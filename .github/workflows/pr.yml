@@ -1,0 +1,30 @@
+name: Pull Request
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - ready_for_review
+      - unlocked
+
+jobs:
+  add-labels:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v3
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+
+  assign-author:
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: samspills/assign-pr-to-author@v1.0
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
