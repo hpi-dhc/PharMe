@@ -1,10 +1,10 @@
-import 'package:app/app/pages/main.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../medications/module.dart';
 import '../../profile/module.dart';
 import '../../reports/module.dart';
+import '../pages/main.dart';
 
 part 'router.gr.dart';
 
