@@ -10,7 +10,10 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
       routes: const [
-        TestRouter(),
+        // The order maps to BottomNavigationBar
+        MedicationsRouter(),
+        ReportsRouter(),
+        ProfileRouter(),
       ],
       appBarBuilder: (_, tabsRouter) => AppBar(
         title: const Text('Frasecys'),
@@ -21,18 +24,26 @@ class MainPage extends StatelessWidget {
         return BottomNavigationBar(
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Test',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.ac_unit),
-              label: 'Other',
-            ),
-          ],
+          items: _bottomNavigationBarItems,
         );
       },
     );
+  }
+
+  List<BottomNavigationBarItem> get _bottomNavigationBarItems {
+    return const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.medication),
+        label: 'Medications',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.assessment),
+        label: 'Reports',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'Profile',
+      ),
+    ];
   }
 }
