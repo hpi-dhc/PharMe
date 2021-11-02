@@ -9,7 +9,7 @@ const medicationsRoutes = AutoRoute(
   path: 'medications',
   name: 'MedicationsRouter',
   page: EmptyRouterPage,
-  children: <AutoRoute>[
+  children: [
     AutoRoute(path: '', page: MedicationsPage),
   ],
 );

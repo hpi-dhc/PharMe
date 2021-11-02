@@ -9,7 +9,7 @@ const reportsRoutes = AutoRoute(
   path: 'reports',
   name: 'ReportsRouter',
   page: EmptyRouterPage,
-  children: <AutoRoute>[
+  children: [
     AutoRoute(path: '', page: ReportsPage),
   ],
 );

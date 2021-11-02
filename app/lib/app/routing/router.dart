@@ -10,11 +10,11 @@ part 'router.gr.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
-  routes: <AutoRoute>[
+  routes: [
     AutoRoute(
       path: '/',
       page: MainPage,
-      children: <AutoRoute>[
+      children: [
         medicationsRoutes,
         profileRoutes,
         reportsRoutes,
