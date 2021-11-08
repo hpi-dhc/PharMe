@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
+
+import '../../models/post.dart';
 
 part 'cubit.freezed.dart';
 
@@ -11,9 +15,16 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
 
   Future<void> loadMedications() async {
     emit(MedicationsOverviewState.loading());
-    // TODO(Benjamin-Frost): Load actual content
-    await Future.delayed(Duration(seconds: 3));
-    emit(MedicationsOverviewState.loaded());
+    final response =
+        await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+
+    if (response.statusCode == 200) {
+      final Iterable list = jsonDecode(response.body);
+      final posts = list.map((json) => Post.fromJson(json)).toList();
+      emit(MedicationsOverviewState.loaded(posts));
+    } else {
+      emit(MedicationsOverviewState.error());
+    }
   }
 }
 
@@ -21,5 +32,7 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
 class MedicationsOverviewState with _$MedicationsOverviewState {
   const factory MedicationsOverviewState.initial() = _InitialState;
   const factory MedicationsOverviewState.loading() = _LoadingState;
-  const factory MedicationsOverviewState.loaded() = _LoadedState;
+  const factory MedicationsOverviewState.loaded(List<Post> posts) =
+      _LoadedState;
+  const factory MedicationsOverviewState.error() = _ErrorState;
 }
