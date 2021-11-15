@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,14 +24,14 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
             initial: () => Container(),
             loading: () => Center(child: CircularProgressIndicator()),
             error: () => Center(child: Text('Error!')),
-            loaded: _buildPostsList,
+            loaded: (posts) => _buildPostsList(context, posts),
           );
         },
       ),
     );
   }
 
-  ListView _buildPostsList(List<Post> posts) {
+  ListView _buildPostsList(BuildContext context, List<Post> posts) {
     return ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
@@ -38,6 +39,7 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
         return Card(
           child: ListTile(
             title: Text(post.title),
+            onTap: () => context.router.pushNamed('/medications/${post.id}'),
           ),
         );
       },
