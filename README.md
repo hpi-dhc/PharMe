@@ -1,6 +1,6 @@
 # For Risks and Side Effects Consult Your Smartphone
 
-[![App](https://github.com/BP-Boettinger-21-22/frasecys/actions/workflows/app.yml/badge.svg)](https://github.com/BP-Boettinger-21-22/frasecys/actions/workflows/app.yml)
+[![App](https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml/badge.svg)](https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml)
 
 ## 🤝 Contributing
 

@@ -6,13 +6,13 @@ Every project (i.e., subdirectories) also contain additional contribution inform
 
 - Install [<img src="https://git-scm.com/favicon.ico" width="16" height="16"> Git](https://git-scm.com/downloads)
 - Install [<img src="https://code.visualstudio.com/favicon.ico" width="16" height="16"> Visual Studio Code](https://code.visualstudio.com)
-- Clone this repository by running `git clone https://github.com/BP-Boettinger-21-22/frasecys.git` in your terminal
+- Clone this repository by running `git clone https://github.com/hpi-dhc/frasecys.git` in your terminal
 - Open the workspace `./frasecys.code-workspace` in VSCode
   - You'll probably see notifications asking you to install some extensions and get packages. Please confirm these two actions
 
 ## Selecting an issue
 
-Visit the [issues page](https://github.com/BP-Boettinger-21-22/frasecys/issues) and look for an interesting problem you want to solve.
+Visit the [issues page](https://github.com/hpi-dhc/frasecys/issues) and look for an interesting problem you want to solve.
 
 Once you have selected an issue to work on, assign yourself to that issue so we don't end up with two people doing the same thing.
 
