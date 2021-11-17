@@ -5,8 +5,16 @@
       "path": "."
     },
     {
+      "name": "📝 Annotation Server",
+      "path": "annotation_server"
+    },
+    {
       "name": "📱 App",
       "path": "app"
+    },
+    {
+      "name": "🧪 Lab Server",
+      "path": "lab_server"
     }
   ]
 }
