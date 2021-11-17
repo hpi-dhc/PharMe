@@ -1,7 +1,11 @@
 {
   "recommendations": [
+    "cschleiden.vscode-github-actions",
     "dart-code.dart-code",
     "dart-code.flutter",
-    "cschleiden.vscode-github-actions"
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "jeroen-meijer.pubspec-assist",
+    "mikestead.dotenv"
   ]
 }
