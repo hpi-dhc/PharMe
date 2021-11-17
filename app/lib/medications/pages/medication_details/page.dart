@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class MedicationDetailsPage extends StatelessWidget {
-  const MedicationDetailsPage({@PathParam('id') required this.id}) : super();
+  const MedicationDetailsPage({@pathParam required this.id}) : super();
 
   final String id;
 
