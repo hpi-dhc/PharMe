@@ -4,8 +4,8 @@ Every project (i.e., subdirectories) also contain additional contribution inform
 
 ## Local setup
 
-- Install [<img src="https://git-scm.com/favicon.ico" width="16" height="16"> Git](https://git-scm.com/downloads)
-- Install [<img src="https://code.visualstudio.com/favicon.ico" width="16" height="16"> Visual Studio Code](https://code.visualstudio.com)
+- Install [<img src="https://user-images.githubusercontent.com/82543715/142914382-5be71efd-9e34-46c2-aad6-04255c430594.png" width="16" height="16"> Git](https://git-scm.com/downloads)
+- Install [<img src="https://user-images.githubusercontent.com/82543715/142914400-49d5815b-71a7-4198-9501-157fc3aa40a2.png" width="16" height="16"> Visual Studio Code](https://code.visualstudio.com)
 - Clone this repository by running `git clone https://github.com/hpi-dhc/frasecys.git` in your terminal
 - Open the workspace `./frasecys.code-workspace` in VSCode
   - You'll probably see notifications asking you to install some extensions and get packages. Please confirm these two actions
