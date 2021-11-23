@@ -6,7 +6,7 @@
     },
     {
       "name": "📝 Annotation Server",
-      "path": "annotation_server"
+      "path": "annotation-server"
     },
     {
       "name": "📱 App",
@@ -14,7 +14,7 @@
     },
     {
       "name": "🧪 Lab Server",
-      "path": "lab_server"
+      "path": "lab-server"
     }
   ]
 }
