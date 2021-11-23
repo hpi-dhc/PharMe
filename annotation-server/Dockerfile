@@ -14,4 +14,6 @@ COPY . .
 
 RUN yarn build
 
-CMD [ "node", "dist/main" ]
+ENV NODE_ENV production
+
+CMD [ "yarn", "start:prod" ]

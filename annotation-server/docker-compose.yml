@@ -6,7 +6,7 @@ services:
     depends_on:
       - postgres
     profiles:
-      - prod
+      - production
 
   postgres:
     image: postgres:13
@@ -16,8 +16,8 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_USER=${ANNOTATION_DB_USER}
-      - POSTGRES_PASSWORD=${ANNOTATION_DB_PASSWORD}
-      - POSTGRES_DB=${ANNOTATION_DB}
+      - POSTGRES_PASSWORD=${ANNOTATION_DB_PASS}
+      - POSTGRES_DB=${ANNOTATION_DB_NAME}
 
 volumes:
   annotation_db:
