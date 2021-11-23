@@ -1,6 +1,13 @@
 # For Risks and Side Effects Consult Your Smartphone
 
-[![App](https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml/badge.svg)](https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml)
+<p align="center">
+  <a href="https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml" target="_blank">
+    <img src="https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml/badge.svg" alt="App Badge" />
+  </a>
+  <a href="https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml" target="_blank">
+    <img src="https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml/badge.svg" alt="Annotation Server Badge" />
+  </a>
+</p>
 
 ## 🤝 Contributing
 

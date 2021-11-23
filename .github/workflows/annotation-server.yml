@@ -1,0 +1,45 @@
+name: Annotation Server
+
+on:
+  push:
+    paths:
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
+  pull_request:
+    paths:
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./annotation-server
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./annotation-server
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./annotation-server
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn build
