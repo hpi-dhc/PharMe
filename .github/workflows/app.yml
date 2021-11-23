@@ -32,6 +32,7 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: flutter pub get
+      - run: flutter pub run build_runner build
       - run: flutter analyze
 
   test:
@@ -52,6 +53,7 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: flutter pub get
+      - run: flutter pub run build_runner build
       - run: flutter test
 
   build-android:
@@ -70,6 +72,7 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: flutter pub get
+      - run: flutter pub run build_runner build
       - run: flutter build apk
 
   build-ios:
@@ -88,4 +91,5 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: flutter pub get
+      - run: flutter pub run build_runner build
       - run: flutter build ios --release --no-codesign
