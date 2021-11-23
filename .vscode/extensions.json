@@ -6,6 +6,7 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "jeroen-meijer.pubspec-assist",
-    "mikestead.dotenv"
+    "mikestead.dotenv",
+    "ms-azuretools.vscode-docker"
   ]
 }
