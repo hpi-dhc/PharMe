@@ -7,11 +7,11 @@ import { AppService } from './app.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'postgres',
       port: 5432,
       username: 'postgres',
-      password: '',
-      database: 'annotation_server',
+      password: 'postgres',
+      database: 'annotation_db',
       autoLoadEntities: true,
       synchronize: true,
     }),
