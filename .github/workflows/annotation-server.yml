@@ -3,12 +3,12 @@ name: Annotation Server
 on:
   push:
     paths:
-      - ".github/workflows/annotation-server.yml"
-      - "annotation-server/**"
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
   pull_request:
     paths:
-      - ".github/workflows/annotation-server.yml"
-      - "annotation-server/**"
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
 
 jobs:
   lint:
@@ -54,7 +54,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.PORT }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
             cd /home/frasecys/annotation-server
             git pull
