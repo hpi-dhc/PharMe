@@ -3,12 +3,12 @@ name: Annotation Server
 on:
   push:
     paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
+      - ".github/workflows/annotation-server.yml"
+      - "annotation-server/**"
   pull_request:
     paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
+      - ".github/workflows/annotation-server.yml"
+      - "annotation-server/**"
 
 jobs:
   lint:
@@ -43,3 +43,19 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/frasecys/annotation-server
+            git pull
+            docker-compose --profile production up --build --force-recreate --no-deps -d
