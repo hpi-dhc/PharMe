@@ -93,10 +93,8 @@ export class ClinicalAnnotationService {
     try {
       if (fs.existsSync(extractedPath)) {
         fs.rmdirSync(extractedPath, { recursive: true });
-        console.log('ClinicalAnnotations deleted');
       }
       await unzip(filePath, { dir: extractedPath });
-      console.log('Extraction complete');
     } catch (err) {
       // handle any errors
       console.log(err);

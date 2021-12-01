@@ -3,8 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClinicalAnnotation } from './clinical_annotation.entity';
-import { AnnotationsModule } from './clinical_annotation.module';
+import { ClinicalAnnotation } from './clinical_annotation/clinical_annotation.entity';
+import { AnnotationsModule } from './clinical_annotation/clinical_annotation.module';
 
 @Module({
   imports: [
@@ -22,6 +22,7 @@ import { AnnotationsModule } from './clinical_annotation.module';
         database: configService.get<string>('ANNOTATION_DB_NAME'),
         entities: [ClinicalAnnotation],
         autoLoadEntities: true,
+        keepConnectionAlive: true,
         synchronize: true,
       }),
       inject: [ConfigService],
