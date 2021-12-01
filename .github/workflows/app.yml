@@ -58,6 +58,7 @@ jobs:
 
   build-android:
     name: Build Android APK
+    needs: [lint, test]
     runs-on: self-hosted
     defaults:
       run:
@@ -77,6 +78,7 @@ jobs:
 
   build-ios:
     name: Build iOS Package
+    needs: [lint, test]
     runs-on: macos-latest
     defaults:
       run:

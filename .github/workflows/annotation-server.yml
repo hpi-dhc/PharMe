@@ -35,6 +35,7 @@ jobs:
 
   build:
     name: Build
+    needs: [lint, test]
     runs-on: self-hosted
     defaults:
       run:
@@ -46,6 +47,7 @@ jobs:
 
   deploy:
     name: Deploy
+    needs: [lint, test, build]
     runs-on: self-hosted
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
