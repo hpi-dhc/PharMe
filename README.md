@@ -7,6 +7,9 @@
   <a href="https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml" target="_blank">
     <img src="https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml/badge.svg" alt="Annotation Server Badge" />
   </a>
+  <a href="https://github.com/hpi-dhc/frasecys/actions/workflows/lab-server.yml" target="_blank">
+    <img src="https://github.com/hpi-dhc/frasecys/actions/workflows/lab-server.yml/badge.svg" alt="Lab Server Badge" />
+  </a>
 </p>
 
 ## 🤝 Contributing
