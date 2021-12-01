@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn Install
+RUN yarn install
 
 # Bundle app source
 COPY . .
