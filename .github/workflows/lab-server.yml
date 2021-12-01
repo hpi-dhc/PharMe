@@ -33,13 +33,13 @@ jobs:
       - run: yarn
       - run: yarn test
 
-build:
-  name: Build
-  runs-on: ubuntu-latest
-  defaults:
-    run:
-      working-directory: ./lab-server
-  steps:
-    - uses: actions/checkout@v2
-    - run: yarn
-    - run: yarn build
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./lab-server
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn build
