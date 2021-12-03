@@ -7,11 +7,11 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 
-RUN yarn install
+RUN yarn
 
 # Bundle app source
 COPY . .
 
 RUN yarn build
 
-CMD [ "node", "dist/main" ]
+CMD [ "yarn", "start:prod" ]
