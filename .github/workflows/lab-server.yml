@@ -61,4 +61,4 @@ jobs:
             
             # use following w/o database
             docker build -t lab-server .
-            docker run -p 8080:3000 -t lab-server
+            docker run -p 8081:3000 -t lab-server
