@@ -1,0 +1,40 @@
+name: Lab Server
+
+on:
+  push:
+    paths:
+      - ".github/workflows/lab-server.yml"
+      - "lab-server/**"
+  pull_request:
+    paths:
+      - ".github/workflows/lab-server.yml"
+      - "lab-server/**"
+
+defaults:
+  run:
+    working-directory: ./lab-server
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: [self-hosted, linux]
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn lint
+
+  test:
+    name: Test
+    runs-on: [self-hosted, linux]
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn test
+
+  build:
+    name: Build
+    runs-on: [self-hosted, linux]
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn build
