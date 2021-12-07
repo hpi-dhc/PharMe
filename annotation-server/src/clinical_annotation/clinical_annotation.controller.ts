@@ -10,7 +10,7 @@ export class ClinicalAnnotationsController {
     return this.clinicalAnnotationsService.findAll();
   }
 
-  @Post('sync')
+  @Get('sync')
   loadData() {
     this.clinicalAnnotationsService.synchronize();
   }
