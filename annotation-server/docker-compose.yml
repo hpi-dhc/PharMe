@@ -14,7 +14,7 @@ services:
   postgres:
     image: postgres:13
     volumes:
-      - annotations_db:/var/lib/postgresql/data
+      - annotation_db:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
@@ -23,4 +23,4 @@ services:
       - POSTGRES_DB=${ANNOTATION_DB_NAME}
 
 volumes:
-  annotations_db:
+  annotation_db:

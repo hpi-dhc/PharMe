@@ -109,7 +109,7 @@ export class ClinicalAnnotationService {
     let count = 0;
 
     // todo add scramjet to npm requirements
-const annotations: ClinicalAnnotation[] = [];
+    const annotations: ClinicalAnnotation[] = [];
 
     StringStream.from(fs.createReadStream(tsvPath))
       // read the file
