@@ -83,6 +83,7 @@ jobs:
         with:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}
+      - run: flutter doctor
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter build ios --release --no-codesign
