@@ -3,12 +3,12 @@ name: App
 on:
   push:
     paths:
-      - '.github/workflows/app.yml'
-      - 'app/**'
+      - ".github/workflows/app.yml"
+      - "app/**"
   pull_request:
     paths:
-      - '.github/workflows/app.yml'
-      - 'app/**'
+      - ".github/workflows/app.yml"
+      - "app/**"
 
 defaults:
   run:
