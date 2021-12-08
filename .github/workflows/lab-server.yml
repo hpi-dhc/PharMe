@@ -3,12 +3,12 @@ name: Lab Server
 on:
   push:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
   pull_request:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
 
 defaults:
   run:
@@ -52,13 +52,9 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/frasecys/lab-server
-            git pull
-            
-            # use following with database 
-            #docker compose up
-            #yarn start:prod
-            
-            # use following w/o database
+            cd ${{ secrets.PROJECT_PATH }}
+            git fetch origin main
+            git reset --hard origin/main
+            cd lab-server
             docker build -t lab-server .
-            docker run -p 8081:3000 -t lab-server
+            docker run -d -p 8081:3000 -t lab-server
