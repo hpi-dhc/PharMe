@@ -1,0 +1,23 @@
+services:
+  api:
+    build: .
+    ports:
+      - 8081:3000
+    depends_on:
+      - postgres
+    profiles:
+      - production
+
+  postgres:
+    image: postgres:13
+    volumes:
+      - annotation_db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${ANNOTATION_DB_USER}
+      - POSTGRES_PASSWORD=${ANNOTATION_DB_PASS}
+      - POSTGRES_DB=${ANNOTATION_DB_NAME}
+
+volumes:
+  annotation_db:

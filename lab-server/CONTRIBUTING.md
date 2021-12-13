@@ -11,5 +11,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 ## Setup for local development
 
 - Open a terminal in VSCode in the `lab-server` directory
-  - Run `docker build -t lab-server .` to build the necessary image from `Dockerfile`
-  - Run `docker run -p 8081:3000 -t lab-server` to start the server
+  - Run `docker compose up` to build and start the necessary containers (e.g. database)
+- Open another terminal in VSCode in the `lab-server` directory
+  - Run `yarn` to install the project dependencies
+  - You can now start the server using `yarn start:dev`
