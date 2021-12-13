@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ClinicalAnnotation } from './clinical_annotation.entity';
+import { AnnotationsModule } from './clinical_annotation.module';
 
 @Module({
   imports: [
@@ -18,11 +20,13 @@ import { AppService } from './app.service';
         username: configService.get<string>('ANNOTATION_DB_USER'),
         password: configService.get<string>('ANNOTATION_DB_PASS'),
         database: configService.get<string>('ANNOTATION_DB_NAME'),
+        entities: [ClinicalAnnotation],
         autoLoadEntities: true,
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    AnnotationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
