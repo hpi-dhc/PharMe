@@ -3,20 +3,21 @@ name: Lab Server
 on:
   push:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
   pull_request:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
+
+defaults:
+  run:
+    working-directory: ./lab-server
 
 jobs:
   lint:
     name: Lint
-    runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: ./lab-server
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -24,10 +25,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: ./lab-server
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -35,11 +33,28 @@ jobs:
 
   build:
     name: Build
-    runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: ./lab-server
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
+
+  deploy:
+    name: Deploy
+    needs: [lint, test, build]
+    runs-on: [self-hosted, linux]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+            git fetch origin main
+            git reset --hard origin/main
+            cd lab-server
+            docker build -t lab-server . && docker rm -f lab-server && docker run -d -p 8081:3000 --name lab-server -t lab-server
+
