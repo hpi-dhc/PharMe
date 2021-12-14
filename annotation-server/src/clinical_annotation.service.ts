@@ -8,9 +8,7 @@ import { ClinicalAnnotation } from './clinical_annotation.entity';
 import * as os from 'os';
 import * as http from 'http';
 import * as https from 'https';
-import * as yauzl from 'yauzl';
 import * as fs from 'fs';
-import { parse } from 'path/posix';
 import * as unzip from 'extract-zip';
 import { StringStream } from 'scramjet';
 
@@ -95,7 +93,7 @@ export class ClinicalAnnotationService {
     try {
       if (fs.existsSync(extractedPath)) {
         fs.rmdirSync(extractedPath, { recursive: true });
-        console.log('clinicalAnnotations deleted');
+        console.log('ClinicalAnnotations deleted');
       }
       await unzip(filePath, { dir: extractedPath });
       console.log('Extraction complete');
@@ -112,18 +110,17 @@ export class ClinicalAnnotationService {
 
     let count = 0;
 
+    // todo add scramjet to npm requirements
+
     StringStream.from(fs.createReadStream(tsvPath))
       // read the file
       .CSVParse({ delimiter: '\t' })
       // parse as csv
       .map((entry) => {
-        //console.log(entry[0], entry[6], entry[8], entry[9]);
-
         if (count > 0) {
-          console.log(entry[0], entry[6], entry[8], entry[9]);
           const clinicalAnnotationId = entry[0];
           const variants: string[] = entry[1].split(', ');
-          const genes: string = entry[2].split(';');
+          const genes: string[] = entry[2].split(';');
           const levelOfEvidence: string = entry[3];
           const levelOverride: string = entry[4];
           const levelModifiers: string[] = entry[5].split(';');
@@ -141,7 +138,7 @@ export class ClinicalAnnotationService {
 
           clinicalAnnotation.clinicalAnnotationId = clinicalAnnotationId;
           clinicalAnnotation.variants = variants.join(', ');
-          clinicalAnnotation.genes = genes;
+          clinicalAnnotation.genes = genes.join(';');
           clinicalAnnotation.levelOfEvidence = levelOfEvidence;
           clinicalAnnotation.levelOverride = levelOverride;
           clinicalAnnotation.levelModifiers = levelModifiers.join(';');
