@@ -2,7 +2,6 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
-    tsconfigRootDir: 'annotation-server',
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
