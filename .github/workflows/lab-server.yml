@@ -1,18 +1,18 @@
-name: Annotation Server
+name: Lab Server
 
 on:
   push:
     paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
   pull_request:
     paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
 
 defaults:
   run:
-    working-directory: ./annotation-server
+    working-directory: ./lab-server
 
 jobs:
   lint:
@@ -33,7 +33,6 @@ jobs:
 
   build:
     name: Build
-    needs: [lint, test]
     runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
@@ -56,5 +55,6 @@ jobs:
             cd ${{ secrets.PROJECT_PATH }}
             git fetch origin main
             git reset --hard origin/main
-            cd annotation-server
-            docker-compose --profile production up --build --force-recreate --no-deps -d
+            cd lab-server
+            docker build -t lab-server . && docker rm -f lab-server && docker run -d -p 8081:3000 --name lab-server -t lab-server
+

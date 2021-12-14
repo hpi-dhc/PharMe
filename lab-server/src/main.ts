@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -7,15 +8,16 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '..', '..', 'assets'));
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('Annotation Server')
-    .setDescription('API Endpoints of our Annotation Server')
+    .setTitle('Lab Server')
+    .setDescription('API Endpoints of our Lab Server')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document, {
-    customSiteTitle: 'Annotation Server API Documentation',
+    customSiteTitle: 'Lab Server API Documentation',
     customCssUrl: '../custom-theme.css',
     customfavIcon: '../favicon.png',
   });
