@@ -56,5 +56,4 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd lab-server
-            docker build -t lab-server . && docker rm -f lab-server && docker run -d -p 8081:3000 --name lab-server -t lab-server
-
+            docker-compose --profile production up --build --force-recreate --no-deps -d
