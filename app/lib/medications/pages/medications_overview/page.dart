@@ -39,7 +39,8 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
         return Card(
           child: ListTile(
             title: Text(post.title),
-            onTap: () => context.router.pushNamed('/medications/${post.id}'),
+            onTap: () =>
+                context.router.pushNamed('main/medications/${post.id}'),
           ),
         );
       },
