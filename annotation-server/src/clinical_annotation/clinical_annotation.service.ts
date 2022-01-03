@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createWriteStream } from 'fs';
 import * as path from 'path';
 import { Repository } from 'typeorm';
 import { ClinicalAnnotation } from './clinical_annotation.entity';
@@ -35,17 +34,12 @@ export class ClinicalAnnotationService {
     const proto = !url.charAt(4).localeCompare('s') ? https : http;
     return new Promise((resolve, reject) => {
       const file = fs.createWriteStream(filePath);
-      let fileInfo = null;
 
       const request = proto.get(url, (response) => {
         if (response.statusCode !== 200) {
           reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
           return;
         }
-        fileInfo = {
-          mime: response.headers['content-type'],
-          size: parseInt(response.headers['content-length'], 10),
-        };
 
         response.pipe(file);
       });

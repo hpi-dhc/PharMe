@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../app.module';
-import { ClinicalAnnotationService } from './clinical_annotation.service';
 
 describe('ClinicalAnnotationsController (e2e)', () => {
   let app: INestApplication;
