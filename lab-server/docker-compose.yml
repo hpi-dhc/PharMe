@@ -1,6 +1,9 @@
 services:
   lab-server:
     build: .
+    volumes:
+      # mapped folder in the container needs to match the working dir's parent directory found in the Dockerfile
+      - ../assets:/usr/src/assets:ro
     ports:
       - 8081:3000
     depends_on:
