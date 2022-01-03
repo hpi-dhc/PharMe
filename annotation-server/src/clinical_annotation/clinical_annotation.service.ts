@@ -20,27 +20,8 @@ export class ClinicalAnnotationService {
     private httpService: HttpService,
   ) {}
 
-  async findAll(): Promise<ListableAnnotation[]> {
-    // get full clinical annotations and deprecate them to a less bloated format
-    // --> ListAllClinicalAnnotations
-    const fullAnnotations = await this.clinicalAnnotationRepository.find();
-
-    const deprecatedAnnotations: ListableAnnotation[] = [];
-    for (const annotation of fullAnnotations) {
-      deprecatedAnnotations.push({
-        clinicalAnnotationId: annotation.clinicalAnnotationId,
-        variants: annotation.variants,
-        genes: annotation.genes,
-        levelOfEvidence: annotation.levelOfEvidence,
-        score: annotation.score,
-        phenotypeCategory: annotation.phenotypeCategory,
-        drugs: annotation.drugs,
-        phenotypes: annotation.phenotypes,
-        pharmkgbUrl: annotation.pharmkgbUrl,
-      });
-    }
-
-    return deprecatedAnnotations;
+  async findAll(): Promise<ClinicalAnnotation[]> {
+    return await this.clinicalAnnotationRepository.find();
   }
 
   synchronize() {
@@ -88,8 +69,6 @@ export class ClinicalAnnotationService {
   async parseData(filePath) {
     const extractedPath = path.join(os.tmpdir(), 'clinicalAnnotations');
 
-    // TODO: add extract-zip to npm requirements
-
     try {
       if (fs.existsSync(extractedPath)) {
         fs.rmdirSync(extractedPath, { recursive: true });
@@ -100,50 +79,23 @@ export class ClinicalAnnotationService {
       console.log(err);
     }
 
-    const jsonPath = path.join(os.tmpdir(), 'clinicalAnnotations.json');
     const tsvPath = path.join(
       os.tmpdir(),
       'clinicalAnnotations/clinical_annotations.tsv',
     );
 
-    let count = 0;
-
-    // todo add scramjet to npm requirements
     const annotations: ClinicalAnnotation[] = [];
 
-    StringStream.from(fs.createReadStream(tsvPath))
-      // read the file
+    await StringStream.from(fs.createReadStream(tsvPath))
       .CSVParse({ delimiter: '\t' })
-      // parse as csv
-      .map((entry) => {
-        if (count > 0) {
-          const temp = new ClinicalAnnotation();
-          temp.clinicalAnnotationId = entry[0];
-          temp.variants = entry[1].split(', ');
-          temp.genes = entry[2].split(';');
-          temp.levelOfEvidence = entry[3];
-          temp.levelOverride = entry[4];
-          temp.levelModifiers = entry[5].split(';');
-          temp.score = entry[6];
-          temp.phenotypeCategory = entry[7];
-          temp.pmidCount = entry[8];
-          temp.evidenceCount = entry[9];
-          temp.drugs = entry[10].split(';');
-          temp.phenotypes = entry[11].split(';');
-          temp.latestHistoryDate = new Date(entry[12]);
-          temp.pharmkgbUrl = entry[13];
-          temp.specialityPopulation = entry[14];
+      .slice(1)
+      .map((entry) => annotations.push(new ClinicalAnnotation(entry)))
+      .whenEnd();
 
-          annotations.push(temp);
-        }
-        count++;
-      })
-      // whatever you return here it will be changed
-      // this can be asynchronous too, so you can do requests...
-      .toJSONArray()
-      .pipe(createWriteStream(jsonPath));
-
-    await this.clinicalAnnotationRepository.save(annotations);
+    await this.clinicalAnnotationRepository.save<ClinicalAnnotation>(
+      annotations,
+      { chunk: 5000 },
+    );
   }
 
   async remove(id: string): Promise<void> {
