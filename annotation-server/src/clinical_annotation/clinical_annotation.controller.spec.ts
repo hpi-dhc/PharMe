@@ -37,8 +37,8 @@ describe('ClinicalAnnotationsController (e2e)', () => {
 
   it('/clinical_annotations/sync (GET)', () => {
     return request(app.getHttpServer())
-      .get('/clinical_annotations/sync')
-      .expect(200);
+      .post('/clinical_annotations/sync')
+      .expect(201);
   });
 
   it('/clinical_annotations (GET)', () => {
