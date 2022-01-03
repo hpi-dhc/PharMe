@@ -10,7 +10,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as unzip from 'extract-zip';
-import { StringStream } from 'scramjet';
+import { parse } from 'csv-parse';
 
 @Injectable()
 export class ClinicalAnnotationService {
@@ -24,13 +24,14 @@ export class ClinicalAnnotationService {
     return await this.clinicalAnnotationRepository.find();
   }
 
-  synchronize() {
+  async fetchAnnotations(): Promise<void> {
     const url = 'https://s3.pgkb.org/data/clinicalAnnotations.zip';
     const tmpPath = path.join(os.tmpdir(), 'clinical_annotations.zip');
-    this.download(url, tmpPath);
+    const filePath = await this.download(url, tmpPath);
+    await this.parseAndSaveData(filePath);
   }
 
-  async download(url, filePath) {
+  async download(url, filePath): Promise<string> {
     const proto = !url.charAt(4).localeCompare('s') ? https : http;
     return new Promise((resolve, reject) => {
       const file = fs.createWriteStream(filePath);
@@ -50,8 +51,7 @@ export class ClinicalAnnotationService {
       });
 
       file.on('finish', () => {
-        resolve(fileInfo);
-        this.parseData(filePath);
+        resolve(filePath);
       });
 
       request.on('error', (err) => {
@@ -66,7 +66,7 @@ export class ClinicalAnnotationService {
     });
   }
 
-  async parseData(filePath) {
+  async parseAndSaveData(filePath): Promise<void> {
     const extractedPath = path.join(os.tmpdir(), 'clinicalAnnotations');
 
     try {
@@ -86,16 +86,16 @@ export class ClinicalAnnotationService {
 
     const annotations: ClinicalAnnotation[] = [];
 
-    await StringStream.from(fs.createReadStream(tsvPath))
-      .CSVParse({ delimiter: '\t' })
-      .slice(1)
-      .map((entry) => annotations.push(new ClinicalAnnotation(entry)))
-      .whenEnd();
-
-    await this.clinicalAnnotationRepository.save<ClinicalAnnotation>(
-      annotations,
-      { chunk: 5000 },
-    );
+    fs.createReadStream(tsvPath)
+      .pipe(parse({ delimiter: '\t', from_line: 2 }))
+      .on('data', (row) => {
+        // it will start from 2nd row
+        annotations.push(new ClinicalAnnotation(row));
+      })
+      .on('end', () => {
+        //might need to set chunk-option, if errors occur
+        this.clinicalAnnotationRepository.save<ClinicalAnnotation>(annotations);
+      });
   }
 
   async remove(id: string): Promise<void> {

@@ -11,8 +11,8 @@ export class ClinicalAnnotationsController {
     return this.clinicalAnnotationsService.findAll();
   }
 
-  @Get('sync')
-  loadData() {
-    this.clinicalAnnotationsService.synchronize();
+  @Post('sync')
+  async loadData() {
+    return this.clinicalAnnotationsService.fetchAnnotations();
   }
 }

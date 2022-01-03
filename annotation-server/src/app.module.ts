@@ -20,7 +20,6 @@ import { AnnotationsModule } from './clinical_annotation/clinical_annotation.mod
         username: configService.get<string>('ANNOTATION_DB_USER'),
         password: configService.get<string>('ANNOTATION_DB_PASS'),
         database: configService.get<string>('ANNOTATION_DB_NAME'),
-        entities: [ClinicalAnnotation],
         autoLoadEntities: true,
         keepConnectionAlive: true,
         synchronize: true,

@@ -29,6 +29,7 @@
     "@nestjs/swagger": "^5.1.5",
     "@nestjs/typeorm": "^8.0.2",
     "@types/yauzl": "^2.9.2",
+    "csv-parse": "^5.0.4",
     "extract-zip": "^2.0.1",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
