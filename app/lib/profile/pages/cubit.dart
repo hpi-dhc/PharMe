@@ -14,7 +14,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileState.loading('Loading genomic data...'));
 
     try {
-      // TODO(DevSchmidtchen): Replace with lab server API endpoint address
+      // Username: admin
+      // Password: 123
       final response = await http.post(
         Uri.parse('http://vm-bp2021eb1.dhclab.i.hpi.de:8081/users'),
         headers: <String, String>{
@@ -36,10 +37,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         emit(ProfileState.loaded(response.body));
       } else {
-        emit(ProfileState.error('Error'));
+        emit(ProfileState.error(jsonDecode(response.body)['message']));
       }
     } catch (error) {
-      emit(ProfileState.error('Error'));
+      emit(ProfileState.error(error.hashCode.toString()));
     }
   }
 }
