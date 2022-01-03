@@ -16,7 +16,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       // TODO(DevSchmidtchen): Replace with lab server API endpoint address
       final response = await http.post(
-        Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+        Uri.parse('http://vm-bp2021eb1.dhclab.i.hpi.de:8081/users'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
