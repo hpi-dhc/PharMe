@@ -111,6 +111,7 @@ export class ClinicalAnnotationService {
     let count = 0;
 
     // todo add scramjet to npm requirements
+const annotations: ClinicalAnnotation[] = [];
 
     StringStream.from(fs.createReadStream(tsvPath))
       // read the file
@@ -118,41 +119,24 @@ export class ClinicalAnnotationService {
       // parse as csv
       .map((entry) => {
         if (count > 0) {
-          const clinicalAnnotationId = entry[0];
-          const variants: string[] = entry[1].split(', ');
-          const genes: string[] = entry[2].split(';');
-          const levelOfEvidence: string = entry[3];
-          const levelOverride: string = entry[4];
-          const levelModifiers: string[] = entry[5].split(';');
-          const score = entry[6];
-          const phenotypeCategory: string = entry[7];
-          const pmidCount = entry[8];
-          const evidenceCount = entry[9];
-          const drugs: string[] = entry[10].split(';');
-          const phenotypes: string[] = entry[11].split(';');
-          const latestHistoryDate: Date = new Date(entry[12]);
-          const pharmkgbUrl: string = entry[13];
-          const specialityPopulation: string = entry[14];
+          const temp = new ClinicalAnnotation();
+          temp.clinicalAnnotationId = entry[0];
+          temp.variants = entry[1].split(', ');
+          temp.genes = entry[2].split(';');
+          temp.levelOfEvidence = entry[3];
+          temp.levelOverride = entry[4];
+          temp.levelModifiers = entry[5].split(';');
+          temp.score = entry[6];
+          temp.phenotypeCategory = entry[7];
+          temp.pmidCount = entry[8];
+          temp.evidenceCount = entry[9];
+          temp.drugs = entry[10].split(';');
+          temp.phenotypes = entry[11].split(';');
+          temp.latestHistoryDate = new Date(entry[12]);
+          temp.pharmkgbUrl = entry[13];
+          temp.specialityPopulation = entry[14];
 
-          const clinicalAnnotation = new ClinicalAnnotation();
-
-          clinicalAnnotation.clinicalAnnotationId = clinicalAnnotationId;
-          clinicalAnnotation.variants = variants.join(', ');
-          clinicalAnnotation.genes = genes.join(';');
-          clinicalAnnotation.levelOfEvidence = levelOfEvidence;
-          clinicalAnnotation.levelOverride = levelOverride;
-          clinicalAnnotation.levelModifiers = levelModifiers.join(';');
-          clinicalAnnotation.score = score;
-          clinicalAnnotation.phenotypeCategory = phenotypeCategory;
-          clinicalAnnotation.pmidCount = pmidCount;
-          clinicalAnnotation.evidenceCount = evidenceCount;
-          clinicalAnnotation.drugs = drugs.join(';');
-          clinicalAnnotation.phenotypes = phenotypes.join(';');
-          clinicalAnnotation.latestHistoryDate = latestHistoryDate;
-          clinicalAnnotation.pharmkgbUrl = pharmkgbUrl;
-          clinicalAnnotation.specialityPopulation = specialityPopulation;
-
-          this.clinicalAnnotationRepository.save(clinicalAnnotation);
+          annotations.push(temp);
         }
         count++;
       })
@@ -160,6 +144,8 @@ export class ClinicalAnnotationService {
       // this can be asynchronous too, so you can do requests...
       .toJSONArray()
       .pipe(createWriteStream(jsonPath));
+
+    await this.clinicalAnnotationRepository.save(annotations);
   }
 
   async remove(id: string): Promise<void> {
