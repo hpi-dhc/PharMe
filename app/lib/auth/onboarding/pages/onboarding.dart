@@ -44,7 +44,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
               SizedBox(
                 height: 600,
                 child: PageView(
-                  physics: ClampingScrollPhysics(),
                   controller: _pageController,
                   onPageChanged: (page) {
                     setState(() {
