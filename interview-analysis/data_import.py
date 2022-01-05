@@ -6,6 +6,13 @@ translator = deepl.Translator(os.getenv('DEEPL_AUTH_KEY'))
 def translate(text):
     return str(translator.translate_text(text, target_lang='EN-US'))
 
+import requests
+
+def fetch_google_sheet(sheet_id, sheet_name, file_out):
+    sheet = requests.get(f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}')
+    with open(file_out, 'w') as fp:
+        fp.write(sheet.text)
+
 import csv, numpy
 
 # `use_col(str) -> bool` determines if column should be included in output
