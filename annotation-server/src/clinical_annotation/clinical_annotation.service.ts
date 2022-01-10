@@ -34,15 +34,15 @@ export class ClinicalAnnotationService {
 
   async download(url, filePath): Promise<void> {
     const file = fs.createWriteStream(filePath);
-    const response = await lastValueFrom(
-      this.httpService.get(url, {
-        headers: {
-          Accept: 'application/zip',
-        },
-        responseType: 'arraybuffer',
-      }),
-    );
     try {
+      const response = await lastValueFrom(
+        this.httpService.get(url, {
+          headers: {
+            Accept: 'application/zip',
+          },
+          responseType: 'arraybuffer',
+        }),
+      );
       file.write(response.data);
     } catch (err) {
       console.log(err);

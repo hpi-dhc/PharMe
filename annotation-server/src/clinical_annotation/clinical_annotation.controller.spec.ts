@@ -6,7 +6,7 @@ import { AppModule } from '../app.module';
 describe('ClinicalAnnotationsController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
