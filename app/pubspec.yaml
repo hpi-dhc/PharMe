@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.3
+  flutter_svg: ^1.0.0
   freezed_annotation: ^0.15.0
   http: ^0.13.4
   json_annotation: ^4.3.0
@@ -27,3 +28,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
