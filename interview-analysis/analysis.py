@@ -1,7 +1,6 @@
 import gensim.downloader as api
 import nltk
-nltk.download('corpus'); nltk.download('sentiment')
-from nltk.corpus import wordnet
+nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 class NLProcessor:
