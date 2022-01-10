@@ -10,6 +10,8 @@ import * as https from 'https';
 import * as fs from 'fs';
 import * as unzip from 'extract-zip';
 import { parse } from 'csv-parse';
+import { AxiosResponse } from 'axios';
+import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class ClinicalAnnotationService {
@@ -26,38 +28,25 @@ export class ClinicalAnnotationService {
   async fetchAnnotations(): Promise<void> {
     const url = 'https://s3.pgkb.org/data/clinicalAnnotations.zip';
     const tmpPath = path.join(os.tmpdir(), 'clinical_annotations.zip');
-    const filePath = await this.download(url, tmpPath);
-    await this.parseAndSaveData(filePath);
+    await this.download(url, tmpPath);
+    await this.parseAndSaveData(tmpPath);
   }
 
-  async download(url, filePath): Promise<string> {
-    const proto = !url.charAt(4).localeCompare('s') ? https : http;
-    return new Promise((resolve, reject) => {
-      const file = fs.createWriteStream(filePath);
-
-      const request = proto.get(url, (response) => {
-        if (response.statusCode !== 200) {
-          reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
-          return;
-        }
-
-        response.pipe(file);
-      });
-
-      file.on('finish', () => {
-        resolve(filePath);
-      });
-
-      request.on('error', (err) => {
-        fs.unlink(filePath, () => reject(err));
-      });
-
-      file.on('error', (err) => {
-        fs.unlink(filePath, () => reject(err));
-      });
-
-      request.end();
-    });
+  async download(url, filePath): Promise<void> {
+    const file = fs.createWriteStream(filePath);
+    const response = await lastValueFrom(
+      this.httpService.get(url, {
+        headers: {
+          Accept: 'application/zip',
+        },
+        responseType: 'arraybuffer',
+      }),
+    );
+    try {
+      file.write(response.data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async parseAndSaveData(filePath): Promise<void> {
@@ -65,7 +54,11 @@ export class ClinicalAnnotationService {
 
     try {
       if (fs.existsSync(extractedPath)) {
-        fs.rmdirSync(extractedPath, { recursive: true });
+        fs.rm(extractedPath, { recursive: true }, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
       }
       await unzip(filePath, { dir: extractedPath });
     } catch (err) {
