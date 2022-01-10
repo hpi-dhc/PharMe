@@ -9,13 +9,6 @@ on:
     paths:
       - '.github/workflows/lab-server.yml'
       - 'lab-server/**'
-<<<<<<< HEAD
-
-defaults:
-  run:
-    working-directory: ./lab-server
-=======
->>>>>>> Fix CI-CD
 
 defaults:
   run:
