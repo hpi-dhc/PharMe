@@ -33,19 +33,19 @@ services:
       - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASS}
       - POSTGRES_DB=${KEYCLOAK_DB_NAME}
   keycloak:
-      image: jboss/keycloak:16.1.0
-      environment:
-        DB_VENDOR: postgres
-        DB_ADDR: postgres-keycloak
-        DB_DATABASE: ${KEYCLOAK_DB_NAME}
-        DB_USER: ${KEYCLOAK_DB_USER}
-        DB_PASSWORD: ${KEYCLOAK_DB_PASS}
-        KEYCLOAK_USER: ${KEYCLOAK_USER}
-        KEYCLOAK_PASSWORD: ${KEYCLAOK_PASS}
-      ports:
-        - 28080:8080
-      depends_on:
-        - postgres-keycloak
+    image: jboss/keycloak:16.1.0
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres-keycloak
+      DB_DATABASE: ${KEYCLOAK_DB_NAME}
+      DB_USER: ${KEYCLOAK_DB_USER}
+      DB_PASSWORD: ${KEYCLOAK_DB_PASS}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASS}
+    ports:
+      - 28080:8080
+    depends_on:
+      - postgres-keycloak
 
 volumes:
   lab_server_db:
