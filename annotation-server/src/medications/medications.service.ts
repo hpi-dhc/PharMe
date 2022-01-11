@@ -22,13 +22,11 @@ export class MedicationsService {
     const url =
       'https://dailymed-data.nlm.nih.gov/public-release-files/rxnorm_mappings.zip';
     const tmpPath = path.join(os.tmpdir(), 'medications.zip');
-    console.log(tmpPath);
     await this.download(url, tmpPath);
     await this.parseAndSaveData(tmpPath);
   }
 
   async download(url, filePath): Promise<void> {
-    console.log('download');
     const file = fs.createWriteStream(filePath);
     try {
       const response = await lastValueFrom(
@@ -46,9 +44,7 @@ export class MedicationsService {
   }
 
   async parseAndSaveData(filePath): Promise<void> {
-    console.log('parseAndSaveData');
     const extractedPath = path.join(os.tmpdir(), 'medications');
-    console.log(extractedPath);
 
     try {
       if (fs.existsSync(extractedPath)) {
