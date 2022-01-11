@@ -111,8 +111,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: state.maybeWhen(
-                        loading: (message) => Text(message),
-                        loaded: (message) => Text(message),
+                        loading: Text.new,
+                        loaded: Text.new,
                         orElse: () => null,
                       ),
                     )

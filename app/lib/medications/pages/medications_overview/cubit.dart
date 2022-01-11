@@ -19,8 +19,9 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
         await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
 
     if (response.statusCode == 200) {
-      final Iterable list = jsonDecode(response.body);
-      final posts = list.map((json) => Post.fromJson(json)).toList();
+      final list =
+          (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
+      final posts = list.map(Post.fromJson).toList();
       emit(MedicationsOverviewState.loaded(posts));
     } else {
       emit(MedicationsOverviewState.error());

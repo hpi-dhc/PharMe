@@ -21,7 +21,7 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
       child: BlocBuilder<MedicationsOverviewCubit, MedicationsOverviewState>(
         builder: (context, state) {
           return state.when(
-            initial: () => Container(),
+            initial: Container.new,
             loading: () => Center(child: CircularProgressIndicator()),
             error: () => Center(child: Text('Error!')),
             loaded: (posts) => _buildPostsList(context, posts),
