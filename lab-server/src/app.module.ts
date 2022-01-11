@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthGuard, KeycloakConnectModule } from 'nest-keycloak-connect';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -10,8 +12,16 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    KeycloakConnectModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        authServerUrl: configService.get<string>('KEYCLOAK_AUTH_SERVER_URL'),
+        realm: configService.get<string>('KEYCLOAK_REALM'),
+        clientId: configService.get<string>('KEYCLOAK_CLIENT_ID'),
+        secret: configService.get<string>('KEYCLOAK_SECRET'),
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get<string>('LAB_SERVER_DB_HOST'),
@@ -27,6 +37,12 @@ import { UsersModule } from './users/users.module';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
