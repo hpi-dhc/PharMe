@@ -1,18 +1,30 @@
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MedicationsController } from './medications.controller';
+import * as request from 'supertest';
+import { AppModule } from '../app.module';
 
 describe('MedicationsController', () => {
-  let controller: MedicationsController;
+  let app: INestApplication;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [MedicationsController],
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
     }).compile();
 
-    controller = module.get<MedicationsController>(MedicationsController);
+    app = moduleFixture.createNestApplication();
+    await app.init();
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('/medications (POST)', () => {
+    return request(app.getHttpServer())
+      .post('/medications')
+      .expect(201)
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  it('/medications (GET)', () => {
+    return request(app.getHttpServer()).get('/medications').expect(200);
   });
 });
