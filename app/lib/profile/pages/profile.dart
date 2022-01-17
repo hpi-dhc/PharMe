@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:openid_client/openid_client_io.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/widgets/headings.dart';
 import 'cubit.dart';
@@ -20,6 +22,32 @@ class _ProfilePageState extends State<ProfilePage> {
   void dispose() {
     usernameController.dispose();
     super.dispose();
+  }
+
+  Future<TokenResponse> authenticate() async {
+    // parameters here just for the sake of the question
+    final uri = Uri.parse('http://10.0.2.2:28080/auth/realms/pharme');
+    const clientId = 'pharme-app';
+    final scopes = List<String>.of(['openid', 'profile']);
+    const port = 4200;
+
+    final issuer = await Issuer.discover(uri);
+    final client = Client(issuer, clientId);
+
+    final authenticator = Authenticator(client, scopes: scopes, port: port,
+        urlLancher: (url) async {
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        throw Exception('Could not launch $url');
+      }
+    });
+
+    final c = await authenticator.authorize();
+    await closeWebView();
+
+    final token = await c.getTokenResponse();
+    return token;
   }
 
   @override
@@ -87,10 +115,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
+                      authenticate();
+                      /* if (_formKey.currentState!.validate()) {
                         context.read<ProfileCubit>().login(
                             usernameController.text, passwordController.text);
-                      }
+                      } */
                     },
                     style: ElevatedButton.styleFrom(
                         minimumSize: Size.fromHeight(50)),

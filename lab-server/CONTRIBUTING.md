@@ -30,7 +30,9 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 To check all your endpoints of your keycloak client send a get request via Postman (or other application) to: `http://localhost:28080/auth/realms/pharme/.well-known/openid-configuration`
 
-To receive a token send a POST request to: `http://localhost:28080/auth/realms/pharme/.well-known/openid-configuration`
+In order to check the administrative console send a GET request to `http://localhost:28080/auth/`
+
+To receive a token send a POST request to: `http://localhost:28080/auth/realms/pharme/protocol/openid-connect/token`
 with body (x-www-form-unlencoded):
 | Type | Value |
 |---|---|
