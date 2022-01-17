@@ -3,12 +3,12 @@ name: Annotation Server
 on:
   push:
     paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
+      - ".github/workflows/annotation-server.yml"
+      - "annotation-server/**"
   pull_request:
     paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
+      - ".github/workflows/annotation-server.yml"
+      - "annotation-server/**"
 
 defaults:
   run:
@@ -29,7 +29,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
+      - run: |
+          docker rm -f postgres-yarn-test && \
+          docker run --name postgres-yarn-test \
+          -p 6789:5432 \
+          -e POSTGRES_PASSWORD=$(echo -n "postgres") \
+          -e POSTGRES_USER=$(echo -n "postgres") \
+          -e POSTGRES_DB=$(echo -n "annotation_db") \
+          -d postgres
       - run: yarn test
+        env:
+          ANNOTATION_DB_HOST: localhost
+          ANNOTATION_DB_USER: postgres
+          ANNOTATION_DB_PASS: postgres
+          ANNOTATION_DB_PORT: 6789
+          ANNOTATION_DB_NAME: annotation_db
+      - run: docker stop postgres-yarn-test
+        if: always()
 
   build:
     name: Build
