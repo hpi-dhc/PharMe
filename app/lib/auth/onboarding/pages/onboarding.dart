@@ -93,7 +93,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         child: TextButton(
           onPressed: () {
             if (isLastPage) {
-              context.router.replaceNamed('main/medications');
+              context.router.pushNamed('auth/login');
             } else {
               _pageController.nextPage(
                 duration: Duration(milliseconds: 500),
