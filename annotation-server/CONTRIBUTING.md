@@ -17,4 +17,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 - Open another terminal in VSCode in the `annotation-server` directory
   - Run `yarn` to install the project dependencies
   - You can now start the server using `yarn start:dev`
-- To download and import the `clinical_annotations` table from pharmgkb.org send a POST-Request like `http://localhost:3000/clinical_annotations/sync` to the server
+
+## Syncing Clinical Annotations
+
+- To download and import the `clinical_annotations` table from pharmgkb.org send a PATCH-Request to `http://localhost:3000/clinical_annotations/sync`
