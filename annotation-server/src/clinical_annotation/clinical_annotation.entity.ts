@@ -5,45 +5,45 @@ export class ClinicalAnnotation {
   @PrimaryColumn()
   clinicalAnnotationId: number;
 
-  @Column()
-  variants: string;
+  @Column({ nullable: true })
+  variants?: string;
 
-  @Column()
-  genes: string;
+  @Column({ nullable: true })
+  genes?: string;
 
-  @Column()
-  levelOfEvidence: string;
+  @Column({ nullable: true })
+  levelOfEvidence?: string;
 
-  @Column()
-  levelOverride: string;
+  @Column({ nullable: true })
+  levelOverride?: string;
 
-  @Column()
-  levelModifiers: string;
+  @Column({ nullable: true })
+  levelModifiers?: string;
 
-  @Column()
-  score: string;
+  @Column({ type: 'real', nullable: true })
+  score?: number;
 
-  @Column()
-  phenotypeCategory: string;
+  @Column({ nullable: true })
+  phenotypeCategory?: string;
 
-  @Column()
-  pmidCount: number;
+  @Column({ nullable: true })
+  pmidCount?: number;
 
-  @Column()
-  evidenceCount: number;
+  @Column({ nullable: true })
+  evidenceCount?: number;
 
-  @Column()
-  drugs: string;
+  @Column({ nullable: true })
+  drugs?: string;
 
-  @Column()
-  phenotypes: string;
+  @Column({ nullable: true })
+  phenotypes?: string;
 
-  @Column()
-  latestHistoryDate: Date;
+  @Column({ nullable: true })
+  latestHistoryDate?: Date;
 
-  @Column()
-  pharmkgbUrl: string;
+  @Column({ nullable: true })
+  pharmkgbUrl?: string;
 
-  @Column()
-  specialityPopulation: string;
+  @Column({ nullable: true })
+  specialityPopulation?: string;
 }

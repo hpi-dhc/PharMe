@@ -19,7 +19,7 @@ export class ClinicalAnnotationsController {
 
   @Patch('sync')
   syncData() {
-    return this.clinicalAnnotationsService.fetchAnnotations();
+    return this.clinicalAnnotationsService.syncAnnotations();
   }
 
   @Delete(':id')
