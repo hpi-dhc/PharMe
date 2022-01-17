@@ -1,31 +1,28 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
+import { Ingredient } from './ingredients.entity';
+import { RxNormMapping } from './rxnormmappings.entity';
 
 @Entity()
 export class Medication {
-  constructor(entry?) {
-    if (!entry) {
-      return;
-    }
-
-    this.setid = entry[0];
-    this.spl_version = parseInt(entry[1]);
-    this.rxcui = parseInt(entry[2]);
-    this.rxstring = entry[3];
-    this.rxtty = entry[4];
-  }
-
-  @PrimaryColumn()
-  setid: string;
+  @PrimaryGeneratedColumn()
+  id: string;
 
   @Column()
-  spl_version: number;
+  name: string;
 
-  @PrimaryColumn()
-  rxcui: number;
+  @Column()
+  manifacturer: string;
 
-  @PrimaryColumn()
-  rxstring: string;
+  @Column()
+  agents: string;
 
-  @PrimaryColumn()
-  rxtty: string;
+  @OneToMany((type) => Ingredient, (ingredient) => ingredient.medication)
+  ingredients: Ingredient[];
+
+  @OneToMany(
+    (type) => RxNormMapping,
+    (rxNormMapping) => rxNormMapping.medication,
+  )
+  rxNormMapping: RxNormMapping[];
 }
