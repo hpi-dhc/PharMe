@@ -1,91 +1,107 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as fs from 'fs';
+import * as https from 'https';
+import * as os from 'os';
 import * as path from 'path';
 import { Repository } from 'typeorm';
+import * as yauzl from 'yauzl';
 import { ClinicalAnnotation } from './clinical_annotation.entity';
-import * as os from 'os';
-import * as http from 'http';
-import * as https from 'https';
-import * as fs from 'fs';
-import * as unzip from 'extract-zip';
-import { parse } from 'csv-parse';
-import { AxiosResponse } from 'axios';
-import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class ClinicalAnnotationService {
   constructor(
     @InjectRepository(ClinicalAnnotation)
-    private clinicalAnnotationRepository: Repository<ClinicalAnnotation>,
-    private httpService: HttpService,
+    private readonly clinicalAnnotationRepository: Repository<ClinicalAnnotation>,
   ) {}
 
-  async findAll(): Promise<ClinicalAnnotation[]> {
-    return await this.clinicalAnnotationRepository.find();
+  findAll() {
+    this.clinicalAnnotationRepository.find();
   }
 
-  async fetchAnnotations(): Promise<void> {
+  fetchAnnotations() {
     const url = 'https://s3.pgkb.org/data/clinicalAnnotations.zip';
     const tmpPath = path.join(os.tmpdir(), 'clinical_annotations.zip');
-    await this.download(url, tmpPath);
-    await this.parseAndSaveData(tmpPath);
+    const unzipTargetPath = path.join(os.tmpdir(), 'clinical_annotations');
+
+    download(url, tmpPath);
+    unzip(tmpPath, unzipTargetPath);
   }
 
-  async download(url, filePath): Promise<void> {
-    const file = fs.createWriteStream(filePath);
-    try {
-      const response = await lastValueFrom(
-        this.httpService.get(url, {
-          headers: {
-            Accept: 'application/zip',
-          },
-          responseType: 'arraybuffer',
-        }),
-      );
-      file.write(response.data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async parseAndSaveData(filePath): Promise<void> {
-    const extractedPath = path.join(os.tmpdir(), 'clinicalAnnotations');
-
-    try {
-      if (fs.existsSync(extractedPath)) {
-        fs.rm(extractedPath, { recursive: true }, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      }
-      await unzip(filePath, { dir: extractedPath });
-    } catch (err) {
-      // handle any errors
-      console.log(err);
-    }
-
-    const tsvPath = path.join(
-      os.tmpdir(),
-      'clinicalAnnotations/clinical_annotations.tsv',
-    );
-
-    const annotations: ClinicalAnnotation[] = [];
-
-    fs.createReadStream(tsvPath)
-      .pipe(parse({ delimiter: '\t', from_line: 2 }))
-      .on('data', (row) => {
-        // it will start from 2nd row
-        annotations.push(new ClinicalAnnotation(row));
-      })
-      .on('end', () => {
-        //might need to set chunk-option, if errors occur
-        this.clinicalAnnotationRepository.save<ClinicalAnnotation>(annotations);
-      });
-  }
-
-  async remove(id: string): Promise<void> {
-    await this.clinicalAnnotationRepository.delete(id);
+  remove(id: number) {
+    return this.clinicalAnnotationRepository.delete(id);
   }
 }
+
+const download = (url: string, filePath: string) => {
+  https.get(url, (res) => {
+    const writeStream = fs.createWriteStream(filePath);
+
+    res.pipe(writeStream);
+
+    writeStream.on('finish', () => {
+      writeStream.close();
+    });
+  });
+};
+
+const unzip = (zipPath: string, unzipTargetPath: string) => {
+  // Create folder if not exists
+  if (!fs.existsSync(unzipTargetPath)) {
+    fs.mkdirSync(unzipTargetPath);
+  }
+
+  // Unzip file
+  yauzl.open(zipPath, { lazyEntries: true }, (error, zipfile) => {
+    if (error) {
+      zipfile.close();
+      throw error;
+    }
+
+    // Read first entry
+    zipfile.readEntry();
+
+    // Trigger next cycle, every time we read an entry
+    zipfile.on('entry', (entry) => {
+      // Directories
+      if (/\/$/.test(entry.fileName)) {
+        // If it is a directory, it needs to be created
+        const dirPath = path.join(unzipTargetPath, entry.fileName);
+        if (!fs.existsSync(dirPath)) {
+          fs.mkdirSync(dirPath);
+        }
+        zipfile.readEntry();
+      }
+      // Files
+      else {
+        zipfile.openReadStream(entry, (error, readStream) => {
+          if (error) {
+            zipfile.close();
+            throw error;
+          }
+
+          const filePath = path.join(unzipTargetPath, entry.fileName);
+          const file = fs.createWriteStream(filePath);
+          readStream.pipe(file);
+
+          file.on('finish', () => {
+            // Wait until the file is finished writing, then read the next entry.
+            file.close(() => {
+              zipfile.readEntry();
+            });
+          });
+
+          file.on('error', (error) => {
+            zipfile.close();
+            throw error;
+          });
+        });
+      }
+    });
+
+    zipfile.on('error', (error) => {
+      zipfile.close();
+      throw error;
+    });
+  });
+};

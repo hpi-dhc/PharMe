@@ -1,5 +1,11 @@
-import { Controller, Get, Post } from '@nestjs/common';
-import { ClinicalAnnotation } from './clinical_annotation.entity';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+} from '@nestjs/common';
 import { ClinicalAnnotationService } from './clinical_annotation.service';
 
 @Controller('clinical_annotations')
@@ -7,12 +13,17 @@ export class ClinicalAnnotationsController {
   constructor(private clinicalAnnotationsService: ClinicalAnnotationService) {}
 
   @Get()
-  async findAll(): Promise<ClinicalAnnotation[]> {
+  findAll() {
     return this.clinicalAnnotationsService.findAll();
   }
 
-  @Post('sync')
-  async loadData() {
+  @Patch('sync')
+  syncData() {
     return this.clinicalAnnotationsService.fetchAnnotations();
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.clinicalAnnotationsService.remove(id);
   }
 }
