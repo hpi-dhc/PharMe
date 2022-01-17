@@ -16,10 +16,6 @@ export class ClinicalAnnotationService {
     private readonly clinicalAnnotationRepository: Repository<ClinicalAnnotation>,
   ) {}
 
-  findAll() {
-    this.clinicalAnnotationRepository.find();
-  }
-
   async syncAnnotations() {
     const url = 'https://s3.pgkb.org/data/clinicalAnnotations.zip';
     const zipPath = path.join(os.tmpdir(), 'clinical_annotations.zip');
@@ -37,10 +33,6 @@ export class ClinicalAnnotationService {
     await this.clinicalAnnotationRepository.save(annotations, {
       chunk: 500,
     });
-  }
-
-  remove(id: number) {
-    return this.clinicalAnnotationRepository.delete(id);
   }
 }
 
