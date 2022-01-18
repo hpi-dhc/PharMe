@@ -36,6 +36,7 @@
     "scramjet": "^4.36.1",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.41",
+    "uuid": "^8.3.2",
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
