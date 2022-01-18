@@ -12,17 +12,30 @@ export class Medication {
   name: string;
 
   @Column()
-  manifacturer: string;
+  manufacturer: string;
 
-  @Column()
+  @Column({ nullable: true })
   agents: string;
 
-  @OneToMany((type) => Ingredient, (ingredient) => ingredient.medication)
+  @Column({ nullable: true })
+  numeratorQuantity: number;
+
+  @Column({ nullable: true })
+  numeratorUnit: string;
+
+  @Column({ nullable: true })
+  denominatorQuantity: number;
+
+  @Column({ nullable: true })
+  denominatorUnit: string;
+
+  @OneToMany(() => Ingredient, (ingredient) => ingredient.medication, {
+    cascade: true,
+  })
   ingredients: Ingredient[];
 
-  @OneToMany(
-    (type) => RxNormMapping,
-    (rxNormMapping) => rxNormMapping.medication,
-  )
-  rxNormMapping: RxNormMapping[];
+  @OneToMany(() => RxNormMapping, (rxNormMapping) => rxNormMapping.medication, {
+    cascade: true,
+  })
+  rxNormMappings: RxNormMapping[];
 }

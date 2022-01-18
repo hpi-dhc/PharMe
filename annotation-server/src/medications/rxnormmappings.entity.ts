@@ -31,6 +31,8 @@ export class RxNormMapping {
   @PrimaryColumn()
   rxtty: string;
 
-  @ManyToOne((type) => Medication, (medication) => medication.rxNormMapping)
+  @ManyToOne(() => Medication, (medication) => medication.rxNormMappings, {
+    onDelete: 'SET NULL',
+  })
   medication: Medication;
 }

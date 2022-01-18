@@ -3,17 +3,24 @@ import { Medication } from './medications.entity';
 
 @Entity()
 export class Ingredient {
-  @ManyToOne((type) => Medication, (medication) => medication.ingredients, {
+  @ManyToOne(() => Medication, (medication) => medication.ingredients, {
     primary: true,
+    onDelete: 'CASCADE',
   })
   medication: Medication;
 
   @PrimaryColumn()
   ingredient: string;
 
-  @Column()
-  quantity: number;
+  @Column({ nullable: true })
+  numeratorQuantity: number;
 
-  @Column()
-  unit: string;
+  @Column({ nullable: true })
+  numeratorUnit: string;
+
+  @Column({ nullable: true })
+  denominatorQuantity: number;
+
+  @Column({ nullable: true })
+  denominatorUnit: string;
 }
