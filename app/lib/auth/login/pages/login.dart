@@ -11,12 +11,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var labs = ['Our Lab', 'Cool lab 1', 'Not our lab'];
+  var labs = ['Illumina Solutions Center Berlin', 'Mount Sinai Hospital (NYC)'];
   String dropdownValue = 'Please select a lab';
 
   Future<TokenResponse> authenticate() async {
     // parameters here just for the sake of the question
-    final uri = Uri.parse('http://10.0.2.2:28080/auth/realms/pharme');
+    final uri = Uri.parse('http://172.20.24.129:28080/auth/realms/pharme');
     const clientId = 'pharme-app';
     final scopes = List<String>.of(['openid', 'profile']);
     const port = 4200;
@@ -24,14 +24,18 @@ class _LoginPageState extends State<LoginPage> {
     final issuer = await Issuer.discover(uri);
     final client = Client(issuer, clientId);
 
-    final authenticator = Authenticator(client, scopes: scopes, port: port,
-        urlLancher: (url) async {
-      if (await canLaunch(url)) {
-        await launch(url, forceWebView: true);
-      } else {
-        throw Exception('Could not launch $url');
-      }
-    });
+    final authenticator = Authenticator(
+      client,
+      scopes: scopes,
+      port: port,
+      urlLancher: (url) async {
+        if (await canLaunch(url)) {
+          await launch(url, forceWebView: true);
+        } else {
+          throw Exception('Could not launch $url');
+        }
+      },
+    );
 
     final c = await authenticator.authorize();
     await closeWebView();
@@ -44,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                 value: labs[0],
                 icon: Icon(Icons.keyboard_arrow_down),
                 items: labs
-                    .map((String items) =>
+                    .map((items) =>
                         DropdownMenuItem(value: items, child: Text(items)))
                     .toList(),
                 onChanged: (newValue) {
@@ -64,11 +68,12 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               ElevatedButton(
-                  onPressed: () async {
-                    await authenticate();
-                    await context.router.replaceNamed('main/medications');
-                  },
-                  child: Text('Login'))
+                onPressed: () async {
+                  await authenticate();
+                  await context.router.replaceNamed('main/medications');
+                },
+                child: Text('Login'),
+              ),
             ],
           ),
         ),

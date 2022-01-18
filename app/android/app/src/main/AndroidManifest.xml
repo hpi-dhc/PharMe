@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.hpi.frasecys">
-   <!--TODO: Delete later, this is for http requests -->
    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="Frasecys"
@@ -48,6 +47,7 @@
         <action android:name="android.intent.action.VIEW" />
         <data android:scheme="https" />
       </intent>
+      <!--TODO This intent clock should probably also be disabled sooner rather than later-->
       <intent>
         <action android:name="android.intent.action.VIEW" />
         <data android:scheme="http" />
