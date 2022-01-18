@@ -124,8 +124,6 @@ export class MedicationsService {
       throw new NotFoundException('Id could not be found in RxNormMappings!');
     }
 
-    console.log(mappings);
-
     if (mappings[0].medication) {
       const medication = await this.medicationRepository.findOne(
         mappings[0].medication.id,
