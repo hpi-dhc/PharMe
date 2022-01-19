@@ -4,14 +4,12 @@ import { RxNormMapping } from './rxnormmappings.entity';
 import { Ingredient } from './ingredients.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
 import * as fs from 'fs';
-import * as unzip from 'extract-zip';
 import * as path from 'path';
 import * as os from 'os';
 import { parse } from 'csv-parse';
 import { parseStringPromise } from 'xml2js';
+import { downloadAndUnzip } from '../common/utils/download-unzip';
 
 @Injectable()
 export class MedicationsService {
@@ -22,51 +20,14 @@ export class MedicationsService {
     private medicationRepository: Repository<Medication>,
     @InjectRepository(Ingredient)
     private ingredientRepository: Repository<Ingredient>,
-    private httpService: HttpService,
   ) {}
 
   async fetchMedications() {
     const url =
       'https://dailymed-data.nlm.nih.gov/public-release-files/rxnorm_mappings.zip';
-    const tmpPath = path.join(os.tmpdir(), 'medications.zip');
-    await this.download(url, tmpPath);
-    await this.unzipToDirectory(tmpPath, 'medications');
+    const tmpPath = path.join(os.tmpdir(), 'medications');
+    await downloadAndUnzip(url, tmpPath);
     await this.parseAndSaveData();
-  }
-
-  async download(url, filePath): Promise<void> {
-    const file = fs.createWriteStream(filePath);
-    try {
-      const response = await lastValueFrom(
-        this.httpService.get(url, {
-          headers: {
-            Accept: 'application/zip',
-          },
-          responseType: 'arraybuffer',
-        }),
-      );
-      file.write(response.data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async unzipToDirectory(filePath: string, dirName: string): Promise<void> {
-    const extractedPath = path.join(os.tmpdir(), dirName);
-
-    try {
-      if (fs.existsSync(extractedPath)) {
-        fs.rm(extractedPath, { recursive: true }, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
-      }
-      await unzip(filePath, { dir: extractedPath });
-    } catch (err) {
-      // handle any errors
-      console.log(err);
-    }
   }
 
   async parseAndSaveData(): Promise<void> {
@@ -135,16 +96,14 @@ export class MedicationsService {
       return medication;
     }
 
-    const tmpPath = path.join(os.tmpdir(), id + '.zip');
+    const tmpPath = path.join(os.tmpdir(), id);
 
     const url =
       'https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=' +
       id +
       '&type=zip';
 
-    await this.download(url, tmpPath);
-
-    await this.unzipToDirectory(tmpPath, id);
+    await downloadAndUnzip(url, tmpPath);
 
     let xmlFileName;
 
