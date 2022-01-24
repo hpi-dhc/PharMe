@@ -2,7 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthGuard, KeycloakConnectModule } from 'nest-keycloak-connect';
+import {
+  AuthGuard,
+  KeycloakConnectModule,
+  TokenValidation,
+} from 'nest-keycloak-connect';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -18,6 +22,7 @@ import { UsersModule } from './users/users.module';
         realm: configService.get<string>('KEYCLOAK_REALM'),
         clientId: configService.get<string>('KEYCLOAK_CLIENT_ID'),
         secret: configService.get<string>('KEYCLOAK_SECRET'),
+        tokenValidation: TokenValidation.OFFLINE,
       }),
       inject: [ConfigService],
     }),
