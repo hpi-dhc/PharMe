@@ -11,8 +11,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var labs = ['Illumina Solutions Center Berlin', 'Mount Sinai Hospital (NYC)'];
-  String dropdownValue = 'Please select a lab';
+  List<String> labs = ['Illumina Solutions Center Berlin', 'Mount Sinai Hospital (NYC)'];
+  String dropdownValue = 'Illumina Solutions Center Berlin';
 
   Future<TokenResponse> authenticate() async {
     // parameters here just for the sake of the question
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               DropdownButton(
-                value: labs[0],
+                value: dropdownValue,
                 icon: Icon(Icons.keyboard_arrow_down),
                 items: labs
                     .map((items) =>
