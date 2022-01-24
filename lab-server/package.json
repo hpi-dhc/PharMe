@@ -30,6 +30,8 @@
     "argon2": "^0.28.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "keycloak-connect": "^16.1.0",
+    "nest-keycloak-connect": "^1.8.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

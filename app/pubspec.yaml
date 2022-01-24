@@ -18,6 +18,8 @@ dependencies:
   freezed_annotation: ^0.15.0
   http: ^0.13.4
   json_annotation: ^4.3.0
+  openid_client: ^0.4.3
+  url_launcher: ^6.0.18
 
 dev_dependencies:
   auto_route_generator: ^3.1.0
