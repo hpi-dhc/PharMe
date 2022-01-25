@@ -1,0 +1,26 @@
+{ 
+  "app_feature_coming_soon": "Ein Bisschen Geduld noch, das Feature ist gerade in Arbeit.",
+  
+  "auth_sign_in": "Anmelden",
+  "auth_sign_off": "Abmelden und Daten löschen",
+  "auth_skip_sign_in": "Anmeldung überspringen",
+  
+  "err_could_not_launch": "Could not launch {url}",
+
+  "nav_medications": "Wirkstoffe",
+  "nav_profile": "Profil",
+  "nav_reports": "Berichte",
+ 
+  "onboarding_get_started": "Los geht's",
+  "onboarding_next": "Weiter",
+
+  "@err_could_not_launch": {
+    "description": "Error message when (auth-related) url cannot be launched.",
+    "placeholders": {
+      "url": {
+        "type": "String",
+        "example": "https://www.google.de"
+      }
+    }
+  }
+}
