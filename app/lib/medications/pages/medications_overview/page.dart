@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../models/post.dart';
+import '../../models/medication.dart';
 import 'cubit.dart';
 
 class MedicationsOverviewPage extends StatefulWidget {
@@ -24,23 +24,25 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
             initial: Container.new,
             loading: () => Center(child: CircularProgressIndicator()),
             error: () => Center(child: Text('Error!')),
-            loaded: (posts) => _buildPostsList(context, posts),
+            loaded: (medications) =>
+                _buildMedicationsList(context, medications),
           );
         },
       ),
     );
   }
 
-  ListView _buildPostsList(BuildContext context, List<Post> posts) {
+  ListView _buildMedicationsList(
+      BuildContext context, List<Medication> medications) {
     return ListView.builder(
-      itemCount: posts.length,
+      itemCount: medications.length,
       itemBuilder: (context, index) {
-        final post = posts[index];
+        final post = medications[index];
         return Card(
           child: ListTile(
-            title: Text(post.title),
+            title: Text(post.rxstring),
             onTap: () =>
-                context.router.pushNamed('main/medications/${post.id}'),
+                context.router.pushNamed('main/medications/${post.setid}'),
           ),
         );
       },
