@@ -13,9 +13,21 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   final _pages = <Widget>[
-    WelcomePage(),
-    MedicinePage(),
-    SecurityPage(),
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_welcome.svg',
+      getHeader: (context) => {context.l10n.onboarding_welcome_page_header},
+      getText: (context) => {context.l10n.onboarding_welcome_page_text},
+    ),
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_medicine.svg',
+      getHeader: (context) => {context.l10n.onboarding_medicine_page_header},
+      getText: (context) => {context.l10n.onboarding_medicine_page_text},
+    ),
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_security.svg',
+      getHeader: (context) => {context.l10n.onboarding_security_page_header},
+      getText: (context) => {context.l10n.onboarding_security_page_text},
+    ),
   ];
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
@@ -130,10 +142,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 }
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({
+class OnboardingSubPage extends StatelessWidget {
+  const OnboardingSubPage({
     Key? key,
+    required this.imagePath,
+    required this.getHeader,
+    required this.getText,
   }) : super(key: key);
+
+  final String imagePath;
+  final Set<String> Function(BuildContext) getHeader;
+  final Set<String> Function(BuildContext) getText;
 
   @override
   Widget build(BuildContext context) {
@@ -144,14 +163,14 @@ class WelcomePage extends StatelessWidget {
         children: [
           Center(
             child: SvgPicture.asset(
-              'assets/images/onboarding_welcome.svg',
+              imagePath,
               width: 300,
               height: 300,
             ),
           ),
           SizedBox(height: 30),
           Text(
-            context.l10n.onboarding_welcome_page_header,
+            getHeader(context).single,
             style: TextStyle(
               color: Colors.white,
               fontSize: 25,
@@ -160,93 +179,7 @@ class WelcomePage extends StatelessWidget {
           ),
           SizedBox(height: 15),
           Text(
-            context.l10n.onboarding_welcome_page_text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              height: 1.2,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class MedicinePage extends StatelessWidget {
-  const MedicinePage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: SvgPicture.asset(
-              'assets/images/onboarding_medicine.svg',
-              width: 300,
-              height: 300,
-            ),
-          ),
-          SizedBox(height: 30),
-          Text(
-            context.l10n.onboarding_medicine_page_header,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              height: 1.5,
-            ),
-          ),
-          SizedBox(height: 15),
-          Text(
-            context.l10n.onboarding_medicine_page_text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              height: 1.2,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class SecurityPage extends StatelessWidget {
-  const SecurityPage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: SvgPicture.asset(
-              'assets/images/onboarding_security.svg',
-              width: 300,
-              height: 300,
-            ),
-          ),
-          SizedBox(height: 30),
-          Text(
-            context.l10n.onboarding_security_page_header,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              height: 1.5,
-            ),
-          ),
-          SizedBox(height: 15),
-          Text(
-            context.l10n.onboarding_security_page_text,
+            getText(context).single,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
