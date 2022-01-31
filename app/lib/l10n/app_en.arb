@@ -43,7 +43,7 @@
     }
   },
 
-  "@medications_detalis_page_working": {
+  "@medications_details_page_working": {
     "description": "Provisional message for developers when visiting medications details page.",
     "placeholders": {
       "id": {
