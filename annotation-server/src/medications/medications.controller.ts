@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete, Query } from '@nestjs/common';
 import { Medication } from './medications.entity';
 import { MedicationsService } from './medications.service';
 import { RxNormMapping } from './rxnormmappings.entity';
@@ -7,8 +7,8 @@ import { RxNormMapping } from './rxnormmappings.entity';
 export class MedicationsController {
   constructor(private medicationsService: MedicationsService) {}
   @Get()
-  async findAll(): Promise<RxNormMapping[]> {
-    return this.medicationsService.findAll();
+  async findAll(@Query('query') query: string): Promise<RxNormMapping[]> {
+    return this.medicationsService.findAll(query);
   }
 
   @Get(':id')

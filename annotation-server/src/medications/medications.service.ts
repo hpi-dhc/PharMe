@@ -3,7 +3,7 @@ import { Medication } from './medications.entity';
 import { RxNormMapping } from './rxnormmappings.entity';
 import { Ingredient } from './ingredients.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -45,7 +45,7 @@ export class MedicationsService {
         rxNormMappings.push(new RxNormMapping(row));
       })
       .on('end', async () => {
-        //might need to set chunk-option, if errors occur
+        // might need to set chunk-option, if errors occur
         console.log(
           'Saving',
           rxNormMappings.length,
@@ -69,8 +69,15 @@ export class MedicationsService {
       });
   }
 
-  async findAll(): Promise<RxNormMapping[]> {
-    return this.rxNormMappingRepository.find();
+  async findAll(query?: string): Promise<RxNormMapping[]> {
+    if (query) {
+      // TODO: Case insensitive
+      return this.rxNormMappingRepository.find({
+        rxstring: Like("%" + query + "%")
+      });
+    } else {
+      return this.rxNormMappingRepository.find({ take: 100 });
+    }
   }
 
   async findOne(id: string): Promise<Medication> {
