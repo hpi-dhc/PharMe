@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../../common/module.dart';
+
 class MedicationDetailsPage extends StatelessWidget {
   const MedicationDetailsPage({@pathParam required this.id}) : super();
 
@@ -9,7 +11,7 @@ class MedicationDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('It works. ID is $id'),
+      child: Text(context.l10n.medications_details_page_working(id)),
     );
   }
 }

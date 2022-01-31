@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../../common/module.dart';
 import '../routing/router.dart';
 
 class MainPage extends StatelessWidget {
@@ -24,25 +25,26 @@ class MainPage extends StatelessWidget {
         return BottomNavigationBar(
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
-          items: _bottomNavigationBarItems,
+          items: _bottomNavigationBarItems(context),
         );
       },
     );
   }
 
-  List<BottomNavigationBarItem> get _bottomNavigationBarItems {
-    return const <BottomNavigationBarItem>[
+  List<BottomNavigationBarItem> _bottomNavigationBarItems(
+      BuildContext context) {
+    return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: Icon(Icons.medication),
-        label: 'Medications',
+        label: context.l10n.nav_medications,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.assessment),
-        label: 'Reports',
+        label: context.l10n.nav_reports,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.person),
-        label: 'Profile',
+        label: context.l10n.nav_profile,
       ),
     ];
   }

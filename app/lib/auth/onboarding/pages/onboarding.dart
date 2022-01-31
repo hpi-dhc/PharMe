@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../common/module.dart';
+
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
@@ -57,7 +59,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(),
               ),
-              _buildNextButton(),
+              _buildNextButton(context),
             ],
           ),
         ),
@@ -86,7 +88,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  Widget _buildNextButton() {
+  Widget _buildNextButton(BuildContext context) {
     return Expanded(
       child: Align(
         alignment: FractionalOffset.bottomRight,
@@ -106,7 +108,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                isLastPage ? 'Get started' : 'Next',
+                isLastPage
+                    ? context.l10n.onboarding_get_started
+                    : context.l10n.onboarding_next,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -147,16 +151,16 @@ class WelcomePage extends StatelessWidget {
           ),
           SizedBox(height: 30),
           Text(
-            'Welcome to Pharme –\nyour drug assistance',
+            context.l10n.onboarding_welcome_page_header,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 26,
+              fontSize: 25,
               height: 1.5,
             ),
           ),
           SizedBox(height: 15),
           Text(
-            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et.',
+            context.l10n.onboarding_welcome_page_text,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -190,16 +194,16 @@ class MedicinePage extends StatelessWidget {
           ),
           SizedBox(height: 30),
           Text(
-            'Genome power unlocked\nto improve human health',
+            context.l10n.onboarding_medicine_page_header,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 26,
+              fontSize: 25,
               height: 1.5,
             ),
           ),
           SizedBox(height: 15),
           Text(
-            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et.',
+            context.l10n.onboarding_medicine_page_text,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -233,16 +237,16 @@ class SecurityPage extends StatelessWidget {
           ),
           SizedBox(height: 30),
           Text(
-            'We care about\nyour data protection',
+            context.l10n.onboarding_security_page_header,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 26,
+              fontSize: 25,
               height: 1.5,
             ),
           ),
           SizedBox(height: 15),
           Text(
-            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et.',
+            context.l10n.onboarding_security_page_text,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,

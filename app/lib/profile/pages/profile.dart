@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../app/widgets/headings.dart';
+import '../../common/module.dart';
 import 'cubit.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -48,19 +49,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Heading('Login to Lab Server'),
+                  Heading(context.l10n.profile_page_header),
                   SizedBox(
                     height: 10,
                   ),
                   TextFormField(
                     controller: usernameController,
                     decoration: InputDecoration(
-                      labelText: 'Username',
+                      labelText: context.l10n.profile_page_username,
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your username!';
+                        return context.l10n.profile_page_enter_username;
                       }
                       return null;
                     },
@@ -72,12 +73,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: 'Password',
+                      labelText: context.l10n.profile_page_password,
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password!';
+                        return context.l10n.profile_page_enter_password;
                       }
                       return null;
                     },
@@ -89,7 +90,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         context.read<ProfileCubit>().login(
-                            usernameController.text, passwordController.text);
+                              context,
+                              usernameController.text,
+                              passwordController.text,
+                            );
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -104,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: Colors.white,
                         ),
                       ),
-                      orElse: () => Text('Login'),
+                      orElse: () => Text(context.l10n.profile_page_sign_in),
                     ),
                   ),
                   if (state is LoadingState || state is LoadedState)

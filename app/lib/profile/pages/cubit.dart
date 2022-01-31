@@ -1,17 +1,24 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:http/http.dart' as http;
+
+import '../../common/module.dart';
 
 part 'cubit.freezed.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileState.initial());
 
-  Future<void> login(String username, String password) async {
-    emit(ProfileState.loading('Loading genomic data...'));
+  Future<void> login(
+    BuildContext context,
+    String username,
+    String password,
+  ) async {
+    emit(ProfileState.loading(context.l10n.profile_page_loading));
 
     try {
       // Username: admin
