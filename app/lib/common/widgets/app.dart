@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../routing/router.dart';
-import '../theme/theme.dart';
+import '../theme.dart';
 
 class FrasecysApp extends StatelessWidget {
   FrasecysApp({Key? key}) : super(key: key);
