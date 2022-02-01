@@ -30,12 +30,18 @@ export class RxNormMappingsService {
     );
 
     const rxNormMappings: RxNormMapping[] = [];
+    const setids = new Set();
+    const rxstrings = new Set();
 
     fs.createReadStream(mappingsPath)
       .pipe(parse({ delimiter: '|', from_line: 2 }))
       .on('data', (row) => {
         // it will start from 2nd row
-        rxNormMappings.push(new RxNormMapping(row));
+        if (!setids.has(row[0]) || !rxstrings.has(row[3])) {
+          rxNormMappings.push(new RxNormMapping(row));
+          setids.add(row[0]);
+          rxstrings.add(row[3]);
+        }
       })
       .on('end', async () => {
         // might need to set chunk-option, if errors occur
