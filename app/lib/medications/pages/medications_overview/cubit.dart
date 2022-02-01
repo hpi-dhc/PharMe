@@ -15,8 +15,7 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
 
   Future<void> loadMedications() async {
     emit(MedicationsOverviewState.loading());
-    final response =
-        await http.get(Uri.parse('http://localhost:3000/medications'));
+    final response = await http.get(Uri.parse('http://localhost:3000/rxnorm'));
 
     if (response.statusCode == 200) {
       final list =
