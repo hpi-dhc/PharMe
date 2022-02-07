@@ -33,8 +33,6 @@ export class RxNormMappingsService {
     const setids = new Set();
     const rxstrings = new Set();
 
-    let count = 0;
-
     await new Promise<void>((resolve, reject) => {
       fs.createReadStream(mappingsPath)
         .pipe(parse({ delimiter: '|', from_line: 2, relaxColumnCount: true }))
@@ -48,15 +46,12 @@ export class RxNormMappingsService {
             setids.add(row[0]);
             rxstrings.add(row[3]);
           }
-
-          count++;
         })
         .on('error', (error) => {
           reject(error);
         })
         .on('end', async () => {
           // might need to set chunk-option, if errors occur
-          console.log('CSV-Count:', count);
           console.log(
             'Saving',
             rxNormMappings.length,
