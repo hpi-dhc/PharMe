@@ -21,7 +21,6 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
     super.initState();
 
     searchController.addListener(() {
-      debugPrint(searchController.text);
       setState(() {});
     });
   }
