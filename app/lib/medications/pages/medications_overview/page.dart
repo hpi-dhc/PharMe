@@ -14,6 +14,18 @@ class MedicationsOverviewPage extends StatefulWidget {
 }
 
 class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
+  final searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    searchController.addListener(() {
+      debugPrint(searchController.text);
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -24,28 +36,49 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
             initial: Container.new,
             loading: () => Center(child: CircularProgressIndicator()),
             error: () => Center(child: Text('Error!')),
-            loaded: (medications) =>
-                _buildMedicationsList(context, medications),
+            loaded: (medications) => _buildMedicationsList(
+                context,
+                medications
+                    .where((medication) => medication.rxstring
+                        .toLowerCase()
+                        .contains(searchController.text.toLowerCase()))
+                    .toList()),
           );
         },
       ),
     );
   }
 
-  ListView _buildMedicationsList(
+  Column _buildMedicationsList(
       BuildContext context, List<Medication> medications) {
-    return ListView.builder(
-      itemCount: medications.length,
-      itemBuilder: (context, index) {
-        final post = medications[index];
-        return Card(
-          child: ListTile(
-            title: Text(post.rxstring),
-            onTap: () =>
-                context.router.pushNamed('main/medications/${post.setid}'),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: searchController,
+            decoration: InputDecoration(
+              labelText: 'Search',
+              border: OutlineInputBorder(),
+            ),
           ),
-        );
-      },
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: medications.length,
+            itemBuilder: (context, index) {
+              final medication = medications[index];
+              return Card(
+                child: ListTile(
+                  title: Text(medication.rxstring),
+                  onTap: () => context.router
+                      .pushNamed('main/medications/${medication.setid}'),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

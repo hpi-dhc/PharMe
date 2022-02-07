@@ -86,7 +86,7 @@ export class RxNormMappingsService {
         rxstring: Like('%' + query + '%'),
       });
     } else {
-      return this.rxNormMappingRepository.find({ take: 100 });
+      return this.rxNormMappingRepository.find();
     }
   }
 

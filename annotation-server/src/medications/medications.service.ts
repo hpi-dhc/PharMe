@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import * as https from 'https';
 import { parseStringPromise } from 'xml2js';
 import { downloadAndUnzip } from '../common/utils/download-unzip';
 
@@ -44,31 +45,26 @@ export class MedicationsService {
       return medication;
     }
 
-    const tmpPath = path.join(os.tmpdir(), id);
+    const url = `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/${id}.xml`;
 
-    const url =
-      'https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=' +
-      id +
-      '&type=zip';
+    const chunk = await new Promise((resolve, reject) => {
+      https
+        .get(url, (res) => {
+          const data = [];
+          res.on('data', (chunk) => {
+            data.push(chunk);
+          });
 
-    await downloadAndUnzip(url, tmpPath);
-
-    let xmlFileName;
-
-    fs.readdirSync(path.join(os.tmpdir(), id)).forEach((file) => {
-      if (path.extname(file) === '.xml') {
-        xmlFileName = file;
-      }
+          res.on('end', () => {
+            resolve(Buffer.concat(data));
+          });
+        })
+        .on('error', (error) => {
+          reject(error);
+        });
     });
 
-    if (!xmlFileName) {
-      throw new NotFoundException("Medication doesn't have xml file!");
-    }
-
-    const xmlPath = path.join(os.tmpdir(), id + '/' + xmlFileName);
-
-    const data = fs.readFileSync(xmlPath);
-    const result = await parseStringPromise(data);
+    const result = await parseStringPromise(chunk);
 
     const medication = new Medication();
 

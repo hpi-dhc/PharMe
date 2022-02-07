@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +17,8 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
   Future<void> loadMedications() async {
     emit(MedicationsOverviewState.loading());
     final response = await http.get(Uri.parse('http://localhost:3000/rxnorm'));
+
+    debugPrint(response.contentLength.toString());
 
     if (response.statusCode == 200) {
       final list =
