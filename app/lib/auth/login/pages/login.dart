@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client_io.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../profile/models/alleles.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -41,6 +47,30 @@ class _LoginPageState extends State<LoginPage> {
     await closeWebView();
 
     final token = await c.getTokenResponse();
+    final prefs = await SharedPreferences.getInstance();
+    final localData = prefs.getString('allData');
+    final tokenString = token.accessToken;
+
+    // TODO(toalaah): refactor to external method
+    if (localData == null) {
+      final response = await http.get(Uri.parse('http://127.0.0.1:3000/api/v1/users/star-alleles'),
+        headers: <String, String>{
+          'Authorization': 'Bearer $tokenString',
+        });
+
+      // TODO(toalaah): handle other response types (ex: 401, ...)
+      if (response.statusCode == 200) {
+        // print('all good from api');
+        final allData = Alleles.fromJson(jsonDecode(response.body)); // mock api call
+        await prefs.setString('allData', jsonEncode(allData));
+      }
+      // print('got from api');
+    } else {
+      // print('got from local');
+    }
+
+    final alleleData = Alleles.fromJson(jsonDecode(prefs.getString('allData') ?? ''));
+
     return token;
   }
 
