@@ -12,7 +12,7 @@ import { downloadAndUnzip } from '../common/utils/download-unzip';
 export class RxNormMappingsService {
   constructor(
     @InjectRepository(RxNormMapping)
-    private rxNormMappingRepository: Repository<RxNormMapping>
+    private rxNormMappingRepository: Repository<RxNormMapping>,
   ) {}
 
   async fetchMedications() {
@@ -72,7 +72,7 @@ export class RxNormMappingsService {
     if (query) {
       // TODO: Case insensitive
       return this.rxNormMappingRepository.find({
-        rxstring: Like("%" + query + "%")
+        rxstring: Like('%' + query + '%'),
       });
     } else {
       return this.rxNormMappingRepository.find({ take: 100 });

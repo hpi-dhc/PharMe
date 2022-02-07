@@ -3,7 +3,7 @@ import { Medication } from './medications.entity';
 import { RxNormMapping } from './rxnormmappings.entity';
 import { Ingredient } from './ingredients.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
