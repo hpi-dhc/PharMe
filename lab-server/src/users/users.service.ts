@@ -3,6 +3,8 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as argon2 from 'argon2';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as path from 'path';
+import { readFile } from 'fs/promises';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +24,12 @@ export class UsersService {
     }
     await sleep(4000);
     return 'Some star alleles';
+  }
+
+  async getStarAlleles(): Promise<string> {
+    return await readFile(path.resolve(__dirname, '../../src/alleles.json'), {
+      encoding: 'utf8',
+    });
   }
 }
 

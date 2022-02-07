@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthenticateDto } from './dto/authenticate.dto';
 import { UsersService } from './users.service';
 
@@ -12,5 +12,10 @@ export class UsersController {
       authenticateDto.username,
       authenticateDto.password,
     );
+  }
+
+  @Get('star-alleles')
+  starAlleles() {
+    return this.usersService.getStarAlleles();
   }
 }
