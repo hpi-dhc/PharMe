@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { RxNormMapping } from './rxnormmappings.entity';
 import { RxNormMappingsService } from './rxnormmappings.service';
 
@@ -13,5 +13,10 @@ export class RxNormMappingsController {
   @Post()
   async create() {
     return this.rxNormMappingsService.fetchMedications();
+  }
+
+  @Delete()
+  async delete() {
+    return this.rxNormMappingsService.deleteAll();
   }
 }

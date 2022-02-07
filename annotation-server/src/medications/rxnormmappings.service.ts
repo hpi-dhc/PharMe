@@ -33,39 +33,55 @@ export class RxNormMappingsService {
     const setids = new Set();
     const rxstrings = new Set();
 
-    fs.createReadStream(mappingsPath)
-      .pipe(parse({ delimiter: '|', from_line: 2 }))
-      .on('data', (row) => {
-        // it will start from 2nd row
-        if (!setids.has(row[0]) || !rxstrings.has(row[3])) {
-          rxNormMappings.push(new RxNormMapping(row));
-          setids.add(row[0]);
-          rxstrings.add(row[3]);
-        }
-      })
-      .on('end', async () => {
-        // might need to set chunk-option, if errors occur
-        console.log(
-          'Saving',
-          rxNormMappings.length,
-          'medications to database...',
-        );
-        const savedMedications = await this.rxNormMappingRepository
-          .save<RxNormMapping>(rxNormMappings, { chunk: 1000 })
-          .catch((error) => {
-            console.error(error);
-          });
+    let count = 0;
 
-        if (savedMedications) {
+    await new Promise<void>((resolve, reject) => {
+      fs.createReadStream(mappingsPath)
+        .pipe(parse({ delimiter: '|', from_line: 2, relaxColumnCount: true }))
+        .on('data', (row) => {
+          // it will start from 2nd row
+          if (
+            row.length === 5 &&
+            (!setids.has(row[0]) || !rxstrings.has(row[3]))
+          ) {
+            rxNormMappings.push(new RxNormMapping(row));
+            setids.add(row[0]);
+            rxstrings.add(row[3]);
+          }
+
+          count++;
+        })
+        .on('error', (error) => {
+          reject(error);
+        })
+        .on('end', async () => {
+          // might need to set chunk-option, if errors occur
+          console.log('CSV-Count:', count);
           console.log(
-            'Successfully saved',
-            savedMedications.length,
-            'to database!',
+            'Saving',
+            rxNormMappings.length,
+            'medications to database...',
           );
-        } else {
-          console.error('Error saving medications!');
-        }
-      });
+          const savedMedications = await this.rxNormMappingRepository
+            .save<RxNormMapping>(rxNormMappings, { chunk: 50 })
+            .catch((error) => {
+              reject(error);
+            });
+
+          if (savedMedications) {
+            console.log(
+              'Successfully saved',
+              savedMedications.length,
+              'to database!',
+            );
+          } else {
+            console.error('Error saving medications!');
+            reject('Error saving medications!');
+          }
+
+          resolve();
+        });
+    });
   }
 
   async findAll(query?: string): Promise<RxNormMapping[]> {
@@ -77,5 +93,9 @@ export class RxNormMappingsService {
     } else {
       return this.rxNormMappingRepository.find({ take: 100 });
     }
+  }
+
+  async deleteAll(): Promise<void> {
+    return this.rxNormMappingRepository.clear();
   }
 }
