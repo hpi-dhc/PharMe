@@ -53,7 +53,7 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: TextField(
             controller: searchController,
             decoration: InputDecoration(
