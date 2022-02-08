@@ -3,8 +3,8 @@ name: Lab Server
 on:
   push:
     paths:
-      - '.github/workflows/lab-server.yml'
-      - 'lab-server/**'
+      - ".github/workflows/lab-server.yml"
+      - "lab-server/**"
   pull_request:
     paths:
       - '.github/workflows/lab-server.yml'

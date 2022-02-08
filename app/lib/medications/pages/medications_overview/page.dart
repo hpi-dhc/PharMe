@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../models/post.dart';
+import '../../models/medication.dart';
 import 'cubit.dart';
 
 class MedicationsOverviewPage extends StatefulWidget {
@@ -14,6 +14,17 @@ class MedicationsOverviewPage extends StatefulWidget {
 }
 
 class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
+  final searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    searchController.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -24,26 +35,49 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
             initial: Container.new,
             loading: () => Center(child: CircularProgressIndicator()),
             error: () => Center(child: Text('Error!')),
-            loaded: (posts) => _buildPostsList(context, posts),
+            loaded: (medications) => _buildMedicationsList(
+                context,
+                medications
+                    .where((medication) => medication.rxstring
+                        .toLowerCase()
+                        .contains(searchController.text.toLowerCase()))
+                    .toList()),
           );
         },
       ),
     );
   }
 
-  ListView _buildPostsList(BuildContext context, List<Post> posts) {
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        final post = posts[index];
-        return Card(
-          child: ListTile(
-            title: Text(post.title),
-            onTap: () =>
-                context.router.pushNamed('main/medications/${post.id}'),
+  Column _buildMedicationsList(
+      BuildContext context, List<Medication> medications) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: TextField(
+            controller: searchController,
+            decoration: InputDecoration(
+              labelText: 'Search',
+              border: OutlineInputBorder(),
+            ),
           ),
-        );
-      },
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: medications.length,
+            itemBuilder: (context, index) {
+              final medication = medications[index];
+              return Card(
+                child: ListTile(
+                  title: Text(medication.rxstring),
+                  onTap: () => context.router
+                      .pushNamed('main/medications/${medication.setid}'),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
