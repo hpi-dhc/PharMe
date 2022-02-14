@@ -13,7 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./other/meeting-assistant
+        id: assign_leader
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: 5
           users: ${{ secrets.BP_USERS }}
+
+  send_telegram_message:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/telegram-action@master
+        with:
+          to: ${{ steps.assign_leader.outputs.telegram }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            Hi @${{ steps.assign_leader.outputs.telegram }},
+            a friendly reminder that you are responsible for the BP meeting next Monday.
