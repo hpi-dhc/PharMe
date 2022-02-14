@@ -1,10 +1,8 @@
 name: Meeting Assistant
 
-# on:
-#   schedule:
-#     - cron: '0 12 * * 5'
-
-on: push
+on:
+  schedule:
+    - cron: '0 12 * * 5'
 
 jobs:
   assign_leader:
