@@ -26,9 +26,8 @@ jobs:
     steps:
       - uses: appleboy/telegram-action@master
         with:
-          # to: ${{ steps.meeting_assistant.outputs.telegram }}
-          to: benjamin_frost
+          to: ${{ secrets.TELEGRAM_BOT_TO }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
             Hi @${{ steps.meeting_assistant.outputs.telegram }},
-            a friendly reminder that you are responsible for the BP meeting next Monday.
+            friendly reminder that you are responsible for the BP meeting next Monday.
