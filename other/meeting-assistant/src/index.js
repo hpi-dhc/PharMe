@@ -7,7 +7,8 @@ try {
     throw new Error('Could not find a list of users');
   }
 
-  console.log(`Hello ${users[0].name}!`);
+  core.setOutput('telegram', users[0].telegram);
+  console.log(`Hello ${users[0].telegram}!`);
 } catch (error) {
   core.setFailed(error.message);
 }

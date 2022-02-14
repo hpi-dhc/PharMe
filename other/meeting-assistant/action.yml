@@ -1,11 +1,14 @@
 name: 'Meeting Assistant'
 author: 'Benjamin-Frost'
-description: 'Assigns leader for next meeting and sends an email'
+description: 'Assigns leader for next meeting and outputs telegram name of selected user'
 
 inputs:
   users:
-    description: 'JSON array of user objects with keys: name, github, email'
+    description: 'JSON array of user objects with keys: name, github, telegram'
     required: true
+outputs:
+  telegram:
+    description: 'Telegram name of selected user'
 
 runs:
   using: 'node16'
