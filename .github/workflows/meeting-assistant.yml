@@ -1,0 +1,14 @@
+name: Meeting Assistant
+
+# on:
+#   schedule:
+#     - cron: '0 12 * * 5'
+
+on: push
+
+jobs:
+  assign_leader:
+    runs-on: [self-hosted, Linux]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./other/meeting-assistant

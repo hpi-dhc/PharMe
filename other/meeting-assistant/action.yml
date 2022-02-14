@@ -1,0 +1,12 @@
+name: 'Meeting Assistant'
+author: 'Benjamin-Frost'
+description: 'Assigns leader for next meeting and sends an email'
+
+inputs:
+  users:
+    description: 'JSON array of user objects with keys: name, github, email'
+    required: true
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
