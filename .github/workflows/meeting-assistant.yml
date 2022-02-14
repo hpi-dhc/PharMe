@@ -14,5 +14,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./other/meeting-assistant
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: 5
           users: ${{ secrets.BP_USERS }}

@@ -3,6 +3,9 @@ author: 'Benjamin-Frost'
 description: 'Assigns leader for next meeting and outputs telegram name of selected user'
 
 inputs:
+  token:
+    description: 'GitHub token'
+    required: true
   issue-number:
     description: 'Number of issue meeting'
     required: true
