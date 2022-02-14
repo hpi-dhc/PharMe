@@ -8477,6 +8477,8 @@ try {
     throw new Error('Could not find a list of users');
   }
 
+  console.log(users);
+
   core.setOutput('telegram', users[0].telegram);
   console.log(`Hello ${users[0].telegram}!`);
 } catch (error) {
