@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../profile/models/alleles.dart';
+import '../../../profile/models/hive/alleles.dart';
+import '../../../profile/models/hive/diplotype.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,10 +18,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  List<String> labs = ['Illumina Solutions Center Berlin', 'Mount Sinai Hospital (NYC)'];
+  List<String> labs = [
+    'Illumina Solutions Center Berlin',
+    'Mount Sinai Hospital (NYC)'
+  ];
   String dropdownValue = 'Illumina Solutions Center Berlin';
 
-  Future<TokenResponse> authenticate() async {
+  Future<void> authenticate() async {
     // parameters here just for the sake of the question
     final uri = Uri.parse('http://172.20.24.129:28080/auth/realms/pharme');
     const clientId = 'pharme-app';
@@ -42,37 +46,24 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
     );
-
-    final c = await authenticator.authorize();
+    final credentials = await authenticator.authorize();
     await closeWebView();
+    final token =
+        await credentials.getTokenResponse().then((res) => res.accessToken);
 
-    final token = await c.getTokenResponse();
-    final prefs = await EncryptedSharedPreferences().getInstance();
-    final localData = prefs.getString('allData');
-    final tokenString = token.accessToken;
+    await setupHive();
+    final userData = await Hive.openBox<Alleles>('userData');
 
+    await userData.clear();
     // TODO(toalaah): refactor to external method
     // TODO(toalaah): move all constant urls to some global file
-    if (localData == null) {
-      final response = await http.get(Uri.parse('http://127.0.0.1:3000/api/v1/users/star-alleles'),
-        headers: <String, String>{
-          'Authorization': 'Bearer $tokenString',
-        });
-
-      // TODO(toalaah): handle other response types (ex: 401, ...)
+    // TODO(toalaah): handle other response types (ex: 401, ...)
+    if (userData.get('alleles') == null) {
+      final response = await getStarAlleles(token);
       if (response.statusCode == 200) {
-        // print('all good from api');
-        final allData = Alleles.fromJson(jsonDecode(response.body)); // mock api call
-        await prefs.setString('allData', jsonEncode(allData));
+        await saveAlleleData(response, 'userData');
       }
-      // print('got from api');
-    } else {
-      // print('got from local');
     }
-
-    final alleleData = Alleles.fromJson(jsonDecode(prefs.getString('allData') ?? ''));
-
-    return token;
   }
 
   @override
@@ -110,5 +101,27 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<http.Response> getStarAlleles(String? token) async {
+    final response = await http.get(
+        Uri.parse('http://127.0.0.1:3000/api/v1/users/star-alleles'),
+        headers: <String, String>{
+          'Authorization': 'Bearer $token',
+        });
+    return response;
+  }
+
+  Future<void> saveAlleleData(http.Response response, String boxname) async {
+    final json = jsonDecode(response.body);
+    final alleles = Alleles.fromJson(json);
+    print('saving data');
+    return Hive.box<Alleles>('userData').put('alleles', alleles);
+  }
+
+  Future<void> setupHive() async {
+    await Hive.initFlutter();
+    Hive.registerAdapter(AllelesAdapter());
+    Hive.registerAdapter(DiplotypeAdapter());
   }
 }

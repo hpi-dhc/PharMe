@@ -17,9 +17,14 @@ dependencies:
   flutter_bloc: ^7.3.3
   flutter_svg: ^1.0.0
   freezed_annotation: ^0.15.0
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
+  hive_generator: ^1.1.0
+  build_runner: ^2.0.5
   http: ^0.13.4
   json_annotation: ^4.3.0
   openid_client: ^0.4.3
+  shared_preferences: ^2.0.13
   url_launcher: ^6.0.18
 
 dev_dependencies:
