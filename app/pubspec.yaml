@@ -11,6 +11,7 @@ dependencies:
   auto_route: ^3.0.4
   black_hole_flutter: ^0.3.4
   bloc: ^7.2.1
+  encrypted_shared_preferences: ^3.0.0
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.3
@@ -19,7 +20,6 @@ dependencies:
   http: ^0.13.4
   json_annotation: ^4.3.0
   openid_client: ^0.4.3
-  shared_preferences: ^2.0.13
   url_launcher: ^6.0.18
 
 dev_dependencies:

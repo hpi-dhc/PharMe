@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:openid_client/openid_client_io.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../profile/models/alleles.dart';
@@ -47,11 +47,12 @@ class _LoginPageState extends State<LoginPage> {
     await closeWebView();
 
     final token = await c.getTokenResponse();
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = await EncryptedSharedPreferences().getInstance();
     final localData = prefs.getString('allData');
     final tokenString = token.accessToken;
 
     // TODO(toalaah): refactor to external method
+    // TODO(toalaah): move all constant urls to some global file
     if (localData == null) {
       final response = await http.get(Uri.parse('http://127.0.0.1:3000/api/v1/users/star-alleles'),
         headers: <String, String>{
