@@ -3,6 +3,9 @@ author: 'Benjamin-Frost'
 description: 'Assigns leader for next meeting and outputs telegram name of selected user'
 
 inputs:
+  issue-number:
+    description: 'Number of issue meeting'
+    required: true
   users:
     description: 'JSON array of user objects with keys: name, github, telegram'
     required: true
@@ -11,5 +14,5 @@ outputs:
     description: 'Telegram name of selected user'
 
 runs:
-  using: 'node16'
+  using: 'node12'
   main: 'dist/index.js'
