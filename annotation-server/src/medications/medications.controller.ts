@@ -6,6 +6,11 @@ import { MedicationsService } from './medications.service';
 export class MedicationsController {
   constructor(private medicationsService: MedicationsService) {}
 
+  @Get()
+  async getAll(): Promise<void> {
+    return this.medicationsService.getAll();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Medication> {
     return this.medicationsService.findOne(id);

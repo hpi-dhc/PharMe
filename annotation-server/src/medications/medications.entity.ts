@@ -18,13 +18,13 @@ export class Medication {
   agents: string;
 
   @Column({ nullable: true })
-  numeratorQuantity: number;
+  numeratorQuantity: string;
 
   @Column({ nullable: true })
   numeratorUnit: string;
 
   @Column({ nullable: true })
-  denominatorQuantity: number;
+  denominatorQuantity: string;
 
   @Column({ nullable: true })
   denominatorUnit: string;

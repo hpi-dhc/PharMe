@@ -4,12 +4,9 @@ import { RxNormMapping } from './rxnormmappings.entity';
 import { Ingredient } from './ingredients.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
 import * as https from 'https';
-import { parseStringPromise } from 'xml2js';
-import { downloadAndUnzip } from '../common/utils/download-unzip';
+import { DOMParser } from 'xmldom';
+import * as xpath from 'xpath';
 
 @Injectable()
 export class MedicationsService {
@@ -22,10 +19,18 @@ export class MedicationsService {
     private ingredientRepository: Repository<Ingredient>,
   ) {}
 
+  async getAll(): Promise<void> {
+    const mappings = await this.rxNormMappingRepository.find();
+    for(const mapping of mappings){
+      console.log(`Fetching ${mapping.setid}.`);
+      await this.findOne(mapping.setid);
+    }
+  }
+
   async findOne(id: string): Promise<Medication> {
     const mappings = await this.rxNormMappingRepository.find({
       where: {
-        setid: id,
+        setid: id.toLowerCase(),
       },
       relations: ['medication'],
     });
@@ -64,49 +69,36 @@ export class MedicationsService {
         });
     });
 
-    const result = await parseStringPromise(chunk);
+    const domParser = new DOMParser();
+    const xml = chunk.toString().replace(/<\?.*\?>/g, '').replace(/<document.*>/, '<document>');
+    const doc = domParser.parseFromString(xml);
 
     const medication = new Medication();
 
-    const manufacturedProduct =
-      result.document.component[0].structuredBody[0].component[0].section[0]
-        .subject[0].manufacturedProduct[0].manufacturedProduct[0];
+    // TODO quantities might be floats
 
-    medication.name = manufacturedProduct.name[0];
-    medication.manufacturer =
-      result.document.author[0].assignedEntity[0].representedOrganization[0].name[0];
-    medication.agents =
-      manufacturedProduct.asEntityWithGeneric[0].genericMedicine[0].name[0];
-
-    const quantity = manufacturedProduct.asContent[0].quantity[0];
-
-    medication.numeratorQuantity = parseInt(quantity.numerator[0]['$'].value);
-    medication.numeratorUnit = quantity.numerator[0]['$'].unit;
-
-    medication.denominatorQuantity = parseInt(
-      quantity.denominator[0]['$'].value,
-    );
-    medication.denominatorUnit = quantity.denominator[0]['$'].unit;
+    medication.name = xpath.select("string(//manufacturedProduct/*/name)", doc).toString();
+    medication.manufacturer = xpath.select("string(//representedOrganisation/name)", doc).toString();
+    medication.agents = xpath.select("string(//genericMedicine/name)", doc).toString();
+    medication.numeratorQuantity = xpath.select('string(//manufacturedProduct/*/asContent/quantity/numerator/@value)', doc).toString();
+    medication.numeratorUnit = xpath.select('string(//manufacturedProduct/*/asContent/quantity/numerator/@unit)', doc).toString();
+    medication.denominatorQuantity = xpath.select('string(//manufacturedProduct/*/asContent/quantity/denominator/@value)', doc).toString();
+    medication.denominatorUnit = xpath.select('string(//manufacturedProduct/*/asContent/quantity/denominator/@unit)', doc).toString();
 
     const ingredients: Ingredient[] = [];
-
-    for (const xmlIngredient of manufacturedProduct.ingredient) {
+    for (const xmlIngredient of xpath.select("//manufacturedProduct/*/ingredient", doc)) {
       const ingredient = new Ingredient();
 
-      if (xmlIngredient.quantity) {
-        ingredient.numeratorQuantity = parseInt(
-          xmlIngredient.quantity[0].numerator[0]['$'].value,
-        );
-        ingredient.numeratorUnit =
-          xmlIngredient.quantity[0].numerator[0]['$'].unit;
+      const ingredientDoc = domParser.parseFromString(xmlIngredient.toString());
 
-        ingredient.denominatorQuantity =
-          xmlIngredient.quantity[0].denominator[0]['$'].value;
-        ingredient.denominatorUnit =
-          xmlIngredient.quantity[0].denominator[0]['$'].unit;
+      if(xpath.select("//quantity", ingredientDoc).length !== 0){
+        ingredient.numeratorQuantity = xpath.select("string(//quantity/numerator/@value)", ingredientDoc).toString();
+        ingredient.numeratorUnit = xpath.select("string(//quantity/numerator/@unit)", ingredientDoc).toString();
+        ingredient.denominatorQuantity = xpath.select("string(//quantity/denominator/@value)", ingredientDoc).toString();
+        ingredient.denominatorUnit = xpath.select("string(//quantity/denominator/@unit)", ingredientDoc).toString();
       }
 
-      ingredient.ingredient = xmlIngredient.ingredientSubstance[0].name[0];
+      ingredient.ingredient = xpath.select("string(//ingredientSubstance/name)", ingredientDoc).toString();
 
       ingredients.push(ingredient);
     }

@@ -38,6 +38,8 @@
     "typeorm": "^0.2.41",
     "uuid": "^8.3.2",
     "xml2js": "^0.4.23",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.32",
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
