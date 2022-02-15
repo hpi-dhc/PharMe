@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -93,6 +94,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         child: TextButton(
           onPressed: () {
             if (isLastPage) {
+              Hive.box('preferences').put('isOnboardingCompleted', true);
               context.router.pushNamed('auth/login');
             } else {
               _pageController.nextPage(
