@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
                 DropdownButtonHideUnderline(
                   child: DropdownButton2(
                     isExpanded: true,
-                    hint: Text('Select your lab'),
+                    hint: Text('Please select your lab'),
                     value: dropdownValue,
                     onChanged: (value) {
                       setState(() {
@@ -60,6 +60,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await authenticate();
+
+                      await context.router.pop();
                       await context.router.replaceNamed('main/medications');
                     },
                     style: ButtonStyle(
