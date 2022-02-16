@@ -1,0 +1,20 @@
+{
+  "name": "PharMe",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@commitlint/cli": "^16.0.2",
+    "@commitlint/config-conventional": "^16.0.0",
+    "husky": "^7.0.4"
+  },
+  "scripts": {
+    "bootstrap": "yarn bootstrap:root; yarn bootstrap:app; yarn bootstrap:lab-server; yarn bootstrap:annotation-server",
+    "bootstrap:root": "yarn install && husky install",
+    "bootstrap:app": "cd app && flutter pub get && flutter pub run build_runner build --delete-conflicting-outputs; cd ../",
+    "bootstrap:lab-server": "cd lab-server && yarn install; cd ../",
+    "bootstrap:annotation-server": "cd annotation-server && yarn install; cd ../"
+  }
+}
+
