@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../common/module.dart';
 import '../../models/medication.dart';
 import 'cubit.dart';
 
@@ -57,7 +58,7 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
           child: TextField(
             controller: searchController,
             decoration: InputDecoration(
-              labelText: 'Search',
+              labelText: context.l10n.overview_search_bar_search,
               border: OutlineInputBorder(),
             ),
           ),
