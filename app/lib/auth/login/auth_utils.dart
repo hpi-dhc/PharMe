@@ -35,10 +35,7 @@ Future<String> authenticate(String authUrl) async {
 }
 
 Future<void> fetchAndSaveAllesData(String token, String url) async {
-  final userData = await Hive.box<Alleles>('userData');
-  // await userData.clear();
-  // TODO(toalaah): refactor to external method
-  // TODO(toalaah): move all constant urls to some global file
+  final userData = Hive.box<Alleles>('userData');
   // TODO(toalaah): handle other response types (ex: 401, ...)
   if (userData.get('alleles') == null) {
     final response = await getStarAlleles(token, url);
@@ -61,6 +58,5 @@ Future<http.Response> getStarAlleles(String? token, String url) async {
 Future<void> saveAlleleData(http.Response response, String boxname) async {
   final json = jsonDecode(response.body);
   final alleles = Alleles.fromJson(json);
-  print('saving data');
   return Hive.box<Alleles>('userData').put('alleles', alleles);
 }
