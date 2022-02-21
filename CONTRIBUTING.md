@@ -6,7 +6,7 @@
 
 This repository contains a handy `bootstrap` script which will install all necessary dependencies for the various sub-projects, making the local setup as simple as executing one command. Before you begin though, make sure that you have the following tools installed:
 
-- A code editor. We **strongly recommend** [<img src="https://user-images.githubusercontent.com/82543715/142914400-49d5815b-71a7-4198-9501-157fc3aa40a2.png" width="16" height="16"> Visual Studio Code](https://code.visualstudio.com)
+- An editor, we **strongly recommend** [<img src="https://user-images.githubusercontent.com/82543715/142914400-49d5815b-71a7-4198-9501-157fc3aa40a2.png" width="16" height="16"> Visual Studio Code](https://code.visualstudio.com)
 - [<img src="https://user-images.githubusercontent.com/82543715/142914382-5be71efd-9e34-46c2-aad6-04255c430594.png" width="16" height="16"> Git](https://git-scm.com/downloads)
 - [<img src="https://user-images.githubusercontent.com/58258541/143049489-668aea70-bb2c-420d-b3e8-e0edc42a4e92.png" width="16" height="16"> Docker](https://docs.docker.com/get-docker/)
 - [<img src="https://user-images.githubusercontent.com/58258541/143050266-4a2030d1-c319-447d-812b-2ad8a4020d48.png" width="16" height="16"> NodeJS](https://nodejs.org)
