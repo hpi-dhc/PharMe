@@ -23,6 +23,8 @@
   "onboarding_security_page_header": "We care about\nyour data protection",
   "onboarding_security_page_text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et.",
 
+  "overview_search_bar_search": "Search",
+
   "profile_page_enter_password": "Please enter your password!",
   "profile_page_enter_username": "Please enter your username!",
   "profile_page_header": "Login to Lab Server",
