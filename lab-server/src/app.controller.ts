@@ -5,7 +5,7 @@ export class AppController {
   // constructor() {}
 
   @Get('/health')
-  getHello(): string {
+  getHealth(): string {
     return 'ok';
   }
 }
