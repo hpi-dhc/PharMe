@@ -2,7 +2,7 @@
 
 > **Note:** every project (i.e., subdirectories) also contains additional contribution information relevant to the specific sub-project.
 
-## Local setup (Entire Project)
+## Local setup
 
 This repository contains a handy `bootstrap` script which will install all necessary dependencies for the various sub-projects, making the local setup as simple as executing one command. Before you begin though, make sure that you have the following tools installed:
 
@@ -11,7 +11,6 @@ This repository contains a handy `bootstrap` script which will install all neces
 - [<img src="https://user-images.githubusercontent.com/58258541/143049489-668aea70-bb2c-420d-b3e8-e0edc42a4e92.png" width="16" height="16"> Docker](https://docs.docker.com/get-docker/)
 - [<img src="https://user-images.githubusercontent.com/58258541/143050266-4a2030d1-c319-447d-812b-2ad8a4020d48.png" width="16" height="16"> NodeJS](https://nodejs.org)
 - [<img src="https://user-images.githubusercontent.com/58258541/143050227-b374b1f7-e28e-4b90-b7f0-b9112521d3b1.png" width="16" height="16"> Yarn](https://yarnpkg.com/)
-- The [<img src="https://user-images.githubusercontent.com/82543715/142913349-54aafb75-8938-4299-b308-ecd2c4a226e7.png" width="16" height="16"> Flutter](https://flutter.dev/docs/get-started/install) toolchain (version `2.8.x` is recommended)
 
 After making sure that you have all the required dependencies take the following steps to setup your local environment:
 
@@ -20,10 +19,6 @@ After making sure that you have all the required dependencies take the following
   - You'll probably see notifications asking you to install some extensions and get packages. Please confirm these two actions
 1. From the root of the project, run `yarn bootstrap`. This will do the following:
     - Setup Husky project-wide in order to enforce the [conventional-commit](https://www.conventionalcommits.org/en/v1.0.0/) style
-    - Install all dependencies for the mock `lab-server`
-    - Install all dependencies for the `annotation-server`
-    - Install all Flutter packages for the PharMe `app`
-    - Build all auto-generated files required for running the PharMe `app`
 
 ## Selecting an issue
 
