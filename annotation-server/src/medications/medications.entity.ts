@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import { Ingredient } from './ingredients.entity';
-import { RxNormMapping } from './rxnormmappings.entity';
 
 @Entity()
 export class Medication {
@@ -33,9 +32,4 @@ export class Medication {
     cascade: true,
   })
   ingredients: Ingredient[];
-
-  @OneToMany(() => RxNormMapping, (rxNormMapping) => rxNormMapping.medication, {
-    cascade: true,
-  })
-  rxNormMappings: RxNormMapping[];
 }

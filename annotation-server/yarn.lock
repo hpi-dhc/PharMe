@@ -584,6 +584,13 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
+"@nestjs/axios@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@nestjs/axios/-/axios-0.0.6.tgz#1d641822bfe1d5fe72f6dcc77a43c3007fd916b3"
+  integrity sha512-RgtKUziiEPRtWS3KJNDqq0Epw9ffFdIKAtcj6cXnWeJvgHLwnDkw2rUsmHpDYrhszG+8bc4H8sDygRKwNPPAQA==
+  dependencies:
+    axios "0.26.0"
+
 "@nestjs/cli@^8.0.0":
   version "8.1.4"
   resolved "https://registry.npmjs.org/@nestjs/cli/-/cli-8.1.4.tgz"
@@ -1411,6 +1418,13 @@ axios@0.24.0:
   integrity sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==
   dependencies:
     follow-redirects "^1.14.4"
+
+axios@0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.0.tgz#9a318f1c69ec108f8cd5f3c3d390366635e13928"
+  integrity sha512-lKoGLMYtHvFrPVt3r+RBMp9nh34N0M8zEfCWqdWZx6phynIEhQqAdydpyBAAG211zlhX9Rgu08cOamy6XjE5Og==
+  dependencies:
+    follow-redirects "^1.14.8"
 
 babel-jest@^27.3.1:
   version "27.3.1"
@@ -2493,6 +2507,11 @@ follow-redirects@^1.14.4:
   version "1.14.5"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.5.tgz"
   integrity sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==
+
+follow-redirects@^1.14.8:
+  version "1.14.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
+  integrity sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==
 
 fork-ts-checker-webpack-plugin@6.3.4:
   version "6.3.4"

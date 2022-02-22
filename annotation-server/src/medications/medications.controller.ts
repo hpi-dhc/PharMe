@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Post } from '@nestjs/common';
 import { Medication } from './medications.entity';
 import { MedicationsService } from './medications.service';
 
@@ -6,15 +6,22 @@ import { MedicationsService } from './medications.service';
 export class MedicationsController {
   constructor(private medicationsService: MedicationsService) {}
 
+  /*
   @Get()
   async getAll(): Promise<void> {
     return this.medicationsService.getAll();
   }
+  */
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Medication> {
-    return this.medicationsService.findOne(id);
+  @Post()
+  async create(): Promise<void> {
+    return this.medicationsService.fetchMedications();
   }
+
+  // @Get(':id')
+  // async findOne(@Param('id') id: string): Promise<Medication> {
+  //   return this.medicationsService.findOne(id);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
