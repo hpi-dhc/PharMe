@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -95,7 +97,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
           onPressed: () {
             if (isLastPage) {
               Hive.box('preferences').put('isOnboardingCompleted', true);
-              context.router.pushNamed('auth/login');
+              //context.router.pushNamed('auth/login');
+              // print(context.router.canPopSelfOrChildren);
+              context.router.pop(true);
             } else {
               _pageController.nextPage(
                 duration: Duration(milliseconds: 500),

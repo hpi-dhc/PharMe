@@ -54,7 +54,9 @@ class _LoginPageState extends State<LoginPage> {
                       labs.firstWhere((el) => el.name == dropdownValue);
                   final token = await authenticate(found.authUrl);
                   await fetchAndSaveAllesData(token, found.allelesUrl);
-                  await context.router.replaceNamed('main/medications');
+
+                  // Login Successful
+                  await context.router.pop(true);
                 },
                 child: Text('Login'),
               ),
