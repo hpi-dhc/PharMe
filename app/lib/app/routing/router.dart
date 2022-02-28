@@ -6,7 +6,6 @@ import '../../medications/module.dart';
 import '../../profile/module.dart';
 import '../../reports/module.dart';
 import '../pages/main.dart';
-import 'guards/auth-guard.dart';
 
 part 'router.gr.dart';
 
@@ -17,16 +16,12 @@ part 'router.gr.dart';
     AutoRoute(
       path: 'main',
       page: MainPage,
-      initial: true,
       children: [
         medicationsRoutes,
         profileRoutes,
         reportsRoutes,
       ],
-      guards: [AuthGuard],
     ),
   ],
 )
-class AppRouter extends _$AppRouter {
-  AppRouter({required AuthGuard authGuard}) : super(authGuard: authGuard);
-}
+class AppRouter extends _$AppRouter {}

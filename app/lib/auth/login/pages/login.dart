@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+import '../../../app/routing/router.dart';
 import '../auth_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -52,11 +54,12 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   final found =
                       labs.firstWhere((el) => el.name == dropdownValue);
+
                   final token = await authenticate(found.authUrl);
                   await fetchAndSaveAllesData(token, found.allelesUrl);
-
                   // Login Successful
-                  await context.router.pop(true);
+                  await Hive.box('preferences').put('isLoggedIn', true);
+                  await context.router.replace(const MainRoute());
                 },
                 child: Text('Login'),
               ),

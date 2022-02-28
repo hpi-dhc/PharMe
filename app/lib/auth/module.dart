@@ -12,7 +12,7 @@ const authRoutes = AutoRoute(
   name: 'AuthRouter',
   page: EmptyRouterPage,
   children: [
-    AutoRoute<bool>(path: 'onboarding', page: OnboardingPage, initial: true),
-    AutoRoute<bool>(path: 'login', page: LoginPage)
+    AutoRoute(path: 'onboarding', page: OnboardingPage),
+    AutoRoute(path: 'login', page: LoginPage)
   ],
 );
