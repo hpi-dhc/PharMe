@@ -38,7 +38,7 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
             loaded: (medications) => _buildMedicationsList(
                 context,
                 medications
-                    .where((medication) => medication.rxstring
+                    .where((medication) => medication.name
                         .toLowerCase()
                         .contains(searchController.text.toLowerCase()))
                     .toList()),
@@ -69,9 +69,9 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
               final medication = medications[index];
               return Card(
                 child: ListTile(
-                  title: Text(medication.rxstring),
+                  title: Text(medication.name),
                   onTap: () => context.router
-                      .pushNamed('main/medications/${medication.setid}'),
+                      .pushNamed('main/medications/${medication.id}'),
                 ),
               );
             },

@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-
-import { Ingredient } from './ingredients.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { MedicationsGroup } from './medicationsGroup.entity';
 
 @Entity()
 export class Medication {
@@ -11,25 +10,8 @@ export class Medication {
   name: string;
 
   @Column()
-  manufacturer: string;
-
-  @Column({ nullable: true })
   agents: string;
 
-  @Column({ nullable: true })
-  numeratorQuantity: string;
-
-  @Column({ nullable: true })
-  numeratorUnit: string;
-
-  @Column({ nullable: true })
-  denominatorQuantity: string;
-
-  @Column({ nullable: true })
-  denominatorUnit: string;
-
-  @OneToMany(() => Ingredient, (ingredient) => ingredient.medication, {
-    cascade: true,
-  })
-  ingredients: Ingredient[];
+  @ManyToOne(() => MedicationsGroup, (medicationsGroup) => medicationsGroup.medications)
+  group: MedicationsGroup;
 }

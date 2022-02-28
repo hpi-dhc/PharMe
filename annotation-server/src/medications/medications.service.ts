@@ -1,67 +1,56 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Medication } from './medications.entity';
-import { Ingredient } from './ingredients.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as https from 'https';
 import { DOMParser } from 'xmldom';
 import * as xpath from 'xpath';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom, map } from 'rxjs';
-import { constants } from 'buffer';
-
-import { ibuprofenSetIDs } from './medications';
+import axiosRetry from 'axios-retry';
+import { MedicationsGroup } from './medicationsGroup.entity';
 
 @Injectable()
 export class MedicationsService {
   constructor(
     @InjectRepository(Medication)
     private medicationRepository: Repository<Medication>,
-    @InjectRepository(Ingredient)
-    private ingredientRepository: Repository<Ingredient>,
+    @InjectRepository(MedicationsGroup)
+    private medicationsGroupRepository: Repository<MedicationsGroup>,
     private httpService: HttpService,
   ) {}
 
   async fetchMedications(): Promise<void> {
+    await this.medicationRepository.delete({});
+    await this.medicationsGroupRepository.delete({});
+
     const medicationGroups = new Map<string, Array<Medication>>();
+
+    const displayNames = new Map<string, string>();
+
+    axiosRetry(this.httpService.axiosRef, { retryDelay: axiosRetry.exponentialDelay });
 
     let nextPageUrl =
       'https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json';
 
-    let counter = 1;
+    let counter = 0;
 
     console.time();
 
-    while (nextPageUrl !== 'null' && counter < 10) {
+    while (nextPageUrl !== 'null' && counter < 25) {
       const observable = this.httpService.get(nextPageUrl);
-
       const response = await lastValueFrom(observable);
 
       const promises = [];
 
-      for (const splMedication of ibuprofenSetIDs) {
+      for (const splMedication of response.data.data) {
         const fetchMedication = async (setid: string): Promise<void> => {
           const url = `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/${setid}.xml`;
 
-          const chunk = await new Promise((resolve, reject) => {
-            https
-              .get(url, (res) => {
-                const data = [];
-                res.on('data', (chunk) => {
-                  data.push(chunk);
-                });
-
-                res.on('end', () => {
-                  resolve(Buffer.concat(data));
-                });
-              })
-              .on('error', (error) => {
-                reject(error);
-              });
-          });
+          const medObservable = this.httpService.get(url);
+          const chunk = await lastValueFrom(medObservable);
 
           const domParser = new DOMParser();
-          const xml = chunk
+          const xml = chunk.data
             .toString()
             .replace(/<\?.*\?>/g, '')
             .replace(/<document.*>/, '<document>');
@@ -89,13 +78,10 @@ export class MedicationsService {
               .split(/,|and/)
               .map((agent) =>
                 agent
-                  .trim()
-                  .split(' ')
-                  .filter((agent) => !/\d/.test(agent) && agent.length > 2)
-                  .join('')
-                  .replace(/[^a-zA-Z]/g, ''),
+                  .replace(/capsules|capsule|pill|pills|coated|tablets|tablet|oral|childrens|children|adults|adult|liquidfilled/g, '')
+                  .trim(),
               )
-              .filter((agent) => !!agent);
+              .filter((agent) => agent.length > 2);
 
             agents.sort();
 
@@ -103,29 +89,42 @@ export class MedicationsService {
           };
 
           const key = agentKey(medication.agents);
+          if (!key) return;
 
           // const key = medication.name.toLowerCase().trim();
           if (medicationGroups.has(key)) {
             medicationGroups.get(key).push(medication);
           } else {
             medicationGroups.set(key, [medication]);
+            //displayNames.set(key, )
             console.log(key);
           }
         };
 
-        promises.push(fetchMedication(splMedication));
+        promises.push(fetchMedication(splMedication.setid));
       }
 
       await Promise.all(promises);
 
-      nextPageUrl = 'null'; // response.data.metadata.next_page_url;
+      nextPageUrl = response.data.metadata.next_page_url;
       console.log(`counter: ${counter}, size: ${medicationGroups.size}`);
       counter++;
     }
 
-    console.log(medicationGroups);
     console.timeEnd();
-    console.log(medicationGroups.size);
+
+    const jsonString = JSON.stringify(medicationGroups);
+
+    const groups: MedicationsGroup[] = [];
+
+    for(const [groupName, medications] of medicationGroups.entries()){
+      const group = new MedicationsGroup();
+      group.name = groupName.replace(/,/g, ', ').replace(/\b\w/g, c => c.toUpperCase());
+      group.medications = medications;
+      groups.push(group);
+    }
+
+    await this.medicationsGroupRepository.save(groups);
   }
 
   /*
@@ -153,6 +152,10 @@ export class MedicationsService {
     }
   }
   */
+
+  async getAll(): Promise<MedicationsGroup[]> {
+    return await this.medicationsGroupRepository.find({ relations: ['medications']});
+  }
 
   async removeMedication(id: string): Promise<void> {
     this.medicationRepository.delete(id);

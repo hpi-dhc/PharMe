@@ -3,11 +3,11 @@ import { MedicationsController } from './medications.controller';
 import { Medication } from './medications.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MedicationsService } from './medications.service';
-import { Ingredient } from './ingredients.entity';
 import { HttpModule } from '@nestjs/axios';
+import { MedicationsGroup } from './medicationsGroup.entity';
 
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature([Medication, Ingredient])],
+  imports: [HttpModule, TypeOrmModule.forFeature([Medication, MedicationsGroup])],
   controllers: [MedicationsController],
   providers: [MedicationsService],
 })
