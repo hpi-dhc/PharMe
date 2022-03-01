@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/medications/models/medications_group.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
@@ -22,8 +23,8 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
     if (response.statusCode == 200) {
       final list =
           (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
-      final medications = list.map(Medication.fromJson).toList();
-      emit(MedicationsOverviewState.loaded(medications));
+      final medicationsGroups = list.map(MedicationsGroup.fromJson).toList();
+      emit(MedicationsOverviewState.loaded(medicationsGroups));
     } else {
       emit(MedicationsOverviewState.error());
     }
@@ -34,7 +35,7 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
 class MedicationsOverviewState with _$MedicationsOverviewState {
   const factory MedicationsOverviewState.initial() = _InitialState;
   const factory MedicationsOverviewState.loading() = _LoadingState;
-  const factory MedicationsOverviewState.loaded(List<Medication> medications) =
-      _LoadedState;
+  const factory MedicationsOverviewState.loaded(
+      List<MedicationsGroup> medicationsGroups) = _LoadedState;
   const factory MedicationsOverviewState.error() = _ErrorState;
 }

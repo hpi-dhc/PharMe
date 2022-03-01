@@ -27,7 +27,9 @@ export class MedicationsService {
 
     const displayNames = new Map<string, string>();
 
-    axiosRetry(this.httpService.axiosRef, { retryDelay: axiosRetry.exponentialDelay });
+    axiosRetry(this.httpService.axiosRef, {
+      retryDelay: axiosRetry.exponentialDelay,
+    });
 
     let nextPageUrl =
       'https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json';
@@ -67,6 +69,11 @@ export class MedicationsService {
             .toString()
             .toLowerCase()
             .trim();
+          medication.manufacturer = xpath
+            .select('string(//representedOrganization/name)', doc)
+            .toString()
+            .trim();
+          console.log(medication.manufacturer);
 
           const agentKey = (agentsString?: string): string => {
             if (!agentsString) {
@@ -78,7 +85,10 @@ export class MedicationsService {
               .split(/,|and/)
               .map((agent) =>
                 agent
-                  .replace(/capsules|capsule|pill|pills|coated|tablets|tablet|oral|childrens|children|adults|adult|liquidfilled/g, '')
+                  .replace(
+                    /capsules|capsule|pill|pills|coated|tablets|tablet|oral|childrens|children|adults|adult|liquidfilled/g,
+                    '',
+                  )
                   .trim(),
               )
               .filter((agent) => agent.length > 2);
@@ -97,7 +107,7 @@ export class MedicationsService {
           } else {
             medicationGroups.set(key, [medication]);
             //displayNames.set(key, )
-            console.log(key);
+            //console.log(key);
           }
         };
 
@@ -117,9 +127,11 @@ export class MedicationsService {
 
     const groups: MedicationsGroup[] = [];
 
-    for(const [groupName, medications] of medicationGroups.entries()){
+    for (const [groupName, medications] of medicationGroups.entries()) {
       const group = new MedicationsGroup();
-      group.name = groupName.replace(/,/g, ', ').replace(/\b\w/g, c => c.toUpperCase());
+      group.name = groupName
+        .replace(/,/g, ', ')
+        .replace(/\b\w/g, (c) => c.toUpperCase());
       group.medications = medications;
       groups.push(group);
     }
@@ -154,7 +166,9 @@ export class MedicationsService {
   */
 
   async getAll(): Promise<MedicationsGroup[]> {
-    return await this.medicationsGroupRepository.find({ relations: ['medications']});
+    return await this.medicationsGroupRepository.find({
+      relations: ['medications'],
+    });
   }
 
   async removeMedication(id: string): Promise<void> {

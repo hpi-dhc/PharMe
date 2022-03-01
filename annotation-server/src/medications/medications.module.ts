@@ -7,7 +7,10 @@ import { HttpModule } from '@nestjs/axios';
 import { MedicationsGroup } from './medicationsGroup.entity';
 
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature([Medication, MedicationsGroup])],
+  imports: [
+    HttpModule,
+    TypeOrmModule.forFeature([Medication, MedicationsGroup]),
+  ],
   controllers: [MedicationsController],
   providers: [MedicationsService],
 })

@@ -12,6 +12,12 @@ export class Medication {
   @Column()
   agents: string;
 
-  @ManyToOne(() => MedicationsGroup, (medicationsGroup) => medicationsGroup.medications)
+  @Column({ nullable: true })
+  manufacturer: string;
+
+  @ManyToOne(
+    () => MedicationsGroup,
+    (medicationsGroup) => medicationsGroup.medications,
+  )
   group: MedicationsGroup;
 }

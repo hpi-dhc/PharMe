@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../models/medication.dart';
+import '../../models/medications_group.dart';
 import 'cubit.dart';
 
 class MedicationsOverviewPage extends StatefulWidget {
@@ -32,24 +32,59 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
       child: BlocBuilder<MedicationsOverviewCubit, MedicationsOverviewState>(
         builder: (context, state) {
           return state.when(
-            initial: Container.new,
-            loading: () => Center(child: CircularProgressIndicator()),
-            error: () => Center(child: Text('Error!')),
-            loaded: (medications) => _buildMedicationsList(
-                context,
-                medications
-                    .where((medication) => medication.name
-                        .toLowerCase()
-                        .contains(searchController.text.toLowerCase()))
-                    .toList()),
-          );
+              initial: Container.new,
+              loading: () => Center(child: CircularProgressIndicator()),
+              error: () => Center(child: Text('Error!')),
+              loaded: (medicationsGroups) => _buildMedicationsList(
+                    context,
+                    _matchingMedicationsTiles(
+                        medicationsGroups, searchController.text),
+                    searchController.text,
+                  ));
         },
       ),
     );
   }
 
-  Column _buildMedicationsList(
-      BuildContext context, List<Medication> medications) {
+  bool _matches(String test, String query) {
+    return test.toLowerCase().contains(query.toLowerCase().trim());
+  }
+
+  List<ListTile> _matchingMedicationsTiles(
+      List<MedicationsGroup> medicationsGroups, String searchText) {
+    return medicationsGroups
+        .map((group) {
+          final matchingMedications = group.medications
+              .where((medication) =>
+                  _matches(medication.name, searchText) ||
+                  _matches(medication.manufacturer, searchText))
+              .toList();
+
+          if (matchingMedications.isEmpty &&
+              !_matches(group.name, searchText)) {
+            return null;
+          }
+
+          final title = matchingMedications.isEmpty
+              ? group.name
+              : matchingMedications
+                  .map((medication) => medication.name)
+                  .toSet()
+                  .join(', ');
+          final subtitle = matchingMedications.isEmpty ? null : group.name;
+          return ListTile(
+            title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+            subtitle: subtitle == null ? null : Text(subtitle),
+            onTap: () =>
+                context.router.pushNamed('main/medications/${group.id}'),
+          );
+        })
+        .whereType<ListTile>()
+        .toList();
+  }
+
+  Column _buildMedicationsList(BuildContext context,
+      List<ListTile> medicationsTiles, String searchText) {
     return Column(
       children: [
         Padding(
@@ -64,15 +99,11 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: medications.length,
+            itemCount: medicationsTiles.length,
             itemBuilder: (context, index) {
-              final medication = medications[index];
+              final medicationsTile = medicationsTiles[index];
               return Card(
-                child: ListTile(
-                  title: Text(medication.name),
-                  onTap: () => context.router
-                      .pushNamed('main/medications/${medication.id}'),
-                ),
+                child: medicationsTile,
               );
             },
           ),
