@@ -3,8 +3,8 @@ name: Lab Server
 on:
   push:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
   pull_request:
     paths:
       - '.github/workflows/lab-server.yml'
@@ -23,13 +23,21 @@ jobs:
       - run: yarn
       - run: yarn lint
 
-  test:
-    name: Test
+  # test:
+  #   name: Test
+  #   runs-on: [self-hosted, linux]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: yarn
+  #     - run: yarn test
+
+  test-e2e:
+    name: Test E2E
     runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: yarn test
+      - run: yarn test:e2e:cov
 
   build:
     name: Build
