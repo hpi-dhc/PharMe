@@ -13,7 +13,6 @@ import { UsersModule } from './users/users.module';
     OrmModule,
     UsersModule,
   ],
-  controllers: [],
   providers: [...KeycloakProviders],
 })
 export class AppModule {}
