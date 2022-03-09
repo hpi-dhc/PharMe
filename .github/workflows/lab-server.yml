@@ -34,6 +34,11 @@ jobs:
   test-e2e:
     name: Test E2E
     runs-on: [self-hosted, linux]
+    env:
+      KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
+      KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+      KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
+      KEYCLOAK_SECRET: ${{ secrets.KEYCLOAK_SECRET }}
     steps:
       - uses: actions/checkout@v2
       - run: yarn
