@@ -1,16 +1,10 @@
 # For Risks and Side Effects Consult Your Smartphone
 
-<p align="center">
-  <a href="https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml" target="_blank">
-    <img src="https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml/badge.svg" alt="App Badge" />
-  </a>
-  <a href="https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml" target="_blank">
-    <img src="https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml/badge.svg" alt="Annotation Server Badge" />
-  </a>
-  <a href="https://github.com/hpi-dhc/frasecys/actions/workflows/lab-server.yml" target="_blank">
-    <img src="https://github.com/hpi-dhc/frasecys/actions/workflows/lab-server.yml/badge.svg" alt="Lab Server Badge" />
-  </a>
-</p>
+|                      | CI/CD                                                                                                      | Test Coverage                                                 |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| 📝 Annotation Server | ![annotation-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml/badge.svg) |                                                               |
+| 📱 App               | ![app-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml/badge.svg)                      |                                                               |
+| 🧪 Lab Server        | ![lab-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/lab-server.yml/badge.svg)               | ![lab-jest](./badges/lab-server/coverage-jest%20coverage.svg) |
 
 ## 🤝 Contributing
 
