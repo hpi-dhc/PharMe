@@ -1,4 +1,4 @@
-import { pathExists, readJson } from 'fs-extra';
+const { pathExists, readJson } = require('fs-extra');
 
 const isUndefined = (element) => element?.pct === undefined;
 
