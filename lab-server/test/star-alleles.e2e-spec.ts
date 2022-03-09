@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { getKeycloakMockHelper } from './helpers/keycloak-mock';
 
-describe('Users', () => {
+describe('StarAlleles', () => {
   let app: INestApplication;
   let keycloakMock: KeycloakMock.Mock;
   let keycloakToken: string;
@@ -28,12 +28,12 @@ describe('Users', () => {
   });
 
   it(`/POST should return 401 when unauthenticated`, () => {
-    return request(app.getHttpServer()).post('/users').expect(401);
+    return request(app.getHttpServer()).get('/star-alleles').expect(401);
   });
 
   it(`/POST should return star alleles`, () => {
     return request(app.getHttpServer())
-      .post('/users')
+      .get('/star-alleles')
       .set({ Authorization: `Bearer ${keycloakToken}` })
       .expect(200)
       .expect('Some star alleles');
