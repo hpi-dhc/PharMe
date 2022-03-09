@@ -9,5 +9,12 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "coveragePathIgnorePatterns": [
+    "/coverage/",
+    "/dist/",
+    "/node_modules/",
+    "/test/"
+  ],
+  "coverageReporters": ["text", "json-summary"]
 }

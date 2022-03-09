@@ -9,7 +9,6 @@ const { generateBadges } = require('node-jest-badges');
 
 async function run() {
   try {
-    // Get input
     const jestSummaryPath = core.getInput('jest-summary-path', {
       required: true,
     });
@@ -35,7 +34,7 @@ async function run() {
     }
 
     core.info('💡 Pushing badges to the repo');
-    await pushBadges();
+    await pushBadges(badgeOutputDir);
 
     core.info('👌 Done!');
   } catch (error) {

@@ -46,7 +46,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: jest-coverage
-          path: ./lab-server/coverage/coverage-final.json
+          path: ./lab-server/coverage/coverage-summary.json
 
   build:
     name: Build
@@ -84,10 +84,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v3
+        id: download
         with:
           name: jest-coverage
-          path: ./lab-server/coverage/coverage-final.json
+          path: ./coverage # Library required storing artificat in this specific directory
       - uses: ./other/jest-badges-generator
         with:
-          jest-summary-path: ./lab-server/coverage/coverage-final.json
-          output-dir: ./badges/lab-server
+          jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
+          badge-output-dir: ./badges/lab-server

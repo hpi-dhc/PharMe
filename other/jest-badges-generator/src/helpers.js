@@ -1,3 +1,4 @@
+const exec = require('@actions/exec');
 const { pathExists, readJson } = require('fs-extra');
 
 const isUndefined = (element) => element?.pct === undefined;
@@ -40,7 +41,7 @@ export const doBadgesExist = async (badgeOutputDir) => {
 export const hasCoverageEvolved = async (badgesExist, badgeOutputDir) => {
   if (!badgesExist) return true;
 
-  const code = await exec('git diff', ['--quiet', `${badgeOutputDir}/*`], {
+  const code = await exec.exec('git diff', ['--quiet', `${badgeOutputDir}/*`], {
     ignoreReturnCode: true,
   });
 
@@ -49,7 +50,8 @@ export const hasCoverageEvolved = async (badgesExist, badgeOutputDir) => {
 };
 
 export const pushBadges = async (badgeOutputDir) => {
-  await exec('git add', [badgeOutputDir]);
-  await exec('git commit', ['-m', 'docs: updating coverage badges']);
-  await exec('git push');
+  await exec.exec('ls');
+  await exec.exec('git add', [badgeOutputDir]);
+  await exec.exec('git commit', ['-m', 'docs: updating coverage badges']);
+  await exec.exec('git push');
 };

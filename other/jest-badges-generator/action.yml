@@ -6,7 +6,7 @@ inputs:
   jest-summary-path:
     description: 'The path to the Jest Summary File (JSON)'
     required: true
-  output-dir:
+  badge-output-dir:
     description: 'The directory where the workflow should store the badges'
     required: true
 
