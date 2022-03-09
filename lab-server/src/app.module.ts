@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { KeycloakModule, KeycloakProviders } from './configs/keycloak.config';
-import { OrmModule } from './configs/orm.config';
-import { UsersModule } from './users/users.module';
+import { StarAllelesModule } from './star-alleles/star-alleles.module';
 
 @Module({
   imports: [
@@ -10,8 +9,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
     KeycloakModule,
-    OrmModule,
-    UsersModule,
+    StarAllelesModule,
   ],
   providers: [...KeycloakProviders],
 })

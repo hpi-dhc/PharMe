@@ -22,8 +22,9 @@ describe('Users', () => {
     keycloakToken = mockToken;
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     KeycloakMock.deactivateMock(keycloakMock);
+    await app.close();
   });
 
   it(`/POST should return 401 when unauthenticated`, () => {
@@ -36,9 +37,5 @@ describe('Users', () => {
       .set({ Authorization: `Bearer ${keycloakToken}` })
       .expect(200)
       .expect('Some star alleles');
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
