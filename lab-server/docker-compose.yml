@@ -11,17 +11,6 @@ services:
     profiles:
       - production
 
-  postgres-api:
-    image: postgres:13
-    volumes:
-      - lab_server_db:/var/lib/postgresql/data
-    ports:
-      - 25432:5432
-    environment:
-      - POSTGRES_USER=${LAB_SERVER_DB_USER}
-      - POSTGRES_PASSWORD=${LAB_SERVER_DB_PASS}
-      - POSTGRES_DB=${LAB_SERVER_DB_NAME}
-
   # uncomment following lines for local debugging
   # postgres-keycloak:
   #   image: postgres:13
