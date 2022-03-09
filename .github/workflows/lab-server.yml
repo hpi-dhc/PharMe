@@ -43,6 +43,10 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn test:e2e:cov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jest-coverage
+          path: ./lab-server/coverage/coverage-final.json
 
   build:
     name: Build
@@ -70,3 +74,20 @@ jobs:
             git reset --hard origin/main
             cd lab-server
             docker-compose --profile production up --build --force-recreate --no-deps -d
+
+  update-jest-badges:
+    name: Update Jest Badges
+    needs: [test-e2e]
+    # runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        with:
+          name: jest-coverage
+          path: ./lab-server/coverage/coverage-final.json
+      - uses: ./other/jest-badges-generator
+        with:
+          jest-summary-path: ./lab-server/coverage/coverage-final.json
+          output-dir: ./badges/lab-server
