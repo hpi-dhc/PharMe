@@ -49,7 +49,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [lint, test, build]
+    needs: [lint, test-e2e, build]
     runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
