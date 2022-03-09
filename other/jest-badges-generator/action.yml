@@ -3,6 +3,9 @@ author: 'Benjamin-Frost'
 description: 'Generates Jest Badges to be used in the ReadMe'
 
 inputs:
+  branch-name:
+    description: 'The current branch name'
+    required: true
   jest-summary-path:
     description: 'The path to the Jest Summary File (JSON)'
     required: true

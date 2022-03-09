@@ -9393,10 +9393,11 @@ const setGitConfig = async () => {
   );
 };
 
-const pushBadges = async (badgeOutputDir) => {
+const pushBadges = async (branchName, badgeOutputDir) => {
+  await exec.exec(`git branch -m ${branchName}`);
   await exec.exec('git add', [badgeOutputDir]);
   await exec.exec('git commit', ['-m', 'docs: updating coverage badges']);
-  await exec.exec('git push origin main');
+  await exec.exec('git push');
 };
 
 
@@ -9628,6 +9629,7 @@ const { generateBadges } = __nccwpck_require__(9237);
 
 async function run() {
   try {
+    const branchName = core.getInput('branch-name', { required: true });
     const jestSummaryPath = core.getInput('jest-summary-path', {
       required: true,
     });
@@ -9652,12 +9654,12 @@ async function run() {
       return core.info('⚠️ Coverage has not evolved, no action required.');
     }
 
-    core.info('💡 Pushing badges to the repo');
+    core.info('💡 Moving badgets to output dir');
     await moveBadges(badgeOutputDir);
 
     core.info('💡 Pushing badges to the repo');
     await setGitConfig();
-    await pushBadges(badgeOutputDir);
+    await pushBadges(branchName, badgeOutputDir);
 
     core.info('👌 Done!');
   } catch (error) {

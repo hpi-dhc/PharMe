@@ -63,8 +63,9 @@ export const setGitConfig = async () => {
   );
 };
 
-export const pushBadges = async (badgeOutputDir) => {
+export const pushBadges = async (branchName, badgeOutputDir) => {
+  await exec.exec(`git branch -m ${branchName}`);
   await exec.exec('git add', [badgeOutputDir]);
   await exec.exec('git commit', ['-m', 'docs: updating coverage badges']);
-  await exec.exec('git push origin main');
+  await exec.exec('git push');
 };

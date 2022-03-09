@@ -11,6 +11,7 @@ const { generateBadges } = require('node-jest-badges');
 
 async function run() {
   try {
+    const branchName = core.getInput('branch-name', { required: true });
     const jestSummaryPath = core.getInput('jest-summary-path', {
       required: true,
     });
@@ -35,12 +36,12 @@ async function run() {
       return core.info('⚠️ Coverage has not evolved, no action required.');
     }
 
-    core.info('💡 Pushing badges to the repo');
+    core.info('💡 Moving badgets to output dir');
     await moveBadges(badgeOutputDir);
 
     core.info('💡 Pushing badges to the repo');
     await setGitConfig();
-    await pushBadges(badgeOutputDir);
+    await pushBadges(branchName, badgeOutputDir);
 
     core.info('👌 Done!');
   } catch (error) {
