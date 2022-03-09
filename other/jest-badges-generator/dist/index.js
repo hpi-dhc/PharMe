@@ -9324,12 +9324,21 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony export */   "isJestCoverageReportAvailable": () => (/* binding */ isJestCoverageReportAvailable),
 /* harmony export */   "doBadgesExist": () => (/* binding */ doBadgesExist),
 /* harmony export */   "hasCoverageEvolved": () => (/* binding */ hasCoverageEvolved),
+/* harmony export */   "moveBadges": () => (/* binding */ moveBadges),
+/* harmony export */   "setGitConfig": () => (/* binding */ setGitConfig),
 /* harmony export */   "pushBadges": () => (/* binding */ pushBadges)
 /* harmony export */ });
 const exec = __nccwpck_require__(1514);
 const { pathExists, readJson } = __nccwpck_require__(5630);
 
 const isUndefined = (element) => element?.pct === undefined;
+const files = [
+  'coverage-branches.svg',
+  'coverage-functions.svg',
+  'coverage-jest coverage.svg',
+  'coverage-lines.svg',
+  'coverage-statements.svg',
+];
 
 const isJestCoverageReportAvailable = async (jestSummaryPath) => {
   const coverageExists = await pathExists(jestSummaryPath);
@@ -9351,14 +9360,6 @@ const isJestCoverageReportAvailable = async (jestSummaryPath) => {
 };
 
 const doBadgesExist = async (badgeOutputDir) => {
-  const files = [
-    'coverage-branches.svg',
-    'coverage-functions.svg',
-    'coverage-jest coverage.svg',
-    'coverage-lines.svg',
-    'coverage-statements.svg',
-  ];
-
   const exist = await Promise.all(
     files.map((file) => pathExists(`${badgeOutputDir}/${file}`))
   );
@@ -9377,11 +9378,25 @@ const hasCoverageEvolved = async (badgesExist, badgeOutputDir) => {
   return hasChanged;
 };
 
+const moveBadges = async (badgeOutputDir) => {
+  // Library outputs into badges, we want to move it to badgeOutputDir
+  await exec.exec(`mkdir ${badgeOutputDir}`);
+  files.forEach(async (file) => {
+    await exec.exec(`mv "./badges/${file}" "${badgeOutputDir}/${file}"`);
+  });
+};
+
+const setGitConfig = async () => {
+  await exec.exec('git config user.name github-actions[bot]');
+  await exec.exec(
+    'git config user.email github-actions[bot]@users.noreply.github.com'
+  );
+};
+
 const pushBadges = async (badgeOutputDir) => {
-  await exec.exec('ls');
   await exec.exec('git add', [badgeOutputDir]);
   await exec.exec('git commit', ['-m', 'docs: updating coverage badges']);
-  await exec.exec('git push');
+  await exec.exec('git push origin main');
 };
 
 
@@ -9605,6 +9620,8 @@ const {
   isJestCoverageReportAvailable,
   doBadgesExist,
   hasCoverageEvolved,
+  moveBadges,
+  setGitConfig,
   pushBadges,
 } = __nccwpck_require__(8505);
 const { generateBadges } = __nccwpck_require__(9237);
@@ -9636,6 +9653,10 @@ async function run() {
     }
 
     core.info('💡 Pushing badges to the repo');
+    await moveBadges(badgeOutputDir);
+
+    core.info('💡 Pushing badges to the repo');
+    await setGitConfig();
     await pushBadges(badgeOutputDir);
 
     core.info('👌 Done!');

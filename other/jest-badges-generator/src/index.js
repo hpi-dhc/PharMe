@@ -3,6 +3,8 @@ const {
   isJestCoverageReportAvailable,
   doBadgesExist,
   hasCoverageEvolved,
+  moveBadges,
+  setGitConfig,
   pushBadges,
 } = require('./helpers');
 const { generateBadges } = require('node-jest-badges');
@@ -34,6 +36,10 @@ async function run() {
     }
 
     core.info('💡 Pushing badges to the repo');
+    await moveBadges(badgeOutputDir);
+
+    core.info('💡 Pushing badges to the repo');
+    await setGitConfig();
     await pushBadges(badgeOutputDir);
 
     core.info('👌 Done!');
