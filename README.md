@@ -1,6 +1,6 @@
 # For Risks and Side Effects Consult Your Smartphone
 
-|                      | CI/CD                                                                                                      | Test Coverage                                                 |
+|                      | CI/CD                                                                                                      | Code Coverage                                                 |
 | -------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | 📝 Annotation Server | ![annotation-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml/badge.svg) |                                                               |
 | 📱 App               | ![app-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml/badge.svg)                      |                                                               |
