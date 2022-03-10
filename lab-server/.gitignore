@@ -40,4 +40,3 @@ test/coverage
 
 # Environment Files
 .env
-.env.test

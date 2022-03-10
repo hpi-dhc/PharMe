@@ -6,8 +6,6 @@ services:
       - ../assets:/usr/src/assets:ro
     ports:
       - 8081:3000
-    depends_on:
-      - postgres-api
     profiles:
       - production
 

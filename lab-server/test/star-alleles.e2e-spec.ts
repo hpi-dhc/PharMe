@@ -27,11 +27,11 @@ describe('StarAlleles', () => {
     await app.close();
   });
 
-  it(`/POST should return 401 when unauthenticated`, () => {
+  it(`/GET should return 401 when unauthenticated`, () => {
     return request(app.getHttpServer()).get('/star-alleles').expect(401);
   });
 
-  it(`/POST should return star alleles`, () => {
+  it(`/GET should return star alleles`, () => {
     return request(app.getHttpServer())
       .get('/star-alleles')
       .set({ Authorization: `Bearer ${keycloakToken}` })
