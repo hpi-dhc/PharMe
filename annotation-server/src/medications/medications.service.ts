@@ -35,17 +35,12 @@ export class MedicationsService {
 
     let nextPageUrl = startPageURL;
 
-    // console.time();
-
     while (nextPageUrl !== 'null') {
-      // console.log(`FETCHING PAGE: ${nextPageUrl}`);
       nextPageUrl = await this.fetchMedicationPage(
         nextPageUrl,
         medicationGroups,
       );
     }
-
-    // console.timeEnd();
 
     const groups: MedicationsGroup[] = [];
 
@@ -103,7 +98,6 @@ export class MedicationsService {
         const key = this.genAgentKey(medication.agents);
         if (!key) return;
 
-        // const key = medication.name.toLowerCase().trim();
         if (medicationGroups.has(key)) {
           medicationGroups.get(key).push(medication);
         } else {
@@ -118,32 +112,6 @@ export class MedicationsService {
 
     return response.data.metadata.next_page_url;
   }
-
-  /*
-  async findOne(id: string): Promise<Medication> {
-    const mappings = await this.rxNormMappingRepository.find({
-      where: {
-        setid: id.toLowerCase(),
-      },
-      relations: ['medication'],
-    });
-
-    if (!mappings.length) {
-      throw new NotFoundException('Id could not be found in RxNormMappings!');
-    }
-
-    if (mappings[0].medication) {
-      const medication = await this.medicationRepository.findOne(
-        mappings[0].medication.id,
-        {
-          relations: ['ingredients'],
-        },
-      );
-
-      return medication;
-    }
-  }
-  */
 
   async getAll(): Promise<MedicationsGroup[]> {
     return await this.medicationsGroupRepository.find({
