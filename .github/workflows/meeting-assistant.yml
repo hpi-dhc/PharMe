@@ -1,0 +1,33 @@
+name: Meeting Assistant
+
+on:
+  schedule:
+    - cron: '0 12 * * 5'
+
+jobs:
+  assign_leader:
+    # runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
+    outputs:
+      telegram: ${{ steps.meeting_assistant.outputs.telegram }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./other/meeting-assistant
+        id: meeting_assistant
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: 5
+          users: ${{ secrets.BP_USERS }}
+
+  send_telegram_message:
+    # runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
+    needs: [assign_leader]
+    steps:
+      - uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_BOT_TO }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            Hi @${{ needs.assign_leader.outputs.telegram }},
+            friendly reminder that you are responsible for the BP meeting next Monday.

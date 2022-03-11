@@ -1,0 +1,18 @@
+name: 'Jest Badges Generator'
+author: 'Benjamin-Frost'
+description: 'Generates Jest Badges to be used in the ReadMe'
+
+inputs:
+  branch-name:
+    description: 'The current branch name'
+    required: true
+  jest-summary-path:
+    description: 'The path to the Jest Summary File (JSON)'
+    required: true
+  badge-output-dir:
+    description: 'The directory where the workflow should store the badges'
+    required: true
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

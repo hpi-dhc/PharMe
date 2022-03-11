@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common/module.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -11,7 +13,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  List<String> labs = ['Illumina Solutions Center Berlin', 'Mount Sinai Hospital (NYC)'];
+  List<String> labs = [
+    'Illumina Solutions Center Berlin',
+    'Mount Sinai Hospital (NYC)'
+  ];
   String dropdownValue = 'Illumina Solutions Center Berlin';
 
   Future<TokenResponse> authenticate() async {
@@ -32,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
         if (await canLaunch(url)) {
           await launch(url, forceWebView: true);
         } else {
-          throw Exception('Could not launch $url');
+          throw Exception(context.l10n.err_could_not_launch(url));
         }
       },
     );
@@ -72,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   await authenticate();
                   await context.router.replaceNamed('main/medications');
                 },
-                child: Text('Login'),
+                child: Text(context.l10n.auth_sign_in),
               ),
             ],
           ),

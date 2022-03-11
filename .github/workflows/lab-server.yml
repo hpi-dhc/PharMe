@@ -3,8 +3,8 @@ name: Lab Server
 on:
   push:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
   pull_request:
     paths:
       - '.github/workflows/lab-server.yml'
@@ -23,13 +23,30 @@ jobs:
       - run: yarn
       - run: yarn lint
 
-  test:
-    name: Test
+  # test:
+  #   name: Test
+  #   runs-on: [self-hosted, linux]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: yarn
+  #     - run: yarn test
+
+  test-e2e:
+    name: Test E2E
     runs-on: [self-hosted, linux]
+    env:
+      KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
+      KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+      KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
+      KEYCLOAK_SECRET: ${{ secrets.KEYCLOAK_SECRET }}
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: yarn test
+      - run: yarn test:e2e:cov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jest-coverage
+          path: ./lab-server/coverage/coverage-summary.json
 
   build:
     name: Build
@@ -41,7 +58,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [lint, test, build]
+    needs: [lint, test-e2e, build]
     runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
@@ -57,3 +74,27 @@ jobs:
             git reset --hard origin/main
             cd lab-server
             docker-compose --profile production up --build --force-recreate --no-deps -d
+
+  update-jest-badges:
+    name: Update Jest Badges
+    needs: [test-e2e]
+    # runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: jest-coverage
+          path: ./coverage # Library required storing artificat in this specific directory
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Generate Jest Badges
+        uses: ./other/jest-badges-generator
+        with:
+          branch-name: ${{ steps.extract_branch.outputs.branch }}
+          jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
+          badge-output-dir: ./badges/lab-server
