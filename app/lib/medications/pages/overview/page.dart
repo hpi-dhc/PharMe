@@ -1,10 +1,9 @@
-import 'package:app/medications/models/medications_group.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/module.dart';
-import '../../models/medication.dart';
+import '../../models/medications_group.dart';
 import 'cubit.dart';
 
 class MedicationsOverviewPage extends StatefulWidget {

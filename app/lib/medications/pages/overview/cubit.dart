@@ -1,11 +1,9 @@
 import 'dart:convert';
-
-import 'package:app/medications/models/medications_group.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/medication.dart';
+import '../../models/medications_group.dart';
 
 part 'cubit.freezed.dart';
 
