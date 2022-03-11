@@ -1,7 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-
-import { Ingredient } from './ingredients.entity';
-import { RxNormMapping } from './rxnormmappings.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { MedicationsGroup } from './medicationsGroup.entity';
 
 @Entity()
 export class Medication {
@@ -12,30 +10,14 @@ export class Medication {
   name: string;
 
   @Column()
-  manufacturer: string;
-
-  @Column({ nullable: true })
   agents: string;
 
   @Column({ nullable: true })
-  numeratorQuantity: number;
+  manufacturer: string;
 
-  @Column({ nullable: true })
-  numeratorUnit: string;
-
-  @Column({ nullable: true })
-  denominatorQuantity: number;
-
-  @Column({ nullable: true })
-  denominatorUnit: string;
-
-  @OneToMany(() => Ingredient, (ingredient) => ingredient.medication, {
-    cascade: true,
-  })
-  ingredients: Ingredient[];
-
-  @OneToMany(() => RxNormMapping, (rxNormMapping) => rxNormMapping.medication, {
-    cascade: true,
-  })
-  rxNormMappings: RxNormMapping[];
+  @ManyToOne(
+    () => MedicationsGroup,
+    (medicationsGroup) => medicationsGroup.medications,
+  )
+  group: MedicationsGroup;
 }
