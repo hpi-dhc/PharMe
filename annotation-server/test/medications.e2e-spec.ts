@@ -19,6 +19,8 @@ describe('MedicationsController (e2e)', () => {
     medicationService =
       moduleFixture.get<MedicationsService>(MedicationsService);
     medicationService.clearAllMedicationData();
+
+    jest.setTimeout(60000);
   }, 60000);
 
   it('should create last two medication pages & return groups', async () => {
@@ -31,7 +33,6 @@ describe('MedicationsController (e2e)', () => {
     const getResponse = request(app.getHttpServer()).get('/medications');
     getResponse.expect(200);
     expect((await getResponse).body.length).toBeGreaterThan(0);
-    return;
   });
 
   afterAll(async () => {
