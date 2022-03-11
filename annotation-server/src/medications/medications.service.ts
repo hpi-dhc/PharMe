@@ -19,7 +19,7 @@ export class MedicationsService {
     private httpService: HttpService,
   ) {}
 
-  async fetchAllMedications(): Promise<void> {
+  async fetchAllMedications(startPageURL: string): Promise<void> {
     await this.medicationRepository.delete({});
     await this.medicationsGroupRepository.delete({});
 
@@ -29,20 +29,16 @@ export class MedicationsService {
       retryDelay: axiosRetry.exponentialDelay,
     });
 
-    let nextPageUrl =
-      'https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json';
-
-    let counter = 0;
+    let nextPageUrl = startPageURL;
 
     console.time();
 
-    while (nextPageUrl !== 'null' && counter < 25) {
-      counter++;
+    while (nextPageUrl !== 'null') {
+      console.log(`FETCHING PAGE: ${nextPageUrl}`);
       nextPageUrl = await this.fetchMedicationPage(
         nextPageUrl,
         medicationGroups,
       );
-      console.log(`---- COUNTER ${counter} ----`);
     }
 
     console.timeEnd();

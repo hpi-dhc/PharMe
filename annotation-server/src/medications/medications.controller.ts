@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete, Post } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Post, Query } from '@nestjs/common';
 import { MedicationsService } from './medications.service';
 import { MedicationsGroup } from './medicationsGroup.entity';
 
@@ -20,7 +20,14 @@ export class MedicationsController {
 
   @Post()
   async create(): Promise<void> {
-    return this.medicationsService.fetchAllMedications();
+    return this.createStartAt(
+      'https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json',
+    );
+  }
+
+  @Post('startingAt')
+  async createStartAt(@Query('firstPage') firstPage: string): Promise<void> {
+    return this.medicationsService.fetchAllMedications(firstPage);
   }
 
   // @Get(':id')
