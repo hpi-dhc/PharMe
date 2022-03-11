@@ -19,9 +19,13 @@ export class MedicationsService {
     private httpService: HttpService,
   ) {}
 
-  async fetchAllMedications(startPageURL: string): Promise<void> {
+  async clearAllMedicationData(): Promise<void> {
     await this.medicationRepository.delete({});
     await this.medicationsGroupRepository.delete({});
+  }
+
+  async fetchAllMedications(startPageURL: string): Promise<void> {
+    await this.clearAllMedicationData();
 
     const medicationGroups = new Map<string, Array<Medication>>();
 
@@ -31,17 +35,17 @@ export class MedicationsService {
 
     let nextPageUrl = startPageURL;
 
-    console.time();
+    // console.time();
 
     while (nextPageUrl !== 'null') {
-      console.log(`FETCHING PAGE: ${nextPageUrl}`);
+      // console.log(`FETCHING PAGE: ${nextPageUrl}`);
       nextPageUrl = await this.fetchMedicationPage(
         nextPageUrl,
         medicationGroups,
       );
     }
 
-    console.timeEnd();
+    // console.timeEnd();
 
     const groups: MedicationsGroup[] = [];
 
@@ -95,7 +99,6 @@ export class MedicationsService {
           .select('string(//representedOrganization/name)', doc)
           .toString()
           .trim();
-        console.log(medication.manufacturer);
 
         const agentKey = (agentsString?: string): string => {
           if (!agentsString) {
