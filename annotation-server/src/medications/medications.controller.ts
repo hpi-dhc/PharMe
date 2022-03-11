@@ -20,7 +20,7 @@ export class MedicationsController {
 
   @Post()
   async create(): Promise<void> {
-    return this.medicationsService.fetchMedications();
+    return this.medicationsService.fetchAllMedications();
   }
 
   // @Get(':id')
