@@ -23,7 +23,7 @@ describe('MedicationsController (e2e)', () => {
 
   it('should create last two medication pages & return groups', async () => {
     const createResponse = request(app.getHttpServer()).post(
-      '/medications/startingAt?firstPage=https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json?page=1432',
+      '/medications/?firstPage=https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json?page=1432',
     );
     createResponse.expect(201);
     await createResponse;

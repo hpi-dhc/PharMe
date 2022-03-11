@@ -19,15 +19,11 @@ export class MedicationsController {
   }
 
   @Post()
-  async create(): Promise<void> {
-    return this.createStartAt(
-      'https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json',
+  async create(@Query('firstPage') firstPage: string): Promise<void> {
+    return this.medicationsService.fetchAllMedications(
+      firstPage ??
+        'https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json',
     );
-  }
-
-  @Post('startingAt')
-  async createStartAt(@Query('firstPage') firstPage: string): Promise<void> {
-    return this.medicationsService.fetchAllMedications(firstPage);
   }
 
   // @Get(':id')
