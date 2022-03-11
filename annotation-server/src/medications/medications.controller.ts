@@ -1,5 +1,4 @@
 import { Controller, Get, Param, Delete, Post } from '@nestjs/common';
-import { Medication } from './medications.entity';
 import { MedicationsService } from './medications.service';
 import { MedicationsGroup } from './medicationsGroup.entity';
 

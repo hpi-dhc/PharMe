@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Medication } from './medications.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DOMParser } from 'xmldom';
 import * as xpath from 'xpath';
 import { HttpService } from '@nestjs/axios';
-import { lastValueFrom, map } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import axiosRetry from 'axios-retry';
 import { MedicationsGroup } from './medicationsGroup.entity';
 
@@ -24,8 +24,6 @@ export class MedicationsService {
     await this.medicationsGroupRepository.delete({});
 
     const medicationGroups = new Map<string, Array<Medication>>();
-
-    const displayNames = new Map<string, string>();
 
     axiosRetry(this.httpService.axiosRef, {
       retryDelay: axiosRetry.exponentialDelay,
@@ -106,8 +104,6 @@ export class MedicationsService {
             medicationGroups.get(key).push(medication);
           } else {
             medicationGroups.set(key, [medication]);
-            //displayNames.set(key, )
-            //console.log(key);
           }
         };
 
@@ -122,8 +118,6 @@ export class MedicationsService {
     }
 
     console.timeEnd();
-
-    const jsonString = JSON.stringify(medicationGroups);
 
     const groups: MedicationsGroup[] = [];
 
