@@ -1,8 +1,8 @@
 /* import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { RxNormMappingsService } from './rxnormmappings.service';
-import { AppModule } from '../app.module';
+import { RxNormMappingsService } from '../src/medications/rxnormmappings.service';
+import { AppModule } from '../src/app.module';
 
 describe('MedicationsController', () => {
   let app: INestApplication;
