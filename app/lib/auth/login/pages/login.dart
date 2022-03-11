@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<TokenResponse> authenticate() async {
     // parameters here just for the sake of the question
-    final uri = Uri.parse('http://172.20.24.129:28080/auth/realms/pharme');
+    final uri = Uri.parse('http://172.20.24.66:28080/auth/realms/pharme');
     const clientId = 'pharme-app';
     final scopes = List<String>.of(['openid', 'profile']);
     const port = 4200;
