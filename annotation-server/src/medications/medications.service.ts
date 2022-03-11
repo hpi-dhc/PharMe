@@ -100,30 +100,7 @@ export class MedicationsService {
           .toString()
           .trim();
 
-        const agentKey = (agentsString?: string): string => {
-          if (!agentsString) {
-            return undefined;
-          }
-
-          const agents = agentsString
-            .toLowerCase()
-            .split(/,|and/)
-            .map((agent) =>
-              agent
-                .replace(
-                  /capsules|capsule|pill|pills|coated|tablets|tablet|oral|childrens|children|adults|adult|liquidfilled/g,
-                  '',
-                )
-                .trim(),
-            )
-            .filter((agent) => agent.length > 2);
-
-          agents.sort();
-
-          return agents.join(',');
-        };
-
-        const key = agentKey(medication.agents);
+        const key = this.genAgentKey(medication.agents);
         if (!key) return;
 
         // const key = medication.name.toLowerCase().trim();
@@ -176,5 +153,25 @@ export class MedicationsService {
 
   async removeMedication(id: string): Promise<void> {
     this.medicationRepository.delete(id);
+  }
+
+  private genAgentKey(agentsString?: string): string {
+    if (!agentsString) {
+      return undefined;
+    }
+    const agents = agentsString
+      .toLowerCase()
+      .split(/,|and/)
+      .map((agent) =>
+        agent
+          .replace(
+            /capsules|capsule|pill|pills|coated|tablets|tablet|oral|childrens|children|adults|adult|liquidfilled/g,
+            '',
+          )
+          .trim(),
+      )
+      .filter((agent) => agent.length > 2);
+    agents.sort();
+    return agents.join(',');
   }
 }
