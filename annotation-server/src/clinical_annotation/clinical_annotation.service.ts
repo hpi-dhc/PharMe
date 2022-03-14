@@ -77,4 +77,8 @@ export class ClinicalAnnotationService {
   async getAll(): Promise<ClinicalAnnotation[]> {
     return this.clinicalAnnotationRepository.find()
   }
+
+  async clearData(): Promise<void> {
+    await this.clinicalAnnotationRepository.delete({});
+  }
 }

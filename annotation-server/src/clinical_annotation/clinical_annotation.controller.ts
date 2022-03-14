@@ -1,4 +1,4 @@
-import { Controller, Get, Patch } from '@nestjs/common'
+import { Controller, Delete, Get, Patch } from '@nestjs/common'
 import { ClinicalAnnotationService } from './clinical_annotation.service'
 
 @Controller('clinical_annotations')
@@ -13,5 +13,10 @@ export class ClinicalAnnotationsController {
   @Get()
   async findAll() {
     return this.clinicalAnnotationsService.findAll()
+  }
+
+  @Delete()
+  async deleteAll() {
+    await this.clinicalAnnotationsService.clearData()
   }
 }
