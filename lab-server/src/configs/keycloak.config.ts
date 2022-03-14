@@ -1,10 +1,10 @@
-import { ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config'
+import { APP_GUARD } from '@nestjs/core'
 import {
   AuthGuard,
   KeycloakConnectModule,
   TokenValidation,
-} from 'nest-keycloak-connect';
+} from 'nest-keycloak-connect'
 
 export const KeycloakModule = KeycloakConnectModule.registerAsync({
   useFactory: (configService: ConfigService) => ({
@@ -16,11 +16,11 @@ export const KeycloakModule = KeycloakConnectModule.registerAsync({
     tokenValidation: TokenValidation.OFFLINE,
   }),
   inject: [ConfigService],
-});
+})
 
 export const KeycloakProviders = [
   {
     provide: APP_GUARD,
     useClass: AuthGuard,
   },
-];
+]

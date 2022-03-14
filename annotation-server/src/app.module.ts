@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AnnotationsModule } from './clinical_annotation/clinical_annotation.module';
-import { MedicationsModule } from './medications/medications.module';
+import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { TypeOrmModule } from '@nestjs/typeorm'
+
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { AnnotationsModule } from './clinical_annotation/clinical_annotation.module'
+import { MedicationsModule } from './medications/medications.module'
 
 @Module({
   imports: [
