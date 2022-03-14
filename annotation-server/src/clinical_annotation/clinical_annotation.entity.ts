@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 @Entity()
 export class ClinicalAnnotation {
   @PrimaryColumn()
-  clinicalAnnotationId: number;
+  id: number;
 
   @Column({ nullable: true })
   variants?: string;

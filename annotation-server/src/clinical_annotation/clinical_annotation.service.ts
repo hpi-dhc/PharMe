@@ -49,7 +49,7 @@ const parseAnnotations = (filePath: string) => {
           reject('Clinical Annotation ID needs to be present');
         }
 
-        annotation.clinicalAnnotationId = Number(row[0]);
+        annotation.id = Number(row[0]);
         annotation.variants = row[1] ? String(row[1]) : null;
         annotation.genes = row[2] ? String(row[2]) : null;
         annotation.levelOfEvidence = row[3] ? String(row[3]) : null;

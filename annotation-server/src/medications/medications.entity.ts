@@ -4,7 +4,7 @@ import { MedicationsGroup } from './medicationsGroup.entity';
 @Entity()
 export class Medication {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;
