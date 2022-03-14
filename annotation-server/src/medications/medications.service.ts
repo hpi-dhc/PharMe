@@ -119,7 +119,7 @@ export class MedicationsService {
     });
   }
 
-  async removeMedication(id: string): Promise<void> {
+  async removeMedication(id: number): Promise<void> {
     this.medicationRepository.delete(id);
   }
 
