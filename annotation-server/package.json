@@ -33,6 +33,7 @@
     "axios": "^0.26.0",
     "axios-retry": "^3.2.4",
     "csv-parse": "^5.0.4",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-nestjs": "^1.2.3",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
