@@ -20,7 +20,7 @@ module.exports = {
     'prettier/prettier': 2,
 
     'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
+    quotes: ['error', 'single', { 'allowTemplateLiterals': true }],
     semi: ['error', 'never'],
     'import/first': 'error',
     'import/named': 'error',
