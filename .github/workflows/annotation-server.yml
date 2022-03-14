@@ -17,7 +17,7 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -25,7 +25,7 @@ jobs:
 
   test-e2e:
     name: Test E2E
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -50,11 +50,11 @@ jobs:
         with:
           name: jest-coverage
           path: ./annotation-server/coverage/coverage-summary.json
-  
+
   update-jest-badges:
     name: Update Jest Badges
     needs: [test-e2e]
-    # runs-on: [self-hosted, Linux]
+    # runs-on: ubuntu-latest
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
@@ -75,31 +75,30 @@ jobs:
           jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
           badge-output-dir: ./badges/annotation-server
 
-
   build:
     name: Build
     needs: [lint, test-e2e]
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
 
-  deploy:
-    name: Deploy
-    needs: [lint, test-e2e, build]
-    runs-on: [self-hosted, linux]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git fetch origin main
-            git reset --hard origin/main
-            cd annotation-server
-            docker-compose --profile production up --build --force-recreate --no-deps -d
+  # deploy:
+  #   name: Deploy
+  #   needs: [lint, test-e2e, build]
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         password: ${{ secrets.SSH_PASSWORD }}
+  #         port: ${{ secrets.SSH_PORT }}
+  #         script: |
+  #           cd ${{ secrets.PROJECT_PATH }}
+  #           git fetch origin main
+  #           git reset --hard origin/main
+  #           cd annotation-server
+  #           docker-compose --profile production up --build --force-recreate --no-deps -d
