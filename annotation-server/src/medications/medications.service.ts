@@ -120,7 +120,7 @@ export class MedicationsService {
     })
   }
 
-  async removeMedication(id: number): Promise<void> {
+  removeMedication(id: number): void {
     this.medicationRepository.delete(id)
   }
 

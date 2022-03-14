@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Delete, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
+
 import { MedicationsService } from './medications.service'
 import { MedicationsGroup } from './medicationsGroup.entity'
 
@@ -45,7 +46,7 @@ export class MedicationsController {
     required: true,
   })
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id') id: number): void {
     return this.medicationsService.removeMedication(id)
   }
 }
