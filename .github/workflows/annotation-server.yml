@@ -3,12 +3,12 @@ name: Annotation Server
 on:
   push:
     paths:
-      - ".github/workflows/annotation-server.yml"
-      - "annotation-server/**"
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
   pull_request:
     paths:
-      - ".github/workflows/annotation-server.yml"
-      - "annotation-server/**"
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
 
 defaults:
   run:
@@ -72,7 +72,7 @@ jobs:
         uses: ./other/jest-badges-generator
         with:
           branch-name: ${{ steps.extract_branch.outputs.branch }}
-          jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
+          jest-summary-path: ${{ steps.download.outputs.download-path }}/coverage-summary.json
           badge-output-dir: ./badges/annotation-server
 
   build:
