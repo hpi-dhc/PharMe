@@ -34,7 +34,7 @@ export class ClinicalAnnotationService {
     })
   }
 
-  async parseAnnotations(filePath: string) {
+  async parseAnnotations(filePath: string): Promise<ClinicalAnnotation[]> {
     return new Promise<ClinicalAnnotation[]>((resolve, reject) => {
       const annotations: ClinicalAnnotation[] = []
 

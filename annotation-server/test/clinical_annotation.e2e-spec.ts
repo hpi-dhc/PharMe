@@ -1,44 +1,69 @@
-import * as request from 'supertest'
-import { Test } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import { AppModule } from '../src/app.module'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { Test } from '@nestjs/testing'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import * as request from 'supertest'
+
+import { AnnotationsModule } from '../src/clinical_annotation/clinical_annotation.module'
+import { ClinicalAnnotationService } from '../src/clinical_annotation/clinical_annotation.service'
 
 describe('Clinical annotations', () => {
   let app: INestApplication
-  jest.setTimeout(300000)
+  let service: ClinicalAnnotationService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+        TypeOrmModule.forRootAsync({
+          imports: [ConfigModule],
+          useFactory: (configService: ConfigService) => ({
+            type: 'postgres',
+            host: configService.get<string>('ANNOTATION_DB_HOST'),
+            port: configService.get<number>('ANNOTATION_DB_PORT'),
+            username: configService.get<string>('ANNOTATION_DB_USER'),
+            password: configService.get<string>('ANNOTATION_DB_PASS'),
+            database: configService.get<string>('ANNOTATION_DB_NAME'),
+            autoLoadEntities: true,
+            keepConnectionAlive: true,
+            synchronize: true,
+          }),
+          inject: [ConfigService],
+        }),
+        AnnotationsModule,
+      ],
     }).compile()
 
     app = moduleRef.createNestApplication()
-    await app.init()
-  })
 
-  it(`/PATCH clinical_annotations/sync`, async () => {
-    await request(app.getHttpServer())
-      .patch('/clinical_annotations/sync')
-      .expect(200)
-  })
-
-  it(`should call parseAnnotations and receive clinical annotations`, async () => {
-    const response = request(app.getHttpServer()).get('/clinical_annotations')
-    response.expect(200)
-    expect((await response).body.length).toBeGreaterThan(0)
-  })
-
-  it(`should clear the database`, async () => {
-    await request(app.getHttpServer())
-      .delete('/clinical_annotations')
-      .expect(200)
-    const response = await request(app.getHttpServer()).get(
-      '/clinical_annotations',
+    service = moduleRef.get<ClinicalAnnotationService>(
+      ClinicalAnnotationService,
     )
-    expect(response.body.length).toEqual(0)
-  })
+    service.clearData()
+
+    await app.init()
+  }, 30000)
 
   afterAll(async () => {
     await app.close()
+  })
+
+  it(`should import, access and delete the database`, async () => {
+    await request(app.getHttpServer())
+      .patch('/clinical_annotations/sync')
+      .expect(200)
+
+    let response = await request(app.getHttpServer())
+      .get('/clinical_annotations')
+      .expect(200)
+    expect((await response).body.length).toBeGreaterThan(0)
+
+    await request(app.getHttpServer())
+      .delete('/clinical_annotations')
+      .expect(200)
+    response = await request(app.getHttpServer()).get('/clinical_annotations')
+    expect(response.body.length).toEqual(0)
   })
 })

@@ -1,4 +1,6 @@
 import { Controller, Delete, Get, Patch } from '@nestjs/common'
+
+import { ClinicalAnnotation } from './clinical_annotation.entity'
 import { ClinicalAnnotationService } from './clinical_annotation.service'
 
 @Controller('clinical_annotations')
@@ -11,12 +13,12 @@ export class ClinicalAnnotationsController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(): Promise<ClinicalAnnotation[]> {
     return this.clinicalAnnotationsService.getAll()
   }
 
   @Delete()
-  async deleteAll() {
+  async deleteAll(): Promise<void> {
     await this.clinicalAnnotationsService.clearData()
   }
 }
