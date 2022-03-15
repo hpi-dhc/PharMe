@@ -11,11 +11,11 @@ const { generateBadges } = require('node-jest-badges');
 
 async function run() {
   try {
-    const branchName = core.getInput('branch_name', { required: true });
-    const jestSummaryPath = core.getInput('jest_summary_path', {
+    const branchName = core.getInput('branch-name', { required: true });
+    const jestSummaryPath = core.getInput('jest-summary-path', {
       required: true,
     });
-    const badgeOutputDir = core.getInput('badge_output_dir', {
+    const badgeOutputDir = core.getInput('badge-output-dir', {
       required: true,
     });
 
