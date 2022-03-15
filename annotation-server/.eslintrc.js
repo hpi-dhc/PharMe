@@ -43,7 +43,6 @@ module.exports = {
         },
       },
     ],
-    'no-console': 'warn',
     'space-before-function-paren': [
       'error',
       {
@@ -52,6 +51,7 @@ module.exports = {
         asyncArrow: 'always',
       },
     ],
+    'no-console': 'warn',
     'no-warning-comments': 'warn',
 
     'comma-dangle': ['error', 'always-multiline'],
