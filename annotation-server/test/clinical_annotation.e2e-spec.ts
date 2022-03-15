@@ -50,7 +50,7 @@ describe('Clinical annotations', () => {
     await app.close()
   })
 
-  it(`should import, access and delete the database`, async () => {
+  it('should import, access and delete the database', async () => {
     await request(app.getHttpServer())
       .patch('/clinical_annotations/sync')
       .expect(200)

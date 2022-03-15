@@ -16,9 +16,8 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   root: true,
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
     'prettier/prettier': 2,
-
+    'no-tabs': ['error'],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single', { 'allowTemplateLiterals': true }],
     semi: ['error', 'never'],
@@ -43,7 +42,6 @@ module.exports = {
         },
       },
     ],
-    'no-console': 'warn',
     'space-before-function-paren': [
       'error',
       {
@@ -52,6 +50,7 @@ module.exports = {
         asyncArrow: 'always',
       },
     ],
+    'no-console': 'warn',
     'no-warning-comments': 'warn',
 
     'comma-dangle': ['error', 'always-multiline'],
