@@ -9335,7 +9335,7 @@ const isUndefined = (element) => element?.pct === undefined;
 const files = [
   'coverage-branches.svg',
   'coverage-functions.svg',
-  'coverage-jest coverage.svg',
+  'coverage-jest-coverage.svg',
   'coverage-lines.svg',
   'coverage-statements.svg',
 ];
@@ -9649,13 +9649,13 @@ async function run() {
     core.info('💡 Generating badges');
     await generateBadges();
 
-    const hasEvolved = await hasCoverageEvolved(badgesExist);
+    core.info('💡 Moving badgets to output dir');
+    await moveBadges(badgeOutputDir);
+
+    const hasEvolved = await hasCoverageEvolved(badgesExist, badgeOutputDir);
     if (!hasEvolved) {
       return core.info('⚠️ Coverage has not evolved, no action required.');
     }
-
-    core.info('💡 Moving badgets to output dir');
-    await moveBadges(badgeOutputDir);
 
     core.info('💡 Pushing badges to the repo');
     await setGitConfig();

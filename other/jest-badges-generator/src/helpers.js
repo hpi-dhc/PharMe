@@ -5,7 +5,7 @@ const isUndefined = (element) => element?.pct === undefined;
 const files = [
   'coverage-branches.svg',
   'coverage-functions.svg',
-  'coverage-jest coverage.svg',
+  'coverage-jest-coverage.svg',
   'coverage-lines.svg',
   'coverage-statements.svg',
 ];
