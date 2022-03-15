@@ -21,7 +21,7 @@ module.exports = {
 
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single', { 'allowTemplateLiterals': true }],
-    semi: ['error', 'always'],
+    semi: ['error', 'never'],
     'import/first': 'error',
     'import/named': 'error',
     'import/namespace': 'error',

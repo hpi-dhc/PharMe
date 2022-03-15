@@ -1,24 +1,24 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 
-import { MedicationsGroup } from './medicationsGroup.entity';
+import { MedicationsGroup } from './medicationsGroup.entity'
 
 @Entity()
 export class Medication {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  name: string;
+  name: string
 
   @Column()
-  agents: string;
+  agents: string
 
   @Column({ nullable: true })
-  manufacturer: string;
+  manufacturer: string
 
   @ManyToOne(
     () => MedicationsGroup,
     (medicationsGroup) => medicationsGroup.medications,
   )
-  group: MedicationsGroup;
+  group: MedicationsGroup
 }

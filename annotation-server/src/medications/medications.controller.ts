@@ -1,8 +1,8 @@
-import { Controller, Get, Param, Delete, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Delete, Post, Query } from '@nestjs/common'
+import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 
-import { MedicationsService } from './medications.service';
-import { MedicationsGroup } from './medicationsGroup.entity';
+import { MedicationsService } from './medications.service'
+import { MedicationsGroup } from './medicationsGroup.entity'
 
 @ApiTags('Medications')
 @Controller('medications')
@@ -12,7 +12,7 @@ export class MedicationsController {
   @ApiOperation({ summary: 'Fetch all medication groups' })
   @Get()
   async get(): Promise<MedicationsGroup[]> {
-    return await this.medicationsService.getAll();
+    return await this.medicationsService.getAll()
   }
 
   @ApiOperation({
@@ -31,7 +31,7 @@ export class MedicationsController {
     return this.medicationsService.fetchAllMedications(
       firstPage ??
         'https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json',
-    );
+    )
   }
 
   @ApiOperation({
@@ -47,6 +47,6 @@ export class MedicationsController {
   })
   @Delete(':id')
   remove(@Param('id') id: number): void {
-    return this.medicationsService.removeMedication(id);
+    return this.medicationsService.removeMedication(id)
   }
 }
