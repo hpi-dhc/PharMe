@@ -1,15 +1,15 @@
-import { INestApplication } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { Test } from '@nestjs/testing'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import * as request from 'supertest'
+import { INestApplication } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Test } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as request from 'supertest';
 
-import { AnnotationsModule } from '../src/clinical_annotation/clinical_annotation.module'
-import { ClinicalAnnotationService } from '../src/clinical_annotation/clinical_annotation.service'
+import { AnnotationsModule } from '../src/clinical_annotation/clinical_annotation.module';
+import { ClinicalAnnotationService } from '../src/clinical_annotation/clinical_annotation.service';
 
 describe('Clinical annotations', () => {
-  let app: INestApplication
-  let service: ClinicalAnnotationService
+  let app: INestApplication;
+  let service: ClinicalAnnotationService;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -34,36 +34,36 @@ describe('Clinical annotations', () => {
         }),
         AnnotationsModule,
       ],
-    }).compile()
+    }).compile();
 
-    app = moduleRef.createNestApplication()
+    app = moduleRef.createNestApplication();
 
     service = moduleRef.get<ClinicalAnnotationService>(
       ClinicalAnnotationService,
-    )
-    service.clearData()
+    );
+    service.clearData();
 
-    await app.init()
-  }, 30000)
+    await app.init();
+  }, 30000);
 
   afterAll(async () => {
-    await app.close()
-  })
+    await app.close();
+  });
 
   it(`should import, access and delete the database`, async () => {
     await request(app.getHttpServer())
       .patch('/clinical_annotations/sync')
-      .expect(200)
+      .expect(200);
 
     let response = await request(app.getHttpServer())
       .get('/clinical_annotations')
-      .expect(200)
-    expect((await response).body.length).toBeGreaterThan(0)
+      .expect(200);
+    expect((await response).body.length).toBeGreaterThan(0);
 
     await request(app.getHttpServer())
       .delete('/clinical_annotations')
-      .expect(200)
-    response = await request(app.getHttpServer()).get('/clinical_annotations')
-    expect(response.body.length).toEqual(0)
-  })
-})
+      .expect(200);
+    response = await request(app.getHttpServer()).get('/clinical_annotations');
+    expect(response.body.length).toEqual(0);
+  });
+});
