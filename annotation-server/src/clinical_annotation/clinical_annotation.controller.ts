@@ -12,7 +12,7 @@ export class ClinicalAnnotationsController {
 
   @Get()
   async findAll() {
-    return this.clinicalAnnotationsService.findAll()
+    return this.clinicalAnnotationsService.getAll()
   }
 
   @Delete()
