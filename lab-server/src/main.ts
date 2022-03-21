@@ -8,10 +8,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.useStaticAssets(join(__dirname, '..', '..', 'assets'));
-  app.useGlobalPipes(new ValidationPipe());
-  app.setGlobalPrefix('/api/v1');
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  app.useStaticAssets(join(__dirname, '..', '..', 'assets'))
+  app.useGlobalPipes(new ValidationPipe())
+  app.setGlobalPrefix('/api/v1')
 
   const config = new DocumentBuilder()
     .setTitle('Lab Server')

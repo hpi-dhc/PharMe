@@ -1,18 +1,13 @@
+import { readFile } from 'fs/promises'
+import * as path from 'path'
+
 import { Injectable } from '@nestjs/common'
-import { readFile } from 'fs/promises';
-import * as path from 'path';
+import { bufferCount } from 'rxjs'
 
 @Injectable()
 export class StarAllelesService {
+  
   async getStarAlleles(): Promise<string> {
-    return await readFile(path.resolve(__dirname, '../../src/alleles.json'), {
-      encoding: 'utf8',
-    });
+    return Buffer.from(process.env.ALLELES_FILE || '', 'base64').toString()
   }
-}
-
-function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time)
-  })
 }
