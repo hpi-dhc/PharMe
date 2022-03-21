@@ -26,8 +26,9 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Local set-up for Keycloak (for debugging)
 
-For local debugging set up your Keycloak by uncommenting the relevant part in
-the `docker-compose.yml`
+For local debugging set up your Keycloak by additionally using the
+`docker-compose.local.yml` in the `docker compose -f docker-compose.yml -f
+docker-compose.local.yml up` statement
 
 ### Keycloak set-up
 

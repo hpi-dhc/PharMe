@@ -1,0 +1,29 @@
+# To use this run `docker compose -f docker-compose.yml -f docker-compose.local.yml up`
+services:
+  postgres-keycloak:
+    image: postgres:13
+    volumes:
+      - keycloak_db:/var/lib/postgresql/data
+    ports:
+      - 25433:5432
+    environment:
+      - POSTGRES_USER=${KEYCLOAK_DB_USER}
+      - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASS}
+      - POSTGRES_DB=${KEYCLOAK_DB_NAME}
+  keycloak:
+    image: jboss/keycloak:16.1.0
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres-keycloak
+      DB_DATABASE: ${KEYCLOAK_DB_NAME}
+      DB_USER: ${KEYCLOAK_DB_USER}
+      DB_PASSWORD: ${KEYCLOAK_DB_PASS}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASS}
+    ports:
+      - 28080:8080
+    depends_on:
+      - postgres-keycloak
+
+volumes:
+  keycloak_db:
