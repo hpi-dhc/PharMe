@@ -3,12 +3,12 @@ name: Lab Server
 on:
   push:
     paths:
-      - '.github/workflows/lab-server.yml'
-      - 'lab-server/**'
+      - ".github/workflows/lab-server.yml"
+      - "lab-server/**"
   pull_request:
     paths:
-      - '.github/workflows/lab-server.yml'
-      - 'lab-server/**'
+      - ".github/workflows/lab-server.yml"
+      - "lab-server/**"
 
 defaults:
   run:
@@ -17,43 +17,84 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
 
-  test:
-    name: Test
-    runs-on: [self-hosted, linux]
+  # test:
+  #   name: Test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: yarn
+  #     - run: yarn test
+
+  test-e2e:
+    name: Test E2E
+    runs-on: ubuntu-latest
+    env:
+      KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
+      KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+      KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
+      KEYCLOAK_SECRET: ${{ secrets.KEYCLOAK_SECRET }}
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: yarn test
+      - run: yarn test:e2e:cov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jest-coverage
+          path: ./lab-server/coverage/coverage-summary.json
 
   build:
     name: Build
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
 
-  deploy:
-    name: Deploy
-    needs: [lint, test, build]
-    runs-on: [self-hosted, linux]
+  # deploy:
+  #   name: Deploy
+  #   needs: [lint, test-e2e, build]
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         password: ${{ secrets.SSH_PASSWORD }}
+  #         port: ${{ secrets.SSH_PORT }}
+  #         script: |
+  #           cd ${{ secrets.PROJECT_PATH }}
+  #           git fetch origin main
+  #           git reset --hard origin/main
+  #           cd lab-server
+  #           docker-compose --profile production up --build --force-recreate --no-deps -d
+
+  update-jest-badges:
+    name: Update Jest Badges
+    needs: [test-e2e]
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        id: download
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git fetch origin main
-            git reset --hard origin/main
-            cd lab-server
-            docker-compose --profile production up --build --force-recreate --no-deps -d
+          name: jest-coverage
+          path: ./coverage # Library required storing artificat in this specific directory
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Generate Jest Badges
+        uses: ./other/jest-badges-generator
+        with:
+          branch-name: ${{ steps.extract_branch.outputs.branch }}
+          jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
+          badge-output-dir: ./badges/lab-server

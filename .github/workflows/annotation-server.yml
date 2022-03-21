@@ -17,60 +17,88 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
 
-  test:
-    name: Test
-    runs-on: [self-hosted, linux]
+  test-e2e:
+    name: Test E2E
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: |
-          docker rm -f postgres-yarn-test && \
-          docker run --name postgres-yarn-test \
+          docker rm -f postgres-yarn-test-e2e && \
+          docker run --name postgres-yarn-test-e2e \
           -p 6789:5432 \
-          -e POSTGRES_PASSWORD=$(echo -n "postgres") \
-          -e POSTGRES_USER=$(echo -n "postgres") \
-          -e POSTGRES_DB=$(echo -n "annotation_db") \
+          -e POSTGRES_PASSWORD=postgres \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_DB=annotation_db \
           -d postgres
-      - run: yarn test
+      - run: yarn test:e2e:cov
         env:
           ANNOTATION_DB_HOST: localhost
           ANNOTATION_DB_USER: postgres
           ANNOTATION_DB_PASS: postgres
           ANNOTATION_DB_PORT: 6789
           ANNOTATION_DB_NAME: annotation_db
-      - run: docker stop postgres-yarn-test
+      - run: docker stop postgres-yarn-test-e2e
         if: always()
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jest-coverage
+          path: ./annotation-server/coverage/coverage-summary.json
+
+  update-jest-badges:
+    name: Update Jest Badges
+    needs: [test-e2e]
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: jest-coverage
+          path: ./coverage # Library required storing artificat in this specific directory
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Generate Jest Badges
+        uses: ./other/jest-badges-generator
+        with:
+          branch-name: ${{ steps.extract_branch.outputs.branch }}
+          jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
+          badge-output-dir: ./badges/annotation-server
 
   build:
     name: Build
-    needs: [lint, test]
-    runs-on: [self-hosted, linux]
+    needs: [lint, test-e2e]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
 
-  deploy:
-    name: Deploy
-    needs: [lint, test, build]
-    runs-on: [self-hosted, linux]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git fetch origin main
-            git reset --hard origin/main
-            cd annotation-server
-            docker-compose --profile production up --build --force-recreate --no-deps -d
+  # deploy:
+  #   name: Deploy
+  #   needs: [lint, test-e2e, build]
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         password: ${{ secrets.SSH_PASSWORD }}
+  #         port: ${{ secrets.SSH_PORT }}
+  #         script: |
+  #           cd ${{ secrets.PROJECT_PATH }}
+  #           git fetch origin main
+  #           git reset --hard origin/main
+  #           cd annotation-server
+  #           docker-compose --profile production up --build --force-recreate --no-deps -d

@@ -21,3 +21,10 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 ## Syncing Clinical Annotations
 
 - To download and import the `clinical_annotations` table from pharmgkb.org send a PATCH-Request to `http://localhost:3000/clinical_annotations/sync`
+
+## Medication Database
+
+- To fetch all drugs from Dailymed send a POST-Request to `/rxnorm`
+- To fetch a specific medication you need the rxnorm_mapping_id. Send a GET-Request to `/medications/b9ff2469-22c7-fc70-e053-2a95a90abc49` to fetch Ibuprofen for example.
+- Send a DELETE-Request to `/medications/:id` to delete the medication entry. The id is the auto-generated
+- Send a DELETE-Request to `/rxnorm` to clear the database

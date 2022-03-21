@@ -2,7 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../../../app/routing/router.dart';
+import '../../../common/module.dart';
+import '../../../common/routing/router.dart';
 import '../auth_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,12 +17,12 @@ class _LoginPageState extends State<LoginPage> {
   List<Lab> labs = [
     Lab(
       'Illumina Solutions Center Berlin',
-      'http://172.20.24.129:28080/auth/realms/pharme',
+      'http://172.20.24.66:28080/auth/realms/pharme',
       'http://10.0.2.2:3000/api/v1/users/star-alleles',
     ),
     Lab(
       'Mount Sinai Hospital (NYC)',
-      'http://172.20.24.129:28080/auth/realms/pharme',
+      'http://172.20.24.66:28080/auth/realms/pharme',
       'http://10.0.2.2:3000/api/v1/users/star-alleles',
     )
   ];
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   await Hive.box('preferences').put('isLoggedIn', true);
                   await context.router.replace(const MainRoute());
                 },
-                child: Text('Login'),
+                child: Text(context.l10n.auth_sign_in),
               ),
             ],
           ),

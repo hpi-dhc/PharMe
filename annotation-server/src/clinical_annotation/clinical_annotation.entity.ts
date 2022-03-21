@@ -1,49 +1,49 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity()
 export class ClinicalAnnotation {
   @PrimaryColumn()
-  clinicalAnnotationId: number;
+  id: number
 
   @Column({ nullable: true })
-  variants?: string;
+  variants?: string
 
   @Column({ nullable: true })
-  genes?: string;
+  genes?: string
 
   @Column({ nullable: true })
-  levelOfEvidence?: string;
+  levelOfEvidence?: string
 
   @Column({ nullable: true })
-  levelOverride?: string;
+  levelOverride?: string
 
   @Column({ nullable: true })
-  levelModifiers?: string;
+  levelModifiers?: string
 
   @Column({ type: 'real', nullable: true })
-  score?: number;
+  score?: number
 
   @Column({ nullable: true })
-  phenotypeCategory?: string;
+  phenotypeCategory?: string
 
   @Column({ nullable: true })
-  pmidCount?: number;
+  pmidCount?: number
 
   @Column({ nullable: true })
-  evidenceCount?: number;
+  evidenceCount?: number
 
   @Column({ nullable: true })
-  drugs?: string;
+  drugs?: string
 
   @Column({ nullable: true })
-  phenotypes?: string;
+  phenotypes?: string
 
   @Column({ nullable: true })
-  latestHistoryDate?: Date;
+  latestHistoryDate?: Date
 
   @Column({ nullable: true })
-  pharmkgbUrl?: string;
+  pharmkgbUrl?: string
 
   @Column({ nullable: true })
-  specialityPopulation?: string;
+  specialityPopulation?: string
 }

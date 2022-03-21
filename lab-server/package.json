@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:cov": "jest --config ./test/jest-e2e.json --coverage"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -26,18 +27,18 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.1.5",
-    "@nestjs/typeorm": "^8.0.2",
-    "argon2": "^0.28.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-nestjs": "^1.2.3",
     "keycloak-connect": "^16.1.0",
+    "keycloak-mock": "^1.0.10",
     "nest-keycloak-connect": "^1.8.0",
-    "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "swagger-ui-express": "^4.2.0",
-    "typeorm": "^0.2.41"
+    "swagger-ui-express": "^4.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
