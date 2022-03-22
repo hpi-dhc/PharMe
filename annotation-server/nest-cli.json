@@ -1,4 +1,8 @@
 {
+  "compilerOptions": {
+    "assets": ["medications/*.zip"],
+    "watchAssets": true
+  },
   "collection": "@nestjs/schematics",
   "sourceRoot": "src"
 }
