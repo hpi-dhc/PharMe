@@ -6,8 +6,7 @@ on:
 
 jobs:
   assign_leader:
-    # runs-on: ubuntu-latest
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     outputs:
       telegram: ${{ steps.meeting_assistant.outputs.telegram }}
     steps:
@@ -20,8 +19,7 @@ jobs:
           users: ${{ secrets.BP_USERS }}
 
   send_telegram_message:
-    # runs-on: ubuntu-latest
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     needs: [assign_leader]
     steps:
       - uses: appleboy/telegram-action@master
