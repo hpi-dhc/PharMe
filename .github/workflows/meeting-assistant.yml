@@ -2,11 +2,10 @@ name: Meeting Assistant
 
 on:
   schedule:
-    - cron: "0 12 * * 5"
+    - cron: '0 12 * * 5'
 
 jobs:
-  assign_leader:
-    # runs-on: ubuntu-latest
+  select_next_student:
     runs-on: ubuntu-latest
     outputs:
       telegram: ${{ steps.meeting_assistant.outputs.telegram }}
@@ -15,19 +14,16 @@ jobs:
       - uses: ./other/meeting-assistant
         id: meeting_assistant
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: 5
           users: ${{ secrets.BP_USERS }}
 
   send_telegram_message:
-    # runs-on: ubuntu-latest
     runs-on: ubuntu-latest
-    needs: [assign_leader]
+    needs: [select_next_student]
     steps:
       - uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_BOT_TO }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message: |
-            Hi @${{ needs.assign_leader.outputs.telegram }},
-            friendly reminder that you are responsible for the BP meeting next Monday.
+            Hi @${{ needs.select_next_student.outputs.telegram }},
+            friendly reminder that you are responsible for the Sprint Planning next Monday 🚀
