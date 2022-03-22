@@ -23,12 +23,22 @@ jobs:
       - run: yarn
       - run: yarn lint
 
+
+  get-runner-metadata:
+    runs-on: [self-hosted, linux]
+    outputs:
+      uid: ${{ steps.get-uid.outputs.uid }}
+    steps:
+      - run: echo "::set-output name=uid::$(id -u)"
+        id: get-uid
+
   test-e2e:
     name: Test E2E
     runs-on: [self-hosted, linux]
+    needs: [get-runner-metadata]
     container:
       image: node:17-buster-slim
-      options: --user 1000
+      options: --user ${{needs.get-runner-metadata.outputs.uid}}
     services:
       postgres:
         image: postgres
@@ -108,3 +118,4 @@ jobs:
             git reset --hard origin/main
             cd annotation-server
             docker-compose --profile production up --build --force-recreate --no-deps -d
+
