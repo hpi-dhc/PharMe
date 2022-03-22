@@ -5,8 +5,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../routing/router.dart';
 import '../theme.dart';
 
-class FrasecysApp extends StatelessWidget {
-  FrasecysApp({Key? key}) : super(key: key);
+class PharmeApp extends StatelessWidget {
+  PharmeApp({Key? key}) : super(key: key);
 
   final _appRouter = AppRouter();
 
@@ -15,7 +15,7 @@ class FrasecysApp extends StatelessWidget {
     return MaterialApp.router(
       routeInformationParser: _appRouter.defaultRouteParser(),
       routerDelegate: _appRouter.delegate(),
-      theme: FrasecysTheme.light,
+      theme: PharmeTheme.light,
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

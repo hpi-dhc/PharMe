@@ -2,4 +2,4 @@ import 'package:flutter/material.dart';
 
 import 'common/module.dart';
 
-void main() => runApp(FrasecysApp());
+void main() => runApp(PharmeApp());
