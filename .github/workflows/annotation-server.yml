@@ -38,7 +38,7 @@ jobs:
     needs: [get-runner-metadata]
     container:
       image: node:17-buster-slim
-      options: --user ${{needs.get-runner-metadata.outputs.uid}}
+      options: --user ${{ needs.get-runner-metadata.outputs.uid }}
     services:
       postgres:
         image: postgres
