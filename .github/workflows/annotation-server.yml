@@ -26,26 +26,33 @@ jobs:
   test-e2e:
     name: Test E2E
     runs-on: [self-hosted, linux]
+    container:
+      image: node:17-buster-slim
+      options: --user 1000
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: annotation_db
+        ports:
+          - 6789:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: |
-          docker rm -f postgres-yarn-test-e2e && \
-          docker run --name postgres-yarn-test-e2e \
-          -p 6789:5432 \
-          -e POSTGRES_PASSWORD=postgres \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_DB=annotation_db \
-          -d postgres
       - run: yarn test:e2e:cov
         env:
-          ANNOTATION_DB_HOST: localhost
+          ANNOTATION_DB_HOST: postgres
           ANNOTATION_DB_USER: postgres
           ANNOTATION_DB_PASS: postgres
-          ANNOTATION_DB_PORT: 6789
+          ANNOTATION_DB_PORT: ${{ job.services.postgres.ports[6789] }}
           ANNOTATION_DB_NAME: annotation_db
-      - run: docker stop postgres-yarn-test-e2e
-        if: always()
       - uses: actions/upload-artifact@v3
         with:
           name: jest-coverage
