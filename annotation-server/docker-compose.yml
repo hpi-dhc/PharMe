@@ -24,3 +24,11 @@ services:
 
 volumes:
   annotation_db:
+
+
+
+# ANNOTATION_DB_HOST=localhost
+# ANNOTATION_DB_PORT=5432
+# ANNOTATION_DB_USER=postgres
+# ANNOTATION_DB_PASS=postgres
+# ANNOTATION_DB_NAME=annotation_db

@@ -1,16 +1,10 @@
 name: 'Meeting Assistant'
 author: 'Benjamin-Frost'
-description: 'Assigns leader for next meeting and outputs telegram name of selected user'
+description: 'Gets telegram name of next student in preselected order'
 
 inputs:
-  token:
-    description: 'GitHub token'
-    required: true
-  issue-number:
-    description: 'Number of issue meeting'
-    required: true
   users:
-    description: 'JSON array of user objects with keys: name, github, telegram'
+    description: 'Array of strings of telegram names'
     required: true
 outputs:
   telegram:

@@ -17,23 +17,15 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
 
-  # test:
-  #   name: Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - run: yarn
-  #     - run: yarn test
-
   test-e2e:
     name: Test E2E
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     env:
       KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
       KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
@@ -50,36 +42,35 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
 
-  # deploy:
-  #   name: Deploy
-  #   needs: [lint, test-e2e, build]
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-  #   steps:
-  #     - uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.SSH_HOST }}
-  #         username: ${{ secrets.SSH_USERNAME }}
-  #         password: ${{ secrets.SSH_PASSWORD }}
-  #         port: ${{ secrets.SSH_PORT }}
-  #         script: |
-  #           cd ${{ secrets.PROJECT_PATH }}
-  #           git fetch origin main
-  #           git reset --hard origin/main
-  #           cd lab-server
-  #           docker-compose --profile production up --build --force-recreate --no-deps -d
+  deploy:
+    name: Deploy
+    needs: [lint, test-e2e, build]
+    runs-on: [self-hosted, linux]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+            git fetch origin main
+            git reset --hard origin/main
+            cd lab-server
+            docker-compose --profile production up --build --force-recreate --no-deps -d
 
   update-jest-badges:
     name: Update Jest Badges
     needs: [test-e2e]
-    # runs-on: ubuntu-latest
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
