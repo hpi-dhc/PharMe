@@ -25,6 +25,7 @@ jobs:
 
 
   get-runner-metadata:
+    name: Get Runner Metadata
     runs-on: [self-hosted, linux]
     outputs:
       uid: ${{ steps.get-uid.outputs.uid }}
