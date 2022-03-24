@@ -29,7 +29,7 @@ export class MedicationsService {
         const medications = drugbank.drugbank.drug.map((drug) =>
             Medication.fromDrug(drug),
         );
-        this.medicationRepository.save(medications);
+        await this.medicationRepository.save(medications);
     }
 
     async getDataFromZip(): Promise<Drugbank> {
