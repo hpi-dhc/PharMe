@@ -5,12 +5,11 @@ import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { XMLParser } from 'fast-xml-parser';
 import { Repository } from 'typeorm';
-import { DOMParser } from 'xmldom';
-import * as xpath from 'xpath';
 
 import { unzip } from '../common/utils/download-unzip';
-import { Medication } from './medications.entity';
+import { Drugbank, Medication } from './medications.entity';
 
 @Injectable()
 export class MedicationsService {
@@ -26,12 +25,14 @@ export class MedicationsService {
 
     async fetchAllMedications(): Promise<void> {
         await this.clearAllMedicationData();
-        const drugbankDoc = await this.getDataFromZip();
-        const select = xpath.useNamespaces({ n: 'http://www.drugbank.ca' });
-        const drugs = select('/n:drugbank/n:drug', drugbankDoc);
+        const drugbank = await this.getDataFromZip();
+        const medications = drugbank.drugbank.drug.map((drug) =>
+            Medication.fromDrug(drug),
+        );
+        this.medicationRepository.save(medications);
     }
 
-    async getDataFromZip(): Promise<Document> {
+    async getDataFromZip(): Promise<Drugbank> {
         const unzipPath = path.join(os.tmpdir(), 'drugbank_data');
         await unzip(
             path.join(
@@ -46,8 +47,8 @@ export class MedicationsService {
                 this.configService.get<string>('DRUGBANK_XML'),
             ),
         );
-        const domParser = new DOMParser();
-        return domParser.parseFromString(xmlContent.toString());
+        const parser = new XMLParser({ removeNSPrefix: true });
+        return parser.parse(xmlContent);
     }
 
     async getAll(): Promise<Medication[]> {
