@@ -1,0 +1,12 @@
+{
+  "name": "frasecys",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start:dev": "ttab -t Lab-Server 'cd lab-server;yarn start:dev' && ttab -t Annotation-Server 'cd annotation-server;yarn start:dev'"
+  },
+  "dependencies": {
+    "ttab": "^0.7.2"
+  }
+}

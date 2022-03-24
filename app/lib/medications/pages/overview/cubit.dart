@@ -16,7 +16,7 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
     emit(MedicationsOverviewState.loading());
     // on Android exchange localhost with 10.0.2.2
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:3000/medications'));
+        await http.get(Uri.parse('http://10.0.2.2:3001/medications'));
 
     if (response.statusCode == 200) {
       final list =

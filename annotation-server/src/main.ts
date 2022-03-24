@@ -22,6 +22,6 @@ async function bootstrap() {
         customfavIcon: '../favicon.png',
     });
 
-    await app.listen(3000);
+    await app.listen(3001);
 }
 bootstrap();
