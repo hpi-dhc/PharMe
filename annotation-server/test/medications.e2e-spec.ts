@@ -20,19 +20,19 @@ describe('MedicationsController (e2e)', () => {
         medicationService =
             moduleFixture.get<MedicationsService>(MedicationsService);
         medicationService.clearAllMedicationData();
-    }, 60000);
+    });
 
-    it('should create last two medication pages & return groups', async () => {
+    it('should load minimized DrugBank XML of 100 entries', async () => {
         const createResponse = request(app.getHttpServer()).post(
-            '/medications/?firstPage=https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json?page=1432',
+            '/medications/',
         );
         createResponse.expect(201);
         await createResponse;
 
         const getResponse = request(app.getHttpServer()).get('/medications');
         getResponse.expect(200);
-        expect((await getResponse).body.length).toBeGreaterThan(0);
-    }, 60000);
+        expect((await getResponse).body.length).toBe(100);
+    });
 
     afterAll(async () => {
         await medicationService.clearAllMedicationData();

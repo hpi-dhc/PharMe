@@ -11,6 +11,10 @@ import { MedicationsModule } from './medications/medications.module';
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
+            envFilePath: (process.env.NODE_ENV === 'test'
+                ? ['test/.env']
+                : []
+            ).concat(['.env']),
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
