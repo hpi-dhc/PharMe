@@ -40,6 +40,8 @@ export class Medication {
             medication.synonyms = internationalBrand.map((brand) => brand.name);
         } else if (internationalBrand) {
             medication.synonyms = [internationalBrand.name];
+        } else {
+            medication.synonyms = [];
         }
 
         return medication;
@@ -57,6 +59,6 @@ export class Medication {
     @Column({ nullable: true })
     pharmgkbId: string;
 
-    @Column('text', { array: true, nullable: true })
+    @Column('text', { array: true })
     synonyms: string[];
 }
