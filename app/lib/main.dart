@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'common/module.dart';
@@ -11,5 +12,6 @@ Future<void> main() async {
   Hive.registerAdapter(DiplotypeAdapter());
   await Hive.openBox<Alleles>('userData');
   await Hive.openBox('preferences');
+  await dotenv.load(fileName: '.env');
   runApp(FrasecysApp());
 }

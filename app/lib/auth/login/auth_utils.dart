@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../profile/models/hive/alleles.dart';
 
 Future<String> authenticate(String authUrl) async {
-  // 'http://172.20.24.129:28080/auth/realms/pharme'
+  // 'http://172.20.24.66:28080/auth/realms/pharme'
   final uri = Uri.parse(authUrl);
   const clientId = 'pharme-app';
   final scopes = List<String>.of(['openid', 'profile']);

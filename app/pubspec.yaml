@@ -15,6 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.3
+  flutter_dotenv: ^5.0.2
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^1.0.0
@@ -44,3 +45,4 @@ flutter:
 
   assets:
     - assets/images/
+    - .env
