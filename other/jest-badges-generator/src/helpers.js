@@ -66,6 +66,8 @@ export const setGitConfig = async () => {
 export const pushBadges = async (branchName, badgeOutputDir) => {
   await exec.exec(`git branch -m ${branchName}`);
   await exec.exec('git add', [badgeOutputDir]);
+  // Discard all changes that were not just staged
+  await exec.exec('git restore .');
   await exec.exec('git commit', ['-m', 'docs: updating coverage badges']);
   await exec.exec('git push');
 };
