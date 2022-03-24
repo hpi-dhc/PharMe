@@ -26,6 +26,11 @@ Work on your code. Repeat:
 - Commit your changes
 - Push to the repo
 
+## Debugging
+
+If you wish to debug the annotation server, lab server or the app, simply go to the 'Run and Debug' section of the vscode activity bar (Ctrl+Shift+D),
+select the project you would like to debug and hit the green play button.
+
 ## It's working!
 
 When you're done, file a pull request. We will take a look at your code and once all checks pass, your code can get merged 🥳
