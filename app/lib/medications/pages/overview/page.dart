@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/module.dart';
-import '../../models/medications_group.dart';
+import '../../models/medication.dart';
 import 'cubit.dart';
 
 class MedicationsOverviewPage extends StatefulWidget {
@@ -36,10 +36,10 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
               initial: Container.new,
               loading: () => Center(child: CircularProgressIndicator()),
               error: () => Center(child: Text('Error!')),
-              loaded: (medicationsGroups) => _buildMedicationsList(
+              loaded: (medications) => _buildMedicationsList(
                     context,
                     _matchingMedicationsTiles(
-                        medicationsGroups, searchController.text),
+                        medications, searchController.text),
                     searchController.text,
                   ));
         },
@@ -52,32 +52,24 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
   }
 
   List<ListTile> _matchingMedicationsTiles(
-      List<MedicationsGroup> medicationsGroups, String searchText) {
-    return medicationsGroups
-        .map((group) {
-          final matchingMedications = group.medications
-              .where((medication) =>
-                  _matches(medication.name, searchText) ||
-                  _matches(medication.manufacturer, searchText))
-              .toList();
+      List<Medication> medications, String searchText) {
+    return medications
+        .map((medication) {
+          final synonymMatch = medication.synonyms
+              .any((synonym) => _matches(synonym, searchText));
 
-          if (matchingMedications.isEmpty &&
-              !_matches(group.name, searchText)) {
+          if (!_matches(medication.name, searchText) &&
+              !synonymMatch &&
+              !_matches(medication.description, searchText)) {
             return null;
           }
 
-          final title = matchingMedications.isEmpty
-              ? group.name
-              : matchingMedications
-                  .map((medication) => medication.name)
-                  .toSet()
-                  .join(', ');
-          final subtitle = matchingMedications.isEmpty ? null : group.name;
           return ListTile(
-            title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-            subtitle: subtitle == null ? null : Text(subtitle),
+            title: Text(medication.name),
+            subtitle: Text(medication.description,
+                maxLines: 2, overflow: TextOverflow.ellipsis),
             onTap: () =>
-                context.router.pushNamed('main/medications/${group.id}'),
+                context.router.pushNamed('main/medications/${medication.id}'),
           );
         })
         .whereType<ListTile>()
