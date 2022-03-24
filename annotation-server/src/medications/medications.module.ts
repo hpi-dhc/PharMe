@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { Medication } from './medication.entity';
 import { MedicationsController } from './medications.controller';
-import { Medication } from './medications.entity';
 import { MedicationsService } from './medications.service';
 
 @Module({

@@ -9,7 +9,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { Repository } from 'typeorm';
 
 import { unzip } from '../common/utils/download-unzip';
-import { Drugbank, Medication } from './medications.entity';
+import { Drugbank, Medication } from './medication.entity';
 
 @Injectable()
 export class MedicationsService {
@@ -53,7 +53,7 @@ export class MedicationsService {
 
     async getAll(): Promise<Medication[]> {
         return await this.medicationRepository.find({
-            select: ['id', 'name', 'description'],
+            select: ['id', 'name', 'description', 'synonyms'],
         });
     }
 }

@@ -9,6 +9,13 @@ export interface Drug {
             identifier: string;
         }>;
     };
+    'international-brands': {
+        'international-brand'?:
+            | Array<{
+                  name: string;
+              }>
+            | { name: string };
+    };
 }
 export interface Drugbank {
     drugbank: {
@@ -27,6 +34,14 @@ export class Medication {
         ].find(
             (externalIdentifier) => externalIdentifier.resource === 'PharmGKB',
         )?.identifier;
+        const internationalBrand =
+            drug['international-brands']['international-brand'];
+        if (Array.isArray(internationalBrand)) {
+            medication.synonyms = internationalBrand.map((brand) => brand.name);
+        } else if (internationalBrand) {
+            medication.synonyms = [internationalBrand.name];
+        }
+
         return medication;
     }
 
@@ -36,11 +51,12 @@ export class Medication {
     @Column()
     name: string;
 
-    // add alternative names as separate table
-
     @Column()
     description: string;
 
     @Column({ nullable: true })
     pharmgkbId: string;
+
+    @Column('text', { array: true, nullable: true })
+    synonyms: string[];
 }
