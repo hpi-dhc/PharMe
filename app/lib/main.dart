@@ -12,6 +12,6 @@ Future<void> main() async {
   Hive.registerAdapter(DiplotypeAdapter());
   await Hive.openBox<Alleles>('userData');
   await Hive.openBox('preferences');
-  await dotenv.load(fileName: '.env');
+  await dotenv.load(fileName: 'assets/env/.env');
   runApp(FrasecysApp());
 }
