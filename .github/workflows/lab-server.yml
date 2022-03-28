@@ -17,7 +17,7 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -25,7 +25,7 @@ jobs:
 
   test-e2e:
     name: Test E2E
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     env:
       KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
       KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
@@ -42,7 +42,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -51,7 +51,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [lint, test-e2e, build]
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: appleboy/ssh-action@master
@@ -70,7 +70,7 @@ jobs:
   update-jest-badges:
     name: Update Jest Badges
     needs: [test-e2e]
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
