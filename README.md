@@ -1,4 +1,4 @@
-# PharMe 
+# PharMe
 
 <img width="150" alt="pharme-logo" src="https://user-images.githubusercontent.com/38653851/158404648-906d5741-66f1-4a90-be1a-4cea92631b90.png">
 
@@ -6,14 +6,12 @@
 
 ---
 
-
-|                      | CI/CD                                                                                                      | Code Coverage                                                 |
-| -------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| 📝 Annotation Server | ![annotation-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/annotation-server.yml/badge.svg) | ![annotation-server](./badges/annotation-server/coverage-jest%20coverage.svg) |
-| 📱 App               | ![app-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/app.yml/badge.svg)                      |                                                               |
-| 🧪 Lab Server        | ![lab-ci-cd](https://github.com/hpi-dhc/frasecys/actions/workflows/lab-server.yml/badge.svg)               | ![lab-jest](./badges/lab-server/coverage-jest%20coverage.svg) |
+|                      | CI/CD                                                                                                    | Code Coverage                                                                 |
+| -------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 📝 Annotation Server | ![annotation-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/annotation-server.yml/badge.svg) | ![annotation-server](./badges/annotation-server/coverage-jest%20coverage.svg) |
+| 📱 App               | ![app-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/app.yml/badge.svg)                      |                                                                               |
+| 🧪 Lab Server        | ![lab-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/lab-server.yml/badge.svg)               | ![lab-jest](./badges/lab-server/coverage-jest%20coverage.svg)                 |
 
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome. Please read our [Contribution Guide](CONTRIBUTING.md) to get started.
-

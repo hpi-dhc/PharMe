@@ -1,7 +1,7 @@
 import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
 
-class FrasecysTheme {
+class PharmeTheme {
   static ThemeData get light {
     return ThemeData(
       colorScheme: ColorScheme(
