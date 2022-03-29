@@ -51,33 +51,38 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
     return test.toLowerCase().contains(query.toLowerCase().trim());
   }
 
-  List<ListTile> _matchingMedicationsTiles(
+  List<MedicationTile> _matchingMedicationsTiles(
       List<Medication> medications, String searchText) {
-    return medications
+    final medicationTiles = medications
         .map((medication) {
           final synonymMatch = medication.synonyms
               .any((synonym) => _matches(synonym, searchText));
 
-          if (!_matches(medication.name, searchText) &&
-              !synonymMatch &&
-              !_matches(medication.description, searchText)) {
+          int priority;
+
+          if (_matches(medication.name, searchText)) {
+            priority = 2;
+          } else if (synonymMatch) {
+            priority = 1;
+          } else if (_matches(medication.description, searchText)) {
+            priority = 0;
+          } else {
             return null;
           }
 
-          return ListTile(
-            title: Text(medication.name),
-            subtitle: Text(medication.description,
-                maxLines: 2, overflow: TextOverflow.ellipsis),
-            onTap: () =>
-                context.router.pushNamed('main/medications/${medication.id}'),
-          );
+          return MedicationTile(medication: medication, priority: priority);
         })
-        .whereType<ListTile>()
+        .whereType<MedicationTile>()
         .toList();
+
+    medicationTiles.sort((medication1, medication2) =>
+        medication2.priority.compareTo(medication1.priority));
+
+    return medicationTiles;
   }
 
   Column _buildMedicationsList(BuildContext context,
-      List<ListTile> medicationsTiles, String searchText) {
+      List<MedicationTile> medicationsTiles, String searchText) {
     return Column(
       children: [
         Padding(
@@ -102,6 +107,28 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class MedicationTile extends StatelessWidget {
+  const MedicationTile({
+    Key? key,
+    required this.medication,
+    required this.priority,
+  }) : super(key: key);
+
+  final Medication medication;
+  final int priority;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(medication.name),
+      subtitle: Text(medication.description,
+          maxLines: 2, overflow: TextOverflow.ellipsis),
+      onTap: () =>
+          context.router.pushNamed('main/medications/${medication.id}'),
     );
   }
 }
