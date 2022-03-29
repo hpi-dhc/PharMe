@@ -16,14 +16,18 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.3
+  flutter_dotenv: ^5.0.2
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^1.0.0
   freezed_annotation: ^0.15.0
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
   http: ^0.13.4
   intl: ^0.17.0
   json_annotation: ^4.3.0
   openid_client: ^0.4.3
+  shared_preferences: ^2.0.13
   url_launcher: ^6.0.18
 
 dev_dependencies:
@@ -33,6 +37,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^0.15.0+1
+  hive_generator: ^1.1.0
   json_serializable: ^6.0.1
 
 flutter:
@@ -41,3 +46,4 @@ flutter:
 
   assets:
     - assets/images/
+    - .env

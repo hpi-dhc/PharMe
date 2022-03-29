@@ -12,8 +12,6 @@ part 'router.gr.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
-    // To set initial route. Later on very useful for login check
-    RedirectRoute(path: '/', redirectTo: 'auth/onboarding'),
     authRoutes,
     AutoRoute(
       path: 'main',
@@ -23,7 +21,7 @@ part 'router.gr.dart';
         profileRoutes,
         reportsRoutes,
       ],
-    )
+    ),
   ],
 )
 class AppRouter extends _$AppRouter {}
