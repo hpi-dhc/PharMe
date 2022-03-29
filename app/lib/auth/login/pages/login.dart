@@ -5,6 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../common/module.dart';
 import '../../../common/routing/router.dart';
+import '../../../common/widgets/radiant_gradiant_mask.dart';
+import '../models/lab.dart';
 import 'cubit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,19 +38,108 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state) {
           return state.when(
-            initial: () => _buildSignInForm(context),
-            loadingAlleles: () => _buildLoadingScreen(context),
-            loadedAlleles: () => _buildLoadedAllelesScreen(context),
-            error: (message) => _buildErrorScreen(context, message),
+            initial: () => _buildStatusScreen(
+              context: context,
+              children: [
+                DropdownButton(
+                  value: dropdownValue,
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  items: labs
+                      .map((items) => DropdownMenuItem(
+                          value: items.name, child: Text(items.name)))
+                      .toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      dropdownValue = newValue.toString();
+                    });
+                  },
+                ),
+                SizedBox(height: 25),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final found =
+                          labs.firstWhere((el) => el.name == dropdownValue);
+                      await context
+                          .read<LoginPageCubit>()
+                          .signInAndLoadData(found.authUrl, found.allelesUrl);
+                    },
+                    child: Text(context.l10n.auth_sign_in),
+                  ),
+                ),
+              ],
+            ),
+            loadingAlleles: () => _buildStatusScreen(
+              context: context,
+              children: [
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: RadiantGradientMask(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            loadedAlleles: () => _buildStatusScreen(
+              context: context,
+              children: [
+                RadiantGradientMask(
+                  child: Icon(
+                    Icons.task_alt,
+                    size: 150,
+                    color: Colors.white,
+                  ),
+                ),
+                Text('Successfully imported data'),
+                SizedBox(height: 25),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => context.router.replace(MainRoute()),
+                    child: Text('Continue'),
+                  ),
+                ),
+              ],
+            ),
+            error: (message) => _buildStatusScreen(
+              context: context,
+              children: [
+                RadiantGradientMask(
+                  child: Icon(
+                    Icons.warning_amber_outlined,
+                    size: 150,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(message),
+                SizedBox(height: 25),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<LoginPageCubit>()
+                          .emit(LoginPageState.initial());
+                    },
+                    child: Text('Retry'),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
-  // TODO: for refactoring purposes later
-  // ignore: unused_element
-  Widget _buildStatusScreen(BuildContext context, List<Widget> children) {
+  Widget _buildStatusScreen({
+    required BuildContext context,
+    required List<Widget> children,
+  }) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(12),
@@ -62,128 +153,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  Widget _buildSignInForm(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              DropdownButton(
-                value: dropdownValue,
-                icon: Icon(Icons.keyboard_arrow_down),
-                items: labs
-                    .map((items) => DropdownMenuItem(
-                        value: items.name, child: Text(items.name)))
-                    .toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    dropdownValue = newValue.toString();
-                  });
-                },
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final found =
-                      labs.firstWhere((el) => el.name == dropdownValue);
-                  await context
-                      .read<LoginPageCubit>()
-                      .signInAndLoadData(found.authUrl, found.allelesUrl);
-                },
-                child: Text(context.l10n.auth_sign_in),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLoadingScreen(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 200,
-                height: 200,
-                child: CircularProgressIndicator(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLoadedAllelesScreen(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.task_alt,
-                size: 150,
-              ),
-              Text('Successfully imported data'),
-              SizedBox(height: 25),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => context.router.replace(MainRoute()),
-                  child: Text('Continue'),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildErrorScreen(BuildContext context, String message) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.warning_amber_outlined,
-                size: 150,
-              ),
-              Text(message),
-              ElevatedButton(
-                onPressed: () {
-                  context.read<LoginPageCubit>().emit(LoginPageState.initial());
-                },
-                child: Text('Retry'),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Lab {
-  Lab(this.name, this.authUrl, this.allelesUrl);
-
-  String name;
-  String authUrl;
-  String allelesUrl;
 }

@@ -16,9 +16,9 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   Future<void> signInAndLoadData(String authUrl, String allelesUrl) async {
     try {
-      final token = await getAccessToken(authUrl);
+      final token = await _getAccessToken(authUrl);
       emit(LoginPageState.loadingAlleles());
-      await fetchAndSaveAllesData(token, allelesUrl);
+      await _fetchAndSaveAllesData(token, allelesUrl);
       // Login Successful
       await Hive.box('preferences').put('isLoggedIn', true);
       emit(LoginPageState.loadedAlleles());
@@ -27,7 +27,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     }
   }
 
-  Future<String> getAccessToken(String authUrl) async {
+  Future<String> _getAccessToken(String authUrl) async {
     // 'http://172.20.24.66:28080/auth/realms/pharme'
     final uri = Uri.parse(authUrl);
     const clientId = 'pharme-app';
@@ -54,19 +54,19 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     return credentials.getTokenResponse().then((res) => res.accessToken ?? '');
   }
 
-  Future<void> fetchAndSaveAllesData(String token, String url) async {
+  Future<void> _fetchAndSaveAllesData(String token, String url) async {
     final userData = Hive.box<Alleles>('userData');
     if (userData.get('alleles') == null) {
-      final response = await getStarAlleles(token, url);
+      final response = await _getStarAlleles(token, url);
       if (response.statusCode == 200) {
-        await saveAlleleData(response, 'userData');
+        await _saveAlleleData(response, 'userData');
       } else {
         throw Exception('Error occurred during loading of allele data');
       }
     }
   }
 
-  Future<http.Response> getStarAlleles(String? token, String url) async {
+  Future<http.Response> _getStarAlleles(String? token, String url) async {
     final response = await http.get(
         // 127.0.0.1 - ios 'http://10.0.2.2:3000/api/v1/users/star-alleles'
         Uri.parse(url),
@@ -76,7 +76,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     return response;
   }
 
-  Future<void> saveAlleleData(http.Response response, String boxname) async {
+  Future<void> _saveAlleleData(http.Response response, String boxname) async {
     final json = jsonDecode(response.body);
     final alleles = Alleles.fromJson(json);
     return Hive.box<Alleles>('userData').put('alleles', alleles);
