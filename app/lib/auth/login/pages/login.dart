@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:black_hole_flutter/black_hole_flutter.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../common/module.dart';
 import '../../../common/routing/router.dart';
@@ -25,138 +27,148 @@ class _LoginPageState extends State<LoginPage> {
       create: (context) => LoginPageCubit(),
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state) {
-          return state.when(
-            initial: () => _buildInitialScreen(context),
-            loadingAlleles: () => _buildLoadingScreen(context),
-            loadedAlleles: () => _buildLoadedScreen(context),
-            error: (message) => _buildErrorScreen(context, message),
+          return Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SvgPicture.asset('assets/images/pharme_logo_horizontal.svg'),
+                  Column(
+                    children: state.when(
+                      initial: () => _buildInitialScreen(context),
+                      loadingAlleles: () => _buildLoadingScreen(context),
+                      loadedAlleles: () => _buildLoadedScreen(context),
+                      error: (message) => _buildErrorScreen(context, message),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildInitialScreen(BuildContext context) {
-    return _basicWidgetTree(
-      children: [
-        DropdownButton(
+  List<Widget> _buildInitialScreen(BuildContext context) {
+    return [
+      DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          isExpanded: true,
+          hint: Text('Please select your lab'),
           value: dropdownValue,
-          icon: Icon(Icons.keyboard_arrow_down),
-          items: labs
-              .map((items) =>
-                  DropdownMenuItem(value: items.name, child: Text(items.name)))
-              .toList(),
-          onChanged: (newValue) {
+          onChanged: (value) {
             setState(() {
-              dropdownValue = newValue.toString();
+              dropdownValue = value.toString();
             });
           },
-        ),
-        SizedBox(height: 25),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () async {
-              final found = labs.firstWhere((el) => el.name == dropdownValue);
-              await context
-                  .read<LoginPageCubit>()
-                  .signInAndLoadAlleles(found.authUrl, found.allelesUrl);
-            },
-            child: Text(context.l10n.auth_sign_in),
+          items: labs
+              .map((lab) => DropdownMenuItem(
+                    value: lab.name,
+                    child: Text(lab.name),
+                  ))
+              .toList(),
+          buttonPadding: const EdgeInsets.only(left: 16, right: 16),
+          buttonDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(32),
+            border: Border.all(color: Colors.black26),
           ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildLoadingScreen(BuildContext context) {
-    return _basicWidgetTree(
-      children: [
-        SizedBox(
-          width: 200,
-          height: 200,
-          child: RadiantGradientMask(
-            colors: [
-              context.theme.colorScheme.primaryVariant,
-              context.theme.colorScheme.secondaryVariant,
-            ],
-            child: CircularProgressIndicator(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoadedScreen(BuildContext context) {
-    return _basicWidgetTree(
-      children: [
-        RadiantGradientMask(
-          colors: [
-            context.theme.colorScheme.primaryVariant,
-            context.theme.colorScheme.secondaryVariant,
-          ],
-          child: Icon(
-            Icons.task_alt,
-            size: 150,
-            color: Colors.white,
-          ),
-        ),
-        Text('Successfully imported data'),
-        SizedBox(height: 25),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () => context.router.replace(MainRoute()),
-            child: Text('Continue'),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildErrorScreen(BuildContext context, String message) {
-    return _basicWidgetTree(
-      children: [
-        RadiantGradientMask(
-          colors: [
-            context.theme.colorScheme.primaryVariant,
-            context.theme.colorScheme.secondaryVariant,
-          ],
-          child: Icon(
-            Icons.warning_amber_outlined,
-            size: 150,
-            color: Colors.white,
-          ),
-        ),
-        Text(message),
-        SizedBox(height: 25),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              context.read<LoginPageCubit>().emit(LoginPageState.initial());
-            },
-            child: Text('Retry'),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _basicWidgetTree({required List<Widget> children}) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: children,
+          dropdownDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
       ),
-    );
+      SizedBox(height: 8),
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () async {
+            final found = labs.firstWhere((el) => el.name == dropdownValue);
+            await context
+                .read<LoginPageCubit>()
+                .signInAndLoadAlleles(found.authUrl, found.allelesUrl);
+          },
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32),
+              ),
+            ),
+          ),
+          child: Text(context.l10n.auth_sign_in),
+        ),
+      )
+    ];
+  }
+
+  List<Widget> _buildLoadingScreen(BuildContext context) {
+    return [
+      SizedBox(
+        width: 200,
+        height: 200,
+        child: RadiantGradientMask(
+          colors: [
+            context.theme.colorScheme.primaryVariant,
+            context.theme.colorScheme.secondaryVariant,
+          ],
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildLoadedScreen(BuildContext context) {
+    return [
+      RadiantGradientMask(
+        colors: [
+          context.theme.colorScheme.primaryVariant,
+          context.theme.colorScheme.secondaryVariant,
+        ],
+        child: Icon(
+          Icons.task_alt,
+          size: 150,
+          color: Colors.white,
+        ),
+      ),
+      Text('Successfully imported data'),
+      SizedBox(height: 25),
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () => context.router.replace(MainRoute()),
+          child: Text('Continue'),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildErrorScreen(BuildContext context, String message) {
+    return [
+      RadiantGradientMask(
+        colors: [
+          context.theme.colorScheme.primaryVariant,
+          context.theme.colorScheme.secondaryVariant,
+        ],
+        child: Icon(
+          Icons.warning_amber_outlined,
+          size: 150,
+          color: Colors.white,
+        ),
+      ),
+      Text(message),
+      SizedBox(height: 25),
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            context.read<LoginPageCubit>().emit(LoginPageState.initial());
+          },
+          child: Text('Retry'),
+        ),
+      ),
+    ];
   }
 }
