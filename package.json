@@ -10,7 +10,6 @@
     "husky": "^7.0.4"
   },
   "scripts": {
-    "bootstrap": "yarn install && husky install",
+    "bootstrap": "yarn install && husky install"
   }
 }
-
