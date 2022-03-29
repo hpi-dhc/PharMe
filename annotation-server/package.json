@@ -29,7 +29,6 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.1.5",
     "@nestjs/typeorm": "^8.0.3",
-    "@types/yauzl": "^2.9.2",
     "axios": "^0.26.0",
     "axios-retry": "^3.2.4",
     "csv-parse": "^5.0.4",
@@ -45,9 +44,6 @@
     "swagger-ui-express": "^4.2.0",
     "typeorm": "^0.2.41",
     "uuid": "^8.3.2",
-    "xml2js": "^0.4.23",
-    "xmldom": "^0.6.0",
-    "xpath": "^0.0.32",
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
@@ -58,7 +54,7 @@
     "@types/jest": "27.0.2",
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",
-    "@types/xmldom": "^0.1.31",
+    "@types/yauzl": "^2.9.2",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^8.0.1",
