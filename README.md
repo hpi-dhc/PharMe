@@ -1,8 +1,10 @@
 # PharMe
 
-<img width="150" alt="pharme-logo" src="https://user-images.githubusercontent.com/38653851/158404648-906d5741-66f1-4a90-be1a-4cea92631b90.png">
+<img width="150" alt="pharme-logo"
+src="https://user-images.githubusercontent.com/38653851/158404648-906d5741-66f1-4a90-be1a-4cea92631b90.png">
 
-**PharMe** - The app which provides you with pharmaceutical insights tailored to your personal genome
+**PharMe** - The app which provides you with pharmaceutical insights tailored to
+your personal genome
 
 ---
 
@@ -14,4 +16,5 @@
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome. Please read our [Contribution Guide](CONTRIBUTING.md) to get started.
+Contributions, issues and feature requests are welcome. Please read our
+[Contribution Guide](CONTRIBUTING.md) to get started.
