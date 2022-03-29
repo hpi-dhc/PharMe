@@ -6,8 +6,8 @@ import 'package:hive/hive.dart';
 import '../routing/router.dart';
 import '../theme.dart';
 
-class FrasecysApp extends StatelessWidget {
-  FrasecysApp({Key? key}) : super(key: key);
+class PharmeApp extends StatelessWidget {
+  PharmeApp({Key? key}) : super(key: key);
 
   final _appRouter = AppRouter();
   final _isLoggedIn =
@@ -20,7 +20,7 @@ class FrasecysApp extends StatelessWidget {
       routerDelegate: _appRouter.delegate(
         initialDeepLink: _isLoggedIn ? 'main' : 'auth/onboarding',
       ),
-      theme: FrasecysTheme.light,
+      theme: PharmeTheme.light,
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

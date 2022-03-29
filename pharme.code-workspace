@@ -15,6 +15,10 @@
     {
       "name": "🧪 Lab Server",
       "path": "lab-server"
+    },
+    {
+      "name": "🦄 Miscellaneous",
+      "path": "miscellaneous"
     }
   ]
 }
