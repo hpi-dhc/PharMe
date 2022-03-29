@@ -29,24 +29,26 @@ export class MedicationsService {
         const medications = drugbank.drugbank.drug.map((drug) =>
             Medication.fromDrug(drug),
         );
-        await this.medicationRepository.save(medications);
+        const savedMedications = await this.medicationRepository.save(
+            medications,
+        );
+        console.log(
+            'Successfully saved',
+            savedMedications.length,
+            'medications!',
+        );
     }
 
     async getDataFromZip(): Promise<Drugbank> {
         const unzipPath = path.join(os.tmpdir(), 'drugbank_data');
-        await unzip(
-            path.join(
-                __dirname,
-                this.configService.get<string>('DRUGBANK_ZIP'),
-            ),
-            unzipPath,
-        );
+        await unzip(this.configService.get<string>('DRUGBANK_ZIP'), unzipPath);
         const xmlContent = fs.readFileSync(
             path.join(
                 unzipPath,
                 this.configService.get<string>('DRUGBANK_XML'),
             ),
         );
+
         const parser = new XMLParser({ removeNSPrefix: true });
         return parser.parse(xmlContent);
     }
