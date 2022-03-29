@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'app/widgets/app.dart';
+import 'common/module.dart';
 
-void main() => runApp(FrasecysApp());
+void main() => runApp(PharmeApp());

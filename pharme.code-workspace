@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "name": "🌍 Everything",
+      "path": "."
+    },
+    {
+      "name": "📝 Annotation Server",
+      "path": "annotation-server"
+    },
+    {
+      "name": "📱 App",
+      "path": "app"
+    },
+    {
+      "name": "🧪 Lab Server",
+      "path": "lab-server"
+    },
+    {
+      "name": "🦄 Miscellaneous",
+      "path": "miscellaneous"
+    }
+  ]
+}

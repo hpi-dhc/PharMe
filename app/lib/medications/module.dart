@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 
-import 'pages/medication_details/page.dart';
-import 'pages/medications_overview/page.dart';
+import 'pages/details/page.dart';
+import 'pages/overview/page.dart';
 
 // We need to expose all pages for AutoRouter
-export 'pages/medication_details/page.dart';
-export 'pages/medications_overview/page.dart';
+export 'pages/details/page.dart';
+export 'pages/overview/page.dart';
 
 const medicationsRoutes = AutoRoute(
   path: 'medications',

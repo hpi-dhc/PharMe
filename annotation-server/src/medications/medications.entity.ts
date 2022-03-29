@@ -1,41 +1,24 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-import { Ingredient } from './ingredients.entity';
-import { RxNormMapping } from './rxnormmappings.entity';
+import { MedicationsGroup } from './medicationsGroup.entity';
 
 @Entity()
 export class Medication {
-  @PrimaryGeneratedColumn()
-  id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  name: string;
+    @Column()
+    name: string;
 
-  @Column()
-  manufacturer: string;
+    @Column()
+    agents: string;
 
-  @Column({ nullable: true })
-  agents: string;
+    @Column({ nullable: true })
+    manufacturer: string;
 
-  @Column({ nullable: true })
-  numeratorQuantity: number;
-
-  @Column({ nullable: true })
-  numeratorUnit: string;
-
-  @Column({ nullable: true })
-  denominatorQuantity: number;
-
-  @Column({ nullable: true })
-  denominatorUnit: string;
-
-  @OneToMany(() => Ingredient, (ingredient) => ingredient.medication, {
-    cascade: true,
-  })
-  ingredients: Ingredient[];
-
-  @OneToMany(() => RxNormMapping, (rxNormMapping) => rxNormMapping.medication, {
-    cascade: true,
-  })
-  rxNormMappings: RxNormMapping[];
+    @ManyToOne(
+        () => MedicationsGroup,
+        (medicationsGroup) => medicationsGroup.medications,
+    )
+    group: MedicationsGroup;
 }

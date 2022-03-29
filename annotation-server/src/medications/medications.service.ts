@@ -1,130 +1,146 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Medication } from './medications.entity';
-import { RxNormMapping } from './rxnormmappings.entity';
-import { Ingredient } from './ingredients.entity';
+import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import axiosRetry from 'axios-retry';
+import { lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
-import * as https from 'https';
-import { parseStringPromise } from 'xml2js';
-import { downloadAndUnzip } from '../common/utils/download-unzip';
+import { DOMParser } from 'xmldom';
+import * as xpath from 'xpath';
+
+import { Medication } from './medications.entity';
+import { MedicationsGroup } from './medicationsGroup.entity';
 
 @Injectable()
 export class MedicationsService {
-  constructor(
-    @InjectRepository(RxNormMapping)
-    private rxNormMappingRepository: Repository<RxNormMapping>,
-    @InjectRepository(Medication)
-    private medicationRepository: Repository<Medication>,
-    @InjectRepository(Ingredient)
-    private ingredientRepository: Repository<Ingredient>,
-  ) {}
+    constructor(
+        @InjectRepository(Medication)
+        private medicationRepository: Repository<Medication>,
+        @InjectRepository(MedicationsGroup)
+        private medicationsGroupRepository: Repository<MedicationsGroup>,
+        private httpService: HttpService,
+    ) {}
 
-  async findOne(id: string): Promise<Medication> {
-    const mappings = await this.rxNormMappingRepository.find({
-      where: {
-        setid: id,
-      },
-      relations: ['medication'],
-    });
-
-    if (!mappings.length) {
-      throw new NotFoundException('Id could not be found in RxNormMappings!');
+    async clearAllMedicationData(): Promise<void> {
+        await this.medicationRepository.delete({});
+        await this.medicationsGroupRepository.delete({});
     }
 
-    if (mappings[0].medication) {
-      const medication = await this.medicationRepository.findOne(
-        mappings[0].medication.id,
-        {
-          relations: ['ingredients'],
-        },
-      );
+    async fetchAllMedications(startPageURL: string): Promise<void> {
+        await this.clearAllMedicationData();
 
-      return medication;
-    }
+        const medicationGroups = new Map<string, Array<Medication>>();
 
-    const url = `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/${id}.xml`;
-
-    const chunk = await new Promise((resolve, reject) => {
-      https
-        .get(url, (res) => {
-          const data = [];
-          res.on('data', (chunk) => {
-            data.push(chunk);
-          });
-
-          res.on('end', () => {
-            resolve(Buffer.concat(data));
-          });
-        })
-        .on('error', (error) => {
-          reject(error);
+        axiosRetry(this.httpService.axiosRef, {
+            retryDelay: axiosRetry.exponentialDelay,
         });
-    });
 
-    const result = await parseStringPromise(chunk);
+        let nextPageUrl = startPageURL;
 
-    const medication = new Medication();
+        while (nextPageUrl !== 'null') {
+            nextPageUrl = await this.fetchMedicationPage(
+                nextPageUrl,
+                medicationGroups,
+            );
+        }
 
-    const manufacturedProduct =
-      result.document.component[0].structuredBody[0].component[0].section[0]
-        .subject[0].manufacturedProduct[0].manufacturedProduct[0];
+        const groups: MedicationsGroup[] = [];
 
-    medication.name = manufacturedProduct.name[0];
-    medication.manufacturer =
-      result.document.author[0].assignedEntity[0].representedOrganization[0].name[0];
-    medication.agents =
-      manufacturedProduct.asEntityWithGeneric[0].genericMedicine[0].name[0];
+        for (const [groupName, medications] of medicationGroups.entries()) {
+            const group = new MedicationsGroup();
+            group.name = groupName
+                .replace(/,/g, ', ')
+                .replace(/\b\w/g, (c) => c.toUpperCase());
+            group.medications = medications;
+            groups.push(group);
+        }
 
-    const quantity = manufacturedProduct.asContent[0].quantity[0];
-
-    medication.numeratorQuantity = parseInt(quantity.numerator[0]['$'].value);
-    medication.numeratorUnit = quantity.numerator[0]['$'].unit;
-
-    medication.denominatorQuantity = parseInt(
-      quantity.denominator[0]['$'].value,
-    );
-    medication.denominatorUnit = quantity.denominator[0]['$'].unit;
-
-    const ingredients: Ingredient[] = [];
-
-    for (const xmlIngredient of manufacturedProduct.ingredient) {
-      const ingredient = new Ingredient();
-
-      if (xmlIngredient.quantity) {
-        ingredient.numeratorQuantity = parseInt(
-          xmlIngredient.quantity[0].numerator[0]['$'].value,
-        );
-        ingredient.numeratorUnit =
-          xmlIngredient.quantity[0].numerator[0]['$'].unit;
-
-        ingredient.denominatorQuantity =
-          xmlIngredient.quantity[0].denominator[0]['$'].value;
-        ingredient.denominatorUnit =
-          xmlIngredient.quantity[0].denominator[0]['$'].unit;
-      }
-
-      ingredient.ingredient = xmlIngredient.ingredientSubstance[0].name[0];
-
-      ingredients.push(ingredient);
+        await this.medicationsGroupRepository.save(groups);
     }
 
-    medication.ingredients = ingredients;
+    async fetchMedicationPage(
+        pageURL: string,
+        medicationGroups: Map<string, Array<Medication>>,
+    ): Promise<string> {
+        const observable = this.httpService.get(pageURL);
+        const response = await lastValueFrom(observable);
 
-    const rxNormMappings = await this.rxNormMappingRepository.find({
-      where: {
-        setid: id,
-      },
-    });
+        const promises = [];
 
-    medication.rxNormMappings = rxNormMappings;
+        for (const splMedication of response.data.data) {
+            const fetchMedication = async (setid: string): Promise<void> => {
+                const url = `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/${setid}.xml`;
 
-    return await this.medicationRepository.save(medication);
-  }
+                const medObservable = this.httpService.get(url);
+                const chunk = await lastValueFrom(medObservable);
 
-  async removeMedication(id: string): Promise<void> {
-    this.medicationRepository.delete(id);
-  }
+                const domParser = new DOMParser();
+                const xml = chunk.data
+                    .toString()
+                    .replace(/<\?.*\?>/g, '')
+                    .replace(/<document.*>/, '<document>');
+                const doc = domParser.parseFromString(xml);
+
+                const medication = new Medication();
+
+                medication.name = xpath
+                    .select('string(//manufacturedProduct/*/name)', doc)
+                    .toString()
+                    .trim();
+                medication.agents = xpath
+                    .select('string(//genericMedicine/name)', doc)
+                    .toString()
+                    .toLowerCase()
+                    .trim();
+                medication.manufacturer = xpath
+                    .select('string(//representedOrganization/name)', doc)
+                    .toString()
+                    .trim();
+
+                const key = this.genAgentKey(medication.agents);
+                if (!key) return;
+
+                if (medicationGroups.has(key)) {
+                    medicationGroups.get(key).push(medication);
+                } else {
+                    medicationGroups.set(key, [medication]);
+                }
+            };
+
+            promises.push(fetchMedication(splMedication.setid));
+        }
+
+        await Promise.all(promises);
+
+        return response.data.metadata.next_page_url;
+    }
+
+    async getAll(): Promise<MedicationsGroup[]> {
+        return await this.medicationsGroupRepository.find({
+            relations: ['medications'],
+        });
+    }
+
+    removeMedication(id: number): void {
+        this.medicationRepository.delete(id);
+    }
+
+    private genAgentKey(agentsString?: string): string {
+        if (!agentsString) {
+            return undefined;
+        }
+        const agents = agentsString
+            .toLowerCase()
+            .split(/,|and/)
+            .map((agent) =>
+                agent
+                    .replace(
+                        /capsules|capsule|pill|pills|coated|tablets|tablet|oral|childrens|children|adults|adult|liquidfilled/g,
+                        '',
+                    )
+                    .trim(),
+            )
+            .filter((agent) => agent.length > 2);
+        agents.sort();
+        return agents.join(',');
+    }
 }

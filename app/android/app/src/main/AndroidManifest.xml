@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.hpi.frasecys">
+    package="de.hpi.pharme">
    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="Frasecys"
+        android:label="PharMe"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <!--TODO Delete line above when in production, http requests-->

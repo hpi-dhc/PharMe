@@ -1,4 +1,4 @@
-package de.hpi.frasecys
+package de.hpi.pharme
 
 import io.flutter.embedding.android.FlutterActivity
 

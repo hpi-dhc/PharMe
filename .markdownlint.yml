@@ -1,0 +1,16 @@
+# Use default rules
+default: true
+
+# Allow inline html by disabling rule MD033
+MD033: false
+
+# Override line length rule
+MD013:
+  # Max characters for lines
+  line_length: 80
+  # Max characters for headings
+  heading_line_length: 80
+  # Max characters for code blocks
+  code_block_line_length: 120
+  # Max characters for tables
+  tables: false

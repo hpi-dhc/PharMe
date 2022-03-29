@@ -70,19 +70,20 @@ jobs:
       - run: flutter pub run build_runner build
       - run: flutter build apk
 
-  build-ios:
-    name: Build iOS Package
-    needs: [lint, test]
-    runs-on: [self-hosted, macos]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: ${{ env.FLUTTER_CHANNEL }}
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-      - run: flutter pub get
-      - run: flutter pub run build_runner build
-      - run: flutter build ios --release --no-codesign
+  # build-ios:
+  #   name: Build iOS Package
+  #   needs: [lint, test]
+  #   runs-on: [self-hosted, macOS]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-java@v1
+  #       with:
+  #         java-version: ${{ env.JAVA_VERSION }}
+  #     - uses: subosito/flutter-action@v1
+  #       with:
+  #         channel: ${{ env.FLUTTER_CHANNEL }}
+  #         flutter-version: ${{ env.FLUTTER_VERSION }}
+  #     - run: flutter pub get
+  #     - run: flutter pub run build_runner build
+  #     - run: flutter build ios --release --no-codesign
+
