@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -39,15 +39,15 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                     items: labs
-                        .map((lab) =>
-                            DropdownMenuItem(value: lab, child: Text(lab)))
+                        .map((lab) => DropdownMenuItem(
+                              value: lab,
+                              child: Text(lab),
+                            ))
                         .toList(),
-                    buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+                    buttonPadding: const EdgeInsets.only(left: 16, right: 16),
                     buttonDecoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(32),
-                      border: Border.all(
-                        color: Colors.black26,
-                      ),
+                      border: Border.all(color: Colors.black26),
                     ),
                     dropdownDecoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
