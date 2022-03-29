@@ -4,7 +4,7 @@
 
 ## Local setup
 
-This repository contains a handy `bootstrap` script which will install all necessary dependencies for the various sub-projects, making the local setup as simple as executing one command. Before you begin though, make sure that you have the following tools installed:
+Before you begin with setting up your local development environment, ensure that you have the following list of tools installed:
 
 - An editor, we **strongly recommend** [<img src="https://user-images.githubusercontent.com/82543715/142914400-49d5815b-71a7-4198-9501-157fc3aa40a2.png" width="16" height="16"> Visual Studio Code](https://code.visualstudio.com)
 - [<img src="https://user-images.githubusercontent.com/82543715/142914382-5be71efd-9e34-46c2-aad6-04255c430594.png" width="16" height="16"> Git](https://git-scm.com/downloads)
@@ -14,11 +14,10 @@ This repository contains a handy `bootstrap` script which will install all neces
 
 After making sure that you have all the required dependencies take the following steps to setup your local environment:
 
-1. Clone this repository by running `git clone https://github.com/hpi-dhc/PharMe.git` in your terminal
-1. If you use VSCode, Open the workspace `./pharme.code-workspace` in VSCode
-  - You'll probably see notifications asking you to install some extensions and get packages. Please confirm these two actions
-1. From the root of the project, run `yarn bootstrap`. This will do the following:
-    - Setup Husky project-wide in order to enforce the [conventional-commit](https://www.conventionalcommits.org/en/v1.0.0/) style
+1. Clone this repository by running `git clone git@github.com:hpi-dhc/PharMe.git` or `git clone https://github.com/hpi-dhc/PharMe.git` in your terminal
+2. If you use VSCode, Open the workspace `./pharme.code-workspace` in VSCode. You can find this workspace in the project root.
+    > **Note:** You will most likely be prompted by VSCode to install some extensions and get packages. Please confirm these two actions.
+3. From the root of the project, run `yarn bootstrap` in order to set up pre-commit linting via Husky. This is used primarily to enforce the [conventional-commit](https://www.conventionalcommits.org/en/v1.0.0/) style
 
 ## Selecting an issue
 
