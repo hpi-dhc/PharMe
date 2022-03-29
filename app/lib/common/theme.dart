@@ -6,9 +6,9 @@ class PharmeTheme {
     return ThemeData(
       colorScheme: ColorScheme(
         primary: primaryColor,
-        primaryVariant: primaryVariantColor,
+        primaryContainer: primaryVariantColor,
         secondary: secondaryColor,
-        secondaryVariant: secondaryVariantColor,
+        secondaryContainer: secondaryVariantColor,
         surface: surfaceColor,
         background: backgroundColor,
         error: errorColor,

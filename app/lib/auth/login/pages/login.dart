@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -75,6 +76,10 @@ class _LoginPageState extends State<LoginPage> {
           width: 200,
           height: 200,
           child: RadiantGradientMask(
+            colors: [
+              context.theme.colorScheme.primaryContainer,
+              context.theme.colorScheme.secondaryContainer,
+            ],
             child: CircularProgressIndicator(
               color: Colors.white,
             ),
@@ -88,6 +93,10 @@ class _LoginPageState extends State<LoginPage> {
     return _basicWidgetTree(
       children: [
         RadiantGradientMask(
+          colors: [
+            context.theme.colorScheme.primaryContainer,
+            context.theme.colorScheme.secondaryContainer,
+          ],
           child: Icon(
             Icons.task_alt,
             size: 150,
@@ -111,6 +120,10 @@ class _LoginPageState extends State<LoginPage> {
     return _basicWidgetTree(
       children: [
         RadiantGradientMask(
+          colors: [
+            context.theme.colorScheme.primaryContainer,
+            context.theme.colorScheme.secondaryContainer,
+          ],
           child: Icon(
             Icons.warning_amber_outlined,
             size: 150,

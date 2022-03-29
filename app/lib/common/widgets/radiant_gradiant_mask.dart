@@ -1,8 +1,12 @@
 import 'package:flutter/widgets.dart';
 
 class RadiantGradientMask extends StatelessWidget {
-  const RadiantGradientMask({required this.child});
+  const RadiantGradientMask({
+    required this.child,
+    required this.colors,
+  });
   final Widget child;
+  final List<Color> colors;
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +14,7 @@ class RadiantGradientMask extends StatelessWidget {
       shaderCallback: (bounds) => LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [
-          Color.fromARGB(255, 88, 166, 221),
-          Color.fromARGB(255, 135, 169, 255)
-        ],
+        colors: colors,
       ).createShader(bounds),
       child: child,
     );
