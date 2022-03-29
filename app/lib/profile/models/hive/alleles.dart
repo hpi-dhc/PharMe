@@ -1,3 +1,4 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 import 'diplotype.dart';
@@ -5,6 +6,7 @@ import 'diplotype.dart';
 part 'alleles.g.dart';
 
 @HiveType(typeId: 2)
+@JsonSerializable(explicitToJson: true)
 class Alleles {
   Alleles({
     required this.organizationId,
@@ -13,14 +15,8 @@ class Alleles {
     required this.diplotypes,
   });
 
-  factory Alleles.fromJson(Map<String, dynamic> json) => Alleles(
-        organizationId: json['OrganizationId'] as int,
-        identifier: json['Identifier'] as String,
-        knowledgeBase: json['KnowledgeBase'] as String,
-        diplotypes: (json['Diplotypes'] as List<dynamic>)
-            .map((e) => Diplotype.fromJson(e as Map<String, dynamic>))
-            .toList(),
-      );
+  factory Alleles.fromJson(Map<String, dynamic> json) =>
+      _$AllelesFromJson(json);
 
   @HiveField(0)
   int organizationId;

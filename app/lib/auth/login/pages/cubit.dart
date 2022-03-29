@@ -2,19 +2,19 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' hide Client;
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../profile/models/hive/alleles.dart';
+
 part 'cubit.freezed.dart';
 
 class LoginPageCubit extends Cubit<LoginPageState> {
   LoginPageCubit() : super(LoginPageState.initial());
 
-  Future<void> signInAndLoadData(String authUrl, String allelesUrl) async {
+  Future<void> signInAndLoadAlleles(String authUrl, String allelesUrl) async {
     try {
       final token = await _getAccessToken(authUrl);
       emit(LoginPageState.loadingAlleles());
@@ -66,17 +66,10 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     }
   }
 
-  Future<http.Response> _getStarAlleles(String? token, String url) async {
-    final response = await http.get(
-        // 127.0.0.1 - ios 'http://10.0.2.2:3000/api/v1/users/star-alleles'
-        Uri.parse(url),
-        headers: <String, String>{
-          'Authorization': 'Bearer $token',
-        });
-    return response;
-  }
+  Future<Response> _getStarAlleles(String? token, String url) async =>
+      get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 
-  Future<void> _saveAlleleData(http.Response response, String boxname) async {
+  Future<void> _saveAlleleData(Response response, String boxname) async {
     final json = jsonDecode(response.body);
     final alleles = Alleles.fromJson(json);
     return Hive.box<Alleles>('userData').put('alleles', alleles);

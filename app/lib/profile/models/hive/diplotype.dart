@@ -1,23 +1,22 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 part 'diplotype.g.dart';
 
 @HiveType(typeId: 1)
+@JsonSerializable()
 class Diplotype {
-  Diplotype(
-      {required this.gene,
-      required this.resultType,
-      required this.genotype,
-      required this.phenotype,
-      required this.allelesTested});
+  Diplotype({
+    required this.gene,
+    required this.resultType,
+    required this.genotype,
+    required this.phenotype,
+    required this.allelesTested,
+  });
 
-  factory Diplotype.fromJson(Map<String, dynamic> json) => Diplotype(
-        gene: json['Gene'] as String,
-        resultType: json['ResultType'] as String,
-        genotype: json['Genotype'] as String,
-        phenotype: json['Phenotype'] as String,
-        allelesTested: json['AllelesTested'] as String,
-      );
+  factory Diplotype.fromJson(Map<String, dynamic> json) =>
+      _$DiplotypeFromJson(json);
+  Map<String, dynamic> toJson() => _$DiplotypeToJson(this);
 
   @HiveField(0)
   String gene;
