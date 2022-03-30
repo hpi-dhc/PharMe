@@ -1,0 +1,15 @@
+name: 'Meeting Assistant'
+author: 'Benjamin-Frost'
+description: 'Gets telegram name of next student in preselected order'
+
+inputs:
+  users:
+    description: 'Array of strings of telegram names'
+    required: true
+outputs:
+  telegram:
+    description: 'Telegram name of selected user'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

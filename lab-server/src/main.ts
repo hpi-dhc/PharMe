@@ -11,6 +11,7 @@ async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     app.useStaticAssets(join(__dirname, '..', '..', 'assets'));
     app.useGlobalPipes(new ValidationPipe());
+    app.setGlobalPrefix('/api/v1');
 
     const config = new DocumentBuilder()
         .setTitle('Lab Server')
@@ -24,6 +25,6 @@ async function bootstrap() {
         customfavIcon: '../favicon.png',
     });
 
-    await app.listen(3000);
+    await app.listen(3001);
 }
 bootstrap();

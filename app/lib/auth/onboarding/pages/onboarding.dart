@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/module.dart';
+import '../../../common/routing/router.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -107,7 +108,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         child: TextButton(
           onPressed: () {
             if (isLastPage) {
-              context.router.pushNamed('auth/login');
+              context.router.replace(const LoginRoute());
             } else {
               _pageController.nextPage(
                 duration: Duration(milliseconds: 500),

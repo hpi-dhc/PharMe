@@ -33,15 +33,15 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
       child: BlocBuilder<MedicationsOverviewCubit, MedicationsOverviewState>(
         builder: (context, state) {
           return state.when(
-              initial: Container.new,
-              loading: () => Center(child: CircularProgressIndicator()),
-              error: () => Center(child: Text('Error!')),
-              loaded: (medications) => _buildMedicationsList(
-                    context,
-                    _matchingMedicationsTiles(
-                        medications, searchController.text),
-                    searchController.text,
-                  ));
+            initial: Container.new,
+            loading: () => Center(child: CircularProgressIndicator()),
+            error: () => Center(child: Text('Error!')),
+            loaded: (medications) => _buildMedicationsList(
+              context,
+              _matchingMedicationsTiles(medications, searchController.text),
+              searchController.text,
+            ),
+          );
         },
       ),
     );

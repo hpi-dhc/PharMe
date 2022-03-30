@@ -17,35 +17,53 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
 
+
+  get-runner-metadata:
+    name: Get Runner Metadata
+    runs-on: [self-hosted, linux]
+    outputs:
+      uid: ${{ steps.get-uid.outputs.uid }}
+    steps:
+      - run: echo "::set-output name=uid::$(id -u)"
+        id: get-uid
+
   test-e2e:
     name: Test E2E
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
+    needs: [get-runner-metadata]
+    container:
+      image: node:17-buster-slim
+      options: --user ${{ needs.get-runner-metadata.outputs.uid }}
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: annotation_db
+        ports:
+          - 6789:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: |
-          docker rm -f postgres-yarn-test-e2e && \
-          docker run --name postgres-yarn-test-e2e \
-          -p 6789:5432 \
-          -e POSTGRES_PASSWORD=postgres \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_DB=annotation_db \
-          -d postgres
       - run: yarn test:e2e:cov
         env:
-          ANNOTATION_DB_HOST: localhost
+          ANNOTATION_DB_HOST: postgres
           ANNOTATION_DB_USER: postgres
           ANNOTATION_DB_PASS: postgres
-          ANNOTATION_DB_PORT: 6789
+          ANNOTATION_DB_PORT: ${{ job.services.postgres.ports[6789] }}
           ANNOTATION_DB_NAME: annotation_db
-      - run: docker stop postgres-yarn-test-e2e
-        if: always()
       - uses: actions/upload-artifact@v3
         with:
           name: jest-coverage
@@ -54,8 +72,7 @@ jobs:
   update-jest-badges:
     name: Update Jest Badges
     needs: [test-e2e]
-    # runs-on: ubuntu-latest
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
@@ -78,27 +95,28 @@ jobs:
   build:
     name: Build
     needs: [lint, test-e2e]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn build
 
-  # deploy:
-  #   name: Deploy
-  #   needs: [lint, test-e2e, build]
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-  #   steps:
-  #     - uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.SSH_HOST }}
-  #         username: ${{ secrets.SSH_USERNAME }}
-  #         password: ${{ secrets.SSH_PASSWORD }}
-  #         port: ${{ secrets.SSH_PORT }}
-  #         script: |
-  #           cd ${{ secrets.PROJECT_PATH }}
-  #           git fetch origin main
-  #           git reset --hard origin/main
-  #           cd annotation-server
-  #           docker-compose --profile production up --build --force-recreate --no-deps -d
+  deploy:
+    name: Deploy
+    needs: [lint, test-e2e, build]
+    runs-on: [self-hosted, linux]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ secrets.PROJECT_PATH }}
+            git fetch origin main
+            git reset --hard origin/main
+            cd annotation-server
+            docker-compose --profile production up --build --force-recreate --no-deps -d
+

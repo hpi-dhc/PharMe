@@ -17,7 +17,7 @@ class MainPage extends StatelessWidget {
         ProfileRouter(),
       ],
       appBarBuilder: (_, tabsRouter) => AppBar(
-        title: const Text('Frasecys'),
+        title: const Text('PharMe'),
         centerTitle: true,
         leading: const AutoBackButton(),
       ),
