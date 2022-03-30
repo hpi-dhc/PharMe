@@ -1,6 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 import { Unprotected } from 'nest-keycloak-connect';
-import internal from 'node:stream';
 
 import { S3Service } from './s3.service';
 
@@ -10,7 +9,7 @@ export class S3Controller {
 
     @Unprotected()
     @Get()
-    async getFile(): Promise<internal.Readable> {
+    async getFile(): Promise<string> {
         return await this.s3Service.getFile();
     }
 }
