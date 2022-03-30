@@ -40,3 +40,7 @@ test/coverage
 
 # Environment Files
 .env
+
+# DrugBank data
+src/medications/example-data.zip
+src/medications/full-data.zip
