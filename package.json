@@ -1,6 +1,8 @@
 {
   "name": "pharme",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": ["lab-server", "annotation-server"],
   "description": "",
   "author": "",
   "license": "UNLICENSED",
