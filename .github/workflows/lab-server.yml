@@ -14,6 +14,23 @@ defaults:
   run:
     working-directory: ./lab-server
 
+env:
+  KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
+  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
+  KEYCLOAK_SECRET: ${{ secrets.KEYCLOAK_SECRET }}
+
+  LAB_SERVER_DB_HOST: postgres
+  LAB_SERVER_DB_PORT: 6543
+  LAB_SERVER_DB_USER: postgres
+  LAB_SERVER_DB_PASS: postgres
+  LAB_SERVER_DB_NAME: lab_server_db
+
+  MINIO_PORT: 9000
+  MINIO_ENDPOINT: minio
+  MINIO_ROOT_USER: admin_minio
+  MINIO_ROOT_PASSWORD: admin_minio
+
 jobs:
   lint:
     name: Lint
@@ -23,18 +40,54 @@ jobs:
       - run: yarn
       - run: yarn lint
 
+
+  get-runner-metadata:
+    name: Get Runner Metadata
+    runs-on: [self-hosted, linux]
+    outputs:
+      uid: ${{ steps.get-uid.outputs.uid }}
+    steps:
+      - run: echo "::set-output name=uid::$(id -u)"
+        id: get-uid
+
   test-e2e:
     name: Test E2E
     runs-on: [self-hosted, linux]
-    env:
-      KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
-      KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
-      KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
-      KEYCLOAK_SECRET: ${{ secrets.KEYCLOAK_SECRET }}
+    needs: [get-runner-metadata]
+    container:
+      image: node:17-buster-slim
+      options: --user ${{ needs.get-runner-metadata.outputs.uid }}
+    services:
+      minio:
+        # we refrain from using the official minio image as we would need to
+        # pass an additional `server` sub-command to the container. Currently,
+        # GH-actions does not support this. Note that this is not an official
+        # minio image and should therefore not be used in production
+        # environments. See: https://stackoverflow.com/questions/60849745/
+        image: bitnami/minio
+        ports:
+          - 9000:9000
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: ${{ env.LAB_SERVER_DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.LAB_SERVER_DB_PASS }}
+          POSTGRES_DB: ${{ env.LAB_SERVER_DB_NAME }}
+        ports:
+          - 6789:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn test:e2e:cov
+        env:
+          LAB_SERVER_DB_PORT: ${{ job.services.postgres.ports[6789] }}
+          MINIO_PORT: ${{ job.services.minio.ports[9000] }}
       - uses: actions/upload-artifact@v3
         with:
           name: jest-coverage
