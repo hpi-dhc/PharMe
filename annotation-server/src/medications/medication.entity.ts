@@ -1,30 +1,21 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
+interface ExternalIdentifier {
+    resource: 'PharmGKB' | string;
+    identifier: string;
+}
+interface InternationalBrand {
+    name: string;
+}
+
 export interface Drug {
     name: string;
     description?: string;
     'external-identifiers'?: {
-        'external-identifier':
-            | Array<{
-                  resource: 'PharmGKB' | string;
-                  identifier: string;
-              }>
-            | {
-                  resource: 'PharmGKB' | string;
-                  identifier: string;
-              };
+        'external-identifier': Array<ExternalIdentifier> | ExternalIdentifier;
     };
     'international-brands'?: {
-        'international-brand':
-            | Array<{
-                  name: string;
-              }>
-            | { name: string };
-    };
-}
-export interface Drugbank {
-    drugbank: {
-        drug: Array<Drug>;
+        'international-brand': Array<InternationalBrand> | InternationalBrand;
     };
 }
 
