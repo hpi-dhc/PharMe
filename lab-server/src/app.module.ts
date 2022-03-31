@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { KeycloakModule, KeycloakProviders } from './configs/keycloak.config';
+import { OrmModule } from './configs/typeorm.config';
 import { S3Module } from './s3/s3.module';
 import { StarAllelesModule } from './star-alleles/star-alleles.module';
 
@@ -11,6 +12,7 @@ import { StarAllelesModule } from './star-alleles/star-alleles.module';
         ConfigModule.forRoot({
             isGlobal: true,
         }),
+        OrmModule,
         S3Module,
         KeycloakModule,
         StarAllelesModule,

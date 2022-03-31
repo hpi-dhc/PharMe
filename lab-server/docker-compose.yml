@@ -8,6 +8,18 @@ services:
       - 8081:3000
     profiles:
       - production
+
+  lab-server-db:
+    image: postgres:13
+    volumes:
+      - lab_server_db:/var/lib/postgresql/data
+    ports:
+      - 6543:5432
+    environment:
+      - POSTGRES_USER=${LAB_SERVER_DB_USER}
+      - POSTGRES_PASSWORD=${LAB_SERVER_DB_PASS}
+      - POSTGRES_DB=${LAB_SERVER_DB_NAME}
+
   minio:
     image: minio/minio
     environment:

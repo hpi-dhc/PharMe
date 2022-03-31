@@ -18,11 +18,11 @@ export class S3Service {
         });
     }
 
-    async getFile(): Promise<string> {
+    async getFile(fileName: string): Promise<string> {
         try {
             const stream = await this.minioClient.client.getObject(
                 'alleles',
-                '204753010001_R04C01.json',
+                fileName,
             );
             return this.streamToString(stream);
         } catch (error) {
