@@ -2,15 +2,20 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export interface Drug {
     name: string;
-    description: string;
-    'external-identifiers': {
-        'external-identifier': Array<{
-            resource: 'PharmGKB' | string;
-            identifier: string;
-        }>;
+    description?: string;
+    'external-identifiers'?: {
+        'external-identifier':
+            | Array<{
+                  resource: 'PharmGKB' | string;
+                  identifier: string;
+              }>
+            | {
+                  resource: 'PharmGKB' | string;
+                  identifier: string;
+              };
     };
-    'international-brands': {
-        'international-brand'?:
+    'international-brands'?: {
+        'international-brand':
             | Array<{
                   name: string;
               }>
@@ -29,20 +34,26 @@ export class Medication {
         const medication = new Medication();
         medication.name = drug.name;
         medication.description = drug.description;
-        medication.pharmgkbId = drug['external-identifiers'][
-            'external-identifier'
-        ].find(
-            (externalIdentifier) => externalIdentifier.resource === 'PharmGKB',
-        )?.identifier;
-        const internationalBrand =
-            drug['international-brands']['international-brand'];
-        if (Array.isArray(internationalBrand)) {
-            medication.synonyms = internationalBrand.map((brand) => brand.name);
-        } else if (internationalBrand) {
-            medication.synonyms = [internationalBrand.name];
-        } else {
-            medication.synonyms = [];
+
+        let externalIdentifier =
+            drug['external-identifiers']?.['external-identifier'];
+        if (externalIdentifier) {
+            externalIdentifier = Array.isArray(externalIdentifier)
+                ? externalIdentifier
+                : [externalIdentifier];
+            medication.pharmgkbId = externalIdentifier.find(
+                (id) => id.resource === 'PharmGKB',
+            )?.identifier;
         }
+
+        let internationalBrand =
+            drug['international-brands']?.['international-brand'];
+        if (internationalBrand) {
+            internationalBrand = Array.isArray(internationalBrand)
+                ? internationalBrand
+                : [internationalBrand];
+            medication.synonyms = internationalBrand.map((brand) => brand.name);
+        } else medication.synonyms = [];
 
         return medication;
     }
@@ -53,7 +64,7 @@ export class Medication {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string;
 
     @Column({ nullable: true })

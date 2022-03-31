@@ -1,18 +1,17 @@
 import * as fs from 'fs';
-import * as os from 'os';
-import * as path from 'path';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { XMLParser } from 'fast-xml-parser';
+import * as JSONStream from 'JSONStream';
 import { Repository } from 'typeorm';
 
-import { unzip } from '../common/utils/download-unzip';
-import { Drugbank, Medication } from './medication.entity';
+import { Drug, Medication } from './medication.entity';
 
 @Injectable()
 export class MedicationsService {
+    private readonly logger = new Logger(MedicationsService.name);
+
     constructor(
         private configService: ConfigService,
         @InjectRepository(Medication)
@@ -25,32 +24,34 @@ export class MedicationsService {
 
     async fetchAllMedications(): Promise<void> {
         await this.clearAllMedicationData();
-        const drugbank = await this.getDataFromZip();
-        const medications = drugbank.drugbank.drug.map((drug) =>
-            Medication.fromDrug(drug),
-        );
+        const drugs = await this.getDataFromJSON();
+        console.log();
+        const medications = drugs.map((drug) => Medication.fromDrug(drug));
         const savedMedications = await this.medicationRepository.save(
             medications,
         );
-        console.log(
-            'Successfully saved',
-            savedMedications.length,
-            'medications!',
+        this.logger.log(
+            `Successfully saved ${savedMedications.length} medications!`,
         );
     }
 
-    async getDataFromZip(): Promise<Drugbank> {
-        const unzipPath = path.join(os.tmpdir(), 'drugbank_data');
-        await unzip(this.configService.get<string>('DRUGBANK_ZIP'), unzipPath);
-        const xmlContent = fs.readFileSync(
-            path.join(
-                unzipPath,
-                this.configService.get<string>('DRUGBANK_XML'),
-            ),
-        );
-
-        const parser = new XMLParser({ removeNSPrefix: true });
-        return parser.parse(xmlContent);
+    getDataFromJSON(): Promise<Drug[]> {
+        const jsonStream = fs
+            .createReadStream('src/medications/full-database.json')
+            .pipe(JSONStream.parse('drugbank.drug.*'));
+        const drugs: Array<Drug> = [];
+        jsonStream.on('data', (drug: Drug) => {
+            if (!(drugs.length % 20)) {
+                process.stdout.write(
+                    `\r${String.fromCharCode(27)}[0J${drugs.length}`,
+                );
+            }
+            drugs.push(drug);
+        });
+        return new Promise<Drug[]>((resolve, reject) => {
+            jsonStream.on('error', () => reject);
+            jsonStream.on('end', () => resolve(drugs));
+        });
     }
 
     async getAll(): Promise<Medication[]> {
