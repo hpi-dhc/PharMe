@@ -1,4 +1,7 @@
+import { spawn } from 'child_process';
 import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -24,8 +27,10 @@ export class MedicationsService {
 
     async fetchAllMedications(): Promise<void> {
         await this.clearAllMedicationData();
-        const drugs = await this.getDataFromJSON();
-        console.log();
+        const jsonPath = await this.getJSONfromZip();
+        this.logger.log('Extracting medications from JSON ...');
+        const drugs = await this.getDataFromJSON(jsonPath);
+        this.logger.log('Writing to database ...');
         const medications = drugs.map((drug) => Medication.fromDrug(drug));
         const savedMedications = await this.medicationRepository.save(
             medications,
@@ -35,22 +40,59 @@ export class MedicationsService {
         );
     }
 
-    getDataFromJSON(): Promise<Drug[]> {
+    getJSONfromZip(): Promise<string> {
+        const jsonPath = path.join(os.tmpdir(), 'drugbank-data.json');
+        const proc = spawn(
+            'python3',
+            [
+                '../common/script/zipped-xml-to-json',
+                this.configService.get<string>('DRUGBANK_ZIP'),
+                this.configService.get<string>('DRUGBANK_XML'),
+                jsonPath,
+            ],
+            { cwd: __dirname },
+        );
+        proc.on('error', (error) => {
+            this.logger.error(error);
+        });
+        proc.stdout.on('data', (data: string) => {
+            this.logger.log(data);
+        });
+        proc.stderr.on('data', (data: string) => {
+            this.logger.error(data);
+        });
+        return new Promise((resolve, reject) => {
+            proc.on('exit', (code) => {
+                if (code === 0) resolve(jsonPath);
+                else reject(`Subprocess exited with ${code}.`);
+            });
+        });
+    }
+
+    getDataFromJSON(path: string): Promise<Drug[]> {
         const jsonStream = fs
-            .createReadStream('src/medications/full-database.json')
+            .createReadStream(path)
             .pipe(JSONStream.parse('drugbank.drug.*'));
         const drugs: Array<Drug> = [];
+        const clearLine = () => {
+            process.stdout.write(`\r${String.fromCharCode(27)}[0J`);
+        };
         jsonStream.on('data', (drug: Drug) => {
-            if (!(drugs.length % 20)) {
-                process.stdout.write(
-                    `\r${String.fromCharCode(27)}[0J${drugs.length}`,
-                );
+            if (!(drugs.length % 50)) {
+                clearLine();
+                process.stdout.write(`${drugs.length} drugs parsed ...`);
             }
             drugs.push(drug);
         });
         return new Promise<Drug[]>((resolve, reject) => {
-            jsonStream.on('error', () => reject);
-            jsonStream.on('end', () => resolve(drugs));
+            jsonStream.on('error', () => {
+                clearLine();
+                reject();
+            });
+            jsonStream.on('end', () => {
+                clearLine();
+                resolve(drugs);
+            });
         });
     }
 

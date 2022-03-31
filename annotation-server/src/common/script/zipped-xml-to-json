@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+import argparse, os, shutil, tempfile, sys
+import json, xmltodict
+
+def print_and_flush(message):
+    print(message)
+    sys.stdout.flush()
+
+def xml2json(path_xml, path_json):
+    print_and_flush('Reading XML ...')
+    with open(path_xml, 'r') as fp:
+        xml = xmltodict.parse(fp.read())
+    print_and_flush('Writing JSON ...')
+    with open(path_json, 'w') as fp:
+        json.dump(xml, fp)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog='xml2json')
+    parser.add_argument('xml_zip')
+    parser.add_argument('xml_name')
+    parser.add_argument('json_out')
+    options = parser.parse_args()
+
+    extract_dir = os.path.join(tempfile.gettempdir(), 'xml2json_extract')
+    print_and_flush(f'Unzipping {options.xml_zip} ...')
+    shutil.unpack_archive(options.xml_zip, extract_dir)
+    xml_path = os.path.join(extract_dir, options.xml_name)
+    xml2json(xml_path, options.json_out)
+

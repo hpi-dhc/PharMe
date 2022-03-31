@@ -1,4 +1,8 @@
 {
+    "compilerOptions": {
+        "assets": ["common/script"],
+        "watchAssets": true
+    },
     "collection": "@nestjs/schematics",
     "sourceRoot": "src"
 }
