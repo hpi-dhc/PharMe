@@ -11,7 +11,7 @@ export class StarAllelesController {
     @Get()
     async starAlleles(
         @AuthenticatedUser(KeycloakUserPipe) oidcUser: OIDCUser,
-    ): Promise<string> {
+    ): Promise<object> {
         return await this.starAllelesService.getStarAlleles(oidcUser);
     }
 }

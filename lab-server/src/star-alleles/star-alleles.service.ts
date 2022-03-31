@@ -12,7 +12,7 @@ export class StarAllelesService {
         private readonly userRepository: Repository<User>,
         private readonly s3Service: S3Service,
     ) {}
-    async getStarAlleles(oidcUser: OIDCUser): Promise<string> {
+    async getStarAlleles(oidcUser: OIDCUser): Promise<object> {
         const result = await this.userRepository.findOneOrFail({
             where: { sub: oidcUser.sub },
         });

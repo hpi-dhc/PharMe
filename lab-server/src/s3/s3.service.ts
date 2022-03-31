@@ -18,13 +18,13 @@ export class S3Service {
         });
     }
 
-    async getFile(fileName: string): Promise<string> {
+    async getFile(fileName: string): Promise<object> {
         try {
             const stream = await this.minioClient.client.getObject(
                 'alleles',
                 fileName,
             );
-            return this.streamToString(stream);
+            return JSON.parse(await this.streamToString(stream));
         } catch (error) {
             throw new HttpException('Could not find file', 400);
         }
