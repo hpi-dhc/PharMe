@@ -3,12 +3,8 @@ name: Lab Server
 on:
   push:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
-  pull_request:
-    paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
 
 defaults:
   run:
@@ -21,7 +17,7 @@ env:
   KEYCLOAK_SECRET: ${{ secrets.KEYCLOAK_SECRET }}
 
   LAB_SERVER_DB_HOST: postgres
-  LAB_SERVER_DB_PORT: 6543
+  LAB_SERVER_DB_PORT: 5432
   LAB_SERVER_DB_USER: postgres
   LAB_SERVER_DB_PASS: postgres
   LAB_SERVER_DB_NAME: lab_server_db
@@ -34,29 +30,17 @@ env:
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
 
-
-  get-runner-metadata:
-    name: Get Runner Metadata
-    runs-on: [self-hosted, linux]
-    outputs:
-      uid: ${{ steps.get-uid.outputs.uid }}
-    steps:
-      - run: echo "::set-output name=uid::$(id -u)"
-        id: get-uid
-
   test-e2e:
     name: Test E2E
-    runs-on: [self-hosted, linux]
-    needs: [get-runner-metadata]
+    runs-on: ubuntu-latest
     container:
       image: node:17-buster-slim
-      options: --user ${{ needs.get-runner-metadata.outputs.uid }}
     services:
       minio:
         # we refrain from using the official minio image as we would need to
@@ -65,38 +49,46 @@ jobs:
         # minio image and should therefore not be used in production
         # environments. See: https://stackoverflow.com/questions/60849745/
         image: bitnami/minio
-        ports:
-          - 9000:9000
       postgres:
         image: postgres
         env:
           POSTGRES_USER: ${{ env.LAB_SERVER_DB_USER }}
           POSTGRES_PASSWORD: ${{ env.LAB_SERVER_DB_PASS }}
           POSTGRES_DB: ${{ env.LAB_SERVER_DB_NAME }}
-        ports:
-          - 6789:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      steps:
+        - uses: actions/checkout@v2
+        - run: yarn
+        - run: yarn seed:run
+        - run: yarn test:e2e:cov
+        - uses: actions/upload-artifact@v3
+          with:
+            name: coverage-report
+            path: lab-server/coverage
 
+  codecov:
+    name: Generate Code Coverage Report
+    needs: [test-e2e]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn
-      - run: yarn seed:run
-      - run: yarn test:e2e:cov
-        env:
-          LAB_SERVER_DB_PORT: ${{ job.services.postgres.ports[6789] }}
-          MINIO_PORT: ${{ job.services.minio.ports[9000] }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/download-artifact@v3
         with:
-          name: jest-coverage
-          path: ./lab-server/coverage/coverage-summary.json
+          name: coverage-report
+          path: lab-server/coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: lab-server
+          directory: lab-server/coverage
+          fail_ci_if_error: true
 
   build:
     name: Build
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -120,26 +112,3 @@ jobs:
             git reset --hard origin/main
             cd lab-server
             docker-compose --profile production up --build --force-recreate --no-deps -d
-
-  update-jest-badges:
-    name: Update Jest Badges
-    needs: [test-e2e]
-    runs-on: [self-hosted, linux]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v3
-        id: download
-        with:
-          name: jest-coverage
-          path: ./coverage # Library required storing artificat in this specific directory
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-      - name: Generate Jest Badges
-        uses: ./other/jest-badges-generator
-        with:
-          branch-name: ${{ steps.extract_branch.outputs.branch }}
-          jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
-          badge-output-dir: ./badges/lab-server

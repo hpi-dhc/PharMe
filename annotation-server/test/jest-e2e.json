@@ -1,20 +1,19 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
-   "moduleNameMapper": {
-     "^@/(.*)$": "<rootDir>/src/$1",
-     "^@test/(.*)$": "<rootDir>/test/$1"
-   },
-   "rootDir": "..",
-   "testEnvironment": "node",
-   "testRegex": "\\.e2e-spec\\.ts$",
-   "transform": {
-     "^.+\\.(t|j)s$": "ts-jest"
-   },
-   "coveragePathIgnorePatterns": [
-     "/coverage/",
-     "/dist/",
-     "/node_modules/",
-     "/test/"
-   ],
-   "coverageReporters": ["text", "json-summary"]
- }
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleNameMapper": {
+        "^@/(.*)$": "<rootDir>/src/$1",
+        "^@test/(.*)$": "<rootDir>/test/$1"
+    },
+    "rootDir": "..",
+    "testEnvironment": "node",
+    "testRegex": "\\.e2e-spec\\.ts$",
+    "transform": {
+        "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coveragePathIgnorePatterns": [
+        "/coverage/",
+        "/dist/",
+        "/node_modules/",
+        "/test/"
+    ]
+}
