@@ -31,8 +31,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: annotation_db
-        ports:
-          - 6789:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -46,7 +44,7 @@ jobs:
           ANNOTATION_DB_HOST: postgres
           ANNOTATION_DB_USER: postgres
           ANNOTATION_DB_PASS: postgres
-          ANNOTATION_DB_PORT: ${{ job.services.postgres.ports[6789] }}
+          ANNOTATION_DB_PORT: 5432
           ANNOTATION_DB_NAME: annotation_db
 
   build:
@@ -61,7 +59,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [lint, test-e2e, build]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: appleboy/ssh-action@master
