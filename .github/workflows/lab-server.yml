@@ -3,12 +3,12 @@ name: Lab Server
 on:
   push:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
   pull_request:
     paths:
-      - ".github/workflows/lab-server.yml"
-      - "lab-server/**"
+      - '.github/workflows/lab-server.yml'
+      - 'lab-server/**'
 
 defaults:
   run:
@@ -84,7 +84,7 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
       - name: Generate Jest Badges
-        uses: ./other/jest-badges-generator
+        uses: ./miscellaneous/jest-badges-generator
         with:
           branch-name: ${{ steps.extract_branch.outputs.branch }}
           jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json

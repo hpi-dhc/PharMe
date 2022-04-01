@@ -3,12 +3,12 @@ name: Annotation Server
 on:
   push:
     paths:
-      - ".github/workflows/annotation-server.yml"
-      - "annotation-server/**"
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
   pull_request:
     paths:
-      - ".github/workflows/annotation-server.yml"
-      - "annotation-server/**"
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
 
 defaults:
   run:
@@ -22,7 +22,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
-
 
   get-runner-metadata:
     name: Get Runner Metadata
@@ -86,7 +85,7 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
       - name: Generate Jest Badges
-        uses: ./other/jest-badges-generator
+        uses: ./miscellaneous/jest-badges-generator
         with:
           branch-name: ${{ steps.extract_branch.outputs.branch }}
           jest-summary-path: ${{steps.download.outputs.download-path}}/coverage-summary.json
@@ -119,4 +118,3 @@ jobs:
             git reset --hard origin/main
             cd annotation-server
             docker-compose --profile production up --build --force-recreate --no-deps -d
-

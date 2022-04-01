@@ -11,7 +11,7 @@ jobs:
       telegram: ${{ steps.meeting_assistant.outputs.telegram }}
     steps:
       - uses: actions/checkout@v2
-      - uses: ./other/meeting-assistant
+      - uses: ./miscellaneous/meeting-assistant
         id: meeting_assistant
         with:
           users: ${{ secrets.BP_USERS }}
