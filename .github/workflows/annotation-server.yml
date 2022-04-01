@@ -23,7 +23,6 @@ jobs:
       - run: yarn
       - run: yarn lint
 
-
   get-runner-metadata:
     name: Get Runner Metadata
     runs-on: [self-hosted, linux]
@@ -56,6 +55,7 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v2
+      - run: pip3 install -r requirements.txt
       - run: yarn
       - run: yarn test:e2e:cov
         env:
@@ -119,4 +119,3 @@ jobs:
             git reset --hard origin/main
             cd annotation-server
             docker-compose --profile production up --build --force-recreate --no-deps -d
-

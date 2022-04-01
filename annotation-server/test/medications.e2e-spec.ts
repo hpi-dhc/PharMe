@@ -32,7 +32,7 @@ describe('MedicationsController (e2e)', () => {
         const getResponse = request(app.getHttpServer()).get('/medications');
         getResponse.expect(200);
         expect((await getResponse).body.length).toBe(100);
-    });
+    }, 20000);
 
     afterAll(async () => {
         await medicationService.clearAllMedicationData();
