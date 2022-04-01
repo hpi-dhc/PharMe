@@ -23,7 +23,7 @@ if __name__ == '__main__':
     options = parser.parse_args()
 
     extract_dir = os.path.join(tempfile.gettempdir(), 'xml2json_extract')
-    print_and_flush(f'Unzipping {options.xml_zip} ...')
+    print_and_flush(f'Unzipping {os.path.realpath(options.xml_zip)} ...')
     shutil.unpack_archive(options.xml_zip, extract_dir)
     xml_path = os.path.join(extract_dir, options.xml_name)
     xml2json(xml_path, options.json_out)
