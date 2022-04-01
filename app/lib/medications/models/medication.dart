@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'medication.dart';
-
 part 'medication.freezed.dart';
 part 'medication.g.dart';
 
