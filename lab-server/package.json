@@ -19,7 +19,7 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "test:e2e:cov": "yarn seed:run && jest --config ./test/jest-e2e.json --coverage",
+        "test:e2e:cov": "jest --config ./test/jest-e2e.json --coverage",
         "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n ./seeder.ormconfig.ts",
         "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n ./seeder.ormconfig.ts",
         "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",

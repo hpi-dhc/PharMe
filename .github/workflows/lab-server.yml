@@ -84,6 +84,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
+      - run: yarn seed:run
       - run: yarn test:e2e:cov
         env:
           LAB_SERVER_DB_PORT: ${{ job.services.postgres.ports[6789] }}

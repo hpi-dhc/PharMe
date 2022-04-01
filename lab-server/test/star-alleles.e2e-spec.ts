@@ -5,7 +5,7 @@ import * as request from 'supertest';
 
 import { AppModule } from '../src/app.module';
 import { S3Service } from '../src/s3/s3.service';
-import { getKeycloakMockHelper } from './helpers/keycloak-mock';
+import { getKeycloakMockHelperForUser } from './helpers/keycloak-mock';
 
 describe('StarAlleles', () => {
     let app: INestApplication;
@@ -34,8 +34,9 @@ describe('StarAlleles', () => {
         app = moduleRef.createNestApplication();
         await app.init();
 
-        const { mockInstance, mockToken } = await getKeycloakMockHelper();
-        const invalidMockHelper = await getKeycloakMockHelper(false);
+        const { mockInstance, mockToken } =
+            await getKeycloakMockHelperForUser();
+        const invalidMockHelper = await getKeycloakMockHelperForUser(false);
         keycloakMock = KeycloakMock.activateMock(mockInstance);
         keycloakToken = mockToken;
         invalidKeycloakToken = invalidMockHelper.mockToken;
