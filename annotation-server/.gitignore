@@ -40,3 +40,6 @@ test/coverage
 
 # Environment Files
 .env
+
+# Zip(s) to populate database
+/data
