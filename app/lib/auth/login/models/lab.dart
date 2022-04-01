@@ -12,11 +12,11 @@ final labs = [
   Lab(
     'Illumina Solutions Center Berlin',
     'http://172.20.24.66:28080/auth/realms/pharme',
-    '${dotenv.env['BACKEND_URL']}/api/v1/star-alleles',
+    '${dotenv.get('BACKEND_URL', fallback: 'https://example.com')}/api/v1/star-alleles',
   ),
   Lab(
     'Mount Sinai Hospital (NYC)',
     'http://172.20.24.66:28080/auth/realms/pharme',
-    '${dotenv.env['BACKEND_URL']}/api/v1/star-alleles',
+    '${dotenv.get('BACKEND_URL', fallback: 'https://example.com')}/api/v1/star-alleles',
   )
 ];
