@@ -3,16 +3,13 @@ name: Lint Markdown
 on:
   push:
     paths:
-     - '**.md'
-  pull_request:
-    paths:
-     - '**.md'
+      - '**.md'
 
 jobs:
   lint-markdown:
-      name: Markdown-Lint
-      runs-on: ubuntu-latest
-      steps:
+    name: Markdown-Lint
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v2
       - name: Run Markdown-Lint
         uses: docker://avtodev/markdown-lint:v1
