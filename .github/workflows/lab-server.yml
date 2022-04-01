@@ -60,15 +60,15 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      steps:
-        - uses: actions/checkout@v2
-        - run: yarn
-        - run: yarn seed:run
-        - run: yarn test:e2e:cov
-        - uses: actions/upload-artifact@v3
-          with:
-            name: coverage-report
-            path: lab-server/coverage
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn seed:run
+      - run: yarn test:e2e:cov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: lab-server/coverage
 
   codecov:
     name: Generate Code Coverage Report
