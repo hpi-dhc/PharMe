@@ -11,7 +11,7 @@ on:
 jobs:
   lint-markdown:
       name: Markdown-Lint
-      runs-on: [self-hosted, linux]
+      runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v2
       - name: Run Markdown-Lint
