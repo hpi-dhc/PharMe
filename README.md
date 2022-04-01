@@ -8,11 +8,11 @@ your personal genome
 
 ---
 
-|                      | CI/CD                                                                                                    | Code Coverage                                                                 |
-| -------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| 📝 Annotation Server | ![annotation-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/annotation-server.yml/badge.svg) | ![annotation-server](./badges/annotation-server/coverage-jest%20coverage.svg) |
-| 📱 App               | ![app-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/app.yml/badge.svg)                      |                                                                               |
-| 🧪 Lab Server        | ![lab-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/lab-server.yml/badge.svg)               | ![lab-jest](./badges/lab-server/coverage-jest%20coverage.svg)                 |
+|                      | CI/CD                                                                                                    | Code Coverage |
+| -------------------- | -------------------------------------------------------------------------------------------------------- | ------------- |
+| 📝 Annotation Server | ![annotation-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/annotation-server.yml/badge.svg) |               |
+| 📱 App               | ![app-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/app.yml/badge.svg)                      |               |
+| 🧪 Lab Server        | ![lab-ci-cd](https://github.com/hpi-dhc/PharMe/actions/workflows/lab-server.yml/badge.svg)               |               |
 
 ## 🤝 Contributing
 
