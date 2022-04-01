@@ -1,7 +1,6 @@
 <div style="display: flex; align-items: center">
   <div>
-    <img width="150" alt="pharme-logo"
-    src="https://user-images.githubusercontent.com/38653851/158404648-906d5741-66f1-4a90-be1a-4cea92631b90.png" />
+    <img width="150" alt="pharme-logo" src="https://user-images.githubusercontent.com/38653851/158404648-906d5741-66f1-4a90-be1a-4cea92631b90.png"/>
   </div>
   <div style="padding-left: 20px">
     <h1 style="padding: 0; margin: 0">PharMe</h1>
