@@ -73,7 +73,7 @@ jobs:
     name: Update Jest Badges
     needs: [test-e2e]
     runs-on: [self-hosted, linux]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v3
