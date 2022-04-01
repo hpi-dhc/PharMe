@@ -41,13 +41,32 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: yarn test:e2e
+      - run: yarn test:e2e:cov
         env:
           ANNOTATION_DB_HOST: postgres
           ANNOTATION_DB_USER: postgres
           ANNOTATION_DB_PASS: postgres
           ANNOTATION_DB_PORT: ${{ job.services.postgres.ports[6789] }}
           ANNOTATION_DB_NAME: annotation_db
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: annotation-server/coverage
+
+  codecov:
+    name: Generate Code Coverage Report
+    needs: [test-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: annotation-server/coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: annotation-server
+          directory: annotation-server/coverage
 
   build:
     name: Build
