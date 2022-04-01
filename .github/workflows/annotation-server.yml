@@ -67,6 +67,7 @@ jobs:
         with:
           flags: annotation-server
           directory: annotation-server/coverage
+          fail_ci_if_error: true
 
   build:
     name: Build
