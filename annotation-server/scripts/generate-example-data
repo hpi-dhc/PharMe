@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+import argparse, os, tempfile, zipfile
+import xmltodict
+import random, uuid, collections
+
+MAX_LIST_ENTRIES = 2
+
+def randomize(x):
+    value_for = {
+        list: lambda l: [randomize(v) for v in l[:MAX_LIST_ENTRIES]],
+        dict: lambda d: { k: randomize(v) for k, v in d.items() },
+        collections.OrderedDict: lambda d: collections.OrderedDict({ k: randomize(v) for k, v in d.items() }),
+        float: lambda _: random.uniform(0, 1000),
+        int: lambda _: random.randint(0, 1000),
+        str: lambda _: str(uuid.uuid1()),
+        type(None): lambda _: None
+    }
+    return value_for[type(x)](x)
+
+def unzip(path, extract_dir):
+    with zipfile.ZipFile(path, mode='r') as zf:
+        zf.extractall(path=extract_dir)
+    return os.path.join(extract_dir, os.listdir(extract_dir)[0])
+
+def zip(source, destination):
+    with zipfile.ZipFile(destination, mode='w') as zf:
+        zf.write(source, arcname=os.path.basename(source))
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(prog='generate-example-data')
+    parser.add_argument('drugbank_zip')
+    parser.add_argument('output_zip')
+    options = parser.parse_args()
+
+    extract_dir = os.path.join(tempfile.gettempdir(), 'extracted-data')
+    drugbank_xml = unzip(options.drugbank_zip, extract_dir)
+
+    with open(drugbank_xml, 'r') as fp:
+        xml = xmltodict.parse(fp.read())
+
+    with open(drugbank_xml, 'w') as fp:
+        fp.write(xmltodict.unparse(randomize(xml), pretty=True))
+
+    zip(drugbank_xml, options.output_zip)
+
