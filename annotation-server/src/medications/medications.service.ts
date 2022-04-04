@@ -43,7 +43,7 @@ export class MedicationsService {
     getJSONfromZip(): Promise<string> {
         const jsonPath = path.join(os.tmpdir(), 'drugbank-data.json');
         const proc = spawn(
-            path.join(__dirname, '../common/script/zipped-xml-to-json'),
+            path.join(__dirname, '../common/scripts/zipped-xml-to-json'),
             [
                 this.configService.get<string>('DRUGBANK_ZIP'),
                 this.configService.get<string>('DRUGBANK_XML'),

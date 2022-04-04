@@ -4,7 +4,7 @@ import argparse, os, tempfile, zipfile
 import xmltodict
 import random, uuid, collections
 
-MAX_LIST_ENTRIES = 2
+MAX_LIST_ENTRIES = 100
 
 def randomize(x):
     value_for = {
@@ -25,7 +25,7 @@ def unzip(path, extract_dir):
 
 def zip(source, destination):
     with zipfile.ZipFile(destination, mode='w') as zf:
-        zf.write(source, arcname=os.path.basename(source))
+        zf.write(source, arcname=os.path.basename(source), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='generate-example-data')

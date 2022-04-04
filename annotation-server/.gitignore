@@ -42,4 +42,5 @@ test/coverage
 .env
 
 # Zip(s) to populate database
-/data
+/data/*
+!/data/random-database.zip
