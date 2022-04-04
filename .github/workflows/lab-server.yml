@@ -30,7 +30,27 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: yarn test:e2e
+      - run: yarn test:e2e:cov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: lab-server/coverage
+
+  codecov:
+    name: Generate Code Coverage Report
+    needs: [test-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: lab-server/coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: lab-server
+          directory: lab-server/coverage
+          fail_ci_if_error: true
 
   build:
     name: Build
@@ -43,7 +63,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [lint, test-e2e, build]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: appleboy/ssh-action@master

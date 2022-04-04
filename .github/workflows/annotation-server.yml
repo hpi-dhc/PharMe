@@ -31,8 +31,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: annotation_db
-        ports:
-          - 6789:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -43,15 +41,35 @@ jobs:
       - uses: actions/setup-python@v3
       - run: python -m pip install -r requirements.txt
       - run: yarn
-      - run: yarn test:e2e
+      - run: yarn test:e2e:cov
         env:
           ANNOTATION_DB_HOST: postgres
           ANNOTATION_DB_USER: postgres
           ANNOTATION_DB_PASS: postgres
-          ANNOTATION_DB_PORT: ${{ job.services.postgres.ports[6789] }}
+          ANNOTATION_DB_PORT: 5432
           ANNOTATION_DB_NAME: annotation_db
           DRUGBANK_ZIP: data/random-database.zip
           DRUGBANK_XML: random-database.xml
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: annotation-server/coverage
+
+  codecov:
+    name: Generate Code Coverage Report
+    needs: [test-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: annotation-server/coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: annotation-server
+          directory: annotation-server/coverage
+          fail_ci_if_error: true
 
   build:
     name: Build
@@ -65,7 +83,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [lint, test-e2e, build]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: appleboy/ssh-action@master
