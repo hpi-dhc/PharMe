@@ -50,6 +50,8 @@ jobs:
           ANNOTATION_DB_PASS: postgres
           ANNOTATION_DB_PORT: ${{ job.services.postgres.ports[6789] }}
           ANNOTATION_DB_NAME: annotation_db
+          DRUGBANK_ZIP: data/random-database.zip
+          DRUGBANK_XML: random-database.xml
 
   build:
     name: Build
