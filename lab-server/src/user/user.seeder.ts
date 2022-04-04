@@ -23,9 +23,9 @@ export default class CreateUsers implements Seeder {
 
     public async run(_: Factory, connection: Connection): Promise<void> {
         await Promise.all(
-            this.mockData.map(async (x) => {
-                await connection.getRepository(User).save(x);
-            }),
+            this.mockData.map(
+                async (x) => await connection.getRepository(User).save(x),
+            ),
         );
     }
 }

@@ -2,8 +2,6 @@ import { KeycloakJwt } from './jwt.interface';
 
 export class OIDCUser {
     sub: string;
-    isInstructor: boolean;
-    isLearningFaciliator: boolean;
     email_verified: boolean;
     name: string;
     preferred_username: string;

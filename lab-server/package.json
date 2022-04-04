@@ -20,10 +20,12 @@
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
         "test:e2e:cov": "jest --config ./test/jest-e2e.json --coverage",
-        "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n ./seeder.ormconfig.ts",
-        "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n ./seeder.ormconfig.ts",
-        "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
-        "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync"
+        "seed:dist:cli": "ts-node ./node_modules/typeorm-seeding/dist/cli.js",
+        "seed:cli": "ts-node ./node_modules/typeorm/cli.js",
+        "seed:run": "yarn seed:dist:cli seed -n ./seeder.ormconfig.ts",
+        "seed:config": "yarn seed:dist:cli config -n ./seeder.ormconfig.ts",
+        "schema:drop": "yarn seed:cli schema:drop",
+        "schema:sync": "yarn seed:cli schema:sync"
     },
     "dependencies": {
         "@nestjs/common": "^8.0.0",

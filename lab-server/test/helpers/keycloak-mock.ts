@@ -5,10 +5,10 @@ interface KeycloakMockHelper {
     mockToken: string;
 }
 
-/*
-If the argument isUserValid is set to false, then the function returns a KeycloakMockHelper with
-an invalid token, otherwise returns an an instance with a valid token
-*/
+/**
+ * If the argument @param isUserValid is set to false, then the function @returns {KeycloakMockHelper} with
+ * an invalid token, otherwise @returns an an instance with a valid token
+ */
 export const getKeycloakMockHelperForUser = async (
     isUserValid = true,
 ): Promise<KeycloakMockHelper> => {

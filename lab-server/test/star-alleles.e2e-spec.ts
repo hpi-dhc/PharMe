@@ -5,6 +5,7 @@ import * as request from 'supertest';
 
 import { AppModule } from '../src/app.module';
 import { S3Service } from '../src/s3/s3.service';
+import { allelesFile } from './helpers/contstants';
 import { getKeycloakMockHelperForUser } from './helpers/keycloak-mock';
 
 describe('StarAlleles', () => {
@@ -15,12 +16,7 @@ describe('StarAlleles', () => {
 
     const mockS3Service = {
         getFile: () => [
-            JSON.parse(
-                Buffer.from(
-                    'ewogICJvcmdhbml6YXRpb25JZCI6IDEsCiAgImlkZW50aWZpZXIiOiAic29tZSBkdW1teSBkYXRhIiwKICAia25vd2xlZGdlQmFzZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICJkaXBsb3R5cGVzIjogWwogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9LAogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9LAogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9LAogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9CiAgXQp9Cg==',
-                    'base64',
-                ).toString(),
-            ),
+            JSON.parse(Buffer.from(allelesFile, 'base64').toString()),
         ],
     };
 
