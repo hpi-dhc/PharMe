@@ -18,13 +18,15 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Setup for local development
 
-- Make sure your `.env` is configured correctly and up to date with the
-  `.env.example` file
+- Make sure your `.env` and `test/.env` are configured correctly and up to date with the
+  `.env.example` and `test/.env.example` files
 - Open a terminal in VSCode in the `annotation-server` directory
   - Run `docker compose up` to build and start the necessary containers (e.g.
     database)
 - Open another terminal in VSCode in the `annotation-server` directory
-  - Run `yarn` to install the project dependencies
+  - Run `yarn` to install the project's Node.js dependencies
+  - Run `/usr/bin/env python3 -m pip install -r requirements.txt` to install the project's Python dependencies
+  - Optionally download DrugBank datasets from our Google Drive, place them in `data/` and adjust your `.env` accordingly
   - You can now start the server using `yarn start:dev`
 
 ## Syncing Clinical Annotations
@@ -34,10 +36,4 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Medication Database
 
-- To fetch all drugs from Dailymed send a POST-Request to `/rxnorm`
-- To fetch a specific medication you need the rxnorm_mapping_id. Send a
-  GET-Request to `/medications/b9ff2469-22c7-fc70-e053-2a95a90abc49` to fetch
-  Ibuprofen for example.
-- Send a DELETE-Request to `/medications/:id` to delete the medication entry.
-  The id is the auto-generated
-- Send a DELETE-Request to `/rxnorm` to clear the database
+- To initialize the database with the zipped data specified in `.env`, send a POST-Request to `/medications`
