@@ -17,7 +17,7 @@ async function bootstrap() {
         .setVersion('1.0')
         .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api-docs', app, document, {
+    SwaggerModule.setup('api', app, document, {
         customSiteTitle: 'Annotation Server API Documentation',
         customCssUrl: '../custom-theme.css',
         customfavIcon: '../favicon.png',
