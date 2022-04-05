@@ -30,13 +30,5 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
   - Optionally download DrugBank datasets from our Google Drive, place them in
     `data/` and adjust your `.env` accordingly
   - You can now start the server using `yarn start:dev`
-
-## Syncing Clinical Annotations
-
-- To download and import the `clinical_annotations` table from pharmgkb.org
-  send a PATCH-Request to `http://localhost:3000/clinical_annotations/sync`
-
-## Medication Database
-
-- To initialize the database with the zipped data specified in `.env`, send a
-  POST-Request to `/medications`
+- initialize the database with the zipped data specified in `.env` by sending
+  a POST-Request to `/api/v1/medications`
