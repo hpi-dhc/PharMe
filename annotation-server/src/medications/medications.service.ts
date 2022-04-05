@@ -11,6 +11,7 @@ import * as JSONStream from 'JSONStream';
 import { lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
 
+import { ClinicalAnnotation } from './interfaces/clinicalAnnotation.interface';
 import { Drug } from './interfaces/drugbank.interface';
 import { Medication } from './medication.entity';
 
@@ -121,7 +122,7 @@ export class MedicationsService {
                 ),
             );
             medication.relatedGenes = response.data.data.flatMap(
-                (clinicalAnnotation) =>
+                (clinicalAnnotation: ClinicalAnnotation) =>
                     clinicalAnnotation.location.genes.map(
                         (gene) => gene.symbol,
                     ),
