@@ -9,7 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
 import { Repository } from 'typeorm';
 
-import { Drug, Medication } from './medication.entity';
+import { Drug } from './interfaces/drugbank.interface';
+import { Medication } from './medication.entity';
 
 @Injectable()
 export class MedicationsService {
