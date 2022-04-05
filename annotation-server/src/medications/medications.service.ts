@@ -3,10 +3,12 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
+import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
+import { lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
 
 import { Drug } from './interfaces/drugbank.interface';
@@ -20,6 +22,7 @@ export class MedicationsService {
         private configService: ConfigService,
         @InjectRepository(Medication)
         private medicationRepository: Repository<Medication>,
+        private httpService: HttpService,
     ) {}
 
     async clearAllMedicationData(): Promise<void> {
@@ -95,9 +98,44 @@ export class MedicationsService {
         });
     }
 
-    async getAll(): Promise<Medication[]> {
+    async findAll(): Promise<Medication[]> {
         return await this.medicationRepository.find({
             select: ['id', 'name', 'description', 'synonyms'],
+        });
+    }
+
+    async ensureRelatedGenes(medicationId: number): Promise<void> {
+        const medication = await this.medicationRepository.findOne(
+            medicationId,
+        );
+        if (!medication.relatedGenes) {
+            const response = await lastValueFrom(
+                this.httpService.get(
+                    'https://api.pharmgkb.org/v1/data/clinicalAnnotation',
+                    {
+                        params: {
+                            'relatedChemicals.accessionId':
+                                medication.pharmgkbId,
+                        },
+                    },
+                ),
+            );
+            medication.relatedGenes = response.data.data.flatMap(
+                (clinicalAnnotation) =>
+                    clinicalAnnotation.location.genes.map(
+                        (gene) => gene.symbol,
+                    ),
+            );
+            await this.medicationRepository.update(medication.id, {
+                relatedGenes: medication.relatedGenes,
+            });
+        }
+    }
+
+    async findOne(id: number): Promise<Medication> {
+        await this.ensureRelatedGenes(id);
+        return await this.medicationRepository.findOne(id, {
+            select: ['id', 'name', 'description', 'synonyms', 'relatedGenes'],
         });
     }
 }

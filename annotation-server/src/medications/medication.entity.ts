@@ -46,4 +46,7 @@ export class Medication {
 
     @Column('text', { array: true })
     synonyms: string[];
+
+    @Column('text', { array: true, nullable: true })
+    relatedGenes: string[];
 }

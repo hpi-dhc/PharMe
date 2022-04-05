@@ -1,5 +1,5 @@
-import { Controller, Get, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Medication } from './medication.entity';
 import { MedicationsService } from './medications.service';
@@ -11,8 +11,23 @@ export class MedicationsController {
 
     @ApiOperation({ summary: 'Fetch all medications' })
     @Get()
-    async get(): Promise<Medication[]> {
-        return await this.medicationsService.getAll();
+    async find(): Promise<Medication[]> {
+        return await this.medicationsService.findAll();
+    }
+
+    @ApiOperation({
+        summary: 'Get summary information and relevant gene-variants',
+    })
+    @ApiParam({
+        name: 'id',
+        description: 'ID of the medication to fetch information for.',
+        example: '14432',
+        type: 'integer',
+        required: true,
+    })
+    @Get(':id')
+    async findOne(@Param('id') id: number): Promise<Medication> {
+        return await this.medicationsService.findOne(id);
     }
 
     @ApiOperation({
