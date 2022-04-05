@@ -8,12 +8,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import { lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import { ClinicalAnnotation } from './interfaces/clinicalAnnotation.interface';
 import { Drug } from './interfaces/drugbank.interface';
+import { GeneVariant } from './interfaces/geneVariant.interface';
+import { PGxFinding } from './interfaces/pgxFinding.interface';
 import { Medication } from './medication.entity';
+import { getClinicalAnnotations } from './pharmgkb';
 
 @Injectable()
 export class MedicationsService {
@@ -110,19 +111,12 @@ export class MedicationsService {
             medicationId,
         );
         if (!medication.relatedGenes) {
-            const response = await lastValueFrom(
-                this.httpService.get(
-                    'https://api.pharmgkb.org/v1/data/clinicalAnnotation',
-                    {
-                        params: {
-                            'relatedChemicals.accessionId':
-                                medication.pharmgkbId,
-                        },
-                    },
-                ),
+            const clinicalAnnotations = await getClinicalAnnotations(
+                this.httpService,
+                medication.pharmgkbId,
             );
-            medication.relatedGenes = response.data.data.flatMap(
-                (clinicalAnnotation: ClinicalAnnotation) =>
+            medication.relatedGenes = clinicalAnnotations.flatMap(
+                (clinicalAnnotation) =>
                     clinicalAnnotation.location.genes.map(
                         (gene) => gene.symbol,
                     ),
@@ -138,5 +132,38 @@ export class MedicationsService {
         return await this.medicationRepository.findOne(id, {
             select: ['id', 'name', 'description', 'synonyms', 'relatedGenes'],
         });
+    }
+
+    async getAnnotations(
+        id: number,
+        geneVariants: Array<GeneVariant>,
+    ): Promise<PGxFinding[]> {
+        const { pharmgkbId } = await this.medicationRepository.findOne(id);
+        const clinicalAnnotations = await getClinicalAnnotations(
+            this.httpService,
+            pharmgkbId,
+        );
+        const findings: Array<PGxFinding> = [];
+        for (const annotation of clinicalAnnotations) {
+            if (annotation.location.genes.length !== 1) continue;
+            const geneVariant = geneVariants.find(
+                ({ gene }) => gene === annotation.location.genes[0].symbol,
+            );
+            if (!geneVariant) continue;
+            for (const phenotype of annotation.allelePhenotypes) {
+                if (
+                    phenotype.allele === geneVariant.variant1 ||
+                    phenotype.allele === geneVariant.variant2
+                ) {
+                    const finding: PGxFinding = {
+                        gene: geneVariant.gene,
+                        description: phenotype.phenotype,
+                    };
+                    findings.push(finding);
+                }
+            }
+        }
+
+        return findings;
     }
 }
