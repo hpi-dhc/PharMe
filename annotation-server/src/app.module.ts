@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AnnotationsModule } from './clinical_annotation/clinical_annotation.module';
 import { MedicationsModule } from './medications/medications.module';
 
 @Module({
@@ -31,7 +30,6 @@ import { MedicationsModule } from './medications/medications.module';
             }),
             inject: [ConfigService],
         }),
-        AnnotationsModule,
         MedicationsModule,
     ],
     controllers: [AppController],
