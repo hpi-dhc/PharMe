@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/module.dart';
-import '../../models/medications_group.dart';
+import '../../models/medication.dart';
 import 'cubit.dart';
 
 class MedicationsOverviewPage extends StatefulWidget {
@@ -36,10 +36,9 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
             initial: Container.new,
             loading: () => Center(child: CircularProgressIndicator()),
             error: () => Center(child: Text('Error!')),
-            loaded: (medicationsGroups) => _buildMedicationsList(
+            loaded: (medications) => _buildMedicationsList(
               context,
-              _matchingMedicationsTiles(
-                  medicationsGroups, searchController.text),
+              _matchingMedicationsTiles(medications, searchController.text),
               searchController.text,
             ),
           );
@@ -52,41 +51,38 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
     return test.toLowerCase().contains(query.toLowerCase().trim());
   }
 
-  List<ListTile> _matchingMedicationsTiles(
-      List<MedicationsGroup> medicationsGroups, String searchText) {
-    return medicationsGroups
-        .map((group) {
-          final matchingMedications = group.medications
-              .where((medication) =>
-                  _matches(medication.name, searchText) ||
-                  _matches(medication.manufacturer, searchText))
-              .toList();
+  List<MedicationTile> _matchingMedicationsTiles(
+      List<Medication> medications, String searchText) {
+    final medicationTiles = medications
+        .map((medication) {
+          final synonymMatch = medication.synonyms
+              .any((synonym) => _matches(synonym, searchText));
 
-          if (matchingMedications.isEmpty &&
-              !_matches(group.name, searchText)) {
+          int priority;
+
+          if (_matches(medication.name, searchText)) {
+            priority = 2;
+          } else if (synonymMatch) {
+            priority = 1;
+          } else if (_matches(medication.description, searchText)) {
+            priority = 0;
+          } else {
             return null;
           }
 
-          final title = matchingMedications.isEmpty
-              ? group.name
-              : matchingMedications
-                  .map((medication) => medication.name)
-                  .toSet()
-                  .join(', ');
-          final subtitle = matchingMedications.isEmpty ? null : group.name;
-          return ListTile(
-            title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-            subtitle: subtitle == null ? null : Text(subtitle),
-            onTap: () =>
-                context.router.pushNamed('main/medications/${group.id}'),
-          );
+          return MedicationTile(medication: medication, priority: priority);
         })
-        .whereType<ListTile>()
+        .whereType<MedicationTile>()
         .toList();
+
+    medicationTiles.sort((medication1, medication2) =>
+        medication2.priority.compareTo(medication1.priority));
+
+    return medicationTiles;
   }
 
   Column _buildMedicationsList(BuildContext context,
-      List<ListTile> medicationsTiles, String searchText) {
+      List<MedicationTile> medicationsTiles, String searchText) {
     return Column(
       children: [
         Padding(
@@ -111,6 +107,28 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class MedicationTile extends StatelessWidget {
+  const MedicationTile({
+    Key? key,
+    required this.medication,
+    required this.priority,
+  }) : super(key: key);
+
+  final Medication medication;
+  final int priority;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(medication.name),
+      subtitle: Text(medication.description,
+          maxLines: 2, overflow: TextOverflow.ellipsis),
+      onTap: () =>
+          context.router.pushNamed('main/medications/${medication.id}'),
     );
   }
 }

@@ -4,6 +4,8 @@ services:
     volumes:
       # mapped folder in the container needs to match the working dir's parent directory found in the Dockerfile
       - ../assets:/usr/src/assets:ro
+      # mapped folder in the container needs to match the working dir found in the Dockerfile
+      - ./data:/usr/src/app/data:ro
     ports:
       - 8080:3000
     depends_on:

@@ -6,7 +6,8 @@ part 'medication.g.dart';
 @freezed
 class Medication with _$Medication {
   const factory Medication(
-      int id, String name, String manufacturer, String agents) = _Medication;
+          int id, String name, String description, List<String> synonyms) =
+      _Medication;
   factory Medication.fromJson(Map<String, dynamic> json) =>
       _$MedicationFromJson(json);
 }

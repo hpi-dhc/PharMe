@@ -31,7 +31,10 @@ const download = (url: string, targetPath: string): Promise<void> => {
     });
 };
 
-const unzip = (zipPath: string, unzipTargetPath: string) => {
+export const unzip = (
+    zipPath: string,
+    unzipTargetPath: string,
+): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
         try {
             // Create folder if not exists
