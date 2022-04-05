@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "assets": ["common/script"],
+        "assets": ["common/scripts"],
         "watchAssets": true
     },
     "collection": "@nestjs/schematics",
