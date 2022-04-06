@@ -5,8 +5,8 @@
   "author": "",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@commitlint/cli": "^16.0.2",
-    "@commitlint/config-conventional": "^16.0.0",
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "husky": "^7.0.4",
     "markdownlint-cli": "^0.31.1"
   },
