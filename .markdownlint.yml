@@ -4,13 +4,16 @@ default: true
 # Allow inline html by disabling rule MD033
 MD033: false
 
+# Allow other elements but h1 in first line
+MD041: false
+
 # Override line length rule
 MD013:
   # Max characters for lines
   line_length: 80
   # Max characters for headings
   heading_line_length: 80
-  # Max characters for code blocks
-  code_block_line_length: 120
-  # Max characters for tables
+  # Ignore rule for tables
   tables: false
+  # Ignore rule for code blocks
+  code_blocks: false

@@ -1,11 +1,13 @@
 services:
-  lab-server:
+  api:
     build: .
     volumes:
       # mapped folder in the container needs to match the working dir's parent directory found in the Dockerfile
       - ../assets:/usr/src/assets:ro
     ports:
-      - 8081:3000
+      - 8081:3001
+    depends_on:
+      - lab-server-db
     profiles:
       - production
 
@@ -20,6 +22,36 @@ services:
       - POSTGRES_PASSWORD=${LAB_SERVER_DB_PASS}
       - POSTGRES_DB=${LAB_SERVER_DB_NAME}
 
+  keycloak:
+    image: jboss/keycloak:16.1.0
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: keycloak-db
+      DB_DATABASE: ${KEYCLOAK_DB_NAME}
+      DB_USER: ${KEYCLOAK_DB_USER}
+      DB_PASSWORD: ${KEYCLOAK_DB_PASS}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASS}
+    ports:
+      - 28080:8080
+    depends_on:
+      - keycloak-db
+    profiles:
+      - local
+
+  keycloak-db:
+    image: postgres:13
+    volumes:
+      - keycloak_db:/var/lib/postgresql/data
+    ports:
+      - 25433:5432
+    environment:
+      - POSTGRES_USER=${KEYCLOAK_DB_USER}
+      - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASS}
+      - POSTGRES_DB=${KEYCLOAK_DB_NAME}
+    profiles:
+      - local
+
   minio:
     image: minio/minio
     environment:
@@ -31,33 +63,10 @@ services:
       - 9000:9000
       - 9001:9001
     command: server /data --console-address ":9001"
-
-  # uncomment following lines for local debugging
-  # postgres-keycloak:
-  #   image: postgres:13
-  #   volumes:
-  #     - keycloak_db:/var/lib/postgresql/data
-  #   ports:
-  #     - 25433:5432
-  #   environment:
-  #     - POSTGRES_USER=${KEYCLOAK_DB_USER}
-  #     - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASS}
-  #     - POSTGRES_DB=${KEYCLOAK_DB_NAME}
-  # keycloak:
-  #   image: jboss/keycloak:16.1.0
-  #   environment:
-  #     DB_VENDOR: postgres
-  #     DB_ADDR: postgres-keycloak
-  #     DB_DATABASE: ${KEYCLOAK_DB_NAME}
-  #     DB_USER: ${KEYCLOAK_DB_USER}
-  #     DB_PASSWORD: ${KEYCLOAK_DB_PASS}
-  #     KEYCLOAK_USER: ${KEYCLOAK_USER}
-  #     KEYCLOAK_PASSWORD: ${KEYCLOAK_PASS}
-  #   ports:
-  #     - 28080:8080
-  #   depends_on:
-  #     - postgres-keycloak
+    profiles:
+      - local
 
 volumes:
   lab_server_db:
   minio_db:
+  keycloak_db:

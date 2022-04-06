@@ -4,17 +4,19 @@ services:
     volumes:
       # mapped folder in the container needs to match the working dir's parent directory found in the Dockerfile
       - ../assets:/usr/src/assets:ro
+      # mapped folder in the container needs to match the working dir found in the Dockerfile
+      - ./data:/usr/src/app/data:ro
     ports:
       - 8080:3000
     depends_on:
-      - postgres
+      - annotation-server-db
     profiles:
       - production
 
-  postgres:
+  annotation-server-db:
     image: postgres:13
     volumes:
-      - annotation_db:/var/lib/postgresql/data
+      - annotation_server_db:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
@@ -23,12 +25,4 @@ services:
       - POSTGRES_DB=${ANNOTATION_DB_NAME}
 
 volumes:
-  annotation_db:
-
-
-
-# ANNOTATION_DB_HOST=localhost
-# ANNOTATION_DB_PORT=5432
-# ANNOTATION_DB_USER=postgres
-# ANNOTATION_DB_PASS=postgres
-# ANNOTATION_DB_NAME=annotation_db
+  annotation_server_db:

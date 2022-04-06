@@ -1,146 +1,103 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import axiosRetry from 'axios-retry';
-import { lastValueFrom } from 'rxjs';
-import { Repository } from 'typeorm';
-import { DOMParser } from 'xmldom';
-import * as xpath from 'xpath';
+import { spawn } from 'child_process';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
-import { Medication } from './medications.entity';
-import { MedicationsGroup } from './medicationsGroup.entity';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as JSONStream from 'JSONStream';
+import { Repository } from 'typeorm';
+
+import { Drug } from './interfaces/drugbank.interface';
+import { Medication } from './medication.entity';
 
 @Injectable()
 export class MedicationsService {
+    private readonly logger = new Logger(MedicationsService.name);
+
     constructor(
+        private configService: ConfigService,
         @InjectRepository(Medication)
         private medicationRepository: Repository<Medication>,
-        @InjectRepository(MedicationsGroup)
-        private medicationsGroupRepository: Repository<MedicationsGroup>,
-        private httpService: HttpService,
     ) {}
 
     async clearAllMedicationData(): Promise<void> {
         await this.medicationRepository.delete({});
-        await this.medicationsGroupRepository.delete({});
     }
 
-    async fetchAllMedications(startPageURL: string): Promise<void> {
+    async fetchAllMedications(): Promise<void> {
         await this.clearAllMedicationData();
+        const jsonPath = await this.getJSONfromZip();
+        this.logger.log('Extracting medications from JSON ...');
+        const drugs = await this.getDataFromJSON(jsonPath);
+        this.logger.log('Writing to database ...');
+        const medications = drugs.map((drug) => Medication.fromDrug(drug));
+        const savedMedications = await this.medicationRepository.save(
+            medications,
+        );
+        this.logger.log(
+            `Successfully saved ${savedMedications.length} medications!`,
+        );
+    }
 
-        const medicationGroups = new Map<string, Array<Medication>>();
-
-        axiosRetry(this.httpService.axiosRef, {
-            retryDelay: axiosRetry.exponentialDelay,
+    getJSONfromZip(): Promise<string> {
+        const jsonPath = path.join(os.tmpdir(), 'drugbank-data.json');
+        const proc = spawn(
+            path.join(__dirname, '../common/scripts/zipped-xml-to-json'),
+            [
+                this.configService.get<string>('DRUGBANK_ZIP'),
+                this.configService.get<string>('DRUGBANK_XML'),
+                jsonPath,
+            ],
+        );
+        proc.on('error', (error) => {
+            this.logger.error(error);
         });
-
-        let nextPageUrl = startPageURL;
-
-        while (nextPageUrl !== 'null') {
-            nextPageUrl = await this.fetchMedicationPage(
-                nextPageUrl,
-                medicationGroups,
-            );
-        }
-
-        const groups: MedicationsGroup[] = [];
-
-        for (const [groupName, medications] of medicationGroups.entries()) {
-            const group = new MedicationsGroup();
-            group.name = groupName
-                .replace(/,/g, ', ')
-                .replace(/\b\w/g, (c) => c.toUpperCase());
-            group.medications = medications;
-            groups.push(group);
-        }
-
-        await this.medicationsGroupRepository.save(groups);
-    }
-
-    async fetchMedicationPage(
-        pageURL: string,
-        medicationGroups: Map<string, Array<Medication>>,
-    ): Promise<string> {
-        const observable = this.httpService.get(pageURL);
-        const response = await lastValueFrom(observable);
-
-        const promises = [];
-
-        for (const splMedication of response.data.data) {
-            const fetchMedication = async (setid: string): Promise<void> => {
-                const url = `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/${setid}.xml`;
-
-                const medObservable = this.httpService.get(url);
-                const chunk = await lastValueFrom(medObservable);
-
-                const domParser = new DOMParser();
-                const xml = chunk.data
-                    .toString()
-                    .replace(/<\?.*\?>/g, '')
-                    .replace(/<document.*>/, '<document>');
-                const doc = domParser.parseFromString(xml);
-
-                const medication = new Medication();
-
-                medication.name = xpath
-                    .select('string(//manufacturedProduct/*/name)', doc)
-                    .toString()
-                    .trim();
-                medication.agents = xpath
-                    .select('string(//genericMedicine/name)', doc)
-                    .toString()
-                    .toLowerCase()
-                    .trim();
-                medication.manufacturer = xpath
-                    .select('string(//representedOrganization/name)', doc)
-                    .toString()
-                    .trim();
-
-                const key = this.genAgentKey(medication.agents);
-                if (!key) return;
-
-                if (medicationGroups.has(key)) {
-                    medicationGroups.get(key).push(medication);
-                } else {
-                    medicationGroups.set(key, [medication]);
-                }
-            };
-
-            promises.push(fetchMedication(splMedication.setid));
-        }
-
-        await Promise.all(promises);
-
-        return response.data.metadata.next_page_url;
-    }
-
-    async getAll(): Promise<MedicationsGroup[]> {
-        return await this.medicationsGroupRepository.find({
-            relations: ['medications'],
+        proc.stdout.on('data', (data: string) => {
+            this.logger.log(data);
+        });
+        proc.stderr.on('data', (data: string) => {
+            this.logger.error(data);
+        });
+        return new Promise((resolve, reject) => {
+            proc.on('exit', (code) => {
+                if (code === 0) resolve(jsonPath);
+                else reject(`Subprocess exited with ${code}.`);
+            });
         });
     }
 
-    removeMedication(id: number): void {
-        this.medicationRepository.delete(id);
+    getDataFromJSON(path: string): Promise<Drug[]> {
+        const jsonStream = fs
+            .createReadStream(path)
+            .pipe(JSONStream.parse('drugbank.drug.*'));
+        const drugs: Array<Drug> = [];
+        const clearLine = () => {
+            process.stdout.write(`\r${String.fromCharCode(27)}[0J`);
+        };
+        jsonStream.on('data', (drug: Drug) => {
+            if (!(drugs.length % 50)) {
+                clearLine();
+                process.stdout.write(`${drugs.length} drugs parsed ...`);
+            }
+            drugs.push(drug);
+        });
+        return new Promise<Drug[]>((resolve, reject) => {
+            jsonStream.on('error', () => {
+                clearLine();
+                reject();
+            });
+            jsonStream.on('end', () => {
+                clearLine();
+                resolve(drugs);
+            });
+        });
     }
 
-    private genAgentKey(agentsString?: string): string {
-        if (!agentsString) {
-            return undefined;
-        }
-        const agents = agentsString
-            .toLowerCase()
-            .split(/,|and/)
-            .map((agent) =>
-                agent
-                    .replace(
-                        /capsules|capsule|pill|pills|coated|tablets|tablet|oral|childrens|children|adults|adult|liquidfilled/g,
-                        '',
-                    )
-                    .trim(),
-            )
-            .filter((agent) => agent.length > 2);
-        agents.sort();
-        return agents.join(',');
+    async getAll(): Promise<Medication[]> {
+        return await this.medicationRepository.find({
+            select: ['id', 'name', 'description', 'synonyms'],
+        });
     }
 }
