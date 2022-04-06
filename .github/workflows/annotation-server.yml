@@ -97,4 +97,4 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd annotation-server
-            docker-compose --profile production up --build --force-recreate --no-deps -d
+            docker-compose --profile production up --build --force-recreate --no-deps --remove-orphans -d
