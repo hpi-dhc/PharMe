@@ -24,10 +24,10 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
   - Run `yarn` to install the project dependencies
   - You can now start the server using `yarn start:dev`
 
-## Local set-up for Keycloak (for debugging)
+## Local set-up for Keycloak / Minio (for debugging)
 
-For local debugging set up your Keycloak by uncommenting the relevant part in
-the `docker-compose.yml`
+For local debugging pass the "local" profile flag when running docker-compose
+by using the following command: `docker compose --profile local up`
 
 ### Keycloak set-up
 

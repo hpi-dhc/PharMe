@@ -14,6 +14,8 @@ part 'cubit.freezed.dart';
 class LoginPageCubit extends Cubit<LoginPageState> {
   LoginPageCubit() : super(LoginPageState.initial());
 
+  void revertToInitialState() => emit(LoginPageState.initial());
+
   Future<void> signInAndLoadAlleles(String authUrl, String allelesUrl) async {
     try {
       final token = await _getAccessToken(authUrl);

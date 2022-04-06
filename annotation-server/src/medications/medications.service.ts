@@ -107,9 +107,9 @@ export class MedicationsService {
     }
 
     async ensureRelatedGenes(medicationId: number): Promise<void> {
-        const medication = await this.medicationRepository.findOne(
-            medicationId,
-        );
+        const medication = await this.medicationRepository.findOne({
+            where: { id: medicationId },
+        });
         if (!medication.relatedGenes) {
             const clinicalAnnotations = await getClinicalAnnotations(
                 this.httpService,
@@ -129,7 +129,8 @@ export class MedicationsService {
 
     async findOne(id: number): Promise<Medication> {
         await this.ensureRelatedGenes(id);
-        return await this.medicationRepository.findOne(id, {
+        return await this.medicationRepository.findOne({
+            where: { id },
             select: ['id', 'name', 'description', 'synonyms', 'relatedGenes'],
         });
     }
@@ -138,7 +139,9 @@ export class MedicationsService {
         id: number,
         geneVariants: Array<GeneVariant>,
     ): Promise<PGxFinding[]> {
-        const { pharmgkbId } = await this.medicationRepository.findOne(id);
+        const { pharmgkbId } = await this.medicationRepository.findOne({
+            where: { id },
+        });
         const clinicalAnnotations = await getClinicalAnnotations(
             this.httpService,
             pharmgkbId,

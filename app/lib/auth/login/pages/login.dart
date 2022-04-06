@@ -163,9 +163,8 @@ class _LoginPageState extends State<LoginPage> {
       SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () {
-            context.read<LoginPageCubit>().emit(LoginPageState.initial());
-          },
+          onPressed: () =>
+              context.read<LoginPageCubit>().revertToInitialState(),
           child: Text('Retry'),
         ),
       ),
