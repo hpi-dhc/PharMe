@@ -1,5 +1,5 @@
 interface ExternalIdentifier {
-    resource: 'PharmGKB' | string;
+    resource: 'PharmGKB' | 'RxCUI' | string;
     identifier: string;
 }
 interface InternationalBrand {
