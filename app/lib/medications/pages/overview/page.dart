@@ -25,7 +25,7 @@ class MedicationsOverviewPage extends HookWidget {
             loaded: (medications) => _buildMedicationsList(
               context,
               _matchingMedicationsTiles(medications, searchController.text),
-              searchController.text,
+              searchController,
             ),
           );
         },
@@ -38,7 +38,9 @@ class MedicationsOverviewPage extends HookWidget {
   }
 
   List<MedicationTile> _matchingMedicationsTiles(
-      List<Medication> medications, String searchText) {
+    List<Medication> medications,
+    String searchText,
+  ) {
     final medicationTiles = medications
         .map((medication) {
           final synonymMatch = medication.synonyms
@@ -67,14 +69,17 @@ class MedicationsOverviewPage extends HookWidget {
     return medicationTiles;
   }
 
-  Column _buildMedicationsList(BuildContext context,
-      List<MedicationTile> medicationsTiles, String searchText) {
+  Column _buildMedicationsList(
+    BuildContext context,
+    List<MedicationTile> medicationsTiles,
+    TextEditingController searchController,
+  ) {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
           child: TextField(
-            // controller: searchController,
+            controller: searchController,
             decoration: InputDecoration(
               labelText: context.l10n.overview_search_bar_search,
               border: OutlineInputBorder(),
