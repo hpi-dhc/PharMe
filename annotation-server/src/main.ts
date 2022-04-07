@@ -1,5 +1,3 @@
-import { join } from 'path';
-
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -8,7 +6,6 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
-    app.useStaticAssets(join(__dirname, '..', '..', 'assets'));
     app.setGlobalPrefix('/api/v1');
 
     const config = new DocumentBuilder()
@@ -18,9 +15,12 @@ async function bootstrap() {
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document, {
-        customSiteTitle: 'Annotation Server API Documentation',
-        customCssUrl: '../custom-theme.css',
-        customfavIcon: '../favicon.png',
+        customSiteTitle: 'API Endpoints of our Lab Server',
+        swaggerOptions: {
+            persistAuthorization: true,
+        },
+        customfavIcon: `${process.env.ASSETS_URL}/favicon.png`,
+        customCssUrl: `${process.env.ASSETS_URL}/styles.css`,
     });
 
     await app.listen(3000);
