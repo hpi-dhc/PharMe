@@ -1,41 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/module.dart';
 import '../../../common/routing/router.dart';
 
-class OnboardingPage extends StatefulWidget {
+class OnboardingPage extends HookWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
   @override
-  State<OnboardingPage> createState() => _OnboardingPageState();
-}
-
-class _OnboardingPageState extends State<OnboardingPage> {
-  final _pages = <Widget>[
-    OnboardingSubPage(
-      imagePath: 'assets/images/onboarding_welcome.svg',
-      getHeader: (context) => {context.l10n.onboarding_welcome_page_header},
-      getText: (context) => {context.l10n.onboarding_welcome_page_text},
-    ),
-    OnboardingSubPage(
-      imagePath: 'assets/images/onboarding_medicine.svg',
-      getHeader: (context) => {context.l10n.onboarding_medicine_page_header},
-      getText: (context) => {context.l10n.onboarding_medicine_page_text},
-    ),
-    OnboardingSubPage(
-      imagePath: 'assets/images/onboarding_security.svg',
-      getHeader: (context) => {context.l10n.onboarding_security_page_header},
-      getText: (context) => {context.l10n.onboarding_security_page_text},
-    ),
-  ];
-  final PageController _pageController = PageController(initialPage: 0);
-  int _currentPage = 0;
-  bool get isLastPage => _currentPage == _pages.length - 1;
-
-  @override
   Widget build(BuildContext context) {
+    final pageController = usePageController(initialPage: 0);
+    final currentPage = useState(0);
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -59,20 +37,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
               SizedBox(
                 height: 600,
                 child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (page) {
-                    setState(() {
-                      _currentPage = page;
-                    });
-                  },
+                  controller: pageController,
+                  onPageChanged: (newPage) => currentPage.value = newPage,
                   children: _pages,
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: _buildPageIndicator(),
+                children: _buildPageIndicator(currentPage.value),
               ),
-              _buildNextButton(context),
+              _buildNextButton(
+                context,
+                pageController,
+                currentPage.value == _pages.length - 1,
+              ),
             ],
           ),
         ),
@@ -80,10 +58,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  List<Widget> _buildPageIndicator() {
+  List<Widget> _buildPageIndicator(int currentPage) {
     final list = <Widget>[];
     for (var i = 0; i < _pages.length; ++i) {
-      list.add(i == _currentPage ? _indicator(true) : _indicator(false));
+      list.add(i == currentPage ? _indicator(true) : _indicator(false));
     }
     return list;
   }
@@ -101,7 +79,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
-  Widget _buildNextButton(BuildContext context) {
+  Widget _buildNextButton(
+    BuildContext context,
+    PageController pageController,
+    bool isLastPage,
+  ) {
     return Expanded(
       child: Align(
         alignment: FractionalOffset.bottomRight,
@@ -110,7 +92,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             if (isLastPage) {
               context.router.replace(const LoginRoute());
             } else {
-              _pageController.nextPage(
+              pageController.nextPage(
                 duration: Duration(milliseconds: 500),
                 curve: Curves.ease,
               );
@@ -142,6 +124,24 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 }
+
+final _pages = <Widget>[
+  OnboardingSubPage(
+    imagePath: 'assets/images/onboarding_welcome.svg',
+    getHeader: (context) => {context.l10n.onboarding_welcome_page_header},
+    getText: (context) => {context.l10n.onboarding_welcome_page_text},
+  ),
+  OnboardingSubPage(
+    imagePath: 'assets/images/onboarding_medicine.svg',
+    getHeader: (context) => {context.l10n.onboarding_medicine_page_header},
+    getText: (context) => {context.l10n.onboarding_medicine_page_text},
+  ),
+  OnboardingSubPage(
+    imagePath: 'assets/images/onboarding_security.svg',
+    getHeader: (context) => {context.l10n.onboarding_security_page_header},
+    getText: (context) => {context.l10n.onboarding_security_page_text},
+  ),
+];
 
 class OnboardingSubPage extends StatelessWidget {
   const OnboardingSubPage({

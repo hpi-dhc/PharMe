@@ -1,33 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../common/module.dart';
 import '../../models/medication.dart';
 import 'cubit.dart';
 
-class MedicationsOverviewPage extends StatefulWidget {
+class MedicationsOverviewPage extends HookWidget {
   const MedicationsOverviewPage({Key? key}) : super(key: key);
 
   @override
-  State<MedicationsOverviewPage> createState() =>
-      _MedicationsOverviewPageState();
-}
-
-class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
-  final searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    searchController.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final searchController = useTextEditingController();
+
     return BlocProvider(
       create: (context) => MedicationsOverviewCubit(),
       child: BlocBuilder<MedicationsOverviewCubit, MedicationsOverviewState>(
@@ -88,7 +74,7 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
         Padding(
           padding: const EdgeInsets.all(8),
           child: TextField(
-            controller: searchController,
+            // controller: searchController,
             decoration: InputDecoration(
               labelText: context.l10n.overview_search_bar_search,
               border: OutlineInputBorder(),
