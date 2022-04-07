@@ -1,26 +1,28 @@
-# Note: this docker file is meant to be run from the project root as we need to
-# add local modules You can build this image by running `docker build -t
-# annotation-server -f ./annotation-server/Dockerfile .` from the project root.
-FROM node:16
+# Note: this Dockerfile is meant to be run from the project root as we need to
+# add local modules which are outside of the context of the `annotation-server`
+# directory. You can build this image by running `docker build -t annotation-server -f
+# ./annotation-server/Dockerfile .` from the project root.
 
-WORKDIR /usr/src/app
+ARG BASE_IMAGE=node:16
 
-RUN apt-get update || : && apt-get install python -y
-RUN apt-get install python3-pip -y
+FROM ${BASE_IMAGE} AS builder
 
-# Copy top-level package json (needed to register workspaces)
+WORKDIR /app
+
+COPY . .
+RUN yarn install
+RUN yarn workspace annotation-server run build
+
+FROM ${BASE_IMAGE}-alpine
+
+WORKDIR /app
+
 COPY ./package.json .
 COPY ./yarn.lock .
 
-# Copy common module
-COPY ./common ./common
-
-# Copy annotation server
-COPY ./annotation-server ./annotation-server
-
-# Install dependencies and build annotation server
-RUN yarn
-RUN pip3 install -r annotation-server/requirements.txt
-RUN yarn workspace annotation-server run build
+COPY ./annotation-server/package.json ./annotation-server/package.json
+COPY ./annotation-server/yarn.lock ./annotation-server/yarn.lock
+RUN yarn workspace annotation-server --production=true --frozen-lockfile install && yarn cache clean
+COPY --from=builder /app/annotation-server/dist ./annotation-server/dist
 
 CMD [ "yarn", "workspace", "annotation-server", "run", "start:prod" ]
