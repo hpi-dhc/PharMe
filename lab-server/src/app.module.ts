@@ -1,32 +1,24 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { KeycloakModule, KeycloakProviders } from './configs/keycloak.config';
+import { OrmModule } from './configs/typeorm.config';
+import { S3Module } from './s3/s3.module';
+import { StarAllelesModule } from './star-alleles/star-alleles.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('LAB_SERVER_DB_HOST'),
-        port: configService.get<number>('LAB_SERVER_DB_PORT'),
-        username: configService.get<string>('LAB_SERVER_DB_USER'),
-        password: configService.get<string>('LAB_SERVER_DB_PASS'),
-        database: configService.get<string>('LAB_SERVER_DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
-      inject: [ConfigService],
-    }),
-    UsersModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+        }),
+        OrmModule,
+        S3Module,
+        KeycloakModule,
+        StarAllelesModule,
+    ],
+
+    controllers: [AppController],
+    providers: [...KeycloakProviders],
 })
 export class AppModule {}

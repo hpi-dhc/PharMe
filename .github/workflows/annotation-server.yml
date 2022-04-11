@@ -3,12 +3,8 @@ name: Annotation Server
 on:
   push:
     paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
-  pull_request:
-    paths:
-      - '.github/workflows/annotation-server.yml'
-      - 'annotation-server/**'
+      - ".github/workflows/annotation-server.yml"
+      - "annotation-server/**"
 
 defaults:
   run:
@@ -17,24 +13,68 @@ defaults:
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
 
-  test:
-    name: Test
-    runs-on: [self-hosted, linux]
+  test-e2e:
+    name: Test E2E
+    runs-on: ubuntu-latest
+    container:
+      image: node:17
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: annotation_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v3
+      - run: python -m pip install -r requirements.txt
       - run: yarn
-      - run: yarn test
+      - run: yarn test:e2e:cov
+        env:
+          ANNOTATION_DB_HOST: postgres
+          ANNOTATION_DB_USER: postgres
+          ANNOTATION_DB_PASS: postgres
+          ANNOTATION_DB_PORT: 5432
+          ANNOTATION_DB_NAME: annotation_db
+          DRUGBANK_ZIP: data/random-database.zip
+          DRUGBANK_XML: random-database.xml
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: annotation-server/coverage
+
+  codecov:
+    name: Generate Code Coverage Report
+    needs: [test-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: annotation-server/coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: annotation-server
+          directory: annotation-server/coverage
+          fail_ci_if_error: true
 
   build:
     name: Build
-    needs: [lint, test]
-    runs-on: [self-hosted, linux]
+    needs: [lint, test-e2e]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -42,7 +82,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [lint, test, build]
+    needs: [lint, test-e2e, build]
     runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
@@ -57,4 +97,4 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd annotation-server
-            docker-compose --profile production up --build --force-recreate --no-deps -d
+            docker-compose --profile production up --build --force-recreate --no-deps --remove-orphans -d

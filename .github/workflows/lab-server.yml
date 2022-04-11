@@ -5,35 +5,90 @@ on:
     paths:
       - '.github/workflows/lab-server.yml'
       - 'lab-server/**'
-  pull_request:
-    paths:
-      - '.github/workflows/lab-server.yml'
-      - 'lab-server/**'
 
 defaults:
   run:
     working-directory: ./lab-server
 
+env:
+  KEYCLOAK_AUTH_SERVER_URL: ${{ secrets.KEYCLOAK_AUTH_SERVER_URL }}
+  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
+  KEYCLOAK_SECRET: ${{ secrets.KEYCLOAK_SECRET }}
+
+  LAB_SERVER_DB_HOST: postgres
+  LAB_SERVER_DB_PORT: 5432
+  LAB_SERVER_DB_USER: postgres
+  LAB_SERVER_DB_PASS: postgres
+  LAB_SERVER_DB_NAME: lab_server_db
+
+  MINIO_PORT: 9000
+  MINIO_ENDPOINT: minio
+  MINIO_ROOT_USER: admin_minio
+  MINIO_ROOT_PASSWORD: admin_minio
+
 jobs:
   lint:
     name: Lint
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
       - run: yarn lint
 
-  test:
-    name: Test
-    runs-on: [self-hosted, linux]
+  test-e2e:
+    name: Test E2E
+    runs-on: ubuntu-latest
+    container:
+      image: node:17-buster-slim
+    services:
+      minio:
+        # we refrain from using the official minio image as we would need to
+        # pass an additional `server` sub-command to the container. Currently,
+        # GH-actions does not support this. Note that this is not an official
+        # minio image and should therefore not be used in production
+        # environments. See: https://stackoverflow.com/questions/60849745/
+        image: bitnami/minio
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: ${{ env.LAB_SERVER_DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.LAB_SERVER_DB_PASS }}
+          POSTGRES_DB: ${{ env.LAB_SERVER_DB_NAME }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: yarn test
+      - run: yarn seed:run
+      - run: yarn test:e2e:cov
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: lab-server/coverage
+
+  codecov:
+    name: Generate Code Coverage Report
+    needs: [test-e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: lab-server/coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: lab-server
+          directory: lab-server/coverage
+          fail_ci_if_error: true
 
   build:
     name: Build
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: yarn
@@ -41,7 +96,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [lint, test, build]
+    needs: [lint, test-e2e, build]
     runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
@@ -56,4 +111,4 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd lab-server
-            docker-compose --profile production up --build --force-recreate --no-deps -d
+            docker-compose --profile production up --build --force-recreate --no-deps --remove-orphans -d

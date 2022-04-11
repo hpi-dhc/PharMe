@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.hpi.frasecys">
+    package="de.hpi.pharme">
+   <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="Frasecys"
-        android:icon="@mipmap/ic_launcher">
+        android:label="PharMe"
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
+        <!--TODO Delete line above when in production, http requests-->
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -38,4 +41,16 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <queries>
+      <!-- If your app opens https URLs -->
+      <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+      </intent>
+      <!--TODO This intent clock should probably also be disabled sooner rather than later-->
+      <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="http" />
+      </intent>
+    </queries>
 </manifest>

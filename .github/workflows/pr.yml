@@ -15,16 +15,16 @@ on:
 jobs:
   add-labels:
     if: github.event_name == 'pull_request'
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@v3
         with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
 
   assign-author:
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - uses: samspills/assign-pr-to-author@v1.0
         with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
