@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../common/module.dart';
-import '../../../common/routing/router.dart';
 import '../../../common/widgets/radiant_gradiant_mask.dart';
 import '../models/lab.dart';
 import 'cubit.dart';
