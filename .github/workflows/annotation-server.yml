@@ -98,3 +98,4 @@ jobs:
             git reset --hard origin/main
             cd annotation-server
             docker-compose --profile production up --build --force-recreate --no-deps --remove-orphans -d
+            sleep 60; [[ -z "$(docker-compose ps | grep Exit)" ]] || return 1
