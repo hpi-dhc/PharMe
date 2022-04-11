@@ -1,52 +1,52 @@
 import gensim.downloader as api
-import nltk
-nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 class NLProcessor:
-    __filter_chars = ['.', ',', '?', ';', '"', '#', '\'', '!', '‘', '’', '“', '”', '…', ':', '_', '*'] 
-    __stop_words_path = 'nlp-resources/stop_words_en.txt'
-    __stop_words = None
+    __stopwords = set(stopwords.words('english'))
     __word_vectors_id = 'word2vec-google-news-300'
     __word_vectors = None
-    __sim_statement = ''
+    __sim_compare = None
     __sentimentIA = SentimentIntensityAnalyzer()
 
+    # MARK: NORMALIZATION
+    # word-tokenizes document and removes all non-alphanumeric characters
+    # optionally clears stopwords
     @staticmethod
-    def __get_stop_words():
-        if not NLProcessor.__stop_words:
-            with open(NLProcessor.__stop_words_path, 'r') as fp:
-                NLProcessor.__stop_words = fp.read().split('\n')
-        return NLProcessor.__stop_words
+    def __normal_tokens(doc, clear_stopwords=True):
+        return [token for token in word_tokenize(''.join([
+            char.lower() for char in doc if char.isalnum() or char.isspace()
+        ])) if not clear_stopwords or token not in NLProcessor.__stopwords]
 
+    # normalize document
+    @staticmethod
+    def normalize(doc):
+        return ' '.join(NLProcessor.__normal_tokens(doc))
+
+    # MARK: WORD MOVER'S DISTANCE
+    # setup - lazily loaded word vectors
     @staticmethod
     def __get_word_vectors():
         if not NLProcessor.__word_vectors:
             NLProcessor.__word_vectors = api.load(NLProcessor.__word_vectors_id)
         return NLProcessor.__word_vectors
-    
     @staticmethod
-    def __normalize(text):
-        return ' '.join([word.lower() for word in text.split(' ') if word not in NLProcessor.__get_stop_words()])
+    def set_word_vectors(vectors): NLProcessor.__word_vectors = vectors
 
+    # skip lazy initialization
     @staticmethod
-    def set_word_vectors(vectors):
-        NLProcessor.__word_vectors = vectors
+    def ready_similarity(compare_doc):
+        NLProcessor.__sim_compare = NLProcessor.__normal_tokens(compare_doc)
+        NLProcessor.similarity('Lazy init.')
 
+    # wrapper for word movers distance
     @staticmethod
-    def ready():
-        NLProcessor.__get_stop_words()
-        NLProcessor.__get_word_vectors()
+    def similarity(doc1):
+        return 1 / NLProcessor.__get_word_vectors().wmdistance(NLProcessor.__normal_tokens(doc1), NLProcessor.__sim_compare)
 
+    # MARK: SENTIMENT ANALYSIS
     @staticmethod
-    def set_similarity_data(statement):
-        NLProcessor.__sim_statement = NLProcessor.__normalize(statement)
-    
-    @staticmethod
-    def similarity(phrase):
-        return 1 / NLProcessor.__get_word_vectors().wmdistance(NLProcessor.__normalize(phrase), NLProcessor.__sim_statement)
-    
-    @staticmethod
-    def sentiment(phrase):
-        return NLProcessor.__sentimentIA.polarity_scores(phrase)
+    def sentiment(doc):
+        return NLProcessor.__sentimentIA.polarity_scores(NLProcessor.normalize(doc))
 

@@ -1,6 +1,10 @@
 deepl>=1.3.1
 gensim>=4.1.2
+ipykernel>=6.5.1
 nltk>=3.6.5
 numpy>=1.20.1
+pandas>=1.3.5
+pandas-bokeh>=0.5.5
+pyemd>=0.5.1
 python-dotenv>=0.19.2
 requests>=2.26.0

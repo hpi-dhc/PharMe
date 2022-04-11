@@ -1,4 +1,5 @@
 __pycache__
+.venv
 .ipynb_checkpoints
 
 interview-data/
