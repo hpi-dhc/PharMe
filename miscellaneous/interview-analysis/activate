@@ -1,0 +1,13 @@
+# source venv activate
+SOURCE_PATH=`test $ZSH_VERSION && echo ${(%):-%N} || echo $BASH_SOURCE`
+source `dirname $(realpath $SOURCE_PATH)`/.venv/bin/activate
+# rename original deactivate function
+eval "$(declare -f deactivate | sed 's/deactivate/original_deactivate/g')"
+# define env variables
+export GENSIM_DATA_DIR="$VIRTUAL_ENV/gensim-data"
+# redefine deactivate to clear env variables
+deactivate() {
+    original_deactivate
+    unset GENSIM_DATA_DIR
+}
+
