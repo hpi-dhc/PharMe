@@ -8,6 +8,8 @@ import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../profile/models/hive/alleles.dart';
+import '../../../../profile/models/hive/diplotype.dart';
+import '../../../profile/models/hive/cpic_lookup_response.dart';
 
 part 'cubit.freezed.dart';
 
@@ -21,12 +23,42 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       final token = await _getAccessToken(authUrl);
       emit(LoginPageState.loadingAlleles());
       await _fetchAndSaveAllesData(token, allelesUrl);
+      await _fetchAndSaveLookups();
       // Login Successful
-      await Hive.box('preferences').put('isLoggedIn', true);
+      // TODO(kolioOtSofia): uncomment the line below
+      // await Hive.box('preferences').put('isLoggedIn', true);
       emit(LoginPageState.loadedAlleles());
     } catch (e) {
       emit(LoginPageState.error(e.toString()));
     }
+  }
+
+  Future<void> _fetchAndSaveLookups() async {
+    final response = await get(Uri.parse(
+        'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,lookupkey'));
+    if (response.statusCode != 200)
+      // ignore: curly_braces_in_flow_control_structures
+      throw Exception('Error while loading lookups');
+
+    final json = jsonDecode(response.body) as List<dynamic>;
+    final lookups =
+        // ignore: unnecessary_lambdas
+        json.map((el) => CpicLookup.fromJson(el)).filterValidLookups();
+    final usersAlleles = Hive.box('userData').get('alleles') as Alleles;
+
+    final matchingLookups = [];
+    usersAlleles.diplotypes.forEach((diplotype) {
+      matchingLookups.addAll(
+        lookups
+            .where(
+              (el) =>
+                  (el.genesymbol == diplotype.gene) &&
+                  (el.diplotype == diplotype.genotype),
+            )
+            .map((el) => el.lookupkey),
+      );
+    });
+    await Hive.box('userData').put('lookups', matchingLookups);
   }
 
   Future<String> _getAccessToken(String authUrl) async {
@@ -56,7 +88,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   }
 
   Future<void> _fetchAndSaveAllesData(String token, String url) async {
-    final userData = Hive.box<Alleles>('userData');
+    final userData = Hive.box('userData');
     if (userData.get('alleles') == null) {
       final response = await _getStarAlleles(token, url);
       if (response.statusCode == 200) {
@@ -73,7 +105,8 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   Future<void> _saveAlleleData(Response response, String boxname) async {
     final json = jsonDecode(response.body);
     final alleles = Alleles.fromJson(json);
-    return Hive.box<Alleles>('userData').put('alleles', alleles);
+    alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes()!;
+    return Hive.box('userData').put('alleles', alleles);
   }
 }
 

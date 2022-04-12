@@ -38,3 +38,13 @@ class Diplotype {
     return gene;
   }
 }
+
+extension FilteredList on List<Diplotype> {
+  List<Diplotype>? filterValidDiplotypes() {
+    final acceptedResultTypes = [
+      'Diplotype',
+    ];
+    return where((element) => acceptedResultTypes.contains(element.resultType))
+        .toList();
+  }
+}
