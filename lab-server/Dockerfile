@@ -10,15 +10,14 @@ FROM ${BASE_IMAGE} AS builder
 WORKDIR /app
 
 COPY . .
-RUN yarn install
+RUN yarn install --frozen-lockfile
 RUN yarn workspace lab-server run build
 
 FROM ${BASE_IMAGE}-alpine
 
 WORKDIR /app
 
-COPY ./package.json .
-COPY ./yarn.lock .
+COPY ./package.json ./yarn.lock ./
 
 COPY ./lab-server/package.json ./lab-server/package.json
 COPY ./lab-server/yarn.lock ./lab-server/yarn.lock

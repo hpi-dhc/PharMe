@@ -10,15 +10,14 @@ FROM ${BASE_IMAGE} AS builder
 WORKDIR /app
 
 COPY . .
-RUN yarn install
+RUN yarn install --frozen-lockfile
 RUN yarn workspace annotation-server run build
 
 FROM ${BASE_IMAGE}-alpine
 
 WORKDIR /app
 
-COPY ./package.json .
-COPY ./yarn.lock .
+COPY ./package.json ./yarn.lock ./
 
 COPY ./annotation-server/package.json ./annotation-server/package.json
 COPY ./annotation-server/yarn.lock ./annotation-server/yarn.lock
