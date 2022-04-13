@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../../../common/constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -9,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../profile/models/hive/alleles.dart';
 import '../../../../profile/models/hive/diplotype.dart';
+import '../../../common/services.dart';
 import '../../../profile/models/hive/cpic_lookup_response.dart';
 
 part 'cubit.freezed.dart';
@@ -34,6 +36,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   }
 
   Future<void> _fetchAndSaveLookups() async {
+    if (!_shouldFetchLookups()) return;
     final response = await get(Uri.parse(
         'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,lookupkey'));
     if (response.statusCode != 200)
@@ -44,10 +47,11 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     final lookups =
         // ignore: unnecessary_lambdas
         json.map((el) => CpicLookup.fromJson(el)).filterValidLookups();
-    final usersAlleles = Hive.box('userData').get('alleles') as Alleles;
+    final usersAlleles = Hive.box<Alleles>(box(Boxes.alleles)).get('alleles');
 
-    final matchingLookups = [];
-    usersAlleles.diplotypes.forEach((diplotype) {
+    // ignore: omit_local_variable_types
+    final List<Lookup> matchingLookups = [];
+    for (final diplotype in usersAlleles!.diplotypes) {
       matchingLookups.addAll(
         lookups
             .where(
@@ -57,8 +61,26 @@ class LoginPageCubit extends Cubit<LoginPageState> {
             )
             .map((el) => el.lookupkey),
       );
-    });
-    await Hive.box('userData').put('lookups', matchingLookups);
+    }
+    await Hive.box<List<Lookup>>(box(Boxes.lookups))
+        .put('lookups', matchingLookups);
+
+    // Save datetime at which lookups were fetched
+    await Hive.box<DateTime>(box(Boxes.lookupsLastFetch))
+        .put(box(Boxes.lookupsLastFetch), DateTime.now());
+  }
+
+  bool _shouldFetchLookups() {
+    return _isOutDated() || Hive.box<List<Lookup>>(box(Boxes.lookups)).isEmpty;
+  }
+
+  bool _isOutDated() {
+    final lastFetchDate = Hive.box<DateTime>(box(Boxes.lookupsLastFetch))
+        .get(box(Boxes.lookupsLastFetch));
+    if (lastFetchDate == null) {
+      return true;
+    }
+    return DateTime.now().difference(lastFetchDate) > cpicMaxCacheTime;
   }
 
   Future<String> _getAccessToken(String authUrl) async {
@@ -88,11 +110,11 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   }
 
   Future<void> _fetchAndSaveAllesData(String token, String url) async {
-    final userData = Hive.box('userData');
-    if (userData.get('alleles') == null) {
+    final userAlleleData = Hive.box<Alleles>(box(Boxes.alleles));
+    if (userAlleleData.get('alleles') == null) {
       final response = await _getStarAlleles(token, url);
       if (response.statusCode == 200) {
-        await _saveAlleleData(response, 'userData');
+        await _saveAlleleData(response, 'alleles');
       } else {
         throw Exception('Error occurred during loading of allele data');
       }
@@ -106,7 +128,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     final json = jsonDecode(response.body);
     final alleles = Alleles.fromJson(json);
     alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes()!;
-    return Hive.box('userData').put('alleles', alleles);
+    return Hive.box<Alleles>(box(Boxes.alleles)).put('alleles', alleles);
   }
 }
 

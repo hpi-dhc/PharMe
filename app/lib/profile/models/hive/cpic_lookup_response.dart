@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 
 part 'cpic_lookup_response.g.dart';
 
+typedef Lookup = Map<String, String>;
+
 @HiveType(typeId: 3)
 @JsonSerializable()
 class CpicLookup {
@@ -22,7 +24,7 @@ class CpicLookup {
   String diplotype;
 
   @HiveField(2)
-  Map<String, String> lookupkey;
+  Lookup lookupkey;
 }
 
 extension FilteredList on Iterable<CpicLookup> {
