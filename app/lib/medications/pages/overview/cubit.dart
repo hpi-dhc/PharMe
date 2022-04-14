@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../common/constants.dart';
 import '../../models/medication.dart';
 
 part 'cubit.freezed.dart';
@@ -14,9 +16,8 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
 
   Future<void> loadMedications() async {
     emit(MedicationsOverviewState.loading());
-    // on Android exchange localhost with 10.0.2.2
     final response =
-        await http.get(Uri.parse('http://localhost:3000/medications'));
+        await http.get(Uri.parse('$annotationServerUrl/medications'));
 
     if (response.statusCode == 200) {
       final list =

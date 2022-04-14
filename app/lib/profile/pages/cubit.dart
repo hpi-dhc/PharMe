@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:http/http.dart' as http;
 
+import '../../common/constants.dart';
 import '../../common/module.dart';
 
 part 'cubit.freezed.dart';
@@ -21,10 +21,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileState.loading(context.l10n.profile_page_loading));
 
     try {
-      // Username: admin
-      // Password: 123
       final response = await http.post(
-        Uri.parse('http://vm-bp2021eb1.dhclab.i.hpi.de:8081/users'),
+        Uri.parse('$labServerUrl/users'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
