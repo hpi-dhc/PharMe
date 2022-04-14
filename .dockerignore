@@ -1,0 +1,7 @@
+*
+!lab-server/
+!annotation-server/
+!common/
+!tsconfig.json
+!package.json
+!yarn.lock

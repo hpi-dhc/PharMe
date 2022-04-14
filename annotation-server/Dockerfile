@@ -1,24 +1,27 @@
-FROM node:16
+# Note: this Dockerfile is meant to be run from the project root as we need to
+# add local modules which are outside of the context of the `annotation-server`
+# directory. You can build this image by running `docker build -t annotation-server -f
+# ./annotation-server/Dockerfile .` from the project root.
 
-RUN apt-get update || : && apt-get install python -y
-RUN apt-get install python3-pip -y
+ARG BASE_IMAGE=node:16
 
-# Create app directory
-WORKDIR /usr/src/app
+FROM ${BASE_IMAGE} AS builder
 
-# Install app dependencies
-COPY package.json ./
-COPY yarn.lock ./
-COPY requirements.txt ./
+WORKDIR /app
 
-RUN yarn
-RUN pip3 install -r requirements.txt
-
-# Bundle app source
 COPY . .
+RUN yarn install --frozen-lockfile
+RUN yarn workspace annotation-server run build
 
-RUN yarn build
+FROM ${BASE_IMAGE}-alpine
 
-ENV NODE_ENV production
+WORKDIR /app
 
-CMD [ "yarn", "start:prod" ]
+COPY ./package.json ./yarn.lock ./
+
+COPY ./annotation-server/package.json ./annotation-server/package.json
+COPY ./annotation-server/yarn.lock ./annotation-server/yarn.lock
+RUN yarn workspace annotation-server --production=true --frozen-lockfile install && yarn cache clean
+COPY --from=builder /app/annotation-server/dist ./annotation-server/dist
+
+CMD [ "yarn", "workspace", "annotation-server", "run", "start:prod" ]
