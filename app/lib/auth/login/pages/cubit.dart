@@ -1,17 +1,10 @@
-import 'dart:convert';
-
-import '../../../common/constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:http/http.dart' hide Client;
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../profile/models/hive/alleles.dart';
-import '../../../../profile/models/hive/diplotype.dart';
 import '../../../common/services.dart';
-import '../../../profile/models/hive/cpic_lookup_response.dart';
+import '../../../common/utilities/genome_data.dart';
 
 part 'cubit.freezed.dart';
 
@@ -24,63 +17,14 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     try {
       final token = await _getAccessToken(authUrl);
       emit(LoginPageState.loadingAlleles());
-      await _fetchAndSaveAllesData(token, allelesUrl);
-      await _fetchAndSaveLookups();
+      await fetchAndSaveAllesData(token, allelesUrl);
+      await fetchAndSaveLookups();
       // Login Successful
-      // TODO(kolioOtSofia): uncomment the line below
-      // await Hive.box('preferences').put('isLoggedIn', true);
+      await getBox(Boxes.preferences).put('isLoggedIn', true);
       emit(LoginPageState.loadedAlleles());
     } catch (e) {
       emit(LoginPageState.error(e.toString()));
     }
-  }
-
-  Future<void> _fetchAndSaveLookups() async {
-    if (!_shouldFetchLookups()) return;
-    final response = await get(Uri.parse(
-        'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,lookupkey'));
-    if (response.statusCode != 200)
-      // ignore: curly_braces_in_flow_control_structures
-      throw Exception('Error while loading lookups');
-
-    final json = jsonDecode(response.body) as List<dynamic>;
-    final lookups =
-        // ignore: unnecessary_lambdas
-        json.map((el) => CpicLookup.fromJson(el)).filterValidLookups();
-    final usersAlleles = Hive.box<Alleles>(box(Boxes.alleles)).get('alleles');
-
-    // ignore: omit_local_variable_types
-    final List<Lookup> matchingLookups = [];
-    for (final diplotype in usersAlleles!.diplotypes) {
-      matchingLookups.addAll(
-        lookups
-            .where(
-              (el) =>
-                  (el.genesymbol == diplotype.gene) &&
-                  (el.diplotype == diplotype.genotype),
-            )
-            .map((el) => el.lookupkey),
-      );
-    }
-    await Hive.box<List<Lookup>>(box(Boxes.lookups))
-        .put('lookups', matchingLookups);
-
-    // Save datetime at which lookups were fetched
-    await Hive.box<DateTime>(box(Boxes.lookupsLastFetch))
-        .put(box(Boxes.lookupsLastFetch), DateTime.now());
-  }
-
-  bool _shouldFetchLookups() {
-    return _isOutDated() || Hive.box<List<Lookup>>(box(Boxes.lookups)).isEmpty;
-  }
-
-  bool _isOutDated() {
-    final lastFetchDate = Hive.box<DateTime>(box(Boxes.lookupsLastFetch))
-        .get(box(Boxes.lookupsLastFetch));
-    if (lastFetchDate == null) {
-      return true;
-    }
-    return DateTime.now().difference(lastFetchDate) > cpicMaxCacheTime;
   }
 
   Future<String> _getAccessToken(String authUrl) async {
@@ -107,28 +51,6 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     final credentials = await authenticator.authorize();
     await closeWebView();
     return credentials.getTokenResponse().then((res) => res.accessToken ?? '');
-  }
-
-  Future<void> _fetchAndSaveAllesData(String token, String url) async {
-    final userAlleleData = Hive.box<Alleles>(box(Boxes.alleles));
-    if (userAlleleData.get('alleles') == null) {
-      final response = await _getStarAlleles(token, url);
-      if (response.statusCode == 200) {
-        await _saveAlleleData(response, 'alleles');
-      } else {
-        throw Exception('Error occurred during loading of allele data');
-      }
-    }
-  }
-
-  Future<Response> _getStarAlleles(String? token, String url) async =>
-      get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
-
-  Future<void> _saveAlleleData(Response response, String boxname) async {
-    final json = jsonDecode(response.body);
-    final alleles = Alleles.fromJson(json);
-    alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes()!;
-    return Hive.box<Alleles>(box(Boxes.alleles)).put('alleles', alleles);
   }
 }
 
