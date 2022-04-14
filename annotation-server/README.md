@@ -3,8 +3,10 @@
 ## Swagger Endpoint Documentation (OpenAPI)
 
 You can find all available API endpoints defined as Swagger Documentation
-[here](http://localhost:3000/api-docs) (currently just when you run the sever on
-`localhost`, later on available through the VM).
+[here](http://vm-bp2021eb1.dhclab.i.hpi.de:8080/api).
+
+> Please note that this endpoint is only available in the HPI network.
+> That means you either need to be connected directly or through a VPN.
 
 ## Getting Started
 
