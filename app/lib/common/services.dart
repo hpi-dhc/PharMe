@@ -15,9 +15,7 @@ enum Boxes {
   preferences,
 }
 
-Box<T> getBox<T>(Boxes type) {
-  return Hive.box<T>(type.toString());
-}
+Box<T> getBox<T>(Boxes type) => Hive.box<T>(type.toString());
 
 Future<void> _initHive() async {
   await Hive.initFlutter();

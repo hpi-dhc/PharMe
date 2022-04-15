@@ -13,7 +13,7 @@ Future<void> fetchAndSaveAllesData(String token, String url) async {
   if (userAlleleData.get('alleles') == null) {
     final response = await getStarAlleles(token, url);
     if (response.statusCode == 200) {
-      await _saveAlleleData(response, 'alleles');
+      await _saveAlleleData(response);
     } else {
       throw Exception('Error occurred during loading of allele data');
     }
@@ -23,10 +23,10 @@ Future<void> fetchAndSaveAllesData(String token, String url) async {
 Future<Response> getStarAlleles(String? token, String url) async =>
     get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 
-Future<void> _saveAlleleData(Response response, String boxname) async {
+Future<void> _saveAlleleData(Response response) async {
   final json = jsonDecode(response.body);
   final alleles = Alleles.fromJson(json);
-  alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes()!;
+  alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes();
   return getBox<Alleles>(Boxes.alleles).put('alleles', alleles);
 }
 

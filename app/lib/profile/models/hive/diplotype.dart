@@ -40,10 +40,8 @@ class Diplotype {
 }
 
 extension FilteredList on List<Diplotype> {
-  List<Diplotype>? filterValidDiplotypes() {
-    final acceptedResultTypes = [
-      'Diplotype',
-    ];
+  List<Diplotype> filterValidDiplotypes() {
+    final acceptedResultTypes = ['Diplotype'];
     return where((element) => acceptedResultTypes.contains(element.resultType))
         .toList();
   }
