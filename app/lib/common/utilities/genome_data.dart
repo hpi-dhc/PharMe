@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:http/http.dart';
@@ -43,19 +44,21 @@ Future<void> fetchAndSaveLookups() async {
       json.map((el) => CpicLookup.fromJson(el)).filterValidLookups();
   final usersAlleles = getBox<Alleles>(Boxes.alleles).get('alleles');
 
+  // use a HashMap for better time complexity
+  final lookupsHashMap = HashMap<String, Lookup>.fromIterable(
+    lookups,
+    key: (el) => '${el.genesymbol}${el.diplotype}',
+    value: (el) => el.lookupkey,
+  );
   // ignore: omit_local_variable_types
   final List<Lookup> matchingLookups = [];
+  // extract the matching lookups
   for (final diplotype in usersAlleles!.diplotypes) {
-    matchingLookups.addAll(
-      lookups
-          .where(
-            (el) =>
-                (el.genesymbol == diplotype.gene) &&
-                (el.diplotype == diplotype.genotype),
-          )
-          .map((el) => el.lookupkey),
-    );
+    // the gene and the genotype build the key for the hashmap
+    final temp = lookupsHashMap['${diplotype.gene}${diplotype.genotype}'];
+    if (temp != null) matchingLookups.add(temp);
   }
+
   await getBox<List<Lookup>>(Boxes.lookups).put('lookups', matchingLookups);
 
   // Save datetime at which lookups were fetched
