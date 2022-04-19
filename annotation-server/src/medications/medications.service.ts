@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
 import { Repository } from 'typeorm';
 
-import { Drug } from './interfaces/drugbank.interface';
+import { DrugDto } from './dtos/drugbank.dto';
 import { Medication } from './medication.entity';
 
 @Injectable()
@@ -22,8 +22,10 @@ export class MedicationsService {
         private medicationRepository: Repository<Medication>,
     ) {}
 
-    async clearAllMedicationData(): Promise<void> {
-        await this.medicationRepository.delete({});
+    async getAll(): Promise<Medication[]> {
+        return await this.medicationRepository.find({
+            select: ['id', 'name', 'description', 'synonyms'],
+        });
     }
 
     async fetchAllMedications(): Promise<void> {
@@ -39,6 +41,10 @@ export class MedicationsService {
         this.logger.log(
             `Successfully saved ${savedMedications.length} medications!`,
         );
+    }
+
+    async clearAllMedicationData(): Promise<void> {
+        await this.medicationRepository.delete({});
     }
 
     getJSONfromZip(): Promise<string> {
@@ -68,22 +74,22 @@ export class MedicationsService {
         });
     }
 
-    getDataFromJSON(path: string): Promise<Drug[]> {
+    getDataFromJSON(path: string): Promise<DrugDto[]> {
         const jsonStream = fs
             .createReadStream(path)
             .pipe(JSONStream.parse('drugbank.drug.*'));
-        const drugs: Array<Drug> = [];
+        const drugs: Array<DrugDto> = [];
         const clearLine = () => {
             process.stdout.write(`\r${String.fromCharCode(27)}[0J`);
         };
-        jsonStream.on('data', (drug: Drug) => {
+        jsonStream.on('data', (drug: DrugDto) => {
             if (!(drugs.length % 50)) {
                 clearLine();
                 process.stdout.write(`${drugs.length} drugs parsed ...`);
             }
             drugs.push(drug);
         });
-        return new Promise<Drug[]>((resolve, reject) => {
+        return new Promise<DrugDto[]>((resolve, reject) => {
             jsonStream.on('error', () => {
                 clearLine();
                 reject();
@@ -92,12 +98,6 @@ export class MedicationsService {
                 clearLine();
                 resolve(drugs);
             });
-        });
-    }
-
-    async getAll(): Promise<Medication[]> {
-        return await this.medicationRepository.find({
-            select: ['id', 'name', 'description', 'synonyms'],
         });
     }
 }

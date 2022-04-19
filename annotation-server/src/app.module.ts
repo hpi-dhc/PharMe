@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { GeneSymbolsModule } from './gene-symbols/gene-symbols.module';
 import { MedicationsModule } from './medications/medications.module';
 
 @Module({
@@ -31,6 +32,7 @@ import { MedicationsModule } from './medications/medications.module';
             inject: [ConfigService],
         }),
         MedicationsModule,
+        GeneSymbolsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

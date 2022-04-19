@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Drug } from './interfaces/drugbank.interface';
+import { DrugDto } from './dtos/drugbank.dto';
 
 @Entity()
 export class Medication {
-    static fromDrug(drug: Drug): Medication {
+    static fromDrug(drug: DrugDto): Medication {
         const medication = new Medication();
         medication.name = drug.name;
         medication.description = drug.description;
