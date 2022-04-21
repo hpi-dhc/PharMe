@@ -1,12 +1,6 @@
-import {
-    Column,
-    Entity,
-    JoinTable,
-    ManyToMany,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Phenotype } from './phenotype.entity';
+import { GenePhenotype } from './gene-phenotype.entity';
 
 @Entity()
 export class GeneSymbol {
@@ -16,7 +10,10 @@ export class GeneSymbol {
     @Column()
     name: string;
 
-    @ManyToMany(() => Phenotype, { eager: true })
-    @JoinTable()
-    phenotypes: Phenotype[];
+    @OneToMany(
+        () => GenePhenotype,
+        (genePhenotype) => genePhenotype.geneSymbol,
+        { cascade: true }, // create GenePhenotype entries with GeneSymbol
+    )
+    genePhenotypes: GenePhenotype[];
 }

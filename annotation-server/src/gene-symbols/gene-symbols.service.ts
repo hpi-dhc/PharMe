@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 
 import { CreateGeneSymbolDto } from './dtos/create-gene-symbol.dto';
 import { LookupKeyDto } from './dtos/lookupkey.dto';
+import { GenePhenotype } from './entities/gene-phenotype.entity';
 import { GeneSymbol } from './entities/gene-symbol.entity';
 import { Phenotype } from './entities/phenotype.entity';
 
@@ -60,7 +61,11 @@ export class GeneSymbolsService {
         for (const [gene, phenotypes] of genePhenotypes) {
             geneSymbolDtos.push({
                 name: gene,
-                phenotypes: Array.from(phenotypes),
+                genePhenotypes: Array.from(phenotypes).map((phenotype) => {
+                    const genePhenotype = new GenePhenotype();
+                    genePhenotype.phenotype = phenotype;
+                    return genePhenotype;
+                }),
             });
         }
         return geneSymbolDtos;

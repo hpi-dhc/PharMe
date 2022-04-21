@@ -1,6 +1,6 @@
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
-import { Phenotype } from '../entities/phenotype.entity';
+import { GenePhenotype } from '../entities/gene-phenotype.entity';
 
 export class CreateGeneSymbolDto {
     @IsString()
@@ -8,5 +8,5 @@ export class CreateGeneSymbolDto {
     name: string;
 
     @IsArray()
-    phenotypes: Phenotype[];
+    genePhenotypes: GenePhenotype[];
 }
