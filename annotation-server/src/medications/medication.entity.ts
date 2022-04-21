@@ -46,4 +46,10 @@ export class Medication {
 
     @Column('text', { array: true })
     synonyms: string[];
+
+    @Column({ nullable: true })
+    drugclass: string;
+
+    @Column({ nullable: true })
+    indication: string;
 }
