@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common/module.dart';
 import '../../../common/services.dart';
 import '../../../common/utilities/genome_data.dart';
 
@@ -13,7 +15,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   void revertToInitialState() => emit(LoginPageState.initial());
 
-  Future<void> signInAndLoadAlleles(String authUrl, String allelesUrl) async {
+  Future<void> signInAndLoadAlleles(BuildContext context, String authUrl, String allelesUrl) async {
     try {
       final token = await _getAccessToken(authUrl);
       emit(LoginPageState.loadingAlleles());
@@ -23,7 +25,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       await getBox(Boxes.preferences).put('isLoggedIn', true);
       emit(LoginPageState.loadedAlleles());
     } catch (e) {
-      emit(LoginPageState.error(e.toString()));
+      emit(LoginPageState.error(context.l10n.err_fetch_user_data_failed));
     }
   }
 

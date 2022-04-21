@@ -6,6 +6,7 @@
   "auth_skip_sign_in": "Skip login",
   
   "err_could_not_launch": "Could not launch {url}",
+  "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   
   "medications_details_page_working": "It works. ID is {id}",
   "medications_overview_page_generic_error": "Error!",

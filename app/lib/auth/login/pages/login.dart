@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
             final found = labs.firstWhere((el) => el.name == dropdownValue);
             await context
                 .read<LoginPageCubit>()
-                .signInAndLoadAlleles(found.authUrl, found.allelesUrl);
+                .signInAndLoadAlleles(context, found.authUrl, found.allelesUrl);
           },
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -14,8 +14,7 @@ class CpicLookup {
     required this.lookupkey,
   });
 
-  factory CpicLookup.fromJson(Map<String, dynamic> json) =>
-      _$CpicLookupFromJson(json);
+  factory CpicLookup.fromJson(dynamic json) => _$CpicLookupFromJson(json);
 
   @HiveField(0)
   String genesymbol;
@@ -30,10 +29,13 @@ class CpicLookup {
 extension FilteredList on Iterable<CpicLookup> {
   List<CpicLookup> filterValidLookups() {
     // TODO(kolioOtSofia): extract those entries from the annotation server
-    final acceptedLookupKeys = [
-      //
-      'carrier', 'decreased function', 'expressor for cyp3a5',
-      'extensive metabolizer', 'increased function', 'indeterminate',
+    final acceptedKeys = [
+      'carrier',
+      'decreased function',
+      'expressor for cyp3a5',
+      'extensive metabolizer',
+      'increased function',
+      'indeterminate',
       'intermediate metabolizer',
       'intermediate metabolizer (controversy remains)',
       'intermediate metabolizer as of 1 (cyp2c9)',
@@ -43,13 +45,24 @@ extension FilteredList on Iterable<CpicLookup> {
       'intermediate warfarin dose requirement (vk c1 ag /ga)',
       'intermediate warfarin dose requirement (vk c1 ag /ga) poor metabolizer',
       'likely intermediate metabolizer',
-      'likely poor metabolizer', 'low wafarin dose requirement (vk c1 aa)',
-      'non-carrier', 'normal function', 'normal metabolizer',
-      'normal warfarin dose requirement (vk c1 gg)', 'poor function',
-      'poor metabolizer', 'possible decreased function', 'rapid metabolizer',
-      'rapid metabolizer (cyp2c19)', 'ultrarapid metabolizer', 'variant',
+      'likely poor metabolizer',
+      'low wafarin dose requirement (vk c1 aa)',
+      'non-carrier',
+      'normal function',
+      'normal metabolizer',
+      'normal warfarin dose requirement (vk c1 gg)',
+      'poor function',
+      'poor metabolizer',
+      'possible decreased function',
+      'rapid metabolizer',
+      'rapid metabolizer (cyp2c19)',
+      'ultrarapid metabolizer',
+      'variant',
     ];
-    return where((element) => acceptedLookupKeys
-        .contains(element.lookupkey.values.first.toLowerCase())).toList();
+
+    // normalize the lookup key to lowercase in order to compare with valid keys
+    String normalizeKey(CpicLookup c) => c.lookupkey.values.first.toLowerCase();
+
+    return where((key) => acceptedKeys.contains(normalizeKey(key))).toList();
   }
 }

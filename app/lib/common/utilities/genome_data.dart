@@ -21,12 +21,12 @@ Future<void> fetchAndSaveAllesData(String token, String url) async {
   }
 }
 
-Future<Response> getStarAlleles(String? token, String url) async =>
-    get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
+Future<Response> getStarAlleles(String? token, String url) async {
+  return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
+}
 
 Future<void> _saveAlleleData(Response response) async {
-  final json = jsonDecode(response.body);
-  final alleles = Alleles.fromJson(json);
+  final alleles = Alleles.fromJson(jsonDecode(response.body));
   alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes();
   return getBox<Alleles>(Boxes.alleles).put('alleles', alleles);
 }
@@ -34,14 +34,15 @@ Future<void> _saveAlleleData(Response response) async {
 Future<void> fetchAndSaveLookups() async {
   if (!shouldFetchLookups()) return;
   final response = await get(Uri.parse(cpicLookupUrl));
-  if (response.statusCode != 200)
-    // ignore: curly_braces_in_flow_control_structures
-    throw Exception('Error while loading lookups');
+  if (response.statusCode != 200) {
+    throw Exception();
+  }
 
+  // the returned json is a list of lookups which we wish to individually map
+  // to a concrete CpicLookup instance, hence the cast to a List
   final json = jsonDecode(response.body) as List<dynamic>;
   final lookups =
-      // ignore: unnecessary_lambdas
-      json.map((el) => CpicLookup.fromJson(el)).filterValidLookups();
+      json.map<CpicLookup>(CpicLookup.fromJson).filterValidLookups();
   final usersAlleles = getBox<Alleles>(Boxes.alleles).get('alleles');
 
   // use a HashMap for better time complexity
