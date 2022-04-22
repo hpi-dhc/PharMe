@@ -16,6 +16,7 @@ class PgxPage extends StatelessWidget {
         child: Column(
           children: [
             _buildHeaderCard(context),
+            SizedBox(height: 16),
             PgxFactsList(),
           ],
         ),
@@ -94,7 +95,7 @@ class _PgxFactsListState extends State<PgxFactsList> {
             );
           },
           body: ListTile(
-            title: Text(item.expandedValue),
+            subtitle: Text(item.expandedValue),
           ),
           isExpanded: item.isExpanded,
         );
