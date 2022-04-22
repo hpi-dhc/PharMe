@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,12 +21,9 @@ class OnboardingPage extends HookWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0.1, 0.4, 0.7, 0.9],
             colors: [
-              Color(0xFF3594DD),
-              Color(0xFF4563DB),
-              Color(0xFF5036D5),
-              Color(0xFF5B16D0),
+              context.theme.colorScheme.primary,
+              context.theme.colorScheme.primaryContainer,
             ],
           ),
         ),
