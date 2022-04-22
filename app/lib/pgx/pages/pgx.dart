@@ -16,8 +16,8 @@ class PgxPage extends StatelessWidget {
         child: Column(
           children: [
             _buildHeaderCard(context),
-            SizedBox(height: 16),
-            PgxFactsList(),
+            SizedBox(height: 8),
+            ...pgxFacts.map((item) => _buildPgxFact(context, item)).toList(),
           ],
         ),
       ),
@@ -35,7 +35,7 @@ class PgxPage extends StatelessWidget {
             PharmeTheme.primaryColor.shade800,
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
@@ -69,37 +69,24 @@ class PgxPage extends StatelessWidget {
       ),
     );
   }
-}
 
-class PgxFactsList extends StatefulWidget {
-  const PgxFactsList({Key? key}) : super(key: key);
-
-  @override
-  State<PgxFactsList> createState() => _PgxFactsListState();
-}
-
-class _PgxFactsListState extends State<PgxFactsList> {
-  @override
-  Widget build(BuildContext context) {
-    return ExpansionPanelList(
-      expansionCallback: (index, isExpanded) {
-        setState(() {
-          pgxFacts[index].isExpanded = !isExpanded;
-        });
-      },
-      children: pgxFacts.map((item) {
-        return ExpansionPanel(
-          headerBuilder: (context, isExpanded) {
-            return ListTile(
-              title: Text(item.headerValue),
-            );
-          },
-          body: ListTile(
-            subtitle: Text(item.expandedValue),
-          ),
-          isExpanded: item.isExpanded,
-        );
-      }).toList(),
+  Widget _buildPgxFact(BuildContext context, PgxFact fact) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Theme(
+        data: context.theme.copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          title: Text(fact.header),
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+              title: Text(fact.description),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
