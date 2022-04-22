@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../common/theme.dart';
+import '../constants.dart';
 
 class PgxPage extends StatelessWidget {
   const PgxPage({Key? key}) : super(key: key);
@@ -69,27 +70,6 @@ class PgxPage extends StatelessWidget {
   }
 }
 
-class Item {
-  Item({
-    required this.expandedValue,
-    required this.headerValue,
-    this.isExpanded = false,
-  });
-
-  String expandedValue;
-  String headerValue;
-  bool isExpanded;
-}
-
-List<Item> generateItems(int numberOfItems) {
-  return List<Item>.generate(numberOfItems, (index) {
-    return Item(
-      headerValue: 'Panel $index',
-      expandedValue: 'This is item number $index',
-    );
-  });
-}
-
 class PgxFactsList extends StatefulWidget {
   const PgxFactsList({Key? key}) : super(key: key);
 
@@ -98,17 +78,15 @@ class PgxFactsList extends StatefulWidget {
 }
 
 class _PgxFactsListState extends State<PgxFactsList> {
-  final List<Item> _data = generateItems(8);
-
   @override
   Widget build(BuildContext context) {
     return ExpansionPanelList(
       expansionCallback: (index, isExpanded) {
         setState(() {
-          _data[index].isExpanded = !isExpanded;
+          pgxFacts[index].isExpanded = !isExpanded;
         });
       },
-      children: _data.map<ExpansionPanel>((item) {
+      children: pgxFacts.map((item) {
         return ExpansionPanel(
           headerBuilder: (context, isExpanded) {
             return ListTile(
@@ -116,15 +94,8 @@ class _PgxFactsListState extends State<PgxFactsList> {
             );
           },
           body: ListTile(
-              title: Text(item.expandedValue),
-              subtitle:
-                  const Text('To delete this panel, tap the trash can icon'),
-              trailing: const Icon(Icons.delete),
-              onTap: () {
-                setState(() {
-                  _data.removeWhere((currentItem) => item == currentItem);
-                });
-              }),
+            title: Text(item.expandedValue),
+          ),
           isExpanded: item.isExpanded,
         );
       }).toList(),
