@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:http/http.dart' hide Client;
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../profile/models/hive/alleles.dart';
+import '../../../common/module.dart';
+import '../../../common/services.dart';
+import '../../../common/utilities/genome_data.dart';
 
 part 'cubit.freezed.dart';
 
@@ -16,16 +15,17 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   void revertToInitialState() => emit(LoginPageState.initial());
 
-  Future<void> signInAndLoadAlleles(String authUrl, String allelesUrl) async {
+  Future<void> signInAndLoadAlleles(BuildContext context, String authUrl, String allelesUrl) async {
     try {
       final token = await _getAccessToken(authUrl);
       emit(LoginPageState.loadingAlleles());
-      await _fetchAndSaveAllesData(token, allelesUrl);
+      await fetchAndSaveAllesData(token, allelesUrl);
+      await fetchAndSaveLookups();
       // Login Successful
-      await Hive.box('preferences').put('isLoggedIn', true);
+      await getBox(Boxes.preferences).put('isLoggedIn', true);
       emit(LoginPageState.loadedAlleles());
     } catch (e) {
-      emit(LoginPageState.error(e.toString()));
+      emit(LoginPageState.error(context.l10n.err_fetch_user_data_failed));
     }
   }
 
@@ -53,27 +53,6 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     final credentials = await authenticator.authorize();
     await closeWebView();
     return credentials.getTokenResponse().then((res) => res.accessToken ?? '');
-  }
-
-  Future<void> _fetchAndSaveAllesData(String token, String url) async {
-    final userData = Hive.box<Alleles>('userData');
-    if (userData.get('alleles') == null) {
-      final response = await _getStarAlleles(token, url);
-      if (response.statusCode == 200) {
-        await _saveAlleleData(response, 'userData');
-      } else {
-        throw Exception('Error occurred during loading of allele data');
-      }
-    }
-  }
-
-  Future<Response> _getStarAlleles(String? token, String url) async =>
-      get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
-
-  Future<void> _saveAlleleData(Response response, String boxname) async {
-    final json = jsonDecode(response.body);
-    final alleles = Alleles.fromJson(json);
-    return Hive.box<Alleles>('userData').put('alleles', alleles);
   }
 }
 

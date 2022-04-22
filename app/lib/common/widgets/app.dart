@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hive/hive.dart';
 
 import '../routing/router.dart';
+import '../services.dart';
 import '../theme.dart';
 
 class PharmeApp extends StatelessWidget {
@@ -11,7 +11,7 @@ class PharmeApp extends StatelessWidget {
 
   final _appRouter = AppRouter();
   final _isLoggedIn =
-      Hive.box('preferences').get('isLoggedIn', defaultValue: false) as bool;
+      getBox(Boxes.preferences).get('isLoggedIn', defaultValue: false) as bool;
 
   @override
   Widget build(BuildContext context) {

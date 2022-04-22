@@ -6,6 +6,7 @@
   "auth_skip_sign_in": "Anmeldung überspringen",
   
   "err_could_not_launch": "Could not launch {url}",
+  "err_fetch_user_data_failed": "Beim Abrufen ihrer genomischen Daten ist ein unerwarteter Fehler aufgetreten",
 
   "medications_details_page_working": "Es funktioniert. ID ist {id}",
   "medications_overview_page_generic_error": "Fehler!",

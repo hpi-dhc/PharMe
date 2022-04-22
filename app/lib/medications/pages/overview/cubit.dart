@@ -5,16 +5,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../common/constants.dart';
+import '../../../common/utilities/genome_data.dart';
 import '../../models/medication.dart';
 
 part 'cubit.freezed.dart';
 
 class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
   MedicationsOverviewCubit() : super(MedicationsOverviewState.initial()) {
-    loadMedications();
+    loadMedicationsAndLookups();
   }
 
-  Future<void> loadMedications() async {
+  Future<void> loadMedicationsAndLookups() async {
     emit(MedicationsOverviewState.loading());
     final response =
         await http.get(Uri.parse('$annotationServerUrl/medications'));
@@ -23,6 +24,7 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
       final list =
           (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
       final medications = list.map(Medication.fromJson).toList();
+      await fetchAndSaveLookups();
       emit(MedicationsOverviewState.loaded(medications));
     } else {
       emit(MedicationsOverviewState.error());
