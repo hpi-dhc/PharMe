@@ -30,7 +30,6 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   }
 
   Future<String> _getAccessToken(String authUrl) async {
-    // 'http://172.20.24.66:28080/auth/realms/pharme'
     final uri = Uri.parse(authUrl);
     const clientId = 'pharme-app';
     final scopes = List<String>.of(['openid', 'profile']);

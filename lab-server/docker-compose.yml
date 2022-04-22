@@ -1,9 +1,9 @@
 services:
   api:
-    build: .
-    volumes:
-      # mapped folder in the container needs to match the working dir's parent directory found in the Dockerfile
-      - ../assets:/usr/src/assets:ro
+    build:
+      dockerfile: ./lab-server/Dockerfile
+      context: ../
+    env_file: .env
     ports:
       - 8081:3001
     depends_on:
