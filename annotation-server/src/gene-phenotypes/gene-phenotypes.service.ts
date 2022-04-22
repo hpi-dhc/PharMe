@@ -2,16 +2,16 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 import { CreateGeneSymbolDto } from './dtos/create-gene-symbol.dto';
-import { LookupKeyDto } from './dtos/lookupkey.dto';
+import { DiplotypeDto } from './dtos/diplotype.dto';
 import { GenePhenotype } from './entities/gene-phenotype.entity';
 import { GeneSymbol } from './entities/gene-symbol.entity';
 import { Phenotype } from './entities/phenotype.entity';
 
 @Injectable()
-export class GeneSymbolsService {
+export class GenePhenotypesService {
     constructor(
         private httpService: HttpService,
         @InjectRepository(GeneSymbol)
@@ -24,31 +24,34 @@ export class GeneSymbolsService {
 
     private hashedPhenotypes: Map<string, Phenotype>;
 
-    async fetchLookupKeys(): Promise<void> {
+    async fetchGenePhenotypes(): Promise<void> {
         this.clearAllData();
 
         const response = this.httpService.get(
             'https://api.cpicpgx.org/v1/diplotype',
-            { params: { select: 'lookupkey' } },
+            { params: { select: 'lookupkey, generesult' } },
         );
 
-        const lookupKeyDtos: LookupKeyDto[] = (await lastValueFrom(response))
+        const diplotypeDtos: DiplotypeDto[] = (await lastValueFrom(response))
             .data;
 
         await this.geneSymbolRepository.save(
-            await this.getGeneSymbolDtos(lookupKeyDtos),
+            await this.getGeneSymbolDtos(diplotypeDtos),
         );
 
         this.hashedPhenotypes.clear();
     }
 
-    private async getGeneSymbolDtos(lookupKeyDtos: LookupKeyDto[]) {
+    private async getGeneSymbolDtos(diplotypeDtos: DiplotypeDto[]) {
         const genePhenotypes = new Map<string, Set<Phenotype>>();
-        for (const lookupKeyDto of lookupKeyDtos) {
-            const geneString = Object.keys(lookupKeyDto.lookupkey)[0];
-            const phenotypeString = Object.values(lookupKeyDto.lookupkey)[0];
+        for (const diplotypeDto of diplotypeDtos) {
+            const geneString = Object.keys(diplotypeDto.lookupkey)[0];
+            const lookupkey = Object.values(diplotypeDto.lookupkey)[0];
 
-            const phenotype = await this.findOrCreatePhenotype(phenotypeString);
+            const phenotype = await this.findOrCreatePhenotype(
+                lookupkey,
+                diplotypeDto.generesult,
+            );
 
             if (genePhenotypes.has(geneString)) {
                 genePhenotypes.get(geneString).add(phenotype);
@@ -71,15 +74,19 @@ export class GeneSymbolsService {
         return geneSymbolDtos;
     }
 
-    private async findOrCreatePhenotype(name: string): Promise<Phenotype> {
+    private async findOrCreatePhenotype(
+        lookupkey: string,
+        generesult: string,
+    ): Promise<Phenotype> {
         let phenotype: Phenotype;
-        if (!this.hashedPhenotypes.has(name)) {
+        if (!this.hashedPhenotypes.has(lookupkey)) {
             phenotype = new Phenotype();
-            phenotype.name = name;
+            phenotype.lookupkey = lookupkey;
+            phenotype.name = generesult;
             phenotype = await this.phenotypeRepository.save(phenotype);
-            this.hashedPhenotypes.set(name, phenotype);
+            this.hashedPhenotypes.set(lookupkey, phenotype);
         } else {
-            phenotype = this.hashedPhenotypes.get(name);
+            phenotype = this.hashedPhenotypes.get(lookupkey);
         }
         return phenotype;
     }
@@ -88,5 +95,9 @@ export class GeneSymbolsService {
         await this.geneSymbolRepository.delete({});
         await this.phenotypeRepository.delete({});
         this.hashedPhenotypes.clear();
+    }
+
+    getOne(options: FindOneOptions<GeneSymbol>): Promise<GeneSymbol> {
+        return this.geneSymbolRepository.findOne(options);
     }
 }

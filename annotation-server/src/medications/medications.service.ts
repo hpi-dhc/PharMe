@@ -7,9 +7,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import { Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
-import { fetchSpreadsheet } from 'src/common/google-sheets';
+import { fetchSpreadsheetCells } from 'src/common/google-sheets';
 
 import { DrugDto } from './dtos/drugbank.dto';
 import { Medication } from './medication.entity';
@@ -24,10 +24,16 @@ export class MedicationsService {
         private medicationRepository: Repository<Medication>,
     ) {}
 
-    async getAll(): Promise<Medication[]> {
-        return await this.medicationRepository.find({
+    getAll(
+        options: FindManyOptions<Medication> = {
             select: ['id', 'name', 'description', 'synonyms', 'drugclass'],
-        });
+        },
+    ): Promise<Medication[]> {
+        return this.medicationRepository.find(options);
+    }
+
+    getOne(options: FindOneOptions<Medication>): Promise<Medication> {
+        return this.medicationRepository.findOne(options);
     }
 
     async fetchAllMedications(): Promise<void> {
@@ -35,24 +41,39 @@ export class MedicationsService {
         const jsonPath = await this.getJSONfromZip();
         this.logger.log('Extracting medications from JSON ...');
         const drugs = await this.getDataFromJSON(jsonPath);
-        const spreadsheetData = await fetchSpreadsheet(
-            this.configService.get<string>('GOOGLESHEET_ID'),
-            this.configService.get<string>('GOOGLESHEET_APIKEY'),
-            ['HPI List v1!D4:D', 'HPI List v1!A4:A', 'HPI List v1!M4:M'],
+        this.logger.log(
+            'Fetching additional medication data from Google Sheet ...',
         );
+        const [medicationNames, drugClasses, indications] =
+            await fetchSpreadsheetCells(
+                this.configService.get<string>('GOOGLESHEET_ID'),
+                this.configService.get<string>('GOOGLESHEET_APIKEY'),
+                [
+                    this.configService.get<string>(
+                        'GOOGLESHEET_RANGE_MEDICATIONS',
+                    ),
+                    this.configService.get<string>(
+                        'GOOGLESHEET_RANGE_DRUGCLASSES',
+                    ),
+                    this.configService.get<string>(
+                        'GOOGLESHEET_RANGE_INDICATIONS',
+                    ),
+                ],
+            );
         const spreadsheetMedications = new Map<
             string,
             { drugClass?: string; indication?: string }
         >();
-        spreadsheetData[0].values.forEach((medicationName, index) => {
-            const drugClass = spreadsheetData[1].values[index]?.[0];
-            const indication = spreadsheetData[2].values[index]?.[0];
-            if (!drugClass && !indication) return;
-            spreadsheetMedications.set(medicationName[0].toLowerCase(), {
+        for (let row = 0; row < medicationNames.length; row++) {
+            const drugClass = drugClasses[row]?.[0].value;
+            const indication = indications[row]?.[0].value;
+            const medicationName = medicationNames[row][0].value;
+            if (!medicationName || (!drugClass && !indication)) continue;
+            spreadsheetMedications.set(medicationName.toLowerCase(), {
                 drugClass: drugClass,
                 indication: indication,
             });
-        });
+        }
         this.logger.log('Writing to database ...');
         const medications = drugs.map((drug) => {
             const medication = Medication.fromDrug(drug);

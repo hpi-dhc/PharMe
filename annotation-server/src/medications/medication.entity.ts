@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
+import { Guideline } from 'src/guidelines/guideline.entity';
 
 import { DrugDto } from './dtos/drugbank.dto';
 
@@ -52,4 +54,7 @@ export class Medication {
 
     @Column({ nullable: true })
     indication: string;
+
+    @OneToMany(() => Guideline, (guideline) => guideline.medication)
+    guidelines: Guideline[];
 }
