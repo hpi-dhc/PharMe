@@ -1,33 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../common/module.dart';
 import '../../models/medication.dart';
 import 'cubit.dart';
 
-class MedicationsOverviewPage extends StatefulWidget {
+class MedicationsOverviewPage extends HookWidget {
   const MedicationsOverviewPage({Key? key}) : super(key: key);
 
   @override
-  State<MedicationsOverviewPage> createState() =>
-      _MedicationsOverviewPageState();
-}
-
-class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
-  final searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-
-    searchController.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final searchController = useTextEditingController();
+
     return BlocProvider(
       create: (context) => MedicationsOverviewCubit(),
       child: BlocBuilder<MedicationsOverviewCubit, MedicationsOverviewState>(
@@ -39,7 +25,7 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
             loaded: (medications) => _buildMedicationsList(
               context,
               _matchingMedicationsTiles(medications, searchController.text),
-              searchController.text,
+              searchController,
             ),
           );
         },
@@ -52,7 +38,9 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
   }
 
   List<MedicationTile> _matchingMedicationsTiles(
-      List<Medication> medications, String searchText) {
+    List<Medication> medications,
+    String searchText,
+  ) {
     final medicationTiles = medications
         .map((medication) {
           final synonymMatch = medication.synonyms
@@ -81,8 +69,11 @@ class _MedicationsOverviewPageState extends State<MedicationsOverviewPage> {
     return medicationTiles;
   }
 
-  Column _buildMedicationsList(BuildContext context,
-      List<MedicationTile> medicationsTiles, String searchText) {
+  Column _buildMedicationsList(
+    BuildContext context,
+    List<MedicationTile> medicationsTiles,
+    TextEditingController searchController,
+  ) {
     return Column(
       children: [
         Padding(
