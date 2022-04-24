@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../auth/module.dart';
 import '../../medications/module.dart';
+import '../../pgx/module.dart';
 import '../../profile/module.dart';
 import '../../reports/module.dart';
 import '../pages/main.dart';
@@ -19,6 +20,7 @@ part 'router.gr.dart';
       children: [
         medicationsRoutes,
         profileRoutes,
+        pgxRoutes,
         reportsRoutes,
       ],
     ),
