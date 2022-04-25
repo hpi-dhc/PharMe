@@ -49,6 +49,7 @@ class PharmeTheme {
     labelMedium: themeFont(12, FontWeight.w500),
     labelSmall: themeFont(11, FontWeight.w500),
     bodyLarge: themeFont(16),
+    // default if no text-style specified
     bodyMedium: themeFont(14),
     bodySmall: themeFont(12),
   );
