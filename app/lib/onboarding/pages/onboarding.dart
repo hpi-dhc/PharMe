@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,12 +21,9 @@ class OnboardingPage extends HookWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0.1, 0.4, 0.7, 0.9],
             colors: [
-              Color(0xFF3594DD),
-              Color(0xFF4563DB),
-              Color(0xFF5036D5),
-              Color(0xFF5B16D0),
+              context.theme.colorScheme.primary,
+              context.theme.colorScheme.primaryContainer,
             ],
           ),
         ),
@@ -44,7 +42,7 @@ class OnboardingPage extends HookWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: _buildPageIndicator(currentPage.value),
+                children: _buildPageIndicator(context, currentPage.value),
               ),
               _buildNextButton(
                 context,
@@ -58,22 +56,22 @@ class OnboardingPage extends HookWidget {
     );
   }
 
-  List<Widget> _buildPageIndicator(int currentPage) {
+  List<Widget> _buildPageIndicator(BuildContext context, int currentPage) {
     final list = <Widget>[];
     for (var i = 0; i < _pages.length; ++i) {
-      list.add(i == currentPage ? _indicator(true) : _indicator(false));
+      list.add(i == currentPage ? _indicator(context, true) : _indicator(context, false));
     }
     return list;
   }
 
-  Widget _indicator(bool isActive) {
+  Widget _indicator(BuildContext context, bool isActive) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       margin: EdgeInsets.symmetric(horizontal: 8),
       height: 8,
       width: isActive ? 24 : 16,
       decoration: BoxDecoration(
-        color: isActive ? Colors.white : Color(0xFF7B51D3),
+        color: isActive ? Colors.white : context.theme.disabledColor,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -106,10 +104,7 @@ class OnboardingPage extends HookWidget {
                 isLastPage
                     ? context.l10n.onboarding_get_started
                     : context.l10n.onboarding_next,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                ),
+                style: context.textTheme.headlineSmall!.copyWith(color: Colors.white),
               ),
               SizedBox(width: 10),
               Icon(
@@ -172,21 +167,13 @@ class OnboardingSubPage extends StatelessWidget {
           SizedBox(height: 30),
           Text(
             getHeader(context).single,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              height: 1.5,
-            ),
+            style: context.textTheme.headlineSmall!.copyWith(color: Colors.white),
           ),
           SizedBox(height: 15),
           Text(
             getText(context).single,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              height: 1.2,
-            ),
-          )
+            style: context.textTheme.bodyMedium!.copyWith(color: Colors.white),
+          ),
         ],
       ),
     );
