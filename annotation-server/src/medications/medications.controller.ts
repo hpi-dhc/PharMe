@@ -16,7 +16,8 @@ export class MedicationsController {
     }
 
     @ApiOperation({
-        summary: 'Clear and update medication data from DrugBank',
+        summary:
+            'Clear and update medication data from DrugBank and the Google Sheet',
     })
     @Post()
     async create(): Promise<void> {
