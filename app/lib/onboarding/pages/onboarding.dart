@@ -90,7 +90,7 @@ class OnboardingPage extends HookWidget {
         child: TextButton(
           onPressed: () {
             if (isLastPage) {
-              context.router.replace(const LoginRoute());
+              context.router.replace(const LoginRouter());
             } else {
               pageController.nextPage(
                 duration: Duration(milliseconds: 500),
