@@ -7,6 +7,7 @@ import '../../profile/models/hive/alleles.dart';
 import '../../profile/models/hive/cpic_lookup_response.dart';
 import '../../profile/models/hive/diplotype.dart';
 import '../constants.dart';
+import '../models/metadata.dart';
 import '../services.dart';
 
 Future<void> fetchAndSaveAllesData(String token, String url) async {
@@ -63,8 +64,8 @@ Future<void> fetchAndSaveLookups() async {
   await getBox<List<Lookup>>(Boxes.lookups).put('lookups', matchingLookups);
 
   // Save datetime at which lookups were fetched
-  await getBox<DateTime>(Boxes.lookupsLastFetch)
-      .put('lookupsLastFetch', DateTime.now());
+  MetadataContainer.instance.data.lookupsLastFetchDate = DateTime.now();
+  await MetadataContainer.save();
 }
 
 bool shouldFetchLookups() {
@@ -72,8 +73,7 @@ bool shouldFetchLookups() {
 }
 
 bool _isOutDated() {
-  final lastFetchDate =
-      getBox<DateTime>(Boxes.lookupsLastFetch).get('lookupsLastFetch');
+  final lastFetchDate = MetadataContainer.instance.data.lookupsLastFetchDate;
   if (lastFetchDate == null) {
     return true;
   }

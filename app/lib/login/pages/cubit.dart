@@ -5,8 +5,8 @@ import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/module.dart';
-import '../../../common/services.dart';
 import '../../../common/utilities/genome_data.dart';
+import '../../common/models/metadata.dart';
 
 part 'cubit.freezed.dart';
 
@@ -22,7 +22,9 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       await fetchAndSaveAllesData(token, allelesUrl);
       await fetchAndSaveLookups();
       // Login Successful
-      await getBox(Boxes.preferences).put('isLoggedIn', true);
+      MetadataContainer.instance.data.isLoggedIn = true;
+      await MetadataContainer.save();
+
       emit(LoginPageState.loadedAlleles());
     } catch (e) {
       emit(LoginPageState.error(context.l10n.err_fetch_user_data_failed));
