@@ -1,0 +1,12 @@
+import 'package:auto_route/auto_route.dart';
+
+import 'pages/login.dart';
+
+// We need to expose all pages for AutoRouter
+export 'pages/login.dart';
+
+const loginRoutes = AutoRoute(
+  path: 'login',
+  name: 'LoginRouter',
+  page: LoginPage,
+);
