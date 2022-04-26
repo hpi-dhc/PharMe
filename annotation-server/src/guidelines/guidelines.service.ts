@@ -81,9 +81,9 @@ export class GuidelinesService {
             for (let col = 0; col < implications[row].length; col++) {
                 for (const genePhenotype of genePhenotypes[col].values()) {
                     const guideline = new Guideline();
-                    const implication = implications[row][col].value.trim();
+                    const implication = implications[row][col].value?.trim();
                     const recommendation =
-                        recommendations[row][col].value.trim();
+                        recommendations[row][col].value?.trim();
                     const warningLevel = this.getWarningLevelFromColor(
                         recommendations[row][col].backgroundColor,
                     );
@@ -129,17 +129,19 @@ export class GuidelinesService {
         if (this.hashedMedications.has(name)) {
             return this.hashedMedications.get(name);
         }
-        const medication = await this.medicationsService.getOne({
-            where: { name: ILike(name) },
-        });
-        // TODO: consider proper error handling
-        if (!medication) {
+        try {
+            const medication = await this.medicationsService.getOne({
+                where: { name: ILike(name) },
+            });
+
+            this.hashedMedications.set(name, medication);
+            return medication;
+        } catch (error) {
+            // TODO: consider proper error handling
             this.logger.error(`Medication ${name} not found in Drugbank data.`);
             this.hashedMedications.set(name, null);
             return null;
         }
-        this.hashedMedications.set(name, medication);
-        return medication;
     }
 
     private async findGenePhenotypes(

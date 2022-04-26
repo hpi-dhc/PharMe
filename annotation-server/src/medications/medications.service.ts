@@ -93,8 +93,9 @@ export class MedicationsService {
                 const spreadsheetMedication = spreadsheetMedications.get(
                     medication.name.toLowerCase(),
                 );
-                medication.drugclass = spreadsheetMedication.drugClass;
-                medication.indication = spreadsheetMedication.indication;
+                medication.drugclass = spreadsheetMedication.drugClass?.trim();
+                medication.indication =
+                    spreadsheetMedication.indication?.trim();
             }
             return medication;
         });
