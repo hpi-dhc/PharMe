@@ -30,6 +30,7 @@ dependencies:
   json_annotation: ^4.4.0
   openid_client: ^0.4.6
   shared_preferences: ^2.0.13
+  sliding_up_panel: ^2.0.0+1
   url_launcher: ^6.0.20
 
 dev_dependencies:

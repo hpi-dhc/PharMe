@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../../common/module.dart';
 import '../../../common/theme.dart';
@@ -77,6 +78,8 @@ class MedicationsOverviewPage extends HookWidget {
     List<MedicationTile> medicationsTiles,
     TextEditingController searchController,
   ) {
+    final panelController = PanelController();
+
     return Stack(
       children: [
         Container(
@@ -110,59 +113,44 @@ class MedicationsOverviewPage extends HookWidget {
             ],
           ),
         ),
-        DraggableScrollableActuator(
-          child: DraggableScrollableSheet(
-            initialChildSize: 0.25,
-            builder: (context, scrollController) {
-              return RoundedCard(
-                onTap: () {
-                  print('you clicked me');
-                },
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        controller: scrollController,
-                        itemCount: medicationsTiles.length + 2,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: CupertinoSearchTextField(
-                                controller: searchController,
-                                // TODO(somebody): send requests
-                                onChanged: (value) => {},
-                              ),
-                            );
-                          }
-                          if (index == 1) {
-                            return MaterialButton(
-                              child: Text('press me'),
-                              onPressed: () => Future.delayed(
-                                Duration(milliseconds: 200),
-                                () {
-                                  print('test');
-                                  // scrollController.animateTo(
-                                  //     scrollController.position.maxScrollExtent,
-                                  //     duration: Duration(milliseconds: 200),
-                                  //     curve: Curves.bounceIn);
-                                  DraggableScrollableActuator.reset(context);
-                                },
-                              ),
-                            );
-                          }
-                          final medicationsTile = medicationsTiles[index];
-                          return Card(
-                            child: medicationsTile,
+        SlidingUpPanel(
+          color: Colors.transparent,
+          controller: panelController,
+          maxHeight: 1000,
+          panelBuilder: (scrollController) {
+            return RoundedCard(
+              onTap: () => panelController.open(),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: medicationsTiles.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: CupertinoSearchTextField(
+                              controller: searchController,
+                              // TODO(somebody): send requests
+                              onTap: () {
+                                print('test');
+                              },
+                              onChanged: (value) => {},
+                            ),
                           );
-                        },
-                      ),
+                        }
+
+                        final medicationsTile = medicationsTiles[index];
+                        return Card(
+                          child: medicationsTile,
+                        );
+                      },
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
