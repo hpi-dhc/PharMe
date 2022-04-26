@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { GenePhenotype } from 'src/gene-phenotypes/entities/gene-phenotype.entity';
-import { Medication } from 'src/medications/medication.entity';
+import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
+import { Medication } from '../medications/medication.entity';
 
 export enum WarningLevel {
     GREEN = 'ok',

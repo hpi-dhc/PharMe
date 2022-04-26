@@ -4,12 +4,11 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 
-import { fetchSpreadsheetCells } from 'src/common/google-sheets';
-import { GenePhenotype } from 'src/gene-phenotypes/entities/gene-phenotype.entity';
-import { GenePhenotypesService } from 'src/gene-phenotypes/gene-phenotypes.service';
-import { Medication } from 'src/medications/medication.entity';
-import { MedicationsService } from 'src/medications/medications.service';
-
+import { fetchSpreadsheetCells } from '../common/google-sheets';
+import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
+import { GenePhenotypesService } from '../gene-phenotypes/gene-phenotypes.service';
+import { Medication } from '../medications/medication.entity';
+import { MedicationsService } from '../medications/medications.service';
 import { Guideline, WarningLevel } from './guideline.entity';
 
 @Injectable()
