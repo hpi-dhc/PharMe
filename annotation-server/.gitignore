@@ -43,4 +43,4 @@ test/coverage
 
 # Zip(s) to populate database
 /data/*
-!/data/random-database.zip
+!/data/example-database.zip
