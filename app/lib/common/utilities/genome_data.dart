@@ -8,11 +8,12 @@ import '../../profile/models/hive/cpic_lookup_response.dart';
 import '../../profile/models/hive/diplotype.dart';
 import '../constants.dart';
 import '../models/metadata.dart';
+import '../models/userdata.dart';
 import '../services.dart';
 
 Future<void> fetchAndSaveAllesData(String token, String url) async {
-  final userAlleleData = getBox<Alleles>(Boxes.alleles);
-  if (userAlleleData.get('alleles') == null) {
+  final userAlleleData = UserdataContainer.instance.data.alleles;
+  if (userAlleleData == null) {
     final response = await getStarAlleles(token, url);
     if (response.statusCode == 200) {
       await _saveAlleleData(response);
@@ -29,7 +30,9 @@ Future<Response> getStarAlleles(String? token, String url) async {
 Future<void> _saveAlleleData(Response response) async {
   final alleles = Alleles.fromJson(jsonDecode(response.body));
   alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes();
-  return getBox<Alleles>(Boxes.alleles).put('alleles', alleles);
+
+  UserdataContainer.instance.data.alleles = alleles;
+  return UserdataContainer.save();
 }
 
 Future<void> fetchAndSaveLookups() async {
@@ -44,7 +47,10 @@ Future<void> fetchAndSaveLookups() async {
   final json = jsonDecode(response.body) as List<dynamic>;
   final lookups =
       json.map<CpicLookup>(CpicLookup.fromJson).filterValidLookups();
-  final usersAlleles = getBox<Alleles>(Boxes.alleles).get('alleles');
+  final usersAlleles = UserdataContainer.instance.data.alleles;
+  if (usersAlleles == null) {
+    throw Exception();
+  }
 
   // use a HashMap for better time complexity
   final lookupsHashMap = HashMap<String, Lookup>.fromIterable(
@@ -55,13 +61,14 @@ Future<void> fetchAndSaveLookups() async {
   // ignore: omit_local_variable_types
   final List<Lookup> matchingLookups = [];
   // extract the matching lookups
-  for (final diplotype in usersAlleles!.diplotypes) {
+  for (final diplotype in usersAlleles.diplotypes) {
     // the gene and the genotype build the key for the hashmap
     final temp = lookupsHashMap['${diplotype.gene}${diplotype.genotype}'];
     if (temp != null) matchingLookups.add(temp);
   }
 
-  await getBox<List<Lookup>>(Boxes.lookups).put('lookups', matchingLookups);
+  UserdataContainer.instance.data.lookups = matchingLookups;
+  await UserdataContainer.save();
 
   // Save datetime at which lookups were fetched
   MetadataContainer.instance.data.lookupsLastFetchDate = DateTime.now();
@@ -69,7 +76,8 @@ Future<void> fetchAndSaveLookups() async {
 }
 
 bool shouldFetchLookups() {
-  return _isOutDated() || getBox<List<Lookup>>(Boxes.lookups).isEmpty;
+  final lookupsPresent = UserdataContainer.instance.data.lookups?.isNotEmpty;
+  return _isOutDated() || (lookupsPresent ?? false);
 }
 
 bool _isOutDated() {

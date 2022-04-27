@@ -11,14 +11,15 @@ part 'metadata.g.dart';
 class MetadataContainer {
   factory MetadataContainer() => _instance;
 
-  MetadataContainer._privateConstructor(this.data);
+  // private constructor
+  MetadataContainer._(this.data);
 
   static Future<void> save() async {
     await getBox<Metadata>(Boxes.metadata).put('data', _instance.data);
   }
 
   static final MetadataContainer _instance =
-      MetadataContainer._privateConstructor(Metadata());
+      MetadataContainer._(Metadata());
 
   static MetadataContainer get instance => _instance;
 

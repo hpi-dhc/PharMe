@@ -9,9 +9,6 @@ part 'alleles.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Alleles {
   Alleles({
-    required this.organizationId,
-    required this.identifier,
-    required this.knowledgeBase,
     required this.diplotypes,
   });
 
@@ -19,19 +16,5 @@ class Alleles {
       _$AllelesFromJson(json);
 
   @HiveField(0)
-  int organizationId;
-
-  @HiveField(1)
-  String identifier;
-
-  @HiveField(2)
-  String knowledgeBase;
-
-  @HiveField(3)
   List<Diplotype> diplotypes;
-
-  @override
-  String toString() {
-    return identifier;
-  }
 }
