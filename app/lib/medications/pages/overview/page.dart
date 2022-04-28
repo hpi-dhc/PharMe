@@ -11,6 +11,8 @@ import '../../../common/theme.dart';
 import '../../models/medication.dart';
 import 'cubit.dart';
 
+final panelController = PanelController();
+
 class MedicationsOverviewPage extends HookWidget {
   const MedicationsOverviewPage({Key? key}) : super(key: key);
 
@@ -22,15 +24,94 @@ class MedicationsOverviewPage extends HookWidget {
       create: (context) => MedicationsOverviewCubit(),
       child: BlocBuilder<MedicationsOverviewCubit, MedicationsOverviewState>(
         builder: (context, state) {
-          return state.when(
-            initial: Container.new,
-            loading: () => Center(child: CircularProgressIndicator()),
-            error: () => Center(child: Text('Error!')),
-            loaded: (medications) => _buildMedicationsList(
-              context,
-              _matchingMedicationsTiles(medications, searchController.text),
-              searchController,
-            ),
+          return Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      PharmeTheme.primaryColor,
+                      PharmeTheme.secondaryColor,
+                    ],
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/images/logo.svg'),
+                    Text(
+                      'Type in a medication',
+                      style: PharmeTheme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.white),
+                    ),
+                    Icon(
+                      Icons.arrow_downward,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                    SizedBox(height: 120),
+                  ],
+                ),
+              ),
+              SlidingUpPanel(
+                color: Colors.transparent,
+                controller: panelController,
+                maxHeight: 1000,
+                panelBuilder: (scrollController) {
+                  return RoundedCard(
+                    // ignore: unnecessary_lambdas
+                    onTap: () => panelController.open(),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: 2,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: CupertinoSearchTextField(
+                                    controller: searchController,
+                                    // TODO(somebody): send requests
+                                    onTap: () => panelController.open(),
+                                    onChanged: (value) async {
+                                      context
+                                          .read<MedicationsOverviewCubit>()
+                                          .setState(
+                                            MedicationsOverviewState.loading(),
+                                          );
+                                      await Future.delayed(
+                                          Duration(seconds: 2));
+                                      context
+                                          .read<MedicationsOverviewCubit>()
+                                          .setState(
+                                            MedicationsOverviewState.loaded([]),
+                                          );
+                                    },
+                                  ),
+                                );
+                              }
+                              return state.when(
+                                initial: Container.new,
+                                error: () => Text('smth went wrong'),
+                                loaded: (medications) =>
+                                    Text('fetched medications'),
+                                loading: () =>
+                                    Center(child: CircularProgressIndicator()),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           );
         },
       ),
@@ -71,89 +152,6 @@ class MedicationsOverviewPage extends HookWidget {
         medication2.priority.compareTo(medication1.priority));
 
     return medicationTiles;
-  }
-
-  Widget _buildMedicationsList(
-    BuildContext context,
-    List<MedicationTile> medicationsTiles,
-    TextEditingController searchController,
-  ) {
-    final panelController = PanelController();
-
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                PharmeTheme.primaryColor,
-                PharmeTheme.secondaryColor,
-              ],
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset('assets/images/logo.svg'),
-              Text(
-                'Type in a medication',
-                style: PharmeTheme.textTheme.bodyLarge!
-                    .copyWith(color: Colors.white),
-              ),
-              Icon(
-                Icons.arrow_downward,
-                size: 30,
-                color: Colors.white,
-              ),
-              SizedBox(height: 120),
-            ],
-          ),
-        ),
-        SlidingUpPanel(
-          color: Colors.transparent,
-          controller: panelController,
-          maxHeight: 1000,
-          panelBuilder: (scrollController) {
-            return RoundedCard(
-              onTap: () => panelController.open(),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: medicationsTiles.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: CupertinoSearchTextField(
-                              controller: searchController,
-                              // TODO(somebody): send requests
-                              onTap: () {
-                                print('test');
-                              },
-                              onChanged: (value) => {},
-                            ),
-                          );
-                        }
-
-                        final medicationsTile = medicationsTiles[index];
-                        return Card(
-                          child: medicationsTile,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
-    );
   }
 }
 
