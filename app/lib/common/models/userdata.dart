@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 
-import '../../profile/models/hive/alleles.dart';
 import '../../profile/models/hive/cpic_lookup_response.dart';
+import '../../profile/models/hive/diplotype.dart';
 import '../services.dart';
 
 part 'userdata.g.dart';
@@ -19,8 +19,7 @@ class UserdataContainer {
     await getBox<UserData>(Boxes.userData).put('data', _instance.data);
   }
 
-  static final UserdataContainer _instance =
-      UserdataContainer._(UserData());
+  static final UserdataContainer _instance = UserdataContainer._(UserData());
 
   static UserdataContainer get instance => _instance;
 
@@ -30,12 +29,12 @@ class UserdataContainer {
 @HiveType(typeId: 5)
 class UserData {
   UserData({
-    this.alleles,
+    this.diplotypes,
     this.lookups,
   });
 
   @HiveField(0)
-  Alleles? alleles;
+  List<Diplotype>? diplotypes;
 
   @HiveField(1)
   List<Lookup>? lookups;

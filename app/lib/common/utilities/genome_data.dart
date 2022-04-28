@@ -3,35 +3,32 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import '../../profile/models/hive/alleles.dart';
 import '../../profile/models/hive/cpic_lookup_response.dart';
 import '../../profile/models/hive/diplotype.dart';
 import '../constants.dart';
 import '../models/metadata.dart';
 import '../models/userdata.dart';
-import '../services.dart';
 
-Future<void> fetchAndSaveAllesData(String token, String url) async {
-  final userAlleleData = UserdataContainer.instance.data.alleles;
-  if (userAlleleData == null) {
-    final response = await getStarAlleles(token, url);
-    if (response.statusCode == 200) {
-      await _saveAlleleData(response);
-    } else {
-      throw Exception('Error occurred during loading of allele data');
-    }
+Future<void> fetchAndSaveDiplotypes(String token, String url) async {
+  if (!shouldFetchDiplotypes()) return;
+  final response = await getDiplotypes(token, url);
+  if (response.statusCode == 200) {
+    await _saveDiplotypeResponse(response);
+  } else {
+    throw Exception('Error occurred during loading of diplotype data');
   }
 }
 
-Future<Response> getStarAlleles(String? token, String url) async {
+Future<Response> getDiplotypes(String? token, String url) async {
   return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 }
 
-Future<void> _saveAlleleData(Response response) async {
-  final alleles = Alleles.fromJson(jsonDecode(response.body));
-  alleles.diplotypes = alleles.diplotypes.filterValidDiplotypes();
+Future<void> _saveDiplotypeResponse(Response response) async {
+  // parse response to list of user's diplotypes
+  final diplotypes =
+      Diplotypes.fromHTTPResponse(response).filterValidDiplotypes();
 
-  UserdataContainer.instance.data.alleles = alleles;
+  UserdataContainer.instance.data.diplotypes = diplotypes;
   return UserdataContainer.save();
 }
 
@@ -47,8 +44,8 @@ Future<void> fetchAndSaveLookups() async {
   final json = jsonDecode(response.body) as List<dynamic>;
   final lookups =
       json.map<CpicLookup>(CpicLookup.fromJson).filterValidLookups();
-  final usersAlleles = UserdataContainer.instance.data.alleles;
-  if (usersAlleles == null) {
+  final usersDiplotypes = UserdataContainer.instance.data.diplotypes;
+  if (usersDiplotypes == null) {
     throw Exception();
   }
 
@@ -61,9 +58,10 @@ Future<void> fetchAndSaveLookups() async {
   // ignore: omit_local_variable_types
   final List<Lookup> matchingLookups = [];
   // extract the matching lookups
-  for (final diplotype in usersAlleles.diplotypes) {
+  for (final diplotype in usersDiplotypes) {
     // the gene and the genotype build the key for the hashmap
-    final temp = lookupsHashMap['${diplotype.gene}${diplotype.genotype}'];
+    final key = '${diplotype.gene}${diplotype.genotype}';
+    final temp = lookupsHashMap[key];
     if (temp != null) matchingLookups.add(temp);
   }
 
@@ -78,6 +76,10 @@ Future<void> fetchAndSaveLookups() async {
 bool shouldFetchLookups() {
   final lookupsPresent = UserdataContainer.instance.data.lookups?.isNotEmpty;
   return _isOutDated() || (lookupsPresent ?? false);
+}
+
+bool shouldFetchDiplotypes() {
+  return UserdataContainer.instance.data.diplotypes == null;
 }
 
 bool _isOutDated() {

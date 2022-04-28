@@ -4,6 +4,7 @@ import '../services.dart';
 
 part 'metadata.g.dart';
 
+
 /// MetadataContainer is a singleton which contains various user-specific preferences
 /// and datapoints. It is intended to be loaded from a hive box once at app
 /// launch, from where it's contents can be modified by accessing it's

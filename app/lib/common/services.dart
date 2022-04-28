@@ -1,6 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../profile/models/hive/alleles.dart';
 import '../profile/models/hive/cpic_lookup_response.dart';
 import '../profile/models/hive/diplotype.dart';
 import 'models/metadata.dart';
@@ -44,10 +43,8 @@ Future<void> _initUserData() async {
 
 Future<void> _initHive() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(AllelesAdapter());
   Hive.registerAdapter(DiplotypeAdapter());
   Hive.registerAdapter(CpicLookupAdapter());
 
-  await Hive.openBox<Alleles>(Boxes.alleles.toString());
   await Hive.openBox<List<Lookup>>(Boxes.lookups.toString());
 }

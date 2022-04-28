@@ -37,8 +37,8 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     children: state.when(
                       initial: () => _buildInitialScreen(context),
-                      loadingAlleles: () => _buildLoadingScreen(context),
-                      loadedAlleles: () => _buildLoadedScreen(context),
+                      loadingUserData: () => _buildLoadingScreen(context),
+                      loadedUserData: () => _buildLoadedScreen(context),
                       error: (message) => _buildErrorScreen(context, message),
                     ),
                   ),
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
             final found = labs.firstWhere((el) => el.name == dropdownValue);
             await context
                 .read<LoginPageCubit>()
-                .signInAndLoadAlleles(context, found.authUrl, found.allelesUrl);
+                .signInAndLoadUserData(context, found);
           },
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

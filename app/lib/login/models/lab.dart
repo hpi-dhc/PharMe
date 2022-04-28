@@ -1,11 +1,11 @@
 import '../../../common/constants.dart';
 
 class Lab {
-  Lab(this.name, this.authUrl, this.allelesUrl);
+  Lab(this.name, this.authUrl, this.endpoint);
 
   String name;
   String authUrl;
-  String allelesUrl;
+  String endpoint;
 }
 
 final labs = [
