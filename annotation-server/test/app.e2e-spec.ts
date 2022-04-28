@@ -7,7 +7,7 @@ import { Guideline } from 'src/guidelines/guideline.entity';
 import { AppModule } from '../src/app.module';
 import { MedicationsService } from '../src/medications/medications.service';
 
-describe('MedicationsController (e2e)', () => {
+describe('App (e2e)', () => {
     let app: INestApplication;
     let medicationService: MedicationsService;
     let codeineId: number;

@@ -78,16 +78,17 @@ export class GenePhenotypesService {
         lookupkey: string,
         generesult: string,
     ): Promise<Phenotype> {
-        let phenotype: Phenotype;
-        if (!this.hashedPhenotypes.has(lookupkey)) {
-            phenotype = new Phenotype();
-            phenotype.lookupkey = lookupkey;
-            phenotype.name = generesult;
-            phenotype = await this.phenotypeRepository.save(phenotype);
-            this.hashedPhenotypes.set(lookupkey, phenotype);
-        } else {
-            phenotype = this.hashedPhenotypes.get(lookupkey);
+        if (this.hashedPhenotypes.has(lookupkey)) {
+            return this.hashedPhenotypes.get(lookupkey);
         }
+
+        let phenotype = new Phenotype();
+        phenotype.lookupkey = lookupkey;
+        phenotype.name = generesult;
+
+        phenotype = await this.phenotypeRepository.save(phenotype);
+        this.hashedPhenotypes.set(lookupkey, phenotype);
+
         return phenotype;
     }
 

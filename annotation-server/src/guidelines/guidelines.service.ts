@@ -60,9 +60,7 @@ export class GuidelinesService {
                 new Set(
                     cell.value
                         .split(';')
-                        .map((phenotype: string) =>
-                            phenotype.trim().toLowerCase(),
-                        ),
+                        .map((phenotype) => phenotype.trim().toLowerCase()),
                 ),
         );
 
