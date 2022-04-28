@@ -7,6 +7,39 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../common/module.dart';
 import '../../../common/routing/router.dart';
 
+const pagesCount = 3;
+List<Widget> getPages(
+  PageController pageController,
+  ValueNotifier<int> currentPage,
+) {
+  final pages = [
+    OnboardingSubPage(
+      pageController: pageController,
+      currentPage: currentPage,
+      imagePath: 'assets/images/onboarding_welcome.svg',
+      getHeader: (context) => {context.l10n.onboarding_welcome_page_header},
+      getText: (context) => {context.l10n.onboarding_welcome_page_text},
+    ),
+    OnboardingSubPage(
+      pageController: pageController,
+      currentPage: currentPage,
+      imagePath: 'assets/images/onboarding_medicine.svg',
+      getHeader: (context) => {context.l10n.onboarding_medicine_page_header},
+      getText: (context) => {context.l10n.onboarding_medicine_page_text},
+    ),
+    OnboardingSubPage(
+      pageController: pageController,
+      currentPage: currentPage,
+      imagePath: 'assets/images/onboarding_security.svg',
+      getHeader: (context) => {context.l10n.onboarding_security_page_header},
+      getText: (context) => {context.l10n.onboarding_security_page_text},
+    ),
+  ];
+
+  assert(pages.length == pagesCount);
+  return pages;
+}
+
 class OnboardingPage extends HookWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
@@ -16,41 +49,95 @@ class OnboardingPage extends HookWidget {
     final currentPage = useState(0);
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              context.theme.colorScheme.primary,
-              context.theme.colorScheme.primaryContainer,
-            ],
-          ),
+      body: PageView(
+        controller: pageController,
+        onPageChanged: (newPage) => currentPage.value = newPage,
+        children: getPages(pageController, currentPage),
+      ),
+    );
+  }
+}
+
+class OnboardingSubPage extends StatelessWidget {
+  const OnboardingSubPage({
+    Key? key,
+    required this.pageController,
+    required this.currentPage,
+    required this.imagePath,
+    required this.getHeader,
+    required this.getText,
+  }) : super(key: key);
+
+  final PageController pageController;
+  final ValueNotifier<int> currentPage;
+  final String imagePath;
+  final Set<String> Function(BuildContext) getHeader;
+  final Set<String> Function(BuildContext) getText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            context.theme.colorScheme.primary,
+            context.theme.colorScheme.primaryContainer,
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: 600,
-                child: PageView(
-                  controller: pageController,
-                  onPageChanged: (newPage) => currentPage.value = newPage,
-                  children: _pages,
-                ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Positioned.fill(
+              top: 40,
+              left: 16,
+              bottom: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: SvgPicture.asset(
+                      imagePath,
+                      width: 256,
+                      height: 256,
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    getHeader(context).single,
+                    style: context.textTheme.headlineSmall!
+                        .copyWith(color: Colors.white),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    getText(context).single,
+                    style: context.textTheme.bodyMedium!
+                        .copyWith(color: Colors.white),
+                  ),
+                ],
               ),
-              Row(
+            ),
+            Positioned(
+              bottom: 64,
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(context, currentPage.value),
               ),
-              _buildNextButton(
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: _buildNextButton(
                 context,
                 pageController,
-                currentPage.value == _pages.length - 1,
+                currentPage.value == pagesCount - 1,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -58,8 +145,10 @@ class OnboardingPage extends HookWidget {
 
   List<Widget> _buildPageIndicator(BuildContext context, int currentPage) {
     final list = <Widget>[];
-    for (var i = 0; i < _pages.length; ++i) {
-      list.add(i == currentPage ? _indicator(context, true) : _indicator(context, false));
+    for (var i = 0; i < pagesCount; ++i) {
+      list.add(i == currentPage
+          ? _indicator(context, true)
+          : _indicator(context, false));
     }
     return list;
   }
@@ -82,97 +171,33 @@ class OnboardingPage extends HookWidget {
     PageController pageController,
     bool isLastPage,
   ) {
-    return Expanded(
-      child: Align(
-        alignment: FractionalOffset.bottomRight,
-        child: TextButton(
-          onPressed: () {
-            if (isLastPage) {
-              context.router.replace(const LoginRouter());
-            } else {
-              pageController.nextPage(
-                duration: Duration(milliseconds: 500),
-                curve: Curves.ease,
-              );
-            }
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                isLastPage
-                    ? context.l10n.onboarding_get_started
-                    : context.l10n.onboarding_next,
-                style: context.textTheme.headlineSmall!.copyWith(color: Colors.white),
-              ),
-              SizedBox(width: 10),
-              Icon(
-                Icons.arrow_forward,
-                color: Colors.white,
-                size: 30,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-final _pages = <Widget>[
-  OnboardingSubPage(
-    imagePath: 'assets/images/onboarding_welcome.svg',
-    getHeader: (context) => {context.l10n.onboarding_welcome_page_header},
-    getText: (context) => {context.l10n.onboarding_welcome_page_text},
-  ),
-  OnboardingSubPage(
-    imagePath: 'assets/images/onboarding_medicine.svg',
-    getHeader: (context) => {context.l10n.onboarding_medicine_page_header},
-    getText: (context) => {context.l10n.onboarding_medicine_page_text},
-  ),
-  OnboardingSubPage(
-    imagePath: 'assets/images/onboarding_security.svg',
-    getHeader: (context) => {context.l10n.onboarding_security_page_header},
-    getText: (context) => {context.l10n.onboarding_security_page_text},
-  ),
-];
-
-class OnboardingSubPage extends StatelessWidget {
-  const OnboardingSubPage({
-    Key? key,
-    required this.imagePath,
-    required this.getHeader,
-    required this.getText,
-  }) : super(key: key);
-
-  final String imagePath;
-  final Set<String> Function(BuildContext) getHeader;
-  final Set<String> Function(BuildContext) getText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return TextButton(
+      onPressed: () {
+        if (isLastPage) {
+          context.router.replace(const LoginRouter());
+        } else {
+          pageController.nextPage(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.ease,
+          );
+        }
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Center(
-            child: SvgPicture.asset(
-              imagePath,
-              width: 300,
-              height: 300,
-            ),
-          ),
-          SizedBox(height: 30),
           Text(
-            getHeader(context).single,
-            style: context.textTheme.headlineSmall!.copyWith(color: Colors.white),
+            isLastPage
+                ? context.l10n.onboarding_get_started
+                : context.l10n.onboarding_next,
+            style:
+                context.textTheme.headlineSmall!.copyWith(color: Colors.white),
           ),
-          SizedBox(height: 15),
-          Text(
-            getText(context).single,
-            style: context.textTheme.bodyMedium!.copyWith(color: Colors.white),
+          SizedBox(width: 8),
+          Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+            size: 32,
           ),
         ],
       ),
