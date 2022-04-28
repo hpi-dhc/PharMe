@@ -1,5 +1,5 @@
-import { Controller, Get, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Medication } from './medication.entity';
 import { MedicationsService } from './medications.service';
@@ -9,17 +9,35 @@ import { MedicationsService } from './medications.service';
 export class MedicationsController {
     constructor(private medicationsService: MedicationsService) {}
 
-    @ApiOperation({ summary: 'Fetch all medications' })
+    @ApiOperation({ summary: 'Fetch all medications with optional search' })
     @Get()
-    async get(): Promise<Medication[]> {
-        return await this.medicationsService.getAll();
+    get(@Query() query: { search: string }): Promise<Medication[]> {
+        return this.medicationsService.findMatchingMedications(query.search);
     }
 
     @ApiOperation({
-        summary: 'Clear and update medication data from DrugBank',
+        summary:
+            'Clear and update medication data from DrugBank and the Google Sheet',
     })
     @Post()
-    async create(): Promise<void> {
+    create(): Promise<void> {
         return this.medicationsService.fetchAllMedications();
+    }
+
+    @ApiOperation({
+        summary:
+            'Get detailed information about a medication and all corresponding guidelines',
+    })
+    @ApiParam({
+        name: 'id',
+        description:
+            'ID of the medication to fetch information and guidelines for',
+        example: '144',
+        type: 'integer',
+        required: true,
+    })
+    @Get(':id')
+    getDetails(@Param('id') id: number): Promise<Medication> {
+        return this.medicationsService.getDetails(id);
     }
 }
