@@ -1,11 +1,12 @@
 import { sheets as googleSheets, sheets_v4 } from '@googleapis/sheets';
 
+const sheets = googleSheets('v4');
+
 export async function fetchSpreadsheetCells(
     spreadsheetId: string,
     apiKey: string,
     ranges: string[],
 ): Promise<{ value?: string; backgroundColor?: sheets_v4.Schema$Color }[][][]> {
-    const sheets = googleSheets('v4');
     const spreadsheetData = await sheets.spreadsheets.get({
         spreadsheetId: spreadsheetId,
         key: apiKey,

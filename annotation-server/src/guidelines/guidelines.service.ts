@@ -60,9 +60,7 @@ export class GuidelinesService {
                 new Set(
                     cell.value
                         .split(';')
-                        .map((phenotype: string) =>
-                            phenotype.trim().toLowerCase(),
-                        ),
+                        .map((phenotype) => phenotype.trim().toLowerCase()),
                 ),
         );
 
@@ -183,7 +181,7 @@ export class GuidelinesService {
         this.clearMaps();
     }
 
-    clearMaps(): void {
+    private clearMaps(): void {
         this.hashedMedications.clear();
         this.hashedGenePhenotypes.clear();
         this.spreadsheetPhenotypeHeader = [];
