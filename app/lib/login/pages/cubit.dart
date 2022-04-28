@@ -1,12 +1,13 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide MetaData;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/module.dart';
-import '../../../common/services.dart';
 import '../../../common/utilities/genome_data.dart';
+import '../../common/models/metadata.dart';
+import '../models/lab.dart';
 
 part 'cubit.freezed.dart';
 
@@ -15,15 +16,23 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   void revertToInitialState() => emit(LoginPageState.initial());
 
-  Future<void> signInAndLoadAlleles(BuildContext context, String authUrl, String allelesUrl) async {
+  // signInAndLoadUserData authenticates a user with a Lab and fetches their
+  // genomic data from it's endpoint.
+  Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
     try {
-      final token = await _getAccessToken(authUrl);
-      emit(LoginPageState.loadingAlleles());
-      await fetchAndSaveAllesData(token, allelesUrl);
+      // authenticate
+      final token = await _getAccessToken(lab.authUrl);
+      emit(LoginPageState.loadingUserData());
+
+      // get data
+      await fetchAndSaveDiplotypes(token, lab.endpoint);
       await fetchAndSaveLookups();
-      // Login Successful
-      await getBox(Boxes.preferences).put('isLoggedIn', true);
-      emit(LoginPageState.loadedAlleles());
+
+      // login + fetching of data successful
+      MetaData.instance.isLoggedIn = true;
+      await MetaData.save();
+      emit(LoginPageState.loadedUserData());
+
     } catch (e) {
       emit(LoginPageState.error(context.l10n.err_fetch_user_data_failed));
     }
@@ -59,7 +68,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 @freezed
 class LoginPageState with _$LoginPageState {
   const factory LoginPageState.initial() = _InitialState;
-  const factory LoginPageState.loadingAlleles() = _LoadingAllelesState;
-  const factory LoginPageState.loadedAlleles() = _LoadedAllelesState;
+  const factory LoginPageState.loadingUserData() = _LoadingUserDataState;
+  const factory LoginPageState.loadedUserData() = _LoadedUserDataState;
   const factory LoginPageState.error(String string) = _ErrorState;
 }
