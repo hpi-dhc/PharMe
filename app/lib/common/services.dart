@@ -13,3 +13,8 @@ Future<void> initServices() async {
 Future<void> _initHive() async {
   await Hive.initFlutter();
 }
+
+Future<void> cleanupServices() async {
+  await MetadataContainer.save();
+  await UserdataContainer.save();
+}
