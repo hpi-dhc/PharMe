@@ -7,7 +7,13 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import {
+    ArrayOverlap,
+    FindManyOptions,
+    FindOneOptions,
+    ILike,
+    Repository,
+} from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/google-sheets';
 import { DrugDto } from './dtos/drugbank.dto';
@@ -46,6 +52,18 @@ export class MedicationsService {
         }).catch(() => {
             throw new NotFoundException('Medication could not be found!');
         });
+    }
+
+    async findMatchingMedications(query: string): Promise<Medication[]> {
+        const options: FindManyOptions<Medication> = {
+            select: ['id', 'name', 'description', 'drugclass', 'indication'],
+            where: [
+                { name: ILike(`%${query}%`) },
+                { drugclass: ILike(`%${query}%`) },
+                { synonyms: ArrayOverlap([query]) },
+            ],
+        };
+        return await this.medicationRepository.find(options);
     }
 
     async fetchAllMedications(): Promise<void> {
