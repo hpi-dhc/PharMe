@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../common/models/metadata.dart';
 import '../../common/models/userdata.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -11,14 +10,12 @@ class ProfilePage extends StatelessWidget {
   String debug() {
     // ignore: prefer_single_quotes
     return """
-    ${UserdataContainer.instance.data.diplotypes?[0].gene}
-    ${UserdataContainer.instance.data.diplotypes?.length}
+    ${UserData.instance.diplotypes?[0].gene}
+    ${UserData.instance.diplotypes?.length}
 
-    ${UserdataContainer.instance.data.lookups?.length}
-    ${UserdataContainer.instance.data.lookups?[0].keys.first} : ${UserdataContainer.instance.data.lookups?[0].values.first}
+    ${UserData.instance.lookups?.length}
+    ${UserData.instance.lookups?[0].keys.first} : ${UserData.instance.lookups?[0].values.first}
 
-    ${MetadataContainer.instance.data.isLoggedIn}
-    ${MetadataContainer.instance.data.lookupsLastFetchDate}
     """;
   }
 

@@ -7,32 +7,22 @@ part 'userdata.g.dart';
 
 const _boxName = 'userdata';
 
-/// UserdataContainer is a singleton data-class which contains various
-/// user-specific data It is intended to be loaded from a Hive box once at app
-/// launch, from where it's contents can be modified by accessing it's
-/// properties.
-class UserdataContainer {
-  factory UserdataContainer() => _instance;
-
-  // private constructor
-  UserdataContainer._(this.data);
-
-  static final UserdataContainer _instance = UserdataContainer._(UserData());
-  static UserdataContainer get instance => _instance;
-
-  /// Writes the current state of `data` to local storage
-  static Future<void> save() async =>
-      Hive.box<UserData>(_boxName).put('data', _instance.data);
-
-  UserData data;
-}
-
+/// UserData is a singleton data-class which contains various user-specific
+/// data It is intended to be loaded from a Hive box once at app launch, from
+/// where it's contents can be modified by accessing it's properties.
 @HiveType(typeId: 5)
 class UserData {
-  UserData({
-    this.diplotypes,
-    this.lookups,
-  });
+  factory UserData() => _instance;
+
+  // private constructor
+  UserData._();
+
+  static final UserData _instance = UserData._();
+  static UserData get instance => _instance;
+
+  /// Writes the current instance to local storage
+  static Future<void> save() async =>
+      Hive.box<UserData>(_boxName).put('data', _instance);
 
   @HiveField(0)
   List<Diplotype>? diplotypes;
@@ -57,6 +47,5 @@ Future<void> initUserData() async {
   // if user's metadata is not null, assign it's contents to the singleton
   await Hive.openBox<UserData>(_boxName);
   final userData = Hive.box<UserData>(_boxName);
-  final sessionData = userData.get('data') ?? UserData();
-  UserdataContainer.instance.data = sessionData;
+  userData.get('data') ?? UserData();
 }

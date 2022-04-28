@@ -16,5 +16,5 @@ Future<void> _initHive() async {
 
 Future<void> cleanupServices() async {
   await MetadataContainer.save();
-  await UserdataContainer.save();
+  await UserData.save();
 }

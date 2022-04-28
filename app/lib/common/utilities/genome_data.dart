@@ -28,8 +28,8 @@ Future<void> _saveDiplotypeResponse(Response response) async {
   final diplotypes =
       Diplotypes.fromHTTPResponse(response).filterValidDiplotypes();
 
-  UserdataContainer.instance.data.diplotypes = diplotypes;
-  return UserdataContainer.save();
+  UserData.instance.diplotypes = diplotypes;
+  return UserData.save();
 }
 
 Future<void> fetchAndSaveLookups() async {
@@ -44,7 +44,7 @@ Future<void> fetchAndSaveLookups() async {
   final json = jsonDecode(response.body) as List<dynamic>;
   final lookups =
       json.map<CpicLookup>(CpicLookup.fromJson).filterValidLookups();
-  final usersDiplotypes = UserdataContainer.instance.data.diplotypes;
+  final usersDiplotypes = UserData.instance.diplotypes;
   if (usersDiplotypes == null) {
     throw Exception();
   }
@@ -65,8 +65,8 @@ Future<void> fetchAndSaveLookups() async {
     if (temp != null) matchingLookups.add(temp);
   }
 
-  UserdataContainer.instance.data.lookups = matchingLookups;
-  await UserdataContainer.save();
+  UserData.instance.lookups = matchingLookups;
+  await UserData.save();
 
   // Save datetime at which lookups were fetched
   MetadataContainer.instance.data.lookupsLastFetchDate = DateTime.now();
@@ -74,12 +74,12 @@ Future<void> fetchAndSaveLookups() async {
 }
 
 bool shouldFetchLookups() {
-  final lookupsPresent = UserdataContainer.instance.data.lookups?.isNotEmpty;
+  final lookupsPresent = UserData.instance.lookups?.isNotEmpty;
   return _isOutDated() || (lookupsPresent ?? false);
 }
 
 bool shouldFetchDiplotypes() {
-  return UserdataContainer.instance.data.diplotypes == null;
+  return UserData.instance.diplotypes == null;
 }
 
 bool _isOutDated() {
