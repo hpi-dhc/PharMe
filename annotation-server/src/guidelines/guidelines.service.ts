@@ -181,7 +181,7 @@ export class GuidelinesService {
         this.clearMaps();
     }
 
-    clearMaps(): void {
+    private clearMaps(): void {
         this.hashedMedications.clear();
         this.hashedGenePhenotypes.clear();
         this.spreadsheetPhenotypeHeader = [];
