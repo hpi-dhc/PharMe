@@ -7,13 +7,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import {
-    ArrayOverlap,
-    FindManyOptions,
-    FindOneOptions,
-    ILike,
-    Repository,
-} from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/google-sheets';
 import { DrugDto } from './dtos/drugbank.dto';
@@ -54,16 +48,16 @@ export class MedicationsService {
         });
     }
 
-    async findMatchingMedications(query: string): Promise<Medication[]> {
-        const options: FindManyOptions<Medication> = {
-            select: ['id', 'name', 'description', 'drugclass', 'indication'],
-            where: [
-                { name: ILike(`%${query}%`) },
-                { drugclass: ILike(`%${query}%`) },
-                { synonyms: ArrayOverlap([query]) },
-            ],
-        };
-        return await this.medicationRepository.find(options);
+    async findMatchingMedications(query = ''): Promise<Medication[]> {
+        const result = await this.medicationRepository.query(`
+            SELECT distinct id, name, description, drugclass, indication
+            FROM (
+                SELECT id, name, description, drugclass, indication, unnest(synonyms) synonym
+                FROM public.medication
+            ) sub
+            WHERE name ILIKE '%${query}%' OR drugclass ILIKE '%${query}%' OR synonym ILIKE '%${query}%'
+            ORDER BY id ASC`);
+        return result;
     }
 
     async fetchAllMedications(): Promise<void> {
