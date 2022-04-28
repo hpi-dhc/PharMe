@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MetaData;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -10,7 +10,7 @@ class PharmeApp extends StatelessWidget {
   PharmeApp({Key? key}) : super(key: key);
 
   final _appRouter = AppRouter();
-  final _isLoggedIn = MetadataContainer().data.isLoggedIn ?? false;
+  final _isLoggedIn = MetaData.instance.isLoggedIn ?? false;
 
   @override
   Widget build(BuildContext context) {

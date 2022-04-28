@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MetaData;
 
+import '../../common/models/metadata.dart';
 import '../../common/models/userdata.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -16,6 +17,8 @@ class ProfilePage extends StatelessWidget {
     ${UserData.instance.lookups?.length}
     ${UserData.instance.lookups?[0].keys.first} : ${UserData.instance.lookups?[0].values.first}
 
+    ${MetaData.instance.isLoggedIn}
+    ${MetaData.instance.lookupsLastFetchDate}
     """;
   }
 

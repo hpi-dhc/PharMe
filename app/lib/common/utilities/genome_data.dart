@@ -69,8 +69,8 @@ Future<void> fetchAndSaveLookups() async {
   await UserData.save();
 
   // Save datetime at which lookups were fetched
-  MetadataContainer.instance.data.lookupsLastFetchDate = DateTime.now();
-  await MetadataContainer.save();
+  MetaData.instance.lookupsLastFetchDate = DateTime.now();
+  await MetaData.save();
 }
 
 bool shouldFetchLookups() {
@@ -83,7 +83,7 @@ bool shouldFetchDiplotypes() {
 }
 
 bool _isOutDated() {
-  final lastFetchDate = MetadataContainer.instance.data.lookupsLastFetchDate;
+  final lastFetchDate = MetaData.instance.lookupsLastFetchDate;
   if (lastFetchDate == null) {
     return true;
   }
