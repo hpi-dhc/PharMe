@@ -15,7 +15,7 @@ Future<void> fetchAndSaveDiplotypes(String token, String url) async {
   if (response.statusCode == 200) {
     await _saveDiplotypeResponse(response);
   } else {
-    throw Exception('Error occurred during loading of diplotype data');
+    throw Exception();
   }
 }
 
@@ -26,7 +26,7 @@ Future<Response> getDiplotypes(String? token, String url) async {
 Future<void> _saveDiplotypeResponse(Response response) async {
   // parse response to list of user's diplotypes
   final diplotypes =
-      Diplotypes.fromHTTPResponse(response).filterValidDiplotypes();
+      diplotypesFromHTTPResponse(response).filterValidDiplotypes();
 
   UserData.instance.diplotypes = diplotypes;
   return UserData.save();
@@ -35,9 +35,7 @@ Future<void> _saveDiplotypeResponse(Response response) async {
 Future<void> fetchAndSaveLookups() async {
   if (!shouldFetchLookups()) return;
   final response = await get(Uri.parse(cpicLookupUrl));
-  if (response.statusCode != 200) {
-    throw Exception();
-  }
+  if (response.statusCode != 200) throw Exception();
 
   // the returned json is a list of lookups which we wish to individually map
   // to a concrete CpicLookup instance, hence the cast to a List
@@ -45,14 +43,12 @@ Future<void> fetchAndSaveLookups() async {
   final lookups =
       json.map<CpicLookup>(CpicLookup.fromJson).filterValidLookups();
   final usersDiplotypes = UserData.instance.diplotypes;
-  if (usersDiplotypes == null) {
-    throw Exception();
-  }
+  if (usersDiplotypes == null) throw Exception();
 
   // use a HashMap for better time complexity
   final lookupsHashMap = HashMap<String, Lookup>.fromIterable(
     lookups,
-    key: (el) => '${el.genesymbol}${el.diplotype}',
+    key: (el) => '${el.genesymbol}__${el.diplotype}',
     value: (el) => el.lookupkey,
   );
   // ignore: omit_local_variable_types
@@ -60,7 +56,7 @@ Future<void> fetchAndSaveLookups() async {
   // extract the matching lookups
   for (final diplotype in usersDiplotypes) {
     // the gene and the genotype build the key for the hashmap
-    final key = '${diplotype.gene}${diplotype.genotype}';
+    final key = '${diplotype.gene}__${diplotype.genotype}';
     final temp = lookupsHashMap[key];
     if (temp != null) matchingLookups.add(temp);
   }
@@ -84,8 +80,6 @@ bool shouldFetchDiplotypes() {
 
 bool _isOutDated() {
   final lastFetchDate = MetaData.instance.lookupsLastFetchDate;
-  if (lastFetchDate == null) {
-    return true;
-  }
+  if (lastFetchDate == null) return true;
   return DateTime.now().difference(lastFetchDate) > cpicMaxCacheTime;
 }

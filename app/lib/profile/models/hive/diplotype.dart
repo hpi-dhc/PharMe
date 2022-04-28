@@ -20,7 +20,6 @@ class Diplotype {
   factory Diplotype.fromJson(dynamic json) => _$DiplotypeFromJson(json);
   Map<String, dynamic> toJson() => _$DiplotypeToJson(this);
 
-
   @HiveField(0)
   String gene;
 
@@ -42,7 +41,6 @@ class Diplotype {
   }
 }
 
-
 extension FilteredList on List<Diplotype> {
   List<Diplotype> filterValidDiplotypes() {
     final acceptedResultTypes = ['Diplotype'];
@@ -51,10 +49,8 @@ extension FilteredList on List<Diplotype> {
   }
 }
 
-class Diplotypes {
-  // assumes http reponse from lab server
-  static List<Diplotype> fromHTTPResponse(Response resp) {
-    final json = jsonDecode(resp.body)['diplotypes'] as List<dynamic>;
-    return json.map<Diplotype>(Diplotype.fromJson).toList();
-  }
+// assumes http reponse from lab server
+List<Diplotype> diplotypesFromHTTPResponse(Response resp) {
+  final json = jsonDecode(resp.body)['diplotypes'] as List<dynamic>;
+  return json.map<Diplotype>(Diplotype.fromJson).toList();
 }
