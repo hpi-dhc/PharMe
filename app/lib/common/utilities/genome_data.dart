@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import '../../settings/models/hive/cpic_lookup_response.dart';
-import '../../settings/models/hive/diplotype.dart';
 import '../constants.dart';
+import '../models/cpic_lookup_response.dart';
+import '../models/diplotype.dart';
 import '../models/metadata.dart';
 import '../models/userdata.dart';
 
