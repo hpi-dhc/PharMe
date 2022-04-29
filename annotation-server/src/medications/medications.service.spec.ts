@@ -27,7 +27,40 @@ describe('MedicationsService', () => {
     describe('getJSONFromZip', () => {
         it('should return the json path', async () => {
             const returnString = await medicationsService.getJSONfromZip();
-            expect(returnString).toContain('.json');
+            expect(returnString).toContain('drugbank-data.json');
+        });
+    });
+
+    describe('getDataFromJSON', () => {
+        it('should return right drugs from example ZIP', async () => {
+            const jsonPath = await medicationsService.getJSONfromZip();
+            const drugs = await medicationsService.getDataFromJSON(jsonPath);
+
+            expect(drugs.length).toBe(2);
+
+            const drug1 = drugs[0];
+            expect(drug1.name).toBe('Codeine');
+            expect(drug1.description).toContain('Lorem ipsum');
+            expect(
+                drug1['international-brands']['international-brand'],
+            ).toStrictEqual({
+                company: 'COMPANY',
+                name: 'Codeine BRAND',
+            });
+            expect(
+                drug1['external-identifiers']['external-identifier'],
+            ).toStrictEqual([
+                { identifier: 'PA449088', resource: 'PharmGKB' },
+                { identifier: '2670', resource: 'RxCUI' },
+            ]);
+
+            expect(drugs[1].name).toBe('Clopidogrel');
+        });
+
+        it('should throw an error without the right filepath', async () => {
+            expect(
+                medicationsService.getDataFromJSON('not-the-right-path.json'),
+            ).rejects.toThrowError();
         });
     });
 });

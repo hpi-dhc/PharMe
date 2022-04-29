@@ -6,18 +6,14 @@ import { fetchSpreadsheetCells } from './google-sheets';
 describe('Helper to fetch spreadsheet', () => {
     let configService: ConfigService;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         const modelFixture: TestingModule = await Test.createTestingModule({
-            imports: [ConfigModule.forRoot()],
+            imports: [
+                ConfigModule.forRoot({ envFilePath: ['.env', 'test/.env'] }),
+            ],
         }).compile();
 
         configService = modelFixture.get<ConfigService>(ConfigService);
-
-        // making sure right .env was loaded
-        // FIX ME: multiple .envs are discuraged (https://www.npmjs.com/package/dotenv#faq)
-        expect(configService.get<string>('DRUGBANK_XML')).toBe(
-            'random-database.xml',
-        );
     });
 
     describe('fetchSpreadsheetCells', () => {
