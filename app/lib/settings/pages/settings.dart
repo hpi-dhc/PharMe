@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/routing/router.dart';
+import '../utils.dart';
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -33,7 +36,13 @@ class SettingsPage extends StatelessWidget {
           onPressed: context.router.root.pop,
           child: Text('Cancel'),
         ),
-        TextButton(onPressed: () {}, child: Text('Continue')),
+        TextButton(
+          onPressed: () async {
+            await deleteAllAppData();
+            await context.router.replaceAll([LoginRouter()]);
+          },
+          child: Text('Continue'),
+        ),
       ],
     );
   }
