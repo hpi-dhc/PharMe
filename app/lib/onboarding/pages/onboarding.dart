@@ -7,39 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../common/module.dart';
 import '../../../common/routing/router.dart';
 
-const pagesCount = 3;
-List<Widget> getPages(
-  PageController pageController,
-  ValueNotifier<int> currentPage,
-) {
-  final pages = [
-    OnboardingSubPage(
-      pageController: pageController,
-      currentPage: currentPage,
-      imagePath: 'assets/images/onboarding_welcome.svg',
-      getHeader: (context) => {context.l10n.onboarding_welcome_page_header},
-      getText: (context) => {context.l10n.onboarding_welcome_page_text},
-    ),
-    OnboardingSubPage(
-      pageController: pageController,
-      currentPage: currentPage,
-      imagePath: 'assets/images/onboarding_medicine.svg',
-      getHeader: (context) => {context.l10n.onboarding_medicine_page_header},
-      getText: (context) => {context.l10n.onboarding_medicine_page_text},
-    ),
-    OnboardingSubPage(
-      pageController: pageController,
-      currentPage: currentPage,
-      imagePath: 'assets/images/onboarding_security.svg',
-      getHeader: (context) => {context.l10n.onboarding_security_page_header},
-      getText: (context) => {context.l10n.onboarding_security_page_text},
-    ),
-  ];
-
-  assert(pages.length == pagesCount);
-  return pages;
-}
-
 class OnboardingPage extends HookWidget {
   const OnboardingPage({Key? key}) : super(key: key);
 
@@ -49,106 +16,38 @@ class OnboardingPage extends HookWidget {
     final currentPage = useState(0);
 
     return Scaffold(
-      body: PageView(
-        controller: pageController,
-        onPageChanged: (newPage) => currentPage.value = newPage,
-        children: getPages(pageController, currentPage),
-      ),
-    );
-  }
-}
-
-class OnboardingSubPage extends StatelessWidget {
-  const OnboardingSubPage({
-    Key? key,
-    required this.pageController,
-    required this.currentPage,
-    required this.imagePath,
-    required this.getHeader,
-    required this.getText,
-  }) : super(key: key);
-
-  final PageController pageController;
-  final ValueNotifier<int> currentPage;
-  final String imagePath;
-  final Set<String> Function(BuildContext) getHeader;
-  final Set<String> Function(BuildContext) getText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            context.theme.colorScheme.primary,
-            context.theme.colorScheme.primaryContainer,
-          ],
+      body: Stack(alignment: Alignment.topCenter, children: [
+        Positioned.fill(
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (newPage) => currentPage.value = newPage,
+            children: _pages,
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Positioned.fill(
-              top: 40,
-              left: 16,
-              bottom: 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: SvgPicture.asset(
-                      imagePath,
-                      width: 256,
-                      height: 256,
-                    ),
-                  ),
-                  SizedBox(height: 32),
-                  Text(
-                    getHeader(context).single,
-                    style: context.textTheme.headlineSmall!
-                        .copyWith(color: Colors.white),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    getText(context).single,
-                    style: context.textTheme.bodyMedium!
-                        .copyWith(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 64,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _buildPageIndicator(context, currentPage.value),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: _buildNextButton(
-                context,
-                pageController,
-                currentPage.value == pagesCount - 1,
-              ),
-            ),
-          ],
+        Positioned(
+          bottom: 80,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _buildPageIndicator(context, currentPage.value),
+          ),
         ),
-      ),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: _buildNextButton(
+            context,
+            pageController,
+            currentPage.value == _pages.length - 1,
+          ),
+        ),
+      ]),
     );
   }
 
   List<Widget> _buildPageIndicator(BuildContext context, int currentPage) {
     final list = <Widget>[];
-    for (var i = 0; i < pagesCount; ++i) {
-      list.add(i == currentPage
-          ? _indicator(context, true)
-          : _indicator(context, false));
+    for (var i = 0; i < _pages.length; ++i) {
+      list.add(_indicator(context, i == currentPage));
     }
     return list;
   }
@@ -200,6 +99,80 @@ class OnboardingSubPage extends StatelessWidget {
             size: 32,
           ),
         ],
+      ),
+    );
+  }
+}
+
+List<Widget> _pages = [
+  OnboardingSubPage(
+    imagePath: 'assets/images/onboarding_welcome.svg',
+    getHeader: (context) => context.l10n.onboarding_welcome_page_header,
+    getText: (context) => context.l10n.onboarding_welcome_page_text,
+  ),
+  OnboardingSubPage(
+    imagePath: 'assets/images/onboarding_medicine.svg',
+    getHeader: (context) => context.l10n.onboarding_medicine_page_header,
+    getText: (context) => context.l10n.onboarding_medicine_page_text,
+  ),
+  OnboardingSubPage(
+    imagePath: 'assets/images/onboarding_security.svg',
+    getHeader: (context) => context.l10n.onboarding_security_page_header,
+    getText: (context) => context.l10n.onboarding_security_page_text,
+  ),
+];
+
+class OnboardingSubPage extends StatelessWidget {
+  const OnboardingSubPage({
+    Key? key,
+    required this.imagePath,
+    required this.getHeader,
+    required this.getText,
+  }) : super(key: key);
+
+  final String imagePath;
+  final String Function(BuildContext) getHeader;
+  final String Function(BuildContext) getText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            context.theme.colorScheme.primary,
+            context.theme.colorScheme.primaryContainer,
+          ],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: SvgPicture.asset(
+                imagePath,
+                width: 256,
+                height: 256,
+              ),
+            ),
+            SizedBox(height: 32),
+            Text(
+              getHeader(context),
+              style: context.textTheme.headlineSmall!
+                  .copyWith(color: Colors.white),
+            ),
+            SizedBox(height: 16),
+            Text(
+              getText(context),
+              style:
+                  context.textTheme.bodyMedium!.copyWith(color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }
