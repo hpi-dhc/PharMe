@@ -139,7 +139,7 @@ class MedicationsOverviewPage extends HookWidget {
                                   children: [
                                     for (final e in medications) ...[
                                       MedicationCard(
-                                        onTap: () => print('test'),
+                                        onTap: () {},
                                         medicationName: e.name,
                                         medicationDescription: e.indication,
                                       ),
@@ -167,7 +167,7 @@ class MedicationsOverviewPage extends HookWidget {
 }
 
 class MedicationCard extends StatelessWidget {
-  MedicationCard(
+  const MedicationCard(
       {this.padding = const EdgeInsets.all(16),
       this.isSafe = true,
       required this.onTap,
@@ -180,31 +180,20 @@ class MedicationCard extends StatelessWidget {
   final String medicationDescription;
   final bool isSafe;
 
-  final borderRadius = BorderRadius.all(Radius.circular(15));
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          // TODO(somebody): find nice colors
-          color: isSafe ? Color(0xFFAFE1AF) : Color(0xFFF5B9B4),
-          border: Border.all(width: 0.5, color: Colors.black.withOpacity(0.2)),
-          borderRadius: borderRadius,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 12,
-              offset: Offset(0, 4),
-            ),
-          ],
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
         ),
+        elevation: 20,
+        color: isSafe ? Color(0xFFAFE1AF) : Color(0xFFF5B9B4),
         child: Padding(
           padding: const EdgeInsets.all(6),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(medicationName, style: PharmeTheme.textTheme.titleLarge),
               SizedBox(height: 6),
