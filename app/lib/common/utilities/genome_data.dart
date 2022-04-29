@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import '../../profile/models/hive/cpic_lookup_response.dart';
-import '../../profile/models/hive/diplotype.dart';
+import '../../settings/models/hive/cpic_lookup_response.dart';
+import '../../settings/models/hive/diplotype.dart';
 import '../constants.dart';
 import '../models/metadata.dart';
 import '../models/userdata.dart';

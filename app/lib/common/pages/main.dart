@@ -15,7 +15,7 @@ class MainPage extends StatelessWidget {
         MedicationsRouter(),
         ReportsRouter(),
         PgxRouter(),
-        ProfileRouter(),
+        SettingsRouter(),
       ],
       appBarBuilder: (_, tabsRouter) => AppBar(
         title: const Text('PharMe'),
@@ -49,8 +49,8 @@ class MainPage extends StatelessWidget {
         label: 'PGx',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        label: context.l10n.nav_profile,
+        icon: Icon(Icons.settings),
+        label: 'Settings',
       ),
     ];
   }
