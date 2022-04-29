@@ -1,17 +1,20 @@
-import 'package:auto_route/auto_route.dart';
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import '../../../common/constants.dart';
 import '../../../common/module.dart';
 import '../../../common/theme.dart';
 import '../../models/medication.dart';
 import 'cubit.dart';
 
-final panelController = PanelController();
+final _panelController = PanelController();
 
 class MedicationsOverviewPage extends HookWidget {
   const MedicationsOverviewPage({Key? key}) : super(key: key);
@@ -19,6 +22,9 @@ class MedicationsOverviewPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
+    final foundMedications = useState<List<Medication>>([]);
+    Timer? searchTimeout;
+    const duration = Duration(milliseconds: 200);
 
     return BlocProvider(
       create: (context) => MedicationsOverviewCubit(),
@@ -59,12 +65,12 @@ class MedicationsOverviewPage extends HookWidget {
               ),
               SlidingUpPanel(
                 color: Colors.transparent,
-                controller: panelController,
+                controller: _panelController,
                 maxHeight: 1000,
                 panelBuilder: (scrollController) {
                   return RoundedCard(
                     // ignore: unnecessary_lambdas
-                    onTap: () => panelController.open(),
+                    onTap: () => _panelController.open(),
                     child: Column(
                       children: [
                         Expanded(
@@ -76,21 +82,52 @@ class MedicationsOverviewPage extends HookWidget {
                                   padding: const EdgeInsets.all(8),
                                   child: CupertinoSearchTextField(
                                     controller: searchController,
-                                    // TODO(somebody): send requests
-                                    onTap: () => panelController.open(),
+                                    onTap: _panelController.open,
                                     onChanged: (value) async {
-                                      context
-                                          .read<MedicationsOverviewCubit>()
-                                          .setState(
-                                            MedicationsOverviewState.loading(),
+                                      if (value == '') return;
+
+                                      if (searchTimeout != null) {
+                                        searchTimeout!.cancel();
+                                      }
+                                      searchTimeout = Timer(
+                                        duration,
+                                        () async {
+                                          final requestUri =
+                                              annotationServerUrl.replace(
+                                            path: 'api/v1/medications',
+                                            queryParameters: {'search': value},
                                           );
-                                      await Future.delayed(
-                                          Duration(seconds: 2));
-                                      context
-                                          .read<MedicationsOverviewCubit>()
-                                          .setState(
-                                            MedicationsOverviewState.loaded([]),
-                                          );
+                                          context
+                                              .read<MedicationsOverviewCubit>()
+                                              .setState(
+                                                MedicationsOverviewState
+                                                    .loading(),
+                                              );
+                                          final response =
+                                              await http.get(requestUri);
+
+                                          if (response.statusCode != 200) {
+                                            context
+                                                .read<
+                                                    MedicationsOverviewCubit>()
+                                                .setState(
+                                                  MedicationsOverviewState
+                                                      .error(),
+                                                );
+                                            return;
+                                          }
+                                          foundMedications.value =
+                                              medicationsFromHTTPResponse(
+                                                  response);
+                                          context
+                                              .read<MedicationsOverviewCubit>()
+                                              .setState(
+                                                MedicationsOverviewState.loaded(
+                                                  foundMedications.value,
+                                                ),
+                                              );
+                                        },
+                                      );
                                     },
                                   ),
                                 );
@@ -98,8 +135,18 @@ class MedicationsOverviewPage extends HookWidget {
                               return state.when(
                                 initial: Container.new,
                                 error: () => Text('smth went wrong'),
-                                loaded: (medications) =>
-                                    Text('fetched medications'),
+                                loaded: (medications) => Column(
+                                  children: [
+                                    for (final e in medications) ...[
+                                      MedicationCard(
+                                        onTap: () => print('test'),
+                                        medicationName: e.name,
+                                        medicationDescription: e.indication,
+                                      ),
+                                      SizedBox(height: 8),
+                                    ]
+                                  ],
+                                ),
                                 loading: () =>
                                     Center(child: CircularProgressIndicator()),
                               );
@@ -117,62 +164,58 @@ class MedicationsOverviewPage extends HookWidget {
       ),
     );
   }
-
-  bool _matches(String test, String query) {
-    return test.toLowerCase().contains(query.toLowerCase().trim());
-  }
-
-  List<MedicationTile> _matchingMedicationsTiles(
-    List<Medication> medications,
-    String searchText,
-  ) {
-    final medicationTiles = medications
-        .map((medication) {
-          final synonymMatch = medication.synonyms
-              .any((synonym) => _matches(synonym, searchText));
-
-          int priority;
-
-          if (_matches(medication.name, searchText)) {
-            priority = 2;
-          } else if (synonymMatch) {
-            priority = 1;
-          } else if (_matches(medication.description, searchText)) {
-            priority = 0;
-          } else {
-            return null;
-          }
-
-          return MedicationTile(medication: medication, priority: priority);
-        })
-        .whereType<MedicationTile>()
-        .toList();
-
-    medicationTiles.sort((medication1, medication2) =>
-        medication2.priority.compareTo(medication1.priority));
-
-    return medicationTiles;
-  }
 }
 
-class MedicationTile extends StatelessWidget {
-  const MedicationTile({
-    Key? key,
-    required this.medication,
-    required this.priority,
-  }) : super(key: key);
+class MedicationCard extends StatelessWidget {
+  MedicationCard(
+      {this.padding = const EdgeInsets.all(16),
+      this.isSafe = true,
+      required this.onTap,
+      required this.medicationName,
+      required this.medicationDescription});
 
-  final Medication medication;
-  final int priority;
+  final EdgeInsets padding;
+  final VoidCallback onTap;
+  final String medicationName;
+  final String medicationDescription;
+  final bool isSafe;
+
+  final borderRadius = BorderRadius.all(Radius.circular(15));
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(medication.name),
-      subtitle: Text(medication.description,
-          maxLines: 2, overflow: TextOverflow.ellipsis),
-      onTap: () =>
-          context.router.pushNamed('main/medications/${medication.id}'),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          // TODO(somebody): find nice colors
+          color: isSafe ? Color(0xFFAFE1AF) : Color(0xFFF5B9B4),
+          border: Border.all(width: 0.5, color: Colors.black.withOpacity(0.2)),
+          borderRadius: borderRadius,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 12,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(medicationName, style: PharmeTheme.textTheme.titleLarge),
+              SizedBox(height: 6),
+              Text(
+                medicationDescription,
+                style: PharmeTheme.textTheme.subtitle2,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
