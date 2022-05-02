@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../common/module.dart';
+
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -6,7 +8,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Profil'),
+      child: Text(context.l10n.nav_profile),
     );
   }
 }

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
 
 part 'diplotype.g.dart';
 
@@ -14,8 +17,7 @@ class Diplotype {
     required this.allelesTested,
   });
 
-  factory Diplotype.fromJson(Map<String, dynamic> json) =>
-      _$DiplotypeFromJson(json);
+  factory Diplotype.fromJson(dynamic json) => _$DiplotypeFromJson(json);
   Map<String, dynamic> toJson() => _$DiplotypeToJson(this);
 
   @HiveField(0)
@@ -32,11 +34,6 @@ class Diplotype {
 
   @HiveField(4)
   String allelesTested;
-
-  @override
-  String toString() {
-    return gene;
-  }
 }
 
 extension FilteredList on List<Diplotype> {
@@ -45,4 +42,10 @@ extension FilteredList on List<Diplotype> {
     return where((element) => acceptedResultTypes.contains(element.resultType))
         .toList();
   }
+}
+
+// assumes http reponse from lab server
+List<Diplotype> diplotypesFromHTTPResponse(Response resp) {
+  final json = jsonDecode(resp.body)['diplotypes'] as List<dynamic>;
+  return json.map<Diplotype>(Diplotype.fromJson).toList();
 }

@@ -71,6 +71,8 @@ class PgxPage extends StatelessWidget {
   }
 
   Widget _buildPgxFact(BuildContext context, PgxFact fact) {
+    final _key = GlobalKey();
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -78,7 +80,11 @@ class PgxPage extends StatelessWidget {
       child: Theme(
         data: context.theme.copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
+          key: _key,
           title: Text(fact.header),
+          onExpansionChanged: (value) {
+            if (value) _scrollToSelectedContent(key: _key);
+          },
           children: [
             ListTile(
               contentPadding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
@@ -88,5 +94,17 @@ class PgxPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _scrollToSelectedContent({required GlobalKey key}) {
+    final keyContext = key.currentContext;
+    if (keyContext != null) {
+      Future.delayed(Duration(milliseconds: 200)).then((value) {
+        Scrollable.ensureVisible(
+          keyContext,
+          duration: Duration(milliseconds: 200),
+        );
+      });
+    }
   }
 }
