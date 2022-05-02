@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -9,6 +10,7 @@ import { GuidelinesService } from './guidelines.service';
 
 @Module({
     imports: [
+        HttpModule,
         TypeOrmModule.forFeature([Guideline]),
         MedicationsModule,
         GenePhenotypesModule,

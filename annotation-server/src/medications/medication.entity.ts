@@ -19,6 +19,9 @@ export class Medication {
             medication.pharmgkbId = externalIdentifier.find(
                 (id) => id.resource === 'PharmGKB',
             )?.identifier;
+            medication.rxcui = externalIdentifier.find(
+                (id) => id.resource === 'RxCUI',
+            )?.identifier;
         }
 
         let internationalBrand =
@@ -44,6 +47,9 @@ export class Medication {
 
     @Column({ nullable: true })
     pharmgkbId: string;
+
+    @Column({ nullable: true })
+    rxcui: string;
 
     @Column('text', { array: true })
     synonyms: string[];

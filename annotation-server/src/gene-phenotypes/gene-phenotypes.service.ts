@@ -18,6 +18,8 @@ export class GenePhenotypesService {
         private geneSymbolRepository: Repository<GeneSymbol>,
         @InjectRepository(Phenotype)
         private phenotypeRepository: Repository<Phenotype>,
+        @InjectRepository(GenePhenotype)
+        private genePhenotypeRepository: Repository<GenePhenotype>,
     ) {
         this.hashedPhenotypes = new Map<string, Phenotype>();
     }
@@ -100,5 +102,11 @@ export class GenePhenotypesService {
 
     getOne(options: FindOneOptions<GeneSymbol>): Promise<GeneSymbol> {
         return this.geneSymbolRepository.findOne(options);
+    }
+
+    getOneGenePhenotype(
+        options: FindOneOptions<GenePhenotype>,
+    ): Promise<GenePhenotype> {
+        return this.genePhenotypeRepository.findOne(options);
     }
 }
