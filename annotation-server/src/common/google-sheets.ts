@@ -14,7 +14,7 @@ export async function fetchSpreadsheetCells(
         includeGridData: true,
     });
 
-    // this asumes data is in first sheet!
+    // this assumes that all ranges are in one sheet!
     return spreadsheetData.data.sheets[0].data.map((range) =>
         range.rowData.map((row) =>
             row.values.map((cell) => {

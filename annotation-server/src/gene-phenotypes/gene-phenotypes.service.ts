@@ -92,7 +92,7 @@ export class GenePhenotypesService {
         return phenotype;
     }
 
-    async clearAllData(): Promise<void> {
+    private async clearAllData(): Promise<void> {
         await this.geneSymbolRepository.delete({});
         await this.phenotypeRepository.delete({});
         this.hashedPhenotypes.clear();
