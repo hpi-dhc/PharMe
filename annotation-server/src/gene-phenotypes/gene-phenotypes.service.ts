@@ -25,7 +25,7 @@ export class GenePhenotypesService {
     private hashedPhenotypes: Map<string, Phenotype>;
 
     async fetchGenePhenotypes(): Promise<void> {
-        this.clearAllData();
+        await this.clearAllData();
 
         const response = this.httpService.get(
             'https://api.cpicpgx.org/v1/diplotype',

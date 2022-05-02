@@ -31,7 +31,7 @@ export class GuidelinesService {
     }
 
     async fetchGuidelines(): Promise<void> {
-        this.clearAllData();
+        await this.clearAllData();
 
         const [
             medications,
