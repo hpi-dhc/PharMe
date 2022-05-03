@@ -70,8 +70,10 @@ Future<void> fetchAndSaveLookups() async {
 }
 
 bool shouldFetchLookups() {
-  final lookupsPresent = UserData.instance.lookups?.isNotEmpty;
-  return _isOutDated() || (lookupsPresent ?? false);
+  final lookupsPresent = UserData.instance.lookups?.isNotEmpty ?? false;
+  final diplotypesPresent = UserData.instance.diplotypes?.isNotEmpty ?? false;
+  final result = (_isOutDated() || !lookupsPresent) && diplotypesPresent;
+  return result;
 }
 
 bool shouldFetchDiplotypes() {
