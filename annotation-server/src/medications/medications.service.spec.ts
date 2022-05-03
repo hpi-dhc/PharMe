@@ -10,7 +10,9 @@ describe('MedicationsService', () => {
 
     beforeEach(async () => {
         const modelFixture: TestingModule = await Test.createTestingModule({
-            imports: [ConfigModule.forRoot()], // needed for MedicationService
+            imports: [
+                ConfigModule.forRoot({ envFilePath: ['test/.env', '.env'] }),
+            ],
             providers: [
                 MedicationsService,
                 {
@@ -27,7 +29,7 @@ describe('MedicationsService', () => {
     describe('getJSONFromZip', () => {
         it('should return the json path', async () => {
             const returnString = await medicationsService.getJSONfromZip();
-            expect(returnString).toContain('drugbank-data.json');
+            expect(returnString.endsWith('.json')).toBe(true);
         });
     });
 

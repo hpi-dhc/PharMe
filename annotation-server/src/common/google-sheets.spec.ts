@@ -9,7 +9,7 @@ describe('Helper to fetch spreadsheet', () => {
     beforeEach(async () => {
         const modelFixture: TestingModule = await Test.createTestingModule({
             imports: [
-                ConfigModule.forRoot({ envFilePath: ['.env', 'test/.env'] }),
+                ConfigModule.forRoot({ envFilePath: ['test/.env', '.env'] }),
             ],
         }).compile();
 
@@ -17,7 +17,7 @@ describe('Helper to fetch spreadsheet', () => {
     });
 
     describe('fetchSpreadsheetCells', () => {
-        it('should not return an error with valid sheet id', async () => {
+        it('should get response with data from Google Sheets API', async () => {
             const spreadsheetData = await fetchSpreadsheetCells(
                 configService.get<string>('GOOGLESHEET_ID'),
                 configService.get<string>('GOOGLESHEET_APIKEY'),

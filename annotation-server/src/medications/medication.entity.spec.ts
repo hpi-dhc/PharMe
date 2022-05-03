@@ -51,5 +51,26 @@ describe('Medication Entity', () => {
             expect(medication.synonyms).toContain(exampleInternationalBrand2);
             expect(medication.synonyms.length).toBe(2);
         });
+
+        it('should able to handle only one external-identifier and international-brand', () => {
+            const exampleDrug = new DrugDto();
+            exampleDrug.name = exampleName;
+            exampleDrug.description = exampleDescription;
+            exampleDrug['external-identifiers'] = {
+                'external-identifier': exampleExternalIdentifierPharmGKB,
+            };
+            exampleDrug['international-brands'] = {
+                'international-brand': { name: exampleInternationalBrand1 },
+            };
+
+            const medication = Medication.fromDrug(exampleDrug);
+
+            expect(medication.pharmgkbId).toBe(
+                exampleExternalIdentifierPharmGKB.identifier,
+            );
+            expect(medication.synonyms).toStrictEqual([
+                exampleInternationalBrand1,
+            ]);
+        });
     });
 });
