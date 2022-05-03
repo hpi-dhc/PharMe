@@ -1,3 +1,5 @@
+import { assert } from 'console';
+
 import { sheets_v4 } from '@googleapis/sheets';
 import { HttpService } from '@nestjs/axios';
 import {
@@ -132,7 +134,17 @@ export class GuidelinesService {
                 }
             }
         }
-        this.guidelinesRepository.save(Array.from(guidelines.values()).flat());
+        const flatGuidelines = Array.from(guidelines.values()).flat();
+
+        const incompleteGuidelines =
+            this.getIncompleteGuidelines(flatGuidelines);
+        for (const incompleteGuideline of incompleteGuidelines) {
+            this.logger.error(
+                `Guideline for ${incompleteGuideline.medication.name} for genephenotype ${incompleteGuideline.genePhenotype.geneSymbol.name}, ${incompleteGuideline.genePhenotype.phenotype.name} is missing from sheet!`,
+            );
+        }
+
+        this.guidelinesRepository.save(flatGuidelines);
 
         this.clearMaps();
     }
@@ -285,6 +297,15 @@ export class GuidelinesService {
         );
         this.hashedGenePhenotypes.set(geneSymbolName, genePhenotypes);
         return genePhenotypes;
+    }
+
+    private getIncompleteGuidelines(guidelines: Guideline[]): Guideline[] {
+        const incompleteGuidelines: Guideline[] = [];
+        for (const guideline of guidelines) {
+            if (!guideline.implication && !guideline.recommendation)
+                incompleteGuidelines.push(guideline);
+        }
+        return incompleteGuidelines;
     }
 
     async clearAllData(): Promise<void> {
