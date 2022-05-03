@@ -1,30 +1,22 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http/http.dart' as http;
 
-import '../../../common/constants.dart';
 import '../../../common/module.dart';
 import '../../../common/theme.dart';
-import '../../models/medication.dart';
 import 'cubit.dart';
 
 final panelController = SlidingUpPanelController();
 
-class MedicationsOverviewPage extends HookWidget {
+class MedicationsOverviewPage extends StatelessWidget {
   const MedicationsOverviewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
-    final foundMedications = useState<List<Medication>>([]);
-    Timer? searchTimeout;
-    const duration = Duration(milliseconds: 500);
 
     return BlocProvider(
       create: (context) => MedicationsOverviewCubit(),
@@ -73,49 +65,10 @@ class MedicationsOverviewPage extends HookWidget {
                         padding: const EdgeInsets.all(8),
                         child: CupertinoSearchTextField(
                           controller: searchController,
-                          onChanged: (value) async {
-                            if (value == '') {
-                              context.read<MedicationsOverviewCubit>().setState(
-                                    MedicationsOverviewState.initial(),
-                                  );
-                              return;
-                            }
-                            if (searchTimeout != null) {
-                              searchTimeout!.cancel();
-                            }
-                            searchTimeout = Timer(
-                              duration,
-                              () async {
-                                final requestUri = annotationServerUrl.replace(
-                                  path: 'api/v1/medications',
-                                  queryParameters: {'search': value},
-                                );
-                                context
-                                    .read<MedicationsOverviewCubit>()
-                                    .setState(
-                                      MedicationsOverviewState.loading(),
-                                    );
-                                final response = await http.get(requestUri);
-                                if (response.statusCode != 200) {
-                                  context
-                                      .read<MedicationsOverviewCubit>()
-                                      .setState(
-                                        MedicationsOverviewState.error(),
-                                      );
-                                  return;
-                                }
-                                foundMedications.value =
-                                    medicationsFromHTTPResponse(response);
-                                context
-                                    .read<MedicationsOverviewCubit>()
-                                    .setState(
-                                      MedicationsOverviewState.loaded(
-                                        foundMedications.value,
-                                      ),
-                                    );
-                                print(foundMedications.value.length);
-                              },
-                            );
+                          onChanged: (value) {
+                            context
+                                .read<MedicationsOverviewCubit>()
+                                .loadMedications(value);
                           },
                         ),
                       ),
@@ -171,17 +124,20 @@ class MedicationCard extends StatelessWidget {
       elevation: 20,
       color: isSafe ? Color(0xFFAFE1AF) : Color(0xFFF5B9B4),
       child: GestureDetector(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(medicationName, style: PharmeTheme.textTheme.titleLarge),
-            SizedBox(height: 6),
-            if (medicationDescription != null)
-              Text(
-                medicationDescription!,
-                style: PharmeTheme.textTheme.subtitle2,
-              )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(medicationName, style: PharmeTheme.textTheme.titleLarge),
+              SizedBox(height: 6),
+              if (medicationDescription != null)
+                Text(
+                  medicationDescription!,
+                  style: PharmeTheme.textTheme.subtitle2,
+                )
+            ],
+          ),
         ),
       ),
     );

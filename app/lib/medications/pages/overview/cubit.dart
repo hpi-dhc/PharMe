@@ -11,21 +11,41 @@ part 'cubit.freezed.dart';
 class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
   MedicationsOverviewCubit() : super(MedicationsOverviewState.initial());
 
-  Future<List<Medication>> loadMedications(String value) async {
-    final requestUri = annotationServerUrl.replace(
-      path: 'api/v1/medications',
-      queryParameters: {'search': value},
-    );
+  Timer? searchTimeout;
+  final duration = Duration(milliseconds: 500);
 
-    emit(MedicationsOverviewState.loading());
-
-    final response = await http.get(requestUri);
-
-    if (response.statusCode != 200) {
-      emit(MedicationsOverviewState.error());
-      return [];
+  void loadMedications(String value) {
+    if (value == '') {
+      emit(
+        MedicationsOverviewState.loaded([]),
+      );
+      if (searchTimeout != null) {
+        searchTimeout!.cancel();
+      }
+      return;
     }
-    return medicationsFromHTTPResponse(response);
+    if (searchTimeout != null) {
+      searchTimeout!.cancel();
+    }
+    searchTimeout = Timer(
+      duration,
+      () async {
+        final requestUri = annotationServerUrl.replace(
+          path: 'api/v1/medications',
+          queryParameters: {'search': value},
+        );
+        emit(MedicationsOverviewState.loading());
+
+        final response = await http.get(requestUri);
+        if (response.statusCode != 200) {
+          emit(MedicationsOverviewState.error());
+          return;
+        }
+        final medications = medicationsFromHTTPResponse(response);
+
+        emit(MedicationsOverviewState.loaded(medications));
+      },
+    );
   }
 
   void setState(MedicationsOverviewState state) => emit(state);
