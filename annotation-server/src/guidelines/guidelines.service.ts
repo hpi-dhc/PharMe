@@ -116,7 +116,7 @@ export class GuidelinesService {
         if (!red && green === 1 && !blue) return WarningLevel.GREEN;
         if (red === 1 && green === 1 && !blue) return WarningLevel.YELLOW;
         if (red === 1 && !green && !blue) return WarningLevel.RED;
-        if (red === green && red === blue && blue === green) return null;
+        if (red === green && red === blue && blue === green) return null; // any shade of gray or transparent/unset background (undefined)
         this.logger.warn('Sheet cell has unknown color');
         return null;
     }
