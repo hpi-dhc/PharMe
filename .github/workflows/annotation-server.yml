@@ -19,9 +19,27 @@ jobs:
       - run: yarn
       - run: yarn lint
 
-  test-e2e:
-    name: Test E2E
+  test-e2e-unit:
+    name: Test E2E and Unit
     runs-on: ubuntu-latest
+    env:
+      ANNOTATION_DB_HOST: postgres
+      ANNOTATION_DB_USER: postgres
+      ANNOTATION_DB_PASS: postgres
+      ANNOTATION_DB_PORT: 5432
+      ANNOTATION_DB_NAME: annotation_db
+      DRUGBANK_ZIP: data/example-database.zip
+      DRUGBANK_XML: example-database.xml
+      GOOGLESHEET_ID: ${{ secrets.GOOGLESHEET_ID }}
+      EMPTY_GOOGLESHEET_ID: ${{ secrets.EMPTY_GOOGLESHEET_ID }}
+      GOOGLESHEET_APIKEY: ${{ secrets.GOOGLESHEET_APIKEY }}
+      GOOGLESHEET_RANGE_MEDICATIONS: "HPI List v1!D4:D"
+      GOOGLESHEET_RANGE_DRUGCLASSES: "HPI List v1!A4:A"
+      GOOGLESHEET_RANGE_INDICATIONS: "HPI List v1!M4:M"
+      GOOGLESHEET_RANGE_GENES: "HPI List v1!E4:E"
+      GOOGLESHEET_RANGE_PHENOTYPES: "HPI List v1!N3:V3"
+      GOOGLESHEET_RANGE_IMPLICATIONS: "HPI List v1!N4:V"
+      GOOGLESHEET_RANGE_RECOMMENDATIONS: "HPI List v1!W4:AE"
     container:
       image: node:17
     services:
@@ -41,24 +59,8 @@ jobs:
       - uses: actions/setup-python@v3
       - run: python -m pip install -r requirements.txt
       - run: yarn
+      - run: yarn test
       - run: yarn test:e2e:cov
-        env:
-          ANNOTATION_DB_HOST: postgres
-          ANNOTATION_DB_USER: postgres
-          ANNOTATION_DB_PASS: postgres
-          ANNOTATION_DB_PORT: 5432
-          ANNOTATION_DB_NAME: annotation_db
-          DRUGBANK_ZIP: data/example-database.zip
-          DRUGBANK_XML: example-database.xml
-          GOOGLESHEET_ID: ${{ secrets.GOOGLESHEET_ID }}
-          GOOGLESHEET_APIKEY: ${{ secrets.GOOGLESHEET_APIKEY }}
-          GOOGLESHEET_RANGE_MEDICATIONS: "HPI List v1!D4:D"
-          GOOGLESHEET_RANGE_DRUGCLASSES: "HPI List v1!A4:A"
-          GOOGLESHEET_RANGE_INDICATIONS: "HPI List v1!M4:M"
-          GOOGLESHEET_RANGE_GENES: "HPI List v1!E4:E"
-          GOOGLESHEET_RANGE_PHENOTYPES: "HPI List v1!N3:V3"
-          GOOGLESHEET_RANGE_IMPLICATIONS: "HPI List v1!N4:V"
-          GOOGLESHEET_RANGE_RECOMMENDATIONS: "HPI List v1!W4:AE"
       - uses: actions/upload-artifact@v3
         with:
           name: coverage-report
@@ -66,7 +68,7 @@ jobs:
 
   codecov:
     name: Generate Code Coverage Report
-    needs: [test-e2e]
+    needs: [test-e2e-unit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -82,7 +84,7 @@ jobs:
 
   build:
     name: Build
-    needs: [lint, test-e2e]
+    needs: [lint, test-e2e-unit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -91,7 +93,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [lint, test-e2e, build]
+    needs: [lint, test-e2e-unit, build]
     runs-on: [self-hosted, linux]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
