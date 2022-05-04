@@ -71,4 +71,8 @@ export class Guideline {
         nullable: true,
     })
     cpicComment: string;
+
+    public get isComplete(): boolean {
+        return !!this.recommendation || !!this.implication;
+    }
 }

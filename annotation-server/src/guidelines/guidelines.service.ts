@@ -1,5 +1,3 @@
-import { assert } from 'console';
-
 import { sheets_v4 } from '@googleapis/sheets';
 import { HttpService } from '@nestjs/axios';
 import {
@@ -82,6 +80,7 @@ export class GuidelinesService {
                 ),
         );
         for (let row = 0; row < medications.length; row++) {
+            // parse all lines in sheet
             const geneSymbolName = genes[row]?.[0];
             const medicationName = medications[row]?.[0];
             if (!geneSymbolName || !medicationName) continue;
@@ -89,55 +88,45 @@ export class GuidelinesService {
             const medication = await this.findMedicationByName(
                 medicationName.value,
             );
-            const genePhenotypes = await this.findGenePhenotypes(
+            const genePhenotypes = await this.findGenePhenotypesForGene(
                 geneSymbolName.value,
             );
             if (genePhenotypes.length === 0 || !medication) continue;
 
             for (let col = 0; col < implications[row].length; col++) {
+                // supplement guidelines with implications and recommendations from sheet
                 for (const genePhenotype of genePhenotypes[col].values()) {
+                    const implication = implications[row][col].value?.trim();
+                    const recommendation =
+                        recommendations[row][col].value?.trim();
+                    const warningLevel = this.getWarningLevelFromColor(
+                        recommendations[row][col].backgroundColor,
+                    );
+                    if (!this.isCuratedGuideline(implication, recommendation))
+                        continue;
+
                     const guidelinesForMedication = guidelines.get(
                         medication.name,
                     );
                     const guidelinesForGenePhenotype =
-                        guidelinesForMedication.filter(
-                            (guidelineForMed) =>
-                                guidelineForMed.genePhenotype.id ===
-                                genePhenotype.id,
+                        this.getGuidelinesForGenePhenotype(
+                            medication,
+                            genePhenotype,
+                            guidelinesForMedication,
                         );
-                    if (!guidelinesForGenePhenotype.length)
-                        throw new InternalServerErrorException(
-                            `No matching CPIC guideline was found for ${medication.name} and genephenotype ${genePhenotype.geneSymbol}, ${genePhenotype.phenotype.name}!`,
-                        );
-                    for (const guideline of guidelinesForGenePhenotype) {
-                        const implication =
-                            implications[row][col].value?.trim();
-                        const recommendation =
-                            recommendations[row][col].value?.trim();
-                        const warningLevel = this.getWarningLevelFromColor(
-                            recommendations[row][col].backgroundColor,
-                        );
-                        if (
-                            !implication ||
-                            implication.replace(' ', '').toLowerCase() ===
-                                'n/a' ||
-                            !recommendation ||
-                            recommendation.replace(' ', '').toLowerCase() ===
-                                'n/a'
-                        ) {
-                            continue;
-                        }
+                    guidelinesForGenePhenotype.forEach((guideline) => {
                         guideline.implication = implication;
                         guideline.recommendation = recommendation;
                         guideline.warningLevel = warningLevel;
-                    }
+                    });
                 }
             }
         }
         const flatGuidelines = Array.from(guidelines.values()).flat();
 
-        const incompleteGuidelines =
-            this.getIncompleteGuidelines(flatGuidelines);
+        const incompleteGuidelines = flatGuidelines.filter(
+            (guideline) => guideline.isComplete,
+        );
         for (const incompleteGuideline of incompleteGuidelines) {
             this.logger.error(
                 `Guideline for ${incompleteGuideline.medication.name} for genephenotype ${incompleteGuideline.genePhenotype.geneSymbol.name}, ${incompleteGuideline.genePhenotype.phenotype.name} is missing from sheet!`,
@@ -265,7 +254,7 @@ export class GuidelinesService {
         return genePhenotype;
     }
 
-    private async findGenePhenotypes(
+    private async findGenePhenotypesForGene(
         geneSymbolName: string,
     ): Promise<Array<Set<GenePhenotype>>> {
         if (!geneSymbolName) return [];
@@ -299,13 +288,32 @@ export class GuidelinesService {
         return genePhenotypes;
     }
 
-    private getIncompleteGuidelines(guidelines: Guideline[]): Guideline[] {
-        const incompleteGuidelines: Guideline[] = [];
-        for (const guideline of guidelines) {
-            if (!guideline.implication && !guideline.recommendation)
-                incompleteGuidelines.push(guideline);
-        }
-        return incompleteGuidelines;
+    private isCuratedGuideline(
+        implication: string,
+        recommendation: string,
+    ): boolean {
+        return (
+            implication &&
+            implication.replace(' ', '').toLowerCase() !== 'n/a' &&
+            recommendation &&
+            recommendation.replace(' ', '').toLowerCase() !== 'n/a'
+        );
+    }
+
+    private getGuidelinesForGenePhenotype(
+        medication: Medication,
+        genePhenotype: GenePhenotype,
+        guidelinesForMed: Guideline[],
+    ): Guideline[] {
+        const guidelinesForGenePhenotype = guidelinesForMed.filter(
+            (guidelineForMed) =>
+                guidelineForMed.genePhenotype.id === genePhenotype.id,
+        );
+        if (!guidelinesForGenePhenotype.length)
+            throw new InternalServerErrorException(
+                `No matching CPIC guideline was found for ${medication.name} and genephenotype ${genePhenotype.geneSymbol}, ${genePhenotype.phenotype.name}!`,
+            );
+        return guidelinesForGenePhenotype;
     }
 
     async clearAllData(): Promise<void> {
