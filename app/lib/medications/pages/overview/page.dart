@@ -7,11 +7,12 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../common/module.dart';
 import '../../../common/theme.dart';
+import '../../models/medication.dart';
 import 'cubit.dart';
 
-final panelController = SlidingUpPanelController();
+final _panelController = SlidingUpPanelController();
 
-class MedicationsOverviewPage extends StatelessWidget {
+class MedicationsOverviewPage extends HookWidget {
   const MedicationsOverviewPage({Key? key}) : super(key: key);
 
   @override
@@ -56,14 +57,16 @@ class MedicationsOverviewPage extends StatelessWidget {
                 ),
               ),
               SlidingUpPanelWidget(
+                onTap: _panelController.expand,
                 controlHeight: 150,
-                panelController: panelController,
+                panelController: _panelController,
                 child: RoundedCard(
                   child: Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8),
                         child: CupertinoSearchTextField(
+                          onTap: _panelController.expand,
                           controller: searchController,
                           onChanged: (value) {
                             context
@@ -75,18 +78,7 @@ class MedicationsOverviewPage extends StatelessWidget {
                       state.when(
                         initial: Container.new,
                         error: () => Text('smth went wrong'),
-                        loaded: (medications) => Flexible(
-                          child: ListView.builder(
-                            itemCount: medications.length,
-                            itemBuilder: (context, index) {
-                              final el = medications[index];
-                              return MedicationCard(
-                                onTap: () {},
-                                medicationName: el.name,
-                              );
-                            },
-                          ),
-                        ),
+                        loaded: _buildMedicationsList,
                         loading: () =>
                             Center(child: CircularProgressIndicator()),
                       ),
@@ -100,11 +92,27 @@ class MedicationsOverviewPage extends StatelessWidget {
       ),
     );
   }
+
+  Flexible _buildMedicationsList(List<Medication> medications) {
+    return Flexible(
+      child: ListView.separated(
+        padding: EdgeInsets.symmetric(vertical: 14),
+        itemCount: medications.length,
+        itemBuilder: (context, index) {
+          final el = medications[index];
+          return MedicationCard(
+            onTap: () {},
+            medicationName: el.name,
+          );
+        },
+        separatorBuilder: (_, __) => SizedBox(height: 8),
+      ),
+    );
+  }
 }
 
 class MedicationCard extends StatelessWidget {
   const MedicationCard({
-    this.isSafe = true,
     required this.onTap,
     required this.medicationName,
     this.medicationDescription,
@@ -113,7 +121,6 @@ class MedicationCard extends StatelessWidget {
   final VoidCallback onTap;
   final String medicationName;
   final String? medicationDescription;
-  final bool isSafe;
 
   @override
   Widget build(BuildContext context) {
@@ -121,15 +128,26 @@ class MedicationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      elevation: 20,
-      color: isSafe ? Color(0xFFAFE1AF) : Color(0xFFF5B9B4),
+      elevation: 5,
+      color: Colors.grey[200],
       child: GestureDetector(
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(medicationName, style: PharmeTheme.textTheme.titleLarge),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      medicationName,
+                      style: PharmeTheme.textTheme.titleMedium,
+                    ),
+                  ),
+                  Icon(Icons.arrow_forward_ios)
+                ],
+              ),
               SizedBox(height: 6),
               if (medicationDescription != null)
                 Text(
