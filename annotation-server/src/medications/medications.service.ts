@@ -161,9 +161,8 @@ export class MedicationsService {
     }
 
     getDataFromJSON(path: string): Promise<DrugDto[]> {
-        const jsonStream = fs
-            .createReadStream(path)
-            .pipe(JSONStream.parse('drugbank.drug.*'));
+        const fileStream = fs.createReadStream(path);
+        const jsonStream = fileStream.pipe(JSONStream.parse('drugbank.drug.*'));
         const drugs: Array<DrugDto> = [];
         const clearLine = () => {
             process.stdout.write(`\r${String.fromCharCode(27)}[0J`);
@@ -176,9 +175,13 @@ export class MedicationsService {
             drugs.push(drug);
         });
         return new Promise<DrugDto[]>((resolve, reject) => {
-            jsonStream.on('error', () => {
+            fileStream.on('error', (error) => {
                 clearLine();
-                reject();
+                reject(error);
+            });
+            jsonStream.on('error', (error) => {
+                clearLine();
+                reject(error);
             });
             jsonStream.on('end', () => {
                 clearLine();
