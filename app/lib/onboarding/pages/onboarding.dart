@@ -1,11 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:black_hole_flutter/black_hole_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../common/module.dart';
-import '../../../common/routing/router.dart';
 
 class OnboardingPage extends HookWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -59,7 +52,9 @@ class OnboardingPage extends HookWidget {
   List<Widget> _buildPageIndicator(BuildContext context, int currentPage) {
     final list = <Widget>[];
     for (var i = 0; i < _pages.length; ++i) {
-      list.add(i == currentPage ? _indicator(context, true) : _indicator(context, false));
+      list.add(i == currentPage
+          ? _indicator(context, true)
+          : _indicator(context, false));
     }
     return list;
   }
@@ -104,7 +99,8 @@ class OnboardingPage extends HookWidget {
                 isLastPage
                     ? context.l10n.onboarding_get_started
                     : context.l10n.onboarding_next,
-                style: context.textTheme.headlineSmall!.copyWith(color: Colors.white),
+                style: context.textTheme.headlineSmall!
+                    .copyWith(color: Colors.white),
               ),
               SizedBox(width: 10),
               Icon(
@@ -167,7 +163,8 @@ class OnboardingSubPage extends StatelessWidget {
           SizedBox(height: 30),
           Text(
             getHeader(context).single,
-            style: context.textTheme.headlineSmall!.copyWith(color: Colors.white),
+            style:
+                context.textTheme.headlineSmall!.copyWith(color: Colors.white),
           ),
           SizedBox(height: 15),
           Text(

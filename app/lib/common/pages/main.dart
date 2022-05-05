@@ -1,8 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-
-import '../../../common/module.dart';
-import '../routing/router.dart';
+import '../module.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);

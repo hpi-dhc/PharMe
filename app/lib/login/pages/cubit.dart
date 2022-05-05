@@ -1,10 +1,8 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/widgets.dart' hide MetaData;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../common/module.dart';
+import '../../../common/module.dart' hide MetaData;
 import '../../../common/utilities/genome_data.dart';
 import '../../common/models/metadata.dart';
 import '../models/lab.dart';
@@ -32,7 +30,6 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       MetaData.instance.isLoggedIn = true;
       await MetaData.save();
       emit(LoginPageState.loadedUserData());
-
     } catch (e) {
       emit(LoginPageState.error(context.l10n.err_fetch_user_data_failed));
     }

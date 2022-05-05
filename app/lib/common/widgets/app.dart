@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart' hide MetaData;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../models/metadata.dart';
-import '../routing/router.dart';
-import '../theme.dart';
+import '../module.dart' hide MetaData;
 
 class PharmeApp extends StatelessWidget {
   PharmeApp({Key? key}) : super(key: key);
