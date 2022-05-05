@@ -1,8 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-
-import '../../../common/module.dart';
-import '../routing/router.dart';
+import '../module.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,10 +11,10 @@ class MainPage extends StatelessWidget {
         MedicationsRouter(),
         ReportsRouter(),
         PgxRouter(),
-        ProfileRouter(),
+        SettingsRouter(),
       ],
       appBarBuilder: (_, tabsRouter) => AppBar(
-        title: const Text('PharMe'),
+        title: Text(context.l10n.general_pharme),
         centerTitle: true,
         leading: const AutoBackButton(),
       ),
@@ -46,11 +42,11 @@ class MainPage extends StatelessWidget {
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.lightbulb),
-        label: 'PGx',
+        label: context.l10n.nav_pgx,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        label: context.l10n.nav_profile,
+        icon: Icon(Icons.settings),
+        label: context.l10n.nav_settings,
       ),
     ];
   }

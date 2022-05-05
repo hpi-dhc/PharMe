@@ -8,12 +8,15 @@
   "err_could_not_launch": "Could not launch {url}",
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   
+  "general_pharme": "PharMe",
+
   "medications_details_page_working": "It works. ID is {id}",
   "medications_overview_page_generic_error": "Error!",
 
   "nav_medications": "Medications",
-  "nav_profile": "Profile",
+  "nav_pgx": "PGx",
   "nav_reports": "Reports",
+  "nav_settings": "Settings",
   
   "onboarding_get_started": "Get started",
   "onboarding_next": "Next",
@@ -61,5 +64,10 @@
 
   "@reports_page_text": {
     "description": "Provisional text on the reports page, will be changed."
-  }
+  },
+
+  "settings_page_cancel": "Cancel",
+  "settings_page_continue": "Continue",
+  "settings_page_delete_data": "Delete App Data",
+  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data and cannot be undone."
 }

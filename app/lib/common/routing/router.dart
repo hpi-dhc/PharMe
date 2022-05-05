@@ -5,8 +5,8 @@ import '../../login/module.dart';
 import '../../medications/module.dart';
 import '../../onboarding/module.dart';
 import '../../pgx/module.dart';
-import '../../profile/module.dart';
 import '../../reports/module.dart';
+import '../../settings/module.dart';
 import '../pages/main.dart';
 
 part 'router.gr.dart';
@@ -21,7 +21,7 @@ part 'router.gr.dart';
       page: MainPage,
       children: [
         medicationsRoutes,
-        profileRoutes,
+        settingsRoutes,
         pgxRoutes,
         reportsRoutes,
       ],

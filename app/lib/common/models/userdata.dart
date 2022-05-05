@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 
-import '../../profile/models/hive/cpic_lookup_response.dart';
-import '../../profile/models/hive/diplotype.dart';
+import 'cpic_lookup_response.dart';
+import 'diplotype.dart';
 
 part 'userdata.g.dart';
 
