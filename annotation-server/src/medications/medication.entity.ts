@@ -1,10 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { Drug } from './interfaces/drugbank.interface';
+import { Guideline } from '../guidelines/guideline.entity';
+import { DrugDto } from './dtos/drugbank.dto';
 
 @Entity()
 export class Medication {
-    static fromDrug(drug: Drug): Medication {
+    static fromDrug(drug: DrugDto): Medication {
         const medication = new Medication();
         medication.name = drug.name;
         medication.description = drug.description;
@@ -46,4 +47,13 @@ export class Medication {
 
     @Column('text', { array: true })
     synonyms: string[];
+
+    @Column({ nullable: true })
+    drugclass: string;
+
+    @Column({ nullable: true })
+    indication: string;
+
+    @OneToMany(() => Guideline, (guideline) => guideline.medication)
+    guidelines: Guideline[];
 }
