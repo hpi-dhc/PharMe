@@ -48,6 +48,28 @@ export class MedicationsService {
         });
     }
 
+    async findMatchingMedications(query: string): Promise<Medication[]> {
+        const result = await this.medicationRepository.query(
+            `
+        SELECT distinct id, name, description, drugclass, indication,
+        CASE
+            WHEN name ILIKE '%'||$1||'%' THEN 1
+            WHEN drugclass ILIKE '%'||$1||'%' THEN 2
+            WHEN synonym ILIKE '%'||$1||'%' THEN 3
+            WHEN description ILIKE '%'||$1||'%' THEN 4
+            ELSE 5
+        END as rank
+        FROM (
+            SELECT id, name, description, drugclass, indication, unnest(synonyms) synonym
+            FROM public.medication
+        ) sub
+        WHERE name ILIKE '%'||$1||'%' OR drugclass ILIKE '%'||$1||'%' OR synonym ILIKE '%'||$1||'%' OR description ILIKE '%'||$1||'%'
+        ORDER BY rank ASC`,
+            [query],
+        );
+        return result;
+    }
+
     async fetchAllMedications(): Promise<void> {
         await this.clearAllMedicationData();
         const jsonPath = await this.getJSONfromZip();
