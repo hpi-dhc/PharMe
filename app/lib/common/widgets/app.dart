@@ -23,10 +23,7 @@ class PharmeApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        Locale('en', ''),
-        Locale('de', ''),
-      ],
+      supportedLocales: [Locale('en', '')],
     );
   }
 }
