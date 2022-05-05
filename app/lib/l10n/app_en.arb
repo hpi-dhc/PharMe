@@ -61,5 +61,10 @@
 
   "@reports_page_text": {
     "description": "Provisional text on the reports page, will be changed."
-  }
+  },
+
+  "settings_page_cancel": "Cancel",
+  "settings_page_continue": "Continue",
+  "settings_page_delete_data": "Delete App Data",
+  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data and cannot be undone."
 }

@@ -34,5 +34,10 @@
   "profile_page_sign_in": "Anmelden",
   "profile_page_username": "Benutzername",
 
-  "reports_page_text": "Berichte Page"
+  "reports_page_text": "Berichte Page",
+
+  "settings_page_cancel": "Abbrechen",
+  "settings_page_continue": "Fortfahren",
+  "settings_page_delete_data": "App-Daten löschen",
+  "settings_page_delete_data_text": "Bist du dir sicher, dass du alle deine Daten löschen möchtest? Dies beinhaltet ebenfalls deine genomischen Daten und kann nicht rückgängig gemacht werden."
 }
