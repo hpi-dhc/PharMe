@@ -14,7 +14,7 @@ class MainPage extends StatelessWidget {
         SettingsRouter(),
       ],
       appBarBuilder: (_, tabsRouter) => AppBar(
-        title: Text(context.l10n.general_pharme),
+        title: Text(context.l10n.general_appName),
         centerTitle: true,
         leading: const AutoBackButton(),
       ),

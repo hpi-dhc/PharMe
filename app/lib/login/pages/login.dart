@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
       DropdownButtonHideUnderline(
         child: DropdownButton2(
           isExpanded: true,
-          hint: Text('Please select your lab'),
+          hint: Text(context.l10n.auth_choose_lab),
           value: dropdownValue,
           onChanged: (value) {
             setState(() {
@@ -123,17 +123,17 @@ class _LoginPageState extends State<LoginPage> {
         ],
         child: Icon(
           Icons.task_alt,
-          size: 150,
+          size: 152,
           color: Colors.white,
         ),
       ),
-      Text('Successfully imported data'),
-      SizedBox(height: 25),
+      Text(context.l10n.auth_success),
+      SizedBox(height: 24),
       SizedBox(
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () => context.router.replace(MainRoute()),
-          child: Text('Continue'),
+          child: Text(context.l10n.general_continue),
         ),
       ),
     ];
@@ -148,18 +148,18 @@ class _LoginPageState extends State<LoginPage> {
         ],
         child: Icon(
           Icons.warning_amber_outlined,
-          size: 150,
+          size: 152,
           color: Colors.white,
         ),
       ),
       Text(message),
-      SizedBox(height: 25),
+      SizedBox(height: 24),
       SizedBox(
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () =>
               context.read<LoginPageCubit>().revertToInitialState(),
-          child: Text('Retry'),
+          child: Text(context.l10n.general_retry),
         ),
       ),
     ];

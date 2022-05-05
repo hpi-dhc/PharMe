@@ -48,13 +48,13 @@ class PgxPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Pharmacogenomics',
+                  context.l10n.faq_pharmacogenomics,
                   style: context.textTheme.headline6!
                       .copyWith(color: Colors.white),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'On this page we will answer common questions regarding PGx',
+                  context.l10n.faq_page_description,
                   style: context.textTheme.bodyText2!
                       .copyWith(color: Colors.white),
                 ),

@@ -1,14 +1,22 @@
 {
   "app_feature_coming_soon": "Have a little patience, this feature is coming soon!",
   
+  "auth_choose_lab": "Please select your lab",
   "auth_sign_in": "Sign in",
   "auth_sign_off": "Sign out and delete data",
   "auth_skip_sign_in": "Skip login",
+  "auth_success": "Successfully imported data",
   
   "err_could_not_launch": "Could not launch {url}",
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
+  "err_generic": "Error!",
   
-  "general_pharme": "PharMe",
+  "faq_page_description": "On this page we will answer common questions regarding PGx",
+  "faq_pharmacogenomics": "Pharmacogenomics",
+
+  "general_appName": "PharMe",
+  "general_continue": "Continue",
+  "general_retry": "Retry",
 
   "medications_details_page_working": "It works. ID is {id}",
   "medications_overview_page_generic_error": "Error!",
