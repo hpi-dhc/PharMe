@@ -48,7 +48,7 @@ export class MedicationsService {
         });
     }
 
-    async findMatchingMedications(query = ''): Promise<Medication[]> {
+    async findMatchingMedications(query: string): Promise<Medication[]> {
         const result = await this.medicationRepository.query(
             `
         SELECT distinct id, name, description, drugclass, indication,

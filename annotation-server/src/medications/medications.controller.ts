@@ -11,8 +11,13 @@ export class MedicationsController {
 
     @ApiOperation({ summary: 'Fetch all medications with optional search' })
     @Get()
-    get(@Query() query: { search: string }): Promise<Medication[]> {
-        return this.medicationsService.findMatchingMedications(query.search);
+    get(@Query() query: { search?: string }): Promise<Medication[]> {
+        if (query.search) {
+            return this.medicationsService.findMatchingMedications(
+                query.search,
+            );
+        }
+        return this.medicationsService.getAll();
     }
 
     @ApiOperation({
