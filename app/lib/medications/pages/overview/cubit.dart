@@ -15,7 +15,7 @@ class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
   final duration = Duration(milliseconds: 500);
 
   void loadMedications(String value) {
-    if (value == '') {
+    if (value.isEmpty) {
       emit(
         MedicationsOverviewState.loaded([]),
       );

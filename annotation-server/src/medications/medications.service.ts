@@ -49,20 +49,24 @@ export class MedicationsService {
     }
 
     async findMatchingMedications(query = ''): Promise<Medication[]> {
-        const result = await this.medicationRepository.query(`
+        const result = await this.medicationRepository.query(
+            `
         SELECT distinct id, name, description, drugclass, indication,
-        CASE 
-            WHEN name ILIKE '%${query}%' THEN 1
-            WHEN drugclass ILIKE '%${query}%' THEN 2
-            WHEN synonym ILIKE '%${query}%' THEN 3 
-            ELSE 4 
+        CASE
+            WHEN name ILIKE '%'||$1||'%' THEN 1
+            WHEN drugclass ILIKE '%'||$1||'%' THEN 2
+            WHEN synonym ILIKE '%'||$1||'%' THEN 3
+            WHEN description ILIKE '%'||$1||'%' THEN 4
+            ELSE 5
         END as rank
         FROM (
             SELECT id, name, description, drugclass, indication, unnest(synonyms) synonym
             FROM public.medication
         ) sub
-        WHERE name ILIKE '%${query}%' OR drugclass ILIKE '%${query}%' OR synonym ILIKE '%${query}%'
-        ORDER BY rank ASC`);
+        WHERE name ILIKE '%'||$1||'%' OR drugclass ILIKE '%'||$1||'%' OR synonym ILIKE '%'||$1||'%' OR description ILIKE '%'||$1||'%'
+        ORDER BY rank ASC`,
+            [query],
+        );
         return result;
     }
 
