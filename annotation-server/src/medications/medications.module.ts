@@ -10,5 +10,6 @@ import { MedicationsService } from './medications.service';
     imports: [HttpModule, TypeOrmModule.forFeature([Medication])],
     controllers: [MedicationsController],
     providers: [MedicationsService],
+    exports: [MedicationsService],
 })
 export class MedicationsModule {}

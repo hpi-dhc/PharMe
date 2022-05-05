@@ -11,9 +11,6 @@ class Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: context.textTheme.titleMedium,
-    );
+    return Text(text, style: context.textTheme.titleMedium);
   }
 }

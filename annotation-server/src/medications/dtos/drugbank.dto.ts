@@ -1,3 +1,5 @@
+import { IsOptional } from 'class-validator';
+
 interface ExternalIdentifier {
     resource: 'PharmGKB' | string;
     identifier: string;
@@ -6,13 +8,19 @@ interface InternationalBrand {
     name: string;
 }
 
-export interface Drug {
+export class DrugDto {
     name: string;
-    description?: string;
-    'external-identifiers'?: {
+
+    @IsOptional()
+    description: string;
+
+    @IsOptional()
+    'external-identifiers': {
         'external-identifier': Array<ExternalIdentifier> | ExternalIdentifier;
     };
-    'international-brands'?: {
+
+    @IsOptional()
+    'international-brands': {
         'international-brand': Array<InternationalBrand> | InternationalBrand;
     };
 }

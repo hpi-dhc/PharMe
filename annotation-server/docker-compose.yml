@@ -6,7 +6,7 @@ services:
     env_file: .env
     volumes:
       # mapped folder in the container needs to match the working dir found in the Dockerfile
-      - ./data:/usr/src/app/data:ro
+      - ./data:/app/data:ro
     ports:
       - 8080:3000
     depends_on:

@@ -22,6 +22,7 @@
     "test:e2e:cov": "jest --config ./test/jest-e2e.json --coverage"
   },
   "dependencies": {
+    "@googleapis/sheets": "^2.0.1",
     "@nestjs/axios": "^0.0.7",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.0.0",
@@ -32,6 +33,7 @@
     "JSONStream": "^1.3.5",
     "axios": "^0.26.0",
     "axios-retry": "^3.2.4",
+    "class-validator": "^0.13.2",
     "csv-parse": "^5.0.4",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",

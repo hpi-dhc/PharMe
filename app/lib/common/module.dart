@@ -13,3 +13,4 @@ export 'routing/router.dart';
 export 'theme.dart';
 export 'widgets/app.dart';
 export 'widgets/headings.dart';
+export 'widgets/rounded_card.dart';
