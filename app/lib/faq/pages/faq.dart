@@ -1,8 +1,8 @@
 import '../../common/module.dart';
 import '../constants.dart';
 
-class PgxPage extends StatelessWidget {
-  const PgxPage({Key? key}) : super(key: key);
+class FaqPage extends StatelessWidget {
+  const FaqPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class PgxPage extends StatelessWidget {
           children: [
             _buildHeaderCard(context),
             SizedBox(height: 8),
-            ...pgxFacts.map((item) => _buildPgxFact(context, item)).toList(),
+            ...faqList.map((item) => _buildQuestion(context, item)).toList(),
           ],
         ),
       ),
@@ -66,9 +66,8 @@ class PgxPage extends StatelessWidget {
     );
   }
 
-  Widget _buildPgxFact(BuildContext context, PgxFact fact) {
+  Widget _buildQuestion(BuildContext context, Question question) {
     final _key = GlobalKey();
-
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -77,14 +76,14 @@ class PgxPage extends StatelessWidget {
         data: context.theme.copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           key: _key,
-          title: Text(fact.header),
+          title: Text(question.question),
           onExpansionChanged: (value) {
             if (value) _scrollToSelectedContent(key: _key);
           },
           children: [
             ListTile(
               contentPadding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-              title: Text(fact.description),
+              title: Text(question.answer),
             ),
           ],
         ),
