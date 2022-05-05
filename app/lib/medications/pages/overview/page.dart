@@ -38,7 +38,7 @@ class MedicationsOverviewPage extends HookWidget {
                   children: [
                     SvgPicture.asset('assets/images/logo.svg'),
                     Text(
-                      'Type in a medication',
+                      context.l10n.medications_overview_page_typeInMedication,
                       style: PharmeTheme.textTheme.bodyLarge!
                           .copyWith(color: Colors.white),
                     ),
@@ -72,7 +72,7 @@ class MedicationsOverviewPage extends HookWidget {
                       ),
                       state.when(
                         initial: Container.new,
-                        error: () => Text('smth went wrong'),
+                        error: () => Text(context.l10n.err_generic),
                         loaded: _buildMedicationsList,
                         loading: () =>
                             Center(child: CircularProgressIndicator()),

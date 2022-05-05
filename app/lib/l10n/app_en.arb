@@ -8,6 +8,15 @@
   "auth_success": "Successfully imported data",
   
   "err_could_not_launch": "Could not launch {url}",
+  "@err_could_not_launch": {
+    "description": "Error message when (auth-related) url cannot be launched.",
+    "placeholders": {
+      "url": {
+        "type": "String",
+        "example": "https://www.google.de"
+      }
+    }
+  },
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   "err_generic": "Error!",
   
@@ -17,9 +26,18 @@
   "general_appName": "PharMe",
   "general_continue": "Continue",
   "general_retry": "Retry",
-
+  
+  "medications_overview_page_typeInMedication": "Type in a medication",
   "medications_details_page_working": "It works. ID is {id}",
-  "medications_overview_page_generic_error": "Error!",
+  "@medications_details_page_working": {
+    "description": "Provisional message for developers when visiting medications details page.",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
 
   "nav_medications": "Medications",
   "nav_faq": "FAQ",
@@ -46,33 +64,12 @@
   "profile_page_username": "Username",
 
   "reports_page_text": "Reports Page",
-
-  "@err_could_not_launch": {
-    "description": "Error message when (auth-related) url cannot be launched.",
-    "placeholders": {
-      "url": {
-        "type": "String",
-        "example": "https://www.google.de"
-      }
-    }
-  },
-
-  "@medications_details_page_working": {
-    "description": "Provisional message for developers when visiting medications details page.",
-    "placeholders": {
-      "id": {
-        "type": "String",
-        "example": "1"
-      }
-    }
-  },
-  "@medications_overview_page_generic_error": {
-    "description": "Provisional message for developers when visiting medications overview page."
-  },
-
   "@reports_page_text": {
     "description": "Provisional text on the reports page, will be changed."
   },
+
+
+
 
   "settings_page_cancel": "Cancel",
   "settings_page_continue": "Continue",
