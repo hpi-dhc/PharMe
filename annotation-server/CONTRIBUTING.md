@@ -31,7 +31,4 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
     `data/` and adjust your `.env` accordingly
   - You can now start the server using `yarn start:dev`
 - initialize the database with the zipped data specified in `.env` by sending a
-  POST-Request to
-  - `/api/v1/medications`, then to
-  - `/api/v1/genephenotypes` and finally to
-  - `/api/v1/guidelines`
+  POST-Request to `api/v1/init`

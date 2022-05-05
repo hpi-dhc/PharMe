@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
 
@@ -6,8 +7,12 @@ import { AppService } from './app.service';
 export class AppController {
     constructor(private readonly appService: AppService) {}
 
-    @Get()
-    getHello(): string {
-        return this.appService.getHello();
+    @ApiOperation({
+        summary:
+            'Clear and update all data from DrugBank, the Google Sheet & CPIC',
+    })
+    @Post('init')
+    initializeDatabase(): Promise<void> {
+        return this.appService.initializeDatabase();
     }
 }
