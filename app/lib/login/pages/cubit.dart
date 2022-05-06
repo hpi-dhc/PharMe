@@ -19,7 +19,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
     try {
       // authenticate
-      final token = await _getAccessToken(lab.authUrl);
+      final token = await _getAccessToken(context, lab.authUrl);
       emit(LoginPageState.loadingUserData());
 
       // get data
@@ -35,7 +35,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     }
   }
 
-  Future<String> _getAccessToken(String authUrl) async {
+  Future<String> _getAccessToken(BuildContext context, String authUrl) async {
     final uri = Uri.parse(authUrl);
     const clientId = 'pharme-app';
     final scopes = List<String>.of(['openid', 'profile']);
@@ -52,7 +52,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         if (await canLaunch(url)) {
           await launch(url, forceWebView: true);
         } else {
-          throw Exception('Could not launch $url');
+          throw Exception(context.l10n.err_could_not_launch(url));
         }
       },
     );

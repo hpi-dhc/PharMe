@@ -10,11 +10,11 @@ class MainPage extends StatelessWidget {
         // The order maps to BottomNavigationBar
         MedicationsRouter(),
         ReportsRouter(),
-        PgxRouter(),
+        FaqRouter(),
         SettingsRouter(),
       ],
       appBarBuilder: (_, tabsRouter) => AppBar(
-        title: Text(context.l10n.general_pharme),
+        title: Text(context.l10n.general_appName),
         centerTitle: true,
         leading: const AutoBackButton(),
       ),
@@ -42,7 +42,7 @@ class MainPage extends StatelessWidget {
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.lightbulb),
-        label: context.l10n.nav_pgx,
+        label: context.l10n.nav_faq,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.settings),

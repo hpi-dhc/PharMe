@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../faq/module.dart';
 import '../../login/module.dart';
 import '../../medications/module.dart';
 import '../../onboarding/module.dart';
-import '../../pgx/module.dart';
 import '../../reports/module.dart';
 import '../../settings/module.dart';
 import '../pages/main.dart';
@@ -22,7 +22,7 @@ part 'router.gr.dart';
       children: [
         medicationsRoutes,
         settingsRoutes,
-        pgxRoutes,
+        faqRoutes,
         reportsRoutes,
       ],
     ),
