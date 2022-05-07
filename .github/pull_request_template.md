@@ -2,12 +2,17 @@
 
 Closes #
 
+- [ ] I have read the [code-style guidelines](../docs/FLUTTER_STYLE.md) and
+      confirmed that this PR upholds said guidelines
+
 ---
 
 ## Changes
+
 <!-- Please summarize your changes: -->
 
 ## Testing Changes
+
 <!-- Please describe how to test your changes: -->
 
 ## Screenshot of Changes (Optional)
