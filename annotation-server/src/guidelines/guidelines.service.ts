@@ -1,7 +1,13 @@
 import { sheets_v4 } from '@googleapis/sheets';
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import {
+    Injectable,
+    InternalServerErrorException,
+    Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { lastValueFrom } from 'rxjs';
 import { ILike, Repository } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/google-sheets';
@@ -9,30 +15,40 @@ import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity
 import { GenePhenotypesService } from '../gene-phenotypes/gene-phenotypes.service';
 import { Medication } from '../medications/medication.entity';
 import { MedicationsService } from '../medications/medications.service';
+import { CpicRecommendationDto } from './dtos/cpic-recommendation.dto';
 import { Guideline, WarningLevel } from './guideline.entity';
 
 @Injectable()
 export class GuidelinesService {
     private readonly logger = new Logger(GuidelinesService.name);
-    private hashedMedications: Map<string, Medication>;
+    private hashedMedicationsByName: Map<string, Medication>;
+    private hashedMedicationsByRxCUI: Map<string, Medication>;
     private hashedGenePhenotypes: Map<string, Array<Set<GenePhenotype>>>;
     private spreadsheetPhenotypeHeader: Array<Set<string>>;
 
     constructor(
         private configService: ConfigService,
+        private httpService: HttpService,
         @InjectRepository(Guideline)
         private guidelinesRepository: Repository<Guideline>,
         private medicationsService: MedicationsService,
         private genePhenotypesService: GenePhenotypesService,
     ) {
         this.hashedGenePhenotypes = new Map();
-        this.hashedMedications = new Map();
+        this.hashedMedicationsByName = new Map();
+        this.hashedMedicationsByRxCUI = new Map();
         this.spreadsheetPhenotypeHeader = [];
     }
 
     async fetchGuidelines(): Promise<void> {
         await this.clearAllData();
+        const guidelines = await this.fetchCpicGuidelines();
+        await this.complementAndSaveGuidelines(guidelines);
+    }
 
+    async complementAndSaveGuidelines(
+        guidelines: Map<string, Guideline[]>,
+    ): Promise<void> {
         const [
             medications,
             genes,
@@ -63,22 +79,23 @@ export class GuidelinesService {
                         .map((phenotype) => phenotype.trim().toLowerCase()),
                 ),
         );
-
-        const guidelines: Guideline[] = [];
         for (let row = 0; row < medications.length; row++) {
+            // parse all lines in sheet
             const geneSymbolName = genes[row]?.[0];
             const medicationName = medications[row]?.[0];
             if (!geneSymbolName || !medicationName) continue;
 
-            const medication = await this.findMedication(medicationName.value);
-            const genePhenotypes = await this.findGenePhenotypes(
+            const medication = await this.findMedicationByName(
+                medicationName.value,
+            );
+            const genePhenotypes = await this.findGenePhenotypesForGene(
                 geneSymbolName.value,
             );
             if (genePhenotypes.length === 0 || !medication) continue;
 
             for (let col = 0; col < implications[row].length; col++) {
+                // supplement guidelines with implications and recommendations from sheet
                 for (const genePhenotype of genePhenotypes[col].values()) {
-                    const guideline = new Guideline();
                     const implication = implications[row][col].value?.trim();
                     const recommendation =
                         recommendations[row][col].value?.trim();
@@ -86,26 +103,87 @@ export class GuidelinesService {
                         recommendations[row][col].backgroundColor,
                     );
                     if (
-                        !implication ||
-                        implication.replace(' ', '').toLowerCase() === 'n/a' ||
-                        !recommendation ||
-                        recommendation.replace(' ', '').toLowerCase() === 'n/a'
-                    ) {
+                        !this.guidelineTextsAreValid(
+                            implication,
+                            recommendation,
+                        )
+                    )
                         continue;
-                    }
-                    guideline.implication = implication;
-                    guideline.recommendation = recommendation;
-                    guideline.warningLevel = warningLevel;
-                    guideline.genePhenotype = genePhenotype;
-                    guideline.medication = medication;
-                    guidelines.push(guideline);
+
+                    const guidelinesForMedication = guidelines.get(
+                        medication.name,
+                    );
+                    const guidelinesForGenePhenotype =
+                        this.getGuidelinesForGenePhenotype(
+                            medication,
+                            genePhenotype,
+                            guidelinesForMedication,
+                        );
+                    guidelinesForGenePhenotype.forEach((guideline) => {
+                        guideline.implication = implication;
+                        guideline.recommendation = recommendation;
+                        guideline.warningLevel = warningLevel;
+                    });
                 }
             }
         }
+        const flatGuidelines = Array.from(guidelines.values()).flat();
 
-        this.guidelinesRepository.save(guidelines);
+        const incompleteGuidelines = flatGuidelines.filter(
+            (guideline) => !guideline.isComplete,
+        );
+        for (const incompleteGuideline of incompleteGuidelines) {
+            this.logger.error(
+                `Guideline for ${incompleteGuideline.medication.name} for genephenotype ${incompleteGuideline.genePhenotype.geneSymbol.name}, ${incompleteGuideline.genePhenotype.phenotype.name} is missing from sheet!`,
+            );
+        }
+
+        this.guidelinesRepository.save(flatGuidelines);
 
         this.clearMaps();
+    }
+
+    async fetchCpicGuidelines(): Promise<Map<string, Guideline[]>> {
+        const response = this.httpService.get(
+            'https://api.cpicpgx.org/v1/recommendation',
+            {
+                params: {
+                    select: 'drugid,drugrecommendation,implications,comments,phenotypes,lookupkey,classification',
+                },
+            },
+        );
+        const recommendationDtos: CpicRecommendationDto[] = (
+            await lastValueFrom(response)
+        ).data;
+
+        const guidelines: Map<string, Guideline[]> = new Map();
+
+        for (const cpicRecommendationDto of recommendationDtos) {
+            const externalid = cpicRecommendationDto.drugid.split(':');
+            if (externalid[0] !== 'RxNorm') continue;
+            const medication = await this.findMedicationByRxNorm(externalid[1]);
+            if (!medication) continue;
+            for (const [geneSymbol, lookupkey] of Object.entries(
+                cpicRecommendationDto.lookupkey,
+            )) {
+                const genePhenotype = await this.findGenePhenotype(
+                    geneSymbol,
+                    lookupkey,
+                );
+                const guideline = Guideline.fromCpicRecommendation(
+                    cpicRecommendationDto,
+                    medication,
+                    genePhenotype,
+                );
+
+                if (guidelines.has(medication.name)) {
+                    guidelines.get(medication.name).push(guideline);
+                } else {
+                    guidelines.set(medication.name, [guideline]);
+                }
+            }
+        }
+        return guidelines;
     }
 
     private getWarningLevelFromColor(
@@ -121,28 +199,66 @@ export class GuidelinesService {
         return null;
     }
 
-    private async findMedication(name: string): Promise<Medication> {
+    private async findMedicationByName(name: string): Promise<Medication> {
         if (!name) return null;
         name = name.trim().toLowerCase();
-        if (this.hashedMedications.has(name)) {
-            return this.hashedMedications.get(name);
+        if (this.hashedMedicationsByName.has(name)) {
+            return this.hashedMedicationsByName.get(name);
         }
         try {
             const medication = await this.medicationsService.getOne({
                 where: { name: ILike(name) },
             });
 
-            this.hashedMedications.set(name, medication);
+            this.hashedMedicationsByName.set(name, medication);
+            this.hashedMedicationsByRxCUI.set(medication.rxcui, medication);
             return medication;
         } catch (error) {
             // TODO: consider proper error handling
             this.logger.error(`Medication ${name} not found in Drugbank data.`);
-            this.hashedMedications.set(name, null);
+            this.hashedMedicationsByName.set(name, null);
             return null;
         }
     }
 
-    private async findGenePhenotypes(
+    private async findMedicationByRxNorm(rxcui: string): Promise<Medication> {
+        if (this.hashedMedicationsByRxCUI.has(rxcui)) {
+            return this.hashedMedicationsByRxCUI.get(rxcui);
+        }
+        try {
+            const medication = await this.medicationsService.getOne({
+                where: {
+                    rxcui,
+                },
+            });
+            this.hashedMedicationsByRxCUI.set(rxcui, medication);
+            this.hashedMedicationsByName.set(medication.name, medication);
+            return medication;
+        } catch (error) {
+            this.logger.error(
+                `Medication with RxCUI ${rxcui} not found in our database.`,
+            );
+            return null;
+        }
+    }
+
+    private async findGenePhenotype(
+        geneSymbolName: string,
+        lookupkey: string,
+    ): Promise<GenePhenotype> {
+        if (!geneSymbolName || !lookupkey) return null;
+        geneSymbolName = geneSymbolName.trim().toLowerCase();
+        const genePhenotype = await this.genePhenotypesService.getOne({
+            where: {
+                geneSymbol: { name: ILike(geneSymbolName) },
+                phenotype: { lookupkey },
+            },
+            relations: ['phenotype', 'geneSymbol'],
+        });
+        return genePhenotype;
+    }
+
+    private async findGenePhenotypesForGene(
         geneSymbolName: string,
     ): Promise<Array<Set<GenePhenotype>>> {
         if (!geneSymbolName) return [];
@@ -150,7 +266,7 @@ export class GuidelinesService {
         if (this.hashedGenePhenotypes.has(geneSymbolName)) {
             return this.hashedGenePhenotypes.get(geneSymbolName);
         }
-        const geneSymbol = await this.genePhenotypesService.getOne({
+        const geneSymbol = await this.genePhenotypesService.getOneGeneSymbol({
             where: { name: ILike(geneSymbolName) },
             relations: ['genePhenotypes', 'genePhenotypes.phenotype'],
         });
@@ -176,13 +292,42 @@ export class GuidelinesService {
         return genePhenotypes;
     }
 
+    private guidelineTextsAreValid(
+        implication: string,
+        recommendation: string,
+    ): boolean {
+        return (
+            implication &&
+            implication.replace(' ', '').toLowerCase() !== 'n/a' &&
+            recommendation &&
+            recommendation.replace(' ', '').toLowerCase() !== 'n/a'
+        );
+    }
+
+    private getGuidelinesForGenePhenotype(
+        medication: Medication,
+        genePhenotype: GenePhenotype,
+        guidelinesForMed: Guideline[],
+    ): Guideline[] {
+        const guidelinesForGenePhenotype = guidelinesForMed.filter(
+            (guidelineForMed) =>
+                guidelineForMed.genePhenotype.id === genePhenotype.id,
+        );
+        if (!guidelinesForGenePhenotype.length)
+            throw new InternalServerErrorException(
+                `No matching CPIC guideline was found for ${medication.name} and genephenotype ${genePhenotype.geneSymbol}, ${genePhenotype.phenotype.name}!`,
+            );
+        return guidelinesForGenePhenotype;
+    }
+
     async clearAllData(): Promise<void> {
         this.guidelinesRepository.delete({});
         this.clearMaps();
     }
 
     private clearMaps(): void {
-        this.hashedMedications.clear();
+        this.hashedMedicationsByName.clear();
+        this.hashedMedicationsByRxCUI.clear();
         this.hashedGenePhenotypes.clear();
         this.spreadsheetPhenotypeHeader = [];
     }

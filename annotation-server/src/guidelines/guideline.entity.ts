@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
 import { Medication } from '../medications/medication.entity';
+import { CpicRecommendationDto } from './dtos/cpic-recommendation.dto';
 
 export enum WarningLevel {
     GREEN = 'ok',
@@ -11,13 +12,35 @@ export enum WarningLevel {
 
 @Entity()
 export class Guideline {
+    static fromCpicRecommendation(
+        recommendation: CpicRecommendationDto,
+        medication: Medication,
+        genePhenotype: GenePhenotype,
+    ): Guideline {
+        const guideline = new Guideline();
+
+        guideline.medication = medication;
+        guideline.genePhenotype = genePhenotype;
+        guideline.cpicRecommendation = recommendation.drugrecommendation;
+        guideline.cpicClassification = recommendation.classification;
+        if (recommendation.comments.toLowerCase() !== 'n/a')
+            guideline.cpicComment = recommendation.comments;
+        guideline.cpicImplication =
+            recommendation.implications[genePhenotype.geneSymbol.name];
+
+        return guideline;
+    }
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     implication: string;
 
-    @Column()
+    @Column({
+        nullable: true,
+    })
     recommendation: string;
 
     @Column({
@@ -34,4 +57,22 @@ export class Guideline {
 
     @ManyToOne(() => GenePhenotype, { onDelete: 'CASCADE' })
     genePhenotype: GenePhenotype;
+
+    @Column()
+    cpicRecommendation: string;
+
+    @Column()
+    cpicImplication: string;
+
+    @Column()
+    cpicClassification: string;
+
+    @Column({
+        nullable: true,
+    })
+    cpicComment: string;
+
+    public get isComplete(): boolean {
+        return !!this.recommendation || !!this.implication;
+    }
 }
