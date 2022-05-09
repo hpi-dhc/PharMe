@@ -17,6 +17,15 @@ export class MedicationsController {
 
     @ApiOperation({
         summary:
+            'Fetch all medications that have guidelines including corresponding guidelines',
+    })
+    @Get('report')
+    getMedicationsWithGuidelines(): Promise<Medication[]> {
+        return this.medicationsService.getWithGuidelines();
+    }
+
+    @ApiOperation({
+        summary:
             'Clear and update medication data from DrugBank and the Google Sheet',
     })
     @Post()

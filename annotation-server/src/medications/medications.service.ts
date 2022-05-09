@@ -7,7 +7,13 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import {
+    FindManyOptions,
+    FindOneOptions,
+    IsNull,
+    Not,
+    Repository,
+} from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/google-sheets';
 import { DrugDto } from './dtos/drugbank.dto';
@@ -29,6 +35,21 @@ export class MedicationsService {
         },
     ): Promise<Medication[]> {
         return this.medicationRepository.find(options);
+    }
+
+    getWithGuidelines(): Promise<Medication[]> {
+        return this.medicationRepository.find({
+            where: {
+                guidelines: {
+                    id: Not(IsNull()),
+                },
+            },
+            relations: [
+                'guidelines',
+                'guidelines.genePhenotype.phenotype',
+                'guidelines.genePhenotype.geneSymbol',
+            ],
+        });
     }
 
     getOne(options: FindOneOptions<Medication>): Promise<Medication> {
