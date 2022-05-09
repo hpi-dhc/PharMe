@@ -100,13 +100,11 @@ export class GenePhenotypesService {
         this.hashedPhenotypes.clear();
     }
 
-    getOne(options: FindOneOptions<GeneSymbol>): Promise<GeneSymbol> {
+    getOneGeneSymbol(options: FindOneOptions<GeneSymbol>): Promise<GeneSymbol> {
         return this.geneSymbolRepository.findOne(options);
     }
 
-    getOneGenePhenotype(
-        options: FindOneOptions<GenePhenotype>,
-    ): Promise<GenePhenotype> {
+    getOne(options: FindOneOptions<GenePhenotype>): Promise<GenePhenotype> {
         return this.genePhenotypeRepository.findOne(options);
     }
 }
