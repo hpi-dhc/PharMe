@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
-import { Guideline } from 'src/guidelines/guideline.entity';
+import { Guideline } from 'src/guidelines/entities/guideline.entity';
 
 import { AppModule } from '../src/app.module';
 import { MedicationsService } from '../src/medications/medications.service';
