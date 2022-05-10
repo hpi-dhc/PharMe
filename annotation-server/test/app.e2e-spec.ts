@@ -26,19 +26,19 @@ describe('App (e2e)', () => {
     });
 
     describe('Initialize dependency data', () => {
-        it('should load mocked DrugBank XML of 2 entries', async () => {
+        it('should load mocked DrugBank XML of 3 entries', async () => {
             const createResponse = await request(app.getHttpServer()).post(
                 '/medications/',
             );
             expect(createResponse.status).toEqual(201);
-        }, 20000);
+        });
 
         it('should load gene phenotypes from CPIC API', async () => {
             const createResponse = await request(app.getHttpServer()).post(
                 '/genephenotypes/',
             );
             expect(createResponse.status).toEqual(201);
-        });
+        }, 10000);
     });
 
     describe('Initialize dependent data', () => {
@@ -47,18 +47,26 @@ describe('App (e2e)', () => {
                 '/guidelines/',
             );
             expect(createResponse.status).toEqual(201);
-        });
+        }, 20000);
     });
 
     describe('Retrieve data', () => {
-        it('should get 2 medications', async () => {
+        it('should get all 3 medications', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications',
             );
             expect(getResponse.status).toEqual(200);
-            expect(getResponse.body.length).toEqual(2);
+            expect(getResponse.body.length).toEqual(3);
 
             codeineId = getResponse.body[0].id;
+        });
+
+        it('should get 2 medications with guidelines', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/medications/report',
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toEqual(2);
         });
     });
 
