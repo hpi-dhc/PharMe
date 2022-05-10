@@ -25,7 +25,7 @@ export class CacheMap<Value, RetrieveFailedError> {
             return this.validate(this.cache.get(key));
         }
         try {
-            const value = await this.retrieve(key);
+            const value = await this.retrieve(...keys);
             this.cache.set(key, value);
             return value;
         } catch {
