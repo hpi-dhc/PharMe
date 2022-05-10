@@ -38,7 +38,7 @@ describe('MedicationsService', () => {
             const jsonPath = await medicationsService.getJSONfromZip();
             const drugs = await medicationsService.getDataFromJSON(jsonPath);
 
-            expect(drugs.length).toBe(2);
+            expect(drugs.length).toBe(3);
 
             const drug1 = drugs[0];
             expect(drug1.name).toBe('Codeine');
