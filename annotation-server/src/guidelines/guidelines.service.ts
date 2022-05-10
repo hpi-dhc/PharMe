@@ -1,10 +1,6 @@
 import { sheets_v4 } from '@googleapis/sheets';
 import { HttpService } from '@nestjs/axios';
-import {
-    Injectable,
-    InternalServerErrorException,
-    Logger,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
@@ -119,7 +115,7 @@ export class GuidelinesService {
                             genePhenotype,
                             guidelinesForMedication,
                         );
-                    guidelinesForGenePhenotype.forEach((guideline) => {
+                    guidelinesForGenePhenotype?.forEach((guideline) => {
                         guideline.implication = implication;
                         guideline.recommendation = recommendation;
                         guideline.warningLevel = warningLevel;
@@ -170,6 +166,7 @@ export class GuidelinesService {
                     geneSymbol,
                     lookupkey,
                 );
+                if (!genePhenotype) continue;
                 const guideline = Guideline.fromCpicRecommendation(
                     cpicRecommendationDto,
                     medication,
@@ -248,14 +245,21 @@ export class GuidelinesService {
     ): Promise<GenePhenotype> {
         if (!geneSymbolName || !lookupkey) return null;
         geneSymbolName = geneSymbolName.trim().toLowerCase();
-        const genePhenotype = await this.genePhenotypesService.getOne({
-            where: {
-                geneSymbol: { name: ILike(geneSymbolName) },
-                phenotype: { lookupkey },
-            },
-            relations: ['phenotype', 'geneSymbol'],
-        });
-        return genePhenotype;
+        try {
+            const genePhenotype = await this.genePhenotypesService.getOne({
+                where: {
+                    geneSymbol: { name: ILike(geneSymbolName) },
+                    phenotype: { lookupkey },
+                },
+                relations: ['phenotype', 'geneSymbol'],
+            });
+            return genePhenotype;
+        } catch (error) {
+            this.logger.error(
+                `GenePhenotype ${geneSymbolName}:${lookupkey} not found in CPIC lookupkeys.`,
+            );
+            return null;
+        }
     }
 
     private async findGenePhenotypesForGene(
@@ -268,7 +272,11 @@ export class GuidelinesService {
         }
         const geneSymbol = await this.genePhenotypesService.getOneGeneSymbol({
             where: { name: ILike(geneSymbolName) },
-            relations: ['genePhenotypes', 'genePhenotypes.phenotype'],
+            relations: [
+                'genePhenotypes',
+                'genePhenotypes.phenotype',
+                'genePhenotypes.geneSymbol',
+            ],
         });
         // TODO: consider proper error handling
         if (!geneSymbol) {
@@ -313,10 +321,12 @@ export class GuidelinesService {
             (guidelineForMed) =>
                 guidelineForMed.genePhenotype.id === genePhenotype.id,
         );
-        if (!guidelinesForGenePhenotype?.length)
-            throw new InternalServerErrorException(
+        if (!guidelinesForGenePhenotype?.length) {
+            this.logger.error(
                 `No matching CPIC guideline was found for ${medication.name} and genephenotype ${genePhenotype.geneSymbol}, ${genePhenotype.phenotype.name}!`,
             );
+            return null;
+        }
         return guidelinesForGenePhenotype;
     }
 

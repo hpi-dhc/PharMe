@@ -105,6 +105,6 @@ export class GenePhenotypesService {
     }
 
     getOne(options: FindOneOptions<GenePhenotype>): Promise<GenePhenotype> {
-        return this.genePhenotypeRepository.findOne(options);
+        return this.genePhenotypeRepository.findOneOrFail(options);
     }
 }
