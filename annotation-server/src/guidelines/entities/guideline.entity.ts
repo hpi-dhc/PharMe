@@ -1,8 +1,15 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
-import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
-import { Medication } from '../medications/medication.entity';
-import { CpicRecommendationDto } from './dtos/cpic-recommendation.dto';
+import { GenePhenotype } from '../../gene-phenotypes/entities/gene-phenotype.entity';
+import { Medication } from '../../medications/medication.entity';
+import { CpicRecommendationDto } from '../dtos/cpic-recommendation.dto';
+import { GuidelineError } from './guideline-error.entity';
 
 export enum WarningLevel {
     GREEN = 'ok',
@@ -27,6 +34,7 @@ export class Guideline {
             guideline.cpicComment = recommendation.comments;
         guideline.cpicImplication =
             recommendation.implications[genePhenotype.geneSymbol.name];
+        guideline.errors = [];
 
         return guideline;
     }
@@ -75,4 +83,9 @@ export class Guideline {
     public get isComplete(): boolean {
         return !!this.recommendation || !!this.implication;
     }
+
+    @OneToMany(() => GuidelineError, (error) => error.guideline, {
+        cascade: true,
+    })
+    errors: GuidelineError[];
 }

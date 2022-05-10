@@ -4,14 +4,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { GenePhenotypesModule } from '../gene-phenotypes/gene-phenotypes.module';
 import { MedicationsModule } from '../medications/medications.module';
-import { Guideline } from './guideline.entity';
+import { GuidelineError } from './entities/guideline-error.entity';
+import { Guideline } from './entities/guideline.entity';
 import { GuidelinesController } from './guidelines.controller';
 import { GuidelinesService } from './guidelines.service';
 
 @Module({
     imports: [
         HttpModule,
-        TypeOrmModule.forFeature([Guideline]),
+        TypeOrmModule.forFeature([Guideline, GuidelineError]),
         MedicationsModule,
         GenePhenotypesModule,
     ],
