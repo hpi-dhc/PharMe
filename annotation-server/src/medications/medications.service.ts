@@ -69,6 +69,28 @@ export class MedicationsService {
         });
     }
 
+    async findMatchingMedications(query: string): Promise<Medication[]> {
+        const result = await this.medicationRepository.query(
+            `
+        SELECT distinct id, name, description, drugclass, indication,
+        CASE
+            WHEN name ILIKE '%'||$1||'%' THEN 1
+            WHEN drugclass ILIKE '%'||$1||'%' THEN 2
+            WHEN synonym ILIKE '%'||$1||'%' THEN 3
+            WHEN description ILIKE '%'||$1||'%' THEN 4
+            ELSE 5
+        END as rank
+        FROM (
+            SELECT id, name, description, drugclass, indication, unnest(synonyms) synonym
+            FROM public.medication
+        ) sub
+        WHERE name ILIKE '%'||$1||'%' OR drugclass ILIKE '%'||$1||'%' OR synonym ILIKE '%'||$1||'%' OR description ILIKE '%'||$1||'%'
+        ORDER BY rank ASC`,
+            [query],
+        );
+        return result;
+    }
+
     async fetchAllMedications(): Promise<void> {
         await this.clearAllMedicationData();
         const jsonPath = await this.getJSONfromZip();
@@ -160,9 +182,8 @@ export class MedicationsService {
     }
 
     getDataFromJSON(path: string): Promise<DrugDto[]> {
-        const jsonStream = fs
-            .createReadStream(path)
-            .pipe(JSONStream.parse('drugbank.drug.*'));
+        const fileStream = fs.createReadStream(path);
+        const jsonStream = fileStream.pipe(JSONStream.parse('drugbank.drug.*'));
         const drugs: Array<DrugDto> = [];
         const clearLine = () => {
             process.stdout.write(`\r${String.fromCharCode(27)}[0J`);
@@ -175,9 +196,13 @@ export class MedicationsService {
             drugs.push(drug);
         });
         return new Promise<DrugDto[]>((resolve, reject) => {
-            jsonStream.on('error', () => {
+            fileStream.on('error', (error) => {
                 clearLine();
-                reject();
+                reject(error);
+            });
+            jsonStream.on('error', (error) => {
+                clearLine();
+                reject(error);
             });
             jsonStream.on('end', () => {
                 clearLine();

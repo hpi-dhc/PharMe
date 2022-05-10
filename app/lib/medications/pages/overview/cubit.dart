@@ -1,33 +1,54 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
-
 import '../../../common/constants.dart';
 import '../../models/medication.dart';
 
 part 'cubit.freezed.dart';
 
 class MedicationsOverviewCubit extends Cubit<MedicationsOverviewState> {
-  MedicationsOverviewCubit() : super(MedicationsOverviewState.initial()) {
-    loadMedications();
-  }
+  MedicationsOverviewCubit() : super(MedicationsOverviewState.initial());
 
-  Future<void> loadMedications() async {
-    emit(MedicationsOverviewState.loading());
-    final response =
-        await http.get(Uri.parse('$annotationServerUrl/medications'));
+  Timer? searchTimeout;
+  final duration = Duration(milliseconds: 500);
 
-    if (response.statusCode == 200) {
-      final list =
-          (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
-      final medications = list.map(Medication.fromJson).toList();
-      emit(MedicationsOverviewState.loaded(medications));
-    } else {
-      emit(MedicationsOverviewState.error());
+  void loadMedications(String value) {
+    if (value.isEmpty) {
+      emit(
+        MedicationsOverviewState.loaded([]),
+      );
+      if (searchTimeout != null) {
+        searchTimeout!.cancel();
+      }
+      return;
     }
+    if (searchTimeout != null) {
+      searchTimeout!.cancel();
+    }
+    searchTimeout = Timer(
+      duration,
+      () async {
+        final requestUri = annotationServerUrl.replace(
+          path: 'api/v1/medications',
+          queryParameters: {'search': value},
+        );
+        emit(MedicationsOverviewState.loading());
+
+        final response = await http.get(requestUri);
+        if (response.statusCode != 200) {
+          emit(MedicationsOverviewState.error());
+          return;
+        }
+        final medications = medicationsFromHTTPResponse(response);
+
+        emit(MedicationsOverviewState.loaded(medications));
+      },
+    );
   }
+
+  void setState(MedicationsOverviewState state) => emit(state);
 }
 
 @freezed

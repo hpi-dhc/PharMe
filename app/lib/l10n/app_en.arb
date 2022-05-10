@@ -1,18 +1,48 @@
 {
   "app_feature_coming_soon": "Have a little patience, this feature is coming soon!",
   
+  "auth_choose_lab": "Please select your lab",
   "auth_sign_in": "Sign in",
   "auth_sign_off": "Sign out and delete data",
   "auth_skip_sign_in": "Skip login",
+  "auth_success": "Successfully imported data",
   
   "err_could_not_launch": "Could not launch {url}",
+  "@err_could_not_launch": {
+    "description": "Error message when (auth-related) url cannot be launched.",
+    "placeholders": {
+      "url": {
+        "type": "String",
+        "example": "https://www.google.de"
+      }
+    }
+  },
+  "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
+  "err_generic": "Error!",
   
+  "faq_page_description": "On this page we will answer common questions regarding PGx",
+  "faq_pharmacogenomics": "Pharmacogenomics",
+
+  "general_appName": "PharMe",
+  "general_continue": "Continue",
+  "general_retry": "Retry",
+  
+  "medications_overview_page_typeInMedication": "Type in a medication",
   "medications_details_page_working": "It works. ID is {id}",
-  "medications_overview_page_generic_error": "Error!",
+  "@medications_details_page_working": {
+    "description": "Provisional message for developers when visiting medications details page.",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
 
   "nav_medications": "Medications",
-  "nav_profile": "Profile",
+  "nav_faq": "FAQ",
   "nav_reports": "Reports",
+  "nav_settings": "Settings",
   
   "onboarding_get_started": "Get started",
   "onboarding_next": "Next",
@@ -34,31 +64,15 @@
   "profile_page_username": "Username",
 
   "reports_page_text": "Reports Page",
-
-  "@err_could_not_launch": {
-    "description": "Error message when (auth-related) url cannot be launched.",
-    "placeholders": {
-      "url": {
-        "type": "String",
-        "example": "https://www.google.de"
-      }
-    }
-  },
-
-  "@medications_details_page_working": {
-    "description": "Provisional message for developers when visiting medications details page.",
-    "placeholders": {
-      "id": {
-        "type": "String",
-        "example": "1"
-      }
-    }
-  },
-  "@medications_overview_page_generic_error": {
-    "description": "Provisional message for developers when visiting medications overview page."
-  },
-
   "@reports_page_text": {
     "description": "Provisional text on the reports page, will be changed."
-  }
+  },
+
+
+
+
+  "settings_page_cancel": "Cancel",
+  "settings_page_continue": "Continue",
+  "settings_page_delete_data": "Delete App Data",
+  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data and cannot be undone."
 }

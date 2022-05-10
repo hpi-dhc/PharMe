@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { Medication } from './medication.entity';
@@ -9,9 +9,14 @@ import { MedicationsService } from './medications.service';
 export class MedicationsController {
     constructor(private medicationsService: MedicationsService) {}
 
-    @ApiOperation({ summary: 'Fetch all medications' })
+    @ApiOperation({ summary: 'Fetch all medications with optional search' })
     @Get()
-    get(): Promise<Medication[]> {
+    get(@Query() query: { search?: string }): Promise<Medication[]> {
+        if (query.search) {
+            return this.medicationsService.findMatchingMedications(
+                query.search,
+            );
+        }
         return this.medicationsService.getAll();
     }
 

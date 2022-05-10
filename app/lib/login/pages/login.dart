@@ -1,12 +1,6 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../common/module.dart';
-import '../../../common/routing/router.dart';
 import '../../../common/widgets/radiant_gradiant_mask.dart';
 import '../models/lab.dart';
 import 'cubit.dart';
@@ -37,8 +31,8 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     children: state.when(
                       initial: () => _buildInitialScreen(context),
-                      loadingAlleles: () => _buildLoadingScreen(context),
-                      loadedAlleles: () => _buildLoadedScreen(context),
+                      loadingUserData: () => _buildLoadingScreen(context),
+                      loadedUserData: () => _buildLoadedScreen(context),
                       error: (message) => _buildErrorScreen(context, message),
                     ),
                   ),
@@ -56,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
       DropdownButtonHideUnderline(
         child: DropdownButton2(
           isExpanded: true,
-          hint: Text('Please select your lab'),
+          hint: Text(context.l10n.auth_choose_lab),
           value: dropdownValue,
           onChanged: (value) {
             setState(() {
@@ -87,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
             final found = labs.firstWhere((el) => el.name == dropdownValue);
             await context
                 .read<LoginPageCubit>()
-                .signInAndLoadAlleles(found.authUrl, found.allelesUrl);
+                .signInAndLoadUserData(context, found);
           },
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -109,8 +103,8 @@ class _LoginPageState extends State<LoginPage> {
         height: 200,
         child: RadiantGradientMask(
           colors: [
-            context.theme.colorScheme.primaryVariant,
-            context.theme.colorScheme.secondaryVariant,
+            context.theme.colorScheme.primaryContainer,
+            context.theme.colorScheme.secondaryContainer,
           ],
           child: CircularProgressIndicator(
             color: Colors.white,
@@ -124,22 +118,22 @@ class _LoginPageState extends State<LoginPage> {
     return [
       RadiantGradientMask(
         colors: [
-          context.theme.colorScheme.primaryVariant,
-          context.theme.colorScheme.secondaryVariant,
+          context.theme.colorScheme.primaryContainer,
+          context.theme.colorScheme.secondaryContainer,
         ],
         child: Icon(
           Icons.task_alt,
-          size: 150,
+          size: 152,
           color: Colors.white,
         ),
       ),
-      Text('Successfully imported data'),
-      SizedBox(height: 25),
+      Text(context.l10n.auth_success),
+      SizedBox(height: 24),
       SizedBox(
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () => context.router.replace(MainRoute()),
-          child: Text('Continue'),
+          child: Text(context.l10n.general_continue),
         ),
       ),
     ];
@@ -149,23 +143,23 @@ class _LoginPageState extends State<LoginPage> {
     return [
       RadiantGradientMask(
         colors: [
-          context.theme.colorScheme.primaryVariant,
-          context.theme.colorScheme.secondaryVariant,
+          context.theme.colorScheme.primaryContainer,
+          context.theme.colorScheme.secondaryContainer,
         ],
         child: Icon(
           Icons.warning_amber_outlined,
-          size: 150,
+          size: 152,
           color: Colors.white,
         ),
       ),
       Text(message),
-      SizedBox(height: 25),
+      SizedBox(height: 24),
       SizedBox(
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () =>
               context.read<LoginPageCubit>().revertToInitialState(),
-          child: Text('Retry'),
+          child: Text(context.l10n.general_retry),
         ),
       ),
     ];

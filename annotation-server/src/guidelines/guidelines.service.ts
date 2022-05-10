@@ -102,7 +102,12 @@ export class GuidelinesService {
                     const warningLevel = this.getWarningLevelFromColor(
                         recommendations[row][col].backgroundColor,
                     );
-                    if (!this.isCuratedGuideline(implication, recommendation))
+                    if (
+                        !this.guidelineTextsAreValid(
+                            implication,
+                            recommendation,
+                        )
+                    )
                         continue;
 
                     const guidelinesForMedication = guidelines.get(
@@ -125,7 +130,7 @@ export class GuidelinesService {
         const flatGuidelines = Array.from(guidelines.values()).flat();
 
         const incompleteGuidelines = flatGuidelines.filter(
-            (guideline) => guideline.isComplete,
+            (guideline) => !guideline.isComplete,
         );
         for (const incompleteGuideline of incompleteGuidelines) {
             this.logger.error(
@@ -243,14 +248,13 @@ export class GuidelinesService {
     ): Promise<GenePhenotype> {
         if (!geneSymbolName || !lookupkey) return null;
         geneSymbolName = geneSymbolName.trim().toLowerCase();
-        const genePhenotype =
-            await this.genePhenotypesService.getOneGenePhenotype({
-                where: {
-                    geneSymbol: { name: ILike(geneSymbolName) },
-                    phenotype: { lookupkey },
-                },
-                relations: ['phenotype', 'geneSymbol'],
-            });
+        const genePhenotype = await this.genePhenotypesService.getOne({
+            where: {
+                geneSymbol: { name: ILike(geneSymbolName) },
+                phenotype: { lookupkey },
+            },
+            relations: ['phenotype', 'geneSymbol'],
+        });
         return genePhenotype;
     }
 
@@ -262,7 +266,7 @@ export class GuidelinesService {
         if (this.hashedGenePhenotypes.has(geneSymbolName)) {
             return this.hashedGenePhenotypes.get(geneSymbolName);
         }
-        const geneSymbol = await this.genePhenotypesService.getOne({
+        const geneSymbol = await this.genePhenotypesService.getOneGeneSymbol({
             where: { name: ILike(geneSymbolName) },
             relations: ['genePhenotypes', 'genePhenotypes.phenotype'],
         });
@@ -288,7 +292,7 @@ export class GuidelinesService {
         return genePhenotypes;
     }
 
-    private isCuratedGuideline(
+    private guidelineTextsAreValid(
         implication: string,
         recommendation: string,
     ): boolean {

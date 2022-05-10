@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../../auth/module.dart';
+import '../../faq/module.dart';
+import '../../login/module.dart';
 import '../../medications/module.dart';
-import '../../profile/module.dart';
+import '../../onboarding/module.dart';
 import '../../reports/module.dart';
+import '../../settings/module.dart';
 import '../pages/main.dart';
 
 part 'router.gr.dart';
@@ -12,13 +14,15 @@ part 'router.gr.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
-    authRoutes,
+    onboardingRoutes,
+    loginRoutes,
     AutoRoute(
       path: 'main',
       page: MainPage,
       children: [
         medicationsRoutes,
-        profileRoutes,
+        settingsRoutes,
+        faqRoutes,
         reportsRoutes,
       ],
     ),

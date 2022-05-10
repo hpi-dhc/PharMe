@@ -1,8 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-
-import '../../../common/module.dart';
-import '../routing/router.dart';
+import '../module.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -14,15 +10,17 @@ class MainPage extends StatelessWidget {
         // The order maps to BottomNavigationBar
         MedicationsRouter(),
         ReportsRouter(),
-        ProfileRouter(),
+        FaqRouter(),
+        SettingsRouter(),
       ],
       appBarBuilder: (_, tabsRouter) => AppBar(
-        title: const Text('PharMe'),
+        title: Text(context.l10n.general_appName),
         centerTitle: true,
         leading: const AutoBackButton(),
       ),
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           currentIndex: tabsRouter.activeIndex,
           onTap: tabsRouter.setActiveIndex,
           items: _bottomNavigationBarItems(context),
@@ -43,8 +41,12 @@ class MainPage extends StatelessWidget {
         label: context.l10n.nav_reports,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        label: context.l10n.nav_profile,
+        icon: Icon(Icons.lightbulb),
+        label: context.l10n.nav_faq,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings),
+        label: context.l10n.nav_settings,
       ),
     ];
   }
