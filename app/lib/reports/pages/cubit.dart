@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../common/constants.dart';
-import '../../medications/models/medication.dart';
+import '../../common/models/medication.dart';
 
 part 'cubit.freezed.dart';
 

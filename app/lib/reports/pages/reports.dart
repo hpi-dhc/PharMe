@@ -1,5 +1,5 @@
+import '../../common/models/medication.dart';
 import '../../common/module.dart';
-import '../../medications/models/medication.dart';
 import '../../medications/pages/overview/page.dart';
 import 'cubit.dart';
 
@@ -95,9 +95,9 @@ class ReportsPage extends StatelessWidget {
 class ReportCard extends MedicationCard {
   const ReportCard({
     required this.warningLevel,
-    required onTap,
-    required medicationName,
-    medicationDescription,
+    required VoidCallback onTap,
+    required String medicationName,
+    String? medicationDescription,
   }) : super(
           onTap: onTap,
           medicationName: medicationName,

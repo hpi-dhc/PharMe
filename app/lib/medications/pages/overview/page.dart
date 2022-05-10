@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 
+import '../../../common/models/medication.dart';
 import '../../../common/module.dart';
-import '../../models/medication.dart';
 import 'cubit.dart';
 
 final _panelController = SlidingUpPanelController();
