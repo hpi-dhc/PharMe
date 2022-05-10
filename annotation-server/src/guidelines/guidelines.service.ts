@@ -309,11 +309,11 @@ export class GuidelinesService {
         genePhenotype: GenePhenotype,
         guidelinesForMed: Guideline[],
     ): Guideline[] {
-        const guidelinesForGenePhenotype = guidelinesForMed.filter(
+        const guidelinesForGenePhenotype = guidelinesForMed?.filter(
             (guidelineForMed) =>
                 guidelineForMed.genePhenotype.id === genePhenotype.id,
         );
-        if (!guidelinesForGenePhenotype.length)
+        if (!guidelinesForGenePhenotype?.length)
             throw new InternalServerErrorException(
                 `No matching CPIC guideline was found for ${medication.name} and genephenotype ${genePhenotype.geneSymbol}, ${genePhenotype.phenotype.name}!`,
             );
