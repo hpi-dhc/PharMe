@@ -63,13 +63,8 @@
   "profile_page_sign_in": "Login",
   "profile_page_username": "Username",
 
-  "reports_page_text": "Reports Page",
-  "@reports_page_text": {
-    "description": "Provisional text on the reports page, will be changed."
-  },
-
-
-
+  "reports_page_disclaimer_text": "All medications shown here should be used with extreme caution, used in different doses or not be used at all. Check specific medications for details.",
+  "reports_page_disclaimer_title": "Pharmacogenomics report",
 
   "settings_page_cancel": "Cancel",
   "settings_page_continue": "Continue",
