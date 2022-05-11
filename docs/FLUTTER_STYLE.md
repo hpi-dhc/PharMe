@@ -46,9 +46,10 @@ In Flutter, you make symbols private by prefixing them with an underscore (e.g. 
 - Order these groups of concepts within a file by their relevance
 
   - E.g. Put helper methods beneath the methods they help
-
-    Why? The name of helper methods should convey their function so you don't
-    need to view their contents to get an initial understanding of the class.
+    
+    Why do this? We want to get an initial understanding of the entire file right
+    away. Assuming our symbols are named meaningfully, we can put the helper
+    concepts beneath since they should be understood by their name already.
 
 ```dart
 import ...
