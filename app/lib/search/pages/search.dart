@@ -91,10 +91,10 @@ class SearchPage extends HookWidget {
         padding: EdgeInsets.symmetric(vertical: 14),
         itemCount: medications.length,
         itemBuilder: (context, index) {
-          final el = medications[index];
+          final med = medications[index];
           return MedicationCard(
             onTap: () {},
-            medicationName: el.name,
+            medicationName: med.name,
           );
         },
         separatorBuilder: (_, __) => SizedBox(height: 8),
