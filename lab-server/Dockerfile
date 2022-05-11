@@ -13,7 +13,7 @@ COPY . .
 RUN yarn install --frozen-lockfile
 RUN yarn workspace lab-server run build
 
-FROM ${BASE_IMAGE}-alpine
+FROM ${BASE_IMAGE}-alpine as runner
 
 WORKDIR /app
 
