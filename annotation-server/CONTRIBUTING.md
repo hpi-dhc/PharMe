@@ -25,8 +25,10 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
     database)
 - Open another terminal in VSCode in the `annotation-server` directory
   - Run `yarn` to install the project's Node.js dependencies
-  - Run `/usr/bin/env python3 -m pip install -r requirements.txt` to install
+  - Run `python -m pip install -r requirements.txt` to install
     the project's Python dependencies
+    - If `python` cannot be found, run
+      `python3 -m pip install -r requirements.txt` instead
   - Optionally download DrugBank datasets from our Google Drive, place them in
     `data/` and adjust your `.env` accordingly
   - You can now start the server using `yarn start:dev`
