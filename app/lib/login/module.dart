@@ -10,3 +10,5 @@ const loginRoutes = AutoRoute(
   name: 'LoginRouter',
   page: LoginPage,
 );
+
+// lol
