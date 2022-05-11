@@ -28,7 +28,7 @@ class UserData {
   List<Diplotype>? diplotypes;
 
   @HiveField(1)
-  List<Lookup>? lookups;
+  Map<String, String>? lookups;
 }
 
 /// Initializes the user's data by registering all necessary adapters and
