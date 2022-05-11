@@ -105,5 +105,6 @@ describe('App (e2e)', () => {
 
     afterAll(async () => {
         await medicationService.clearAllMedicationData();
+        await app.close();
     });
 });

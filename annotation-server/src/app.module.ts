@@ -27,7 +27,6 @@ import { MedicationsModule } from './medications/medications.module';
                 password: configService.get<string>('ANNOTATION_DB_PASS'),
                 database: configService.get<string>('ANNOTATION_DB_NAME'),
                 autoLoadEntities: true,
-                keepConnectionAlive: true,
                 synchronize: true,
             }),
             inject: [ConfigService],
