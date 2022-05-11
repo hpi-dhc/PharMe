@@ -119,19 +119,19 @@ export class GuidelinesService {
             },
         );
         this.genePhenotypesByLookupkeyCacher = new CacheMap(
-            (geneSymbolName, lookupkey) =>
+            (geneSymbolName, phenotype) =>
                 this.genePhenotypesService.getOne({
                     where: {
                         geneSymbol: { name: ILike(geneSymbolName) },
-                        phenotype: { lookupkey },
+                        phenotype: { name: phenotype },
                     },
                     relations: ['phenotype', 'geneSymbol'],
                 }),
-            (geneSymbolName, lookupkey) => {
+            (geneSymbolName, phenotype) => {
                 const error = new GuidelineError();
                 error.type = GuidelineErrorType.GENEPHENOTYPE_NOT_FOUND;
                 error.blame = GuidelineErrorBlame.CPIC;
-                error.context = `${geneSymbolName}: ${lookupkey}`;
+                error.context = `${geneSymbolName}: ${phenotype}`;
                 return error;
             },
             (genePhenotypeOrError) => {
@@ -266,7 +266,7 @@ export class GuidelinesService {
             'https://api.cpicpgx.org/v1/recommendation',
             {
                 params: {
-                    select: 'drugid,drugrecommendation,implications,comments,phenotypes,lookupkey,classification',
+                    select: 'drugid,drugrecommendation,implications,comments,phenotypes,classification',
                 },
             },
         );
@@ -285,13 +285,13 @@ export class GuidelinesService {
                     externalid[1],
                 );
                 if (!medication) continue;
-                for (const [geneSymbol, lookupkey] of Object.entries(
-                    cpicRecommendationDto.lookupkey,
+                for (const [geneSymbol, phenotype] of Object.entries(
+                    cpicRecommendationDto.phenotypes,
                 )) {
                     const genePhenotype =
                         await this.genePhenotypesByLookupkeyCacher.get(
                             geneSymbol,
-                            lookupkey,
+                            phenotype,
                         );
                     if (!genePhenotype) continue;
                     const guideline = Guideline.fromCpicRecommendation(
@@ -353,7 +353,7 @@ export class GuidelinesService {
         );
         if (!guidelinesForGenePhenotype?.length) {
             this.logger.error(
-                `No matching CPIC guideline was found for ${medication.name} and genephenotype ${genePhenotype.geneSymbol}, ${genePhenotype.phenotype.name}!`,
+                `No matching CPIC guideline was found for ${medication.name} and genephenotype ${genePhenotype.geneSymbol.name}, ${genePhenotype.phenotype.name}!`,
             );
             return null;
         }
