@@ -156,14 +156,8 @@ export class MedicationsService {
 
     getJSONfromZip(): Promise<string> {
         const jsonPath = path.join(os.tmpdir(), 'drugbank-data.json');
-        const proc = spawn(
-            path.join(__dirname, './scripts/zipped-xml-to-json'),
-            [
-                this.configService.get<string>('DRUGBANK_ZIP'),
-                this.configService.get<string>('DRUGBANK_XML'),
-                jsonPath,
-            ],
-        );
+        const proc = getOsSpecificPyProcess(this.configService);
+
         proc.on('error', (error) => {
             this.logger.error(error);
         });
@@ -179,6 +173,24 @@ export class MedicationsService {
                 else reject(`Subprocess exited with ${code}.`);
             });
         });
+
+        function getOsSpecificPyProcess(
+            configService: ConfigService<Record<string, unknown>, false>,
+        ) {
+            if (process.platform == 'win32')
+                return spawn('python', [
+                    path.join(__dirname, './scripts/zipped-xml-to-json'),
+                    configService.get<string>('DRUGBANK_ZIP'),
+                    configService.get<string>('DRUGBANK_XML'),
+                    jsonPath,
+                ]);
+
+            return spawn(path.join(__dirname, './scripts/zipped-xml-to-json'), [
+                configService.get<string>('DRUGBANK_ZIP'),
+                configService.get<string>('DRUGBANK_XML'),
+                jsonPath,
+            ]);
+        }
     }
 
     getDataFromJSON(path: string): Promise<DrugDto[]> {
