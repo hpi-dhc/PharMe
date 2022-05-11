@@ -17,5 +17,6 @@ import { GuidelinesService } from './guidelines.service';
     ],
     controllers: [GuidelinesController],
     providers: [GuidelinesService],
+    exports: [GuidelinesService],
 })
 export class GuidelinesModule {}
