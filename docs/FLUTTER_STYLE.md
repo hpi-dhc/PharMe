@@ -22,7 +22,7 @@ Put calls in a single line if they fit:
 return Container(color: Colors.pink, child: myChild);
 ```
 
-Wrap if there are more than two named parameters, they get longer:
+Wrap arguments with trailing comma if they exceed the char limit of 80 per line:
 
 ```dart
 return Container(
@@ -61,12 +61,12 @@ int main() {
 // Group 1
 int helper1() { return helper11().toInt(); }
 
-String helper11() { return '11' }
+String helper11() { return '11'; }
 
 // Group 2
 int helper2() { return helper21().toInt(); }
 
-String helper11() { return '21' }
+String helper21() { return '21'; }
 ```
 
 ## 7. Base sizes, font sizes etc. on multiples of 4, preferably 8
