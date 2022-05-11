@@ -1,4 +1,4 @@
-import '../../../common/module.dart';
+import '../../common/module.dart';
 
 class MedicationDetailsPage extends StatelessWidget {
   const MedicationDetailsPage({@pathParam required this.id}) : super();

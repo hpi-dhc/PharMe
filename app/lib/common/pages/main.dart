@@ -8,7 +8,7 @@ class MainPage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: const [
         // The order maps to BottomNavigationBar
-        MedicationsRouter(),
+        SearchRouter(),
         ReportsRouter(),
         FaqRouter(),
         SettingsRouter(),
@@ -33,8 +33,8 @@ class MainPage extends StatelessWidget {
       BuildContext context) {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.medication),
-        label: context.l10n.nav_medications,
+        icon: Icon(Icons.search),
+        label: context.l10n.nav_search,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.assessment),

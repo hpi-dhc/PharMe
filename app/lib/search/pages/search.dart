@@ -2,21 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 
 import '../../../common/module.dart';
-import '../../models/medication.dart';
+import '../../medications/models/medication.dart';
 import 'cubit.dart';
 
 final _panelController = SlidingUpPanelController();
 
-class MedicationsOverviewPage extends HookWidget {
-  const MedicationsOverviewPage({Key? key}) : super(key: key);
+class SearchPage extends HookWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
 
     return BlocProvider(
-      create: (context) => MedicationsOverviewCubit(),
-      child: BlocBuilder<MedicationsOverviewCubit, MedicationsOverviewState>(
+      create: (context) => SearchCubit(),
+      child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
           return Stack(
             children: [
@@ -64,9 +64,7 @@ class MedicationsOverviewPage extends HookWidget {
                           onTap: _panelController.expand,
                           controller: searchController,
                           onChanged: (value) {
-                            context
-                                .read<MedicationsOverviewCubit>()
-                                .loadMedications(value);
+                            context.read<SearchCubit>().loadMedications(value);
                           },
                         ),
                       ),
