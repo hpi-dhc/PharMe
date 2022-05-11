@@ -92,8 +92,7 @@ jobs:
       - run: yarn build
 
   build-and-push-image:
-    # TODO(Benjamin-Frost): Enable this when done
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [lint, test-e2e-unit, build]
     runs-on: ubuntu-latest
     permissions:
