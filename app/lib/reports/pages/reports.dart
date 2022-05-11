@@ -13,45 +13,12 @@ class ReportsPage extends StatelessWidget {
       child: BlocBuilder<ReportsCubit, ReportsState>(
         builder: (context, state) {
           return RoundedCard(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
-              child: Column(children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  color: PharmeTheme.secondaryColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(children: [
-                      Text(
-                        context.l10n.reports_page_disclaimer_title,
-                        style: PharmeTheme.textTheme.headline6!
-                            .copyWith(color: Colors.white),
-                      ),
-                      SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              context.l10n.reports_page_disclaimer_text,
-                              style: PharmeTheme.textTheme.bodyMedium!
-                                  .copyWith(color: Colors.white),
-                            ),
-                          ),
-                          SvgPicture.asset('assets/images/reports_icon.svg')
-                        ],
-                      )
-                    ]),
-                  ),
-                ),
-                state.when(
-                  initial: Container.new,
-                  error: () => Text(context.l10n.err_generic),
-                  loading: () => Center(child: CircularProgressIndicator()),
-                  loaded: _buildMedicationsList,
-                )
-              ]),
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+            child: state.when(
+              initial: Container.new,
+              error: () => Text(context.l10n.err_generic),
+              loading: () => Center(child: CircularProgressIndicator()),
+              loaded: (medications) => _buildReportsPage(medications, context),
             ),
           );
         },
@@ -59,22 +26,76 @@ class ReportsPage extends StatelessWidget {
     );
   }
 
+  Widget _buildReportsPage(
+      List<MedicationWithGuidelines> medications, BuildContext context) {
+    return CustomScrollView(slivers: [
+      SliverPersistentHeader(
+        delegate: SliverReportsHeaderDelegate(50, 100, 150),
+        floating: true,
+      ),
+      _buildMedicationsList(medications),
+    ]);
+
+    return Column(children: [
+      Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        color: PharmeTheme.secondaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(children: [
+            Text(
+              "Pharmacogenomics report",
+              style: PharmeTheme.textTheme.headline6!
+                  .copyWith(color: Colors.white),
+            ),
+            SizedBox(height: 6),
+            Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    "All medications ###############################################################################################################################",
+                    style: PharmeTheme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.white),
+                  ),
+                ),
+                SvgPicture.asset('assets/images/reports_icon.svg')
+              ],
+            )
+          ]),
+        ),
+      ),
+    ]);
+  }
+
   Widget _buildMedicationsList(List<MedicationWithGuidelines> medications) {
     // TODO(kolioOtSofia): filter relevant guidelines and remove medications with ok warning levels only #270
+    return SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+      if (index < medications.length) {
+        final el = medications[index];
+        return ReportCard(
+          warningLevel: _convertToWarningLevel(el.guidelines[0].warningLevel),
+          onTap: () {},
+          medicationName: el.name,
+          medicationDescription: el.description,
+        );
+      } else {
+        return ReportCard(
+          warningLevel: WarningLevel.danger,
+          onTap: () {},
+          medicationName: "Dummy medication",
+          medicationDescription:
+              "This is a long string -------------------------------------------------------------------------------------------------------------------------------------------",
+        );
+      }
+    }, childCount: medications.length + 4));
     return Flexible(
       child: ListView.separated(
-          itemBuilder: (context, index) {
-            final el = medications[index];
-            return ReportCard(
-              warningLevel:
-                  _convertToWarningLevel(el.guidelines[0].warningLevel),
-              onTap: () {},
-              medicationName: el.name,
-              medicationDescription: el.description,
-            );
-          },
+          itemBuilder: (context, index) {},
           separatorBuilder: (_, __) => SizedBox(height: 8),
-          itemCount: medications.length),
+          itemCount: medications.length + 4),
     );
   }
 
@@ -89,6 +110,62 @@ class ReportsPage extends StatelessWidget {
       default:
         throw Exception('Warning level not supperted');
     }
+  }
+}
+
+class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
+  const SliverReportsHeaderDelegate(
+      this.toolBarHeight, this.closedHeight, this.openHeight)
+      : super();
+
+  final double toolBarHeight;
+  final double closedHeight;
+  final double openHeight;
+
+  @override
+  double get maxExtent => toolBarHeight + openHeight;
+
+  @override
+  double get minExtent => toolBarHeight + closedHeight;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      color: PharmeTheme.secondaryColor,
+      clipBehavior: Clip.hardEdge,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(children: [
+          Text(
+            "Pharmacogenomics report",
+            style:
+                PharmeTheme.textTheme.headline6!.copyWith(color: Colors.white),
+          ),
+          SizedBox(height: 6),
+          Expanded(
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    "All medications ###############################################################################################################################",
+                    style: PharmeTheme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.white),
+                  ),
+                ),
+                SvgPicture.asset('assets/images/reports_icon.svg')
+              ],
+            ),
+          )
+        ]),
+      ),
+    );
   }
 }
 
