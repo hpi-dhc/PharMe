@@ -8,8 +8,5 @@ export 'pages/reports.dart';
 const reportsRoutes = AutoRoute(
   path: 'reports',
   name: 'ReportsRouter',
-  page: EmptyRouterPage,
-  children: [
-    AutoRoute(path: '', page: ReportsPage),
-  ],
+  page: ReportsPage,
 );

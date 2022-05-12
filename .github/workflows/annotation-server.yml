@@ -3,8 +3,8 @@ name: Annotation Server
 on:
   push:
     paths:
-      - ".github/workflows/annotation-server.yml"
-      - "annotation-server/**"
+      - '.github/workflows/annotation-server.yml'
+      - 'annotation-server/**'
 
 defaults:
   run:
@@ -33,13 +33,13 @@ jobs:
       GOOGLESHEET_ID: ${{ secrets.GOOGLESHEET_ID }}
       EMPTY_GOOGLESHEET_ID: ${{ secrets.EMPTY_GOOGLESHEET_ID }}
       GOOGLESHEET_APIKEY: ${{ secrets.GOOGLESHEET_APIKEY }}
-      GOOGLESHEET_RANGE_MEDICATIONS: "HPI List v1!D4:D"
-      GOOGLESHEET_RANGE_DRUGCLASSES: "HPI List v1!A4:A"
-      GOOGLESHEET_RANGE_INDICATIONS: "HPI List v1!M4:M"
-      GOOGLESHEET_RANGE_GENES: "HPI List v1!E4:E"
-      GOOGLESHEET_RANGE_PHENOTYPES: "HPI List v1!N3:V3"
-      GOOGLESHEET_RANGE_IMPLICATIONS: "HPI List v1!N4:V"
-      GOOGLESHEET_RANGE_RECOMMENDATIONS: "HPI List v1!W4:AE"
+      GOOGLESHEET_RANGE_MEDICATIONS: 'HPI List v1!D4:D'
+      GOOGLESHEET_RANGE_DRUGCLASSES: 'HPI List v1!A4:A'
+      GOOGLESHEET_RANGE_INDICATIONS: 'HPI List v1!M4:M'
+      GOOGLESHEET_RANGE_GENES: 'HPI List v1!E4:E'
+      GOOGLESHEET_RANGE_PHENOTYPES: 'HPI List v1!N3:V3'
+      GOOGLESHEET_RANGE_IMPLICATIONS: 'HPI List v1!N4:V'
+      GOOGLESHEET_RANGE_RECOMMENDATIONS: 'HPI List v1!W4:AE'
     container:
       image: node:17
     services:
@@ -91,22 +91,38 @@ jobs:
       - run: yarn
       - run: yarn build
 
-  deploy:
-    name: Deploy
-    needs: [lint, test-e2e-unit, build]
-    runs-on: [self-hosted, linux]
+  build-and-push-image:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [lint, test-e2e-unit, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}-annotation-server
     steps:
-      - uses: appleboy/ssh-action@master
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git fetch origin main
-            git reset --hard origin/main
-            cd annotation-server
-            docker-compose --profile production up --build --force-recreate --no-deps --remove-orphans -d
-            sleep 60; [[ -z "$(docker-compose ps | grep exited)" ]] || return 1
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./annotation-server/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

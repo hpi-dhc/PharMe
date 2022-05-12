@@ -5,6 +5,10 @@
       "path": "."
     },
     {
+      "name": "📚 Documentation",
+      "path": "docs"
+    },
+    {
       "name": "📝 Annotation Server",
       "path": "annotation-server"
     },

@@ -2,7 +2,7 @@ import '../../common/models/guideline.dart';
 import '../../common/models/medication.dart';
 import '../../common/module.dart';
 import '../../common/utilities/medication_utils.dart';
-import '../../medications/pages/overview/page.dart';
+import '../../search/pages/search.dart';
 import 'cubit.dart';
 
 class ReportsPage extends StatelessWidget {
