@@ -2,7 +2,6 @@ import '../../common/models/guideline.dart';
 import '../../common/models/medication.dart';
 import '../../common/module.dart';
 import '../../common/utilities/medication_utils.dart';
-import '../../search/pages/search.dart';
 import 'cubit.dart';
 
 class ReportsPage extends StatelessWidget {
@@ -52,12 +51,12 @@ class ReportsPage extends StatelessWidget {
 
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
-        final el = filteredMedications[index];
+        final med = filteredMedications[index];
         return ReportCard(
-          warningLevel: _extractWarningLevelFromGuidelines(el.guidelines),
+          warningLevel: _extractWarningLevelFromGuidelines(med.guidelines),
           onTap: () {},
-          medicationName: el.name,
-          medicationDescription: el.description,
+          medicationName: med.name,
+          medicationDescription: med.description,
         );
       }, childCount: filteredMedications.length),
     );
@@ -138,31 +137,31 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class ReportCard extends MedicationCard {
+class ReportCard extends StatelessWidget {
   const ReportCard({
     required this.warningLevel,
-    required VoidCallback onTap,
-    required String medicationName,
-    String? medicationDescription,
-  }) : super(
-          onTap: onTap,
-          medicationName: medicationName,
-          medicationDescription: medicationDescription,
-        );
+    required this.onTap,
+    required this.medicationName,
+    this.medicationDescription,
+  }) : super();
 
   final WarningLevel warningLevel;
+  final VoidCallback onTap;
+  final String medicationName;
+  final String? medicationDescription;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 5,
-      color: warningLevel == WarningLevel.danger
-          ? Color(0xFFFFAFAF)
-          : Color(0xFFFFEBCC),
-      child: GestureDetector(
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 5,
+        color: warningLevel == WarningLevel.danger
+            ? Color(0xFFFFAFAF)
+            : Color(0xFFFFEBCC),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(
