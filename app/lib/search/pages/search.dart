@@ -93,8 +93,12 @@ class SearchPage extends HookWidget {
         itemBuilder: (context, index) {
           final med = medications[index];
           return MedicationCard(
-            onTap: () {},
+            onTap: () {
+              // ignore: avoid_print
+              print('TODO: route to details page');
+            },
             medicationName: med.name,
+            // medicationDescription: med.description,
           );
         },
         separatorBuilder: (_, __) => SizedBox(height: 8),
@@ -116,13 +120,14 @@ class MedicationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      elevation: 5,
-      color: Colors.grey[200],
-      child: GestureDetector(
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 5,
+        color: Colors.grey[200],
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -137,7 +142,7 @@ class MedicationCard extends StatelessWidget {
                       style: PharmeTheme.textTheme.titleMedium,
                     ),
                   ),
-                  Icon(Icons.arrow_forward_ios)
+                  Icon(Icons.arrow_forward_ios),
                 ],
               ),
               SizedBox(height: 6),
