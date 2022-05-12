@@ -1,6 +1,7 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { GuidelineError } from './entities/guideline-error.entity';
 import { GuidelinesService } from './guidelines.service';
 
 @ApiTags('Guidelines')
@@ -12,5 +13,11 @@ export class GuidelinesController {
     @Post()
     async fetchGuidelines(): Promise<void> {
         return this.guidelinesService.fetchGuidelines();
+    }
+
+    @ApiOperation({ summary: 'Get all guideline data errors' })
+    @Get('errors')
+    async getErrors(): Promise<GuidelineError[]> {
+        return this.guidelinesService.getAllErrors();
     }
 }

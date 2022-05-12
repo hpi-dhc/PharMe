@@ -300,4 +300,16 @@ export class GuidelinesService {
             this.spreadsheetPhenotypeHeader.length,
         );
     }
+
+    async getAllErrors(): Promise<GuidelineError[]> {
+        return this.guidelineErrorRepository.find({
+            select: {
+                type: true,
+                context: true,
+                blame: true,
+                guideline: { id: true },
+            },
+            relations: ['guideline'],
+        });
+    }
 }
