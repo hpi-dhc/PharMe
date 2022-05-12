@@ -101,6 +101,14 @@ describe('App (e2e)', () => {
                 );
             }
         });
+
+        it('should verify that data errors have been saved', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/guidelines/errors',
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toBeGreaterThan(0);
+        });
     });
 
     afterAll(async () => {
