@@ -94,11 +94,9 @@ class SearchPage extends HookWidget {
           final med = medications[index];
           return MedicationCard(
             onTap: () {
-              // ignore: avoid_print
-              print('TODO: route to details page');
+              context.router.pushNamed(index.toString());
             },
             medicationName: med.name,
-            // medicationDescription: med.description,
           );
         },
         separatorBuilder: (_, __) => SizedBox(height: 8),
