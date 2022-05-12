@@ -35,7 +35,6 @@ export class GenePhenotypesByGeneCache extends GuidelineCacheMap<
                 'genePhenotypes.geneSymbol',
             ],
         });
-        if (!geneSymbol) throw new Error();
         const genePhenotypes = this.spreadsheetPhenotypeHeader.map(
             (phenotypes) =>
                 new Set(
