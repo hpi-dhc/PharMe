@@ -17,9 +17,6 @@ export class CpicRecommendationDto {
     @IsObject()
     phenotypes: { [key: string]: string };
 
-    @IsObject()
-    lookupkey: { [key: string]: string };
-
     @IsString()
     classification: string;
 }

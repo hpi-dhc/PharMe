@@ -13,7 +13,7 @@ import { Medication } from '../medications/medication.entity';
 import { MedicationsService } from '../medications/medications.service';
 import {
     GenePhenotypesByGeneCache,
-    GenePhenotypesByLookupkeyCache,
+    GenePhenotypesCache,
 } from './caches/gene-phenotype-caches';
 import {
     MedicationByNameCache,
@@ -34,7 +34,7 @@ export class GuidelinesService {
     private medicationsByNameCache: MedicationByNameCache;
     private medicationsByRxcuiCache: MedicationByRxcuiCache;
     private genePhenotypesByGeneCache: GenePhenotypesByGeneCache;
-    private genePhenotypesByLookupkeyCache: GenePhenotypesByLookupkeyCache;
+    private genePhenotypesCache: GenePhenotypesCache;
 
     constructor(
         private configService: ConfigService,
@@ -57,8 +57,9 @@ export class GuidelinesService {
             this.genePhenotypesService,
             this.spreadsheetPhenotypeHeader,
         );
-        this.genePhenotypesByLookupkeyCache =
-            new GenePhenotypesByLookupkeyCache(this.genePhenotypesService);
+        this.genePhenotypesCache = new GenePhenotypesCache(
+            this.genePhenotypesService,
+        );
     }
 
     async fetchGuidelines(): Promise<void> {
@@ -192,7 +193,7 @@ export class GuidelinesService {
             'https://api.cpicpgx.org/v1/recommendation',
             {
                 params: {
-                    select: 'drugid,drugrecommendation,implications,comments,phenotypes,lookupkey,classification',
+                    select: 'drugid,drugrecommendation,implications,comments,phenotypes,classification',
                 },
             },
         );
@@ -203,6 +204,7 @@ export class GuidelinesService {
         const guidelines: Map<string, Guideline[]> = new Map();
         const guidelineErrors: Set<GuidelineError> = new Set();
 
+        const knownCombinations: Set<string> = new Set();
         for (const cpicRecommendationDto of recommendationDtos) {
             const externalid = cpicRecommendationDto.drugid.split(':');
             if (externalid[0] !== 'RxNorm') continue;
@@ -211,15 +213,17 @@ export class GuidelinesService {
                     externalid[1],
                 );
                 if (!medication) continue;
-                for (const [geneSymbol, lookupkey] of Object.entries(
-                    cpicRecommendationDto.lookupkey,
+                for (const [geneSymbol, phenotype] of Object.entries(
+                    cpicRecommendationDto.phenotypes,
                 )) {
-                    const genePhenotype =
-                        await this.genePhenotypesByLookupkeyCache.get(
-                            geneSymbol,
-                            lookupkey,
-                        );
+                    const genePhenotype = await this.genePhenotypesCache.get(
+                        geneSymbol,
+                        phenotype,
+                    );
                     if (!genePhenotype) continue;
+                    const knownKey = `${medication.id}:${genePhenotype.id}`;
+                    if (knownCombinations.has(knownKey)) continue;
+                    knownCombinations.add(knownKey);
                     const guideline = Guideline.fromCpicRecommendation(
                         cpicRecommendationDto,
                         medication,
@@ -298,7 +302,7 @@ export class GuidelinesService {
         this.medicationsByNameCache.clear();
         this.medicationsByRxcuiCache.clear();
         this.genePhenotypesByGeneCache.clear();
-        this.genePhenotypesByLookupkeyCache.clear();
+        this.genePhenotypesCache.clear();
         this.spreadsheetPhenotypeHeader.splice(
             0,
             this.spreadsheetPhenotypeHeader.length,
