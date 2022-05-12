@@ -4,14 +4,21 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
-import { CacheMap } from '../common/cache-map';
 import { fetchSpreadsheetCells } from '../common/google-sheets';
 import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
 import { GenePhenotypesService } from '../gene-phenotypes/gene-phenotypes.service';
 import { Medication } from '../medications/medication.entity';
 import { MedicationsService } from '../medications/medications.service';
+import {
+    GenePhenotypesByGeneCache,
+    GenePhenotypesByLookupkeyCache,
+} from './caches/gene-phenotype-caches';
+import {
+    MedicationByNameCache,
+    MedicationByRxcuiCache,
+} from './caches/medication-caches';
 import { CpicRecommendationDto } from './dtos/cpic-recommendation.dto';
 import {
     GuidelineError,
@@ -23,17 +30,11 @@ import { Guideline, WarningLevel } from './entities/guideline.entity';
 @Injectable()
 export class GuidelinesService {
     private readonly logger = new Logger(GuidelinesService.name);
-    private medicationsByNameCacher: CacheMap<Medication, GuidelineError>;
-    private medicationsByRxcuiCacher: CacheMap<Medication, GuidelineError>;
-    private genePhenotypesByGeneCacher: CacheMap<
-        Array<Set<GenePhenotype>>,
-        GuidelineError
-    >;
-    private genePhenotypesByLookupkeyCacher: CacheMap<
-        GenePhenotype,
-        GuidelineError
-    >;
     private spreadsheetPhenotypeHeader: Array<Set<string>>;
+    private medicationsByNameCache: MedicationByNameCache;
+    private medicationsByRxcuiCache: MedicationByRxcuiCache;
+    private genePhenotypesByGeneCache: GenePhenotypesByGeneCache;
+    private genePhenotypesByLookupkeyCache: GenePhenotypesByLookupkeyCache;
 
     constructor(
         private configService: ConfigService,
@@ -45,104 +46,19 @@ export class GuidelinesService {
         private medicationsService: MedicationsService,
         private genePhenotypesService: GenePhenotypesService,
     ) {
-        this.medicationsByNameCacher = new CacheMap(
-            (name) =>
-                this.medicationsService.getOne({
-                    where: { name: ILike(name) },
-                }),
-            (name) => {
-                const error = new GuidelineError();
-                error.type = GuidelineErrorType.MEDICATION_NAME_NOT_FOUND;
-                error.blame = GuidelineErrorBlame.DRUGBANK;
-                error.context = name;
-                return error;
-            },
-            (medicationOrError) => {
-                if (medicationOrError instanceof GuidelineError) {
-                    throw medicationOrError;
-                }
-                return medicationOrError;
-            },
-        );
-        this.medicationsByRxcuiCacher = new CacheMap(
-            (rxcui) => this.medicationsService.getOne({ where: { rxcui } }),
-            (rxcui) => {
-                const error = new GuidelineError();
-                error.type = GuidelineErrorType.MEDICATION_RXCUI_NOT_FOUND;
-                error.blame = GuidelineErrorBlame.DRUGBANK;
-                error.context = rxcui;
-                return error;
-            },
-            (medicationOrError) => {
-                if (medicationOrError instanceof GuidelineError) {
-                    throw medicationOrError;
-                }
-                return medicationOrError;
-            },
-        );
-        this.genePhenotypesByGeneCacher = new CacheMap(
-            async (geneSymbolName) => {
-                const geneSymbol =
-                    await this.genePhenotypesService.getOneGeneSymbol({
-                        where: { name: ILike(geneSymbolName) },
-                        relations: [
-                            'genePhenotypes',
-                            'genePhenotypes.phenotype',
-                            'genePhenotypes.geneSymbol',
-                        ],
-                    });
-                if (!geneSymbol) throw new Error();
-                const genePhenotypes = this.spreadsheetPhenotypeHeader.map(
-                    (phenotypes) =>
-                        new Set(
-                            geneSymbol.genePhenotypes.filter((genePhenotype) =>
-                                phenotypes.has(
-                                    genePhenotype.phenotype.name.toLowerCase(),
-                                ),
-                            ),
-                        ),
-                );
-                return genePhenotypes;
-            },
-            (geneSymbolName) => {
-                const error = new GuidelineError();
-                error.type = GuidelineErrorType.GENEPHENOTYPE_NOT_FOUND;
-                error.blame = GuidelineErrorBlame.CPIC;
-                error.context = geneSymbolName;
-                return error;
-            },
-            (valueOrError) => {
-                if (valueOrError instanceof GuidelineError) {
-                    throw valueOrError;
-                }
-                return valueOrError;
-            },
-        );
-        this.genePhenotypesByLookupkeyCacher = new CacheMap(
-            (geneSymbolName, lookupkey) =>
-                this.genePhenotypesService.getOne({
-                    where: {
-                        geneSymbol: { name: ILike(geneSymbolName) },
-                        phenotype: { lookupkey },
-                    },
-                    relations: ['phenotype', 'geneSymbol'],
-                }),
-            (geneSymbolName, lookupkey) => {
-                const error = new GuidelineError();
-                error.type = GuidelineErrorType.GENEPHENOTYPE_NOT_FOUND;
-                error.blame = GuidelineErrorBlame.CPIC;
-                error.context = `${geneSymbolName}: ${lookupkey}`;
-                return error;
-            },
-            (genePhenotypeOrError) => {
-                if (genePhenotypeOrError instanceof GuidelineError) {
-                    throw genePhenotypeOrError;
-                }
-                return genePhenotypeOrError;
-            },
-        );
-
         this.spreadsheetPhenotypeHeader = [];
+        this.medicationsByNameCache = new MedicationByNameCache(
+            this.medicationsService,
+        );
+        this.medicationsByRxcuiCache = new MedicationByRxcuiCache(
+            this.medicationsService,
+        );
+        this.genePhenotypesByGeneCache = new GenePhenotypesByGeneCache(
+            this.genePhenotypesService,
+            this.spreadsheetPhenotypeHeader,
+        );
+        this.genePhenotypesByLookupkeyCache =
+            new GenePhenotypesByLookupkeyCache(this.genePhenotypesService);
     }
 
     async fetchGuidelines(): Promise<void> {
@@ -176,13 +92,17 @@ export class GuidelinesService {
             ],
         );
 
-        this.spreadsheetPhenotypeHeader = phenotypeHeader[0].map(
-            (cell) =>
-                new Set(
-                    cell.value
-                        .split(';')
-                        .map((phenotype) => phenotype.trim().toLowerCase()),
-                ),
+        this.spreadsheetPhenotypeHeader.splice(
+            0,
+            this.spreadsheetPhenotypeHeader.length,
+            ...phenotypeHeader[0].map(
+                (cell) =>
+                    new Set(
+                        cell.value
+                            .split(';')
+                            .map((phenotype) => phenotype.trim().toLowerCase()),
+                    ),
+            ),
         );
 
         const guidelineErrors: Set<GuidelineError> = new Set();
@@ -195,13 +115,12 @@ export class GuidelinesService {
             }
 
             try {
-                const medication = await this.medicationsByNameCacher.get(
+                const medication = await this.medicationsByNameCache.get(
                     medicationName.value,
                 );
-                const genePhenotypes =
-                    await this.genePhenotypesByGeneCacher.get(
-                        geneSymbolName.value,
-                    );
+                const genePhenotypes = await this.genePhenotypesByGeneCache.get(
+                    geneSymbolName.value,
+                );
                 if (genePhenotypes.length === 0) continue;
 
                 const guidelinesForMedication = guidelines.get(medication.name);
@@ -285,7 +204,7 @@ export class GuidelinesService {
             const externalid = cpicRecommendationDto.drugid.split(':');
             if (externalid[0] !== 'RxNorm') continue;
             try {
-                const medication = await this.medicationsByRxcuiCacher.get(
+                const medication = await this.medicationsByRxcuiCache.get(
                     externalid[1],
                 );
                 if (!medication) continue;
@@ -293,7 +212,7 @@ export class GuidelinesService {
                     cpicRecommendationDto.lookupkey,
                 )) {
                     const genePhenotype =
-                        await this.genePhenotypesByLookupkeyCacher.get(
+                        await this.genePhenotypesByLookupkeyCache.get(
                             geneSymbol,
                             lookupkey,
                         );
@@ -372,10 +291,13 @@ export class GuidelinesService {
     }
 
     private clearCaches(): void {
-        this.medicationsByNameCacher.clear();
-        this.medicationsByRxcuiCacher.clear();
-        this.genePhenotypesByGeneCacher.clear();
-        this.genePhenotypesByLookupkeyCacher.clear();
-        this.spreadsheetPhenotypeHeader = [];
+        this.medicationsByNameCache.clear();
+        this.medicationsByRxcuiCache.clear();
+        this.genePhenotypesByGeneCache.clear();
+        this.genePhenotypesByLookupkeyCache.clear();
+        this.spreadsheetPhenotypeHeader.splice(
+            0,
+            this.spreadsheetPhenotypeHeader.length,
+        );
     }
 }

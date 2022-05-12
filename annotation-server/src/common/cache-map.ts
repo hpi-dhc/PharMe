@@ -1,17 +1,13 @@
-export class CacheMap<Value, RetrieveFailedError> {
-    retrieve: (...keys: string[]) => Promise<Value>;
-    createError: (...keys: string[]) => RetrieveFailedError;
-    validate: (valueOrError: Value | RetrieveFailedError) => Value;
+export abstract class CacheMap<Value, RetrieveFailedError> {
+    protected abstract retrieve(...keys: string[]): Promise<Value>;
+    protected abstract createError(...keys: string[]): RetrieveFailedError;
+    protected abstract validate(
+        valueOrError: Value | RetrieveFailedError,
+    ): Value;
+
     cache: Map<string, Value | RetrieveFailedError>;
 
-    constructor(
-        retrieve: (...keys: string[]) => Promise<Value>,
-        createError: (...keys: string[]) => RetrieveFailedError,
-        validate: (valueOrError: Value | RetrieveFailedError) => Value,
-    ) {
-        this.retrieve = retrieve;
-        this.createError = createError;
-        this.validate = validate;
+    constructor() {
         this.cache = new Map();
     }
 
