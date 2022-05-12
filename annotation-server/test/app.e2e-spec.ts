@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
-import { Guideline } from 'src/guidelines/guideline.entity';
+import { Guideline } from 'src/guidelines/entities/guideline.entity';
 
 import { AppModule } from '../src/app.module';
 import { MedicationsService } from '../src/medications/medications.service';
@@ -100,6 +100,14 @@ describe('App (e2e)', () => {
                     guideline.warningLevel ?? 'null',
                 );
             }
+        });
+
+        it('should verify that data errors have been saved', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/guidelines/errors',
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toBeGreaterThan(0);
         });
     });
 

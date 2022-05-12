@@ -24,5 +24,8 @@
       "name": "🦄 Miscellaneous",
       "path": "miscellaneous"
     }
-  ]
+  ],
+  "settings": {
+    "typescript.preferences.importModuleSpecifier": "relative"
+  }
 }

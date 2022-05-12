@@ -84,7 +84,6 @@ jobs:
         with:
           flags: lab-server
           directory: lab-server/coverage
-          fail_ci_if_error: true
 
   build:
     name: Build

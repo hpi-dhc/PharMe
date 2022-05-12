@@ -10,10 +10,10 @@ export class GenePhenotypesController {
 
     @ApiOperation({
         summary:
-            'Clear and update CPIC lookupkeys and generesults needed to match CPIC and Google Sheet data',
+            'Clear and update CPIC gene-phenotype combinations needed to match CPIC and Google Sheet data',
     })
     @Post()
-    async fetchLookupKeys(): Promise<void> {
+    async fetchGenePhenotypes(): Promise<void> {
         return this.genePhenotypesService.fetchGenePhenotypes();
     }
 }

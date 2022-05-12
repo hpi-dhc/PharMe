@@ -37,6 +37,6 @@ class GeneSymbol with _$GeneSymbol {
 
 @freezed
 class Phenotype with _$Phenotype {
-  const factory Phenotype(int id, String lookupkey, String name) = _Phenotype;
+  const factory Phenotype(int id, String name) = _Phenotype;
   factory Phenotype.fromJson(dynamic json) => _$PhenotypeFromJson(json);
 }

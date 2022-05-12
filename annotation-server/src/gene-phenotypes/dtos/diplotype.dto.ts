@@ -1,8 +1,9 @@
-import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class DiplotypeDto {
-    @IsObject()
-    lookupkey: { [key: string]: string };
+    @IsString()
+    @IsNotEmpty()
+    genesymbol: string;
 
     @IsString()
     @IsNotEmpty()

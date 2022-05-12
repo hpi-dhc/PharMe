@@ -6,8 +6,5 @@ export class Phenotype {
     id: number;
 
     @Column()
-    lookupkey: string;
-
-    @Column()
     name: string;
 }
