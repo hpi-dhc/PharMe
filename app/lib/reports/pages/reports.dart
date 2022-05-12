@@ -1,5 +1,7 @@
+import '../../common/models/guideline.dart';
 import '../../common/models/medication.dart';
 import '../../common/module.dart';
+import '../../common/utilities/medication_utils.dart';
 import '../../medications/pages/overview/page.dart';
 import 'cubit.dart';
 
@@ -40,31 +42,40 @@ class ReportsPage extends StatelessWidget {
   }
 
   Widget _buildMedicationsList(List<MedicationWithGuidelines> medications) {
-    // TODO(kolioOtSofia): filter relevant guidelines and remove medications with ok warning levels only #270
+    var filteredMedications =
+        medications.map(extractRelevantGuidelineFromMedication).toList();
+    filteredMedications = filteredMedications
+        .where((element) =>
+            element.guidelines.isNotEmpty &&
+            !_containsOnlyOkGuidelines(element.guidelines))
+        .toList();
+
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
-        final el = medications[index];
+        final el = filteredMedications[index];
         return ReportCard(
-          warningLevel: _convertToWarningLevel(el.guidelines[0].warningLevel),
+          warningLevel: _extractWarningLevelFromGuidelines(el.guidelines),
           onTap: () {},
           medicationName: el.name,
           medicationDescription: el.description,
         );
-      }, childCount: medications.length),
+      }, childCount: filteredMedications.length),
     );
   }
 
-  WarningLevel _convertToWarningLevel(String? str) {
-    switch (str) {
-      case 'danger':
+  WarningLevel _extractWarningLevelFromGuidelines(List<Guideline> guidelines) {
+    for (final guideline in guidelines) {
+      if (guideline.warningLevel == WarningLevel.danger.name) {
         return WarningLevel.danger;
-      case 'warning':
-        return WarningLevel.warning;
-      case 'ok':
-        return WarningLevel.ok;
-      default:
-        throw Exception('Warning level not supperted');
+      }
     }
+    return WarningLevel.warning;
+  }
+
+  bool _containsOnlyOkGuidelines(List<Guideline> guidelines) {
+    final warningLevels = guidelines.map((e) => e.warningLevel);
+    return warningLevels
+        .every((warningLevel) => warningLevel == WarningLevel.ok.name);
   }
 }
 
