@@ -206,6 +206,11 @@ export class GuidelinesService {
 
         const knownCombinations: Set<string> = new Set();
         for (const cpicRecommendationDto of recommendationDtos) {
+            if (
+                cpicRecommendationDto.classification.match(/no recommendation/i)
+            ) {
+                continue;
+            }
             const externalid = cpicRecommendationDto.drugid.split(':');
             if (externalid[0] !== 'RxNorm') continue;
             try {
