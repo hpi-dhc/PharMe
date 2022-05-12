@@ -70,6 +70,7 @@ export class GuidelinesService {
     async complementAndSaveGuidelines(
         guidelines: Map<string, Guideline[]>,
     ): Promise<void> {
+        this.logger.log('Complementing CPIC guidelines with data from sheet.');
         const [
             medications,
             genes,
@@ -182,9 +183,11 @@ export class GuidelinesService {
         this.guidelineErrorRepository.save(Array.from(guidelineErrors));
 
         this.clearCaches();
+        this.logger.log('Successfully saved all valid guidelines.');
     }
 
     async fetchCpicGuidelines(): Promise<Map<string, Guideline[]>> {
+        this.logger.log('Fetching guidelines from CPIC.');
         const response = this.httpService.get(
             'https://api.cpicpgx.org/v1/recommendation',
             {
@@ -237,6 +240,7 @@ export class GuidelinesService {
             }
         }
         this.guidelineErrorRepository.save(Array.from(guidelineErrors));
+        this.logger.log('Successfully fetched guidelines from CPIC.');
         return guidelines;
     }
 

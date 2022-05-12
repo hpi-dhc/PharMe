@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
 import { FindOneOptions, Repository } from 'typeorm';
@@ -12,6 +12,8 @@ import { Phenotype } from './entities/phenotype.entity';
 
 @Injectable()
 export class GenePhenotypesService {
+    private readonly logger = new Logger(GenePhenotypesService.name);
+
     constructor(
         private httpService: HttpService,
         @InjectRepository(GeneSymbol)
@@ -29,6 +31,7 @@ export class GenePhenotypesService {
     async fetchGenePhenotypes(): Promise<void> {
         await this.clearAllData();
 
+        this.logger.log('Fetching gene-phenotype combinations from CPIC.');
         const response = this.httpService.get(
             'https://api.cpicpgx.org/v1/diplotype',
             { params: { select: 'lookupkey, generesult' } },
@@ -42,6 +45,9 @@ export class GenePhenotypesService {
         );
 
         this.hashedPhenotypes.clear();
+        this.logger.log(
+            'Successfully saved gene-phenotype combinations to database.',
+        );
     }
 
     private async getGeneSymbolDtos(diplotypeDtos: DiplotypeDto[]) {
