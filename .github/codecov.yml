@@ -1,0 +1,10 @@
+flag_management:
+  individual_flags:
+    - name: annotation-server
+      paths:
+        - annotation-server/src
+      carryforward: true
+    - name: lab-server
+      paths:
+        - lab-server/src
+      carryforward: true
