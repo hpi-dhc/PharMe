@@ -14,8 +14,8 @@ part 'router.gr.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
-    onboardingRoutes,
     loginRoutes,
+    onboardingRoutes,
     AutoRoute(
       path: 'main',
       page: MainPage,
