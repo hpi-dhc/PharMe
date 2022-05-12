@@ -27,7 +27,9 @@ class ReportsPage extends StatelessWidget {
   }
 
   Widget _buildReportsPage(
-      List<MedicationWithGuidelines> medications, BuildContext context) {
+    List<MedicationWithGuidelines> medications,
+    BuildContext context,
+  ) {
     return CustomScrollView(slivers: [
       SliverPersistentHeader(
         delegate: SliverReportsHeaderDelegate(50, 100, 150),
@@ -35,45 +37,12 @@ class ReportsPage extends StatelessWidget {
       ),
       _buildMedicationsList(medications),
     ]);
-
-    return Column(children: [
-      Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        color: PharmeTheme.secondaryColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(children: [
-            Text(
-              "Pharmacogenomics report",
-              style: PharmeTheme.textTheme.headline6!
-                  .copyWith(color: Colors.white),
-            ),
-            SizedBox(height: 6),
-            Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    "All medications ###############################################################################################################################",
-                    style: PharmeTheme.textTheme.bodyMedium!
-                        .copyWith(color: Colors.white),
-                  ),
-                ),
-                SvgPicture.asset('assets/images/reports_icon.svg')
-              ],
-            )
-          ]),
-        ),
-      ),
-    ]);
   }
 
   Widget _buildMedicationsList(List<MedicationWithGuidelines> medications) {
     // TODO(kolioOtSofia): filter relevant guidelines and remove medications with ok warning levels only #270
     return SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-      if (index < medications.length) {
+      delegate: SliverChildBuilderDelegate((context, index) {
         final el = medications[index];
         return ReportCard(
           warningLevel: _convertToWarningLevel(el.guidelines[0].warningLevel),
@@ -81,21 +50,7 @@ class ReportsPage extends StatelessWidget {
           medicationName: el.name,
           medicationDescription: el.description,
         );
-      } else {
-        return ReportCard(
-          warningLevel: WarningLevel.danger,
-          onTap: () {},
-          medicationName: "Dummy medication",
-          medicationDescription:
-              "This is a long string -------------------------------------------------------------------------------------------------------------------------------------------",
-        );
-      }
-    }, childCount: medications.length + 4));
-    return Flexible(
-      child: ListView.separated(
-          itemBuilder: (context, index) {},
-          separatorBuilder: (_, __) => SizedBox(height: 8),
-          itemCount: medications.length + 4),
+      }, childCount: medications.length),
     );
   }
 
@@ -133,7 +88,10 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -144,7 +102,7 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
         padding: const EdgeInsets.all(8),
         child: Column(children: [
           Text(
-            "Pharmacogenomics report",
+            context.l10n.reports_page_disclaimer_title,
             style:
                 PharmeTheme.textTheme.headline6!.copyWith(color: Colors.white),
           ),
@@ -154,7 +112,7 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
               children: [
                 Flexible(
                   child: Text(
-                    "All medications ###############################################################################################################################",
+                    context.l10n.reports_page_disclaimer_text,
                     style: PharmeTheme.textTheme.bodyMedium!
                         .copyWith(color: Colors.white),
                   ),
