@@ -57,7 +57,7 @@ export class GenePhenotypesByGeneCache extends GuidelineCacheMap<
     }
 }
 
-export class GenePhenotypesByLookupkeyCache extends GuidelineCacheMap<GenePhenotype> {
+export class GenePhenotypesCache extends GuidelineCacheMap<GenePhenotype> {
     private genePhenotypesService: GenePhenotypesService;
 
     constructor(genePhenotypeService: GenePhenotypesService) {
@@ -66,24 +66,24 @@ export class GenePhenotypesByLookupkeyCache extends GuidelineCacheMap<GenePhenot
     }
 
     protected async retrieve(
-        ...[geneSymbolName, lookupkey]: string[]
+        ...[geneSymbolName, phenotype]: string[]
     ): Promise<GenePhenotype> {
         return this.genePhenotypesService.getOne({
             where: {
                 geneSymbol: { name: ILike(geneSymbolName) },
-                phenotype: { lookupkey },
+                phenotype: { name: phenotype },
             },
             relations: ['phenotype', 'geneSymbol'],
         });
     }
 
     protected createError(
-        ...[geneSymbolName, lookupkey]: string[]
+        ...[geneSymbolName, phenotype]: string[]
     ): GuidelineError {
         const error = new GuidelineError();
         error.type = GuidelineErrorType.GENEPHENOTYPE_NOT_FOUND;
         error.blame = GuidelineErrorBlame.CPIC;
-        error.context = `${geneSymbolName}:${lookupkey}`;
+        error.context = `${geneSymbolName}:${phenotype}`;
         return error;
     }
 }
