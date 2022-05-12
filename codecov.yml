@@ -4,16 +4,10 @@ coverage:
       default:
         target: auto
         threshold: 10%
-        flags:
-          - annotation-server
-          - lab-server
     patch:
       default:
         target: auto
         threshold: 10%
-        flags:
-          - annotation-server
-          - lab-server
 
 flag_management:
   individual_flags:
