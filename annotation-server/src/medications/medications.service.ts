@@ -162,10 +162,10 @@ export class MedicationsService {
             this.logger.error(error);
         });
         proc.stdout.on('data', (data: string) => {
-            this.logger.log(data);
+            this.logger.log(data.toString().replace(/\n\r?/, ''));
         });
         proc.stderr.on('data', (data: string) => {
-            this.logger.error(data);
+            this.logger.error(data.toString().replace(/\n\r?/, ''));
         });
         return new Promise((resolve, reject) => {
             proc.on('exit', (code) => {

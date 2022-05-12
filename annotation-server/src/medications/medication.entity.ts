@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { Guideline } from '../guidelines/guideline.entity';
+import { Guideline } from '../guidelines/entities/guideline.entity';
 import { DrugDto } from './dtos/drugbank.dto';
 
 @Entity()
