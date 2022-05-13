@@ -7,8 +7,6 @@ class MedicationDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(context.l10n.medications_details_page_working(id)),
-    );
+    return Container();
   }
 }
