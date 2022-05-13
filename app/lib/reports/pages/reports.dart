@@ -33,7 +33,7 @@ class ReportsPage extends StatelessWidget {
   ) {
     return CustomScrollView(slivers: [
       SliverPersistentHeader(
-        delegate: SliverReportsHeaderDelegate(50, 100, 150),
+        delegate: SliverReportsHeaderDelegate(48, 96, 136),
         floating: true,
       ),
       _buildMedicationsList(medications),
@@ -41,19 +41,20 @@ class ReportsPage extends StatelessWidget {
   }
 
   Widget _buildMedicationsList(List<MedicationWithGuidelines> medications) {
-    var filteredMedications =
-        medications.map(extractRelevantGuidelineFromMedication).toList();
+    var filteredMedications = medications.map(filterUserGuidelines).toList();
     filteredMedications = filteredMedications
-        .where((element) =>
-            element.guidelines.isNotEmpty &&
-            !_containsOnlyOkGuidelines(element.guidelines))
+        .where(
+          (element) =>
+              element.guidelines.isNotEmpty &&
+              !_containsOnlyOkGuidelines(element.guidelines),
+        )
         .toList();
 
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
         final med = filteredMedications[index];
         return ReportCard(
-          warningLevel: _extractWarningLevelFromGuidelines(med.guidelines),
+          warningLevel: _getWarningLevel(med.guidelines),
           onTap: () {},
           medicationName: med.name,
           medicationDescription: med.description,
@@ -62,7 +63,7 @@ class ReportsPage extends StatelessWidget {
     );
   }
 
-  WarningLevel _extractWarningLevelFromGuidelines(List<Guideline> guidelines) {
+  WarningLevel _getWarningLevel(List<Guideline> guidelines) {
     for (final guideline in guidelines) {
       if (guideline.warningLevel == WarningLevel.danger.name) {
         return WarningLevel.danger;
@@ -73,15 +74,18 @@ class ReportsPage extends StatelessWidget {
 
   bool _containsOnlyOkGuidelines(List<Guideline> guidelines) {
     final warningLevels = guidelines.map((e) => e.warningLevel);
-    return warningLevels
-        .every((warningLevel) => warningLevel == WarningLevel.ok.name);
+    return warningLevels.every((warningLevel) {
+      return warningLevel == WarningLevel.ok.name;
+    });
   }
 }
 
 class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
   const SliverReportsHeaderDelegate(
-      this.toolBarHeight, this.closedHeight, this.openHeight)
-      : super();
+    this.toolBarHeight,
+    this.closedHeight,
+    this.openHeight,
+  ) : super();
 
   final double toolBarHeight;
   final double closedHeight;
@@ -116,20 +120,18 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
             style:
                 PharmeTheme.textTheme.headline6!.copyWith(color: Colors.white),
           ),
-          SizedBox(height: 6),
+          SizedBox(height: 8),
           Expanded(
-            child: Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    context.l10n.reports_page_disclaimer_text,
-                    style: PharmeTheme.textTheme.bodyMedium!
-                        .copyWith(color: Colors.white),
-                  ),
+            child: Row(children: [
+              Flexible(
+                child: Text(
+                  context.l10n.reports_page_disclaimer_text,
+                  style: PharmeTheme.textTheme.bodyMedium!
+                      .copyWith(color: Colors.white),
                 ),
-                SvgPicture.asset('assets/images/reports_icon.svg')
-              ],
-            ),
+              ),
+              SvgPicture.asset('assets/images/reports_icon.svg')
+            ]),
           )
         ]),
       ),
@@ -156,7 +158,7 @@ class ReportCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(16),
         ),
         elevation: 5,
         color: warningLevel == WarningLevel.danger
@@ -175,21 +177,21 @@ class ReportCard extends StatelessWidget {
                           ? Icons.block_flipped
                           : Icons.warning_amber,
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 12),
                     Text(
                       medicationName,
                       style: PharmeTheme.textTheme.titleMedium,
                     ),
                   ]),
-                  SizedBox(height: 10),
+                  SizedBox(height: 12),
                   if (medicationDescription != null)
                     Text(
                       medicationDescription!,
                       style: PharmeTheme.textTheme.subtitle2,
-                    )
+                    ),
                 ]),
               ),
-              Icon(Icons.arrow_forward_ios)
+              Icon(Icons.arrow_forward_ios),
             ],
           ),
         ),
@@ -198,8 +200,4 @@ class ReportCard extends StatelessWidget {
   }
 }
 
-enum WarningLevel {
-  danger,
-  warning,
-  ok,
-}
+enum WarningLevel { danger, warning, ok }
