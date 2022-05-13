@@ -1,5 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-
+import '../common/module.dart';
 import 'pages/faq.dart';
 
 // We need to expose all pages for AutoRouter

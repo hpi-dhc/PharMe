@@ -1,5 +1,4 @@
-import '../models/medication.dart';
-import '../models/userdata.dart';
+import '../models/module.dart';
 
 // removes the guidelines that are not passing to the user
 MedicationWithGuidelines filterUserGuidelines(

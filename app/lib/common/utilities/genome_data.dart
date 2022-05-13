@@ -4,10 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../constants.dart';
-import '../models/cpic_lookup_response.dart';
-import '../models/diplotype.dart';
-import '../models/metadata.dart';
-import '../models/userdata.dart';
+import '../models/module.dart';
 
 Future<void> fetchAndSaveDiplotypes(String token, String url) async {
   if (!shouldFetchDiplotypes()) return;

@@ -1,7 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'models/metadata.dart';
-import 'models/userdata.dart';
+import 'models/module.dart';
 
 Future<void> initServices() async {
   await Hive.initFlutter();

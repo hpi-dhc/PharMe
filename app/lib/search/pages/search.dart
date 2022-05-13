@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 
-import '../../../common/models/medication.dart';
 import '../../../common/module.dart';
 import 'cubit.dart';
 
