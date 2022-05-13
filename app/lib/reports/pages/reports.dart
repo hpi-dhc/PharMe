@@ -130,9 +130,9 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
                       .copyWith(color: Colors.white),
                 ),
               ),
-              SvgPicture.asset('assets/images/reports_icon.svg')
+              SvgPicture.asset('assets/images/reports_icon.svg'),
             ]),
-          )
+          ),
         ]),
       ),
     );

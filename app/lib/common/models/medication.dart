@@ -44,7 +44,8 @@ class MedicationWithGuidelines with _$MedicationWithGuidelines {
 }
 
 List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
-    Response resp) {
+  Response resp,
+) {
   final json = jsonDecode(resp.body) as List<dynamic>;
   return json
       .map<MedicationWithGuidelines>(MedicationWithGuidelines.fromJson)
