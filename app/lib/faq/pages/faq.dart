@@ -49,13 +49,13 @@ class FaqPage extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.faq_pharmacogenomics,
-                  style: context.textTheme.headline6!
+                  style: context.textTheme.titleLarge!
                       .copyWith(color: Colors.white),
                 ),
                 SizedBox(height: 8),
                 Text(
                   context.l10n.faq_page_description,
-                  style: context.textTheme.bodyText2!
+                  style: context.textTheme.bodyMedium!
                       .copyWith(color: Colors.white),
                 ),
               ],

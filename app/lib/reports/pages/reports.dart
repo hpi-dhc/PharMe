@@ -118,7 +118,7 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
           Text(
             context.l10n.reports_page_disclaimer_title,
             style:
-                PharmeTheme.textTheme.headline6!.copyWith(color: Colors.white),
+                PharmeTheme.textTheme.titleLarge!.copyWith(color: Colors.white),
           ),
           SizedBox(height: 8),
           Expanded(
@@ -187,7 +187,7 @@ class ReportCard extends StatelessWidget {
                   if (medicationDescription != null)
                     Text(
                       medicationDescription!,
-                      style: PharmeTheme.textTheme.subtitle2,
+                      style: PharmeTheme.textTheme.titleSmall,
                     ),
                 ]),
               ),
