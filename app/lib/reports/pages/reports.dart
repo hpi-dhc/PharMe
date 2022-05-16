@@ -52,7 +52,7 @@ class ReportsPage extends StatelessWidget {
         final med = filteredMedications[index];
         return ReportCard(
           warningLevel: _getWarningLevel(med.guidelines),
-          onTap: () {},
+          onTap: () => context.router.pushNamed(index.toString()),
           medicationName: med.name,
           medicationDescription: med.description,
         );
