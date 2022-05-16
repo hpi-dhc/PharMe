@@ -13,6 +13,6 @@ const reportsRoutes = AutoRoute(
   page: EmptyRouterPage,
   children: [
     AutoRoute(path: '', page: ReportsPage),
-    AutoRoute(path: ':id', page: MedicationDetailsPage),
+    AutoRoute(page: MedicationDetailsPage),
   ],
 );

@@ -13,6 +13,6 @@ const searchRoutes = AutoRoute(
   page: EmptyRouterPage,
   children: [
     AutoRoute(path: '', page: SearchPage),
-    AutoRoute(path: ':id', page: MedicationDetailsPage),
+    AutoRoute(page: MedicationDetailsPage),
   ],
 );
