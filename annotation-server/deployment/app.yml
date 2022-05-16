@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: annotation-server
+  labels:
+    app: annotation-server
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: annotation-server
+  template:
+    metadata:
+      labels:
+        app: annotation-server
+    spec:
+      containers:
+        - image: ghcr.io/hpi-dhc/pharme-annotation-server:main
+          imagePullPolicy: "Always"
+          name: annotation-server
+          ports:
+            - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-annotation-server
+  labels:
+    app: annotation-server
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+  selector:
+    app: annotation-server
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-annotation-server
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # TODO: might not need cluster issuer below
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+spec:
+    - host: "<TODO: configure host>"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-annotation-server
+                port:
+                  number: 80
+---
+
