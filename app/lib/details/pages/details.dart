@@ -1,12 +1,14 @@
 import '../../common/module.dart';
 
 class MedicationDetailsPage extends StatelessWidget {
-  const MedicationDetailsPage({@pathParam required this.id}) : super();
+  const MedicationDetailsPage({required this.medication}) : super();
 
-  final String id;
+  final MedicationWithGuidelines medication;
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Center(child: Text(medication.name),),
+    );
   }
 }
