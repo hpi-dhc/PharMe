@@ -29,44 +29,61 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 For local debugging pass the "local" profile flag when running docker-compose
 by using the following command: `docker compose --profile local up`
 
-### Keycloak set-up
+### Keycloak set-up (local)
 
-- Open `http://localhost:28080` in your browser
-- Open the administration console
-- For username and password use the credentials from your `.env` file
+- Open `http://localhost:28080` in your browser to access the keycloak admin
+  console. Login using the credentials from your `.env` file
 - Follow
   [this](https://medium.com/devops-dudes/secure-nestjs-rest-api-with-keycloak-745ef32a2370)
   guide to set up your local Keycloak. A lot of the steps including the
   application configuration in NestJS are irrelevant.
   - The important steps are
-    - Create a REALM
+    - Create a REALM called `pharme`
     - Create clients (one for the backend and one for the frontend)
       - For the backend the name should be "pharme-lab-server" and the
-        "access-type" should be "bearer only" and under credentials you need to
-        create a secret and copy-paste it into you `.env` file
-      - For the frontend the name should be "pharme-app" and the "access-type"
-        should be "public"
+        "access-type" should be "bearer only". In the credentials tab you need
+        to create a secret and update the value `KEYCLOAK_SECRET` accordingly
+      - For the frontend the name should be "pharme-app". The "access-type"
+        should be set to "public"
     - Create a user for testing (you can choose username and password freely, no
       roles are required)
+    - Set redirect URIs to `*` for both clients
 
 To check all endpoints of your local Keycloak instance, send a GET request to
 (for example with Postman):
 `http://localhost:28080/auth/realms/pharme/.well-known/openid-configuration`
 
-In order to check the administrative console, send a GET request to:
+In order to check the admin console, send a GET request to:
 `http://localhost:28080/auth/`
 
 To receive authentication tokens, send a POST request to:
 `http://localhost:28080/auth/realms/pharme/protocol/openid-connect/token` with
-body (x-www-form-unlencoded):
+the following body (x-www-form-unlencoded):
 
-| Type | Value |
-|---|---|
-| grant_type | password |
-| username | \<username-of-your-user\> |
-| password | \<password-of-your-user\> |
-| client_id | pharme-app |
+| Type       | Value                     |
+|------------|---------------------------|
+| grant_type | password                  |
+| username   | \<username-of-your-user\> |
+| password   | \<password-of-your-user\> |
+| client_id  | pharme-app                |
 
-To test the application, send a GET request to `http://localhost:3000` with the
-received bearer token as a header, you should receive "Hello World!" as an
-answer
+To test the application, send a GET request to
+`http://localhost:3000/api/v1/health` in order to verify that the lab server is
+up and running. You should now be able to make an authentication request to
+Keycloak and use the returned access token to make requests to the lab server.
+
+### MinIO set-up (local)
+
+- Open `http://localhost:9001` in your browser
+- Open the administration console. Login with the credentials you have set in
+  the `.env` file.
+- Create a bucket called `alleles`
+- Adapt the seeder to insert a `user` entry with the test user's UUID (look for
+  the file `user.seeder.ts` in the lab server). This UUID can be found in the
+  keycloak admin console under the "users" menu on the left.
+- Add the corresponding alleles file to the `alleles` bucket using the minio
+  admin console. Make sure that it is named the same as in the seeder config.
+
+If everything was setup correctly you can now get an access token from Keycloak
+and then use this token to make a request to the lab server under the route
+`/api/v1/star-alleles`.
