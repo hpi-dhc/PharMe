@@ -29,6 +29,10 @@
   
   "medications_overview_page_typeInMedication": "Type in a medication",
   "medications_details_page_working": "It works. ID is {id}",
+  "medications_details_page_disclaimer": "This assessment is only based on your genomic data. It does not consider other factors such as weight, age and pre-existing condition",
+  "medications_details_page_header_guideline": "Clinical Guideline",
+  "medications_details_page_header_recommendation": "Recommendation",
+  "medications_details_page_header_further_info": "Further Information",
   "@medications_details_page_working": {
     "description": "Provisional message for developers when visiting medications details page.",
     "placeholders": {
