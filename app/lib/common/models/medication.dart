@@ -38,9 +38,8 @@ class MedicationWithGuidelines with _$MedicationWithGuidelines {
     String? indication,
     List<Guideline> guidelines,
   ) = _MedicationWithGuidelines;
-  factory MedicationWithGuidelines.fromJson(dynamic json) {
-    return _$MedicationWithGuidelinesFromJson(json);
-  }
+  factory MedicationWithGuidelines.fromJson(dynamic json) =>
+      _$MedicationWithGuidelinesFromJson(json);
 }
 
 List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
