@@ -52,7 +52,7 @@ class OnboardingPage extends HookWidget {
       height: 8,
       width: isActive ? 24 : 16,
       decoration: BoxDecoration(
-        color: isActive ? Colors.white : context.theme.disabledColor,
+        color: isActive ? Colors.white : PharmeTheme.onSurfaceColor,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -82,8 +82,8 @@ class OnboardingPage extends HookWidget {
             isLastPage
                 ? context.l10n.onboarding_get_started
                 : context.l10n.onboarding_next,
-            style:
-                context.textTheme.headlineSmall!.copyWith(color: Colors.white),
+            style: PharmeTheme.textTheme.headlineSmall!
+                .copyWith(color: Colors.white),
           ),
           SizedBox(width: 8),
           Icon(
@@ -135,8 +135,8 @@ class OnboardingSubPage extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            context.theme.colorScheme.primary,
-            context.theme.colorScheme.primaryContainer,
+            PharmeTheme.primaryColor,
+            PharmeTheme.primaryContainer,
           ],
         ),
       ),
@@ -155,14 +155,16 @@ class OnboardingSubPage extends StatelessWidget {
             SizedBox(height: 32),
             Text(
               getHeader(context),
-              style: context.textTheme.headlineSmall!
-                  .copyWith(color: Colors.white),
+              style: PharmeTheme.textTheme.headlineSmall!.copyWith(
+                color: Colors.white,
+              ),
             ),
             SizedBox(height: 16),
             Text(
               getText(context),
-              style:
-                  context.textTheme.bodyMedium!.copyWith(color: Colors.white),
+              style: PharmeTheme.textTheme.bodyMedium!.copyWith(
+                color: Colors.white,
+              ),
             ),
           ],
         ),
