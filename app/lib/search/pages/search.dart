@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 
 import '../../../common/module.dart';
-import '../../medications/models/medication.dart';
 import 'cubit.dart';
 
 final _panelController = SlidingUpPanelController();
@@ -119,7 +118,7 @@ class MedicationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(16),
       ),
       elevation: 5,
       color: Colors.grey[200],
@@ -145,7 +144,7 @@ class MedicationCard extends StatelessWidget {
               if (medicationDescription != null)
                 Text(
                   medicationDescription!,
-                  style: PharmeTheme.textTheme.subtitle2,
+                  style: PharmeTheme.textTheme.titleSmall,
                 )
             ],
           ),

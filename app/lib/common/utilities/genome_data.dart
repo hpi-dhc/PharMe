@@ -4,10 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../constants.dart';
-import '../models/cpic_lookup_response.dart';
-import '../models/diplotype.dart';
-import '../models/metadata.dart';
-import '../models/userdata.dart';
+import '../models/module.dart';
 
 Future<void> fetchAndSaveDiplotypes(String token, String url) async {
   if (!shouldFetchDiplotypes()) return;
@@ -40,25 +37,27 @@ Future<void> fetchAndSaveLookups() async {
   // the returned json is a list of lookups which we wish to individually map
   // to a concrete CpicLookup instance, hence the cast to a List
   final json = jsonDecode(response.body) as List<dynamic>;
-  final lookups =
-      json.map<CpicLookup>(CpicLookup.fromJson).filterValidLookups();
+  final lookups = json.map<CpicLookup>(CpicLookup.fromJson);
   final usersDiplotypes = UserData.instance.diplotypes;
   if (usersDiplotypes == null) throw Exception();
 
   // use a HashMap for better time complexity
-  final lookupsHashMap = HashMap<String, Lookup>.fromIterable(
+  final lookupsHashMap = HashMap<String, String>.fromIterable(
     lookups,
     key: (el) => '${el.genesymbol}__${el.diplotype}',
-    value: (el) => el.lookupkey,
+    value: (el) => el.generesult,
   );
   // ignore: omit_local_variable_types
-  final List<Lookup> matchingLookups = [];
+  final Map<String, String> matchingLookups = {};
   // extract the matching lookups
   for (final diplotype in usersDiplotypes) {
+    if (diplotype.genotype.contains('-')) {
+      // TODO(kolioOtSofia): what to do with genotypes that contain -
+    }
     // the gene and the genotype build the key for the hashmap
     final key = '${diplotype.gene}__${diplotype.genotype}';
     final temp = lookupsHashMap[key];
-    if (temp != null) matchingLookups.add(temp);
+    if (temp != null) matchingLookups[diplotype.gene] = temp;
   }
 
   UserData.instance.lookups = matchingLookups;
