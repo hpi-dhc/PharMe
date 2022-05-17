@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-db
+spec:
+  # must be one, multiple instances will not share state
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak-db
+  template:
+    metadata:
+      labels:
+        app: keycloak-db
+      name: keycloak-db
+    spec:
+      containers:
+        - name: keycloak-db
+          image: postgres:13
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: lab-server-secrets
+                  key: keycloak_db_user
+            - name: POSTGRES_DB
+              value: keycloak_db
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lab-server-secrets
+                  key: keycloak_db_pass
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: keycloak-db-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "10m"
+            limits:
+              memory: "256Mi"
+              cpu: "1"
+
+      volumes:
+        - name: keycloak-db-data
+          persistentVolumeClaim:
+            claimName: keycloak-db-volume-claim
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: keycloak-db-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: keycloak-db
+  name: keycloak-db-service
+spec:
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    app: keycloak-db

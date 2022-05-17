@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - image: jboss/keycloak:16.1.0
+          imagePullPolicy: "Always"
+          name: keycloak
+          ports:
+            - containerPort: 8080
+          env:
+            # - name: DB_VENDOR
+            #   value: postgres
+            # - name: DB_ADDR
+            #   value: keycloak-db-service
+            # - name: DB_DATABASE
+            #   value: keycloak_db
+            # - name: DB_USER
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: lab-server-secrets
+            #       key: keycloak_db_user
+            # - name: DB_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: lab-server-secrets
+            #       key: keycloak_db_pass
+            - name: KEYCLOAK_USER
+              valueFrom:
+                secretKeyRef:
+                  name: lab-server-secrets
+                  key: keycloak_user
+            - name: KEYCLOAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lab-server-secrets
+                  key: keycloak_pass
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-keycloak
+  labels:
+    app: keycloak
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: keycloak
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-keycloak
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: vm-bp2021eb1n.dhclab.i.hpi.de
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-keycloak
+                port:
+                  number: 80
