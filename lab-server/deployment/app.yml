@@ -20,7 +20,7 @@ spec:
         app: lab-server
     spec:
       containers:
-        - image: ghcr.io/hpi-dhc/lab-server:main
+        - image: ghcr.io/hpi-dhc/pharme-lab-server:main
           imagePullPolicy: "Always"
           name: lab-server
           ports:
