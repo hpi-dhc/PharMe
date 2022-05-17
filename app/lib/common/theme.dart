@@ -6,19 +6,21 @@ class PharmeTheme {
   static ThemeData get light {
     return ThemeData(
       colorScheme: ColorScheme(
+        background: backgroundColor,
+        brightness: Brightness.light,
+        error: errorColor,
+        onBackground: backgroundColor.highEmphasisOnColor,
+        onError: errorColor.highEmphasisOnColor,
+        onPrimary: primaryColor.highEmphasisOnColor,
+        onSecondary: secondaryColor.highEmphasisOnColor,
+        onSurface: surfaceColor.highEmphasisOnColor,
+        onSurfaceVariant: onSurfaceColor,
         primary: primaryColor,
         primaryContainer: primaryContainer,
         secondary: secondaryColor,
         secondaryContainer: secondaryContainer,
-        surface: surfaceColor,
-        background: backgroundColor,
-        error: errorColor,
-        onPrimary: primaryColor.highEmphasisOnColor,
-        onSecondary: secondaryColor.highEmphasisOnColor,
-        onSurface: surfaceColor.highEmphasisOnColor,
-        onBackground: backgroundColor.highEmphasisOnColor,
-        onError: errorColor.highEmphasisOnColor,
-        brightness: Brightness.light,
+        surface: onSurfaceColor,
+        surfaceVariant: surfaceColor,
       ),
       textTheme: textTheme,
     );
@@ -83,6 +85,7 @@ class PharmeTheme {
   static const secondaryContainer = Color(0xFF7759C0);
 
   static const surfaceColor = Colors.white;
+  static const onSurfaceColor = Color(0xE5E5E5FF);
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xFFB00020);
 }
