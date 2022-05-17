@@ -87,3 +87,10 @@ Keycloak and use the returned access token to make requests to the lab server.
 If everything was setup correctly you can now get an access token from Keycloak
 and then use this token to make a request to the lab server under the route
 `/api/v1/star-alleles`.
+
+**OPTIONAL**: if you would like to add custom styling to the lab-server's
+swagger api documentation (`/api/v1`) you can create a bucket with the name
+supplied after the last '/' in the environment variable `ASSETS_URL` (for
+example, in the example env-file this would be `pharme-assets`). Simply place
+an image and css filed named `favicon.png` and `styles.css` respectively into
+the bucket and the styling should be picked up by the lab-server.
