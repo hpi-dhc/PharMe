@@ -49,13 +49,13 @@ class FaqPage extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.faq_pharmacogenomics,
-                  style: context.textTheme.titleLarge!
+                  style: PharmeTheme.textTheme.titleLarge!
                       .copyWith(color: Colors.white),
                 ),
                 SizedBox(height: 8),
                 Text(
                   context.l10n.faq_page_description,
-                  style: context.textTheme.bodyMedium!
+                  style: PharmeTheme.textTheme.bodyMedium!
                       .copyWith(color: Colors.white),
                 ),
               ],
@@ -72,21 +72,18 @@ class FaqPage extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Theme(
-        data: context.theme.copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          key: _key,
-          title: Text(question.question),
-          onExpansionChanged: (value) {
-            if (value) _scrollToSelectedContent(key: _key);
-          },
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-              title: Text(question.answer),
-            ),
-          ],
-        ),
+      child: ExpansionTile(
+        key: _key,
+        title: Text(question.question),
+        onExpansionChanged: (value) {
+          if (value) _scrollToSelectedContent(key: _key);
+        },
+        children: [
+          ListTile(
+            contentPadding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            title: Text(question.answer),
+          ),
+        ],
       ),
     );
   }
