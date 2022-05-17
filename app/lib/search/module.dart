@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 
-import '../details/module.dart';
+import '../medications/page.dart';
 import 'pages/search.dart';
 
 // We need to expose all pages for AutoRouter
-export '../details/module.dart';
+export '../medications/page.dart';
 export 'pages/search.dart';
 
 const searchRoutes = AutoRoute(
@@ -13,6 +13,6 @@ const searchRoutes = AutoRoute(
   page: EmptyRouterPage,
   children: [
     AutoRoute(path: '', page: SearchPage),
-    AutoRoute(page: MedicationDetailsPage),
+    AutoRoute(page: MedicationPage),
   ],
 );
