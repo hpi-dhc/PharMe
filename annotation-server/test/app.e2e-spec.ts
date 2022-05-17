@@ -69,6 +69,14 @@ describe('App (e2e)', () => {
             expect(getResponse.body.length).toEqual(2);
         });
 
+        it('should return 2 medications matching a search query', async () => {
+            const getResponse = await request(app.getHttpServer())
+                .get('/medications')
+                .query({ search: 'cod' });
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toEqual(2);
+        });
+
         it('should verify that data errors have been saved', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/guidelines/errors',
