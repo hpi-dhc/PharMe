@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsObject, IsString } from 'class-validator';
 
 export class CpicRecommendationDto {
     @IsString()
@@ -19,4 +19,7 @@ export class CpicRecommendationDto {
 
     @IsString()
     classification: string;
+
+    @IsNumber()
+    guidelineid: number;
 }
