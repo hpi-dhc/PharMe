@@ -354,13 +354,17 @@ export class GuidelinesService {
         );
     }
 
-    async getAllErrors(): Promise<GuidelineError[]> {
-        return this.guidelineErrorRepository.find({
-            select: {
-                type: true,
-                context: true,
-                blame: true,
-                guideline: { id: true },
+    async findAllErrors(
+        limit: number,
+        offset: number,
+        sortBy: string,
+        orderBy: string,
+    ): Promise<[GuidelineError[], number]> {
+        return this.guidelineErrorRepository.findAndCount({
+            take: limit,
+            skip: offset,
+            order: {
+                [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
             },
             relations: ['guideline'],
         });

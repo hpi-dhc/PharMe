@@ -1,7 +1,11 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { GuidelineError } from './entities/guideline-error.entity';
+import {
+    ApiFindGuidelineErrorsQueries,
+    FindGuidelineErrorQueryDto,
+} from './dtos/find-guideline-error.dto';
+import { GuidelineErrorPageDto } from './dtos/guideline-error-page-dto';
 import { GuidelinesService } from './guidelines.service';
 
 @ApiTags('Guidelines')
@@ -16,8 +20,19 @@ export class GuidelinesController {
     }
 
     @ApiOperation({ summary: 'Get all guideline data errors' })
+    @ApiFindGuidelineErrorsQueries()
     @Get('errors')
-    async getErrors(): Promise<GuidelineError[]> {
-        return this.guidelinesService.getAllErrors();
+    async findAllErrors(
+        @Query() dto: FindGuidelineErrorQueryDto,
+    ): Promise<GuidelineErrorPageDto> {
+        const [guidelineErrors, total] =
+            await this.guidelinesService.findAllErrors(
+                dto.limit ?? 0,
+                dto.offset ?? 0,
+                dto.sortby ?? 'name',
+                dto.orderby ?? 'asc',
+            );
+
+        return { guidelineErrors: guidelineErrors, total: total };
     }
 }

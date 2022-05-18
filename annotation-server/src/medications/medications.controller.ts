@@ -1,6 +1,11 @@
 import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
+import {
+    ApiFindMedicationsQueries,
+    FindMedicationQueryDto,
+} from './dtos/find-medication-query-dto';
+import { MedicationPageDto } from './dtos/medication-page.dto';
 import { Medication } from './medication.entity';
 import { MedicationsService } from './medications.service';
 
@@ -10,14 +15,19 @@ export class MedicationsController {
     constructor(private medicationsService: MedicationsService) {}
 
     @ApiOperation({ summary: 'Fetch all medications with optional search' })
+    @ApiFindMedicationsQueries()
     @Get()
-    get(@Query() query: { search?: string }): Promise<Medication[]> {
-        if (query.search) {
-            return this.medicationsService.findMatchingMedications(
-                query.search,
-            );
-        }
-        return this.medicationsService.getAll();
+    async findAll(
+        @Query() dto: FindMedicationQueryDto,
+    ): Promise<MedicationPageDto> {
+        const [medications, total] = await this.medicationsService.findAll(
+            dto.limit ?? 0,
+            dto.offset ?? 0,
+            dto.search ?? '',
+            dto.sortby ?? 'name',
+            dto.orderby ?? 'asc',
+        );
+        return { medications: medications, total: total };
     }
 
     @ApiOperation({ summary: 'Get all medication IDs' })
