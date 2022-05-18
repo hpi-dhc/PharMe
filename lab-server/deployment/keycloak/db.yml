@@ -24,7 +24,7 @@ spec:
                   name: lab-server-secrets
                   key: keycloak_db_user
             - name: POSTGRES_DB
-              value: keycloak_db
+              value: db
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:

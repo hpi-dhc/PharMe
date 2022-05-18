@@ -1,3 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-svc
+  labels:
+    app: keycloak
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: keycloak
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,28 +29,9 @@ spec:
         app: keycloak
     spec:
       containers:
-        - image: jboss/keycloak:16.1.0
-          imagePullPolicy: "Always"
-          name: keycloak
-          ports:
-            - containerPort: 8080
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:10.0.0
           env:
-            # - name: DB_VENDOR
-            #   value: postgres
-            # - name: DB_ADDR
-            #   value: keycloak-db-service
-            # - name: DB_DATABASE
-            #   value: keycloak_db
-            # - name: DB_USER
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: lab-server-secrets
-            #       key: keycloak_db_user
-            # - name: DB_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: lab-server-secrets
-            #       key: keycloak_db_pass
             - name: KEYCLOAK_USER
               valueFrom:
                 secretKeyRef:
@@ -47,22 +42,39 @@ spec:
                 secretKeyRef:
                   name: lab-server-secrets
                   key: keycloak_pass
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: svc-keycloak
-  labels:
-    app: keycloak
-spec:
-  ports:
-    - name: http
-      port: 80
-      targetPort: 8080
-  selector:
-    app: keycloak
-
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true"
+            - name: DB_VENDOR
+              value: POSTGRES
+            - name: DB_ADDR
+              value: keycloak-db-service
+            - name: DB_DATABASE
+              value: db
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: lab-server-secrets
+                  key: keycloak_db_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lab-server-secrets
+                  key: keycloak_db_pass
+            - name: KEYCLOAK_HTTP_PORT
+              value: "80"
+            - name: KEYCLOAK_HTTPS_PORT
+              value: "443"
+            - name: KEYCLOAK_HOSTNAME
+              value: vm-bp2021eb1n.dhclab.i.hpi.de
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+          readinessProbe:
+            httpGet:
+              path: /auth/realms/master
+              port: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -79,6 +91,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: svc-keycloak
+                name: keycloak-svc
                 port:
-                  number: 80
+                  number: 8080
