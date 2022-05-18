@@ -1,20 +1,11 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    OneToMany,
-    ViewEntity,
-    ViewColumn,
-} from 'typeorm';
+import { Entity, Column, OneToMany, ViewEntity, ViewColumn } from 'typeorm';
 
+import { BaseEntity } from '../common/entities/base.entity';
 import { Guideline } from '../guidelines/entities/guideline.entity';
 import { DrugDto } from './dtos/drugbank.dto';
 
 @Entity()
-export class Medication {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class Medication extends BaseEntity {
     @Column()
     name: string;
 
