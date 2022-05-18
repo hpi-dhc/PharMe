@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    OneToMany,
+    ViewEntity,
+    ViewColumn,
+} from 'typeorm';
 
 import { Guideline } from '../guidelines/entities/guideline.entity';
 import { DrugDto } from './dtos/drugbank.dto';
@@ -62,4 +69,23 @@ export class Medication {
 
     @OneToMany(() => Guideline, (guideline) => guideline.medication)
     guidelines: Guideline[];
+}
+
+@ViewEntity({
+    expression: `
+        select id, name             as "searchString", 1 as priority from medication union
+        select id, drugclass        as "searchString", 2 as priority from medication union
+        select id, unnest(synonyms) as "searchString", 3 as priority from medication union
+        select id, description      as "searchString", 4 as priority from medication
+    `,
+})
+export class MedicationSearchView {
+    @ViewColumn()
+    id: number;
+
+    @ViewColumn()
+    searchString: string;
+
+    @ViewColumn()
+    priority: number;
 }
