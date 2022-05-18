@@ -85,7 +85,7 @@ class PharmeTheme {
   static const secondaryContainer = Color(0xFF7759C0);
 
   static const surfaceColor = Colors.white;
-  static const onSurfaceColor = Color(0xE5E5E5FF);
+  static const onSurfaceColor = Color(0xFFE5E5E5);
   static const backgroundColor = Colors.white;
-  static const errorColor = Color(0xFFB00020);
+  static const errorColor = Color(0xCCF52A2A);
 }

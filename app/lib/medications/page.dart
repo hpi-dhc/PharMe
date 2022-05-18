@@ -11,28 +11,105 @@ class MedicationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return RoundedCard(
       padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _Header(
+              name: medication.name,
+              drugclass: medication.drugclass!,
+            ),
+            SizedBox(height: 16),
+            MedicationsPageDisclaimer(),
+            _SubHeader(
+              title: context.l10n.medications_details_page_header_guideline,
+              secondary: Icon(Icons.help_outline),
+              uppercase: true,
+            ),
+            ClinicalAnnotationCard(medication: medication),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    required this.name,
+    required this.drugclass,
+  });
+
+  final String name;
+  final String drugclass;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(name, style: PharmeTheme.textTheme.displaySmall),
+            Icon(
+              Icons.ios_share,
+              size: 32,
+              color: PharmeTheme.primaryColor,
+            ),
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: PharmeTheme.onSurfaceColor,
+            borderRadius: BorderRadius.all(Radius.circular(6)),
+          ),
+          child: Text(
+            drugclass,
+            style: PharmeTheme.textTheme.titleMedium!.copyWith(
+              fontWeight: FontWeight.w100,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MedicationsPageDisclaimer extends StatelessWidget {
+  const MedicationsPageDisclaimer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        color: PharmeTheme.surfaceColor,
+        border: Border.all(color: PharmeTheme.errorColor, width: 1.2),
+      ),
+      child: Row(
         children: [
-          MedicationsPageMedicationHeader(
-            name: medication.name,
-            drugclass: medication.drugclass!,
+          Icon(Icons.warning_rounded, size: 52, color: PharmeTheme.errorColor),
+          SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              context.l10n.medications_details_page_disclaimer,
+              style: PharmeTheme.textTheme.labelMedium!.copyWith(
+                fontWeight: FontWeight.w100,
+              ),
+            ),
           ),
-          MedicationsPageDisclaimer(),
-          HeaderGeneric(
-            title: context.l10n.medications_details_page_header_guideline,
-            secondary: Icon(Icons.help_outline),
-            uppercase: true,
-          ),
-          ClinicalAnnotationCard(medication: medication),
         ],
       ),
     );
   }
 }
 
-class HeaderGeneric extends StatelessWidget {
-  const HeaderGeneric({
+class _SubHeader extends StatelessWidget {
+  const _SubHeader({
     required this.title,
     required this.secondary,
     this.uppercase = false,
@@ -56,44 +133,6 @@ class HeaderGeneric extends StatelessWidget {
   }
 }
 
-class MedicationsPageMedicationHeader extends StatelessWidget {
-  const MedicationsPageMedicationHeader({
-    required this.name,
-    required this.drugclass,
-  });
-
-  final String name;
-  final String drugclass;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(name),
-        Text(drugclass),
-      ],
-    );
-  }
-}
-
-class MedicationsPageDisclaimer extends StatelessWidget {
-  const MedicationsPageDisclaimer();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.warning),
-        Flexible(
-          child: Text(context.l10n.medications_details_page_disclaimer),
-        ),
-      ],
-    );
-  }
-}
-
 class ClinicalAnnotationCard extends StatelessWidget {
   const ClinicalAnnotationCard({required this.medication});
 
@@ -107,7 +146,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              HeaderGeneric(
+              _SubHeader(
                   title: medication.guidelines[0].genePhenotype.geneSymbol.name,
                   secondary: Row(
                     children: [
@@ -130,7 +169,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Column(children: [
-                    HeaderGeneric(
+                    _SubHeader(
                       title: context
                           .l10n.medications_details_page_header_recommendation,
                       secondary: Icon(Icons.warning),
@@ -141,7 +180,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
                   ]),
                 ),
               ),
-              HeaderGeneric(
+              _SubHeader(
                   title:
                       context.l10n.medications_details_page_header_further_info,
                   secondary: Icon(Icons.help_outline),
