@@ -24,7 +24,7 @@ spec:
                                 name: annotation-server-secrets
                                 key: db_user
                       - name: POSTGRES_DB
-                        value: db
+                        value: annotation_db
                       - name: POSTGRES_PASSWORD
                         valueFrom:
                             secretKeyRef:
