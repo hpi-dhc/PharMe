@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
 import { FindOneOptions, IsNull, Like, Not, Repository } from 'typeorm';
 
-import { fetchSpreadsheetCells } from '../common/google-sheets';
+import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { DrugDto } from './dtos/drugbank.dto';
 import { Medication, MedicationSearchView } from './medication.entity';
 

@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import { fetchSpreadsheetCells } from '../common/google-sheets';
+import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
 import { GenePhenotypesService } from '../gene-phenotypes/gene-phenotypes.service';
 import { Medication } from '../medications/medication.entity';
