@@ -29,7 +29,7 @@ spec:
             - name: ANNOTATION_DB_HOST
               value: annotation-server-db-service
             - name: ANNOTATION_DB_PORT
-              value: 5432
+              value: "5432"
             - name: ANNOTATION_DB_USER
               valueFrom:
                 secretKeyRef:
@@ -70,8 +70,6 @@ spec:
               value: "HPI List v1!N4:V"
             - name: GOOGLESHEET_RANGE_RECOMMENDATIONS
               value: "HPI List v1!W4:AE"
-            
-            
 
 ---
 apiVersion: v1
@@ -96,6 +94,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
+  rules:
     - host: vm-bp2021eb1n.dhclab.i.hpi.de
       http:
         paths:
