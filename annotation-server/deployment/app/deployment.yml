@@ -48,18 +48,14 @@ metadata:
   name: ingress-annotation-server
   annotations:
     kubernetes.io/ingress.class: nginx
-    # TODO: might not need cluster issuer below
-    cert-manager.io/cluster-issuer: "letsencrypt-production"
 spec:
-    - host: "<TODO: configure host>"
+    - host: vm-bp2021eb1n.dhclab.i.hpi.de
       http:
         paths:
-          - path: /
+          - path: /annotation-server
             pathType: Prefix
             backend:
               service:
                 name: svc-annotation-server
                 port:
                   number: 80
----
-

@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: annotation-server-db
+spec:
+    # must be one, multiple instances will not share state
+    replicas: 1
+    selector:
+        matchLabels:
+            app: annotation-server-db
+    template:
+        metadata:
+            labels:
+                app: annotation-server-db
+            name: annotation-server-db
+        spec:
+            containers:
+                - name: annotation-server-db
+                  image: postgres:13
+                  env:
+                      - name: POSTGRES_USER
+                        valueFrom:
+                            secretKeyRef:
+                                name: annotation-server-secrets
+                                key: db_user
+                      - name: POSTGRES_DB
+                        value: db
+                      - name: POSTGRES_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: annotation-server-secrets
+                                key: db_pass
+                      - name: PGDATA
+                        value: /var/lib/postgresql/data/pgdata
+                  volumeMounts:
+                      - name: annotation-server-db-data
+                        mountPath: /var/lib/postgresql/data
+                  resources:
+                      requests:
+                          memory: '64Mi'
+                          cpu: '10m'
+                      limits:
+                          memory: '256Mi'
+                          cpu: '1'
+
+            volumes:
+                - name: annotation-server-db-data
+                  persistentVolumeClaim:
+                      claimName: annotation-server-db-volume-claim
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: annotation-server-db-volume-claim
+spec:
+    accessModes:
+        - ReadWriteOnce
+    volumeMode: Filesystem
+    resources:
+        requests:
+            storage: 1Gi
+    storageClassName: longhorn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    labels:
+        app: annotation-server-db
+    name: annotation-server-db-service
+spec:
+    ports:
+        - port: 5432
+          protocol: TCP
+          targetPort: 5432
+    selector:
+        app: annotation-server-db
