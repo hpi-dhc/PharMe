@@ -14,7 +14,6 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
       ListTile(
-        leading: Icon(Icons.delete),
         title: Text(context.l10n.settings_page_delete_data),
         trailing: Icon(Icons.chevron_right),
         onTap: () => showDialog(
