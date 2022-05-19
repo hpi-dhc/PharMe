@@ -9,7 +9,7 @@ class SettingsPage extends StatelessWidget {
     return ListView(children: [
       ListTile(
         title: Text(
-          context.l10n.settings_page_account_settings_headline,
+          context.l10n.settings_page_account_settings,
           style: PharmeTheme.textTheme.bodyLarge,
         ),
       ),
@@ -25,7 +25,7 @@ class SettingsPage extends StatelessWidget {
       Divider(),
       ListTile(
         title: Text(
-          context.l10n.settings_page_more_headline,
+          context.l10n.settings_page_more,
           style: PharmeTheme.textTheme.bodyLarge,
         ),
       ),
