@@ -1,12 +1,20 @@
 import { Readable } from 'stream';
 
-import { allelesFile } from './contstants';
+export interface MockS3File {
+    name: string;
+    buffer: Buffer;
+}
 
-export const MockS3Instance = {
-    client: {
-        getObject: jest.fn().mockImplementation(() => {
-            const buffer = Buffer.from(allelesFile, 'base64');
-            return Readable.from(buffer.toString());
-        }),
-    },
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const MockS3Instance = (mockedFiles: MockS3File[]) => {
+    return {
+        client: {
+            getObject: jest.fn().mockImplementation((_, objectName: string) => {
+                const file = mockedFiles.find(
+                    (file) => file.name === objectName,
+                );
+                return Readable.from(file.buffer.toString());
+            }),
+        },
+    };
 };

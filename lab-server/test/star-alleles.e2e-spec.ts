@@ -1,39 +1,33 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import * as KeycloakMock from 'keycloak-mock';
 import { MinioService } from 'nestjs-minio-client';
 import * as request from 'supertest';
 
 import { AppModule } from '../src/app.module';
-import { getKeycloakMockHelperForUser } from './helpers/keycloak-mock';
+import { mockedS3Files } from './helpers/contstants';
+import { KeycloakMock } from './helpers/keycloak-mock';
 import { MockS3Instance } from './helpers/s3-mock';
 
 describe('StarAlleles', () => {
     let app: INestApplication;
-    let keycloakMock: KeycloakMock.Mock;
-    let keycloakToken: string;
-    let invalidKeycloakToken: string;
+    let keycloakMock: KeycloakMock;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [AppModule],
         })
             .overrideProvider(MinioService)
-            .useValue(MockS3Instance)
+            .useValue(MockS3Instance(mockedS3Files))
             .compile();
         app = moduleRef.createNestApplication();
         await app.init();
 
-        const { mockInstance, mockToken } =
-            await getKeycloakMockHelperForUser();
-        const invalidMockHelper = await getKeycloakMockHelperForUser(false);
-        keycloakMock = KeycloakMock.activateMock(mockInstance);
-        keycloakToken = mockToken;
-        invalidKeycloakToken = invalidMockHelper.mockToken;
+        keycloakMock = KeycloakMock.getInstance();
+        await keycloakMock.activate();
     });
 
     afterAll(async () => {
-        KeycloakMock.deactivateMock(keycloakMock);
+        keycloakMock.deactivate();
         await app.close();
     });
 
@@ -51,7 +45,7 @@ describe('StarAlleles', () => {
         };
         const response = await request(app.getHttpServer())
             .get('/star-alleles')
-            .set({ Authorization: `Bearer ${keycloakToken}` })
+            .set({ Authorization: `Bearer ${keycloakMock.getExampleUser()}` })
             .expect(200);
         const data = response.body;
         expect(data).toHaveProperty('organizationId');
@@ -64,10 +58,12 @@ describe('StarAlleles', () => {
         );
     });
 
-    it('/GET should fail when user without alleles file makes request', async () => {
+    it('/GET should return 404 when user has no alleles file', async () => {
         await request(app.getHttpServer())
             .get('/star-alleles')
-            .set({ Authorization: `Bearer ${invalidKeycloakToken}` })
-            .expect(401);
+            .set({
+                Authorization: `Bearer ${keycloakMock.getExampleUserWithoutAllelesFile()}`,
+            })
+            .expect(404);
     });
 });

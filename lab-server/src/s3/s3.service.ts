@@ -26,7 +26,7 @@ export class S3Service {
             );
             return JSON.parse(await this.streamToString(stream));
         } catch (error) {
-            throw new HttpException('Could not find file', 400);
+            throw new HttpException('Could not find file', 404);
         }
     }
 }
