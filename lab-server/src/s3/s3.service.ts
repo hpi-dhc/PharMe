@@ -1,4 +1,4 @@
-import internal from 'stream';
+import { Readable } from 'stream';
 
 import { HttpException, Injectable } from '@nestjs/common';
 import { MinioService } from 'nestjs-minio-client';
@@ -7,7 +7,7 @@ import { MinioService } from 'nestjs-minio-client';
 export class S3Service {
     constructor(private readonly minioClient: MinioService) {}
 
-    private streamToString(stream: internal.Readable): Promise<string> {
+    private streamToString(stream: Readable): Promise<string> {
         const chunks = [];
         return new Promise((resolve, reject) => {
             stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));

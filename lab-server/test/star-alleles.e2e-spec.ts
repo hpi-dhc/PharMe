@@ -1,12 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as KeycloakMock from 'keycloak-mock';
+import { MinioService } from 'nestjs-minio-client';
 import * as request from 'supertest';
 
 import { AppModule } from '../src/app.module';
-import { S3Service } from '../src/s3/s3.service';
-import { allelesFile } from './helpers/contstants';
 import { getKeycloakMockHelperForUser } from './helpers/keycloak-mock';
+import { MockS3Instance } from './helpers/s3-mock';
 
 describe('StarAlleles', () => {
     let app: INestApplication;
@@ -14,18 +14,12 @@ describe('StarAlleles', () => {
     let keycloakToken: string;
     let invalidKeycloakToken: string;
 
-    const mockS3Service = {
-        getFile: () => [
-            JSON.parse(Buffer.from(allelesFile, 'base64').toString()),
-        ],
-    };
-
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [AppModule],
         })
-            .overrideProvider(S3Service)
-            .useValue(mockS3Service)
+            .overrideProvider(MinioService)
+            .useValue(MockS3Instance)
             .compile();
         app = moduleRef.createNestApplication();
         await app.init();
@@ -59,7 +53,7 @@ describe('StarAlleles', () => {
             .get('/star-alleles')
             .set({ Authorization: `Bearer ${keycloakToken}` })
             .expect(200);
-        const data = response.body[0];
+        const data = response.body;
         expect(data).toHaveProperty('organizationId');
         expect(data).toHaveProperty('identifier');
         expect(data).toHaveProperty('knowledgeBase');
