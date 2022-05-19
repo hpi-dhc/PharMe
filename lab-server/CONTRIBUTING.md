@@ -44,10 +44,12 @@ by using the following command: `docker compose --profile local up`
         "access-type" should be "bearer only". In the credentials tab you need
         to create a secret and update the value `KEYCLOAK_SECRET` accordingly
       - For the frontend the name should be "pharme-app". The "access-type"
-        should be set to "public" and the redirect URI should be `*`.
+        should be set to "public" and the redirect URI should be `*`. Note that
+        this is bad practice security-wise and should only be done in a local
+        testing environment!
     - Create a user for testing (you can choose username and password freely, no
       roles are required)
-      - Remove the Required User Action `update password`
+      - When setting the password (User > Credentials), set "Temporary" to "OFF"
 
 To check all endpoints of your local Keycloak instance, send a GET request to
 (for example with Postman):
