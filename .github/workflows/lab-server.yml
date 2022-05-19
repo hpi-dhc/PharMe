@@ -94,7 +94,7 @@ jobs:
       - run: yarn build
 
   build-and-push-image:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [lint, test-e2e, build]
     runs-on: ubuntu-latest
     permissions:
@@ -128,3 +128,36 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+        name: Deploy
+        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        needs: [build-and-push-image]
+        runs-on: ubuntu-latest
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+
+          - name: Create namespace
+            uses: actions-hub/kubectl@master
+            with:
+              # creates ns only if it does not exist
+              args: apply -f ./lab-server/deployment/namespace.yml
+
+          - name: Deploy database
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n lab-server rollout restart deploy lab-server-db
+
+          - name: Deploy lab server
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n lab-server rollout restart deploy lab-server
+
+          - name: Watch deployment
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n lab-server rollout status -w deployment/lab-server
