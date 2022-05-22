@@ -49,8 +49,8 @@ class MainPage extends StatelessWidget {
         label: context.l10n.nav_faq,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.settings),
-        label: context.l10n.nav_settings,
+        icon: Icon(Icons.more_horiz),
+        label: context.l10n.nav_more,
       ),
     ];
   }

@@ -42,7 +42,7 @@
   "nav_search": "Search",
   "nav_faq": "FAQ",
   "nav_reports": "Reports",
-  "nav_settings": "Settings",
+  "nav_more": "More",
   
   "onboarding_get_started": "Get started",
   "onboarding_next": "Next",
@@ -66,8 +66,17 @@
   "reports_page_disclaimer_text": "All medications shown here should be used with extreme caution, used in different doses or not be used at all. Check specific medications for details.",
   "reports_page_disclaimer_title": "Pharmacogenomics report",
 
+  "settings_page_account_settings": "Account Settings",
   "settings_page_cancel": "Cancel",
   "settings_page_continue": "Continue",
   "settings_page_delete_data": "Delete App Data",
-  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data and cannot be undone."
+  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data and cannot be undone.",
+  "settings_page_more": "More",
+  "settings_page_onboarding": "Onboarding",
+  "settings_page_about_us": "About us",
+  "settings_page_about_us_text": "PharMe was created as a bachelors project at Hasso-Plattner-Institut (HPI) Potsdam. The aim of the project is to provide a proof of concept for digital health apps that use pharmacogenomic information to improve the users health. We work together with the Digital Health chair at HPI and health professionals from Mount Sinai hospital in New York who helped us tremendously with medical knowledge.",
+  "settings_page_privacy_policy": "Privacy policy",
+  "settings_page_privacy_policy_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "settings_page_terms_and_conditions": "Terms and conditions",
+  "settings_page_terms_and_conditions_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 }
