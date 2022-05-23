@@ -57,7 +57,7 @@ spec:
                   name: lab-server-secrets
                   key: minio_pass
             - name: KEYCLOAK_AUTH_SERVER_URL
-              value: http://vm-bp2021eb1n.dhclab.i.hpi.de/auth
+              value: https://keycloak-pharme.dhc-lab.hpi.de/auth
             - name: KEYCLOAK_REALM
               value: pharme
             - name: KEYCLOAK_CLIENT_ID
@@ -84,3 +84,22 @@ spec:
   selector:
     app: lab-server
 
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-lab-server
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: lab-server-pharme.dhc-lab.hpi.de
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-lab-server
+                port:
+                  number: 3001
