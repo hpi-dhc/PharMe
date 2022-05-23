@@ -32,7 +32,7 @@ Future<void> _saveDiplotypeResponse(Response response) async {
 
 Future<void> fetchAndSaveLookups() async {
   if (!shouldFetchLookups()) return;
-  final response = await get(Uri.parse(cpicLookupUrl));
+  final response = await get(cpicLookupUrl);
   if (response.statusCode != 200) throw Exception();
 
   // the returned json is a list of lookups which we wish to individually map
