@@ -10,10 +10,6 @@ export class GeneSymbol {
     @Column()
     name: string;
 
-    @OneToMany(
-        () => GenePhenotype,
-        (genePhenotype) => genePhenotype.geneSymbol,
-        { cascade: true }, // create GenePhenotype entries with GeneSymbol
-    )
+    @OneToMany(() => GenePhenotype, (genePhenotype) => genePhenotype.geneSymbol)
     genePhenotypes: GenePhenotype[];
 }
