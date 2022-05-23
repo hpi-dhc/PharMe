@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../common/module.dart';
 import '../models/lab.dart';
@@ -47,15 +48,15 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       scopes: scopes,
       port: port,
       urlLancher: (url) async {
-        if (await canLaunch(url)) {
-          await launch(url, forceWebView: true);
+        if (await canLaunchUrlString(url)) {
+          await launchUrlString(url);
         } else {
           throw Exception(context.l10n.err_could_not_launch(url));
         }
       },
     );
     final credentials = await authenticator.authorize();
-    await closeWebView();
+    await closeInAppWebView();
     return credentials.getTokenResponse().then((res) => res.accessToken ?? '');
   }
 }
