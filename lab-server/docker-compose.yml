@@ -27,7 +27,7 @@ services:
     environment:
       DB_VENDOR: postgres
       DB_ADDR: keycloak-db
-      DB_DATABASE: ${KEYCLOAK_DB_NAME}
+      DB_DATABASE: keycloak_db
       DB_USER: ${KEYCLOAK_DB_USER}
       DB_PASSWORD: ${KEYCLOAK_DB_PASS}
       KEYCLOAK_USER: ${KEYCLOAK_USER}
@@ -48,7 +48,7 @@ services:
     environment:
       - POSTGRES_USER=${KEYCLOAK_DB_USER}
       - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASS}
-      - POSTGRES_DB=${KEYCLOAK_DB_NAME}
+      - POSTGRES_DB=keycloak_db
     profiles:
       - local
 
