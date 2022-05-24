@@ -1,3 +1,5 @@
+import 'package:comprehension_measurement/comprehension_measurement.dart';
+
 import '../../common/module.dart';
 import '../utils.dart';
 
@@ -47,6 +49,18 @@ class SettingsPage extends StatelessWidget {
         title: Text(context.l10n.settings_page_terms_and_conditions),
         trailing: Icon(Icons.chevron_right),
         onTap: () => context.router.push(TermsAndConditionsRoute()),
+      ),
+      Divider(),
+      ListTile(
+        title: Text(
+          'Comprehension Measurment',
+          style: PharmeTheme.textTheme.bodyLarge,
+        ),
+      ),
+      ListTile(
+        title: Text('Measure comprehension'),
+        trailing: Icon(Icons.chevron_right),
+        onTap: () => measureComprehension(context, 1),
       ),
     ]);
   }
