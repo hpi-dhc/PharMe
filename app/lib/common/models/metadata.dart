@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+import '../utilities/hive_utils.dart';
+
 part 'metadata.g.dart';
 
 const _boxName = 'metadata';
@@ -40,8 +42,13 @@ Future<void> initMetaData() async {
   } catch (e) {
     return;
   }
+
+  final encryptionKey = await retrieveExistingOrGenerateKey();
   // if user's metadata is not null, assign it's contents to the singleton
-  await Hive.openBox<MetaData>(_boxName);
+  await Hive.openBox<MetaData>(
+    _boxName,
+    encryptionCipher: HiveAesCipher(encryptionKey),
+  );
   final metaData = Hive.box<MetaData>(_boxName);
   metaData.get('data') ?? MetaData();
 }
