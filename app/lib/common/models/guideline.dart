@@ -1,42 +1,100 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 
-part 'guideline.freezed.dart';
 part 'guideline.g.dart';
 
-@freezed
-class Guideline with _$Guideline {
-  const factory Guideline(
-    int id,
-    String? implication,
-    String? recommendation,
-    String? warningLevel,
-    String? cpicRecommendation,
-    String? cpicImplication,
-    String? cpicClassification,
-    String? cpicComment,
-    GenePhenotype genePhenotype,
-  ) = _Guideline;
+@HiveType(typeId: 9)
+@JsonSerializable()
+class Guideline {
+  Guideline({
+    required this.id,
+    this.implication,
+    this.recommendation,
+    this.warningLevel,
+    this.cpicRecommendation,
+    this.cpicImplication,
+    this.cpicClassification,
+    this.cpicComment,
+    required this.genePhenotype,
+  });
   factory Guideline.fromJson(dynamic json) => _$GuidelineFromJson(json);
+
+  @HiveField(0)
+  int id;
+
+  @HiveField(1)
+  String? implication;
+
+  @HiveField(2)
+  String? recommendation;
+
+  @HiveField(3)
+  String? warningLevel;
+
+  @HiveField(4)
+  String? cpicRecommendation;
+
+  @HiveField(5)
+  String? cpicImplication;
+
+  @HiveField(6)
+  String? cpicClassification;
+
+  @HiveField(7)
+  String? cpicComment;
+
+  @HiveField(8)
+  GenePhenotype genePhenotype;
 }
 
-@freezed
-class GenePhenotype with _$GenePhenotype {
-  const factory GenePhenotype(
-    int id,
-    Phenotype phenotype,
-    GeneSymbol geneSymbol,
-  ) = _GenePhenotype;
+@HiveType(typeId: 10)
+@JsonSerializable()
+class GenePhenotype {
+  GenePhenotype({
+    required this.id,
+    required this.phenotype,
+    required this.geneSymbol,
+  });
   factory GenePhenotype.fromJson(dynamic json) => _$GenePhenotypeFromJson(json);
+
+  @HiveField(0)
+  int id;
+
+  @HiveField(1)
+  Phenotype phenotype;
+
+  @HiveField(2)
+  GeneSymbol geneSymbol;
 }
 
-@freezed
-class GeneSymbol with _$GeneSymbol {
-  const factory GeneSymbol(int id, String name) = _GeneSymbol;
+@HiveType(typeId: 11)
+@JsonSerializable()
+class GeneSymbol {
+  GeneSymbol({
+    required this.id,
+    required this.name,
+  });
   factory GeneSymbol.fromJson(dynamic json) => _$GeneSymbolFromJson(json);
+
+  @HiveField(0)
+  int id;
+
+  @HiveField(1)
+  String name;
 }
 
-@freezed
-class Phenotype with _$Phenotype {
-  const factory Phenotype(int id, String name) = _Phenotype;
+@HiveType(typeId: 12)
+@JsonSerializable()
+class Phenotype {
+  Phenotype({
+    required this.id,
+    required this.name,
+  });
   factory Phenotype.fromJson(dynamic json) => _$PhenotypeFromJson(json);
+
+  @HiveField(0)
+  int id;
+
+  @HiveField(1)
+  String name;
 }

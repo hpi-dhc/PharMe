@@ -11,14 +11,14 @@ MedicationWithGuidelines filterUserGuidelines(
     return foundEntry != null && foundEntry == genePhenotype.phenotype.name;
   });
   return MedicationWithGuidelines(
-    medication.id,
-    medication.name,
-    medication.description,
-    medication.pharmgkbId,
-    medication.rxcui,
-    medication.synonyms,
-    medication.drugclass,
-    medication.indication,
-    matchingGuidelines.toList(),
+    id: medication.id,
+    name: medication.name,
+    description: medication.description,
+    pharmgkbId: medication.pharmgkbId,
+    rxcui: medication.rxcui,
+    synonyms: medication.synonyms,
+    drugclass: medication.drugclass,
+    indication: medication.indication,
+    guidelines: matchingGuidelines.toList(),
   );
 }
