@@ -49,28 +49,28 @@ export class GenePhenotypesService {
         const diplotypeDtos: DiplotypeDto[] = (await lastValueFrom(response))
             .data;
 
-        await this.genePhenotypeRepository.save(
-            await this.getGenePhenotypes(diplotypeDtos),
-        );
+        await this.createGenePhenotypes(diplotypeDtos);
 
         this.hashedGeneSymbols.clear();
         this.hashedPhenotypes.clear();
+
         this.logger.log(
             'Successfully saved gene-phenotype combinations to database.',
         );
     }
 
-    private async getGenePhenotypes(
+    private async createGenePhenotypes(
         diplotypeDtos: DiplotypeDto[],
-    ): Promise<GenePhenotype[]> {
-        const genePhenotypes = new Map<string, GenePhenotype>();
+    ): Promise<void> {
+        const genePhenotypeKeys = new Set<string>();
+        const genePhenotypes: GenePhenotype[] = [];
 
         for (const diplotypeDto of diplotypeDtos) {
             const key = [diplotypeDto.genesymbol, diplotypeDto.generesult].join(
                 ';',
             );
 
-            if (genePhenotypes.has(key)) {
+            if (genePhenotypeKeys.has(key)) {
                 continue;
             }
 
@@ -86,10 +86,11 @@ export class GenePhenotypesService {
             genePhenotype.phenotype = phenotype;
             genePhenotype.cpicConsultationText = diplotypeDto.consultationtext;
 
-            genePhenotypes.set(key, genePhenotype);
+            genePhenotypeKeys.add(key);
+            genePhenotypes.push(genePhenotype);
         }
 
-        return Array.from(genePhenotypes.values());
+        await this.genePhenotypeRepository.save(genePhenotypes);
     }
 
     private async findOrCreateGeneSymbol(
