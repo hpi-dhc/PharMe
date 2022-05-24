@@ -34,6 +34,7 @@ export class Guideline {
             guideline.cpicComment = recommendation.comments;
         guideline.cpicImplication =
             recommendation.implications[genePhenotype.geneSymbol.name];
+        guideline.cpicGuidelineId = recommendation.guidelineid;
         guideline.errors = [];
 
         return guideline;
@@ -79,6 +80,15 @@ export class Guideline {
         nullable: true,
     })
     cpicComment: string;
+
+    @Column()
+    cpicGuidelineId: number;
+
+    @Column()
+    cpicGuidelineUrl: string;
+
+    @Column()
+    cpicGuidelineName: string;
 
     public get isComplete(): boolean {
         return !!this.recommendation || !!this.implication;

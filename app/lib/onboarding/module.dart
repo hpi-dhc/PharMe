@@ -1,5 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-
+import '../common/module.dart';
 import 'pages/onboarding.dart';
 
 export 'pages/onboarding.dart';

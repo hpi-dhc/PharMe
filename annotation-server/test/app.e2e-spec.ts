@@ -50,7 +50,7 @@ describe('App (e2e)', () => {
         }, 20000);
     });
 
-    describe('Retrieve data', () => {
+    describe('Retrieve data for all medications', () => {
         it('should get all 3 medications', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications',
@@ -68,9 +68,25 @@ describe('App (e2e)', () => {
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.length).toEqual(2);
         });
+
+        it('should return 2 medications matching a search query', async () => {
+            const getResponse = await request(app.getHttpServer())
+                .get('/medications')
+                .query({ search: 'cod' });
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toEqual(2);
+        });
+
+        it('should verify that data errors have been saved', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/guidelines/errors',
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toBeGreaterThan(0);
+        });
     });
 
-    describe('Get data', () => {
+    describe('Retrieve data for a specific medication', () => {
         it('should verify details for one medication', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications/' + codeineId,
@@ -100,14 +116,6 @@ describe('App (e2e)', () => {
                     guideline.warningLevel ?? 'null',
                 );
             }
-        });
-
-        it('should verify that data errors have been saved', async () => {
-            const getResponse = await request(app.getHttpServer()).get(
-                '/guidelines/errors',
-            );
-            expect(getResponse.status).toEqual(200);
-            expect(getResponse.body.length).toBeGreaterThan(0);
         });
     });
 

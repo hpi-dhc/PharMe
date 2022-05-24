@@ -19,6 +19,7 @@ import {
     MedicationByNameCache,
     MedicationByRxcuiCache,
 } from './caches/medication-caches';
+import { CpicGuidelineDto } from './dtos/cpic-guideline.dto';
 import { CpicRecommendationDto } from './dtos/cpic-recommendation.dto';
 import {
     GuidelineError,
@@ -65,10 +66,115 @@ export class GuidelinesService {
     async fetchGuidelines(): Promise<void> {
         await this.clearAllData();
         const guidelines = await this.fetchCpicGuidelines();
+        await this.addGuidelineURLS(guidelines);
         await this.complementAndSaveGuidelines(guidelines);
     }
 
-    async complementAndSaveGuidelines(
+    private async fetchCpicGuidelines(): Promise<Map<string, Guideline[]>> {
+        this.logger.log('Fetching guidelines from CPIC.');
+        const response = this.httpService.get(
+            'https://api.cpicpgx.org/v1/recommendation',
+            {
+                params: {
+                    select: [
+                        'drugid',
+                        'drugrecommendation',
+                        'implications',
+                        'comments',
+                        'phenotypes',
+                        'classification',
+                        'guidelineid',
+                    ].join(','),
+                },
+            },
+        );
+        const recommendationDtos: CpicRecommendationDto[] = (
+            await lastValueFrom(response)
+        ).data;
+
+        const guidelines: Map<string, Guideline[]> = new Map();
+        const guidelineErrors: Set<GuidelineError> = new Set();
+
+        const knownCombinations: Set<string> = new Set();
+        for (const cpicRecommendationDto of recommendationDtos) {
+            if (
+                cpicRecommendationDto.classification.match(/no recommendation/i)
+            ) {
+                continue;
+            }
+            const externalid = cpicRecommendationDto.drugid.split(':');
+            if (externalid[0] !== 'RxNorm') continue;
+            try {
+                const medication = await this.medicationsByRxcuiCache.get(
+                    externalid[1],
+                );
+                if (!medication) continue;
+                for (const [geneSymbol, phenotype] of Object.entries(
+                    cpicRecommendationDto.phenotypes,
+                )) {
+                    const genePhenotype = await this.genePhenotypesCache.get(
+                        geneSymbol,
+                        phenotype,
+                    );
+                    if (!genePhenotype) continue;
+                    const knownKey = `${medication.id}:${genePhenotype.id}`;
+                    if (knownCombinations.has(knownKey)) continue;
+                    knownCombinations.add(knownKey);
+                    const guideline = Guideline.fromCpicRecommendation(
+                        cpicRecommendationDto,
+                        medication,
+                        genePhenotype,
+                    );
+
+                    if (guidelines.has(medication.name)) {
+                        guidelines.get(medication.name).push(guideline);
+                    } else {
+                        guidelines.set(medication.name, [guideline]);
+                    }
+                }
+            } catch (error) {
+                if (error instanceof GuidelineError) {
+                    guidelineErrors.add(error);
+                } else throw error;
+                continue;
+            }
+        }
+        this.guidelineErrorRepository.save(Array.from(guidelineErrors));
+        this.logger.log('Successfully fetched guidelines from CPIC.');
+        return guidelines;
+    }
+
+    private async addGuidelineURLS(
+        guidelines: Map<string, Guideline[]>,
+    ): Promise<Map<string, Guideline[]>> {
+        const response = this.httpService.get(
+            'https://api.cpicpgx.org/v1/guideline',
+            {
+                params: {
+                    select: ['id', 'name', 'url'].join(','),
+                },
+            },
+        );
+        const guidelineDtos: CpicGuidelineDto[] = (
+            await lastValueFrom(response)
+        ).data;
+        const guidelineDtoById: Map<number, CpicGuidelineDto> = new Map();
+        guidelineDtos.forEach((guidelineDto) =>
+            guidelineDtoById.set(guidelineDto.id, guidelineDto),
+        );
+        for (const guidelinesForMedication of guidelines.values()) {
+            guidelinesForMedication.forEach((guideline) => {
+                const guidelineDto = guidelineDtoById.get(
+                    guideline.cpicGuidelineId,
+                );
+                guideline.cpicGuidelineUrl = guidelineDto.url;
+                guideline.cpicGuidelineName = guidelineDto.name;
+            });
+        }
+        return guidelines;
+    }
+
+    private async complementAndSaveGuidelines(
         guidelines: Map<string, Guideline[]>,
     ): Promise<void> {
         this.logger.log('Complementing CPIC guidelines with data from sheet.');
@@ -185,72 +291,6 @@ export class GuidelinesService {
 
         this.clearCaches();
         this.logger.log('Successfully saved all valid guidelines.');
-    }
-
-    async fetchCpicGuidelines(): Promise<Map<string, Guideline[]>> {
-        this.logger.log('Fetching guidelines from CPIC.');
-        const response = this.httpService.get(
-            'https://api.cpicpgx.org/v1/recommendation',
-            {
-                params: {
-                    select: 'drugid,drugrecommendation,implications,comments,phenotypes,classification',
-                },
-            },
-        );
-        const recommendationDtos: CpicRecommendationDto[] = (
-            await lastValueFrom(response)
-        ).data;
-
-        const guidelines: Map<string, Guideline[]> = new Map();
-        const guidelineErrors: Set<GuidelineError> = new Set();
-
-        const knownCombinations: Set<string> = new Set();
-        for (const cpicRecommendationDto of recommendationDtos) {
-            if (
-                cpicRecommendationDto.classification.match(/no recommendation/i)
-            ) {
-                continue;
-            }
-            const externalid = cpicRecommendationDto.drugid.split(':');
-            if (externalid[0] !== 'RxNorm') continue;
-            try {
-                const medication = await this.medicationsByRxcuiCache.get(
-                    externalid[1],
-                );
-                if (!medication) continue;
-                for (const [geneSymbol, phenotype] of Object.entries(
-                    cpicRecommendationDto.phenotypes,
-                )) {
-                    const genePhenotype = await this.genePhenotypesCache.get(
-                        geneSymbol,
-                        phenotype,
-                    );
-                    if (!genePhenotype) continue;
-                    const knownKey = `${medication.id}:${genePhenotype.id}`;
-                    if (knownCombinations.has(knownKey)) continue;
-                    knownCombinations.add(knownKey);
-                    const guideline = Guideline.fromCpicRecommendation(
-                        cpicRecommendationDto,
-                        medication,
-                        genePhenotype,
-                    );
-
-                    if (guidelines.has(medication.name)) {
-                        guidelines.get(medication.name).push(guideline);
-                    } else {
-                        guidelines.set(medication.name, [guideline]);
-                    }
-                }
-            } catch (error) {
-                if (error instanceof GuidelineError) {
-                    guidelineErrors.add(error);
-                } else throw error;
-                continue;
-            }
-        }
-        this.guidelineErrorRepository.save(Array.from(guidelineErrors));
-        this.logger.log('Successfully fetched guidelines from CPIC.');
-        return guidelines;
     }
 
     private getWarningLevelFromColor(

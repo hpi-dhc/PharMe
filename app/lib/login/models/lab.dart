@@ -1,4 +1,4 @@
-import '../../../common/constants.dart';
+import '../../common/module.dart';
 
 class Lab {
   Lab(this.name, this.authUrl, this.endpoint);

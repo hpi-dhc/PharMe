@@ -1,4 +1,8 @@
-import '../module.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+
+import '../l10n.dart';
+import '../routing/router.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -45,8 +49,8 @@ class MainPage extends StatelessWidget {
         label: context.l10n.nav_faq,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.settings),
-        label: context.l10n.nav_settings,
+        icon: Icon(Icons.more_horiz),
+        label: context.l10n.nav_more,
       ),
     ];
   }

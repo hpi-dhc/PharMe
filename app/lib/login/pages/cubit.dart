@@ -2,9 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:openid_client/openid_client_io.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../common/module.dart' hide MetaData;
-import '../../../common/utilities/genome_data.dart';
-import '../../common/models/metadata.dart';
+import '../../../common/module.dart';
 import '../models/lab.dart';
 
 part 'cubit.freezed.dart';

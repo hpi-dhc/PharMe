@@ -17,7 +17,7 @@ import {
 
 import { fetchSpreadsheetCells } from '../common/google-sheets';
 import { DrugDto } from './dtos/drugbank.dto';
-import { Medication } from './medication.entity';
+import { Medication, MedicationSearchView } from './medication.entity';
 
 @Injectable()
 export class MedicationsService {
@@ -69,26 +69,26 @@ export class MedicationsService {
         });
     }
 
-    async findMatchingMedications(query: string): Promise<Medication[]> {
-        const result = await this.medicationRepository.query(
-            `
-        SELECT distinct id, name, description, drugclass, indication,
-        CASE
-            WHEN name ILIKE '%'||$1||'%' THEN 1
-            WHEN drugclass ILIKE '%'||$1||'%' THEN 2
-            WHEN synonym ILIKE '%'||$1||'%' THEN 3
-            WHEN description ILIKE '%'||$1||'%' THEN 4
-            ELSE 5
-        END as rank
-        FROM (
-            SELECT id, name, description, drugclass, indication, unnest(synonyms) synonym
-            FROM public.medication
-        ) sub
-        WHERE name ILIKE '%'||$1||'%' OR drugclass ILIKE '%'||$1||'%' OR synonym ILIKE '%'||$1||'%' OR description ILIKE '%'||$1||'%'
-        ORDER BY rank ASC`,
-            [query],
-        );
-        return result;
+    findMatchingMedications(query: string): Promise<Medication[]> {
+        return this.medicationRepository
+            .createQueryBuilder('medication')
+            .select([
+                'medication.id',
+                'medication.name',
+                'medication.description',
+                'medication.drugclass',
+                'medication.indication',
+            ])
+            .leftJoinAndSelect(
+                MedicationSearchView,
+                'searchView',
+                'searchView.id = medication.id',
+            )
+            .where('searchView.searchString ilike :searchString', {
+                searchString: `%${query}%`,
+            })
+            .orderBy('searchView.priority', 'ASC')
+            .getMany();
     }
 
     async fetchAllMedications(): Promise<void> {

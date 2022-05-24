@@ -1,7 +1,10 @@
-import '../../../common/module.dart';
+import '../../../common/models/metadata.dart';
+import '../../../common/module.dart' hide MetaData;
 
 class OnboardingPage extends HookWidget {
-  const OnboardingPage({Key? key}) : super(key: key);
+  OnboardingPage({Key? key}) : super(key: key);
+
+  final _isLoggedIn = MetaData.instance.isLoggedIn ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +69,11 @@ class OnboardingPage extends HookWidget {
     return TextButton(
       onPressed: () {
         if (isLastPage) {
-          context.router.replace(const LoginRouter());
+          if (_isLoggedIn) {
+            context.router.pop();
+          } else {
+            context.router.replace(LoginRouter());
+          }
         } else {
           pageController.nextPage(
             duration: Duration(milliseconds: 500),

@@ -1,10 +1,11 @@
-/**
- *  This file contains constants that are meant to be used in different tests,
- *  but are too lengthy to be stored in a test
- */
+import { MockS3File } from './s3-mock';
 
-/**
- * @allelesFile has the structure of the JSONs that the lab server is returning, encoded in base64
- */
-export const allelesFile =
+const allelesFile =
     'ewogICJvcmdhbml6YXRpb25JZCI6IDEsCiAgImlkZW50aWZpZXIiOiAic29tZSBkdW1teSBkYXRhIiwKICAia25vd2xlZGdlQmFzZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICJkaXBsb3R5cGVzIjogWwogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9LAogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9LAogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9LAogICAgewogICAgICAiZ2VuZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAicmVzdWx0VHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiZ2Vub3R5cGUiOiAic29tZSBkdW1teSBkYXRhIiwKICAgICAgInBoZW5vdHlwZSI6ICJzb21lIGR1bW15IGRhdGEiLAogICAgICAiYWxsZWxlc1Rlc3RlZCI6ICJzb21lIGR1bW15IGRhdGEiCiAgICB9CiAgXQp9Cg==';
+
+export const mockedS3Files: MockS3File[] = [
+    {
+        name: '204753010001_R01C01.json',
+        buffer: Buffer.from(allelesFile, 'base64'),
+    },
+];

@@ -7,16 +7,46 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
-      Card(
-        child: ListTile(
-          leading: Icon(Icons.delete),
-          title: Text(context.l10n.settings_page_delete_data),
-          trailing: Icon(Icons.chevron_right),
-          onTap: () => showDialog(
-            context: context,
-            builder: (_) => _deleteDataDialog(context),
-          ),
+      ListTile(
+        title: Text(
+          context.l10n.settings_page_account_settings,
+          style: PharmeTheme.textTheme.bodyLarge,
         ),
+      ),
+      ListTile(
+        title: Text(context.l10n.settings_page_delete_data),
+        trailing: Icon(Icons.chevron_right),
+        onTap: () => showDialog(
+          context: context,
+          builder: (_) => _deleteDataDialog(context),
+        ),
+      ),
+      Divider(),
+      ListTile(
+        title: Text(
+          context.l10n.settings_page_more,
+          style: PharmeTheme.textTheme.bodyLarge,
+        ),
+      ),
+      ListTile(
+        title: Text(context.l10n.settings_page_onboarding),
+        trailing: Icon(Icons.chevron_right),
+        onTap: () => context.router.push(OnboardingRouter()),
+      ),
+      ListTile(
+        title: Text(context.l10n.settings_page_about_us),
+        trailing: Icon(Icons.chevron_right),
+        onTap: () => context.router.push(AboutUsRoute()),
+      ),
+      ListTile(
+        title: Text(context.l10n.settings_page_privacy_policy),
+        trailing: Icon(Icons.chevron_right),
+        onTap: () => context.router.push(PrivacyPolicyRoute()),
+      ),
+      ListTile(
+        title: Text(context.l10n.settings_page_terms_and_conditions),
+        trailing: Icon(Icons.chevron_right),
+        onTap: () => context.router.push(TermsAndConditionsRoute()),
       ),
     ]);
   }

@@ -2,8 +2,7 @@
 
 Closes #
 
-- [ ] I have read the [code-style guidelines](https://github.com/hpi-dhc/PharMe/blob/main/docs/FLUTTER_STYLE.md) and
-      confirmed that this PR upholds said guidelines
+- [ ] I have read the [code-style guidelines](https://github.com/hpi-dhc/PharMe/blob/main/docs/FLUTTER_STYLE.md) and confirmed that this PR upholds said guidelines
 
 ---
 

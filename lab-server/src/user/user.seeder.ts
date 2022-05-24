@@ -19,6 +19,13 @@ export default class CreateUsers implements Seeder {
             sub: '4beb7675-e415-4580-bdcb-75b63ca14766',
             allelesFile: '204753010001_R02C01.json',
         },
+        {
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            id: 3,
+            sub: '340d6476-68dc-4852-90ca-caf6fce1a50d',
+            allelesFile: 'does_not_exist.json',
+        },
     ];
 
     public async run(_: Factory, connection: Connection): Promise<void> {
