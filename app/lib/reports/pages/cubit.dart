@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
-import '../../common/models/cached_reports.dart';
 import '../../common/module.dart';
+import '../models/cached_reports.dart';
 
 part 'cubit.freezed.dart';
 
@@ -17,8 +17,8 @@ class ReportsCubit extends Cubit<ReportsState> {
     );
     emit(ReportsState.loading());
 
-    // TODO(kolioOtSofia): remove port when kubernetes is done
-    final isOnline = await hasConnectionTo('${requestUri.host}:3000');
+    // TODO(kolioOtSofia): change when kubernetes is deployed
+    final isOnline = await hasConnectionTo('google.com');
     if (!isOnline) {
       emit(ReportsState.loaded(CachedReports.instance.medications ?? []));
       return;

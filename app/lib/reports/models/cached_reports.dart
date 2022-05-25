@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import '../module.dart';
+import '../../common/module.dart';
 
 part 'cached_reports.g.dart';
 

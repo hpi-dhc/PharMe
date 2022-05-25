@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'models/cached_reports.dart';
+import '../reports/models/cached_reports.dart';
 import 'models/module.dart';
 
 Future<void> initServices() async {

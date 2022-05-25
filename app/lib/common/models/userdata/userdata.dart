@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import 'cpic_lookup_response.dart';
+import '../cpic_lookup_response.dart';
 import 'diplotype.dart';
 
 part 'userdata.g.dart';
