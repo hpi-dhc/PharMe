@@ -27,7 +27,7 @@ export class GenePhenotypesByGeneCache extends GuidelineCacheMap<
     protected async retrieve(
         ...[geneSymbolName]: string[]
     ): Promise<Set<GenePhenotype>[]> {
-        const geneSymbol = await this.genePhenotypesService.getOneGeneSymbol({
+        const geneSymbol = await this.genePhenotypesService.findOneGeneSymbol({
             where: { name: ILike(geneSymbolName) },
             relations: [
                 'genePhenotypes',
@@ -68,7 +68,7 @@ export class GenePhenotypesCache extends GuidelineCacheMap<GenePhenotype> {
     protected async retrieve(
         ...[geneSymbolName, phenotype]: string[]
     ): Promise<GenePhenotype> {
-        return this.genePhenotypesService.getOne({
+        return this.genePhenotypesService.findOne({
             where: {
                 geneSymbol: { name: ILike(geneSymbolName) },
                 phenotype: { name: phenotype },
