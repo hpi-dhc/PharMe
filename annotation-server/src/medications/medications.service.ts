@@ -7,7 +7,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import { FindOneOptions, IsNull, Like, Not, Repository } from 'typeorm';
+import { FindOneOptions, ILike, IsNull, Not, Repository } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { DrugDto } from './dtos/drugbank.dto';
@@ -31,7 +31,7 @@ export class MedicationsService {
         orderBy: string,
     ): Promise<[Medication[], number]> {
         return await this.medicationRepository.findAndCount({
-            where: { name: Like(`%${search}%`) },
+            where: { name: ILike(`%${search}%`) },
             take: limit,
             skip: offset,
             order: {

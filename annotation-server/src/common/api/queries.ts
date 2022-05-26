@@ -42,7 +42,7 @@ export function ApiQueryOrderby(resourceName: string): MethodDecorator {
 
 export function ApiQuerySearch(resourceName: string): MethodDecorator {
     return ApiQuery({
-        name: 'query',
+        name: 'search',
         description: `String to search in the name of the ${resourceName}`,
         type: 'string',
         required: false,
