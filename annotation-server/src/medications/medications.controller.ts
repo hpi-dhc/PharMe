@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import {
@@ -43,15 +43,6 @@ export class MedicationsController {
     @Get('report')
     getMedicationsWithGuidelines(): Promise<Medication[]> {
         return this.medicationsService.getWithGuidelines();
-    }
-
-    @ApiOperation({
-        summary:
-            'Clear and update medication data from DrugBank and the Google Sheet',
-    })
-    @Post()
-    create(): Promise<void> {
-        return this.medicationsService.fetchAllMedications();
     }
 
     @ApiOperation({

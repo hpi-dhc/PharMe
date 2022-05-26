@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GenePhenotype } from './entities/gene-phenotype.entity';
 import { GeneSymbol } from './entities/gene-symbol.entity';
 import { Phenotype } from './entities/phenotype.entity';
-import { GenePhenotypesController } from './gene-phenotypes.controller';
 import { GenePhenotypesService } from './gene-phenotypes.service';
 
 @Module({
@@ -13,7 +12,7 @@ import { GenePhenotypesService } from './gene-phenotypes.service';
         HttpModule,
         TypeOrmModule.forFeature([GeneSymbol, Phenotype, GenePhenotype]),
     ],
-    controllers: [GenePhenotypesController],
+    controllers: [],
     providers: [GenePhenotypesService],
     exports: [GenePhenotypesService],
 })

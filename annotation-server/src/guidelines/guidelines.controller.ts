@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
@@ -12,12 +12,6 @@ import { GuidelinesService } from './guidelines.service';
 @Controller('guidelines')
 export class GuidelinesController {
     constructor(private guidelinesService: GuidelinesService) {}
-
-    @ApiOperation({ summary: 'Clear and update Google Sheet guidelines' })
-    @Post()
-    async fetchGuidelines(): Promise<void> {
-        return this.guidelinesService.fetchGuidelines();
-    }
 
     @ApiOperation({ summary: 'Get all guideline data errors' })
     @ApiFindGuidelineErrorsQueries()
