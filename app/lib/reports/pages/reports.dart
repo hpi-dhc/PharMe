@@ -181,7 +181,7 @@ class ReportCard extends StatelessWidget {
                     ),
                   ]),
                   SizedBox(height: 12),
-                  if (medicationDescription != null)
+                  if (medicationDescription.isNotNullOrBlank)
                     Text(
                       medicationDescription!,
                       style: PharmeTheme.textTheme.titleSmall,

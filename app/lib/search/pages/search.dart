@@ -144,7 +144,7 @@ class MedicationCard extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 6),
-              if (medicationDescription != null)
+              if (medicationDescription.isNotNullOrBlank)
                 Text(
                   medicationDescription!,
                   style: PharmeTheme.textTheme.titleSmall,

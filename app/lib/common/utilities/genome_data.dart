@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:dartx/dartx.dart';
 import 'package:http/http.dart';
 
 import '../constants.dart';
@@ -57,7 +58,7 @@ Future<void> fetchAndSaveLookups() async {
     // the gene and the genotype build the key for the hashmap
     final key = '${diplotype.gene}__${diplotype.genotype}';
     final temp = lookupsHashMap[key];
-    if (temp != null) matchingLookups[diplotype.gene] = temp;
+    if (temp.isNotNullOrBlank) matchingLookups[diplotype.gene] = temp!;
   }
 
   UserData.instance.lookups = matchingLookups;

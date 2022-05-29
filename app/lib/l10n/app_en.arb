@@ -27,13 +27,32 @@
   "general_continue": "Continue",
   "general_retry": "Retry",
   
-  "medications_overview_page_typeInMedication": "Type in a medication",
-  "medications_details_page_working": "It works. ID is {id}",
-  "medications_details_page_disclaimer": "This assessment is only based on your genomic data. It does not consider other factors such as weight, age and pre-existing condition",
-  "medications_details_page_header_guideline": "Clinical Guideline",
-  "medications_details_page_header_recommendation": "Recommendation",
-  "medications_details_page_header_further_info": "Further Information",
-  "@medications_details_page_working": {
+  "medications_page_working": "It works. ID is {id}",
+  "medications_page_disclaimer": "This assessment is only based on your genomic data. It does not consider other factors such as weight, age and pre-existing condition",
+  "medications_page_gene_name": "Gene: {geneName}",
+  "@medications_page_gene_name": {
+    "description": "Name of the Gene.",
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "medications_page_header_further_info": "Further Information",
+  "medications_page_header_guideline": "Clinical Guideline",
+  "medications_page_header_recommendation": "Recommendation",
+  "medications_page_info_big_i": "i",
+  "medications_page_sources_cpic_name": "CPIC",
+  "medications_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
+  "medications_page_sources_dpwg_name": "DPWG",
+  "medications_page_sources_dpwg_description": "Guidelines published by the Dutch Pharmacogenetics Working Group (DPWG)",
+  "medications_page_sources_pharmGkb_name": "PharmGKB",
+  "medications_page_sources_pharmGkb_description": "Curated pharmacogenetic studies for this drug-gene reaction",
+  "medications_page_tooltip_classification": "The better the evidence level, the more scientifically accepted is the clinical annotation it refers to. Many studies and good studies mean a high evidence level.",
+  "medications_page_tooltip_further_info": "Get to know the source material! CPIC, DPWG and PharmGKB are well-known for their clinical guidelines regarding drug-gene-interactions. Also see the PGx-Tab for more information ",
+  "medications_page_tooltip_guideline": "Clinical guidelines are designed to help you understand how genetic test results should be used to optimize drug therapy.",
+  "@medications_page_working": {
     "description": "Provisional message for developers when visiting medications details page.",
     "placeholders": {
       "id": {
@@ -56,9 +75,9 @@
   "onboarding_medicine_page_text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et.",
   "onboarding_security_page_header": "We care about\nyour data protection",
   "onboarding_security_page_text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et.",
-
+  
   "overview_search_bar_search": "Search",
-
+  
   "profile_page_enter_password": "Please enter your password!",
   "profile_page_enter_username": "Please enter your username!",
   "profile_page_header": "Login to Lab Server",
@@ -66,10 +85,12 @@
   "profile_page_password": "Password",
   "profile_page_sign_in": "Login",
   "profile_page_username": "Username",
-
+  
   "reports_page_disclaimer_text": "All medications shown here should be used with extreme caution, used in different doses or not be used at all. Check specific medications for details.",
   "reports_page_disclaimer_title": "Pharmacogenomics report",
-
+  
+  "search_page_typeInMedication": "Type in a medication",
+  
   "settings_page_account_settings": "Account Settings",
   "settings_page_cancel": "Cancel",
   "settings_page_continue": "Continue",
