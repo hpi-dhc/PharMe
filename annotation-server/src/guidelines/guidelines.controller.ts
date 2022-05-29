@@ -23,7 +23,7 @@ export class GuidelinesController {
             await this.guidelinesService.findAllErrors(
                 dto.limit ?? 0,
                 dto.offset ?? 0,
-                dto.sortby ?? 'name',
+                dto.sortby ?? 'blame',
                 dto.orderby ?? 'asc',
             );
 
