@@ -57,7 +57,10 @@ spec:
                   name: lab-server-secrets
                   key: minio_pass
             - name: KEYCLOAK_AUTH_SERVER_URL
-              value: https://keycloak-pharme.dhc-lab.hpi.de/auth
+              valueFrom:
+                secretKeyRef:
+                  name: lab-server-secrets
+                  key: keycloak_auth_url
             - name: KEYCLOAK_REALM
               value: pharme
             - name: KEYCLOAK_CLIENT_ID
