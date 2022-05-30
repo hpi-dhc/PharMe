@@ -3,7 +3,7 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../common/module.dart';
+import '../../module.dart';
 import 'cubit.dart';
 
 class MedicationPage extends StatelessWidget {
@@ -18,7 +18,7 @@ class MedicationPage extends StatelessWidget {
       child: BlocBuilder<MedicationsCubit, MedicationsState>(
         builder: (context, state) {
           return RoundedCard(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+            padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
             child: state.when(
               initial: Container.new,
               error: () => Text(context.l10n.err_generic),
@@ -36,23 +36,20 @@ class MedicationPage extends StatelessWidget {
     MedicationWithGuidelines medication,
     BuildContext context,
   ) {
-    return RoundedCard(
-      padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(medication.name, medication.drugclass!),
-          SizedBox(height: 20),
-          _buildDisclaimer(context),
-          SizedBox(height: 20),
-          _SubHeader(
-            context.l10n.medications_page_header_guideline,
-            tooltip: context.l10n.medications_page_tooltip_guideline,
-          ),
-          SizedBox(height: 12),
-          ClinicalAnnotationCard(medication),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildHeader(medication.name, medication.drugclass!),
+        SizedBox(height: 20),
+        _buildDisclaimer(context),
+        SizedBox(height: 20),
+        _SubHeader(
+          context.l10n.medications_page_header_guideline,
+          tooltip: context.l10n.medications_page_tooltip_guideline,
+        ),
+        SizedBox(height: 12),
+        ClinicalAnnotationCard(medication),
+      ],
     );
   }
 
@@ -96,24 +93,22 @@ class MedicationPage extends StatelessWidget {
         color: PharmeTheme.surfaceColor,
         border: Border.all(color: PharmeTheme.errorColor, width: 1.2),
       ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.warning_rounded,
-            size: 52,
-            color: PharmeTheme.errorColor,
-          ),
-          SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              context.l10n.medications_page_disclaimer,
-              style: PharmeTheme.textTheme.labelMedium!.copyWith(
-                fontWeight: FontWeight.w100,
-              ),
+      child: Row(children: [
+        Icon(
+          Icons.warning_rounded,
+          size: 52,
+          color: PharmeTheme.errorColor,
+        ),
+        SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            context.l10n.medications_page_disclaimer,
+            style: PharmeTheme.textTheme.labelMedium!.copyWith(
+              fontWeight: FontWeight.w100,
             ),
           ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 }
@@ -147,24 +142,22 @@ class ClinicalAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildImplicationInfo(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          context.l10n.medications_page_info_big_i,
-          style: GoogleFonts.robotoSlab(
-            fontSize: 48,
-            fontWeight: FontWeight.w900,
-          ),
+    return Row(children: [
+      Text(
+        context.l10n.medications_page_info_big_i,
+        style: GoogleFonts.robotoSlab(
+          fontSize: 48,
+          fontWeight: FontWeight.w900,
         ),
-        SizedBox(width: 24),
-        Flexible(
-          child: Text(
-            medication.guidelines[0].implication!,
-            style: PharmeTheme.textTheme.bodySmall,
-          ),
+      ),
+      SizedBox(width: 24),
+      Flexible(
+        child: Text(
+          medication.guidelines[0].implication!,
+          style: PharmeTheme.textTheme.bodySmall,
         ),
-      ],
-    );
+      ),
+    ]);
   }
 
   Widget _buildHeader(BuildContext context) {
