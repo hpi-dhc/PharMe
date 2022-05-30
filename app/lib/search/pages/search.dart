@@ -7,8 +7,6 @@ import 'cubit.dart';
 final _panelController = SlidingUpPanelController();
 
 class SearchPage extends HookWidget {
-  const SearchPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
@@ -37,9 +35,10 @@ class SearchPage extends HookWidget {
                   children: [
                     SvgPicture.asset('assets/images/logo.svg'),
                     Text(
-                      context.l10n.medications_overview_page_typeInMedication,
-                      style: PharmeTheme.textTheme.bodyLarge!
-                          .copyWith(color: Colors.white),
+                      context.l10n.search_page_typeInMedication,
+                      style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                      ),
                     ),
                     Icon(
                       Icons.arrow_downward,
@@ -71,8 +70,9 @@ class SearchPage extends HookWidget {
                         initial: Container.new,
                         error: () => Text(context.l10n.err_generic),
                         loaded: _buildMedicationsList,
-                        loading: () =>
-                            Center(child: CircularProgressIndicator()),
+                        loading: () => Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
                     ],
                   ),
