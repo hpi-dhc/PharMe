@@ -22,6 +22,9 @@ spec:
       containers:
         - image: ghcr.io/hpi-dhc/pharme-annotation-server:main
           imagePullPolicy: "Always"
+          volumeMounts:
+            - name: sample-data
+              mountPath: /app/annotation-server/data
           name: annotation-server
           ports:
             - containerPort: 3000
@@ -70,6 +73,11 @@ spec:
               value: "HPI List v1!N4:V"
             - name: GOOGLESHEET_RANGE_RECOMMENDATIONS
               value: "HPI List v1!W4:AE"
+      volumes:
+        - name: sample-data
+          hostPath:
+            path: /home/kubernetes/data
+            type: DirectoryOrCreate
 
 ---
 apiVersion: v1
