@@ -94,7 +94,7 @@ class SearchPage extends HookWidget {
           final med = medications[index];
           return MedicationCard(
             onTap: () {
-              context.router.pushNamed(index.toString());
+              context.router.push(MedicationRoute(id: med.id));
             },
             medicationName: med.name,
           );

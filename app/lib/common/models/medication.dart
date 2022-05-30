@@ -50,3 +50,9 @@ List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
       .map<MedicationWithGuidelines>(MedicationWithGuidelines.fromJson)
       .toList();
 }
+
+MedicationWithGuidelines medicationWithGuidelinesFromHTTPResponse(
+  Response resp,
+) {
+  return MedicationWithGuidelines.fromJson(jsonDecode(resp.body));
+}

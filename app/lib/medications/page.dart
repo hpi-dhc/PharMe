@@ -4,14 +4,38 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../common/module.dart';
+import 'cubit.dart';
 
 class MedicationPage extends StatelessWidget {
-  const MedicationPage(this.medication);
+  const MedicationPage(this.id);
 
-  final MedicationWithGuidelines medication;
+  final int id;
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => MedicationsCubit(id),
+      child: BlocBuilder<MedicationsCubit, MedicationsState>(
+        builder: (context, state) {
+          return RoundedCard(
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+            child: state.when(
+              initial: Container.new,
+              error: () => Text(context.l10n.err_generic),
+              loading: () => Center(child: CircularProgressIndicator()),
+              loaded: (medication) =>
+                  _buildMedicationsPage(medication, context),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildMedicationsPage(
+    MedicationWithGuidelines medication,
+    BuildContext context,
+  ) {
     return RoundedCard(
       padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
       child: Column(

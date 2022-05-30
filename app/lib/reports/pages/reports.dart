@@ -2,8 +2,6 @@ import '../../common/module.dart';
 import 'cubit.dart';
 
 class ReportsPage extends StatelessWidget {
-  const ReportsPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -48,15 +46,18 @@ class ReportsPage extends StatelessWidget {
         .toList();
 
     return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        final med = filteredMedications[index];
-        return ReportCard(
-          warningLevel: _getWarningLevel(med.guidelines),
-          onTap: () => context.router.push(MedicationRoute(medication: med)),
-          medicationName: med.name,
-          medicationDescription: med.description,
-        );
-      }, childCount: filteredMedications.length),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final med = filteredMedications[index];
+          return ReportCard(
+            warningLevel: _getWarningLevel(med.guidelines),
+            onTap: () => context.router.push(MedicationRoute(id: med.id)),
+            medicationName: med.name,
+            medicationDescription: med.description,
+          );
+        },
+        childCount: filteredMedications.length,
+      ),
     );
   }
 
