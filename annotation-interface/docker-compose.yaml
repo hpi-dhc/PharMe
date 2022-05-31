@@ -1,0 +1,13 @@
+services:
+  annotation-interface-db:
+    image: mongo:5.0
+    volumes:
+      - annotation_interface_db:/var/lib/mongodb/data
+    ports:
+      - ${DB_PORT}:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+
+volumes:
+  annotation_interface_db:
