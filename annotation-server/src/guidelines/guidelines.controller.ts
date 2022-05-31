@@ -5,7 +5,7 @@ import {
     ApiFindGuidelineErrorsQueries,
     FindGuidelineErrorQueryDto,
 } from './dtos/find-guideline-error.dto';
-import { GuidelineErrorPageDto } from './dtos/guideline-error-page-dto';
+import { GuidelineError } from './entities/guideline-error.entity';
 import { GuidelinesService } from './guidelines.service';
 
 @ApiTags('Guidelines')
@@ -18,15 +18,12 @@ export class GuidelinesController {
     @Get('errors')
     async findAllErrors(
         @Query() dto: FindGuidelineErrorQueryDto,
-    ): Promise<GuidelineErrorPageDto> {
-        const [guidelineErrors, total] =
-            await this.guidelinesService.findAllErrors(
-                dto.limit ?? 0,
-                dto.offset ?? 0,
-                dto.sortby ?? 'blame',
-                dto.orderby ?? 'asc',
-            );
-
-        return { guidelineErrors: guidelineErrors, total: total };
+    ): Promise<GuidelineError[]> {
+        return await this.guidelinesService.findAllErrors(
+            dto.limit ?? 0,
+            dto.offset ?? 0,
+            dto.sortby ?? 'blame',
+            dto.orderby ?? 'asc',
+        );
     }
 }

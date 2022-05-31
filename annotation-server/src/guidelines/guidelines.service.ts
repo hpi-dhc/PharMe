@@ -68,8 +68,8 @@ export class GuidelinesService {
         offset: number,
         sortBy: string,
         orderBy: string,
-    ): Promise<[GuidelineError[], number]> {
-        return this.guidelineErrorRepository.findAndCount({
+    ): Promise<GuidelineError[]> {
+        return this.guidelineErrorRepository.find({
             take: limit,
             skip: offset,
             order: {
