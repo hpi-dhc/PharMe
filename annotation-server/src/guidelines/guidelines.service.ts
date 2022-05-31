@@ -63,6 +63,22 @@ export class GuidelinesService {
         );
     }
 
+    async findAllErrors(
+        limit: number,
+        offset: number,
+        sortBy: string,
+        orderBy: string,
+    ): Promise<[GuidelineError[], number]> {
+        return this.guidelineErrorRepository.findAndCount({
+            take: limit,
+            skip: offset,
+            order: {
+                [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
+            },
+            relations: ['guideline'],
+        });
+    }
+
     async fetchGuidelines(): Promise<void> {
         await this.clearAllData();
         const guidelines = await this.fetchCpicGuidelines();
@@ -237,14 +253,12 @@ export class GuidelinesService {
                     const implication = implications[row][col].value?.trim();
                     const recommendation =
                         recommendations[row][col].value?.trim();
-                    const warningLevel = this.getWarningLevelFromColor(
+                    const warningLevel = this.warningLevelFromColor(
                         recommendations[row][col].backgroundColor,
                     );
                     if (
-                        !this.guidelineTextsAreValid(
-                            implication,
-                            recommendation,
-                        )
+                        this.isInvalidText(implication) ||
+                        this.isInvalidText(recommendation)
                     ) {
                         continue;
                     }
@@ -293,29 +307,9 @@ export class GuidelinesService {
         this.logger.log('Successfully saved all valid guidelines.');
     }
 
-    private getWarningLevelFromColor(
-        color?: sheets_v4.Schema$Color,
-    ): WarningLevel | null {
-        if (!color) return null;
-        const [red, green, blue] = [color.red, color.green, color.blue];
-        if (!red && green === 1 && !blue) return WarningLevel.GREEN;
-        if (red === 1 && green === 1 && !blue) return WarningLevel.YELLOW;
-        if (red === 1 && !green && !blue) return WarningLevel.RED;
-        if (red === green && red === blue && blue === green) return null; // any shade of gray or transparent/unset background (undefined)
-        this.logger.warn('Sheet cell has unknown color');
-        return null;
-    }
-
-    private guidelineTextsAreValid(
-        implication: string,
-        recommendation: string,
-    ): boolean {
-        return (
-            implication &&
-            implication.replace(' ', '').toLowerCase() !== 'n/a' &&
-            recommendation &&
-            recommendation.replace(' ', '').toLowerCase() !== 'n/a'
-        );
+    private isInvalidText(text: string): boolean {
+        text = text.replace(' ', '');
+        return !(text && text.toLowerCase() !== 'n/a');
     }
 
     private getGuidelinesForGenePhenotype(
@@ -354,19 +348,16 @@ export class GuidelinesService {
         );
     }
 
-    async findAllErrors(
-        limit: number,
-        offset: number,
-        sortBy: string,
-        orderBy: string,
-    ): Promise<[GuidelineError[], number]> {
-        return this.guidelineErrorRepository.findAndCount({
-            take: limit,
-            skip: offset,
-            order: {
-                [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
-            },
-            relations: ['guideline'],
-        });
+    private warningLevelFromColor(
+        color?: sheets_v4.Schema$Color,
+    ): WarningLevel | null {
+        if (!color) return null;
+        const [red, green, blue] = [color.red, color.green, color.blue];
+        if (!red && green === 1 && !blue) return WarningLevel.GREEN;
+        if (red === 1 && green === 1 && !blue) return WarningLevel.YELLOW;
+        if (red === 1 && !green && !blue) return WarningLevel.RED;
+        if (red === green && red === blue && blue === green) return null; // any shade of gray or transparent/unset background (undefined)
+        this.logger.warn('Sheet cell has unknown color');
+        return null;
     }
 }

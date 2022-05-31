@@ -14,14 +14,10 @@ export enum WarningLevel {
 
 @Entity()
 export class Guideline extends BaseEntity {
-    @Column({
-        nullable: true,
-    })
+    @Column({ nullable: true })
     implication: string;
 
-    @Column({
-        nullable: true,
-    })
+    @Column({ nullable: true })
     recommendation: string;
 
     @Column({
@@ -48,9 +44,7 @@ export class Guideline extends BaseEntity {
     @Column()
     cpicClassification: string;
 
-    @Column({
-        nullable: true,
-    })
+    @Column({ nullable: true })
     cpicComment: string;
 
     @Column()
@@ -62,14 +56,14 @@ export class Guideline extends BaseEntity {
     @Column()
     cpicGuidelineName: string;
 
-    public get isIncomplete(): boolean {
-        return !this.recommendation && !this.implication;
-    }
-
     @OneToMany(() => GuidelineError, (error) => error.guideline, {
         cascade: true,
     })
     errors: GuidelineError[];
+
+    public get isIncomplete(): boolean {
+        return !this.recommendation && !this.implication;
+    }
 
     static fromCpicRecommendation(
         recommendation: CpicRecommendationDto,
