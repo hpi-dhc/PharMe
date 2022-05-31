@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../common/module.dart';
+import '../models/cached_reports.dart';
+import '../models/warning_level.dart';
 
 part 'cubit.freezed.dart';
 
@@ -14,6 +16,16 @@ class ReportsCubit extends Cubit<ReportsState> {
     final requestUri = annotationServerUrl.replace(
       path: 'api/v1/medications/report',
     );
+
+    final isOnline = await hasConnectionTo(requestUri.authority.toString());
+    if (!isOnline) {
+      emit(
+        ReportsState.loaded(
+          _filterMedications(CachedReports.instance.medications ?? []),
+        ),
+      );
+      return;
+    }
     emit(ReportsState.loading());
     final response = await http.get(requestUri);
     if (response.statusCode != 200) {
@@ -21,7 +33,27 @@ class ReportsCubit extends Cubit<ReportsState> {
       return;
     }
     final medications = medicationsWithGuidelinesFromHTTPResponse(response);
-    emit(ReportsState.loaded(medications));
+    emit(ReportsState.loaded(_filterMedications(medications)));
+  }
+
+  bool _containsOnlyOkGuidelines(List<Guideline> guidelines) {
+    final warningLevels = guidelines.map((e) => e.warningLevel);
+    return warningLevels.every((warningLevel) {
+      return warningLevel == WarningLevel.ok.name;
+    });
+  }
+
+  List<MedicationWithGuidelines> _filterMedications(
+    List<MedicationWithGuidelines> medications,
+  ) {
+    final filteredMedications = medications.map(filterUserGuidelines).toList();
+    return filteredMedications
+        .where(
+          (element) =>
+              element.guidelines.isNotEmpty &&
+              !_containsOnlyOkGuidelines(element.guidelines),
+        )
+        .toList();
   }
 }
 

@@ -1,6 +1,6 @@
 export 'cpic_lookup_response.dart';
-export 'diplotype.dart';
-export 'guideline.dart';
-export 'medication.dart';
+export 'medication/guideline.dart';
+export 'medication/medication.dart';
 export 'metadata.dart';
-export 'userdata.dart';
+export 'userdata/diplotype.dart';
+export 'userdata/userdata.dart';

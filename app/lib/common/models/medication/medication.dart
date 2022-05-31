@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
 import 'guideline.dart';
@@ -25,21 +26,49 @@ List<Medication> medicationsFromHTTPResponse(Response resp) {
   return json.map<Medication>(Medication.fromJson).toList();
 }
 
-@freezed
-class MedicationWithGuidelines with _$MedicationWithGuidelines {
-  const factory MedicationWithGuidelines(
-    int id,
-    String name,
-    String? description,
-    String? pharmgkbId,
-    String? rxcui,
-    List<String> synonyms,
-    String? drugclass,
-    String? indication,
-    List<Guideline> guidelines,
-  ) = _MedicationWithGuidelines;
+@HiveType(typeId: 8)
+@JsonSerializable()
+class MedicationWithGuidelines {
+  MedicationWithGuidelines({
+    required this.id,
+    required this.name,
+    this.description,
+    this.pharmgkbId,
+    this.rxcui,
+    this.synonyms,
+    this.drugclass,
+    this.indication,
+    required this.guidelines,
+  });
   factory MedicationWithGuidelines.fromJson(dynamic json) =>
       _$MedicationWithGuidelinesFromJson(json);
+
+  @HiveField(0)
+  int id;
+
+  @HiveField(1)
+  String name;
+
+  @HiveField(2)
+  String? description;
+
+  @HiveField(3)
+  String? pharmgkbId;
+
+  @HiveField(4)
+  String? rxcui;
+
+  @HiveField(5)
+  List<String>? synonyms;
+
+  @HiveField(6)
+  String? drugclass;
+
+  @HiveField(7)
+  String? indication;
+
+  @HiveField(8)
+  List<Guideline> guidelines;
 }
 
 List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
