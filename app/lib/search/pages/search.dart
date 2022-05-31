@@ -7,8 +7,6 @@ import 'cubit.dart';
 final _panelController = SlidingUpPanelController();
 
 class SearchPage extends HookWidget {
-  const SearchPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
@@ -37,9 +35,10 @@ class SearchPage extends HookWidget {
                   children: [
                     SvgPicture.asset('assets/images/logo.svg'),
                     Text(
-                      context.l10n.medications_overview_page_typeInMedication,
-                      style: PharmeTheme.textTheme.bodyLarge!
-                          .copyWith(color: Colors.white),
+                      context.l10n.search_page_typeInMedication,
+                      style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                      ),
                     ),
                     Icon(
                       Icons.arrow_downward,
@@ -71,8 +70,9 @@ class SearchPage extends HookWidget {
                         initial: Container.new,
                         error: () => Text(context.l10n.err_generic),
                         loaded: _buildMedicationsList,
-                        loading: () =>
-                            Center(child: CircularProgressIndicator()),
+                        loading: () => Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
                     ],
                   ),
@@ -91,10 +91,12 @@ class SearchPage extends HookWidget {
         padding: EdgeInsets.symmetric(vertical: 14),
         itemCount: medications.length,
         itemBuilder: (context, index) {
-          final el = medications[index];
+          final med = medications[index];
           return MedicationCard(
-            onTap: () {},
-            medicationName: el.name,
+            onTap: () {
+              context.router.push(MedicationRoute(id: med.id));
+            },
+            medicationName: med.name,
           );
         },
         separatorBuilder: (_, __) => SizedBox(height: 8),
@@ -116,13 +118,14 @@ class MedicationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      elevation: 5,
-      color: Colors.grey[200],
-      child: GestureDetector(
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 5,
+        color: Colors.grey[200],
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -137,11 +140,11 @@ class MedicationCard extends StatelessWidget {
                       style: PharmeTheme.textTheme.titleMedium,
                     ),
                   ),
-                  Icon(Icons.arrow_forward_ios)
+                  Icon(Icons.arrow_forward_ios),
                 ],
               ),
               SizedBox(height: 6),
-              if (medicationDescription != null)
+              if (medicationDescription.isNotNullOrBlank)
                 Text(
                   medicationDescription!,
                   style: PharmeTheme.textTheme.titleSmall,

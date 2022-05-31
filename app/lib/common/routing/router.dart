@@ -7,15 +7,15 @@ import '../../onboarding/module.dart';
 import '../../reports/module.dart';
 import '../../search/module.dart';
 import '../../settings/module.dart';
-import '../pages/main.dart';
+import '../pages/main/main.dart';
 
 part 'router.gr.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
-    onboardingRoutes,
     loginRoutes,
+    onboardingRoutes,
     AutoRoute(
       path: 'main',
       page: MainPage,

@@ -1,5 +1,6 @@
-import 'package:black_hole_flutter/black_hole_flutter.dart';
 import 'package:flutter/material.dart';
+
+import '../theme.dart';
 
 class Heading extends StatelessWidget {
   const Heading(
@@ -11,6 +12,6 @@ class Heading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: context.textTheme.titleMedium);
+    return Text(text, style: PharmeTheme.textTheme.titleMedium);
   }
 }

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../common/module.dart';
+import '../../common/module.dart';
 
 part 'cubit.freezed.dart';
 
