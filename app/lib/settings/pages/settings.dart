@@ -8,6 +8,11 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final questionContext = {
+      'title': ['1'],
+      'another_title': ['1', '2'],
+    };
+
     return ListView(children: [
       ListTile(
         title: Text(
@@ -60,7 +65,7 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text('Measure comprehension'),
         trailing: Icon(Icons.chevron_right),
-        onTap: () => measureComprehension(context, 1),
+        onTap: () => measureComprehension(context, 1, questionContext),
       ),
     ]);
   }
