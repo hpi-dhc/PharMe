@@ -3,11 +3,18 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import { FindOneOptions, ILike, IsNull, Not, Repository } from 'typeorm';
+import {
+    FindManyOptions,
+    FindOneOptions,
+    In,
+    IsNull,
+    Not,
+    Repository,
+} from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { DrugDto } from './dtos/drugbank.dto';
@@ -29,69 +36,57 @@ export class MedicationsService {
         search: string,
         sortBy: string,
         orderBy: string,
-    ): Promise<[Medication[], number]> {
-        return await this.medicationRepository.findAndCount({
-            where: { name: ILike(`%${search}%`) },
+        withGuidelines: boolean,
+    ): Promise<Medication[]> {
+        const findOptions = <FindManyOptions<Medication>>{
             take: limit,
             skip: offset,
             order: {
                 [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
             },
-        });
-    }
+        };
 
-    getWithGuidelines(): Promise<Medication[]> {
-        return this.medicationRepository.find({
-            where: {
-                guidelines: {
-                    id: Not(IsNull()),
-                },
-            },
-            relations: [
+        if (withGuidelines) {
+            findOptions.relations = [
                 'guidelines',
                 'guidelines.genePhenotype.phenotype',
                 'guidelines.genePhenotype.geneSymbol',
-            ],
-        });
+            ];
+            if (search) {
+                const matchingIds = await this.findIdsMatching(search);
+                findOptions.where = {
+                    id: In(matchingIds),
+                    guidelines: { id: Not(IsNull()) },
+                };
+            } else {
+                findOptions.where = {
+                    guidelines: { id: Not(IsNull()) },
+                };
+            }
+        }
+
+        return await this.medicationRepository.find(findOptions);
+    }
+
+    findOne(id: number, withGuidelines: boolean): Promise<Medication> {
+        const findOptions = <FindOneOptions<Medication>>{};
+
+        if (withGuidelines) {
+            findOptions.where = { id: id, guidelines: { id: Not(IsNull()) } };
+            findOptions.relations = [
+                'guidelines',
+                'guidelines.genePhenotype.phenotype',
+                'guidelines.genePhenotype.geneSymbol',
+            ];
+        } else {
+            findOptions.where = { id: id };
+        }
+
+        return this.medicationRepository.findOne(findOptions);
     }
 
     getOne(options: FindOneOptions<Medication>): Promise<Medication> {
         return this.medicationRepository.findOneOrFail(options);
-    }
-
-    getDetails(id: number): Promise<Medication> {
-        return this.getOne({
-            where: { id },
-            relations: [
-                'guidelines',
-                'guidelines.genePhenotype.phenotype',
-                'guidelines.genePhenotype.geneSymbol',
-            ],
-        }).catch(() => {
-            throw new NotFoundException('Medication could not be found!');
-        });
-    }
-
-    findMatchingMedications(query: string): Promise<Medication[]> {
-        return this.medicationRepository
-            .createQueryBuilder('medication')
-            .select([
-                'medication.id',
-                'medication.name',
-                'medication.description',
-                'medication.drugclass',
-                'medication.indication',
-            ])
-            .leftJoinAndSelect(
-                MedicationSearchView,
-                'searchView',
-                'searchView.id = medication.id',
-            )
-            .where('searchView.searchString ilike :searchString', {
-                searchString: `%${query}%`,
-            })
-            .orderBy('searchView.priority', 'ASC')
-            .getMany();
     }
 
     async fetchAllMedications(): Promise<void> {
@@ -224,5 +219,29 @@ export class MedicationsService {
                 resolve(drugs);
             });
         });
+    }
+
+    private async findIdsMatching(search: string): Promise<number[]> {
+        const queryRes = await this.medicationRepository
+            .createQueryBuilder('medication')
+            .select([
+                'medication.id',
+                'medication.name',
+                'medication.description',
+                'medication.drugclass',
+                'medication.indication',
+            ])
+            .leftJoinAndSelect(
+                MedicationSearchView,
+                'searchView',
+                'searchView.id = medication.id',
+            )
+            .where('searchView.searchString ilike :searchString', {
+                searchString: `%${search}%`,
+            })
+            .orderBy('searchView.priority', 'ASC')
+            .getMany();
+
+        return queryRes.map((e) => e.id);
     }
 }

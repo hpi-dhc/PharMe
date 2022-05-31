@@ -3,9 +3,9 @@ import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import {
     ApiFindMedicationsQueries,
+    ApiFindMedicationQueries,
     FindMedicationQueryDto,
 } from './dtos/find-medication-query-dto';
-import { MedicationPageDto } from './dtos/medication-page.dto';
 import { Medication } from './medication.entity';
 import { MedicationsService } from './medications.service';
 
@@ -14,41 +14,22 @@ import { MedicationsService } from './medications.service';
 export class MedicationsController {
     constructor(private medicationsService: MedicationsService) {}
 
-    @ApiOperation({ summary: 'Fetch all medications with optional search' })
+    @ApiOperation({ summary: 'Fetch all medications' })
     @ApiFindMedicationsQueries()
     @Get()
-    async findAll(
-        @Query() dto: FindMedicationQueryDto,
-    ): Promise<MedicationPageDto> {
-        const [medications, total] = await this.medicationsService.findAll(
+    async findAll(@Query() dto: FindMedicationQueryDto): Promise<Medication[]> {
+        return await this.medicationsService.findAll(
             dto.limit ?? 0,
             dto.offset ?? 0,
             dto.search ?? '',
             dto.sortby ?? 'name',
             dto.orderby ?? 'asc',
+            dto.withGuidelines ?? false,
         );
-        return { medications: medications, total: total };
     }
 
-    @ApiOperation({ summary: 'Get all medication IDs' })
-    @Get('ids')
-    getIds(): Promise<Medication[]> {
-        return this.medicationsService.getAll({ select: ['id'] });
-    }
-
-    @ApiOperation({
-        summary:
-            'Fetch all medications that have guidelines including corresponding guidelines',
-    })
-    @Get('report')
-    getMedicationsWithGuidelines(): Promise<Medication[]> {
-        return this.medicationsService.getWithGuidelines();
-    }
-
-    @ApiOperation({
-        summary:
-            'Get detailed information about a medication and all corresponding guidelines',
-    })
+    @ApiOperation({ summary: 'Fetch one medication' })
+    @ApiFindMedicationQueries()
     @ApiParam({
         name: 'id',
         description:
@@ -58,7 +39,19 @@ export class MedicationsController {
         required: true,
     })
     @Get(':id')
-    getDetails(@Param('id') id: number): Promise<Medication> {
-        return this.medicationsService.getDetails(id);
+    async findOne(
+        @Param() id: number,
+        @Query() dto: FindMedicationQueryDto,
+    ): Promise<Medication> {
+        return await this.medicationsService.findOne(
+            id,
+            dto.withGuidelines ?? false,
+        );
+    }
+
+    @ApiOperation({ summary: 'Get all medication IDs' })
+    @Get('ids')
+    findAllIds(): Promise<Medication[]> {
+        return this.medicationsService.getAllIds();
     }
 }
