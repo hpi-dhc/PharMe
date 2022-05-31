@@ -62,8 +62,8 @@ export class Guideline extends BaseEntity {
     @Column()
     cpicGuidelineName: string;
 
-    public get isComplete(): boolean {
-        return !!this.recommendation || !!this.implication;
+    public get isIncomplete(): boolean {
+        return !this.recommendation && !this.implication;
     }
 
     @OneToMany(() => GuidelineError, (error) => error.guideline, {

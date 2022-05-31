@@ -277,7 +277,7 @@ export class GuidelinesService {
         const flatGuidelines = Array.from(guidelines.values()).flat();
 
         const incompleteGuidelines = flatGuidelines.filter(
-            (guideline) => !guideline.isComplete,
+            (guideline) => guideline.isIncomplete,
         );
         for (const incompleteGuideline of incompleteGuidelines) {
             const error = new GuidelineError();
