@@ -78,6 +78,22 @@ class MedicationWithGuidelines {
   int get hashCode => hashValues(id, name);
 }
 
+extension AddUniqueMedications on List<MedicationWithGuidelines>? {
+  List<MedicationWithGuidelines> addUnique(
+      List<MedicationWithGuidelines> newMedications) {
+    if (this != null) {
+      for (final element in newMedications) {
+        if (!this!.contains(element)) {
+          this!.add(element);
+        }
+      }
+      return this!;
+    } else {
+      return newMedications;
+    }
+  }
+}
+
 List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
   Response resp,
 ) {

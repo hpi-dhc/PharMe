@@ -29,14 +29,15 @@ class MedicationsCubit extends Cubit<MedicationsState> {
       return;
     }
     final medication = medicationWithGuidelinesFromHTTPResponse(response);
-    _cacheMedication(medication);
+    await _cacheMedication(medication);
     emit(MedicationsState.loaded(medication));
   }
 
-  void _cacheMedication(MedicationWithGuidelines medication) {
+  Future<void> _cacheMedication(MedicationWithGuidelines medication) async {
     CachedMedications.instance.medications ??= [];
     if (CachedMedications.instance.medications!.contains(medication)) return;
     CachedMedications.instance.medications!.add(medication);
+    await CachedMedications.save();
   }
 
   void _findCachedMedication(int id) {

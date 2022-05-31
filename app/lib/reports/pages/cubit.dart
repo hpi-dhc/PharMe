@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 
+import '../../common/models/medication/cached_medications.dart';
 import '../../common/module.dart';
 import '../models/cached_reports.dart';
 import '../models/warning_level.dart';
@@ -21,7 +22,7 @@ class ReportsCubit extends Cubit<ReportsState> {
     if (!isOnline) {
       emit(
         ReportsState.loaded(
-          _filterMedications(CachedReports.instance.medications ?? []),
+          _filterMedications(CachedMedications.instance.medications ?? []),
         ),
       );
       return;
@@ -33,7 +34,11 @@ class ReportsCubit extends Cubit<ReportsState> {
       return;
     }
     final medications = medicationsWithGuidelinesFromHTTPResponse(response);
-    emit(ReportsState.loaded(_filterMedications(medications)));
+    final filteredMedications = _filterMedications(medications);
+    CachedMedications.instance.medications =
+        CachedMedications.instance.medications.addUnique(filteredMedications);
+    await CachedMedications.save();
+    emit(ReportsState.loaded(filteredMedications));
   }
 
   bool _containsOnlyOkGuidelines(List<Guideline> guidelines) {
