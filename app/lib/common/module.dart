@@ -1,6 +1,7 @@
 // Widely used across the app
 export 'package:auto_route/auto_route.dart';
 export 'package:black_hole_flutter/black_hole_flutter.dart';
+export 'package:dartx/dartx.dart';
 export 'package:flutter/material.dart' hide MetaData;
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:flutter_gen/gen_l10n/app_localizations.dart';

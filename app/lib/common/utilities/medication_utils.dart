@@ -1,3 +1,5 @@
+import 'package:dartx/dartx.dart';
+
 import '../models/module.dart';
 
 // removes the guidelines that are not passing to the user
@@ -8,7 +10,8 @@ MedicationWithGuidelines filterUserGuidelines(
     final genePhenotype = guideline.genePhenotype;
     final foundEntry =
         UserData.instance.lookups![guideline.genePhenotype.geneSymbol.name];
-    return foundEntry != null && foundEntry == genePhenotype.phenotype.name;
+    return foundEntry.isNotNullOrBlank &&
+        foundEntry == genePhenotype.phenotype.name;
   });
   return MedicationWithGuidelines(
     id: medication.id,

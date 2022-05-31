@@ -7,8 +7,7 @@ import '../../onboarding/module.dart';
 import '../../reports/module.dart';
 import '../../search/module.dart';
 import '../../settings/module.dart';
-import '../models/module.dart';
-import '../pages/main.dart';
+import '../pages/main/main.dart';
 
 part 'router.gr.dart';
 

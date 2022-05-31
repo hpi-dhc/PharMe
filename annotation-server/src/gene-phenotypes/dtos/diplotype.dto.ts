@@ -8,4 +8,8 @@ export class DiplotypeDto {
     @IsString()
     @IsNotEmpty()
     generesult: string;
+
+    @IsString()
+    @IsNotEmpty()
+    consultationtext: string;
 }

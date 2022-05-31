@@ -12,6 +12,7 @@ dependencies:
   black_hole_flutter: ^0.3.5
   bloc: ^8.0.3
   cupertino_icons: ^1.0.4
+  dartx: ^1.1.0
   debug_overlay: ^0.1.3
   dropdown_button2: ^1.2.5
   flutter:
