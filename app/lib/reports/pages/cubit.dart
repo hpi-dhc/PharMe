@@ -17,7 +17,7 @@ class ReportsCubit extends Cubit<ReportsState> {
       path: 'api/v1/medications/report',
     );
 
-    final isOnline = await hasConnectionTo(requestUri.authority.toString());
+    final isOnline = await hasConnectionTo(requestUri.authority);
     if (!isOnline) {
       emit(
         ReportsState.loaded(

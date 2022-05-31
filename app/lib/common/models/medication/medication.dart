@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
-import 'guideline.dart';
+import '../../module.dart';
 
 part 'medication.freezed.dart';
 part 'medication.g.dart';
@@ -69,6 +69,13 @@ class MedicationWithGuidelines {
 
   @HiveField(8)
   List<Guideline> guidelines;
+
+  @override
+  bool operator ==(other) =>
+      other is MedicationWithGuidelines && name == other.name;
+
+  @override
+  int get hashCode => hashValues(id, name);
 }
 
 List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
