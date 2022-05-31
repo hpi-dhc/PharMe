@@ -56,3 +56,8 @@ MedicationWithGuidelines medicationWithGuidelinesFromHTTPResponse(
 ) {
   return MedicationWithGuidelines.fromJson(jsonDecode(resp.body));
 }
+
+Iterable<int> idsFromHTTPResponse(Response resp) {
+  final idsList = jsonDecode(resp.body) as List<dynamic>;
+  return idsList.map((e) => e['id'] as int).toList();
+}
