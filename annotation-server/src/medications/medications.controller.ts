@@ -1,5 +1,6 @@
 import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { FindManyOptions } from 'typeorm';
 
 import { Medication } from './medication.entity';
 import { MedicationsService } from './medications.service';
@@ -18,6 +19,13 @@ export class MedicationsController {
             );
         }
         return this.medicationsService.getAll();
+    }
+
+    @ApiOperation({ summary: 'Get all medication IDs' })
+    @Get('ids')
+    getIds(): Promise<Medication[]> {
+        const options: FindManyOptions<Medication> = { select: ['id'] };
+        return this.medicationsService.getAll(options);
     }
 
     @ApiOperation({
