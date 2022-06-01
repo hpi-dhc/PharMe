@@ -1,4 +1,16 @@
 services:
+  app:
+    build:
+      dockerfile: ./annotation-interface/Dockerfile
+      context: ../
+    env_file: .env
+    ports:
+      - ${PRODUCTION_PORT}:3000
+    depends_on:
+      - annotation-interface-db
+    profiles:
+      - production
+
   annotation-interface-db:
     image: mongo:5.0
     volumes:
