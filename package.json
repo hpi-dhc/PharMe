@@ -5,6 +5,7 @@
   "workspaces": [
     "lab-server",
     "annotation-server",
+    "annotation-interface",
     "miscellaneous/jest-badges-generator",
     "miscellaneous/meeting-assistant"
   ],
