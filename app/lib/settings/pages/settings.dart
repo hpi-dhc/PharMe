@@ -65,7 +65,14 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text('Measure comprehension'),
         trailing: Icon(Icons.chevron_right),
-        onTap: () => measureComprehension(context, 1, questionContext),
+        onTap: () => measureComprehension(
+          context: context,
+          surveyId: 1,
+          introText: 'Was the last page understandable for you?',
+          surveyButtonText: 'Yes',
+          feedbackButtonText: 'No',
+          questionContext: questionContext,
+        ),
       ),
     ]);
   }
