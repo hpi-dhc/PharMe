@@ -18,9 +18,7 @@ export class MedicationByNameCache extends GuidelineCacheMap<Medication> {
     }
 
     protected retrieve(...[name]: string[]): Promise<Medication> {
-        return this.medicationsService.getOne({
-            where: { name: ILike(name) },
-        });
+        return this.medicationsService.getOne({ where: { name: ILike(name) } });
     }
 
     protected createError(...[name]: string[]): GuidelineError {

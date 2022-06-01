@@ -30,7 +30,6 @@ export class GuidelineError extends BaseEntity {
     context: string;
 
     @ManyToOne(() => Guideline, (guideline) => guideline.errors, {
-        eager: true,
         onDelete: 'CASCADE',
     })
     guideline: Guideline;
