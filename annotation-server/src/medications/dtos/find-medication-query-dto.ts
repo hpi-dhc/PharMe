@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { IsBoolean, IsIn } from 'class-validator';
+import { IsBooleanString, IsIn } from 'class-validator';
 
 import {
     ApiQueryLimit,
@@ -15,8 +15,8 @@ export class FindMedicationQueryDto extends FindSearchableQueryDto {
     @IsIn(['name', 'rxcui', 'drugclass'])
     sortby: string;
 
-    @IsBoolean()
-    withGuidelines: boolean;
+    @IsBooleanString()
+    withGuidelines: string;
 }
 
 export function ApiFindMedicationsQueries(): MethodDecorator {
@@ -26,15 +26,15 @@ export function ApiFindMedicationsQueries(): MethodDecorator {
         ApiQueryOrderby('medication'),
         ApiQuerySearch('medication'),
         ApiQuerySortby('medication'),
-        ApiQueryWithGuideline(),
+        ApiQueryWithGuidelines(),
     );
 }
 
 export function ApiFindMedicationQueries(): MethodDecorator {
-    return applyDecorators(ApiQueryWithGuideline());
+    return applyDecorators(ApiQueryWithGuidelines());
 }
 
-function ApiQueryWithGuideline(): MethodDecorator {
+function ApiQueryWithGuidelines(): MethodDecorator {
     return ApiQuery({
         name: 'withGuidelines',
         description: `Attribute by which returned medications are sorted. Defaults to "false"`,
