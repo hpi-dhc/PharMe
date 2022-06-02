@@ -37,7 +37,8 @@ export function ApiFindMedicationQueries(): MethodDecorator {
 function ApiQueryWithGuidelines(): MethodDecorator {
     return ApiQuery({
         name: 'withGuidelines',
-        description: `Attribute by which returned medications are sorted. Defaults to "false"`,
+        description:
+            'Determines whether medications will be returned with their guidelines. If set to true, this endpoint only returns medications that have corresponding guidelines. Defaults to "false"',
         type: 'boolean',
         required: false,
     });
