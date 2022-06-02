@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import '../../common/module.dart';
 
@@ -12,10 +12,11 @@ class ReportsCubit extends Cubit<ReportsState> {
 
   Future<void> loadMedications() async {
     final requestUri = annotationServerUrl.replace(
-      path: 'api/v1/medications/report',
+      path: 'api/v1/medications',
+      queryParameters: {'withGuidelines': 'true'},
     );
     emit(ReportsState.loading());
-    final response = await http.get(requestUri);
+    final response = await get(requestUri);
     if (response.statusCode != 200) {
       emit(ReportsState.error());
       return;

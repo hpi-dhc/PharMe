@@ -39,6 +39,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     for (final id in randomIds) {
       final requestMedicationUri = annotationServerUrl.replace(
         path: 'api/v1/medications/$id',
+        queryParameters: {'withGuidelines': 'true'},
       );
 
       final tempResponse = await get(requestMedicationUri);
