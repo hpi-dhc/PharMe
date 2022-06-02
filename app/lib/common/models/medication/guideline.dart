@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
+import '../../module.dart';
+
 part 'guideline.g.dart';
 
 @HiveType(typeId: 9)
@@ -45,6 +47,31 @@ class Guideline {
 
   @HiveField(8)
   GenePhenotype genePhenotype;
+
+  @override
+  bool operator ==(other) {
+    return other is Guideline &&
+        genePhenotype == other.genePhenotype &&
+        implication == other.implication &&
+        warningLevel == other.warningLevel &&
+        cpicRecommendation == other.cpicRecommendation &&
+        cpicImplication == other.cpicImplication &&
+        cpicClassification == other.cpicClassification &&
+        cpicComment == other.cpicComment;
+  }
+
+  @override
+  int get hashCode {
+    return hashValues(
+      implication,
+      recommendation,
+      warningLevel,
+      cpicImplication,
+      cpicClassification,
+      cpicComment,
+      genePhenotype,
+    );
+  }
 }
 
 @HiveType(typeId: 10)
@@ -65,6 +92,16 @@ class GenePhenotype {
 
   @HiveField(2)
   GeneSymbol geneSymbol;
+
+  @override
+  bool operator ==(other) {
+    return other is GenePhenotype &&
+        phenotype.name == other.phenotype.name &&
+        geneSymbol.name == other.geneSymbol.name;
+  }
+
+  @override
+  int get hashCode => hashValues(phenotype.name, geneSymbol.name);
 }
 
 @HiveType(typeId: 11)

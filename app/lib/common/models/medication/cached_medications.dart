@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import 'medication.dart';
+import '../module.dart';
 
 part 'cached_medications.g.dart';
 
@@ -30,6 +30,11 @@ class CachedMedications {
 Future<void> initCachedMedications() async {
   try {
     Hive.registerAdapter(CachedMedicationsAdapter());
+    Hive.registerAdapter(GeneSymbolAdapter());
+    Hive.registerAdapter(PhenotypeAdapter());
+    Hive.registerAdapter(GenePhenotypeAdapter());
+    Hive.registerAdapter(GuidelineAdapter());
+    Hive.registerAdapter(MedicationWithGuidelinesAdapter());
   } catch (e) {
     return;
   }

@@ -72,13 +72,16 @@ class MedicationWithGuidelines {
 
   @override
   bool operator ==(other) =>
-      other is MedicationWithGuidelines && name == other.name;
+      other is MedicationWithGuidelines &&
+      name == other.name &&
+      guidelines.contentEquals(other.guidelines);
 
   @override
-  int get hashCode => hashValues(id, name);
+  int get hashCode => hashValues(name, guidelines);
 }
 
 extension AddUniqueMedications on List<MedicationWithGuidelines>? {
+  /// Returns a copy of the array by pushing only elements that are new to the array
   List<MedicationWithGuidelines> addUnique(
       List<MedicationWithGuidelines> newMedications) {
     if (this != null) {
