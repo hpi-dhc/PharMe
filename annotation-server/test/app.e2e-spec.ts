@@ -25,40 +25,29 @@ describe('App (e2e)', () => {
         medicationService.clearAllMedicationData();
     });
 
-    describe('Initialize dependency data', () => {
-        it('should load mocked DrugBank XML of 3 entries', async () => {
+    describe('Initialization', () => {
+        it('should load all data', async () => {
             const createResponse = await request(app.getHttpServer()).post(
-                '/medications/',
+                '/init/',
             );
             expect(createResponse.status).toEqual(201);
-        });
-
-        it('should load gene phenotypes from CPIC API', async () => {
-            const createResponse = await request(app.getHttpServer()).post(
-                '/genephenotypes/',
-            );
-            expect(createResponse.status).toEqual(201);
-        }, 10000);
-    });
-
-    describe('Initialize dependent data', () => {
-        it('should load guidelines from mocked Google Sheet', async () => {
-            const createResponse = await request(app.getHttpServer()).post(
-                '/guidelines/',
-            );
-            expect(createResponse.status).toEqual(201);
-        }, 20000);
+        }, 60000);
     });
 
     describe('Retrieve data for all medications', () => {
-        it('should get all 3 medications', async () => {
-            const getResponse = await request(app.getHttpServer()).get(
-                '/medications',
-            );
+        it('should get all 3 medications sorted ASCIIbetically by name', async () => {
+            const getResponse = await request(app.getHttpServer())
+                .get('/medications')
+                .query({ sortby: 'name' });
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.length).toEqual(3);
+            expect(
+                getResponse.body[0].name < getResponse.body[1].name &&
+                    getResponse.body[1].name < getResponse.body[2].name,
+            ).toBe(true);
 
-            codeineId = getResponse.body[0].id;
+            // Clo..., Cod..., Not... --> Codeine is second
+            codeineId = getResponse.body[1].id;
         });
 
         it('should return 3 medication ids', async () => {
@@ -70,9 +59,9 @@ describe('App (e2e)', () => {
         });
 
         it('should get 2 medications with guidelines', async () => {
-            const getResponse = await request(app.getHttpServer()).get(
-                '/medications/report',
-            );
+            const getResponse = await request(app.getHttpServer())
+                .get('/medications')
+                .query({ withGuidelines: 'true' });
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.length).toEqual(2);
         });
@@ -83,6 +72,14 @@ describe('App (e2e)', () => {
                 .query({ search: 'cod' });
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.length).toEqual(2);
+        });
+
+        it('should return 1 medications matching a search query with guidelines', async () => {
+            const getResponse = await request(app.getHttpServer())
+                .get('/medications')
+                .query({ search: 'cod', withGuidelines: 'true' });
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toEqual(1);
         });
 
         it('should verify that data errors have been saved', async () => {
@@ -105,9 +102,9 @@ describe('App (e2e)', () => {
         });
 
         it('should verify guidelines for one medication', async () => {
-            const getResponse = await request(app.getHttpServer()).get(
-                '/medications/' + codeineId,
-            );
+            const getResponse = await request(app.getHttpServer())
+                .get('/medications/' + codeineId)
+                .query({ withGuidelines: 'true' });
             expect(getResponse.status).toEqual(200);
 
             const guidelines: Guideline[] = getResponse.body.guidelines;
