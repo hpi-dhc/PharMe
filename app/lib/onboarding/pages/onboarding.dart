@@ -2,41 +2,102 @@ import '../../../common/models/metadata.dart';
 import '../../../common/module.dart' hide MetaData;
 
 class OnboardingPage extends HookWidget {
-  OnboardingPage({Key? key}) : super(key: key);
+  final _pages = [
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_welcome.svg',
+      getHeader: (context) => context.l10n.onboarding_welcome_page_header,
+      getText: (context) => context.l10n.onboarding_welcome_page_text,
+      color: Color(0xFFFF7E41),
+    ),
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_medicine.svg',
+      getHeader: (context) => context.l10n.onboarding_medicine_page_header,
+      getText: (context) => context.l10n.onboarding_medicine_page_text,
+      color: Color(0xFFCC0700),
+    ),
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_security.svg',
+      getHeader: (context) => context.l10n.onboarding_security_page_header,
+      getText: (context) => context.l10n.onboarding_security_page_text,
+      color: Color(0xFF359600),
+    ),
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_security.svg',
+      getHeader: (context) => context.l10n.onboarding_security_page_header,
+      getText: (context) => context.l10n.onboarding_security_page_text,
+      color: Color(0xFF00B9FA),
+    ),
+    OnboardingSubPage(
+      imagePath: 'assets/images/onboarding_security.svg',
+      getHeader: (context) => context.l10n.onboarding_security_page_header,
+      getText: (context) => context.l10n.onboarding_security_page_text,
+      color: Color(0xFF0A64BC),
+    ),
+  ];
 
   final _isLoggedIn = MetaData.instance.isLoggedIn ?? false;
 
   @override
   Widget build(BuildContext context) {
+    final colors = _pages.map((page) => page.color);
+    final tweenSequenceItems = <TweenSequenceItem>[];
+    for (var tweenIndex = 0; tweenIndex < colors.length - 1; tweenIndex++) {
+      tweenSequenceItems.add(
+        TweenSequenceItem(
+          weight: 1,
+          tween: ColorTween(
+            begin: colors.elementAt(tweenIndex),
+            end: colors.elementAt(tweenIndex + 1),
+          ),
+        ),
+      );
+    }
+    final background = TweenSequence(tweenSequenceItems);
+
     final pageController = usePageController(initialPage: 0);
     final currentPage = useState(0);
 
     return Scaffold(
-      body: Stack(alignment: Alignment.topCenter, children: [
-        Positioned.fill(
-          child: PageView(
-            controller: pageController,
-            onPageChanged: (newPage) => currentPage.value = newPage,
-            children: _pages,
+      body: AnimatedBuilder(
+        animation: pageController,
+        builder: (context, child) {
+          final color = pageController.hasClients
+              ? pageController.page! / (_pages.length - 1)
+              : .0;
+
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              color: background.evaluate(AlwaysStoppedAnimation(color)),
+            ),
+            child: child,
+          );
+        },
+        child: Stack(alignment: Alignment.topCenter, children: [
+          Positioned.fill(
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (newPage) => currentPage.value = newPage,
+              children: _pages,
+            ),
           ),
-        ),
-        Positioned(
-          bottom: 80,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: _buildPageIndicator(context, currentPage.value),
+          Positioned(
+            bottom: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildPageIndicator(context, currentPage.value),
+            ),
           ),
-        ),
-        Positioned(
-          bottom: 16,
-          right: 16,
-          child: _buildNextButton(
-            context,
-            pageController,
-            currentPage.value == _pages.length - 1,
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: _buildNextButton(
+              context,
+              pageController,
+              currentPage.value == _pages.length - 1,
+            ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 
@@ -104,77 +165,48 @@ class OnboardingPage extends HookWidget {
   }
 }
 
-List<Widget> _pages = [
-  OnboardingSubPage(
-    imagePath: 'assets/images/onboarding_welcome.svg',
-    getHeader: (context) => context.l10n.onboarding_welcome_page_header,
-    getText: (context) => context.l10n.onboarding_welcome_page_text,
-  ),
-  OnboardingSubPage(
-    imagePath: 'assets/images/onboarding_medicine.svg',
-    getHeader: (context) => context.l10n.onboarding_medicine_page_header,
-    getText: (context) => context.l10n.onboarding_medicine_page_text,
-  ),
-  OnboardingSubPage(
-    imagePath: 'assets/images/onboarding_security.svg',
-    getHeader: (context) => context.l10n.onboarding_security_page_header,
-    getText: (context) => context.l10n.onboarding_security_page_text,
-  ),
-];
-
 class OnboardingSubPage extends StatelessWidget {
   const OnboardingSubPage({
-    Key? key,
     required this.imagePath,
     required this.getHeader,
     required this.getText,
-  }) : super(key: key);
+    required this.color,
+  });
 
   final String imagePath;
   final String Function(BuildContext) getHeader;
   final String Function(BuildContext) getText;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            PharmeTheme.primaryColor,
-            PharmeTheme.primaryContainer,
-          ],
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: SvgPicture.asset(
-                imagePath,
-                width: 256,
-                height: 256,
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: SvgPicture.asset(
+              imagePath,
+              width: 256,
+              height: 256,
             ),
-            SizedBox(height: 32),
-            Text(
-              getHeader(context),
-              style: PharmeTheme.textTheme.headlineSmall!.copyWith(
-                color: Colors.white,
-              ),
+          ),
+          SizedBox(height: 32),
+          Text(
+            getHeader(context),
+            style: PharmeTheme.textTheme.headlineSmall!.copyWith(
+              color: Colors.white,
             ),
-            SizedBox(height: 16),
-            Text(
-              getText(context),
-              style: PharmeTheme.textTheme.bodyMedium!.copyWith(
-                color: Colors.white,
-              ),
+          ),
+          SizedBox(height: 16),
+          Text(
+            getText(context),
+            style: PharmeTheme.textTheme.bodyMedium!.copyWith(
+              color: Colors.white,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
