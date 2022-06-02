@@ -69,7 +69,7 @@ export class GenePhenotypesService {
 
         for (const dto of diplotypeDtos) {
             // skip entire iteration if genephenotype already exists
-            const genePhenotypeId = `${dto.genesymbol}__${dto.genesymbol}`;
+            const genePhenotypeId = `${dto.genesymbol}__${dto.generesult}`;
             if (genePhenotypes.has(genePhenotypeId)) continue;
 
             const genePhenotype = new GenePhenotype();
@@ -80,7 +80,7 @@ export class GenePhenotypesService {
                 });
                 geneSymbols.set(dto.genesymbol, geneSymbol);
             }
-            genePhenotype.geneSymbol = geneSymbols.get(dto.generesult);
+            genePhenotype.geneSymbol = geneSymbols.get(dto.genesymbol);
 
             if (!phenotypes.has(dto.generesult)) {
                 const phenotype = await this.phenotypeRepository.save({
