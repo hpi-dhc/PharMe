@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
 import {
+    FindOptionsWhere,
     FindManyOptions,
     FindOneOptions,
     In,
@@ -38,7 +39,9 @@ export class MedicationsService {
         orderBy: string,
         withGuidelines: boolean,
     ): Promise<Medication[]> {
+        const whereClause: FindOptionsWhere<Medication> = {};
         const findOptions = <FindManyOptions<Medication>>{
+            where: whereClause,
             take: limit,
             skip: offset,
             order: {
@@ -46,43 +49,37 @@ export class MedicationsService {
             },
         };
 
+        if (search) {
+            const matchingIds = await this.findIdsMatching(search);
+            whereClause.id = In(matchingIds);
+        }
+
         if (withGuidelines) {
+            whereClause.guidelines = { id: Not(IsNull()) };
             findOptions.relations = [
                 'guidelines',
                 'guidelines.genePhenotype.phenotype',
                 'guidelines.genePhenotype.geneSymbol',
             ];
-            if (search) {
-                const matchingIds = await this.findIdsMatching(search);
-                findOptions.where = {
-                    id: In(matchingIds),
-                    guidelines: { id: Not(IsNull()) },
-                };
-            } else {
-                findOptions.where = {
-                    guidelines: { id: Not(IsNull()) },
-                };
-            }
         }
 
         return await this.medicationRepository.find(findOptions);
     }
 
     findOne(id: number, withGuidelines: boolean): Promise<Medication> {
-        const findOptions = <FindOneOptions<Medication>>{};
+        const whereClause: FindOptionsWhere<Medication> = { id: id };
+        const findOptions = <FindOneOptions<Medication>>{ where: whereClause };
 
         if (withGuidelines) {
-            findOptions.where = { id: id, guidelines: { id: Not(IsNull()) } };
+            whereClause.guidelines = { id: Not(IsNull()) };
             findOptions.relations = [
                 'guidelines',
                 'guidelines.genePhenotype.phenotype',
                 'guidelines.genePhenotype.geneSymbol',
             ];
-        } else {
-            findOptions.where = { id: id };
         }
 
-        return this.medicationRepository.findOne(findOptions);
+        return this.medicationRepository.findOneOrFail(findOptions);
     }
 
     getOne(options: FindOneOptions<Medication>): Promise<Medication> {
