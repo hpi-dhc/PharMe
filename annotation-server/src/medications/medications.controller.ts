@@ -20,6 +20,12 @@ export class MedicationsController {
         return this.medicationsService.getAll();
     }
 
+    @ApiOperation({ summary: 'Get all medication IDs' })
+    @Get('ids')
+    getIds(): Promise<Medication[]> {
+        return this.medicationsService.getAll({ select: ['id'] });
+    }
+
     @ApiOperation({
         summary:
             'Fetch all medications that have guidelines including corresponding guidelines',

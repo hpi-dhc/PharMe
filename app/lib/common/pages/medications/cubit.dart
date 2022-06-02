@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import '../../models/medication/cached_medications.dart';
 import '../../module.dart';
@@ -14,18 +14,14 @@ class MedicationsCubit extends Cubit<MedicationsState> {
   final int _id;
 
   Future<void> loadMedications() async {
-    final requestUri = annotationServerUrl.replace(
-      path: 'api/v1/medications/$_id',
-    );
     emit(MedicationsState.loading());
-    final isOnline = await hasConnectionTo(requestUri.authority);
+    final isOnline = await hasConnectionTo(annotationServerUrl.authority);
     if (!isOnline) {
       _findCachedMedication(_id);
       return;
     }
-
-    final response = await http.get(requestUri);
-    if (response.statusCode != 200) {
+    final response = await sendRequest();
+    if (response == null) {
       emit(MedicationsState.error());
       return;
     }
@@ -64,6 +60,34 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     } catch (e) {
       emit(MedicationsState.error());
     }
+  }
+
+  Future<Response?> sendRequest() async {
+    final requestIdsUri = annotationServerUrl.replace(
+      path: 'api/v1/medications/ids',
+    );
+    final idsResponse = await get(requestIdsUri);
+    if (idsResponse.statusCode != 200) {
+      emit(MedicationsState.error());
+      return null;
+    }
+    final randomIds = idsFromHTTPResponse(idsResponse).sample(2);
+    randomIds.add(_id);
+    randomIds.shuffle();
+    Response? response;
+    for (final id in randomIds) {
+      final requestMedicationUri = annotationServerUrl.replace(
+        path: 'api/v1/medications/$id',
+      );
+
+      final tempResponse = await get(requestMedicationUri);
+      if (tempResponse.statusCode != 200) {
+        emit(MedicationsState.error());
+        return null;
+      }
+      if (id == _id) response = tempResponse;
+    }
+    return response;
   }
 }
 

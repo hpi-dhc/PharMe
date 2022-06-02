@@ -61,6 +61,14 @@ describe('App (e2e)', () => {
             codeineId = getResponse.body[0].id;
         });
 
+        it('should return 3 medication ids', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/medications/ids',
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.length).toEqual(3);
+        });
+
         it('should get 2 medications with guidelines', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications/report',
