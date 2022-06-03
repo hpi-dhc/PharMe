@@ -9,7 +9,7 @@ def print_and_flush(message):
 
 def xml2json(path_xml, path_json):
     print_and_flush('Reading XML ...')
-    with open(path_xml, 'r') as fp:
+    with open(path_xml, 'r', encoding='utf-8') as fp:
         xml = xmltodict.parse(fp.read())
     print_and_flush('Writing JSON ...')
     with open(path_json, 'w') as fp:
