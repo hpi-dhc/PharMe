@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
@@ -66,12 +66,10 @@ export class MedicationsService {
         return await this.medicationRepository.find(findOptions);
     }
 
-    findOne(id: number, withGuidelines: boolean): Promise<Medication> {
-        const whereClause: FindOptionsWhere<Medication> = { id: id };
-        const findOptions = <FindOneOptions<Medication>>{ where: whereClause };
+    async findOne(id: number, withGuidelines: boolean): Promise<Medication> {
+        const findOptions: FindOneOptions<Medication> = { where: { id: id } };
 
         if (withGuidelines) {
-            whereClause.guidelines = { id: Not(IsNull()) };
             findOptions.relations = [
                 'guidelines',
                 'guidelines.genePhenotype.phenotype',
@@ -79,7 +77,10 @@ export class MedicationsService {
             ];
         }
 
-        return this.medicationRepository.findOneOrFail(findOptions);
+        const results = await this.medicationRepository.find(findOptions);
+        if (results.length === 0) throw new NotFoundException();
+
+        return results.at(0);
     }
 
     getOne(options: FindOneOptions<Medication>): Promise<Medication> {

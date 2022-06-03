@@ -40,7 +40,7 @@ export class MedicationsController {
     })
     @Get(':id')
     async findOne(
-        @Param('id') id: number,
+        @Param() id: number,
         @Query() dto: FindMedicationQueryDto,
     ): Promise<Medication> {
         return await this.medicationsService.findOne(
