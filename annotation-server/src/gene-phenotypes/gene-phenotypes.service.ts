@@ -89,6 +89,7 @@ export class GenePhenotypesService {
                 phenotypes.set(dto.generesult, phenotype);
             }
             genePhenotype.phenotype = phenotypes.get(dto.generesult);
+            genePhenotype.cpicConsultationText = dto.consultationtext;
 
             genePhenotypes.set(genePhenotypeId, genePhenotype);
         }

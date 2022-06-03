@@ -19,5 +19,5 @@ export abstract class FindQueryDto {
 
     @IsOptional()
     @IsIn(['asc', 'desc'])
-    orderby: string;
+    orderby: 'asc' | 'desc';
 }
