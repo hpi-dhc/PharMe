@@ -25,7 +25,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 
   Future<Response?> sendRequest() async {
     final requestIdsUri = annotationServerUrl.replace(
-      path: 'api/v1/medications/ids',
+      path: 'api/v1/medications',
+      queryParameters: {'onlyIds': 'true'},
     );
     final idsResponse = await get(requestIdsUri);
     if (idsResponse.statusCode != 200) {

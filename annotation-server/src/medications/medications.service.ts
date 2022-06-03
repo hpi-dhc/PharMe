@@ -38,7 +38,10 @@ export class MedicationsService {
         sortBy: string,
         orderBy: string,
         withGuidelines: boolean,
+        onlyIds: boolean,
     ): Promise<Medication[]> {
+        if (onlyIds) return this.getAllIds();
+
         const whereClause: FindOptionsWhere<Medication> = {};
         const findOptions = <FindManyOptions<Medication>>{
             where: whereClause,
@@ -64,6 +67,10 @@ export class MedicationsService {
         }
 
         return await this.medicationRepository.find(findOptions);
+    }
+
+    async getAllIds(): Promise<Medication[]> {
+        return await this.medicationRepository.find({ select: ['id'] });
     }
 
     async findOne(id: number, withGuidelines: boolean): Promise<Medication> {

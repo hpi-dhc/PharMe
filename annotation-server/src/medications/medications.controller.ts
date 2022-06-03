@@ -25,6 +25,7 @@ export class MedicationsController {
             dto.sortby ?? 'name',
             dto.orderby ?? 'asc',
             dto.withGuidelines === 'true' ? true : false,
+            dto.onlyIds === 'true' ? true : false,
         );
     }
 
@@ -40,18 +41,12 @@ export class MedicationsController {
     })
     @Get(':id')
     async findOne(
-        @Param() id: number,
+        @Param('id') id: number,
         @Query() dto: FindMedicationQueryDto,
     ): Promise<Medication> {
         return await this.medicationsService.findOne(
             id,
             dto.withGuidelines === 'true' ? true : false,
         );
-    }
-
-    @ApiOperation({ summary: 'Get all medication IDs' })
-    @Get('ids')
-    findAllIds(): Promise<Medication[]> {
-        return this.medicationsService.getAllIds();
     }
 }

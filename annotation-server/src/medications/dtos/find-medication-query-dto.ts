@@ -17,6 +17,9 @@ export class FindMedicationQueryDto extends FindSearchableQueryDto {
 
     @IsBooleanString()
     withGuidelines: string;
+
+    @IsBooleanString()
+    onlyIds: string;
 }
 
 export function ApiFindMedicationsQueries(): MethodDecorator {
@@ -27,6 +30,7 @@ export function ApiFindMedicationsQueries(): MethodDecorator {
         ApiQuerySearch('medication'),
         ApiQuerySortby('medication'),
         ApiQueryWithGuidelines(),
+        ApiQueryOnlyIds(),
     );
 }
 
@@ -39,6 +43,16 @@ function ApiQueryWithGuidelines(): MethodDecorator {
         name: 'withGuidelines',
         description:
             'Determines whether medications will be returned with their guidelines. If set to true, this endpoint only returns medications that have corresponding guidelines. Defaults to "false"',
+        type: 'boolean',
+        required: false,
+    });
+}
+
+function ApiQueryOnlyIds(): MethodDecorator {
+    return ApiQuery({
+        name: 'onlyIds',
+        description:
+            'Determines whether only IDS of medications will be returned. If set to true, all other query parameters are ignored.',
         type: 'boolean',
         required: false,
     });
