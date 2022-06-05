@@ -1,6 +1,7 @@
 import { Tab } from '@headlessui/react';
-import { ExclamationIcon } from '@heroicons/react/solid';
+import { ExclamationIcon, PlusCircleIcon } from '@heroicons/react/solid';
 import { InferGetServerSidePropsType } from 'next';
+import Link from 'next/link';
 
 import { displayCategories } from '../../common/constants';
 import FilterTabs, { DisplayFilterProps } from '../../components/FilterTabs';
@@ -16,10 +17,18 @@ const AllTextBricks = ({
     return (
         <>
             <PageHeading>Defined Bricks</PageHeading>
-            <FilterTabs withLanguagePicker={true} display={display}>
+            <FilterTabs display={display}>
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
                         <div className="py-2">
+                            <div className="flex justify-center p-2">
+                                <Link href="/bricks/new">
+                                    <a className="inline-flex p-3">
+                                        <PlusCircleIcon className="h-5 w-5 mr-2"></PlusCircleIcon>
+                                        Create new Brick
+                                    </a>
+                                </Link>
+                            </div>
                             {(categoryIndex > 0
                                 ? bricks.filter(
                                       (brick) => brick.usage === category,

@@ -1,5 +1,4 @@
-import { Menu, Tab } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
+import { Tab } from '@headlessui/react';
 import { Dispatch, SetStateAction } from 'react';
 
 import {
@@ -7,6 +6,7 @@ import {
     SupportedLanguage,
     displayCategories,
 } from '../common/constants';
+import SelectionPopover from './SelectionPopover';
 
 export type DisplayFilterProps = {
     display: {
@@ -16,63 +16,54 @@ export type DisplayFilterProps = {
         setLanguage: Dispatch<SetStateAction<SupportedLanguage>>;
     };
 };
-type Props = { withLanguagePicker: boolean } & DisplayFilterProps;
+type Props = React.PropsWithChildren<
+    DisplayFilterProps & {
+        withLanguagePicker?: boolean;
+        withAllOption?: boolean;
+    }
+>;
 
-const FilterTabs = ({
-    withLanguagePicker,
-    children,
+const FilterTabs: React.FC<Props> = ({
     display,
-}: React.PropsWithChildren<Props>) => {
-    const categories = displayCategories;
+    withLanguagePicker,
+    withAllOption,
+    children,
+}: Props) => {
+    const tabs = displayCategories.map((category, index) => {
+        if (!withAllOption && category === 'All') {
+            return <Tab key={index} />;
+        }
+        return (
+            <Tab
+                key={index}
+                className={({ selected }) =>
+                    `font-bold mr-4 ${selected && 'underline decoration-2'}`
+                }
+            >
+                {category}
+            </Tab>
+        );
+    });
+
     return (
         <Tab.Group
             selectedIndex={display.categoryIndex}
             onChange={display.setCategoryIndex}
         >
-            <Tab.List className="space-x-4">
-                {categories.map((tab, index) => (
-                    <Tab
-                        key={index}
-                        className={({ selected }) =>
-                            `float-left font-bold ${
-                                selected && 'underline decoration-2'
-                            }`
-                        }
-                    >
-                        {tab}
-                    </Tab>
-                ))}
+            <Tab.List className="flex justify-between">
+                <div>{tabs}</div>
                 {withLanguagePicker && (
-                    <Menu as="div" className="inline float-right">
-                        <Menu.Button className="inline-flex">
-                            {display.language}
-                            <ChevronDownIcon className="h-5 w-5 ml-2" />
-                        </Menu.Button>
-                        <Menu.Items className="absolute bg-white p-4 border border-black border-opacity-10">
-                            {supportedLanguages.map((language, index) => (
-                                <Menu.Item
-                                    key={index}
-                                    as="button"
-                                    className={`block ${
-                                        language == display.language &&
-                                        'underline'
-                                    }`}
-                                    onClick={() =>
-                                        display.setLanguage(language)
-                                    }
-                                >
-                                    {language}
-                                </Menu.Item>
-                            ))}
-                        </Menu.Items>
-                    </Menu>
+                    <SelectionPopover
+                        options={[...supportedLanguages]}
+                        selectedOption={display.language}
+                        onSelect={(language) => display.setLanguage(language)}
+                    />
                 )}
             </Tab.List>
-            {children && (
-                <Tab.Panels className="clear-both">{children}</Tab.Panels>
-            )}
+            {children && <Tab.Panels>{children}</Tab.Panels>}
         </Tab.Group>
     );
 };
+FilterTabs.defaultProps = { withLanguagePicker: true, withAllOption: true };
 
 export default FilterTabs;

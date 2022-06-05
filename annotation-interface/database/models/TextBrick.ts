@@ -19,6 +19,20 @@ export interface ITextBrick {
     translations: ITextBrickTranslation[];
 }
 
+export function translationsToArray(
+    translations: Map<SupportedLanguage, string>,
+): ITextBrickTranslation[] {
+    return Array.from(translations.entries()).map(([language, text]) => {
+        return { language, text };
+    });
+}
+
+export function translationIsValid(
+    translation: ITextBrickTranslation,
+): boolean {
+    return translation.text.length > 0;
+}
+
 // prevent client side from trying to use node module
 export default !mongoose.models
     ? undefined
@@ -42,11 +56,6 @@ export default !mongoose.models
                           text: {
                               type: String,
                               required: true,
-                              validate: {
-                                  validator: (text: string) => text.length > 0,
-                                  message:
-                                      'TextBrick texts should not be empty',
-                              },
                           },
                       },
                   ],
@@ -61,6 +70,13 @@ export default !mongoose.models
                           validator: (translations: ITextBrickTranslation[]) =>
                               translations.length ===
                               new Set(translations.map((t) => t.language)).size,
+                          message:
+                              'Each language should at most have one translation.',
+                      },
+                      {
+                          validator: (translations: ITextBrickTranslation[]) =>
+                              translations.filter((t) => !translationIsValid(t))
+                                  .length === 0,
                           message:
                               'Each  language should at most have one translation.',
                       },
