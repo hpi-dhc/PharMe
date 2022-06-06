@@ -15,6 +15,7 @@ class PharmeApp extends StatelessWidget {
       routeInformationParser: _appRouter.defaultRouteParser(),
       routerDelegate: _appRouter.delegate(
         initialDeepLink: _isLoggedIn ? 'main' : 'onboarding',
+        navigatorObservers: () => [AutoRouteObserver()],
       ),
       theme: PharmeTheme.light,
       localizationsDelegates: [

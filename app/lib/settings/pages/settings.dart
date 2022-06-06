@@ -53,7 +53,8 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(context.l10n.settings_page_terms_and_conditions),
         trailing: Icon(Icons.chevron_right),
-        onTap: () => context.router.push(TermsAndConditionsRoute()),
+        onTap: () => context.router
+            .push(TermsAndConditionsRoute(comprehensionContext: context)),
       ),
       Divider(),
       ListTile(
@@ -72,6 +73,7 @@ class SettingsPage extends StatelessWidget {
           surveyButtonText: 'Yes',
           feedbackButtonText: 'No',
           questionContext: questionContext,
+          supabaseConfig: supabaseConfig,
         ),
       ),
     ]);
