@@ -8,3 +8,6 @@ export const brickUsages = [
     'Recommendation',
 ] as const;
 export type BrickUsage = typeof brickUsages[number];
+
+export const displayCategories = ['All', ...brickUsages] as const;
+export type DisplayCategory = typeof displayCategories[number];
