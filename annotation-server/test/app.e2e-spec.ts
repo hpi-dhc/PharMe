@@ -31,7 +31,7 @@ describe('App (e2e)', () => {
                 '/init/',
             );
             expect(createResponse.status).toEqual(201);
-        }, 20000);
+        }, 30000);
     });
 
     describe('Retrieve data for all medications', () => {
