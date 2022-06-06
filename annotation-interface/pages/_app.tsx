@@ -8,7 +8,9 @@ function AnnotationInterface({ Component, pageProps }: AppProps) {
             <Head>
                 <title>PharMe: Annotation Interface</title>
             </Head>
-            <Component {...pageProps} />
+            <div className="max-w-screen-md mx-auto">
+                <Component {...pageProps} />
+            </div>
         </>
     );
 }
