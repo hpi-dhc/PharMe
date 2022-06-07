@@ -21,6 +21,7 @@ dependencies:
   flutter_hooks: ^0.18.2+1
   flutter_localizations:
     sdk: flutter
+  flutter_secure_storage: ^5.0.2
   flutter_sliding_up_panel: ^2.0.1
   flutter_svg: ^1.0.3
   freezed_annotation: ^1.1.0
