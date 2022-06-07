@@ -61,7 +61,7 @@ class SearchCubit extends Cubit<SearchState> {
       (med) =>
           med.name.ilike(value) ||
           _medDescriptionMatches(value, med) ||
-          _medSynonymsMatches(value, med) ||
+          _medSynonymsMatch(value, med) ||
           _medDrugclassMatches(value, med),
     )
         .map(
@@ -86,7 +86,7 @@ class SearchCubit extends Cubit<SearchState> {
     return false;
   }
 
-  bool _medSynonymsMatches(String value, MedicationWithGuidelines med) {
+  bool _medSynonymsMatch(String value, MedicationWithGuidelines med) {
     if (med.synonyms != null) {
       return med.synonyms!.any((element) => element.ilike(value));
     }

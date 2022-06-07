@@ -21,11 +21,6 @@ class Medication with _$Medication {
   factory Medication.fromJson(dynamic json) => _$MedicationFromJson(json);
 }
 
-List<Medication> medicationsFromHTTPResponse(Response resp) {
-  final json = jsonDecode(resp.body) as List<dynamic>;
-  return json.map<Medication>(Medication.fromJson).toList();
-}
-
 @HiveType(typeId: 8)
 @JsonSerializable()
 class MedicationWithGuidelines {
@@ -97,6 +92,11 @@ extension AddUniqueMedications on List<MedicationWithGuidelines>? {
   }
 }
 
+List<Medication> medicationsFromHTTPResponse(Response resp) {
+  final json = jsonDecode(resp.body) as List<dynamic>;
+  return json.map<Medication>(Medication.fromJson).toList();
+}
+
 List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
   Response resp,
 ) {
@@ -112,7 +112,7 @@ MedicationWithGuidelines medicationWithGuidelinesFromHTTPResponse(
   return MedicationWithGuidelines.fromJson(jsonDecode(resp.body));
 }
 
-Iterable<int> idsFromHTTPResponse(Response resp) {
+List<int> idsFromHTTPResponse(Response resp) {
   final idsList = jsonDecode(resp.body) as List<dynamic>;
   return idsList.map((e) => e['id'] as int).toList();
 }

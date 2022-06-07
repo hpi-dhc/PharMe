@@ -48,16 +48,19 @@ class Guideline {
   @HiveField(8)
   GenePhenotype genePhenotype;
 
+  /// some properties are intentionally omitted, because a difference in them
+  /// does not imply that this a completely new guideline
   @override
   bool operator ==(other) {
     return other is Guideline &&
-        genePhenotype == other.genePhenotype &&
         implication == other.implication &&
+        recommendation == other.recommendation &&
         warningLevel == other.warningLevel &&
         cpicRecommendation == other.cpicRecommendation &&
         cpicImplication == other.cpicImplication &&
         cpicClassification == other.cpicClassification &&
-        cpicComment == other.cpicComment;
+        cpicComment == other.cpicComment &&
+        genePhenotype == other.genePhenotype;
   }
 
   @override
@@ -66,6 +69,7 @@ class Guideline {
       implication,
       recommendation,
       warningLevel,
+      cpicRecommendation,
       cpicImplication,
       cpicClassification,
       cpicComment,
