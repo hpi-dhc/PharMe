@@ -8,15 +8,27 @@ import {
 } from '../../common/constants';
 
 export interface ITextBrickTranslation {
-    _id?: Types.ObjectId;
+    _id?: Types.ObjectId | string;
     language: SupportedLanguage;
     text: string;
 }
 
 export interface ITextBrick {
-    _id?: Types.ObjectId;
+    _id?: Types.ObjectId | string;
     usage: BrickUsage;
     translations: ITextBrickTranslation[];
+}
+
+export function translationsToMap(
+    translations: ITextBrickTranslation[],
+): Map<SupportedLanguage, string> {
+    const map = new Map<SupportedLanguage, string>();
+    if (translations) {
+        translations.forEach((translation) =>
+            map.set(translation.language, translation.text),
+        );
+    }
+    return map;
 }
 
 export function translationsToArray(

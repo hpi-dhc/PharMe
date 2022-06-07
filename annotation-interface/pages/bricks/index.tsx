@@ -39,19 +39,24 @@ const AllTextBricks = ({
                                     key={index}
                                     className="border-t border-black border-opacity-10 py-3 pl-3"
                                 >
-                                    <span className="mr-2">
-                                        {brick.translations.find(
-                                            (translation) =>
-                                                translation.language ===
-                                                display.language,
-                                        )?.text ?? (
-                                            <span className="inline-flex align-top">
-                                                <ExclamationIcon className="h-5 w-5 mr-2 pt-1" />
-                                                This Brick is not translated to{' '}
-                                                {display.language}.
-                                            </span>
-                                        )}
-                                    </span>
+                                    <Link
+                                        key={index}
+                                        href={`/bricks/${brick._id}`}
+                                    >
+                                        <a className="self-start mr-2">
+                                            {brick.translations.find(
+                                                (translation) =>
+                                                    translation.language ===
+                                                    display.language,
+                                            )?.text ?? (
+                                                <span className="inline-flex align-top">
+                                                    <ExclamationIcon className="h-5 w-5 mr-2 pt-1" />
+                                                    This Brick is not translated
+                                                    to {display.language}.
+                                                </span>
+                                            )}
+                                        </a>
+                                    </Link>
                                     <button
                                         className="border border-black border-opacity-20 text-xs px-2 rounded-full whitespace-nowrap font-semibold align-text-top mr-2"
                                         onClick={() =>

@@ -9,20 +9,29 @@ import {
     supportedLanguages,
 } from '../common/constants';
 import {
+    ITextBrick,
+    ITextBrickTranslation,
     translationIsValid,
     translationsToArray,
-    ITextBrickTranslation,
+    translationsToMap,
 } from '../database/models/TextBrick';
 import SelectionPopover from './SelectionPopover';
-const BrickForm = ({ usage }: { usage: BrickUsage | null }) => {
+const BrickForm = ({
+    usage,
+    brick,
+}: {
+    usage: BrickUsage | null;
+    brick?: ITextBrick | null;
+}) => {
     const router = useRouter();
+    const id = brick?._id;
 
     // MARK: Errors
     const [message, setMessage] = useState('');
 
     // MARK: Translations
     const [translations, setTranslations] = useState(
-        new Map<SupportedLanguage, string>(),
+        translationsToMap(brick?.translations ?? []),
     );
     const validTranslations = useRef<ITextBrickTranslation[]>([]);
     const [isValid, setIsValid] = useState(true);
@@ -60,8 +69,8 @@ const BrickForm = ({ usage }: { usage: BrickUsage | null }) => {
     };
     const save = async () => {
         try {
-            const res = await fetch('/api/bricks', {
-                method: 'POST',
+            const res = await fetch(`/api/bricks${id ? '/' + id : ''}`, {
+                method: id ? 'PUT' : 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
@@ -74,7 +83,17 @@ const BrickForm = ({ usage }: { usage: BrickUsage | null }) => {
             if (!res.ok) throw new Error(res.status.toString());
             done();
         } catch (error) {
-            setMessage('Failed to add new Brick.');
+            setMessage(`Failed to ${id ? 'update' : 'add new'} Brick.`);
+        }
+    };
+    const deleteBrick = async () => {
+        try {
+            await fetch(`/api/bricks/${id}`, {
+                method: 'DELETE',
+            });
+            done();
+        } catch (error) {
+            setMessage('Failed to delete Brick.');
         }
     };
 
@@ -128,16 +147,27 @@ const BrickForm = ({ usage }: { usage: BrickUsage | null }) => {
                     <XIcon className="h-5 w-5 mr-2"></XIcon>
                     Cancel
                 </button>
-                <button
-                    className={`inline-flex ${
-                        isValid || 'opacity-50 line-through'
-                    }`}
-                    onClick={() => save()}
-                    disabled={!isValid}
-                >
-                    Save Brick
-                    <UploadIcon className="h-5 w-5 ml-2"></UploadIcon>
-                </button>
+                <div className="space-x-4">
+                    {id && (
+                        <button
+                            className="inline-flex"
+                            onClick={() => deleteBrick()}
+                        >
+                            Delete Brick
+                            <TrashIcon className="h-5 w-5 ml-2"></TrashIcon>
+                        </button>
+                    )}
+                    <button
+                        className={`inline-flex ${
+                            isValid || 'opacity-50 line-through'
+                        }`}
+                        onClick={() => save()}
+                        disabled={!isValid}
+                    >
+                        Save Brick
+                        <UploadIcon className="h-5 w-5 ml-2"></UploadIcon>
+                    </button>
+                </div>
             </div>
         </div>
     );
