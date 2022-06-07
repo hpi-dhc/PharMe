@@ -10,7 +10,7 @@ export class AppController {
     @ApiResponse({
         status: 200,
         description: 'The service is running.',
-        content: { 'application/json': { example: 'ok' } },
+        content: { 'text/plain': { example: 'ok' } },
     })
     @Unprotected()
     getHealth(): string {
