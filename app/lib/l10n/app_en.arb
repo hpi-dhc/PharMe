@@ -25,7 +25,7 @@
   "general_continue": "Continue",
   "general_retry": "Retry",
   
-  "medications_page_disclaimer": "This assessment is only based on your genomic data. It does not consider other factors such as weight, age and pre-existing condition",
+  "medications_page_disclaimer": "This assessment is only based on your genomic data. It does not consider other factors such as weight, age and pre-existing conditions.",
   "medications_page_gene_name": "Gene: {geneName}",
   "@medications_page_gene_name": {
     "description": "Name of the Gene.",
@@ -40,6 +40,7 @@
   "medications_page_header_guideline": "Clinical Guideline",
   "medications_page_header_recommendation": "Recommendation",
   "medications_page_info_big_i": "i",
+  "medications_page_no_guidelines_for_phenotype": "No guidelines found matching your genetic profile.",
   "medications_page_sources_cpic_name": "CPIC",
   "medications_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
   "medications_page_sources_pharmGkb_name": "PharmGKB",
