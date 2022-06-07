@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 
+import '../../utilities/hive_utils.dart';
 import '../cpic_lookup_response.dart';
 import 'diplotype.dart';
 
@@ -44,8 +45,13 @@ Future<void> initUserData() async {
   } catch (e) {
     return;
   }
+
+  final encryptionKey = await retrieveExistingOrGenerateKey();
   // if user's metadata is not null, assign it's contents to the singleton
-  await Hive.openBox<UserData>(_boxName);
+  await Hive.openBox<UserData>(
+    _boxName,
+    encryptionCipher: HiveAesCipher(encryptionKey),
+  );
   final userData = Hive.box<UserData>(_boxName);
   userData.get('data') ?? UserData();
 }
