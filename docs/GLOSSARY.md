@@ -82,7 +82,7 @@ understanding of this project's code.
   two variant from the other.</dd>
 </dl>
 
-## Pharmacogenomic terms
+## Terms used in our projects
 
 <dl>
   <dt>Implication</dt>
@@ -98,4 +98,17 @@ understanding of this project's code.
   <dt>Guideline</dt>
   <dd>Consists of the implication and recommendation for a given
   medication-phenotype pair.</dd>
+
+  <dt>Annotation</dt>
+  <dd>Describes data that is manually curated for our project, i.e. implication
+  and recommendation for a medication-phenotype pair and indication and a
+  patient-friendly drug-class for a medication.</dd>
+
+  <dt>(Text) Brick</dt>
+  <dd>*Text Bricks* are predefined components that are used to create texts for
+  annotations. The creation of annotation texts is strictly limited to
+  combinations of Bricks to ensure consistency and enable easy multi-language
+  support without the need of the maintainer having to know more than one
+  supported language. Bricks can also include placeholders such as a given
+  medication's name</dd>
 </dl>
