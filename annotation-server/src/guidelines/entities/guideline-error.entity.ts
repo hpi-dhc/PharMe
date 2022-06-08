@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Guideline } from './guideline.entity';
 
 export enum GuidelineErrorType {
@@ -18,10 +19,7 @@ export enum GuidelineErrorBlame {
 }
 
 @Entity()
-export class GuidelineError {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class GuidelineError extends BaseEntity {
     @Column({ type: 'enum', enum: GuidelineErrorType })
     type: GuidelineErrorType;
 

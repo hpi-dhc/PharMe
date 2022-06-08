@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import { fetchSpreadsheetCells } from '../common/google-sheets';
+import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
 import { GenePhenotypesService } from '../gene-phenotypes/gene-phenotypes.service';
 import { Medication } from '../medications/medication.entity';
@@ -61,6 +61,22 @@ export class GuidelinesService {
         this.genePhenotypesCache = new GenePhenotypesCache(
             this.genePhenotypesService,
         );
+    }
+
+    async findAllErrors(
+        limit: number,
+        offset: number,
+        sortBy: string,
+        orderBy: string,
+    ): Promise<GuidelineError[]> {
+        return this.guidelineErrorRepository.find({
+            take: limit,
+            skip: offset,
+            order: {
+                [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
+            },
+            relations: ['guideline'],
+        });
     }
 
     async fetchGuidelines(): Promise<void> {
@@ -237,14 +253,12 @@ export class GuidelinesService {
                     const implication = implications[row][col].value?.trim();
                     const recommendation =
                         recommendations[row][col].value?.trim();
-                    const warningLevel = this.getWarningLevelFromColor(
+                    const warningLevel = this.warningLevelFromColor(
                         recommendations[row][col].backgroundColor,
                     );
                     if (
-                        !this.guidelineTextsAreValid(
-                            implication,
-                            recommendation,
-                        )
+                        this.isInvalidText(implication) ||
+                        this.isInvalidText(recommendation)
                     ) {
                         continue;
                     }
@@ -277,7 +291,7 @@ export class GuidelinesService {
         const flatGuidelines = Array.from(guidelines.values()).flat();
 
         const incompleteGuidelines = flatGuidelines.filter(
-            (guideline) => !guideline.isComplete,
+            (guideline) => guideline.isIncomplete,
         );
         for (const incompleteGuideline of incompleteGuidelines) {
             const error = new GuidelineError();
@@ -293,29 +307,9 @@ export class GuidelinesService {
         this.logger.log('Successfully saved all valid guidelines.');
     }
 
-    private getWarningLevelFromColor(
-        color?: sheets_v4.Schema$Color,
-    ): WarningLevel | null {
-        if (!color) return null;
-        const [red, green, blue] = [color.red, color.green, color.blue];
-        if (!red && green === 1 && !blue) return WarningLevel.GREEN;
-        if (red === 1 && green === 1 && !blue) return WarningLevel.YELLOW;
-        if (red === 1 && !green && !blue) return WarningLevel.RED;
-        if (red === green && red === blue && blue === green) return null; // any shade of gray or transparent/unset background (undefined)
-        this.logger.warn('Sheet cell has unknown color');
-        return null;
-    }
-
-    private guidelineTextsAreValid(
-        implication: string,
-        recommendation: string,
-    ): boolean {
-        return (
-            implication &&
-            implication.replace(' ', '').toLowerCase() !== 'n/a' &&
-            recommendation &&
-            recommendation.replace(' ', '').toLowerCase() !== 'n/a'
-        );
+    private isInvalidText(text: string): boolean {
+        text = text.replace(' ', '');
+        return !(text && text.toLowerCase() !== 'n/a');
     }
 
     private getGuidelinesForGenePhenotype(
@@ -354,15 +348,16 @@ export class GuidelinesService {
         );
     }
 
-    async getAllErrors(): Promise<GuidelineError[]> {
-        return this.guidelineErrorRepository.find({
-            select: {
-                type: true,
-                context: true,
-                blame: true,
-                guideline: { id: true },
-            },
-            relations: ['guideline'],
-        });
+    private warningLevelFromColor(
+        color?: sheets_v4.Schema$Color,
+    ): WarningLevel | null {
+        if (!color) return null;
+        const [red, green, blue] = [color.red, color.green, color.blue];
+        if (!red && green === 1 && !blue) return WarningLevel.GREEN;
+        if (red === 1 && green === 1 && !blue) return WarningLevel.YELLOW;
+        if (red === 1 && !green && !blue) return WarningLevel.RED;
+        if (red === green && red === blue && blue === green) return null; // any shade of gray or transparent/unset background (undefined)
+        this.logger.warn('Sheet cell has unknown color');
+        return null;
     }
 }

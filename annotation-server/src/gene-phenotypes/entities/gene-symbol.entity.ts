@@ -1,12 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
+import { BaseEntity } from '../../common/entities/base.entity';
 import { GenePhenotype } from './gene-phenotype.entity';
 
 @Entity()
-export class GeneSymbol {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class GeneSymbol extends BaseEntity {
     @Column()
     name: string;
 

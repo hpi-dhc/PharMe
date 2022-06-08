@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 
 import { GenePhenotypesService } from './gene-phenotypes/gene-phenotypes.service';
 import { GuidelinesService } from './guidelines/guidelines.service';
@@ -8,7 +8,6 @@ import { MedicationsService } from './medications/medications.service';
 @Injectable()
 export class AppService {
     constructor(
-        private schedulerRegistry: SchedulerRegistry,
         private medicationService: MedicationsService,
         private guidelineService: GuidelinesService,
         private genephenotypeService: GenePhenotypesService,

@@ -1,17 +1,35 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    OneToMany,
-    ViewEntity,
-    ViewColumn,
-} from 'typeorm';
+import { Entity, Column, OneToMany, ViewEntity, ViewColumn } from 'typeorm';
 
+import { BaseEntity } from '../common/entities/base.entity';
 import { Guideline } from '../guidelines/entities/guideline.entity';
 import { DrugDto } from './dtos/drugbank.dto';
 
 @Entity()
-export class Medication {
+export class Medication extends BaseEntity {
+    @Column()
+    name: string;
+
+    @Column({ nullable: true })
+    description: string;
+
+    @Column({ nullable: true })
+    pharmgkbId: string;
+
+    @Column({ nullable: true })
+    rxcui: string;
+
+    @Column('text', { array: true })
+    synonyms: string[];
+
+    @Column({ nullable: true })
+    drugclass: string;
+
+    @Column({ nullable: true })
+    indication: string;
+
+    @OneToMany(() => Guideline, (guideline) => guideline.medication)
+    guidelines: Guideline[];
+
     static fromDrug(drug: DrugDto): Medication {
         const medication = new Medication();
         medication.name = drug.name;
@@ -42,33 +60,6 @@ export class Medication {
 
         return medication;
     }
-
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
-    name: string;
-
-    @Column({ nullable: true })
-    description: string;
-
-    @Column({ nullable: true })
-    pharmgkbId: string;
-
-    @Column({ nullable: true })
-    rxcui: string;
-
-    @Column('text', { array: true })
-    synonyms: string[];
-
-    @Column({ nullable: true })
-    drugclass: string;
-
-    @Column({ nullable: true })
-    indication: string;
-
-    @OneToMany(() => Guideline, (guideline) => guideline.medication)
-    guidelines: Guideline[];
 }
 
 @ViewEntity({

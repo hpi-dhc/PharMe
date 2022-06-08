@@ -12,9 +12,9 @@ import { GuidelinesService } from './guidelines.service';
 @Module({
     imports: [
         HttpModule,
-        TypeOrmModule.forFeature([Guideline, GuidelineError]),
-        MedicationsModule,
         GenePhenotypesModule,
+        MedicationsModule,
+        TypeOrmModule.forFeature([Guideline, GuidelineError]),
     ],
     controllers: [GuidelinesController],
     providers: [GuidelinesService],

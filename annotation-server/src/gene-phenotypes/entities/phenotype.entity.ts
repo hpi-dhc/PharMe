@@ -1,10 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+
+import { BaseEntity } from '../../common/entities/base.entity';
 
 @Entity()
-export class Phenotype {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class Phenotype extends BaseEntity {
     @Column()
     name: string;
 }

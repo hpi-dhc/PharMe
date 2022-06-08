@@ -64,7 +64,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 
   Future<Response?> sendRequest() async {
     final requestIdsUri = annotationServerUrl.replace(
-      path: 'api/v1/medications/ids',
+      path: 'api/v1/medications',
+      queryParameters: {'onlyIds': 'true'},
     );
     final idsResponse = await get(requestIdsUri);
     if (idsResponse.statusCode != 200) {
@@ -78,6 +79,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     for (final id in randomIds) {
       final requestMedicationUri = annotationServerUrl.replace(
         path: 'api/v1/medications/$id',
+        queryParameters: {'withGuidelines': 'true'},
       );
 
       final tempResponse = await get(requestMedicationUri);
