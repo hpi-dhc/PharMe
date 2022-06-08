@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../module.dart';
+import '../../utilities/pdf_utils.dart';
 import 'cubit.dart';
 
 class MedicationPage extends StatelessWidget {
@@ -41,7 +42,7 @@ class MedicationPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeader(medication.name, medication.drugclass),
+        _buildHeader(medication.name, medication.drugclass!, medication),
         SizedBox(height: 20),
         _buildDisclaimer(context),
         SizedBox(height: 20),
@@ -58,7 +59,11 @@ class MedicationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(String name, String? drugclass) {
+  Widget _buildHeader(
+    String name,
+    String drugclass,
+    MedicationWithGuidelines medication,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -66,10 +71,13 @@ class MedicationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(name, style: PharmeTheme.textTheme.displaySmall),
-            Icon(
-              Icons.ios_share,
-              size: 32,
-              color: PharmeTheme.primaryColor,
+            IconButton(
+              onPressed: () => sharePdf(medication),
+              icon: Icon(
+                Icons.ios_share,
+                size: 32,
+                color: PharmeTheme.primaryColor,
+              ),
             ),
           ],
         ),
