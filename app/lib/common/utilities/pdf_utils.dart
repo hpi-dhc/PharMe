@@ -39,29 +39,44 @@ pw.Widget buildPdfPage(
     children: [
       _PdfSegment(
         child: pw.Text(
+          'Personal PGX Report',
+          style: pw.TextStyle(
+            fontWeight: pw.FontWeight.bold,
+            fontSize: 30,
+          ),
+          textAlign: pw.TextAlign.center,
+        ),
+      ),
+      pw.SizedBox(height: 20, width: double.infinity),
+      _PdfSegment(
+        child: pw.Text(
           medication.name,
           style: pw.TextStyle(fontSize: 26),
         ),
       ),
-      if (medication.drugclass.isNotNullOrBlank)
+      if (medication.drugclass.isNotNullOrBlank) ...[
+        pw.SizedBox(height: 8, width: double.infinity),
         _PdfSegment(
           child: pw.Text(
             medication.drugclass!,
             style: pw.TextStyle(fontSize: 16),
           ),
         ),
+      ],
       if (medication.description.isNotNullOrBlank)
-        _PdfSegment(
-          child: pw.Text(
-            medication.description!,
-            style: pw.TextStyle(fontSize: 12),
-          ),
+        pw.SizedBox(height: 8, width: double.infinity),
+      _PdfSegment(
+        child: pw.Text(
+          medication.description!,
+          style: pw.TextStyle(fontSize: 12),
         ),
-      pw.SizedBox(height: 16),
+      ),
+      pw.SizedBox(height: 32, width: double.infinity),
       for (final guideline in relevantGuidelines) ...[
         ..._buildGuidelinePart(guideline),
-        pw.Divider(color: PdfColors.grey100),
+        pw.Divider(color: PdfColors.grey500),
         ..._buildGuidelinePart(guideline),
+        pw.Divider(color: PdfColors.grey500),
         ..._buildGuidelinePart(guideline)
       ]
     ],
@@ -71,37 +86,55 @@ pw.Widget buildPdfPage(
 List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
   return [
     _PdfSegment(
-      child: pw.Text('CPIC recommendation: ${guideline.cpicRecommendation}'),
-    ),
-    pw.SizedBox(height: 8),
-    _PdfSegment(
-      child: pw.Text('CPIC implication: ${guideline.cpicImplication}'),
-    ),
-    pw.SizedBox(height: 8),
-    _PdfSegment(
-      child: pw.Text('CPIC classification: ${guideline.cpicClassification}'),
-    ),
-    pw.SizedBox(height: 8),
-    _PdfSegment(
-      child: pw.Text('CPIC comment: ${guideline.cpicComment}'),
-    ),
-    pw.SizedBox(height: 8),
-    _PdfSegment(
-      child: pw.Text('CPIC implication: ${guideline.cpicImplication}'),
-    ),
-    pw.SizedBox(height: 8),
-    _PdfSegment(
-      child: pw.Text(
-          'Relevant gene and phenotype: ${guideline.genePhenotype.geneSymbol.name} - ${guideline.genePhenotype.phenotype.name}'),
-    ),
-    pw.SizedBox(height: 8),
-    _PdfSegment(
-      child: pw.Text(
-        'CPIC consultation text: ${guideline.genePhenotype.cpicConsultationText}',
+      child: _PdfText(
+        title: 'CPIC Recommendation: ',
+        text: guideline.cpicRecommendation,
       ),
     ),
-    pw.SizedBox(height: 8),
-    pw.UrlLink(child: pw.Text('Test'), destination: 'www.google.com')
+    pw.SizedBox(height: 8, width: double.infinity),
+    _PdfSegment(
+      child: _PdfText(
+        title: 'CPIC Implication: ',
+        text: guideline.cpicImplication,
+      ),
+    ),
+    pw.SizedBox(height: 8, width: double.infinity),
+    _PdfSegment(
+      child: _PdfText(
+        title: 'CPIC Classification: ',
+        text: guideline.cpicClassification,
+      ),
+    ),
+    pw.SizedBox(height: 8, width: double.infinity),
+    _PdfSegment(
+      child: _PdfText(
+        title: 'CPIC Comment: ',
+        text: guideline.cpicComment,
+      ),
+    ),
+    pw.SizedBox(height: 8, width: double.infinity),
+    _PdfSegment(
+      child: _PdfText(
+        title: 'Relevant Gene and Phenotype: ',
+        text:
+            '${guideline.genePhenotype.geneSymbol.name} - ${guideline.genePhenotype.phenotype.name}',
+      ),
+    ),
+    pw.SizedBox(height: 8, width: double.infinity),
+    _PdfSegment(
+      child: _PdfText(
+        title: 'CPIC Consultation Text: ',
+        text: guideline.genePhenotype.cpicConsultationText,
+      ),
+    ),
+    pw.SizedBox(height: 8, width: double.infinity),
+    _PdfSegment(
+      child: _PdfText(
+        title: 'CPIC Guideline Link: ',
+        text: guideline.cpicGuidelineUrl,
+      ),
+    ),
+    pw.SizedBox(height: 8, width: double.infinity),
   ];
 }
 
@@ -115,6 +148,28 @@ class _PdfSegment extends pw.StatelessWidget {
     return pw.SizedBox(
       width: double.infinity,
       child: child,
+    );
+  }
+}
+
+class _PdfText extends pw.StatelessWidget {
+  _PdfText({required this.title, this.text});
+
+  final String title;
+  final String? text;
+  @override
+  pw.Widget build(Context context) {
+    return pw.RichText(
+      text: pw.TextSpan(
+          text: title,
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          children: [
+            if (text.isNotNullOrBlank)
+              pw.TextSpan(
+                text: text,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.normal),
+              )
+          ]),
     );
   }
 }
