@@ -20,4 +20,8 @@ export abstract class FindQueryDto {
     @IsOptional()
     @IsIn(['asc', 'desc'])
     orderby: 'asc' | 'desc';
+
+    static isTrueString(string: string): boolean {
+        return string === 'true' ? true : false;
+    }
 }

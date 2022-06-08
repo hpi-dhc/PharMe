@@ -24,8 +24,8 @@ export class MedicationsController {
             dto.search ?? '',
             dto.sortby ?? 'name',
             dto.orderby ?? 'asc',
-            dto.withGuidelines === 'true' ? true : false,
-            dto.onlyIds === 'true' ? true : false,
+            FindMedicationQueryDto.isTrueString(dto.withGuidelines),
+            FindMedicationQueryDto.isTrueString(dto.onlyIds),
         );
     }
 
@@ -46,7 +46,7 @@ export class MedicationsController {
     ): Promise<Medication> {
         return await this.medicationsService.findOne(
             id,
-            dto.withGuidelines === 'true' ? true : false,
+            FindMedicationQueryDto.isTrueString(dto.withGuidelines),
         );
     }
 }

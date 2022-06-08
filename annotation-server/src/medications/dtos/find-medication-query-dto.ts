@@ -9,9 +9,9 @@ import {
     ApiQuerySearch,
     ApiQuerySortby,
 } from '../../common/api/queries';
-import { FindSearchableQueryDto } from '../../common/dtos/find-searchable-query.dto';
+import { SearchableFindQueryDto } from '../../common/dtos/searchable-find-query.dto';
 
-export class FindMedicationQueryDto extends FindSearchableQueryDto {
+export class FindMedicationQueryDto extends SearchableFindQueryDto {
     @IsIn(['name', 'rxcui', 'drugclass'])
     sortby: string;
 

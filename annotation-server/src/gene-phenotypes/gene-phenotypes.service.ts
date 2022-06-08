@@ -79,16 +79,16 @@ export class GenePhenotypesService {
                     name: dto.genesymbol,
                 });
                 geneSymbols.set(dto.genesymbol, geneSymbol);
-            }
-            genePhenotype.geneSymbol = geneSymbols.get(dto.genesymbol);
+                genePhenotype.geneSymbol = geneSymbol;
+            } else genePhenotype.geneSymbol = geneSymbols.get(dto.genesymbol);
 
             if (!phenotypes.has(dto.generesult)) {
                 const phenotype = await this.phenotypeRepository.save({
                     name: dto.generesult,
                 });
                 phenotypes.set(dto.generesult, phenotype);
-            }
-            genePhenotype.phenotype = phenotypes.get(dto.generesult);
+                genePhenotype.phenotype = phenotype;
+            } else genePhenotype.phenotype = phenotypes.get(dto.generesult);
             genePhenotype.cpicConsultationText = dto.consultationtext;
 
             genePhenotypes.set(genePhenotypeId, genePhenotype);
