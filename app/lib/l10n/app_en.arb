@@ -42,8 +42,6 @@
   "medications_page_info_big_i": "i",
   "medications_page_sources_cpic_name": "CPIC",
   "medications_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
-  "medications_page_sources_dpwg_name": "DPWG",
-  "medications_page_sources_dpwg_description": "Guidelines published by the Dutch Pharmacogenetics Working Group (DPWG)",
   "medications_page_sources_pharmGkb_name": "PharmGKB",
   "medications_page_sources_pharmGkb_description": "Curated pharmacogenetic studies for this drug-gene reaction",
   "medications_page_tooltip_classification": "The better the evidence level, the more scientifically accepted is the clinical annotation it refers to. Many studies and good studies mean a high evidence level.",

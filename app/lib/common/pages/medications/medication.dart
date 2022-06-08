@@ -234,13 +234,6 @@ class ClinicalAnnotationCard extends StatelessWidget {
         // TODO(SebastianWagner2): imeplement correct redirects to other sources than PharmGKB, https://github.com/hpi-dhc/PharMe/issues/325
         () => null,
       ),
-      SizedBox(height: 8),
-      _buildSourceCard(
-        context.l10n.medications_page_sources_cpic_name,
-        context.l10n.medications_page_sources_cpic_description,
-        // TODO(SebastianWagner2): imeplement correct redirects to other sources than PharmGKB, https://github.com/hpi-dhc/PharMe/issues/325
-        () => null,
-      ),
     ]);
   }
 
