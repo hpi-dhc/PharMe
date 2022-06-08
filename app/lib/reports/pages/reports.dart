@@ -1,4 +1,5 @@
 import '../../common/module.dart';
+import '../models/warning_level.dart';
 import 'cubit.dart';
 
 class ReportsPage extends StatelessWidget {
@@ -36,19 +37,10 @@ class ReportsPage extends StatelessWidget {
   }
 
   Widget _buildMedicationsList(List<MedicationWithGuidelines> medications) {
-    var filteredMedications = medications.map(filterUserGuidelines).toList();
-    filteredMedications = filteredMedications
-        .where(
-          (element) =>
-              element.guidelines.isNotEmpty &&
-              !_containsOnlyOkGuidelines(element.guidelines),
-        )
-        .toList();
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final med = filteredMedications[index];
+          final med = medications[index];
           return ReportCard(
             warningLevel: _getWarningLevel(med.guidelines),
             onTap: () => context.router.push(MedicationRoute(id: med.id)),
@@ -56,7 +48,7 @@ class ReportsPage extends StatelessWidget {
             medicationDescription: med.description,
           );
         },
-        childCount: filteredMedications.length,
+        childCount: medications.length,
       ),
     );
   }
@@ -68,13 +60,6 @@ class ReportsPage extends StatelessWidget {
       }
     }
     return WarningLevel.warning;
-  }
-
-  bool _containsOnlyOkGuidelines(List<Guideline> guidelines) {
-    final warningLevels = guidelines.map((e) => e.warningLevel);
-    return warningLevels.every((warningLevel) {
-      return warningLevel == WarningLevel.ok.name;
-    });
   }
 }
 
@@ -197,5 +182,3 @@ class ReportCard extends StatelessWidget {
     );
   }
 }
-
-enum WarningLevel { danger, warning, ok }
