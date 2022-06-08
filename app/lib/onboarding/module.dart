@@ -1,7 +1,7 @@
 import '../common/module.dart';
-import 'pages/page.dart';
+import 'pages/onboarding.dart';
 
-export 'pages/page.dart';
+export 'pages/onboarding.dart';
 
 const onboardingRoutes = AutoRoute(
   path: 'onboarding',

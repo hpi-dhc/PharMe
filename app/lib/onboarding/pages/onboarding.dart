@@ -86,31 +86,34 @@ class OnboardingPage extends HookWidget {
             child: child,
           );
         },
-        child: Stack(alignment: Alignment.topCenter, children: [
-          Positioned.fill(
-            child: PageView(
-              controller: pageController,
-              onPageChanged: (newPage) => currentPage.value = newPage,
-              children: _pages,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Positioned.fill(
+              child: PageView(
+                controller: pageController,
+                onPageChanged: (newPage) => currentPage.value = newPage,
+                children: _pages,
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _buildPageIndicator(context, currentPage.value),
+            Positioned(
+              bottom: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _buildPageIndicator(context, currentPage.value),
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 16,
-            right: 16,
-            child: _buildNextButton(
-              context,
-              pageController,
-              currentPage.value == _pages.length - 1,
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: _buildNextButton(
+                context,
+                pageController,
+                currentPage.value == _pages.length - 1,
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }
@@ -144,11 +147,9 @@ class OnboardingPage extends HookWidget {
     return TextButton(
       onPressed: () {
         if (isLastPage) {
-          if (_isLoggedIn) {
-            context.router.pop();
-          } else {
-            context.router.replace(LoginRouter());
-          }
+          _isLoggedIn
+              ? context.router.pop()
+              : context.router.replace(LoginRouter());
         } else {
           pageController.nextPage(
             duration: Duration(milliseconds: 500),
