@@ -60,7 +60,9 @@ Future<void> _cacheMedication(MedicationWithGuidelines medication) async {
   CachedMedications.instance.medications ??= [];
   final cachedMedList = CachedMedications.instance.medications!;
   // only allow caching up to maxCachedMedications results
-  if (cachedMedList.length >= maxCachedMedications) return;
+  if (cachedMedList.length >= maxCachedMedications) {
+    return _cacheWhenLimitReached(cachedMedList, medication);
+  }
 
   // equality for a medication is defined as same name and same value for the guidelines
   if (cachedMedList.contains(medication)) return;
@@ -76,8 +78,20 @@ Future<void> _cacheMedication(MedicationWithGuidelines medication) async {
     cachedMedList[index] = filteredMedication;
     return CachedMedications.save();
   }
-
   // if the medication is completely new add to the list
   cachedMedList.add(medication);
+  return CachedMedications.save();
+}
+
+Future<void> _cacheWhenLimitReached(
+  List<MedicationWithGuidelines> cachedMedList,
+  MedicationWithGuidelines med,
+) async {
+  // find first medication that's not used in the reports
+  final index = cachedMedList.indexWhere((e) => !e.isCritical);
+  if (index < 0) return;
+
+  cachedMedList.removeAt(index);
+  cachedMedList.add(med);
   return CachedMedications.save();
 }
