@@ -17,6 +17,7 @@ class Guideline {
     this.cpicImplication,
     this.cpicClassification,
     this.cpicComment,
+    required this.cpicGuidelineUrl,
     required this.genePhenotype,
   });
   factory Guideline.fromJson(dynamic json) => _$GuidelineFromJson(json);
@@ -46,6 +47,9 @@ class Guideline {
   String? cpicComment;
 
   @HiveField(8)
+  String cpicGuidelineUrl;
+
+  @HiveField(9)
   GenePhenotype genePhenotype;
 
   /// some properties are intentionally omitted, because a difference in them
@@ -60,6 +64,7 @@ class Guideline {
         cpicImplication == other.cpicImplication &&
         cpicClassification == other.cpicClassification &&
         cpicComment == other.cpicComment &&
+        cpicGuidelineUrl == other.cpicGuidelineUrl &&
         genePhenotype == other.genePhenotype;
   }
 
@@ -73,6 +78,7 @@ class Guideline {
       cpicImplication,
       cpicClassification,
       cpicComment,
+      cpicGuidelineUrl,
       genePhenotype,
     );
   }
