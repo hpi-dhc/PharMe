@@ -229,17 +229,9 @@ class ClinicalAnnotationCard extends StatelessWidget {
       ),
       SizedBox(height: 8),
       _buildSourceCard(
-        context.l10n.medications_page_sources_dpwg_name,
-        context.l10n.medications_page_sources_dpwg_description,
-        // TODO(SebastianWagner2): imeplement correct redirects to other sources than PharmGKB, https://github.com/hpi-dhc/PharMe/issues/325
-        () => null,
-      ),
-      SizedBox(height: 8),
-      _buildSourceCard(
         context.l10n.medications_page_sources_cpic_name,
         context.l10n.medications_page_sources_cpic_description,
-        // TODO(SebastianWagner2): imeplement correct redirects to other sources than PharmGKB, https://github.com/hpi-dhc/PharMe/issues/325
-        () => null,
+        () => _launchUrl(Uri.parse(medication.guidelines[0].cpicGuidelineUrl)),
       ),
     ]);
   }
