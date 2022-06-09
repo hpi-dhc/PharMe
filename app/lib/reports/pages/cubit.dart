@@ -57,7 +57,13 @@ class ReportsCubit extends Cubit<ReportsState> {
               element.guidelines.isNotEmpty &&
               !_containsOnlyOkGuidelines(element.guidelines),
         )
+        .map(_setCritical)
         .toList();
+  }
+
+  MedicationWithGuidelines _setCritical(MedicationWithGuidelines med) {
+    med.isCritical = true;
+    return med;
   }
 }
 
