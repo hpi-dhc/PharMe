@@ -75,13 +75,18 @@ class MedicationWithGuidelines {
   int get hashCode => hashValues(name, guidelines);
 }
 
-extension AddUniqueMedications on List<MedicationWithGuidelines>? {
-  /// Returns a copy of the array by pushing only elements that are new to the array
+extension CacheUniqueMedications on List<MedicationWithGuidelines>? {
+  /// Returns a copy of the array by pushing only elements that are new to the
+  /// array.
+  ///
+  /// New medications are cached so long as the total number of currently
+  /// cached items is less than the maximum defined in the app constants
   List<MedicationWithGuidelines> addUnique(
       List<MedicationWithGuidelines> newMedications) {
     if (this != null) {
       for (final element in newMedications) {
-        if (!this!.contains(element)) {
+        final numCachedMedications = this?.length ?? 0;
+        if (!this!.contains(element) && numCachedMedications < maxCachedMedications) {
           this!.add(element);
         }
       }
