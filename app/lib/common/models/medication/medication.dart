@@ -75,23 +75,6 @@ class MedicationWithGuidelines {
   int get hashCode => hashValues(name, guidelines);
 }
 
-extension AddUniqueMedications on List<MedicationWithGuidelines>? {
-  /// Returns a copy of the array by pushing only elements that are new to the array
-  List<MedicationWithGuidelines> addUnique(
-      List<MedicationWithGuidelines> newMedications) {
-    if (this != null) {
-      for (final element in newMedications) {
-        if (!this!.contains(element)) {
-          this!.add(element);
-        }
-      }
-      return this!;
-    } else {
-      return newMedications;
-    }
-  }
-}
-
 List<Medication> medicationsFromHTTPResponse(Response resp) {
   final json = jsonDecode(resp.body) as List<dynamic>;
   return json.map<Medication>(Medication.fromJson).toList();
