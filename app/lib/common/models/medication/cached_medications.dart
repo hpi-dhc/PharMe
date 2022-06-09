@@ -20,6 +20,12 @@ class CachedMedications {
   static Future<void> save() async =>
       Hive.box<CachedMedications>(_boxName).put('data', _instance);
 
+  /// Caches a list of medications along with their guidelines
+  ///
+  /// Internally calls addUnique on the current instance's medication-list
+  static void cache(List<MedicationWithGuidelines> meds) =>
+      _instance.medications.addUnique(meds);
+
   @HiveField(0)
   DateTime? lastFetch;
 

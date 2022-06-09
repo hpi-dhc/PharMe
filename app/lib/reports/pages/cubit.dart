@@ -35,8 +35,7 @@ class ReportsCubit extends Cubit<ReportsState> {
     }
     final medications = medicationsWithGuidelinesFromHTTPResponse(response);
     final filteredMedications = _filterMedications(medications);
-    CachedMedications.instance.medications =
-        CachedMedications.instance.medications.addUnique(filteredMedications);
+    CachedMedications.cache(filteredMedications);
     await CachedMedications.save();
     emit(ReportsState.loaded(filteredMedications));
   }
