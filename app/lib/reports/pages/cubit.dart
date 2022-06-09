@@ -35,7 +35,7 @@ class ReportsCubit extends Cubit<ReportsState> {
     }
     final medications = medicationsWithGuidelinesFromHTTPResponse(response);
     final filteredMedications = _filterMedications(medications);
-    CachedMedications.cache(filteredMedications);
+    await CachedMedications.cacheAll(filteredMedications);
     await CachedMedications.save();
     emit(ReportsState.loaded(filteredMedications));
   }

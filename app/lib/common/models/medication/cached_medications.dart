@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+import '../../constants.dart';
+import '../../utilities/medication_utils.dart';
 import '../module.dart';
 
 part 'cached_medications.g.dart';
@@ -22,9 +24,13 @@ class CachedMedications {
 
   /// Caches a list of medications along with their guidelines
   ///
-  /// Internally calls addUnique on the current instance's medication-list
-  static void cache(List<MedicationWithGuidelines> meds) =>
-      _instance.medications.addUnique(meds);
+  /// Internally calls cache on each medication seperately
+  static Future<void> cacheAll(List<MedicationWithGuidelines> meds) async =>
+      meds.forEach(cache);
+
+  /// Caches a medications along with its guidelines
+  static Future<void> cache(MedicationWithGuidelines med) async =>
+      _cacheMedication(med);
 
   @HiveField(0)
   DateTime? lastFetch;
@@ -48,4 +54,30 @@ Future<void> initCachedMedications() async {
   await Hive.openBox<CachedMedications>(_boxName);
   final cachedMedications = Hive.box<CachedMedications>(_boxName);
   cachedMedications.get('data') ?? CachedMedications();
+}
+
+Future<void> _cacheMedication(MedicationWithGuidelines medication) async {
+  CachedMedications.instance.medications ??= [];
+  final cachedMedList = CachedMedications.instance.medications!;
+  // only allow caching up to maxCachedMedications results
+  if (cachedMedList.length >= maxCachedMedications) return;
+
+  // equality for a medication is defined as same name and same value for the guidelines
+  if (cachedMedList.contains(medication)) return;
+
+  // if there is a medication with the same name already cached, then update its guidelines
+  final index =
+      cachedMedList.indexWhere((element) => element.name == medication.name);
+
+  // index is negative if no match is found
+  final medicationAlreadyExists = index >= 0;
+  if (medicationAlreadyExists) {
+    final filteredMedication = filterUserGuidelines(medication);
+    cachedMedList[index] = filteredMedication;
+    return CachedMedications.save();
+  }
+
+  // if the medication is completely new add to the list
+  cachedMedList.add(medication);
+  return CachedMedications.save();
 }

@@ -26,29 +26,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
       return;
     }
     final medication = medicationWithGuidelinesFromHTTPResponse(response);
-    await _cacheMedication(medication);
+    await CachedMedications.cache(medication);
     emit(MedicationsState.loaded(medication));
-  }
-
-  Future<void> _cacheMedication(MedicationWithGuidelines medication) async {
-    CachedMedications.instance.medications ??= [];
-
-    // equality for a medication is defined as same name and same value for the guidelines
-    if (CachedMedications.instance.medications!.contains(medication)) return;
-
-    // if there is a medication with the same name already cached, then update its guidelines
-    final index = CachedMedications.instance.medications!
-        .indexWhere((element) => element.name == medication.name);
-    if (index > -1) {
-      final filteredMedication = filterUserGuidelines(medication);
-      CachedMedications.instance.medications![index] = filteredMedication;
-      await CachedMedications.save();
-      return;
-    }
-
-    // if the medication is completely new to the list
-    CachedMedications.instance.medications!.add(medication);
-    await CachedMedications.save();
   }
 
   void _findCachedMedication(int id) {
