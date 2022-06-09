@@ -35,7 +35,11 @@ const EditBrick = ({
     });
     return (
         <>
-            <PageHeading>Edit Brick</PageHeading>
+            <PageHeading title="Edit Brick">
+                View your Brick or edit it by changing its usage category, its
+                different translations or by deleting it. Hit cancel below to
+                exit without making any changes.
+            </PageHeading>
             <FilterTabs
                 withLanguagePicker={false}
                 withAllOption={false}

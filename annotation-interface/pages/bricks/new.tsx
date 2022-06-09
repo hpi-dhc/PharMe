@@ -16,7 +16,10 @@ const NewBrick = ({ display }: DisplayFilterProps) => {
         : null;
     return (
         <>
-            <PageHeading>Create new Brick</PageHeading>
+            <PageHeading title="Create new Brick">
+                Create a new Brick by specifying the annotation text category
+                it&apos;ll be used for and defining it in at least one language.
+            </PageHeading>
             <FilterTabs
                 withLanguagePicker={false}
                 withAllOption={false}

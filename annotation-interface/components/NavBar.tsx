@@ -11,6 +11,11 @@ const NavBar = () => {
     const router = useRouter();
     const tabDefinitions: TabDefinition[] = [
         { activePaths: /^\/$/, title: 'Home', linkPath: '/' },
+        {
+            activePaths: /^\/annotations.*$/,
+            title: 'Annotations',
+            linkPath: '/annotations',
+        },
         { activePaths: /^\/bricks.*$/, title: 'Bricks', linkPath: '/bricks' },
     ];
     return (

@@ -16,7 +16,19 @@ const AllTextBricks = ({
     DisplayFilterProps) => {
     return (
         <>
-            <PageHeading>Defined Bricks</PageHeading>
+            <PageHeading title="Defined Bricks">
+                <>
+                    <span className="italic">Bricks</span> are predefined
+                    components that are used to create texts for{' '}
+                    <Link href="/annotations">
+                        <a className="italic underline">annotations</a>
+                    </Link>
+                    . The creation of annotation texts is strictly limited to
+                    combinations of Bricks to ensure consistency and enable easy
+                    multi-language support. Bricks can also include placeholders
+                    such as a given drug&apos;s name.
+                </>
+            </PageHeading>
             <FilterTabs display={display}>
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
