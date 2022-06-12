@@ -20,4 +20,4 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 - Start the database by running `docker compose up` in this directory
 - Start the development server with `yarn dev`
-- You can now access the annotation interface app on `localhost:3000`
+- You can now access the annotation interface app on `localhost:3001`
