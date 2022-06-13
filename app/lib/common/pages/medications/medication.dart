@@ -43,20 +43,17 @@ class MedicationPage extends StatelessWidget {
       children: [
         _buildHeader(medication.name, medication.drugclass),
         SizedBox(height: 20),
-        if (medication.guidelines.isNotEmpty) ...[
-          _buildDisclaimer(context),
-          SizedBox(height: 20),
-          _SubHeader(
-            context.l10n.medications_page_header_guideline,
-            tooltip: context.l10n.medications_page_tooltip_guideline,
-          ),
-          SizedBox(height: 12),
+        _buildDisclaimer(context),
+        SizedBox(height: 20),
+        _SubHeader(
+          context.l10n.medications_page_header_guideline,
+          tooltip: context.l10n.medications_page_tooltip_guideline,
+        ),
+        SizedBox(height: 12),
+        if (medication.guidelines.isNotEmpty)
           ClinicalAnnotationCard(medication)
-        ] else ...[
+        else
           Text(context.l10n.medications_page_no_guidelines_for_phenotype),
-          SizedBox(height: 12),
-          Text(context.l10n.medications_page_disclaimer),
-        ]
       ],
     );
   }
