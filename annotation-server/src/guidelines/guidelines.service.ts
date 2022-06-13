@@ -4,7 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
-import { Repository } from 'typeorm';
+import { FindOptionsOrder, Repository } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { Medication } from '../medications/medication.entity';
@@ -59,6 +59,50 @@ export class GuidelinesService {
             this.spreadsheetGeneResultHeader,
         );
         this.phenotypesCache = new PhenotypesCache(this.phenotypesService);
+    }
+
+    async findAll(
+        limit: number,
+        offset: number,
+        order: FindOptionsOrder<Guideline>,
+    ): Promise<Guideline[]> {
+        return this.guidelinesRepository.find({
+            select: {
+                id: true,
+                implication: true,
+                recommendation: true,
+                warningLevel: true,
+                medication: { name: true },
+                phenotype: {
+                    id: true,
+                    geneSymbol: { name: true },
+                    geneResult: { name: true },
+                },
+            },
+            take: limit,
+            skip: offset,
+            order,
+            relations: {
+                medication: true,
+                phenotype: {
+                    geneSymbol: true,
+                    geneResult: true,
+                },
+            },
+        });
+    }
+
+    async findOne(id: number): Promise<Guideline> {
+        return this.guidelinesRepository.findOneOrFail({
+            where: { id },
+            relations: {
+                medication: true,
+                phenotype: {
+                    geneSymbol: true,
+                    geneResult: true,
+                },
+            },
+        });
     }
 
     async findAllErrors(
