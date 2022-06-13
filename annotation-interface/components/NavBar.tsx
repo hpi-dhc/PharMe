@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-interface ITabDefinition {
+interface TabDefinition {
     activePaths: RegExp;
     title: string;
     linkPath: string;
@@ -9,7 +9,7 @@ interface ITabDefinition {
 
 const NavBar = () => {
     const router = useRouter();
-    const tabDefinitions: ITabDefinition[] = [
+    const tabDefinitions: TabDefinition[] = [
         { activePaths: /^\/$/, title: 'Home', linkPath: '/' },
     ];
     return (
