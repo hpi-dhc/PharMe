@@ -19,6 +19,9 @@ export class FindMedicationQueryDto extends SearchableFindQueryDto {
     withGuidelines: string;
 
     @IsBooleanString()
+    getGuidelines: string;
+
+    @IsBooleanString()
     onlyIds: string;
 }
 
@@ -30,19 +33,30 @@ export function ApiFindMedicationsQueries(): MethodDecorator {
         ApiQuerySearch('medication'),
         ApiQuerySortby('medication'),
         ApiQueryWithGuidelines(),
+        ApiQueryGetGuidelines(),
         ApiQueryOnlyIds(),
     );
 }
 
 export function ApiFindMedicationQueries(): MethodDecorator {
-    return applyDecorators(ApiQueryWithGuidelines());
+    return applyDecorators(ApiQueryGetGuidelines());
 }
 
 function ApiQueryWithGuidelines(): MethodDecorator {
     return ApiQuery({
         name: 'withGuidelines',
         description:
-            'Determines whether medications will be returned with their guidelines. If set to true, this endpoint only returns medications that have corresponding guidelines. Defaults to "false"',
+            'If set to true, this endpoint only returns medications that have corresponding guidelines. Defaults to "false"',
+        type: 'boolean',
+        required: false,
+    });
+}
+
+function ApiQueryGetGuidelines(): MethodDecorator {
+    return ApiQuery({
+        name: 'getGuidelines',
+        description:
+            'Determines whether medications will be returned with their guidelines. Defaults to "false"',
         type: 'boolean',
         required: false,
     });

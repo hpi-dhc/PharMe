@@ -25,6 +25,7 @@ export class MedicationsController {
             dto.sortby ?? 'name',
             dto.orderby ?? 'asc',
             FindMedicationQueryDto.isTrueString(dto.withGuidelines),
+            FindMedicationQueryDto.isTrueString(dto.getGuidelines),
             FindMedicationQueryDto.isTrueString(dto.onlyIds),
         );
     }
@@ -46,7 +47,7 @@ export class MedicationsController {
     ): Promise<Medication> {
         return await this.medicationsService.findOne(
             id,
-            FindMedicationQueryDto.isTrueString(dto.withGuidelines),
+            FindMedicationQueryDto.isTrueString(dto.getGuidelines),
         );
     }
 }
