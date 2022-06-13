@@ -15,6 +15,7 @@ import {
     IsNull,
     Not,
     Repository,
+    FindOptionsOrderValue,
 } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
@@ -36,7 +37,7 @@ export class MedicationsService {
         offset: number,
         search: string,
         sortBy: string,
-        orderBy: string,
+        orderBy: FindOptionsOrderValue,
         withGuidelines: boolean,
         getGuidelines: boolean,
         onlyIds: boolean,
@@ -48,9 +49,7 @@ export class MedicationsService {
             where: whereClause,
             take: limit,
             skip: offset,
-            order: {
-                [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
-            },
+            order: { [sortBy]: orderBy },
         };
 
         if (search) {

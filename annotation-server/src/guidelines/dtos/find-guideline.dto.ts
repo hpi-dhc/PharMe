@@ -22,17 +22,11 @@ export class FindGuidelineQueryDto extends FindQueryDto {
     ): FindOptionsOrder<Guideline> {
         switch (dto.sortby) {
             case 'medicationName':
-                return {
-                    medication: {
-                        name: dto.orderby === 'asc' ? 'ASC' : 'DESC',
-                    },
-                };
+                return { medication: { name: dto.orderby ?? 'asc' } };
             default:
                 return {
                     phenotype: {
-                        geneSymbol: {
-                            name: dto.orderby === 'asc' ? 'ASC' : 'DESC',
-                        },
+                        geneSymbol: { name: dto.orderby ?? 'asc' },
                     },
                 };
         }
