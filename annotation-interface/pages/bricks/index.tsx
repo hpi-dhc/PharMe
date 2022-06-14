@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { displayCategories } from '../../common/constants';
 import FilterTabs, { DisplayFilterProps } from '../../components/FilterTabs';
+import Label from '../../components/Label';
 import PageHeading from '../../components/PageHeading';
 import dbConnect from '../../database/connect';
 import TextBrick from '../../database/models/TextBrick';
@@ -69,8 +70,9 @@ const AllTextBricks = ({
                                             )}
                                         </a>
                                     </Link>
-                                    <button
-                                        className="border border-black border-opacity-20 text-xs px-2 rounded-full whitespace-nowrap font-semibold align-text-top mr-2"
+                                    <Label
+                                        as="button"
+                                        title={brick.usage}
                                         onClick={() =>
                                             display.setCategoryIndex(
                                                 displayCategories.indexOf(
@@ -78,9 +80,7 @@ const AllTextBricks = ({
                                                 ),
                                             )
                                         }
-                                    >
-                                        {brick.usage}
-                                    </button>
+                                    />
                                 </p>
                             ))}
                         </div>
