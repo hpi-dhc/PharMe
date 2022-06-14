@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createElement, PropsWithChildren } from 'react';
 
+import { AnnotationFilterContextProvider } from '../../contexts/annotationFilter';
 import { BrickFilterContextProvider } from '../../contexts/brickFilter';
 import { LanguageContextProvider } from '../../contexts/language';
 
@@ -34,7 +35,7 @@ const tabDefinitions: TabDefinition[] = [
         activePaths: /^\/annotations.*$/,
         title: 'Annotations',
         linkPath: '/annotations',
-        providers: [LanguageContextProvider],
+        providers: [LanguageContextProvider, AnnotationFilterContextProvider],
     },
     {
         activePaths: /^\/bricks.*$/,

@@ -44,60 +44,53 @@ const AllTextBricks = ({
             >
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
-                        <div className="py-2">
-                            <div className="flex justify-center p-4">
-                                <Link href="/bricks/new">
-                                    <a>
-                                        <WithIcon icon={PlusCircleIcon}>
-                                            Create new Brick
-                                        </WithIcon>
+                        <div className="flex justify-center p-4">
+                            <Link href="/bricks/new">
+                                <a>
+                                    <WithIcon icon={PlusCircleIcon}>
+                                        Create new Brick
+                                    </WithIcon>
+                                </a>
+                            </Link>
+                        </div>
+                        {(categoryIndex > 0
+                            ? bricks.filter((brick) => brick.usage === category)
+                            : bricks
+                        ).map((brick, index) => (
+                            <p
+                                key={index}
+                                className="border-t border-black border-opacity-10 py-3 pl-3"
+                            >
+                                <Link key={index} href={`/bricks/${brick._id}`}>
+                                    <a className="self-start mr-2">
+                                        {brick.translations.find(
+                                            (translation) =>
+                                                translation.language ===
+                                                language,
+                                        )?.text ?? (
+                                            <WithIcon
+                                                icon={ExclamationIcon}
+                                                className="align-top"
+                                            >
+                                                This Brick is not translated to{' '}
+                                                {language}
+                                            </WithIcon>
+                                        )}
                                     </a>
                                 </Link>
-                            </div>
-                            {(categoryIndex > 0
-                                ? bricks.filter(
-                                      (brick) => brick.usage === category,
-                                  )
-                                : bricks
-                            ).map((brick, index) => (
-                                <p
-                                    key={index}
-                                    className="border-t border-black border-opacity-10 py-3 pl-3"
-                                >
-                                    <Link
-                                        key={index}
-                                        href={`/bricks/${brick._id}`}
-                                    >
-                                        <a className="self-start mr-2">
-                                            {brick.translations.find(
-                                                (translation) =>
-                                                    translation.language ===
-                                                    language,
-                                            )?.text ?? (
-                                                <WithIcon
-                                                    icon={ExclamationIcon}
-                                                    className="align-top"
-                                                >
-                                                    This Brick is not translated
-                                                    to {language}
-                                                </WithIcon>
-                                            )}
-                                        </a>
-                                    </Link>
-                                    <Label
-                                        as="button"
-                                        title={brick.usage}
-                                        onClick={() =>
-                                            setCategoryIndex(
-                                                displayCategories.indexOf(
-                                                    brick.usage,
-                                                ),
-                                            )
-                                        }
-                                    />
-                                </p>
-                            ))}
-                        </div>
+                                <Label
+                                    as="button"
+                                    title={brick.usage}
+                                    onClick={() =>
+                                        setCategoryIndex(
+                                            displayCategories.indexOf(
+                                                brick.usage,
+                                            ),
+                                        )
+                                    }
+                                />
+                            </p>
+                        ))}
                     </Tab.Panel>
                 ))}
             </FilterTabs>

@@ -18,6 +18,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Setup for local development
 
+- Set up and start our [Annotation Server](../annotation-server/CONTRIBUTING.md)
 - Start the database by running `docker compose up` in this directory
 - Start the development server with `yarn dev`
 - You can now access the annotation interface app on `localhost:3001`

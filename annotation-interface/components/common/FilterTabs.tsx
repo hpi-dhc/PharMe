@@ -31,7 +31,7 @@ const FilterTabs: React.FC<Props> = ({
                 <div>{tabs}</div>
                 {accessory && accessory}
             </Tab.List>
-            {children && <Tab.Panels>{children}</Tab.Panels>}
+            {children && <Tab.Panels className="py-2">{children}</Tab.Panels>}
         </Tab.Group>
     );
 };
