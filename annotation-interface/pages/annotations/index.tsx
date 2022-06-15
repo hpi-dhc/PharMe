@@ -114,9 +114,22 @@ const Annotations = ({
                                 className="border-t border-black border-opacity-10 py-3 pl-3"
                             >
                                 <p className="mr-2">
-                                    {item.guideline.phenotype.geneSymbol.name}{' '}
-                                    and {item.guideline.medication.name}:{' '}
-                                    {item.guideline.phenotype.geneResult.name}
+                                    <Link
+                                        href={`/annotations/guidelines/${item.guideline.id}`}
+                                    >
+                                        <a className="mr-2">
+                                            {
+                                                item.guideline.phenotype
+                                                    .geneSymbol.name
+                                            }{' '}
+                                            and {item.guideline.medication.name}
+                                            :{' '}
+                                            {
+                                                item.guideline.phenotype
+                                                    .geneResult.name
+                                            }
+                                        </a>
+                                    </Link>
                                 </p>
                                 {item.labels}
                             </div>

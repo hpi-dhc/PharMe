@@ -12,6 +12,18 @@ export type ServerGuidelineOverview = {
     };
 };
 
+export type ServerGuideline = ServerGuidelineOverview & {
+    cpicGuidelineName: string;
+    cpicGuidelineUrl: string;
+    cpicRecommendation: string;
+    cpicImplication: string;
+    cpicClassification: string;
+    cpicComment: string | null;
+    phenotype: {
+        cpicConsultationText: string | null;
+    };
+};
+
 export type ServerMedication = {
     id: number;
     name: string;
