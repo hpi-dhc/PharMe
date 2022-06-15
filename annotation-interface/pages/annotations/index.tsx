@@ -94,9 +94,13 @@ const Annotations = ({
                                 key={item.medication.id}
                                 className="border-t border-black border-opacity-10 py-3 pl-3"
                             >
-                                <span className="mr-2">
-                                    {item.medication.name}
-                                </span>
+                                <Link
+                                    href={`/annotations/medications/${item.medication.id}`}
+                                >
+                                    <a className="mr-2">
+                                        {item.medication.name}
+                                    </a>
+                                </Link>
                                 {item.labels}
                             </p>
                         ),
