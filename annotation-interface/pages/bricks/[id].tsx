@@ -4,31 +4,28 @@ import {
     InferGetServerSidePropsType,
 } from 'next';
 
+import { BrickUsage, brickUsages } from '../../common/constants';
+import { useMountEffect } from '../../common/react-helpers';
+import BrickForm from '../../components/BrickForm';
+import FilterTabs from '../../components/FilterTabs';
+import PageHeading from '../../components/PageHeading';
 import {
-    BrickUsage,
-    brickUsages,
+    useBrickFilterContext,
     DisplayCategory,
     displayCategoryForIndex,
     indexForDisplayCategory,
-} from '../../common/constants';
-import { useMountEffect } from '../../common/react-helpers';
-import BrickForm from '../../components/BrickForm';
-import FilterTabs, { DisplayFilterProps } from '../../components/FilterTabs';
-import PageHeading from '../../components/PageHeading';
+} from '../../contexts/brickFilter';
 import dbConnect from '../../database/connect';
 import TextBrick, { ITextBrick } from '../../database/models/TextBrick';
 
 const EditBrick = ({
     brick,
-    display,
-}: InferGetServerSidePropsType<typeof getServerSideProps> &
-    DisplayFilterProps) => {
-    const categoryString: string = displayCategoryForIndex(
-        display.categoryIndex,
-    );
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
+    const categoryString: string = displayCategoryForIndex(categoryIndex);
     useMountEffect(() => {
         if (!(brickUsages as readonly string[]).includes(categoryString)) {
-            display.setCategoryIndex(
+            setCategoryIndex(
                 indexForDisplayCategory(brick.usage as DisplayCategory),
             );
         }
@@ -43,7 +40,6 @@ const EditBrick = ({
             <FilterTabs
                 withLanguagePicker={false}
                 withAllOption={false}
-                display={display}
             ></FilterTabs>
             <BrickForm usage={categoryString as BrickUsage} brick={brick} />
         </>

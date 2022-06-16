@@ -3,18 +3,22 @@ import { ExclamationIcon, PlusCircleIcon } from '@heroicons/react/solid';
 import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
-import { displayCategories } from '../../common/constants';
-import FilterTabs, { DisplayFilterProps } from '../../components/FilterTabs';
+import FilterTabs from '../../components/FilterTabs';
 import Label from '../../components/Label';
 import PageHeading from '../../components/PageHeading';
+import {
+    displayCategories,
+    useBrickFilterContext,
+} from '../../contexts/brickFilter';
+import { useLanguageContext } from '../../contexts/language';
 import dbConnect from '../../database/connect';
 import TextBrick from '../../database/models/TextBrick';
 
 const AllTextBricks = ({
     bricks,
-    display,
-}: InferGetServerSidePropsType<typeof getServerSideProps> &
-    DisplayFilterProps) => {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { language } = useLanguageContext();
+    const { setCategoryIndex } = useBrickFilterContext();
     return (
         <>
             <PageHeading title="Defined Bricks">
@@ -30,7 +34,7 @@ const AllTextBricks = ({
                     such as a given drug&apos;s name.
                 </>
             </PageHeading>
-            <FilterTabs display={display}>
+            <FilterTabs>
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
                         <div className="py-2">
@@ -60,12 +64,12 @@ const AllTextBricks = ({
                                             {brick.translations.find(
                                                 (translation) =>
                                                     translation.language ===
-                                                    display.language,
+                                                    language,
                                             )?.text ?? (
                                                 <span className="inline-flex align-top">
                                                     <ExclamationIcon className="h-5 w-5 mr-2 pt-1" />
                                                     This Brick is not translated
-                                                    to {display.language}.
+                                                    to {language}.
                                                 </span>
                                             )}
                                         </a>
@@ -74,7 +78,7 @@ const AllTextBricks = ({
                                         as="button"
                                         title={brick.usage}
                                         onClick={() =>
-                                            display.setCategoryIndex(
+                                            setCategoryIndex(
                                                 displayCategories.indexOf(
                                                     brick.usage,
                                                 ),

@@ -1,34 +1,25 @@
 import { Tab } from '@headlessui/react';
-import { Dispatch, SetStateAction } from 'react';
 
+import { supportedLanguages } from '../common/constants';
 import {
-    supportedLanguages,
-    SupportedLanguage,
+    useBrickFilterContext,
     displayCategories,
-} from '../common/constants';
+} from '../contexts/brickFilter';
+import { useLanguageContext } from '../contexts/language';
 import SelectionPopover from './SelectionPopover';
 
-export type DisplayFilterProps = {
-    display: {
-        categoryIndex: number;
-        setCategoryIndex: Dispatch<SetStateAction<number>>;
-        language: SupportedLanguage;
-        setLanguage: Dispatch<SetStateAction<SupportedLanguage>>;
-    };
-};
-type Props = React.PropsWithChildren<
-    DisplayFilterProps & {
-        withLanguagePicker?: boolean;
-        withAllOption?: boolean;
-    }
->;
+type Props = React.PropsWithChildren<{
+    withLanguagePicker?: boolean;
+    withAllOption?: boolean;
+}>;
 
 const FilterTabs: React.FC<Props> = ({
-    display,
     withLanguagePicker,
     withAllOption,
     children,
 }: Props) => {
+    const { language, setLanguage } = useLanguageContext();
+    const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     const tabs = displayCategories.map((category, index) => {
         if (!withAllOption && category === 'All') {
             return <Tab key={index} />;
@@ -46,17 +37,14 @@ const FilterTabs: React.FC<Props> = ({
     });
 
     return (
-        <Tab.Group
-            selectedIndex={display.categoryIndex}
-            onChange={display.setCategoryIndex}
-        >
+        <Tab.Group selectedIndex={categoryIndex} onChange={setCategoryIndex}>
             <Tab.List className="flex justify-between">
                 <div>{tabs}</div>
                 {withLanguagePicker && (
                     <SelectionPopover
                         options={[...supportedLanguages]}
-                        selectedOption={display.language}
-                        onSelect={(language) => display.setLanguage(language)}
+                        selectedOption={language}
+                        onSelect={setLanguage}
                     />
                 )}
             </Tab.List>

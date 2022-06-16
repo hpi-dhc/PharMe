@@ -1,16 +1,15 @@
-import {
-    BrickUsage,
-    brickUsages,
-    displayCategoryForIndex,
-} from '../../common/constants';
+import { BrickUsage, brickUsages } from '../../common/constants';
 import BrickForm from '../../components/BrickForm';
-import FilterTabs, { DisplayFilterProps } from '../../components/FilterTabs';
+import FilterTabs from '../../components/FilterTabs';
 import PageHeading from '../../components/PageHeading';
+import {
+    displayCategoryForIndex,
+    useBrickFilterContext,
+} from '../../contexts/brickFilter';
 
-const NewBrick = ({ display }: DisplayFilterProps) => {
-    const categoryString: string = displayCategoryForIndex(
-        display.categoryIndex,
-    );
+const NewBrick = () => {
+    const { categoryIndex } = useBrickFilterContext();
+    const categoryString: string = displayCategoryForIndex(categoryIndex);
     const usage = (brickUsages as readonly string[]).includes(categoryString)
         ? (categoryString as BrickUsage)
         : null;
@@ -23,7 +22,6 @@ const NewBrick = ({ display }: DisplayFilterProps) => {
             <FilterTabs
                 withLanguagePicker={false}
                 withAllOption={false}
-                display={display}
             ></FilterTabs>
             <BrickForm usage={usage} />
         </>
