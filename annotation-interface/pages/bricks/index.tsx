@@ -3,6 +3,7 @@ import { ExclamationIcon, PlusCircleIcon } from '@heroicons/react/solid';
 import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
+import DisplayLanguagePicker from '../../components/DisplayLanguagePicker';
 import FilterTabs from '../../components/FilterTabs';
 import Label from '../../components/Label';
 import PageHeading from '../../components/PageHeading';
@@ -34,7 +35,7 @@ const AllTextBricks = ({
                     such as a given drug&apos;s name.
                 </>
             </PageHeading>
-            <FilterTabs>
+            <FilterTabs accessory={<DisplayLanguagePicker />}>
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
                         <div className="py-2">

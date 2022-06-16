@@ -37,10 +37,7 @@ const EditBrick = ({
                 different translations or by deleting it. Hit cancel below to
                 exit without making any changes.
             </PageHeading>
-            <FilterTabs
-                withLanguagePicker={false}
-                withAllOption={false}
-            ></FilterTabs>
+            <FilterTabs withAllOption={false}></FilterTabs>
             <BrickForm usage={categoryString as BrickUsage} brick={brick} />
         </>
     );
