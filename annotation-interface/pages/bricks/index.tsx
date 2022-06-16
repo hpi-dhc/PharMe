@@ -7,6 +7,7 @@ import DisplayLanguagePicker from '../../components/common/DisplayLanguagePicker
 import FilterTabs from '../../components/common/FilterTabs';
 import Label from '../../components/common/Label';
 import PageHeading from '../../components/common/PageHeading';
+import WithIcon from '../../components/common/WithIcon';
 import {
     displayCategories,
     useBrickFilterContext,
@@ -44,11 +45,12 @@ const AllTextBricks = ({
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
                         <div className="py-2">
-                            <div className="flex justify-center p-2">
+                            <div className="flex justify-center p-4">
                                 <Link href="/bricks/new">
-                                    <a className="inline-flex p-3">
-                                        <PlusCircleIcon className="h-5 w-5 mr-2"></PlusCircleIcon>
-                                        Create new Brick
+                                    <a>
+                                        <WithIcon icon={PlusCircleIcon}>
+                                            Create new Brick
+                                        </WithIcon>
                                     </a>
                                 </Link>
                             </div>
@@ -72,11 +74,13 @@ const AllTextBricks = ({
                                                     translation.language ===
                                                     language,
                                             )?.text ?? (
-                                                <span className="inline-flex align-top">
-                                                    <ExclamationIcon className="h-5 w-5 mr-2 pt-1" />
+                                                <WithIcon
+                                                    icon={ExclamationIcon}
+                                                    className="align-top"
+                                                >
                                                     This Brick is not translated
-                                                    to {language}.
-                                                </span>
+                                                    to {language}
+                                                </WithIcon>
                                             )}
                                         </a>
                                     </Link>
