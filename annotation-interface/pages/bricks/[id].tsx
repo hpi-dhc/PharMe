@@ -37,7 +37,11 @@ const EditBrick = ({
                 different translations or by deleting it. Hit cancel below to
                 exit without making any changes.
             </PageHeading>
-            <FilterTabs withAllOption={false}></FilterTabs>
+            <FilterTabs
+                titles={[...brickUsages]}
+                selected={categoryIndex - 1}
+                setSelected={(newIndex) => setCategoryIndex(newIndex + 1)}
+            ></FilterTabs>
             <BrickForm usage={categoryString as BrickUsage} brick={brick} />
         </>
     );

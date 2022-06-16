@@ -1,39 +1,32 @@
 import { Tab } from '@headlessui/react';
 
-import {
-    useBrickFilterContext,
-    displayCategories,
-} from '../contexts/brickFilter';
-
 type Props = React.PropsWithChildren<{
+    titles: string[];
+    selected: number;
+    setSelected: (index: number) => void;
     accessory?: JSX.Element;
-    withAllOption?: boolean;
 }>;
 
 const FilterTabs: React.FC<Props> = ({
+    titles,
+    selected,
+    setSelected,
     accessory,
-    withAllOption,
     children,
 }: Props) => {
-    const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
-    const tabs = displayCategories.map((category, index) => {
-        if (!withAllOption && category === 'All') {
-            return <Tab key={index} />;
-        }
-        return (
-            <Tab
-                key={index}
-                className={({ selected }) =>
-                    `font-bold mr-4 ${selected && 'underline decoration-2'}`
-                }
-            >
-                {category}
-            </Tab>
-        );
-    });
+    const tabs = titles.map((title, index) => (
+        <Tab
+            key={index}
+            className={({ selected }) =>
+                `font-bold mr-4 ${selected && 'underline decoration-2'}`
+            }
+        >
+            {title}
+        </Tab>
+    ));
 
     return (
-        <Tab.Group selectedIndex={categoryIndex} onChange={setCategoryIndex}>
+        <Tab.Group selectedIndex={selected} onChange={setSelected}>
             <Tab.List className="flex justify-between">
                 <div>{tabs}</div>
                 {accessory && accessory}
@@ -42,6 +35,5 @@ const FilterTabs: React.FC<Props> = ({
         </Tab.Group>
     );
 };
-FilterTabs.defaultProps = { withAllOption: true };
 
 export default FilterTabs;

@@ -1,26 +1,37 @@
 import { BrickUsage, brickUsages } from '../../common/constants';
+import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/BrickForm';
 import FilterTabs from '../../components/FilterTabs';
 import PageHeading from '../../components/PageHeading';
 import {
+    DisplayCategory,
     displayCategoryForIndex,
+    indexForDisplayCategory,
     useBrickFilterContext,
 } from '../../contexts/brickFilter';
 
 const NewBrick = () => {
-    const { categoryIndex } = useBrickFilterContext();
+    const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     const categoryString: string = displayCategoryForIndex(categoryIndex);
-    const usage = (brickUsages as readonly string[]).includes(categoryString)
-        ? (categoryString as BrickUsage)
-        : null;
+    useMountEffect(() => {
+        if (!(brickUsages as readonly string[]).includes(categoryString)) {
+            setCategoryIndex(
+                indexForDisplayCategory(brickUsages[0] as DisplayCategory),
+            );
+        }
+    });
     return (
         <>
             <PageHeading title="Create new Brick">
                 Create a new Brick by specifying the annotation text category
                 it&apos;ll be used for and defining it in at least one language.
             </PageHeading>
-            <FilterTabs withAllOption={false}></FilterTabs>
-            <BrickForm usage={usage} />
+            <FilterTabs
+                titles={[...brickUsages]}
+                selected={categoryIndex - 1}
+                setSelected={(newIndex) => setCategoryIndex(newIndex + 1)}
+            ></FilterTabs>
+            <BrickForm usage={categoryString as BrickUsage} />
         </>
     );
 };

@@ -19,7 +19,7 @@ const AllTextBricks = ({
     bricks,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const { language } = useLanguageContext();
-    const { setCategoryIndex } = useBrickFilterContext();
+    const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     return (
         <>
             <PageHeading title="Defined Bricks">
@@ -35,7 +35,12 @@ const AllTextBricks = ({
                     such as a given drug&apos;s name.
                 </>
             </PageHeading>
-            <FilterTabs accessory={<DisplayLanguagePicker />}>
+            <FilterTabs
+                titles={[...displayCategories]}
+                selected={categoryIndex}
+                setSelected={setCategoryIndex}
+                accessory={<DisplayLanguagePicker />}
+            >
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
                         <div className="py-2">
