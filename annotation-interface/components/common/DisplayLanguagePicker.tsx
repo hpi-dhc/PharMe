@@ -1,5 +1,5 @@
-import { supportedLanguages } from '../common/constants';
-import { useLanguageContext } from '../contexts/language';
+import { supportedLanguages } from '../../common/constants';
+import { useLanguageContext } from '../../contexts/language';
 import SelectionPopover from './SelectionPopover';
 
 const DisplayLanguagePicker = () => {

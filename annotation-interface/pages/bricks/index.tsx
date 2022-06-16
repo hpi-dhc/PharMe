@@ -3,10 +3,10 @@ import { ExclamationIcon, PlusCircleIcon } from '@heroicons/react/solid';
 import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
-import DisplayLanguagePicker from '../../components/DisplayLanguagePicker';
-import FilterTabs from '../../components/FilterTabs';
-import Label from '../../components/Label';
-import PageHeading from '../../components/PageHeading';
+import DisplayLanguagePicker from '../../components/common/DisplayLanguagePicker';
+import FilterTabs from '../../components/common/FilterTabs';
+import Label from '../../components/common/Label';
+import PageHeading from '../../components/common/PageHeading';
 import {
     displayCategories,
     useBrickFilterContext,

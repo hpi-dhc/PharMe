@@ -8,15 +8,15 @@ import {
     BrickUsage,
     SupportedLanguage,
     supportedLanguages,
-} from '../common/constants';
+} from '../../common/constants';
 import {
     ITextBrick,
     ITextBrickTranslation,
     translationIsValid,
     translationsToArray,
     translationsToMap,
-} from '../database/models/TextBrick';
-import SelectionPopover from './SelectionPopover';
+} from '../../database/models/TextBrick';
+import SelectionPopover from '../common/SelectionPopover';
 
 type Props = {
     usage: BrickUsage | null;

@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createElement, PropsWithChildren } from 'react';
 
-import { BrickFilterContextProvider } from '../contexts/brickFilter';
-import { LanguageContextProvider } from '../contexts/language';
+import { BrickFilterContextProvider } from '../../contexts/brickFilter';
+import { LanguageContextProvider } from '../../contexts/language';
 
 export type ContextProvider = ({ children }: PropsWithChildren) => JSX.Element;
 

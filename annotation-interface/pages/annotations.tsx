@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import PageHeading from '../components/PageHeading';
+import PageHeading from '../components/common/PageHeading';
 
 const Annotations = () => {
     return (
