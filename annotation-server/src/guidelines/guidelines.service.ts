@@ -1,6 +1,6 @@
 import { sheets_v4 } from '@googleapis/sheets';
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
@@ -120,6 +120,16 @@ export class GuidelinesService {
     }
 
     async fetchGuidelines(): Promise<void> {
+        if (!(await this.medicationsService.hasData())) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    error: 'Medication data has to be initialized.',
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+        await this.phenotypesService.fetchPhenotypes();
         await this.clearAllData();
         const guidelines = await this.fetchCpicGuidelines();
         await this.addGuidelineURLS(guidelines);

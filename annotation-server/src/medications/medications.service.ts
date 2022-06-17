@@ -155,6 +155,10 @@ export class MedicationsService {
         await this.medicationRepository.delete({});
     }
 
+    async hasData(): Promise<boolean> {
+        return (await this.medicationRepository.count()) > 0;
+    }
+
     getJSONfromZip(): Promise<string> {
         const jsonPath = path.join(os.tmpdir(), 'drugbank-data.json');
         const proc = getOsSpecificPyProcess(this.configService);

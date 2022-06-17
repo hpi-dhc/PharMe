@@ -26,10 +26,19 @@ describe('App (e2e)', () => {
         medicationService.clearAllMedicationData();
     });
 
+    describe('Pre-initialization', () => {
+        it('should fail to load guidelines without medications', async () => {
+            const createResponse = await request(app.getHttpServer()).post(
+                '/guidelines',
+            );
+            expect(createResponse.status).toEqual(400);
+        });
+    });
+
     describe('Initialization', () => {
         it('should load all data', async () => {
             const createResponse = await request(app.getHttpServer()).post(
-                '/init/',
+                '/init',
             );
             expect(createResponse.status).toEqual(201);
         }, 30000);
