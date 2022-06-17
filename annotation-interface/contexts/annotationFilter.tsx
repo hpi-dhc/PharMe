@@ -16,6 +16,8 @@ interface IAnnotationFilterContext {
     setCurationState: Dispatch<SetStateAction<FilterState>>;
     categoryIndex: number;
     setCategoryIndex: Dispatch<SetStateAction<number>>;
+    searchQuery: string;
+    setSearchQuery: Dispatch<SetStateAction<string>>;
 }
 
 const AnnotationFilterContext = createContext<
@@ -27,6 +29,7 @@ export const AnnotationFilterContextProvider: ContextProvider = ({
 }) => {
     const [curationState, setCurationState] = useState<FilterState>('all');
     const [categoryIndex, setCategoryIndex] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
     return (
         <AnnotationFilterContext.Provider
             value={{
@@ -34,6 +37,8 @@ export const AnnotationFilterContextProvider: ContextProvider = ({
                 setCurationState,
                 categoryIndex,
                 setCategoryIndex,
+                searchQuery,
+                setSearchQuery,
             }}
         >
             {children}

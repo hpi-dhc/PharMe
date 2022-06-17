@@ -10,6 +10,7 @@ import {
 import FilterTabs from '../../components/common/FilterTabs';
 import Label from '../../components/common/Label';
 import PageHeading from '../../components/common/PageHeading';
+import SearchBar from '../../components/common/SearchBar';
 import SelectionPopover from '../../components/common/SelectionPopover';
 import {
     FilterState,
@@ -40,27 +41,51 @@ function filteredElements<T extends { labels: JSX.Element[] }>(
     );
 }
 
+const matches = (test: string, query: string) =>
+    test.toLowerCase().includes(query);
+
 const Annotations = ({
     medications,
     guidelines,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const { curationState, setCurationState, categoryIndex, setCategoryIndex } =
-        useAnnotationFilterContext();
-    const medicationsWithLabels = medications.map((medication) => {
-        const labels = getMissingLabels(medication, [
-            { name: 'indication', display: 'Indication' },
-            { name: 'drugclass', display: 'Drug class' },
-        ]);
-        return { medication, labels };
-    });
-    const guidelinesWithLabels = guidelines.map((guideline) => {
-        const labels = getMissingLabels(guideline, [
-            { name: 'implication', display: 'Implication' },
-            { name: 'recommendation', display: 'Recommendation' },
-            { name: 'warningLevel', display: 'Warning level' },
-        ]);
-        return { guideline, labels };
-    });
+    const {
+        curationState,
+        setCurationState,
+        categoryIndex,
+        setCategoryIndex,
+        searchQuery,
+        setSearchQuery,
+    } = useAnnotationFilterContext();
+
+    const medicationsWithLabels = filteredElements(
+        medications
+            .filter(({ name }) => matches(name, searchQuery))
+            .map((medication) => {
+                const labels = getMissingLabels(medication, [
+                    { name: 'indication', display: 'Indication' },
+                    { name: 'drugclass', display: 'Drug class' },
+                ]);
+                return { medication, labels };
+            }),
+        curationState,
+    );
+    const guidelinesWithLabels = filteredElements(
+        guidelines
+            .filter(
+                (guideline) =>
+                    matches(guideline.medication.name, searchQuery) ||
+                    matches(guideline.phenotype.geneSymbol.name, searchQuery),
+            )
+            .map((guideline) => {
+                const labels = getMissingLabels(guideline, [
+                    { name: 'implication', display: 'Implication' },
+                    { name: 'recommendation', display: 'Recommendation' },
+                    { name: 'warningLevel', display: 'Warning level' },
+                ]);
+                return { guideline, labels };
+            }),
+        curationState,
+    );
 
     return (
         <>
@@ -74,6 +99,7 @@ const Annotations = ({
                 </Link>
                 .
             </PageHeading>
+            <SearchBar query={searchQuery} setQuery={setSearchQuery} />
             <FilterTabs
                 titles={['Drugs', 'Guidelines']}
                 selected={categoryIndex}
@@ -88,53 +114,46 @@ const Annotations = ({
                 }
             >
                 <Tab.Panel>
-                    {filteredElements(medicationsWithLabels, curationState).map(
-                        (item) => (
-                            <p
-                                key={item.medication.id}
-                                className="border-t border-black border-opacity-10 py-3 pl-3"
+                    {medicationsWithLabels.map((item) => (
+                        <p
+                            key={item.medication.id}
+                            className="border-t border-black border-opacity-10 py-3 pl-3"
+                        >
+                            <Link
+                                href={`/annotations/medications/${item.medication.id}`}
                             >
-                                <Link
-                                    href={`/annotations/medications/${item.medication.id}`}
-                                >
-                                    <a className="mr-2">
-                                        {item.medication.name}
-                                    </a>
-                                </Link>
-                                {item.labels}
-                            </p>
-                        ),
-                    )}
+                                <a className="mr-2">{item.medication.name}</a>
+                            </Link>
+                            {item.labels}
+                        </p>
+                    ))}
                 </Tab.Panel>
                 <Tab.Panel className="space-y-2">
-                    {filteredElements(guidelinesWithLabels, curationState).map(
-                        (item) => (
-                            <div
-                                key={item.guideline.id}
-                                className="border-t border-black border-opacity-10 py-3 pl-3"
-                            >
-                                <p className="mr-2">
-                                    <Link
-                                        href={`/annotations/guidelines/${item.guideline.id}`}
-                                    >
-                                        <a className="mr-2">
-                                            {
-                                                item.guideline.phenotype
-                                                    .geneSymbol.name
-                                            }{' '}
-                                            and {item.guideline.medication.name}
-                                            :{' '}
-                                            {
-                                                item.guideline.phenotype
-                                                    .geneResult.name
-                                            }
-                                        </a>
-                                    </Link>
-                                </p>
-                                {item.labels}
-                            </div>
-                        ),
-                    )}
+                    {guidelinesWithLabels.map((item) => (
+                        <div
+                            key={item.guideline.id}
+                            className="border-t border-black border-opacity-10 py-3 pl-3"
+                        >
+                            <p className="mr-2">
+                                <Link
+                                    href={`/annotations/guidelines/${item.guideline.id}`}
+                                >
+                                    <a className="mr-2">
+                                        {
+                                            item.guideline.phenotype.geneSymbol
+                                                .name
+                                        }{' '}
+                                        and {item.guideline.medication.name}:{' '}
+                                        {
+                                            item.guideline.phenotype.geneResult
+                                                .name
+                                        }
+                                    </a>
+                                </Link>
+                            </p>
+                            {item.labels}
+                        </div>
+                    ))}
                 </Tab.Panel>
             </FilterTabs>
         </>
