@@ -1,19 +1,19 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 import { BaseEntity } from '../../common/entities/base.entity';
+import { GeneResult } from './gene-result.entity';
 import { GeneSymbol } from './gene-symbol.entity';
-import { Phenotype } from './phenotype.entity';
 
 @Entity()
-export class GenePhenotype extends BaseEntity {
+export class Phenotype extends BaseEntity {
     @Column({ nullable: true })
     cpicConsultationText: string;
     // onDelete: 'CASCADE': delete Many when One is deleted
-    @ManyToOne(() => GeneSymbol, (geneSymbol) => geneSymbol.genePhenotypes, {
+    @ManyToOne(() => GeneSymbol, (geneSymbol) => geneSymbol.phenotypes, {
         onDelete: 'CASCADE',
     })
     geneSymbol: GeneSymbol;
 
-    @ManyToOne(() => Phenotype, { onDelete: 'CASCADE' })
-    phenotype: Phenotype;
+    @ManyToOne(() => GeneResult, { onDelete: 'CASCADE' })
+    geneResult: GeneResult;
 }

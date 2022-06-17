@@ -6,7 +6,7 @@ import { Guideline } from './guideline.entity';
 export enum GuidelineErrorType {
     MEDICATION_NAME_NOT_FOUND = 'medication_name_not_found',
     MEDICATION_RXCUI_NOT_FOUND = 'medication_rxcui_not_found',
-    GENEPHENOTYPE_NOT_FOUND = 'genephenotype_not_found',
+    PHENOTYPE_NOT_FOUND = 'phenotype_not_found',
     GENE_NOT_FOUND = 'gene_not_found',
     GUIDELINE_MISSING_FROM_SHEET = 'guideline_missing_from_sheet',
     GUIDELINE_MISSING_FROM_CPIC = 'guideline_missing_from_cpic',

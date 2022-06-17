@@ -61,8 +61,8 @@ export class MedicationsService {
             whereClause.guidelines = { id: Not(IsNull()) };
             findOptions.relations = [
                 'guidelines',
-                'guidelines.genePhenotype.phenotype',
-                'guidelines.genePhenotype.geneSymbol',
+                'guidelines.phenotype.geneResult',
+                'guidelines.phenotype.geneSymbol',
             ];
         }
 
@@ -79,8 +79,8 @@ export class MedicationsService {
         if (withGuidelines) {
             findOptions.relations = [
                 'guidelines',
-                'guidelines.genePhenotype.phenotype',
-                'guidelines.genePhenotype.geneSymbol',
+                'guidelines.phenotype.geneResult',
+                'guidelines.phenotype.geneSymbol',
             ];
         }
 
