@@ -7,11 +7,11 @@ MedicationWithGuidelines filterUserGuidelines(
   MedicationWithGuidelines medication,
 ) {
   final matchingGuidelines = medication.guidelines.where((guideline) {
-    final genePhenotype = guideline.genePhenotype;
+    final phenotype = guideline.phenotype;
     final foundEntry =
-        UserData.instance.lookups![guideline.genePhenotype.geneSymbol.name];
+        UserData.instance.lookups![guideline.phenotype.geneSymbol.name];
     return foundEntry.isNotNullOrBlank &&
-        foundEntry == genePhenotype.phenotype.name;
+        foundEntry == phenotype.geneResult.name;
   });
   return MedicationWithGuidelines(
     id: medication.id,

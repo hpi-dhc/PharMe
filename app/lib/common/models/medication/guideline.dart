@@ -18,7 +18,7 @@ class Guideline {
     this.cpicClassification,
     this.cpicComment,
     required this.cpicGuidelineUrl,
-    required this.genePhenotype,
+    required this.phenotype,
   });
   factory Guideline.fromJson(dynamic json) => _$GuidelineFromJson(json);
 
@@ -50,7 +50,7 @@ class Guideline {
   String cpicGuidelineUrl;
 
   @HiveField(9)
-  GenePhenotype genePhenotype;
+  Phenotype phenotype;
 
   /// some properties are intentionally omitted, because a difference in them
   /// does not imply that this a completely new guideline
@@ -65,7 +65,7 @@ class Guideline {
         cpicClassification == other.cpicClassification &&
         cpicComment == other.cpicComment &&
         cpicGuidelineUrl == other.cpicGuidelineUrl &&
-        genePhenotype == other.genePhenotype;
+        phenotype == other.phenotype;
   }
 
   @override
@@ -79,39 +79,39 @@ class Guideline {
       cpicClassification,
       cpicComment,
       cpicGuidelineUrl,
-      genePhenotype,
+      phenotype,
     );
   }
 }
 
 @HiveType(typeId: 10)
 @JsonSerializable()
-class GenePhenotype {
-  GenePhenotype({
+class Phenotype {
+  Phenotype({
     required this.id,
-    required this.phenotype,
+    required this.geneResult,
     required this.geneSymbol,
   });
-  factory GenePhenotype.fromJson(dynamic json) => _$GenePhenotypeFromJson(json);
+  factory Phenotype.fromJson(dynamic json) => _$PhenotypeFromJson(json);
 
   @HiveField(0)
   int id;
 
   @HiveField(1)
-  Phenotype phenotype;
+  GeneResult geneResult;
 
   @HiveField(2)
   GeneSymbol geneSymbol;
 
   @override
   bool operator ==(other) {
-    return other is GenePhenotype &&
-        phenotype.name == other.phenotype.name &&
+    return other is Phenotype &&
+        geneResult.name == other.geneResult.name &&
         geneSymbol.name == other.geneSymbol.name;
   }
 
   @override
-  int get hashCode => hashValues(phenotype.name, geneSymbol.name);
+  int get hashCode => hashValues(geneResult.name, geneSymbol.name);
 }
 
 @HiveType(typeId: 11)
@@ -132,12 +132,12 @@ class GeneSymbol {
 
 @HiveType(typeId: 12)
 @JsonSerializable()
-class Phenotype {
-  Phenotype({
+class GeneResult {
+  GeneResult({
     required this.id,
     required this.name,
   });
-  factory Phenotype.fromJson(dynamic json) => _$PhenotypeFromJson(json);
+  factory GeneResult.fromJson(dynamic json) => _$GeneResultFromJson(json);
 
   @HiveField(0)
   int id;
