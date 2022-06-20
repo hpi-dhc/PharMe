@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseEntity } from '../../common/entities/base.entity';
-import { GenePhenotype } from '../../gene-phenotypes/entities/gene-phenotype.entity';
 import { Medication } from '../../medications/medication.entity';
+import { Phenotype } from '../../phenotypes/entities/phenotype.entity';
 import { CpicRecommendationDto } from '../dtos/cpic-recommendation.dto';
 import { GuidelineError } from './guideline-error.entity';
 
@@ -32,8 +32,8 @@ export class Guideline extends BaseEntity {
     })
     medication: Medication;
 
-    @ManyToOne(() => GenePhenotype, { onDelete: 'CASCADE' })
-    genePhenotype: GenePhenotype;
+    @ManyToOne(() => Phenotype, { onDelete: 'CASCADE' })
+    phenotype: Phenotype;
 
     @Column()
     cpicRecommendation: string;
@@ -68,18 +68,18 @@ export class Guideline extends BaseEntity {
     static fromCpicRecommendation(
         recommendation: CpicRecommendationDto,
         medication: Medication,
-        genePhenotype: GenePhenotype,
+        phenotype: Phenotype,
     ): Guideline {
         const guideline = new Guideline();
 
         guideline.medication = medication;
-        guideline.genePhenotype = genePhenotype;
+        guideline.phenotype = phenotype;
         guideline.cpicRecommendation = recommendation.drugrecommendation;
         guideline.cpicClassification = recommendation.classification;
         if (recommendation.comments.toLowerCase() !== 'n/a')
             guideline.cpicComment = recommendation.comments;
         guideline.cpicImplication =
-            recommendation.implications[genePhenotype.geneSymbol.name];
+            recommendation.implications[phenotype.geneSymbol.name];
         guideline.cpicGuidelineId = recommendation.guidelineid;
         guideline.errors = [];
 

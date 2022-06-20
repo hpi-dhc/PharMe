@@ -43,8 +43,8 @@ Future<void> initCachedMedications() async {
   try {
     Hive.registerAdapter(CachedMedicationsAdapter());
     Hive.registerAdapter(GeneSymbolAdapter());
+    Hive.registerAdapter(GeneResultAdapter());
     Hive.registerAdapter(PhenotypeAdapter());
-    Hive.registerAdapter(GenePhenotypeAdapter());
     Hive.registerAdapter(GuidelineAdapter());
     Hive.registerAdapter(MedicationWithGuidelinesAdapter());
   } catch (e) {

@@ -172,7 +172,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
       children: [
         Text(
           context.l10n.medications_page_gene_name(
-            medication.guidelines[0].genePhenotype.geneSymbol.name,
+            medication.guidelines[0].phenotype.geneSymbol.name,
           ),
           style: PharmeTheme.textTheme.bodyLarge!.copyWith(
             color: Colors.black.withOpacity(0.5),

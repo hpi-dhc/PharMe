@@ -51,10 +51,14 @@ understanding of this project's code.
   made up of, may differ for each individual. This specific sequence of base
   pairs or <em>variant</em> is referred to as the gene's <em>genotype</em>.</dd>
 
-  <dt>Phenotype</dt>
+  <dt>Gene result</dt>
   <dd>In practice, the different genotypes can have different effects on the
-  encoded enzyme. The <em>phenotype</em> describes this effect for a given gene.
-  One possible phenotype for CYP2D6 is "Normal metabolizer".</dd>
+  encoded enzyme. The <em>gene result</em> describes this effect.  One possible
+  gene result for CYP2D6 is "Normal metabolizer".</dd>
+
+  <dt>Phenotype</dt>
+  <dd>A gene along with its gene result is referred to as a
+  <em>phenotype</em></dd>
 
   <dt>Allele</dt>
   <dd>In theory, a person has two copies of each gene: one from each parent.

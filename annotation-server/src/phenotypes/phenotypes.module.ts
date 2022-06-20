@@ -2,18 +2,18 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { GenePhenotype } from './entities/gene-phenotype.entity';
+import { GeneResult } from './entities/gene-result.entity';
 import { GeneSymbol } from './entities/gene-symbol.entity';
 import { Phenotype } from './entities/phenotype.entity';
-import { GenePhenotypesService } from './gene-phenotypes.service';
+import { PhenotypesService } from './phenotypes.service';
 
 @Module({
     imports: [
         HttpModule,
-        TypeOrmModule.forFeature([GeneSymbol, Phenotype, GenePhenotype]),
+        TypeOrmModule.forFeature([GeneSymbol, GeneResult, Phenotype]),
     ],
     controllers: [],
-    providers: [GenePhenotypesService],
-    exports: [GenePhenotypesService],
+    providers: [PhenotypesService],
+    exports: [PhenotypesService],
 })
-export class GenePhenotypesModule {}
+export class PhenotypesModule {}
