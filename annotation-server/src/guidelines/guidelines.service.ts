@@ -7,6 +7,8 @@ import { lastValueFrom } from 'rxjs';
 import { FindOptionsOrder, FindOptionsOrderValue, Repository } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
+import { FetchTarget } from '../fetch-dates/fetch-date.entity';
+import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { Medication } from '../medications/medication.entity';
 import { MedicationsService } from '../medications/medications.service';
 import { Phenotype } from '../phenotypes/entities/phenotype.entity';
@@ -46,6 +48,7 @@ export class GuidelinesService {
         private guidelineErrorRepository: Repository<GuidelineError>,
         private medicationsService: MedicationsService,
         private phenotypesService: PhenotypesService,
+        private fetchDatesService: FetchDatesService,
     ) {
         this.spreadsheetGeneResultHeader = [];
         this.medicationsByNameCache = new MedicationByNameCache(
@@ -134,6 +137,11 @@ export class GuidelinesService {
         const guidelines = await this.fetchCpicGuidelines();
         await this.addGuidelineURLS(guidelines);
         await this.complementAndSaveGuidelines(guidelines);
+        await this.fetchDatesService.set(FetchTarget.GUIDELINES);
+    }
+
+    async getLastUpdate(): Promise<Date | null> {
+        return this.fetchDatesService.get(FetchTarget.GUIDELINES);
     }
 
     private async fetchCpicGuidelines(): Promise<Map<string, Guideline[]>> {

@@ -19,6 +19,8 @@ import {
 } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
+import { FetchTarget } from '../fetch-dates/fetch-date.entity';
+import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { DrugDto } from './dtos/drugbank.dto';
 import { Medication, MedicationSearchView } from './medication.entity';
 
@@ -30,6 +32,7 @@ export class MedicationsService {
         private configService: ConfigService,
         @InjectRepository(Medication)
         private medicationRepository: Repository<Medication>,
+        private fetchDatesService: FetchDatesService,
     ) {}
 
     async findAll(
@@ -146,9 +149,14 @@ export class MedicationsService {
         const savedMedications = await this.medicationRepository.save(
             medications,
         );
+        await this.fetchDatesService.set(FetchTarget.MEDICATIONS);
         this.logger.log(
             `Successfully saved ${savedMedications.length} medications!`,
         );
+    }
+
+    async getLastUpdate(): Promise<Date | null> {
+        return this.fetchDatesService.get(FetchTarget.MEDICATIONS);
     }
 
     async clearAllMedicationData(): Promise<void> {

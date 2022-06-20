@@ -2,6 +2,8 @@ import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { FetchDate } from '../fetch-dates/fetch-date.entity';
+import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { Medication } from './medication.entity';
 import { MedicationsService } from './medications.service';
 
@@ -17,6 +19,11 @@ describe('MedicationsService', () => {
                 MedicationsService,
                 {
                     provide: getRepositoryToken(Medication),
+                    useValue: {},
+                },
+                FetchDatesService,
+                {
+                    provide: getRepositoryToken(FetchDate),
                     useValue: {},
                 },
             ],

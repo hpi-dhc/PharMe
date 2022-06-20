@@ -25,6 +25,12 @@ export class GuidelinesController {
         return this.guidelinesService.fetchGuidelines();
     }
 
+    @ApiOperation({ summary: `Get the previous CPIC data update's date` })
+    @Get('last_update')
+    getLastUpdate(): Promise<Date | null> {
+        return this.guidelinesService.getLastUpdate();
+    }
+
     @ApiOperation({ summary: 'Fetch all guidelines' })
     @ApiFindGuidelinesQueries()
     @Get()
