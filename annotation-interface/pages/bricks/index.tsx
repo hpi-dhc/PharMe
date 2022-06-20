@@ -95,9 +95,8 @@ export default AllTextBricks;
 
 export const getServerSideProps = async () => {
     await dbConnect();
-    const result = await TextBrick!.find({}).exec();
-    const bricks = result.map((doc) => {
-        const brick = doc.toObject();
+    const result = await TextBrick!.find().lean().exec();
+    const bricks = result.map((brick) => {
         return {
             ...brick,
             _id: brick._id!.toString(),

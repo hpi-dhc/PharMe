@@ -57,9 +57,8 @@ export const getServerSideProps = async (
 ): Promise<GetServerSidePropsResult<{ brick: ITextBrick }>> => {
     if (!context.params?.id) return { notFound: true };
     await dbConnect();
-    const result = await TextBrick!.findById(context.params.id).exec();
-    if (!result) return { notFound: true };
-    const brick = result.toObject();
+    const brick = await TextBrick!.findById(context.params.id).lean().exec();
+    if (!brick) return { notFound: true };
     return {
         props: {
             brick: {

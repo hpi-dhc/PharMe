@@ -16,13 +16,12 @@ const brickApi = async (
     switch (method) {
         case 'PUT':
             try {
-                const brick = await TextBrick!.findByIdAndUpdate(id, req.body, {
-                    new: true,
-                    runValidators: true,
-                });
-                if (!brick) {
-                    return res.status(400).json({ success: false });
-                }
+                const brick = await TextBrick!
+                    .findByIdAndUpdate(id, req.body, {
+                        new: true,
+                        runValidators: true,
+                    })
+                    .orFail();
                 res.status(200).json({ success: true, data: brick });
             } catch (error) {
                 res.status(400).json({ success: false });
@@ -31,10 +30,7 @@ const brickApi = async (
 
         case 'DELETE':
             try {
-                const deletedBrick = await TextBrick!.deleteOne({ _id: id });
-                if (!deletedBrick) {
-                    return res.status(400).json({ success: false });
-                }
+                await TextBrick!.deleteOne({ _id: id }).orFail();
                 res.status(200).json({ success: true, data: {} });
             } catch (error) {
                 res.status(400).json({ success: false });

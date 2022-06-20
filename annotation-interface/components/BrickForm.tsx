@@ -1,5 +1,6 @@
 import { UploadIcon } from '@heroicons/react/outline';
 import { XIcon, TrashIcon } from '@heroicons/react/solid';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
@@ -16,13 +17,13 @@ import {
     translationsToMap,
 } from '../database/models/TextBrick';
 import SelectionPopover from './SelectionPopover';
-const BrickForm = ({
-    usage,
-    brick,
-}: {
+
+type Props = {
     usage: BrickUsage | null;
     brick?: ITextBrick | null;
-}) => {
+};
+
+const BrickForm = ({ usage, brick }: Props) => {
     const router = useRouter();
     const id = brick?._id;
 
@@ -69,18 +70,11 @@ const BrickForm = ({
     };
     const save = async () => {
         try {
-            const res = await fetch(`/api/bricks${id ? '/' + id : ''}`, {
-                method: id ? 'PUT' : 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    usage,
-                    translations: validTranslations.current,
-                }),
+            const method = id ? axios.put : axios.post;
+            await method(`/api/bricks${id ? '/' + id : ''}`, {
+                usage,
+                translations: validTranslations.current,
             });
-            if (!res.ok) throw new Error(res.status.toString());
             done();
         } catch (error) {
             setMessage(`Failed to ${id ? 'update' : 'add new'} Brick.`);
@@ -88,9 +82,7 @@ const BrickForm = ({
     };
     const deleteBrick = async () => {
         try {
-            await fetch(`/api/bricks/${id}`, {
-                method: 'DELETE',
-            });
+            axios.delete(`/api/bricks/${id}`);
             done();
         } catch (error) {
             setMessage('Failed to delete Brick.');
