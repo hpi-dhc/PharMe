@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { GenePhenotypesModule } from './gene-phenotypes/gene-phenotypes.module';
 import { GuidelinesModule } from './guidelines/guidelines.module';
 import { MedicationsModule } from './medications/medications.module';
+import { PhenotypesModule } from './phenotypes/phenotypes.module';
 
 @Module({
     imports: [
@@ -32,10 +32,10 @@ import { MedicationsModule } from './medications/medications.module';
             }),
             inject: [ConfigService],
         }),
-        ScheduleModule.forRoot(),
-        MedicationsModule,
-        GenePhenotypesModule,
+        PhenotypesModule,
         GuidelinesModule,
+        MedicationsModule,
+        ScheduleModule.forRoot(),
     ],
     controllers: [AppController],
     providers: [AppService],

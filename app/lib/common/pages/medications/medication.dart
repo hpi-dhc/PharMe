@@ -23,8 +23,10 @@ class MedicationPage extends StatelessWidget {
               initial: Container.new,
               error: () => Text(context.l10n.err_generic),
               loading: () => Center(child: CircularProgressIndicator()),
-              loaded: (medication) =>
-                  _buildMedicationsPage(medication, context),
+              loaded: (medication) => _buildMedicationsPage(
+                filterUserGuidelines(medication),
+                context,
+              ),
             ),
           );
         },
@@ -39,7 +41,7 @@ class MedicationPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeader(medication.name, medication.drugclass!),
+        _buildHeader(medication.name, medication.drugclass),
         SizedBox(height: 20),
         _buildDisclaimer(context),
         SizedBox(height: 20),
@@ -48,12 +50,15 @@ class MedicationPage extends StatelessWidget {
           tooltip: context.l10n.medications_page_tooltip_guideline,
         ),
         SizedBox(height: 12),
-        ClinicalAnnotationCard(medication),
+        if (medication.guidelines.isNotEmpty)
+          ClinicalAnnotationCard(medication)
+        else
+          Text(context.l10n.medications_page_no_guidelines_for_phenotype),
       ],
     );
   }
 
-  Widget _buildHeader(String name, String drugclass) {
+  Widget _buildHeader(String name, String? drugclass) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -68,19 +73,20 @@ class MedicationPage extends StatelessWidget {
             ),
           ],
         ),
-        Container(
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: PharmeTheme.onSurfaceColor,
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-          ),
-          child: Text(
-            drugclass,
-            style: PharmeTheme.textTheme.titleMedium!.copyWith(
-              fontWeight: FontWeight.w100,
+        if (drugclass != null)
+          Container(
+            padding: EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: PharmeTheme.onSurfaceColor,
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+            ),
+            child: Text(
+              drugclass,
+              style: PharmeTheme.textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.w100,
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -166,7 +172,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
       children: [
         Text(
           context.l10n.medications_page_gene_name(
-            medication.guidelines[0].genePhenotype.geneSymbol.name,
+            medication.guidelines[0].phenotype.geneSymbol.name,
           ),
           style: PharmeTheme.textTheme.bodyLarge!.copyWith(
             color: Colors.black.withOpacity(0.5),
@@ -229,17 +235,9 @@ class ClinicalAnnotationCard extends StatelessWidget {
       ),
       SizedBox(height: 8),
       _buildSourceCard(
-        context.l10n.medications_page_sources_dpwg_name,
-        context.l10n.medications_page_sources_dpwg_description,
-        // TODO(SebastianWagner2): imeplement correct redirects to other sources than PharmGKB, https://github.com/hpi-dhc/PharMe/issues/325
-        () => null,
-      ),
-      SizedBox(height: 8),
-      _buildSourceCard(
         context.l10n.medications_page_sources_cpic_name,
         context.l10n.medications_page_sources_cpic_description,
-        // TODO(SebastianWagner2): imeplement correct redirects to other sources than PharmGKB, https://github.com/hpi-dhc/PharMe/issues/325
-        () => null,
+        () => _launchUrl(Uri.parse(medication.guidelines[0].cpicGuidelineUrl)),
       ),
     ]);
   }

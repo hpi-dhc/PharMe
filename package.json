@@ -2,7 +2,13 @@
   "name": "pharme",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["lab-server", "annotation-server"],
+  "workspaces": [
+    "lab-server",
+    "annotation-server",
+    "annotation-interface",
+    "miscellaneous/jest-badges-generator",
+    "miscellaneous/meeting-assistant"
+  ],
   "description": "",
   "author": "",
   "license": "UNLICENSED",

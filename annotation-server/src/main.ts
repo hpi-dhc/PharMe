@@ -15,7 +15,7 @@ async function bootstrap() {
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document, {
-        customSiteTitle: 'API Endpoints of our Lab Server',
+        customSiteTitle: 'API Endpoints of our Annotation Server',
         swaggerOptions: {
             persistAuthorization: true,
         },

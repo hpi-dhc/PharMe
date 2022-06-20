@@ -6,19 +6,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
 
-import { fetchSpreadsheetCells } from '../common/google-sheets';
-import { GenePhenotype } from '../gene-phenotypes/entities/gene-phenotype.entity';
-import { GenePhenotypesService } from '../gene-phenotypes/gene-phenotypes.service';
+import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { Medication } from '../medications/medication.entity';
 import { MedicationsService } from '../medications/medications.service';
-import {
-    GenePhenotypesByGeneCache,
-    GenePhenotypesCache,
-} from './caches/gene-phenotype-caches';
+import { Phenotype } from '../phenotypes/entities/phenotype.entity';
+import { PhenotypesService } from '../phenotypes/phenotypes.service';
 import {
     MedicationByNameCache,
     MedicationByRxcuiCache,
 } from './caches/medication-caches';
+import {
+    PhenotypesByGeneCache,
+    PhenotypesCache,
+} from './caches/phenotype-caches';
 import { CpicGuidelineDto } from './dtos/cpic-guideline.dto';
 import { CpicRecommendationDto } from './dtos/cpic-recommendation.dto';
 import {
@@ -31,11 +31,11 @@ import { Guideline, WarningLevel } from './entities/guideline.entity';
 @Injectable()
 export class GuidelinesService {
     private readonly logger = new Logger(GuidelinesService.name);
-    private spreadsheetPhenotypeHeader: Array<Set<string>>;
+    private spreadsheetGeneResultHeader: Array<Set<string>>;
     private medicationsByNameCache: MedicationByNameCache;
     private medicationsByRxcuiCache: MedicationByRxcuiCache;
-    private genePhenotypesByGeneCache: GenePhenotypesByGeneCache;
-    private genePhenotypesCache: GenePhenotypesCache;
+    private phenotypesByGeneCache: PhenotypesByGeneCache;
+    private phenotypesCache: PhenotypesCache;
 
     constructor(
         private configService: ConfigService,
@@ -45,22 +45,36 @@ export class GuidelinesService {
         @InjectRepository(GuidelineError)
         private guidelineErrorRepository: Repository<GuidelineError>,
         private medicationsService: MedicationsService,
-        private genePhenotypesService: GenePhenotypesService,
+        private phenotypesService: PhenotypesService,
     ) {
-        this.spreadsheetPhenotypeHeader = [];
+        this.spreadsheetGeneResultHeader = [];
         this.medicationsByNameCache = new MedicationByNameCache(
             this.medicationsService,
         );
         this.medicationsByRxcuiCache = new MedicationByRxcuiCache(
             this.medicationsService,
         );
-        this.genePhenotypesByGeneCache = new GenePhenotypesByGeneCache(
-            this.genePhenotypesService,
-            this.spreadsheetPhenotypeHeader,
+        this.phenotypesByGeneCache = new PhenotypesByGeneCache(
+            this.phenotypesService,
+            this.spreadsheetGeneResultHeader,
         );
-        this.genePhenotypesCache = new GenePhenotypesCache(
-            this.genePhenotypesService,
-        );
+        this.phenotypesCache = new PhenotypesCache(this.phenotypesService);
+    }
+
+    async findAllErrors(
+        limit: number,
+        offset: number,
+        sortBy: string,
+        orderBy: string,
+    ): Promise<GuidelineError[]> {
+        return this.guidelineErrorRepository.find({
+            take: limit,
+            skip: offset,
+            order: {
+                [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
+            },
+            relations: ['guideline'],
+        });
     }
 
     async fetchGuidelines(): Promise<void> {
@@ -109,21 +123,21 @@ export class GuidelinesService {
                     externalid[1],
                 );
                 if (!medication) continue;
-                for (const [geneSymbol, phenotype] of Object.entries(
+                for (const [geneSymbol, geneResult] of Object.entries(
                     cpicRecommendationDto.phenotypes,
                 )) {
-                    const genePhenotype = await this.genePhenotypesCache.get(
+                    const phenotype = await this.phenotypesCache.get(
                         geneSymbol,
-                        phenotype,
+                        geneResult,
                     );
-                    if (!genePhenotype) continue;
-                    const knownKey = `${medication.id}:${genePhenotype.id}`;
+                    if (!phenotype) continue;
+                    const knownKey = `${medication.id}:${phenotype.id}`;
                     if (knownCombinations.has(knownKey)) continue;
                     knownCombinations.add(knownKey);
                     const guideline = Guideline.fromCpicRecommendation(
                         cpicRecommendationDto,
                         medication,
-                        genePhenotype,
+                        phenotype,
                     );
 
                     if (guidelines.has(medication.name)) {
@@ -181,7 +195,7 @@ export class GuidelinesService {
         const [
             medications,
             genes,
-            phenotypeHeader,
+            geneResultHeader,
             implications,
             recommendations,
         ] = await fetchSpreadsheetCells(
@@ -200,15 +214,17 @@ export class GuidelinesService {
             ],
         );
 
-        this.spreadsheetPhenotypeHeader.splice(
+        this.spreadsheetGeneResultHeader.splice(
             0,
-            this.spreadsheetPhenotypeHeader.length,
-            ...phenotypeHeader[0].map(
+            this.spreadsheetGeneResultHeader.length,
+            ...geneResultHeader[0].map(
                 (cell) =>
                     new Set(
                         cell.value
                             .split(';')
-                            .map((phenotype) => phenotype.trim().toLowerCase()),
+                            .map((geneResult) =>
+                                geneResult.trim().toLowerCase(),
+                            ),
                     ),
             ),
         );
@@ -226,10 +242,10 @@ export class GuidelinesService {
                 const medication = await this.medicationsByNameCache.get(
                     medicationName.value,
                 );
-                const genePhenotypes = await this.genePhenotypesByGeneCache.get(
+                const phenotypes = await this.phenotypesByGeneCache.get(
                     geneSymbolName.value,
                 );
-                if (genePhenotypes.length === 0) continue;
+                if (phenotypes.length === 0) continue;
 
                 const guidelinesForMedication = guidelines.get(medication.name);
 
@@ -237,27 +253,25 @@ export class GuidelinesService {
                     const implication = implications[row][col].value?.trim();
                     const recommendation =
                         recommendations[row][col].value?.trim();
-                    const warningLevel = this.getWarningLevelFromColor(
+                    const warningLevel = this.warningLevelFromColor(
                         recommendations[row][col].backgroundColor,
                     );
                     if (
-                        !this.guidelineTextsAreValid(
-                            implication,
-                            recommendation,
-                        )
+                        this.isInvalidText(implication) ||
+                        this.isInvalidText(recommendation)
                     ) {
                         continue;
                     }
                     // supplement guidelines with implications and recommendations from sheet
-                    for (const genePhenotype of genePhenotypes[col].values()) {
+                    for (const phenotype of phenotypes[col].values()) {
                         try {
-                            const guidelinesForGenePhenotype =
-                                this.getGuidelinesForGenePhenotype(
+                            const guidelinesForPhenotype =
+                                this.getGuidelinesForPhenotype(
                                     medication,
-                                    genePhenotype,
+                                    phenotype,
                                     guidelinesForMedication,
                                 );
-                            guidelinesForGenePhenotype.forEach((guideline) => {
+                            guidelinesForPhenotype.forEach((guideline) => {
                                 guideline.implication = implication;
                                 guideline.recommendation = recommendation;
                                 guideline.warningLevel = warningLevel;
@@ -277,7 +291,7 @@ export class GuidelinesService {
         const flatGuidelines = Array.from(guidelines.values()).flat();
 
         const incompleteGuidelines = flatGuidelines.filter(
-            (guideline) => !guideline.isComplete,
+            (guideline) => guideline.isIncomplete,
         );
         for (const incompleteGuideline of incompleteGuidelines) {
             const error = new GuidelineError();
@@ -293,48 +307,27 @@ export class GuidelinesService {
         this.logger.log('Successfully saved all valid guidelines.');
     }
 
-    private getWarningLevelFromColor(
-        color?: sheets_v4.Schema$Color,
-    ): WarningLevel | null {
-        if (!color) return null;
-        const [red, green, blue] = [color.red, color.green, color.blue];
-        if (!red && green === 1 && !blue) return WarningLevel.GREEN;
-        if (red === 1 && green === 1 && !blue) return WarningLevel.YELLOW;
-        if (red === 1 && !green && !blue) return WarningLevel.RED;
-        if (red === green && red === blue && blue === green) return null; // any shade of gray or transparent/unset background (undefined)
-        this.logger.warn('Sheet cell has unknown color');
-        return null;
+    private isInvalidText(text: string): boolean {
+        text = text.replace(' ', '');
+        return !(text && text.toLowerCase() !== 'n/a');
     }
 
-    private guidelineTextsAreValid(
-        implication: string,
-        recommendation: string,
-    ): boolean {
-        return (
-            implication &&
-            implication.replace(' ', '').toLowerCase() !== 'n/a' &&
-            recommendation &&
-            recommendation.replace(' ', '').toLowerCase() !== 'n/a'
-        );
-    }
-
-    private getGuidelinesForGenePhenotype(
+    private getGuidelinesForPhenotype(
         medication: Medication,
-        genePhenotype: GenePhenotype,
+        phenotype: Phenotype,
         guidelinesForMed: Guideline[],
     ): Guideline[] {
-        const guidelinesForGenePhenotype = guidelinesForMed?.filter(
-            (guidelineForMed) =>
-                guidelineForMed.genePhenotype.id === genePhenotype.id,
+        const guidelinesForPhenotype = guidelinesForMed?.filter(
+            (guidelineForMed) => guidelineForMed.phenotype.id === phenotype.id,
         );
-        if (!guidelinesForGenePhenotype?.length) {
+        if (!guidelinesForPhenotype?.length) {
             const error = new GuidelineError();
             error.type = GuidelineErrorType.GUIDELINE_MISSING_FROM_CPIC;
             error.blame = GuidelineErrorBlame.CPIC;
-            error.context = `${medication.name}, ${genePhenotype.geneSymbol.name}:${genePhenotype.phenotype.name}`;
+            error.context = `${medication.name}, ${phenotype.geneSymbol.name}:${phenotype.geneResult.name}`;
             throw error;
         }
-        return guidelinesForGenePhenotype;
+        return guidelinesForPhenotype;
     }
 
     async clearAllData(): Promise<void> {
@@ -346,23 +339,24 @@ export class GuidelinesService {
     private clearCaches(): void {
         this.medicationsByNameCache.clear();
         this.medicationsByRxcuiCache.clear();
-        this.genePhenotypesByGeneCache.clear();
-        this.genePhenotypesCache.clear();
-        this.spreadsheetPhenotypeHeader.splice(
+        this.phenotypesByGeneCache.clear();
+        this.phenotypesCache.clear();
+        this.spreadsheetGeneResultHeader.splice(
             0,
-            this.spreadsheetPhenotypeHeader.length,
+            this.spreadsheetGeneResultHeader.length,
         );
     }
 
-    async getAllErrors(): Promise<GuidelineError[]> {
-        return this.guidelineErrorRepository.find({
-            select: {
-                type: true,
-                context: true,
-                blame: true,
-                guideline: { id: true },
-            },
-            relations: ['guideline'],
-        });
+    private warningLevelFromColor(
+        color?: sheets_v4.Schema$Color,
+    ): WarningLevel | null {
+        if (!color) return null;
+        const [red, green, blue] = [color.red, color.green, color.blue];
+        if (!red && green === 1 && !blue) return WarningLevel.GREEN;
+        if (red === 1 && green === 1 && !blue) return WarningLevel.YELLOW;
+        if (red === 1 && !green && !blue) return WarningLevel.RED;
+        if (red === green && red === blue && blue === green) return null; // any shade of gray or transparent/unset background (undefined)
+        this.logger.warn('Sheet cell has unknown color');
+        return null;
     }
 }
