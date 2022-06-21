@@ -1,27 +1,23 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiHandler } from 'next';
 
 import dbConnect from '../../../database/connect';
 import TextBrick from '../../../database/models/TextBrick';
 
-const brickApi = async (
-    req: NextApiRequest,
-    res: NextApiResponse,
-): Promise<void> => {
+const brickApi: NextApiHandler = async (req, res) => {
     const { method } = req;
     await dbConnect();
 
-    switch (method) {
-        case 'POST':
-            try {
+    try {
+        switch (method) {
+            case 'POST':
                 const brick = await TextBrick!.create(req.body);
-                res.status(201).json({ success: true, data: brick });
-            } catch (error) {
-                res.status(400).json({ success: false });
-            }
-            break;
-        default:
-            res.status(400).json({ success: false });
-            break;
+                res.status(201).json({ brick });
+                return;
+            default:
+                throw new Error();
+        }
+    } catch (error) {
+        res.status(400).json({ success: false });
     }
 };
 

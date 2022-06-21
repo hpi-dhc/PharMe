@@ -1,45 +1,35 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiHandler } from 'next';
 
 import dbConnect from '../../../database/connect';
 import TextBrick from '../../../database/models/TextBrick';
 
-const brickApi = async (
-    req: NextApiRequest,
-    res: NextApiResponse,
-): Promise<void> => {
+const brickApi: NextApiHandler = async (req, res) => {
     const {
         query: { id },
         method,
     } = req;
     await dbConnect();
 
-    switch (method) {
-        case 'PUT':
-            try {
+    try {
+        switch (method) {
+            case 'PUT':
                 const brick = await TextBrick!
                     .findByIdAndUpdate(id, req.body, {
                         new: true,
                         runValidators: true,
                     })
                     .orFail();
-                res.status(200).json({ success: true, data: brick });
-            } catch (error) {
-                res.status(400).json({ success: false });
-            }
-            break;
-
-        case 'DELETE':
-            try {
+                res.status(200).json({ brick });
+                return;
+            case 'DELETE':
                 await TextBrick!.deleteOne({ _id: id }).orFail();
-                res.status(200).json({ success: true, data: {} });
-            } catch (error) {
-                res.status(400).json({ success: false });
-            }
-            break;
-
-        default:
-            res.status(400).json({ success: false });
-            break;
+                res.status(200).json({ success: true });
+                return;
+            default:
+                throw new Error();
+        }
+    } catch {
+        res.status(400).json({ success: false });
     }
 };
 
