@@ -1,12 +1,14 @@
-import { ExclamationIcon } from '@heroicons/react/solid';
+import { CloudDownloadIcon, ExclamationIcon } from '@heroicons/react/solid';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import RelativeTime from 'dayjs/plugin/relativeTime';
+import { useState } from 'react';
 import useSWR from 'swr';
 
 import PageHeading from '../components/common/PageHeading';
 import WithIcon from '../components/common/WithIcon';
+import ControlPanel from '../components/home/ControlPanel';
 import { LastUpdatesDto } from './api/server-update';
 
 dayjs.extend(RelativeTime);
@@ -39,6 +41,7 @@ const Home = () => {
         fetchLastUpdateDates,
     );
     const lastUpdates = updatesResponse?.data;
+    const [controlVisible, setControlVisible] = useState(false);
     return (
         <>
             <PageHeading title="PharMe's Annotation Interface">
@@ -63,6 +66,16 @@ const Home = () => {
 
             <div className="pb-2 border-b border-black border-opacity-10 flex justify-between">
                 <h2 className="font-bold">External data status</h2>
+                {!error && (
+                    <WithIcon
+                        as="button"
+                        icon={CloudDownloadIcon}
+                        reverse
+                        onClick={() => setControlVisible(true)}
+                    >
+                        Fetch new data
+                    </WithIcon>
+                )}
             </div>
             {error ? (
                 <WithIcon as="p" icon={ExclamationIcon} className="p-2">
@@ -79,6 +92,12 @@ const Home = () => {
                         {dateDisplay(lastUpdates, 'guidelines')}
                     </div>
                 </>
+            )}
+            {controlVisible && (
+                <ControlPanel
+                    updates={lastUpdates}
+                    hide={() => setControlVisible(false)}
+                />
             )}
         </>
     );
