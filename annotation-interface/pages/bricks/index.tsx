@@ -3,17 +3,24 @@ import { ExclamationIcon, PlusCircleIcon } from '@heroicons/react/solid';
 import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
-import { displayCategories } from '../../common/constants';
-import FilterTabs, { DisplayFilterProps } from '../../components/FilterTabs';
-import PageHeading from '../../components/PageHeading';
+import DisplayLanguagePicker from '../../components/common/DisplayLanguagePicker';
+import FilterTabs from '../../components/common/FilterTabs';
+import Label from '../../components/common/Label';
+import PageHeading from '../../components/common/PageHeading';
+import WithIcon from '../../components/common/WithIcon';
+import {
+    displayCategories,
+    useBrickFilterContext,
+} from '../../contexts/brickFilter';
+import { useLanguageContext } from '../../contexts/language';
 import dbConnect from '../../database/connect';
 import TextBrick from '../../database/models/TextBrick';
 
 const AllTextBricks = ({
     bricks,
-    display,
-}: InferGetServerSidePropsType<typeof getServerSideProps> &
-    DisplayFilterProps) => {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { language } = useLanguageContext();
+    const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     return (
         <>
             <PageHeading title="Defined Bricks">
@@ -29,61 +36,61 @@ const AllTextBricks = ({
                     such as a given drug&apos;s name.
                 </>
             </PageHeading>
-            <FilterTabs display={display}>
+            <FilterTabs
+                titles={[...displayCategories]}
+                selected={categoryIndex}
+                setSelected={setCategoryIndex}
+                accessory={<DisplayLanguagePicker />}
+            >
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
-                        <div className="py-2">
-                            <div className="flex justify-center p-2">
-                                <Link href="/bricks/new">
-                                    <a className="inline-flex p-3">
-                                        <PlusCircleIcon className="h-5 w-5 mr-2"></PlusCircleIcon>
+                        <div className="flex justify-center p-4">
+                            <Link href="/bricks/new">
+                                <a>
+                                    <WithIcon icon={PlusCircleIcon}>
                                         Create new Brick
+                                    </WithIcon>
+                                </a>
+                            </Link>
+                        </div>
+                        {(categoryIndex > 0
+                            ? bricks.filter((brick) => brick.usage === category)
+                            : bricks
+                        ).map((brick, index) => (
+                            <p
+                                key={index}
+                                className="border-t border-black border-opacity-10 py-3 pl-3"
+                            >
+                                <Link key={index} href={`/bricks/${brick._id}`}>
+                                    <a className="self-start mr-2">
+                                        {brick.translations.find(
+                                            (translation) =>
+                                                translation.language ===
+                                                language,
+                                        )?.text ?? (
+                                            <WithIcon
+                                                icon={ExclamationIcon}
+                                                className="align-top"
+                                            >
+                                                This Brick is not translated to{' '}
+                                                {language}
+                                            </WithIcon>
+                                        )}
                                     </a>
                                 </Link>
-                            </div>
-                            {(categoryIndex > 0
-                                ? bricks.filter(
-                                      (brick) => brick.usage === category,
-                                  )
-                                : bricks
-                            ).map((brick, index) => (
-                                <p
-                                    key={index}
-                                    className="border-t border-black border-opacity-10 py-3 pl-3"
-                                >
-                                    <Link
-                                        key={index}
-                                        href={`/bricks/${brick._id}`}
-                                    >
-                                        <a className="self-start mr-2">
-                                            {brick.translations.find(
-                                                (translation) =>
-                                                    translation.language ===
-                                                    display.language,
-                                            )?.text ?? (
-                                                <span className="inline-flex align-top">
-                                                    <ExclamationIcon className="h-5 w-5 mr-2 pt-1" />
-                                                    This Brick is not translated
-                                                    to {display.language}.
-                                                </span>
-                                            )}
-                                        </a>
-                                    </Link>
-                                    <button
-                                        className="border border-black border-opacity-20 text-xs px-2 rounded-full whitespace-nowrap font-semibold align-text-top mr-2"
-                                        onClick={() =>
-                                            display.setCategoryIndex(
-                                                displayCategories.indexOf(
-                                                    brick.usage,
-                                                ),
-                                            )
-                                        }
-                                    >
-                                        {brick.usage}
-                                    </button>
-                                </p>
-                            ))}
-                        </div>
+                                <Label
+                                    as="button"
+                                    title={brick.usage}
+                                    onClick={() =>
+                                        setCategoryIndex(
+                                            displayCategories.indexOf(
+                                                brick.usage,
+                                            ),
+                                        )
+                                    }
+                                />
+                            </p>
+                        ))}
                     </Tab.Panel>
                 ))}
             </FilterTabs>

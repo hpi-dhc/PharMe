@@ -8,10 +8,3 @@ export const brickUsages = [
     'Recommendation',
 ] as const;
 export type BrickUsage = typeof brickUsages[number];
-
-export const displayCategories = ['All', ...brickUsages] as const;
-export type DisplayCategory = typeof displayCategories[number];
-export const displayCategoryForIndex = (index: number): DisplayCategory =>
-    displayCategories[index];
-export const indexForDisplayCategory = (category: DisplayCategory): number =>
-    displayCategories.indexOf(category);

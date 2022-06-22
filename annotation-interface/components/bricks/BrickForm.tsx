@@ -8,15 +8,16 @@ import {
     BrickUsage,
     SupportedLanguage,
     supportedLanguages,
-} from '../common/constants';
+} from '../../common/constants';
 import {
     ITextBrick,
     ITextBrickTranslation,
     translationIsValid,
     translationsToArray,
     translationsToMap,
-} from '../database/models/TextBrick';
-import SelectionPopover from './SelectionPopover';
+} from '../../database/models/TextBrick';
+import SelectionPopover from '../common/SelectionPopover';
+import WithIcon from '../common/WithIcon';
 
 type Props = {
     usage: BrickUsage | null;
@@ -105,13 +106,13 @@ const BrickForm = ({ usage, brick }: Props) => {
                     <div key={index} className="space-y-1">
                         <div className="flex justify-between">
                             <h2 className="font-bold">{language}</h2>
-                            <button
-                                className="inline-flex"
+                            <WithIcon
+                                as="button"
+                                icon={TrashIcon}
                                 onClick={() => deleteTranslation(language)}
                             >
                                 Delete translation
-                                <TrashIcon className="h-5 w-5 ml-2"></TrashIcon>
-                            </button>
+                            </WithIcon>
                         </div>
                         <textarea
                             className="resize-y w-full border border-black border-opacity-10 p-2"
@@ -135,30 +136,31 @@ const BrickForm = ({ usage, brick }: Props) => {
                 <p>{message}</p>
             </div>
             <div className="flex justify-between">
-                <button className="inline-flex" onClick={() => done()}>
-                    <XIcon className="h-5 w-5 mr-2"></XIcon>
+                <WithIcon as="button" icon={XIcon} onClick={() => done()}>
                     Cancel
-                </button>
+                </WithIcon>
                 <div className="space-x-4">
                     {id && (
-                        <button
-                            className="inline-flex"
+                        <WithIcon
+                            as="button"
+                            icon={TrashIcon}
+                            reverse
                             onClick={() => deleteBrick()}
                         >
                             Delete Brick
-                            <TrashIcon className="h-5 w-5 ml-2"></TrashIcon>
-                        </button>
+                        </WithIcon>
                     )}
-                    <button
-                        className={`inline-flex ${
-                            isValid || 'opacity-50 line-through'
-                        }`}
-                        onClick={() => save()}
-                        disabled={!isValid}
+                    <WithIcon
+                        as="button"
+                        icon={UploadIcon}
+                        reverse
+                        className={
+                            isValid ? undefined : 'opacity-50 line-through'
+                        }
+                        onClick={() => isValid && save()}
                     >
                         Save Brick
-                        <UploadIcon className="h-5 w-5 ml-2"></UploadIcon>
-                    </button>
+                    </WithIcon>
                 </div>
             </div>
         </div>

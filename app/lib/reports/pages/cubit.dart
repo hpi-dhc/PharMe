@@ -15,7 +15,10 @@ class ReportsCubit extends Cubit<ReportsState> {
   Future<void> loadMedications() async {
     final requestUri = annotationServerUrl.replace(
       path: 'api/v1/medications',
-      queryParameters: {'withGuidelines': 'true'},
+      queryParameters: {
+          'withGuidelines': 'true',
+          'getGuidelines': 'true',
+      },
     );
 
     final isOnline = await hasConnectionTo(requestUri.authority);
