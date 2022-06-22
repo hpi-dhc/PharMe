@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { ApiParamGetById } from '../common/api/params';
 import {
     ApiFindGuidelineErrorsQueries,
     FindGuidelineErrorQueryDto,
@@ -44,13 +45,7 @@ export class GuidelinesController {
     }
 
     @ApiOperation({ summary: 'Fetch one guideline' })
-    @ApiParam({
-        name: 'id',
-        description: 'ID of the guideline to fetch information for',
-        example: '144',
-        type: 'integer',
-        required: true,
-    })
+    @ApiParamGetById('guideline')
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Guideline> {
         return await this.guidelinesService.findOne(id);

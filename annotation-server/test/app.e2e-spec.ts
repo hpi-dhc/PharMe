@@ -62,7 +62,7 @@ describe('App (e2e)', () => {
         it('should return 3 medication ids', async () => {
             const getResponse = await request(app.getHttpServer())
                 .get('/medications')
-                .query({ onlyIds: 'true' });
+                .query({ onlyIds: true });
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.length).toEqual(3);
         });
@@ -70,7 +70,7 @@ describe('App (e2e)', () => {
         it('should get 2 medications with guidelines', async () => {
             const getResponse = await request(app.getHttpServer())
                 .get('/medications')
-                .query({ withGuidelines: 'true', getGuidelines: 'true' });
+                .query({ withGuidelines: true, getGuidelines: true });
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.length).toEqual(2);
         });
@@ -88,8 +88,8 @@ describe('App (e2e)', () => {
                 .get('/medications')
                 .query({
                     search: 'cod',
-                    withGuidelines: 'true',
-                    getGuidelines: 'true',
+                    withGuidelines: true,
+                    getGuidelines: true,
                 });
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.length).toEqual(1);
@@ -126,7 +126,7 @@ describe('App (e2e)', () => {
         it('should verify guidelines for one medication', async () => {
             const getResponse = await request(app.getHttpServer())
                 .get('/medications/' + codeineId)
-                .query({ withGuidelines: 'true', getGuidelines: 'true' });
+                .query({ getGuidelines: true });
             expect(getResponse.status).toEqual(200);
 
             const guidelines: Guideline[] = getResponse.body.guidelines;
