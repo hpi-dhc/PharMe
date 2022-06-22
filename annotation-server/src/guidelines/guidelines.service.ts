@@ -1,12 +1,14 @@
 import { sheets_v4 } from '@googleapis/sheets';
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
 import { FindOptionsOrder, FindOptionsOrderValue, Repository } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
+import { FetchTarget } from '../fetch-dates/fetch-date.entity';
+import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { Medication } from '../medications/medication.entity';
 import { MedicationsService } from '../medications/medications.service';
 import { Phenotype } from '../phenotypes/entities/phenotype.entity';
@@ -46,6 +48,7 @@ export class GuidelinesService {
         private guidelineErrorRepository: Repository<GuidelineError>,
         private medicationsService: MedicationsService,
         private phenotypesService: PhenotypesService,
+        private fetchDatesService: FetchDatesService,
     ) {
         this.spreadsheetGeneResultHeader = [];
         this.medicationsByNameCache = new MedicationByNameCache(
@@ -120,10 +123,25 @@ export class GuidelinesService {
     }
 
     async fetchGuidelines(): Promise<void> {
+        if (!(await this.medicationsService.hasData())) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    error: 'Medication data has to be initialized.',
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+        await this.phenotypesService.fetchPhenotypes();
         await this.clearAllData();
         const guidelines = await this.fetchCpicGuidelines();
         await this.addGuidelineURLS(guidelines);
         await this.complementAndSaveGuidelines(guidelines);
+        await this.fetchDatesService.set(FetchTarget.GUIDELINES);
+    }
+
+    async getLastUpdate(): Promise<Date | null> {
+        return this.fetchDatesService.get(FetchTarget.GUIDELINES);
     }
 
     private async fetchCpicGuidelines(): Promise<Map<string, Guideline[]>> {

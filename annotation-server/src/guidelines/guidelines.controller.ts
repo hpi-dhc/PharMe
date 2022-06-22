@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiParamGetById } from '../common/api/params';
@@ -18,6 +18,18 @@ import { GuidelinesService } from './guidelines.service';
 @Controller('guidelines')
 export class GuidelinesController {
     constructor(private guidelinesService: GuidelinesService) {}
+
+    @ApiOperation({ summary: 'Clear and update all data from CPIC' })
+    @Post()
+    initializeDatabase(): Promise<void> {
+        return this.guidelinesService.fetchGuidelines();
+    }
+
+    @ApiOperation({ summary: `Get the previous CPIC data update's date` })
+    @Get('last_update')
+    getLastUpdate(): Promise<Date | null> {
+        return this.guidelinesService.getLastUpdate();
+    }
 
     @ApiOperation({ summary: 'Fetch all guidelines' })
     @ApiFindGuidelinesQueries()

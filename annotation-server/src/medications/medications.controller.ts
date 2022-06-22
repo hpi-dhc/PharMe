@@ -15,6 +15,12 @@ import { MedicationsService } from './medications.service';
 export class MedicationsController {
     constructor(private medicationsService: MedicationsService) {}
 
+    @ApiOperation({ summary: `Get the previous DrugBank data update's date` })
+    @Get('last_update')
+    getLastUpdate(): Promise<Date | null> {
+        return this.medicationsService.getLastUpdate();
+    }
+
     @ApiOperation({ summary: 'Fetch all medications' })
     @ApiFindMedicationsQueries()
     @Get()
