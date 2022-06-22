@@ -33,6 +33,22 @@ describe('App (e2e)', () => {
             );
             expect(createResponse.status).toEqual(400);
         });
+
+        it(`should verify guidelines haven't been fetched`, async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/guidelines/last_update',
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(new Date(getResponse.body).getTime()).toBeNaN();
+        });
+
+        it(`should verify medications haven't been fetched`, async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/medications/last_update',
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(new Date(getResponse.body).getTime()).toBeNaN();
+        });
     });
 
     describe('Initialization', () => {
@@ -45,6 +61,30 @@ describe('App (e2e)', () => {
     });
 
     describe('Retrieve data for all medications & guidelines', () => {
+        const verifyLastUpdate = (dateString: string) => {
+            const lastUpdate = new Date(dateString).getTime();
+            const now = new Date().getTime();
+            const interval = now - lastUpdate;
+            expect(interval).toBeGreaterThanOrEqual(0);
+            expect(interval).toBeLessThanOrEqual(5 * 60 * 1000);
+        };
+
+        it('should verify guidelines have been fetched in the last 5 minutes', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/guidelines/last_update',
+            );
+            expect(getResponse.status).toEqual(200);
+            verifyLastUpdate(getResponse.body);
+        });
+
+        it('should verify medications have been fetched in the last 5 minutes', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/medications/last_update',
+            );
+            expect(getResponse.status).toEqual(200);
+            verifyLastUpdate(getResponse.body);
+        });
+
         it('should verify that data errors have been saved', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/guidelines/errors',

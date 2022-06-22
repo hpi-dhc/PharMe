@@ -11,7 +11,7 @@ export class FetchDatesService {
         private fetchDatesRepository: Repository<FetchDate>,
     ) {}
 
-    async get(target: FetchTarget): Promise<Date | null> {
+    async get(target: FetchTarget): Promise<Date | undefined> {
         const fetchDate = await this.fetchDatesRepository.findOneBy({ target });
         return fetchDate?.date;
     }

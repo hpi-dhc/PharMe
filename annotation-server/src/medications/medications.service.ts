@@ -155,7 +155,7 @@ export class MedicationsService {
         );
     }
 
-    async getLastUpdate(): Promise<Date | null> {
+    async getLastUpdate(): Promise<Date | undefined> {
         return this.fetchDatesService.get(FetchTarget.MEDICATIONS);
     }
 
