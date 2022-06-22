@@ -27,7 +27,7 @@ export class GuidelinesController {
 
     @ApiOperation({ summary: `Get the previous CPIC data update's date` })
     @Get('last_update')
-    getLastUpdate(): Promise<Date | null> {
+    getLastUpdate(): Promise<Date | undefined> {
         return this.guidelinesService.getLastUpdate();
     }
 

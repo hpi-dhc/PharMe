@@ -140,7 +140,7 @@ export class GuidelinesService {
         await this.fetchDatesService.set(FetchTarget.GUIDELINES);
     }
 
-    async getLastUpdate(): Promise<Date | null> {
+    async getLastUpdate(): Promise<Date | undefined> {
         return this.fetchDatesService.get(FetchTarget.GUIDELINES);
     }
 
