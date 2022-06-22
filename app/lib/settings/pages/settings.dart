@@ -3,16 +3,24 @@ import 'package:comprehension_measurement/comprehension_measurement.dart';
 import '../../common/module.dart';
 import '../utils.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+class SettingsPage extends AutoComprehensiblePage {
+  SettingsPage()
+      : super(
+          supabaseConfig: supabaseConfig,
+          surveyId: 1,
+          introText:
+              '''Would you like to participate in a survey with the aim to measure user comprehension 
+                of the applications content? This would help the developer team greatly to improve PharMe 
+                and make it understandable for everyone!''',
+          surveyButtonText: 'Continue to survey',
+          probability: 1,
+          didOpenTab: (previousRoute) {
+            return previousRoute == AutoRoute(path: 'main/reports/');
+          },
+        );
 
   @override
   Widget build(BuildContext context) {
-    final questionContext = {
-      'title': ['1'],
-      'another_title': ['1', '2'],
-    };
-
     return ListView(children: [
       ListTile(
         title: Text(
@@ -72,7 +80,6 @@ class SettingsPage extends StatelessWidget {
           introText: 'Was the last page understandable for you?',
           surveyButtonText: 'Yes',
           feedbackButtonText: 'No',
-          questionContext: questionContext,
           supabaseConfig: supabaseConfig,
         ),
       ),

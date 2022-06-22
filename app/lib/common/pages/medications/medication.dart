@@ -1,13 +1,24 @@
 // ignore_for_file: avoid_returning_null_for_void
 
+import 'package:comprehension_measurement/comprehension_measurement.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../reports/models/warning_level.dart';
 import '../../module.dart';
 import 'cubit.dart';
 
-class MedicationPage extends StatelessWidget {
-  const MedicationPage(this.id);
+class MedicationPage extends AutoComprehensiblePage {
+  MedicationPage(this.id)
+      : super(
+            supabaseConfig: supabaseConfig,
+            surveyId: 4,
+            introText:
+                '''Would you like to participate in a survey with the aim to measure user comprehension 
+                of the applications content? This would help the developer team greatly to improve PharMe 
+                and make it understandable for everyone!''',
+            surveyButtonText: 'Continue to survey',
+            probability: 1);
 
   final int id;
 
@@ -34,10 +45,40 @@ class MedicationPage extends StatelessWidget {
     );
   }
 
+  void _initializeQuestionContext(MedicationWithGuidelines medication) {
+    if (medication.guidelines.isEmpty) return;
+    switch (medication.guidelines[0].warningLevel) {
+      case 'danger':
+        setContext('danger_level', [12]);
+        break;
+      case 'warning':
+        setContext('danger_level', [11]);
+        break;
+      case 'ok':
+        setContext('danger_level', [10]);
+        break;
+    }
+    switch (medication.guidelines[0].phenotype.geneResult.name) {
+      case 'Rapid Metabolizer':
+        setContext('metabolization_class', [15]);
+        break;
+      case 'Normal Metabolizer':
+        setContext('metabolization_class', [16]);
+        break;
+      case 'Intermediate Metabolizer':
+        setContext('metabolization_class', [17]);
+        break;
+      case 'Poor Metabolizer':
+        setContext('metabolization_class', [18]);
+        break;
+    }
+  }
+
   Widget _buildMedicationsPage(
     MedicationWithGuidelines medication,
     BuildContext context,
   ) {
+    _initializeQuestionContext(medication);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

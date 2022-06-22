@@ -1,8 +1,23 @@
+import 'package:comprehension_measurement/comprehension_measurement.dart';
+
 import '../../common/module.dart';
 import '../constants.dart';
 
-class FaqPage extends StatelessWidget {
-  const FaqPage({Key? key}) : super(key: key);
+class FaqPage extends AutoComprehensiblePage {
+  FaqPage()
+      : super(
+          supabaseConfig: supabaseConfig,
+          surveyId: 1,
+          introText:
+              '''Would you like to participate in a survey with the aim to measure user comprehension 
+                of the applications content? This would help the developer team greatly to improve PharMe 
+                and make it understandable for everyone!''',
+          surveyButtonText: 'Continue to survey',
+          probability: 1,
+          didOpenTab: (previousRoute) {
+            return previousRoute == AutoRoute(path: 'main/reports/');
+          },
+        );
 
   @override
   Widget build(BuildContext context) {
