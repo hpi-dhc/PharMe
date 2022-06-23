@@ -5,7 +5,7 @@ final annotationServerIp = Uri.https(
 );
 final annotationServerUrl = annotationServerIp.replace(path: 'api/v1');
 final labServerUrl = labServerIp.replace(path: 'api/v1');
-final keycloakUrl = Uri.https('keycloak.k8s.kunst.me', '');
+final keycloakUrl = labServerIp;
 final cpicMaxCacheTime = Duration(days: 90);
 const maxCachedMedications = 10;
 const cpicLookupUrl =

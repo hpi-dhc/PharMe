@@ -63,22 +63,18 @@ pw.Widget buildPdfPage(
           ),
         ),
       ],
-      if (medication.description.isNotNullOrBlank)
+      if (medication.description.isNotNullOrBlank) ...[
         pw.SizedBox(height: 8, width: double.infinity),
-      _PdfSegment(
-        child: pw.Text(
-          medication.description!,
-          style: pw.TextStyle(fontSize: 12),
-        ),
-      ),
+        _PdfSegment(
+          child: pw.Text(
+            medication.description!,
+            style: pw.TextStyle(fontSize: 12),
+          ),
+        )
+      ],
       pw.SizedBox(height: 32, width: double.infinity),
-      for (final guideline in relevantGuidelines) ...[
+      for (final guideline in relevantGuidelines)
         ..._buildGuidelinePart(guideline),
-        pw.Divider(color: PdfColors.grey500),
-        ..._buildGuidelinePart(guideline),
-        pw.Divider(color: PdfColors.grey500),
-        ..._buildGuidelinePart(guideline)
-      ]
     ],
   );
 }
@@ -117,14 +113,14 @@ List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
       child: _PdfText(
         title: 'Relevant Gene and Phenotype: ',
         text:
-            '${guideline.genePhenotype.geneSymbol.name} - ${guideline.genePhenotype.phenotype.name}',
+            '${guideline.phenotype.geneSymbol.name} - ${guideline.phenotype.geneResult.name}',
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
     _PdfSegment(
       child: _PdfText(
         title: 'CPIC Consultation Text: ',
-        text: guideline.genePhenotype.cpicConsultationText,
+        text: guideline.phenotype.cpicConsulationText,
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
@@ -135,6 +131,7 @@ List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
+    pw.Divider(color: PdfColors.grey500),
   ];
 }
 
