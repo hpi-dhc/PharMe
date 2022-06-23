@@ -91,6 +91,7 @@ class Phenotype {
     required this.id,
     required this.geneResult,
     required this.geneSymbol,
+    this.cpicConsulationText,
   });
   factory Phenotype.fromJson(dynamic json) => _$PhenotypeFromJson(json);
 
@@ -102,6 +103,9 @@ class Phenotype {
 
   @HiveField(2)
   GeneSymbol geneSymbol;
+
+  @HiveField(3)
+  String? cpicConsulationText;
 
   @override
   bool operator ==(other) {

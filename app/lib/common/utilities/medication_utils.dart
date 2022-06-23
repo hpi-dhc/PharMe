@@ -2,7 +2,7 @@ import 'package:dartx/dartx.dart';
 
 import '../models/module.dart';
 
-// removes the guidelines that are not passing to the user
+/// Removes the guidelines that are not relevant to the user
 MedicationWithGuidelines filterUserGuidelines(
   MedicationWithGuidelines medication,
 ) {
