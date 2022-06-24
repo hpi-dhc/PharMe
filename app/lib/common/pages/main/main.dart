@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../comprehension_measurement.dart';
 import '../../l10n.dart';
 import '../../routing/router.dart';
 
@@ -26,7 +27,10 @@ class MainPage extends StatelessWidget {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: tabsRouter.activeIndex,
-          onTap: tabsRouter.setActiveIndex,
+          onTap: (index) {
+            tabsRouter.setActiveIndex(index);
+            ComprehensionMeasurement.measure(context);
+          },
           items: _bottomNavigationBarItems(context),
         );
       },
