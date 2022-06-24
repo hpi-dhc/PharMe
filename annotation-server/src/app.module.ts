@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FetchDatesModule } from './fetch-dates/fetch-dates.module';
 import { GuidelinesModule } from './guidelines/guidelines.module';
 import { MedicationsModule } from './medications/medications.module';
 import { PhenotypesModule } from './phenotypes/phenotypes.module';
@@ -35,7 +35,7 @@ import { PhenotypesModule } from './phenotypes/phenotypes.module';
         PhenotypesModule,
         GuidelinesModule,
         MedicationsModule,
-        ScheduleModule.forRoot(),
+        FetchDatesModule,
     ],
     controllers: [AppController],
     providers: [AppService],

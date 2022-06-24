@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import NavBar from '../components/NavBar';
+import Layout from '../components/common/Layout';
 
 function AnnotationInterface({ Component, pageProps }: AppProps) {
     return (
@@ -10,10 +10,9 @@ function AnnotationInterface({ Component, pageProps }: AppProps) {
             <Head>
                 <title>PharMe: Annotation Interface</title>
             </Head>
-            <NavBar />
-            <div className="max-w-screen-md mx-auto pt-4">
+            <Layout>
                 <Component {...pageProps} />
-            </div>
+            </Layout>
         </>
     );
 }

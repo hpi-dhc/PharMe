@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { ApiParamGetById } from '../common/api/params';
 import {
     ApiFindMedicationsQueries,
     ApiFindMedicationQueries,
@@ -14,6 +15,12 @@ import { MedicationsService } from './medications.service';
 export class MedicationsController {
     constructor(private medicationsService: MedicationsService) {}
 
+    @ApiOperation({ summary: `Get the previous DrugBank data update's date` })
+    @Get('last_update')
+    getLastUpdate(): Promise<Date | undefined> {
+        return this.medicationsService.getLastUpdate();
+    }
+
     @ApiOperation({ summary: 'Fetch all medications' })
     @ApiFindMedicationsQueries()
     @Get()
@@ -25,20 +32,14 @@ export class MedicationsController {
             dto.sortby ?? 'name',
             dto.orderby ?? 'asc',
             FindMedicationQueryDto.isTrueString(dto.withGuidelines),
+            FindMedicationQueryDto.isTrueString(dto.getGuidelines),
             FindMedicationQueryDto.isTrueString(dto.onlyIds),
         );
     }
 
     @ApiOperation({ summary: 'Fetch one medication' })
     @ApiFindMedicationQueries()
-    @ApiParam({
-        name: 'id',
-        description:
-            'ID of the medication to fetch information and guidelines for',
-        example: '144',
-        type: 'integer',
-        required: true,
-    })
+    @ApiParamGetById('medication')
     @Get(':id')
     async findOne(
         @Param('id') id: number,
@@ -46,7 +47,7 @@ export class MedicationsController {
     ): Promise<Medication> {
         return await this.medicationsService.findOne(
             id,
-            FindMedicationQueryDto.isTrueString(dto.withGuidelines),
+            FindMedicationQueryDto.isTrueString(dto.getGuidelines),
         );
     }
 }

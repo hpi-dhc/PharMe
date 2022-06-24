@@ -58,6 +58,7 @@ module.exports = {
 
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'error',
+    '@typescript-eslint/no-non-null-assertion': 'off',
 
     // we need this due to our injections in services and controllers
     'no-useless-constructor': 'off',

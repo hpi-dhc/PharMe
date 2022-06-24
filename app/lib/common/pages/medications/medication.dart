@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../reports/models/warning_level.dart';
 import '../../module.dart';
+import '../../utilities/pdf_utils.dart';
 import 'cubit.dart';
 
 class MedicationPage extends AutoComprehensiblePage {
@@ -82,7 +83,7 @@ class MedicationPage extends AutoComprehensiblePage {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeader(medication.name, medication.drugclass),
+        _buildHeader(medication),
         SizedBox(height: 20),
         _buildDisclaimer(context),
         SizedBox(height: 20),
@@ -99,22 +100,27 @@ class MedicationPage extends AutoComprehensiblePage {
     );
   }
 
-  Widget _buildHeader(String name, String? drugclass) {
+  Widget _buildHeader(
+    MedicationWithGuidelines medication,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(name, style: PharmeTheme.textTheme.displaySmall),
-            Icon(
-              Icons.ios_share,
-              size: 32,
-              color: PharmeTheme.primaryColor,
+            Text(medication.name, style: PharmeTheme.textTheme.displaySmall),
+            IconButton(
+              onPressed: () => sharePdf(medication),
+              icon: Icon(
+                Icons.ios_share,
+                size: 32,
+                color: PharmeTheme.primaryColor,
+              ),
             ),
           ],
         ),
-        if (drugclass != null)
+        if (medication.drugclass != null)
           Container(
             padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
@@ -122,7 +128,7 @@ class MedicationPage extends AutoComprehensiblePage {
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
             child: Text(
-              drugclass,
+              medication.drugclass!,
               style: PharmeTheme.textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.w100,
               ),

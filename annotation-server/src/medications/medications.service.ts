@@ -15,9 +15,12 @@ import {
     IsNull,
     Not,
     Repository,
+    FindOptionsOrderValue,
 } from 'typeorm';
 
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
+import { FetchTarget } from '../fetch-dates/fetch-date.entity';
+import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { DrugDto } from './dtos/drugbank.dto';
 import { Medication, MedicationSearchView } from './medication.entity';
 
@@ -29,6 +32,7 @@ export class MedicationsService {
         private configService: ConfigService,
         @InjectRepository(Medication)
         private medicationRepository: Repository<Medication>,
+        private fetchDatesService: FetchDatesService,
     ) {}
 
     async findAll(
@@ -36,8 +40,9 @@ export class MedicationsService {
         offset: number,
         search: string,
         sortBy: string,
-        orderBy: string,
+        orderBy: FindOptionsOrderValue,
         withGuidelines: boolean,
+        getGuidelines: boolean,
         onlyIds: boolean,
     ): Promise<Medication[]> {
         if (onlyIds) return this.getAllIds();
@@ -47,9 +52,7 @@ export class MedicationsService {
             where: whereClause,
             take: limit,
             skip: offset,
-            order: {
-                [sortBy]: orderBy === 'asc' ? 'ASC' : 'DESC',
-            },
+            order: { [sortBy]: orderBy },
         };
 
         if (search) {
@@ -57,8 +60,9 @@ export class MedicationsService {
             whereClause.id = In(matchingIds);
         }
 
-        if (withGuidelines) {
-            whereClause.guidelines = { id: Not(IsNull()) };
+        if (withGuidelines) whereClause.guidelines = { id: Not(IsNull()) };
+
+        if (getGuidelines) {
             findOptions.relations = [
                 'guidelines',
                 'guidelines.phenotype.geneResult',
@@ -73,10 +77,10 @@ export class MedicationsService {
         return await this.medicationRepository.find({ select: ['id'] });
     }
 
-    async findOne(id: number, withGuidelines: boolean): Promise<Medication> {
+    async findOne(id: number, getGuidelines: boolean): Promise<Medication> {
         const findOptions: FindOneOptions<Medication> = { where: { id: id } };
 
-        if (withGuidelines) {
+        if (getGuidelines) {
             findOptions.relations = [
                 'guidelines',
                 'guidelines.phenotype.geneResult',
@@ -145,13 +149,22 @@ export class MedicationsService {
         const savedMedications = await this.medicationRepository.save(
             medications,
         );
+        await this.fetchDatesService.set(FetchTarget.MEDICATIONS);
         this.logger.log(
             `Successfully saved ${savedMedications.length} medications!`,
         );
     }
 
+    async getLastUpdate(): Promise<Date | undefined> {
+        return this.fetchDatesService.get(FetchTarget.MEDICATIONS);
+    }
+
     async clearAllMedicationData(): Promise<void> {
         await this.medicationRepository.delete({});
+    }
+
+    async hasData(): Promise<boolean> {
+        return (await this.medicationRepository.count()) > 0;
     }
 
     getJSONfromZip(): Promise<string> {
