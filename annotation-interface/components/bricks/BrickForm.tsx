@@ -18,6 +18,7 @@ import {
 } from '../../database/models/TextBrick';
 import SelectionPopover from '../common/SelectionPopover';
 import WithIcon from '../common/WithIcon';
+import AutocompleteArea from './AutocompleteArea';
 
 type Props = {
     usage: BrickUsage | null;
@@ -114,13 +115,12 @@ const BrickForm = ({ usage, brick }: Props) => {
                                 Delete translation
                             </WithIcon>
                         </div>
-                        <textarea
-                            className="resize-y w-full border border-black border-opacity-10 p-2"
-                            value={translations.get(language)}
-                            onChange={(e) =>
-                                updateTranslation(language, e.target.value)
+                        <AutocompleteArea
+                            value={translations.get(language) ?? ''}
+                            onChange={(text) =>
+                                updateTranslation(language, text)
                             }
-                        ></textarea>
+                        />
                     </div>
                 ))}
             {missingLanguages.length > 0 && (
