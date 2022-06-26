@@ -16,7 +16,7 @@ import {
     displayCategoryForIndex,
     indexForDisplayCategory,
 } from '../../contexts/brickFilter';
-import dbConnect from '../../database/connect';
+import dbConnect from '../../database/helpers/connect';
 import TextBrick, { ITextBrick } from '../../database/models/TextBrick';
 
 const EditBrick = ({

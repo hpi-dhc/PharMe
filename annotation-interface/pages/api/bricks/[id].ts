@@ -1,6 +1,6 @@
 import { NextApiHandler } from 'next';
 
-import dbConnect from '../../../database/connect';
+import dbConnect from '../../../database/helpers/connect';
 import TextBrick from '../../../database/models/TextBrick';
 
 const brickApi: NextApiHandler = async (req, res) => {

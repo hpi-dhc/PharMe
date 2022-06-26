@@ -1,7 +1,7 @@
 import mongoose, { SchemaValidator, Types } from 'mongoose';
 
 import { BrickUsage } from '../../common/constants';
-import { IBaseModel, OptionalId } from '../types';
+import { IBaseModel, OptionalId } from '../helpers/types';
 import TextBrick from './TextBrick';
 
 export interface IAbstractAnnotation<IdT extends OptionalId = undefined>

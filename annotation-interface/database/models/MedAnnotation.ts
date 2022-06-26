@@ -1,6 +1,6 @@
 import mongoose, { Types } from 'mongoose';
 
-import { MongooseId, OptionalId } from '../types';
+import { MongooseId, OptionalId } from '../helpers/types';
 import AbstractAnnotation, {
     annotationBrickValidators,
     IAbstractAnnotation,

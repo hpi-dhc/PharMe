@@ -5,11 +5,14 @@ import AutocompleteMenu, { AutoCompleteMenuRef } from './AutocompleteMenu';
 type Props = {
     value: string;
     onChange: (text: string) => void;
+    validPlaceholders: string[];
 };
 
-const validPlaceholders = ['drug-name', 'gene-symbol', 'gene-result'];
-
-const AutocompleteArea = ({ value: text, onChange: setText }: Props) => {
+const AutocompleteArea = ({
+    value: text,
+    onChange: setText,
+    validPlaceholders,
+}: Props) => {
     const [selection, setSelection] = useState<
         [start: number, end: number] | null
     >(null);

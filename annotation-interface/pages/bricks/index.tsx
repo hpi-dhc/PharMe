@@ -13,7 +13,7 @@ import {
     useBrickFilterContext,
 } from '../../contexts/brickFilter';
 import { useLanguageContext } from '../../contexts/language';
-import dbConnect from '../../database/connect';
+import dbConnect from '../../database/helpers/connect';
 import TextBrick from '../../database/models/TextBrick';
 
 const AllTextBricks = ({

@@ -10,11 +10,17 @@ import {
     supportedLanguages,
 } from '../../common/constants';
 import {
-    ITextBrick,
-    ITextBrickTranslation,
     translationIsValid,
     translationsToArray,
     translationsToMap,
+} from '../../database/helpers/brick-translations';
+import {
+    allBrickPlaceholders,
+    medicationBrickPlaceholders,
+} from '../../database/helpers/resolve-bricks';
+import {
+    ITextBrick,
+    ITextBrickTranslation,
 } from '../../database/models/TextBrick';
 import SelectionPopover from '../common/SelectionPopover';
 import WithIcon from '../common/WithIcon';
@@ -119,6 +125,11 @@ const BrickForm = ({ usage, brick }: Props) => {
                             value={translations.get(language) ?? ''}
                             onChange={(text) =>
                                 updateTranslation(language, text)
+                            }
+                            validPlaceholders={
+                                usage.startsWith('Drug')
+                                    ? [...medicationBrickPlaceholders]
+                                    : [...allBrickPlaceholders]
                             }
                         />
                     </div>

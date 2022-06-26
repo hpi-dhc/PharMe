@@ -6,7 +6,8 @@ import {
     BrickUsage,
     supportedLanguages,
 } from '../../common/constants';
-import { IBaseModel, OptionalId } from '../types';
+import { translationIsValid } from '../helpers/brick-translations';
+import { IBaseModel, OptionalId } from '../helpers/types';
 
 export interface ITextBrickTranslation<IdT extends OptionalId = undefined>
     extends IBaseModel<IdT> {
@@ -18,32 +19,6 @@ export interface ITextBrick<IdT extends OptionalId = undefined>
     extends IBaseModel<IdT> {
     usage: BrickUsage;
     translations: ITextBrickTranslation<IdT>[];
-}
-
-export function translationsToMap<IdT extends OptionalId = undefined>(
-    translations: ITextBrickTranslation<IdT>[],
-): Map<SupportedLanguage, string> {
-    const map = new Map<SupportedLanguage, string>();
-    if (translations) {
-        translations.forEach((translation) =>
-            map.set(translation.language, translation.text),
-        );
-    }
-    return map;
-}
-
-export function translationsToArray(
-    translations: Map<SupportedLanguage, string>,
-): ITextBrickTranslation[] {
-    return Array.from(translations.entries()).map(([language, text]) => {
-        return { language, text };
-    });
-}
-
-export function translationIsValid<IdT extends OptionalId = undefined>(
-    translation: ITextBrickTranslation<IdT>,
-): boolean {
-    return translation.text.length > 0;
 }
 
 // prevent client side from trying to use node module
