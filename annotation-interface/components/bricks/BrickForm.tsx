@@ -22,7 +22,7 @@ import AutocompleteArea from './AutocompleteArea';
 
 type Props = {
     usage: BrickUsage | null;
-    brick?: ITextBrick | null;
+    brick?: ITextBrick<string> | null;
 };
 
 const BrickForm = ({ usage, brick }: Props) => {

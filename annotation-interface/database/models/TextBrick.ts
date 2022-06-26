@@ -6,21 +6,22 @@ import {
     BrickUsage,
     supportedLanguages,
 } from '../../common/constants';
+import { IBaseModel, OptionalId } from '../types';
 
-export interface ITextBrickTranslation {
-    _id?: Types.ObjectId | string;
+export interface ITextBrickTranslation<IdT extends OptionalId = undefined>
+    extends IBaseModel<IdT> {
     language: SupportedLanguage;
     text: string;
 }
 
-export interface ITextBrick {
-    _id?: Types.ObjectId | string;
+export interface ITextBrick<IdT extends OptionalId = undefined>
+    extends IBaseModel<IdT> {
     usage: BrickUsage;
-    translations: ITextBrickTranslation[];
+    translations: ITextBrickTranslation<IdT>[];
 }
 
-export function translationsToMap(
-    translations: ITextBrickTranslation[],
+export function translationsToMap<IdT extends OptionalId = undefined>(
+    translations: ITextBrickTranslation<IdT>[],
 ): Map<SupportedLanguage, string> {
     const map = new Map<SupportedLanguage, string>();
     if (translations) {
@@ -39,8 +40,8 @@ export function translationsToArray(
     });
 }
 
-export function translationIsValid(
-    translation: ITextBrickTranslation,
+export function translationIsValid<IdT extends OptionalId = undefined>(
+    translation: ITextBrickTranslation<IdT>,
 ): boolean {
     return translation.text.length > 0;
 }
@@ -48,10 +49,12 @@ export function translationIsValid(
 // prevent client side from trying to use node module
 export default !mongoose.models
     ? undefined
-    : (mongoose.models.TextBrick as mongoose.Model<ITextBrick>) ||
-      mongoose.model<ITextBrick>(
+    : (mongoose.models.TextBrick as mongoose.Model<
+          ITextBrick<Types.ObjectId>
+      >) ||
+      mongoose.model<ITextBrick<Types.ObjectId>>(
           'TextBrick',
-          new mongoose.Schema<ITextBrick>({
+          new mongoose.Schema<ITextBrick<Types.ObjectId>>({
               usage: {
                   type: String,
                   enum: brickUsages,
@@ -73,20 +76,25 @@ export default !mongoose.models
                   ],
                   validate: [
                       {
-                          validator: (translations: ITextBrickTranslation[]) =>
-                              translations.length > 0,
+                          validator: (
+                              translations: ITextBrickTranslation<Types.ObjectId>[],
+                          ) => translations.length > 0,
                           message:
                               'TextBricks should be defined in at least one language.',
                       },
                       {
-                          validator: (translations: ITextBrickTranslation[]) =>
+                          validator: (
+                              translations: ITextBrickTranslation<Types.ObjectId>[],
+                          ) =>
                               translations.length ===
                               new Set(translations.map((t) => t.language)).size,
                           message:
                               'Each language should at most have one translation.',
                       },
                       {
-                          validator: (translations: ITextBrickTranslation[]) =>
+                          validator: (
+                              translations: ITextBrickTranslation<Types.ObjectId>[],
+                          ) =>
                               translations.filter((t) => !translationIsValid(t))
                                   .length === 0,
                           message:

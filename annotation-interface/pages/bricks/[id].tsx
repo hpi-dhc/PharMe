@@ -55,7 +55,7 @@ export default EditBrick;
 
 export const getServerSideProps = async (
     context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ brick: ITextBrick }>> => {
+): Promise<GetServerSidePropsResult<{ brick: ITextBrick<string> }>> => {
     if (!context.params?.id) return { notFound: true };
     await dbConnect();
     const brick = await TextBrick!.findById(context.params.id).lean().exec();
