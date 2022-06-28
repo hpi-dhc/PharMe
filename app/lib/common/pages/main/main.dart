@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../comprehension_measurement.dart';
+import '../../constants.dart';
 import '../../l10n.dart';
 import '../../routing/router.dart';
 
@@ -29,7 +30,16 @@ class MainPage extends StatelessWidget {
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) {
             tabsRouter.setActiveIndex(index);
-            ComprehensionMeasurement.measure(context);
+            ComprehensionMeasurement.measure(
+              context: context,
+              surveyId: 4,
+              introText:
+                  '''Would you like to participate in a survey with the aim to measure user comprehension 
+                of the applications content? This would help the developer team greatly to improve PharMe 
+                and make it understandable for everyone!''',
+              surveyButtonText: 'Continue to survey',
+              supabaseConfig: supabaseConfig,
+            );
           },
           items: _bottomNavigationBarItems(context),
         );

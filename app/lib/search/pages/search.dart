@@ -98,6 +98,10 @@ class SearchPage extends HookWidget {
               ComprehensionMeasurement.attach(
                 context.router.push(MedicationRoute(id: med.id)),
                 context: context,
+                surveyId: 1,
+                surveyButtonText: 'test',
+                introText: 'test',
+                supabaseConfig: supabaseConfig,
               );
             },
             medicationName: med.name,

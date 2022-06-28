@@ -2,15 +2,11 @@ import 'package:comprehension_measurement/comprehension_measurement.dart';
 
 import '../../common/module.dart';
 
-class TermsAndConditionsPage extends AutoComprehensiblePage {
+class TermsAndConditionsPage extends StatelessWidget {
   TermsAndConditionsPage({
     Key? key,
-    required BuildContext comprehensionContext,
   }) : super(
           key: key,
-          comprehensionContext: comprehensionContext,
-          surveyId: 1,
-          supabaseConfig: supabaseConfig,
         );
 
   @override
