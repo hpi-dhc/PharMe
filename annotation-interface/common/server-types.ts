@@ -5,7 +5,7 @@ export type ServerGuidelineOverview = {
     implication: string | null;
     recommendation: string | null;
     warningLevel: WarningLevel | null;
-    medication: { name: string };
+    medication: ServerMedication;
     phenotype: {
         geneResult: { name: string };
         geneSymbol: { name: string };
