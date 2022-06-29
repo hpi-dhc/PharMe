@@ -1,7 +1,7 @@
+import 'package:comprehension_measurement/comprehension_measurement.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 
-import '../../comprehension_measurement.dart';
 import '../../models/medication/cached_medications.dart';
 import '../../module.dart';
 
@@ -36,27 +36,27 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     if (medication.guidelines.isEmpty) return;
     switch (medication.guidelines[0].warningLevel) {
       case 'danger':
-        ComprehensionMeasurement.questionContext['danger_level'] = [12];
+        ComprehensionHelper.questionContext['danger_level'] = [12];
         break;
       case 'warning':
-        ComprehensionMeasurement.questionContext['danger_level'] = [11];
+        ComprehensionHelper.questionContext['danger_level'] = [11];
         break;
       case 'ok':
-        ComprehensionMeasurement.questionContext['danger_level'] = [10];
+        ComprehensionHelper.questionContext['danger_level'] = [10];
         break;
     }
     switch (medication.guidelines[0].phenotype.geneResult.name) {
       case 'Rapid Metabolizer':
-        ComprehensionMeasurement.questionContext['metabolization_class'] = [15];
+        ComprehensionHelper.questionContext['metabolization_class'] = [15];
         break;
       case 'Normal Metabolizer':
-        ComprehensionMeasurement.questionContext['metabolization_class'] = [16];
+        ComprehensionHelper.questionContext['metabolization_class'] = [16];
         break;
       case 'Intermediate Metabolizer':
-        ComprehensionMeasurement.questionContext['metabolization_class'] = [17];
+        ComprehensionHelper.questionContext['metabolization_class'] = [17];
         break;
       case 'Poor Metabolizer':
-        ComprehensionMeasurement.questionContext['metabolization_class'] = [18];
+        ComprehensionHelper.questionContext['metabolization_class'] = [18];
         break;
     }
   }

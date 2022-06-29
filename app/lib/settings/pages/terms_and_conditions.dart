@@ -1,9 +1,7 @@
-import 'package:comprehension_measurement/comprehension_measurement.dart';
-
 import '../../common/module.dart';
 
 class TermsAndConditionsPage extends StatelessWidget {
-  TermsAndConditionsPage({
+  const TermsAndConditionsPage({
     Key? key,
   }) : super(
           key: key,

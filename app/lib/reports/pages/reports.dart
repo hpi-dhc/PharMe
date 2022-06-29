@@ -1,5 +1,3 @@
-import 'package:comprehension_measurement/comprehension_measurement.dart';
-
 import '../../common/module.dart';
 import '../models/warning_level.dart';
 import 'cubit.dart';

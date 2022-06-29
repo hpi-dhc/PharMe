@@ -12,7 +12,11 @@ dependencies:
   black_hole_flutter: ^0.3.5
   bloc: ^8.0.3
   comprehension_measurement:
-    path: ../../comprehension-measurement/
+    # Use this to switch to the github version
+    #git: 
+    #  url: https://github.com/hpi-dhc/comprehension-measurement.git
+    #  ref: main
+    path: ../../comprehension-measurement
   cupertino_icons: ^1.0.4
   dartx: ^1.1.0
   debug_overlay: ^0.1.3

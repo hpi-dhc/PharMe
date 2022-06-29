@@ -46,8 +46,7 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(context.l10n.settings_page_terms_and_conditions),
         trailing: Icon(Icons.chevron_right),
-        onTap: () =>
-            context.router.push(TermsAndConditionsRoute(context: context)),
+        onTap: () => context.router.push(TermsAndConditionsRoute()),
       ),
       Divider(),
       ListTile(

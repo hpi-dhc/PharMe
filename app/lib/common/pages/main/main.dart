@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:comprehension_measurement/comprehension_measurement.dart';
 import 'package:flutter/material.dart';
 
-import '../../comprehension_measurement.dart';
 import '../../constants.dart';
 import '../../l10n.dart';
 import '../../routing/router.dart';
@@ -22,7 +22,7 @@ class MainPage extends StatelessWidget {
       appBarBuilder: (_, tabsRouter) => AppBar(
         title: Text(context.l10n.general_appName),
         centerTitle: true,
-        leading: const AutoBackButton(),
+        leading: const AutoLeadingButton(),
       ),
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
@@ -30,7 +30,7 @@ class MainPage extends StatelessWidget {
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) {
             tabsRouter.setActiveIndex(index);
-            ComprehensionMeasurement.measure(
+            ComprehensionHelper.measure(
               context: context,
               surveyId: 4,
               introText:

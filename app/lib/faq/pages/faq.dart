@@ -1,5 +1,3 @@
-import 'package:comprehension_measurement/comprehension_measurement.dart';
-
 import '../../common/module.dart';
 import '../constants.dart';
 
