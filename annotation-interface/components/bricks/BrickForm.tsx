@@ -90,7 +90,7 @@ const BrickForm = ({ usage, brick }: Props) => {
     };
     const deleteBrick = async () => {
         try {
-            axios.delete(`/api/bricks/${id}`);
+            await axios.delete(`/api/bricks/${id}`);
             done();
         } catch (error) {
             setMessage('Failed to delete Brick.');
