@@ -21,7 +21,7 @@ class MainPage extends StatelessWidget {
       appBarBuilder: (_, tabsRouter) => AppBar(
         title: Text(context.l10n.general_appName),
         centerTitle: true,
-        leading: const AutoBackButton(),
+        leading: const AutoLeadingButton(),
       ),
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
