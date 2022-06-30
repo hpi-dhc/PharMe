@@ -67,16 +67,17 @@ class FaqPage extends StatelessWidget {
   }
 
   Widget _buildQuestion(BuildContext context, Question question) {
-    final _key = GlobalKey();
+    final key = GlobalKey();
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       child: ExpansionTile(
-        key: _key,
+        key: key,
         title: Text(question.question),
         onExpansionChanged: (value) {
-          if (value) _scrollToSelectedContent(key: _key);
+          if (value) _scrollToSelectedContent(key: key);
         },
         children: [
           ListTile(
