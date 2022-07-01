@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 
 import '../../../common/module.dart';
-import '../../common/comprehension_measurement.dart';
 import 'cubit.dart';
 
 final _panelController = SlidingUpPanelController();
@@ -94,12 +93,7 @@ class SearchPage extends HookWidget {
         itemBuilder: (context, index) {
           final med = medications[index];
           return MedicationCard(
-            onTap: () {
-              ComprehensionMeasurement.attach(
-                context.router.push(MedicationRoute(id: med.id)),
-                context: context,
-              );
-            },
+            onTap: () => context.router.push(MedicationRoute(id: med.id)),
             medicationName: med.name,
           );
         },
