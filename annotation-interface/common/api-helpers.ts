@@ -64,8 +64,8 @@ export const updateDeleteApi = async (
         },
         DELETE: async () => {
             await dbConnect();
-            await model.deleteOne({ _id: id }).orFail();
-            res.status(200).json({ success: true });
+            await model.findByIdAndDelete(id).orFail();
+            res.status(204).end();
         },
         ...additionalMethodHandlers,
     });
