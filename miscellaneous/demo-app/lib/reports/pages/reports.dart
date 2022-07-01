@@ -93,10 +93,18 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      color: PharmeTheme.secondaryColor,
       clipBehavior: Clip.hardEdge,
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              PharmeTheme.primaryColor.shade500,
+              PharmeTheme.primaryColor.shade800,
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Column(children: [
           Text(
             context.l10n.reports_page_disclaimer_title,

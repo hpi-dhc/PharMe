@@ -70,9 +70,7 @@ class SearchPage extends HookWidget {
                         initial: Container.new,
                         error: () => Text(context.l10n.err_generic),
                         loaded: _buildMedicationsList,
-                        loading: () => Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        loading: Container.new,
                       ),
                     ],
                   ),

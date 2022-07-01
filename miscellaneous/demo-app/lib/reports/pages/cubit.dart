@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart';
 
 import '../../common/models/medication/cached_medications.dart';
 import '../../common/module.dart';
@@ -13,30 +12,7 @@ class ReportsCubit extends Cubit<ReportsState> {
   }
 
   Future<void> loadMedications() async {
-    final requestUri = annotationServerUrl.replace(
-      path: 'api/v1/medications',
-      queryParameters: {
-          'withGuidelines': 'true',
-          'getGuidelines': 'true',
-      },
-    );
-
-    final isOnline = await hasConnectionTo(requestUri.authority);
-    if (!isOnline) {
-      emit(
-        ReportsState.loaded(
-          _filterMedications(CachedMedications.instance.medications ?? []),
-        ),
-      );
-      return;
-    }
-    emit(ReportsState.loading());
-    final response = await get(requestUri);
-    if (response.statusCode != 200) {
-      emit(ReportsState.error());
-      return;
-    }
-    final medications = medicationsWithGuidelinesFromHTTPResponse(response);
+    final medications = MedicationWithGuidelines.fakeData;
     final filteredMedications = _filterMedications(medications);
     await CachedMedications.cacheAll(filteredMedications);
     await CachedMedications.save();

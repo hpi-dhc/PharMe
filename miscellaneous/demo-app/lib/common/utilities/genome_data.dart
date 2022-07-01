@@ -2,42 +2,28 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:dartx/dartx.dart';
-import 'package:http/http.dart';
+import 'package:flutter/services.dart';
 
 import '../constants.dart';
 import '../models/module.dart';
 
-Future<void> fetchAndSaveDiplotypes(String token, String url) async {
+Future<void> fetchAndSaveDiplotypes() async {
   if (!shouldFetchDiplotypes()) return;
-  final response = await getDiplotypes(token, url);
-  if (response.statusCode == 200) {
-    await _saveDiplotypeResponse(response);
-  } else {
-    throw Exception();
-  }
-}
-
-Future<Response> getDiplotypes(String? token, String url) async {
-  return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
-}
-
-Future<void> _saveDiplotypeResponse(Response response) async {
-  // parse response to list of user's diplotypes
+  final jsonFile = await rootBundle.loadString('assets/data/diplotypes.json');
+  final json = jsonDecode(jsonFile)['diplotypes'] as List<dynamic>;
   final diplotypes =
-      diplotypesFromHTTPResponse(response).filterValidDiplotypes();
-
+      json.map<Diplotype>(Diplotype.fromJson).toList().filterValidDiplotypes();
   UserData.instance.diplotypes = diplotypes;
-  return UserData.save();
+  await UserData.save();
 }
 
 Future<void> fetchAndSaveLookups() async {
   if (!shouldFetchLookups()) return;
-  final response = await get(Uri.parse(cpicLookupUrl));
-  if (response.statusCode != 200) throw Exception();
 
   // the returned json is a list of lookups which we wish to individually map
   // to a concrete CpicLookup instance, hence the cast to a List
-  final json = jsonDecode(response.body) as List<dynamic>;
+  final jsonFile = await rootBundle.loadString('assets/data/lookups.json');
+  final json = jsonDecode(jsonFile) as List<dynamic>;
   final lookups = json.map<CpicLookup>(CpicLookup.fromJson);
   final usersDiplotypes = UserData.instance.diplotypes;
   if (usersDiplotypes == null) throw Exception();

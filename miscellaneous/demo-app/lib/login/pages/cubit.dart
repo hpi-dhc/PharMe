@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common/module.dart';
+import '../../common/utilities/genome_data.dart';
 
 part 'cubit.freezed.dart';
 
@@ -9,6 +10,10 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   Future<void> fakeLoadGeneticData() async {
     emit(LoginPageState.loading());
+
+    // get data
+    await fetchAndSaveDiplotypes();
+    await fetchAndSaveLookups();
 
     MetaData.instance.isLoggedIn = true;
     await MetaData.save();
