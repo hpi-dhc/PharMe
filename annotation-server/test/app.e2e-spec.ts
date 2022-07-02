@@ -218,6 +218,15 @@ describe('App (e2e)', () => {
                 .send([{ id: codeineId, drugclass: 'Not a pain killer' }]);
             expect(patchResponse.status).toEqual(200);
         });
+
+        it('should patch details of one guideline', async () => {
+            const patchResponse = await request(app.getHttpServer())
+                .patch('/guidelines/')
+                .send([
+                    { id: guidelineId, recommendation: 'Some recommendation.' },
+                ]);
+            expect(patchResponse.status).toEqual(200);
+        });
     });
 
     describe('Verify modified data', () => {
@@ -228,6 +237,16 @@ describe('App (e2e)', () => {
             expect(getResponse.status).toEqual(200);
             expect(getResponse.body.drugclass).toEqual('Not a pain killer');
             expect(getResponse.body.indication).toEqual('Codeine/indication');
+        });
+
+        it('should verify details for one medication', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/guidelines/' + guidelineId,
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.recommendation).toEqual(
+                'Some recommendation.',
+            );
         });
     });
 
