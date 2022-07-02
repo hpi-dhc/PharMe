@@ -134,9 +134,9 @@ export class GuidelinesService {
         }
         await this.phenotypesService.fetchPhenotypes();
         await this.clearAllData();
-        const guidelines = await this.fetchCpicGuidelines();
-        await this.addGuidelineURLS(guidelines);
-        await this.complementAndSaveGuidelines(guidelines);
+        const guidelinesByMeds = await this.fetchCpicGuidelinesByMeds();
+        await this.addGuidelineURLS(guidelinesByMeds);
+        await this.saveGuidelines(guidelinesByMeds);
         await this.fetchDatesService.set(FetchTarget.GUIDELINES);
     }
 
@@ -144,7 +144,9 @@ export class GuidelinesService {
         return this.fetchDatesService.get(FetchTarget.GUIDELINES);
     }
 
-    private async fetchCpicGuidelines(): Promise<Map<string, Guideline[]>> {
+    private async fetchCpicGuidelinesByMeds(): Promise<
+        Map<string, Guideline[]>
+    > {
         this.logger.log('Fetching guidelines from CPIC.');
         const response = this.httpService.get(
             'https://api.cpicpgx.org/v1/recommendation',
@@ -166,7 +168,7 @@ export class GuidelinesService {
             await lastValueFrom(response)
         ).data;
 
-        const guidelines: Map<string, Guideline[]> = new Map();
+        const guidelinesByMeds: Map<string, Guideline[]> = new Map();
         const guidelineErrors: Set<GuidelineError> = new Set();
 
         const knownCombinations: Set<string> = new Set();
@@ -200,10 +202,10 @@ export class GuidelinesService {
                         phenotype,
                     );
 
-                    if (guidelines.has(medication.name)) {
-                        guidelines.get(medication.name).push(guideline);
+                    if (guidelinesByMeds.has(medication.name)) {
+                        guidelinesByMeds.get(medication.name).push(guideline);
                     } else {
-                        guidelines.set(medication.name, [guideline]);
+                        guidelinesByMeds.set(medication.name, [guideline]);
                     }
                 }
             } catch (error) {
@@ -215,11 +217,11 @@ export class GuidelinesService {
         }
         this.guidelineErrorRepository.save(Array.from(guidelineErrors));
         this.logger.log('Successfully fetched guidelines from CPIC.');
-        return guidelines;
+        return guidelinesByMeds;
     }
 
     private async addGuidelineURLS(
-        guidelines: Map<string, Guideline[]>,
+        guidelinesByMeds: Map<string, Guideline[]>,
     ): Promise<Map<string, Guideline[]>> {
         const response = this.httpService.get(
             'https://api.cpicpgx.org/v1/guideline',
@@ -236,7 +238,7 @@ export class GuidelinesService {
         guidelineDtos.forEach((guidelineDto) =>
             guidelineDtoById.set(guidelineDto.id, guidelineDto),
         );
-        for (const guidelinesForMedication of guidelines.values()) {
+        for (const guidelinesForMedication of guidelinesByMeds.values()) {
             guidelinesForMedication.forEach((guideline) => {
                 const guidelineDto = guidelineDtoById.get(
                     guideline.cpicGuidelineId,
@@ -245,12 +247,20 @@ export class GuidelinesService {
                 guideline.cpicGuidelineName = guidelineDto.name;
             });
         }
-        return guidelines;
+        return guidelinesByMeds;
     }
 
-    private async complementAndSaveGuidelines(
+    private async saveGuidelines(
         guidelines: Map<string, Guideline[]>,
     ): Promise<void> {
+        const flatGuidelines = Array.from(guidelines.values()).flat();
+        this.guidelinesRepository.save(flatGuidelines);
+        this.clearCaches();
+        this.logger.log('Successfully saved all valid guidelines.');
+    }
+
+    async supplementSheetData(): Promise<void> {
+        const guidelinesByMeds = new Map<string, Guideline[]>();
         this.logger.log('Complementing CPIC guidelines with data from sheet.');
         const [
             medications,
@@ -307,7 +317,16 @@ export class GuidelinesService {
                 );
                 if (phenotypes.length === 0) continue;
 
-                const guidelinesForMedication = guidelines.get(medication.name);
+                const guidelinesForMedication =
+                    await this.guidelinesRepository.find({
+                        where: { medication: { name: medication.name } },
+                        relations: {
+                            errors: true,
+                            medication: true,
+                            phenotype: true,
+                        },
+                    });
+                guidelinesByMeds.set(medication.name, guidelinesForMedication);
 
                 for (let col = 0; col < implications[row].length; col++) {
                     const implication = implications[row][col].value?.trim();
@@ -348,8 +367,7 @@ export class GuidelinesService {
                 continue;
             }
         }
-        const flatGuidelines = Array.from(guidelines.values()).flat();
-
+        const flatGuidelines = Array.from(guidelinesByMeds.values()).flat();
         const incompleteGuidelines = flatGuidelines.filter(
             (guideline) => guideline.isIncomplete,
         );
@@ -360,11 +378,7 @@ export class GuidelinesService {
             incompleteGuideline.errors.push(error);
         }
 
-        this.guidelinesRepository.save(flatGuidelines);
-        this.guidelineErrorRepository.save(Array.from(guidelineErrors));
-
-        this.clearCaches();
-        this.logger.log('Successfully saved all valid guidelines.');
+        this.saveGuidelines(guidelinesByMeds);
     }
 
     private isInvalidText(text: string): boolean {

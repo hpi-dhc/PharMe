@@ -67,6 +67,13 @@ describe('App (e2e)', () => {
             );
             expect(patchResponse.status).toEqual(200);
         }, 30000);
+
+        it('should supplement guideline data', async () => {
+            const patchResponse = await request(app.getHttpServer()).patch(
+                `/guidelines`,
+            );
+            expect(patchResponse.status).toEqual(200);
+        }, 30000);
     });
 
     describe('Retrieve data for all medications & guidelines', () => {
