@@ -18,13 +18,13 @@ export interface PatchMedicationDto {
     annotation: Partial<IMedAnnotation<string, string>>;
 }
 
+const serverEndpoint = `http://${process.env.AS_API}/medications/`;
+
 const api: NextApiHandler = async (req, res) => {
     const {
         query: { id },
     } = req;
-    const getResponse = await axios.get<ServerMedication>(
-        `http://${process.env.AS_API}/medications/${id}`,
-    );
+    const getResponse = await axios.get<ServerMedication>(serverEndpoint + id);
     const serverMedication = getResponse.data;
 
     await dbConnect();
@@ -50,7 +50,12 @@ const api: NextApiHandler = async (req, res) => {
             res.status(200).json(response);
         },
         PATCH: async () => {
-            const { annotation: patch } = req.body as PatchMedicationDto;
+            const { serverData: serverPatch, annotation: patch } =
+                req.body as PatchMedicationDto;
+            await axios.patch(serverEndpoint, [
+                { id: serverMedication.id, ...serverPatch },
+            ]);
+
             if (!annotation && (patch.drugclass || patch.indication)) {
                 annotation = {
                     medicationRxCUI: serverMedication.rxcui,

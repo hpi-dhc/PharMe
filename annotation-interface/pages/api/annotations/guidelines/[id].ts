@@ -18,13 +18,13 @@ export interface PatchGuidelineDto {
     annotation: Partial<IGuidelineAnnotation<string, string>>;
 }
 
+const serverEndpoint = `http://${process.env.AS_API}/guidelines/`;
+
 const api: NextApiHandler = async (req, res) => {
     const {
         query: { id },
     } = req;
-    const getResponse = await axios.get<ServerGuideline>(
-        `http://${process.env.AS_API}/guidelines/${id}`,
-    );
+    const getResponse = await axios.get<ServerGuideline>(serverEndpoint + id);
     const serverGuideline = getResponse.data;
 
     await dbConnect();
@@ -53,7 +53,12 @@ const api: NextApiHandler = async (req, res) => {
             res.status(200).json(response);
         },
         PATCH: async () => {
-            const { annotation: patch } = req.body as PatchGuidelineDto;
+            const { serverData: serverPatch, annotation: patch } =
+                req.body as PatchGuidelineDto;
+            await axios.patch(serverEndpoint, [
+                { id: serverGuideline.id, ...serverPatch },
+            ]);
+
             if (!annotation && (patch.implication || patch.recommendation)) {
                 annotation = {
                     medicationRxCUI: serverGuideline.medication.rxcui,
