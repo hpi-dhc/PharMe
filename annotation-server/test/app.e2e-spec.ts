@@ -60,6 +60,15 @@ describe('App (e2e)', () => {
         }, 30000);
     });
 
+    describe('Add sheet data', () => {
+        it('should supplement medication data', async () => {
+            const patchResponse = await request(app.getHttpServer()).patch(
+                `/medications`,
+            );
+            expect(patchResponse.status).toEqual(200);
+        }, 30000);
+    });
+
     describe('Retrieve data for all medications & guidelines', () => {
         const verifyLastUpdate = (dateString: string) => {
             const lastUpdate = new Date(dateString).getTime();

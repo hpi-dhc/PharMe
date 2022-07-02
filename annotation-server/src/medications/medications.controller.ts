@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiParamGetById } from '../common/api/params';
@@ -19,6 +19,14 @@ export class MedicationsController {
     @Get('last_update')
     getLastUpdate(): Promise<Date | undefined> {
         return this.medicationsService.getLastUpdate();
+    }
+
+    @ApiOperation({
+        summary: 'Supplement matching medication data from a Google Sheet',
+    })
+    @Patch()
+    async supplementSheetData(): Promise<void> {
+        return this.medicationsService.supplementSheetData();
     }
 
     @ApiOperation({ summary: 'Fetch all medications' })
