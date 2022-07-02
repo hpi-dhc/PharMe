@@ -34,7 +34,7 @@ export class GuidelinesController {
     @ApiOperation({
         summary: 'Supplement matching guideline data from a Google Sheet',
     })
-    @Patch()
+    @Patch('sheet')
     async supplementSheetData(): Promise<void> {
         return this.guidelinesService.supplementSheetData();
     }

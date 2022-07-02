@@ -63,14 +63,14 @@ describe('App (e2e)', () => {
     describe('Add sheet data', () => {
         it('should supplement medication data', async () => {
             const patchResponse = await request(app.getHttpServer()).patch(
-                `/medications`,
+                `/medications/sheet`,
             );
             expect(patchResponse.status).toEqual(200);
         }, 30000);
 
         it('should supplement guideline data', async () => {
             const patchResponse = await request(app.getHttpServer()).patch(
-                `/guidelines`,
+                `/guidelines/sheet`,
             );
             expect(patchResponse.status).toEqual(200);
         }, 30000);
@@ -208,6 +208,26 @@ describe('App (e2e)', () => {
                     guideline.warningLevel ?? 'null',
                 );
             }
+        });
+    });
+
+    describe('Modify data', () => {
+        it('should patch details of one medication', async () => {
+            const patchResponse = await request(app.getHttpServer())
+                .patch('/medications/')
+                .send([{ id: codeineId, drugclass: 'Not a pain killer' }]);
+            expect(patchResponse.status).toEqual(200);
+        });
+    });
+
+    describe('Verify modified data', () => {
+        it('should verify details for one medication', async () => {
+            const getResponse = await request(app.getHttpServer()).get(
+                '/medications/' + codeineId,
+            );
+            expect(getResponse.status).toEqual(200);
+            expect(getResponse.body.drugclass).toEqual('Not a pain killer');
+            expect(getResponse.body.indication).toEqual('Codeine/indication');
         });
     });
 

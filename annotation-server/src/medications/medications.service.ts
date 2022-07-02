@@ -18,6 +18,7 @@ import {
     FindOptionsOrderValue,
 } from 'typeorm';
 
+import { PatchBodyDto } from '../common/dtos/patch-body.dto';
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { FetchTarget } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
@@ -160,6 +161,14 @@ export class MedicationsService {
 
     async hasData(): Promise<boolean> {
         return (await this.medicationRepository.count()) > 0;
+    }
+
+    async patch(patch: PatchBodyDto<Medication>): Promise<void> {
+        await Promise.all(
+            patch.map(({ id, ...update }) =>
+                this.medicationRepository.update(id, update),
+            ),
+        );
     }
 
     getJSONfromZip(): Promise<string> {
