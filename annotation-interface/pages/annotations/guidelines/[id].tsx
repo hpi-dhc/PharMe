@@ -9,10 +9,7 @@ import { useSWRConfig } from 'swr';
 
 import { useSwrFetcher } from '../../../common/react-helpers';
 import { ServerGuideline } from '../../../common/server-types';
-import {
-    ImplicationAnnotation,
-    RecommendationAnnotation,
-} from '../../../components/annotations/Annotations';
+import { GuidelineAnnotation } from '../../../components/annotations/Annotations';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
@@ -53,19 +50,21 @@ const GuidelineDetail = ({
             </PageHeading>
             <div className="space-y-4">
                 {guideline && <CpicGuidelineBox guideline={guideline} />}
-                <ImplicationAnnotation
+                <GuidelineAnnotation
                     refetch={refetch}
                     resolvedBricks={implicationBrickMap}
                     displayContext={displayContext}
                     annotation={annotation}
-                    serverGuideline={guideline}
+                    serverData={guideline}
+                    category="implication"
                 />
-                <RecommendationAnnotation
+                <GuidelineAnnotation
                     refetch={refetch}
                     resolvedBricks={recommendationBrickMap}
                     displayContext={displayContext}
                     annotation={annotation}
-                    serverGuideline={guideline}
+                    serverData={guideline}
+                    category="recommendation"
                 />
             </div>
         </>

@@ -1,4 +1,9 @@
-import { PencilAltIcon, ExclamationIcon, XIcon } from '@heroicons/react/solid';
+import {
+    PencilAltIcon,
+    ExclamationIcon,
+    XIcon,
+    UploadIcon,
+} from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
@@ -11,6 +16,7 @@ import TrashDroppable from './drag-drop/TrashDroppable';
 
 type AbstractProps = {
     refetch: () => void;
+    patchApi: (brickIds: string[] | null, text: string | null) => Promise<void>;
     resolvedBricks: Map<string, string>;
     serverText: string | null | undefined;
     annotationBrickIds: string[] | null | undefined;
@@ -22,6 +28,7 @@ const Missing = () => <WithIcon icon={ExclamationIcon}>Not set</WithIcon>;
 
 const AbstractAnnotation = ({
     refetch,
+    patchApi,
     resolvedBricks,
     serverText,
     annotationBrickIds,
@@ -35,6 +42,10 @@ const AbstractAnnotation = ({
         [annotationBrickIds],
     );
 
+    const annotationText =
+        usedBrickIds && usedBrickIds.length > 0
+            ? usedBrickIds?.map((id) => resolvedBricks.get(id)!)?.join(' ')
+            : null;
     const unusedBrickIds = [...resolvedBricks.keys()].filter(
         (id) => !usedBrickIds?.includes(id),
     );
@@ -61,7 +72,12 @@ const AbstractAnnotation = ({
                 );
                 break;
         }
-        setUsedBrickIds(selected);
+        setUsedBrickIds(selected.length > 0 ? selected : null);
+    };
+
+    const save = async () => {
+        await patchApi(usedBrickIds, annotationText);
+        done();
     };
 
     const done = () => {
@@ -69,7 +85,7 @@ const AbstractAnnotation = ({
         refetch();
     };
 
-    const EditAnnotation = () => (
+    const AnnotationEditor = () => (
         <DragDropContext onDragEnd={onDragEnd}>
             <GenericDroppable
                 droppableId="used"
@@ -87,13 +103,27 @@ const AbstractAnnotation = ({
             </GenericDroppable>
 
             <div className="flex justify-between">
-                <WithIcon as="button" icon={XIcon} onClick={() => done()}>
+                <WithIcon
+                    as="button"
+                    icon={XIcon}
+                    onClick={done}
+                    className="py-2"
+                >
                     Cancel
                 </WithIcon>
-                <div>
+                <div className="flex space-x-4">
                     {usedBrickIds && usedBrickIds.length > 0 && (
                         <TrashDroppable onClick={() => setUsedBrickIds(null)} />
                     )}
+                    <WithIcon
+                        as="button"
+                        icon={UploadIcon}
+                        reverse
+                        onClick={save}
+                        className="py-2"
+                    >
+                        Save
+                    </WithIcon>
                 </div>
             </div>
             <h2 className="font-bold my-4">Defined Bricks</h2>
@@ -131,20 +161,12 @@ const AbstractAnnotation = ({
             </div>
             {editVisible && (
                 <PageOverlay
-                    hide={done}
+                    hide={() => serverText === annotationText && done()}
                     heading={`Edit the ${displayName} for ${displayContext}`}
                 >
-                    <p>
-                        {usedBrickIds && usedBrickIds.length > 0 ? (
-                            usedBrickIds
-                                ?.map((id) => resolvedBricks.get(id)!)
-                                ?.join(' ')
-                        ) : (
-                            <Missing />
-                        )}
-                    </p>
+                    <p>{annotationText ?? <Missing />}</p>
                     {resolvedBricks.size > 0 ? (
-                        <EditAnnotation />
+                        <AnnotationEditor />
                     ) : (
                         <p className="my-6">
                             Looks like there aren&apos;t any defined Bricks for

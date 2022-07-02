@@ -9,10 +9,7 @@ import { useSWRConfig } from 'swr';
 
 import { useSwrFetcher } from '../../../common/react-helpers';
 import { ServerMedication } from '../../../common/server-types';
-import {
-    DrugClassAnnotation,
-    IndicationAnnotation,
-} from '../../../components/annotations/Annotations';
+import { MedAnnotation } from '../../../components/annotations/Annotations';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import {
@@ -45,19 +42,21 @@ const MedicationDetail = ({
                 patient-friendly drug class and its indication.
             </PageHeading>
             <div className="space-y-4">
-                <DrugClassAnnotation
+                <MedAnnotation
                     refetch={refetch}
                     resolvedBricks={classBrickMap}
                     displayContext={displayContext}
                     annotation={annotation}
-                    serverMedication={medication}
+                    serverData={medication}
+                    category="drugclass"
                 />
-                <IndicationAnnotation
+                <MedAnnotation
                     refetch={refetch}
                     resolvedBricks={indicationBrickMap}
                     displayContext={displayContext}
                     annotation={annotation}
-                    serverMedication={medication}
+                    serverData={medication}
+                    category="indication"
                 />
             </div>
         </>
