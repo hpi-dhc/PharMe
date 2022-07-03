@@ -43,8 +43,15 @@ function filteredElements<T extends { labels: JSX.Element[] }>(
     );
 }
 
-const matches = (test: string, query: string) =>
-    test.toLowerCase().includes(query);
+const matches = (test: string, query: string) => {
+    test = test.toLowerCase();
+    return (
+        query
+            .toLowerCase()
+            .split(/\s+/)
+            .filter((word) => !test.includes(word)).length === 0
+    );
+};
 
 const Annotations = ({
     medications,
@@ -73,10 +80,13 @@ const Annotations = ({
     );
     const guidelinesWithLabels = filteredElements(
         guidelines
-            .filter(
-                (guideline) =>
-                    matches(guideline.medication.name, searchQuery) ||
-                    matches(guideline.phenotype.geneSymbol.name, searchQuery),
+            .filter((guideline) =>
+                matches(
+                    guideline.medication.name +
+                        guideline.phenotype.geneSymbol.name +
+                        guideline.phenotype.geneResult.name,
+                    searchQuery,
+                ),
             )
             .map((guideline) => {
                 const labels = getMissingLabels(guideline, [
