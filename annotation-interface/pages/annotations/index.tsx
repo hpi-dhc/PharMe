@@ -4,6 +4,8 @@ import { GetServerSidePropsResult, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import {
+    serverEndpointGuidelines,
+    serverEndpointMeds,
     ServerGuidelineOverview,
     ServerMedication,
 } from '../../common/server-types';
@@ -170,13 +172,10 @@ export const getServerSideProps = async (): Promise<
 > => {
     try {
         const [medicationResponse, guidelineResponse] = await Promise.all([
-            axios.get<ServerMedication[]>(
-                `http://${process.env.AS_API}/medications`,
-                { params: { withGuidelines: true } },
-            ),
-            axios.get<ServerGuidelineOverview[]>(
-                `http://${process.env.AS_API}/guidelines`,
-            ),
+            axios.get<ServerMedication[]>(serverEndpointMeds(), {
+                params: { withGuidelines: true },
+            }),
+            axios.get<ServerGuidelineOverview[]>(serverEndpointGuidelines()),
         ]);
         return {
             props: {

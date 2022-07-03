@@ -8,7 +8,10 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { useSWRConfig } from 'swr';
 
 import { useSwrFetcher } from '../../../common/react-helpers';
-import { ServerMedication } from '../../../common/server-types';
+import {
+    serverEndpointMeds,
+    ServerMedication,
+} from '../../../common/server-types';
 import { MedAnnotation } from '../../../components/annotations/Annotations';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
@@ -79,7 +82,7 @@ export const getServerSideProps = async (
     resetServerContext();
     try {
         const response = await axios.get<ServerMedication>(
-            `http://${process.env.AS_API}/medications/${serverId}`,
+            serverEndpointMeds(serverId),
         );
         const medication = response.data;
         await dbConnect();

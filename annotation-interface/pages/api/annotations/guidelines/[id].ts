@@ -2,7 +2,10 @@ import axios from 'axios';
 import { NextApiHandler } from 'next';
 
 import { handleApiMethods } from '../../../../common/api-helpers';
-import { ServerGuideline } from '../../../../common/server-types';
+import {
+    serverEndpointGuidelines,
+    ServerGuideline,
+} from '../../../../common/server-types';
 import dbConnect from '../../../../database/helpers/connect';
 import GuidelineAnnotation, {
     IGuidelineAnnotation,
@@ -18,13 +21,13 @@ export interface PatchGuidelineDto {
     annotation: Partial<IGuidelineAnnotation<string, string>>;
 }
 
-const serverEndpoint = `http://${process.env.AS_API}/guidelines/`;
-
 const api: NextApiHandler = async (req, res) => {
     const {
         query: { id },
     } = req;
-    const getResponse = await axios.get<ServerGuideline>(serverEndpoint + id);
+    const getResponse = await axios.get<ServerGuideline>(
+        serverEndpointGuidelines(id as string),
+    );
     const serverGuideline = getResponse.data;
 
     await dbConnect();
@@ -55,7 +58,7 @@ const api: NextApiHandler = async (req, res) => {
         PATCH: async () => {
             const { serverData: serverPatch, annotation: patch } =
                 req.body as PatchGuidelineDto;
-            await axios.patch(serverEndpoint, [
+            await axios.patch(serverEndpointGuidelines(), [
                 { id: serverGuideline.id, ...serverPatch },
             ]);
 

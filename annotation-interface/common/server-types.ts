@@ -33,3 +33,10 @@ export type ServerMedication = {
     drugclass: string | null;
     indication: string | null;
 };
+
+const serverEndpoint = `http://${process.env.AS_API}/`;
+export const serverEndpointInit = serverEndpoint + 'init/';
+export const serverEndpointMeds = (query?: string): string =>
+    `${serverEndpoint}medications/${query ?? ''}`;
+export const serverEndpointGuidelines = (query?: string): string =>
+    `${serverEndpoint}guidelines/${query ?? ''}`;

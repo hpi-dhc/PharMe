@@ -8,7 +8,10 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { useSWRConfig } from 'swr';
 
 import { useSwrFetcher } from '../../../common/react-helpers';
-import { ServerGuideline } from '../../../common/server-types';
+import {
+    serverEndpointGuidelines,
+    ServerGuideline,
+} from '../../../common/server-types';
 import { GuidelineAnnotation } from '../../../components/annotations/Annotations';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
 import PageHeading from '../../../components/common/PageHeading';
@@ -87,7 +90,7 @@ export const getServerSideProps = async (
     resetServerContext();
     try {
         const response = await axios.get<ServerGuideline>(
-            `http://${process.env.AS_API}/guidelines/${serverId}`,
+            serverEndpointGuidelines(serverId),
         );
         const guideline = response.data;
         await dbConnect();

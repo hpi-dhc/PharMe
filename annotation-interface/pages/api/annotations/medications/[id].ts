@@ -2,7 +2,10 @@ import axios from 'axios';
 import { NextApiHandler } from 'next';
 
 import { handleApiMethods } from '../../../../common/api-helpers';
-import { ServerMedication } from '../../../../common/server-types';
+import {
+    serverEndpointMeds,
+    ServerMedication,
+} from '../../../../common/server-types';
 import dbConnect from '../../../../database/helpers/connect';
 import MedAnnotation, {
     IMedAnnotation,
@@ -18,13 +21,13 @@ export interface PatchMedicationDto {
     annotation: Partial<IMedAnnotation<string, string>>;
 }
 
-const serverEndpoint = `http://${process.env.AS_API}/medications/`;
-
 const api: NextApiHandler = async (req, res) => {
     const {
         query: { id },
     } = req;
-    const getResponse = await axios.get<ServerMedication>(serverEndpoint + id);
+    const getResponse = await axios.get<ServerMedication>(
+        serverEndpointMeds(id as string),
+    );
     const serverMedication = getResponse.data;
 
     await dbConnect();
@@ -52,7 +55,7 @@ const api: NextApiHandler = async (req, res) => {
         PATCH: async () => {
             const { serverData: serverPatch, annotation: patch } =
                 req.body as PatchMedicationDto;
-            await axios.patch(serverEndpoint, [
+            await axios.patch(serverEndpointMeds(), [
                 { id: serverMedication.id, ...serverPatch },
             ]);
 
