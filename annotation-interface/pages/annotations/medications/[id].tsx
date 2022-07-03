@@ -12,7 +12,7 @@ import {
     serverEndpointMeds,
     ServerMedication,
 } from '../../../common/server-types';
-import { MedAnnotation } from '../../../components/annotations/Annotations';
+import { MedAnnotation } from '../../../components/annotations/BrickAnnotations';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import {

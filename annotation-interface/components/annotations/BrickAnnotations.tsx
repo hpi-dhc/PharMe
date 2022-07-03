@@ -3,9 +3,9 @@ import axios from 'axios';
 import { ServerGuideline, ServerMedication } from '../../common/server-types';
 import { IGuidelineAnnotation } from '../../database/models/GuidelineAnnotation';
 import { IMedAnnotation } from '../../database/models/MedAnnotation';
-import AbstractAnnotation from './AbstractAnnotation';
+import AbstractBrickAnnotation from './AbstractBrickAnnotation';
 
-type AbstractProps<
+type Props<
     ST extends ServerMedication | ServerGuideline,
     IT extends ST extends ServerMedication
         ? IMedAnnotation<string, string>
@@ -26,7 +26,7 @@ const displayName: Map<AnyAnnotationCategory, string> = new Map([
     ['drugclass', 'patient friendly drug class'],
 ]);
 
-function AbstractAnnotationHelper<
+function BrickAnnotation<
     ST extends ServerMedication | ServerGuideline,
     IT extends ST extends ServerMedication
         ? IMedAnnotation<string, string>
@@ -39,9 +39,9 @@ function AbstractAnnotationHelper<
     annotation,
     category,
     apiEndpoint,
-}: AbstractProps<ST, IT> & { apiEndpoint: string }) {
+}: Props<ST, IT> & { apiEndpoint: string }) {
     return (
-        <AbstractAnnotation
+        <AbstractBrickAnnotation
             refetch={refetch}
             patchApi={async (brickIds, text) => {
                 const patch = {
@@ -72,11 +72,11 @@ function AbstractAnnotationHelper<
 }
 
 export const MedAnnotation = (
-    props: AbstractProps<ServerMedication, IMedAnnotation<string, string>>,
-) => <AbstractAnnotationHelper {...props} apiEndpoint="medications" />;
+    props: Props<ServerMedication, IMedAnnotation<string, string>>,
+) => <BrickAnnotation {...props} apiEndpoint="medications" />;
 
 export const GuidelineAnnotation = (
-    props: AbstractProps<ServerGuideline, IGuidelineAnnotation<string, string>>,
-) => <AbstractAnnotationHelper {...props} apiEndpoint="guidelines" />;
+    props: Props<ServerGuideline, IGuidelineAnnotation<string, string>>,
+) => <BrickAnnotation {...props} apiEndpoint="guidelines" />;
 
 // TODO: warning level annotation

@@ -12,7 +12,7 @@ import {
     serverEndpointGuidelines,
     ServerGuideline,
 } from '../../../common/server-types';
-import { GuidelineAnnotation } from '../../../components/annotations/Annotations';
+import { GuidelineAnnotation } from '../../../components/annotations/BrickAnnotations';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
