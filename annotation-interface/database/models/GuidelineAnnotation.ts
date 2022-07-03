@@ -1,5 +1,6 @@
 import mongoose, { Types } from 'mongoose';
 
+import { ServerGuidelineOverview } from '../../common/server-types';
 import { MongooseId, OptionalId } from '../helpers/types';
 import AbstractAnnotation, {
     annotationBrickValidators,
@@ -16,8 +17,18 @@ export interface IGuidelineAnnotation<
     implication?: BrickIdT[] | undefined;
 }
 
+interface GuidelineAnnotationModel
+    extends mongoose.Model<
+        IGuidelineAnnotation<Types.ObjectId, Types.ObjectId>
+    > {
+    findMatching(
+        serverGuideline: ServerGuidelineOverview,
+    ): ReturnType<typeof findMatching>;
+}
+
 const guidelineAnnotationSchema = new mongoose.Schema<
-    IGuidelineAnnotation<Types.ObjectId, Types.ObjectId>
+    IGuidelineAnnotation<Types.ObjectId, Types.ObjectId>,
+    GuidelineAnnotationModel
 >({
     geneSymbol: { type: String, required: true, index: true },
     geneResult: { type: String, required: true, index: true },
@@ -41,11 +52,22 @@ guidelineAnnotationSchema.pre<
     next();
 });
 
+function findMatching(
+    this: GuidelineAnnotationModel,
+    serverGuideline: ServerGuidelineOverview,
+) {
+    return this.findOne({
+        medicationRxCUI: serverGuideline.medication.rxcui,
+        geneSymbol: serverGuideline.phenotype.geneSymbol.name,
+        geneResult: serverGuideline.phenotype.geneResult.name,
+    });
+}
+guidelineAnnotationSchema.static('findMatching', findMatching);
+
 export default !mongoose.models
     ? undefined
-    : (mongoose.models.GuidelineAnnotation as mongoose.Model<
-          IGuidelineAnnotation<Types.ObjectId, Types.ObjectId>
-      >) ||
+    : (mongoose.models.GuidelineAnnotation as GuidelineAnnotationModel) ||
       AbstractAnnotation!.discriminator<
-          IGuidelineAnnotation<Types.ObjectId, Types.ObjectId>
+          IGuidelineAnnotation<Types.ObjectId, Types.ObjectId>,
+          GuidelineAnnotationModel
       >('GuidelineAnnotation', guidelineAnnotationSchema);

@@ -1,5 +1,3 @@
-import { FilterQuery, Types } from 'mongoose';
-
 import { pharMeLanguage, SupportedLanguage } from '../../common/constants';
 import {
     ServerGuidelineOverview,
@@ -7,7 +5,7 @@ import {
 } from '../../common/server-types';
 import { IGuidelineAnnotation } from '../models/GuidelineAnnotation';
 import { IMedAnnotation } from '../models/MedAnnotation';
-import TextBrick, { ITextBrick } from '../models/TextBrick';
+import { ITextBrick } from '../models/TextBrick';
 import { translationsToMap } from './brick-translations';
 import { MongooseId, OptionalId } from './types';
 
@@ -21,7 +19,7 @@ type BrickPlaceholderValues = {
     [Property in typeof allBrickPlaceholders[number]]?: string;
 };
 
-type BrickResolver =
+export type BrickResolver =
     | { from: 'medAnnotation'; with: IMedAnnotation<MongooseId> }
     | { from: 'serverMedication'; with: ServerMedication }
     | { from: 'guidelineAnnotation'; with: IGuidelineAnnotation<MongooseId> }
@@ -75,11 +73,10 @@ export function resolveBricks<IdT extends OptionalId>(
     return resolved;
 }
 
-export const findResolvedBricks = async (
-    resolver: BrickResolver,
-    filter: FilterQuery<ITextBrick<MongooseId>>,
-    language: SupportedLanguage = pharMeLanguage,
-): Promise<ResolvedBrick<Types.ObjectId>[]> => {
-    const bricks = await TextBrick!.find(filter).lean().exec();
-    return resolveBricks(resolver, bricks, language);
-};
+export function definedResolvedMap<IdT extends MongooseId>(
+    bricks: ResolvedBrick<IdT>[],
+): Map<string, string> {
+    return new Map(
+        bricks.filter(([, text]) => text !== undefined) as [string, string][],
+    );
+}

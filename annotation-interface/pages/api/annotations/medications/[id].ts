@@ -32,7 +32,7 @@ const api: NextApiHandler = async (req, res) => {
 
     await dbConnect();
     const findResult = await MedAnnotation!
-        .findOne({ medicationRxCUI: serverMedication.rxcui })
+        .findMatching(serverMedication)
         .lean()
         .exec();
     let annotation: IMedAnnotation<string, string> | null = findResult

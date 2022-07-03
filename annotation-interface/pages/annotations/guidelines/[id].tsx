@@ -17,9 +17,10 @@ import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import {
-    findResolvedBricks,
+    definedResolvedMap,
     ResolvedBrick,
 } from '../../../database/helpers/resolve-bricks';
+import TextBrick from '../../../database/models/TextBrick';
 import { GetGuidelineDto } from '../../api/annotations/guidelines/[id]';
 
 const GuidelineDetail = ({
@@ -27,10 +28,6 @@ const GuidelineDetail = ({
     implicationBricks,
     recommendationBricks,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const implicationBrickMap: Map<string, string> = new Map(implicationBricks);
-    const recommendationBrickMap: Map<string, string> = new Map(
-        recommendationBricks,
-    );
     const { mutate } = useSWRConfig();
     const url = `/api/annotations/guidelines/${serverId}`;
     const { data } = useSwrFetcher<GetGuidelineDto>(url, {
@@ -55,7 +52,7 @@ const GuidelineDetail = ({
                 {guideline && <CpicGuidelineBox guideline={guideline} />}
                 <GuidelineAnnotation
                     refetch={refetch}
-                    resolvedBricks={implicationBrickMap}
+                    resolvedBricks={definedResolvedMap(implicationBricks)}
                     displayContext={displayContext}
                     annotation={annotation}
                     serverData={guideline}
@@ -63,7 +60,7 @@ const GuidelineDetail = ({
                 />
                 <GuidelineAnnotation
                     refetch={refetch}
-                    resolvedBricks={recommendationBrickMap}
+                    resolvedBricks={definedResolvedMap(recommendationBricks)}
                     displayContext={displayContext}
                     annotation={annotation}
                     serverData={guideline}
@@ -95,11 +92,11 @@ export const getServerSideProps = async (
         const guideline = response.data;
         await dbConnect();
         const [implicationBricks, recommendationBricks] = await Promise.all([
-            findResolvedBricks(
+            TextBrick!.findResolved(
                 { from: 'serverGuideline', with: guideline },
                 { usage: 'Implication' },
             ),
-            findResolvedBricks(
+            TextBrick!.findResolved(
                 { from: 'serverGuideline', with: guideline },
                 { usage: 'Recommendation' },
             ),

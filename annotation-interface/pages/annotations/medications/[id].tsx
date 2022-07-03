@@ -16,9 +16,10 @@ import { MedAnnotation } from '../../../components/annotations/Annotations';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import {
-    findResolvedBricks,
+    definedResolvedMap,
     ResolvedBrick,
 } from '../../../database/helpers/resolve-bricks';
+import TextBrick from '../../../database/models/TextBrick';
 import { GetMedicationDto } from '../../api/annotations/medications/[id]';
 
 const MedicationDetail = ({
@@ -26,8 +27,6 @@ const MedicationDetail = ({
     classBricks,
     indicationBricks,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const classBrickMap: Map<string, string> = new Map(classBricks);
-    const indicationBrickMap: Map<string, string> = new Map(indicationBricks);
     const { mutate } = useSWRConfig();
     const url = `/api/annotations/medications/${serverId}`;
     const { data } = useSwrFetcher<GetMedicationDto>(url, {
@@ -47,7 +46,7 @@ const MedicationDetail = ({
             <div className="space-y-4">
                 <MedAnnotation
                     refetch={refetch}
-                    resolvedBricks={classBrickMap}
+                    resolvedBricks={definedResolvedMap(classBricks)}
                     displayContext={displayContext}
                     annotation={annotation}
                     serverData={medication}
@@ -55,7 +54,7 @@ const MedicationDetail = ({
                 />
                 <MedAnnotation
                     refetch={refetch}
-                    resolvedBricks={indicationBrickMap}
+                    resolvedBricks={definedResolvedMap(indicationBricks)}
                     displayContext={displayContext}
                     annotation={annotation}
                     serverData={medication}
@@ -87,11 +86,11 @@ export const getServerSideProps = async (
         const medication = response.data;
         await dbConnect();
         const [classBricks, indicationBricks] = await Promise.all([
-            findResolvedBricks(
+            TextBrick!.findResolved(
                 { from: 'serverMedication', with: medication },
                 { usage: 'Drug class' },
             ),
-            findResolvedBricks(
+            TextBrick!.findResolved(
                 { from: 'serverMedication', with: medication },
                 { usage: 'Drug indication' },
             ),

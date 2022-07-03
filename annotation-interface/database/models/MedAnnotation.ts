@@ -1,5 +1,6 @@
 import mongoose, { Types } from 'mongoose';
 
+import { ServerMedication } from '../../common/server-types';
 import { MongooseId, OptionalId } from '../helpers/types';
 import AbstractAnnotation, {
     annotationBrickValidators,
@@ -14,8 +15,14 @@ export interface IMedAnnotation<
     indication?: BrickIdT[] | undefined;
 }
 
+interface MedAnnotationModel
+    extends mongoose.Model<IMedAnnotation<Types.ObjectId, Types.ObjectId>> {
+    findMatching(serverMed: ServerMedication): ReturnType<typeof findMatching>;
+}
+
 const medAnnotationSchema = new mongoose.Schema<
-    IMedAnnotation<Types.ObjectId, Types.ObjectId>
+    IMedAnnotation<Types.ObjectId, Types.ObjectId>,
+    MedAnnotationModel
 >({
     drugclass: {
         type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
@@ -38,11 +45,15 @@ medAnnotationSchema.pre<IMedAnnotation<Types.ObjectId, Types.ObjectId>>(
     },
 );
 
+function findMatching(this: MedAnnotationModel, serverMed: ServerMedication) {
+    return this.findOne({ medicationRxCUI: serverMed.rxcui });
+}
+medAnnotationSchema.static('findMatching', findMatching);
+
 export default !mongoose.models
     ? undefined
-    : (mongoose.models.MedAnnotation as mongoose.Model<
-          IMedAnnotation<Types.ObjectId, Types.ObjectId>
-      >) ||
+    : (mongoose.models.MedAnnotation as MedAnnotationModel) ||
       AbstractAnnotation!.discriminator<
-          IMedAnnotation<Types.ObjectId, Types.ObjectId>
+          IMedAnnotation<Types.ObjectId, Types.ObjectId>,
+          MedAnnotationModel
       >('MedAnnotation', medAnnotationSchema);

@@ -32,11 +32,7 @@ const api: NextApiHandler = async (req, res) => {
 
     await dbConnect();
     const findResult = await GuidelineAnnotation!
-        .findOne({
-            medicationRxCUI: serverGuideline.medication.rxcui,
-            geneSymbol: serverGuideline.phenotype.geneSymbol.name,
-            geneResult: serverGuideline.phenotype.geneResult.name,
-        })
+        .findMatching(serverGuideline)
         .lean()
         .exec();
     let annotation: IGuidelineAnnotation<string, string> | null = findResult
