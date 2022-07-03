@@ -1,6 +1,10 @@
 import mongoose, { Types } from 'mongoose';
 
-import { ServerGuidelineOverview } from '../../common/server-types';
+import {
+    ServerGuidelineOverview,
+    WarningLevel,
+    warningLevelValues,
+} from '../../common/server-types';
 import { MongooseId, OptionalId } from '../helpers/types';
 import AbstractAnnotation, {
     annotationBrickValidators,
@@ -15,6 +19,7 @@ export interface IGuidelineAnnotation<
     geneResult: string;
     recommendation?: BrickIdT[] | undefined;
     implication?: BrickIdT[] | undefined;
+    warningLevel?: WarningLevel | null;
 }
 
 interface GuidelineAnnotationModel
@@ -42,12 +47,17 @@ const guidelineAnnotationSchema = new mongoose.Schema<
         default: undefined,
         validate: annotationBrickValidators('Implication'),
     },
+    warningLevel: {
+        type: String,
+        enum: warningLevelValues,
+        default: undefined,
+    },
 });
 
 guidelineAnnotationSchema.pre<
     IGuidelineAnnotation<Types.ObjectId, Types.ObjectId>
 >('validate', function (next) {
-    if (!this.recommendation && !this.implication)
+    if (!this.recommendation && !this.implication && !this.warningLevel)
         next(new Error('At least one category needs to be defined'));
     next();
 });

@@ -78,5 +78,3 @@ export const MedAnnotation = (
 export const GuidelineAnnotation = (
     props: Props<ServerGuideline, IGuidelineAnnotation<string, string>>,
 ) => <BrickAnnotation {...props} apiEndpoint="guidelines" />;
-
-// TODO: warning level annotation

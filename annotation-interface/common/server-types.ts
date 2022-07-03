@@ -1,4 +1,5 @@
-export type WarningLevel = 'ok' | 'warning' | 'danger';
+export const warningLevelValues = ['ok', 'warning', 'danger'] as const;
+export type WarningLevel = typeof warningLevelValues[number];
 
 export type ServerGuidelineOverview = {
     id: number;

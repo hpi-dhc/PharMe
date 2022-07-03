@@ -58,7 +58,12 @@ const api: NextApiHandler = async (req, res) => {
                 { id: serverGuideline.id, ...serverPatch },
             ]);
 
-            if (!annotation && (patch.implication || patch.recommendation)) {
+            if (
+                !annotation &&
+                (patch.implication ||
+                    patch.recommendation ||
+                    patch.warningLevel)
+            ) {
                 annotation = {
                     medicationRxCUI: serverGuideline.medication.rxcui,
                     medicationName: serverGuideline.medication.name,
@@ -69,7 +74,11 @@ const api: NextApiHandler = async (req, res) => {
                 await GuidelineAnnotation!.create(annotation);
             } else if (annotation) {
                 annotation = { ...annotation, ...patch };
-                if (annotation.implication || annotation.recommendation) {
+                if (
+                    annotation.implication ||
+                    annotation.recommendation ||
+                    patch.warningLevel
+                ) {
                     await GuidelineAnnotation!
                         .findByIdAndUpdate(annotation._id!, annotation, {
                             runValidators: true,

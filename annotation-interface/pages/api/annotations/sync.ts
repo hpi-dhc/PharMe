@@ -95,6 +95,7 @@ const api: NextApiHandler = async (req, res) =>
                             resolver,
                             annotation.recommendation,
                         ),
+                        warningLevel: annotation.warningLevel,
                     };
                 })
                 .filter((patch) => patch);

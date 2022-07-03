@@ -14,6 +14,7 @@ import {
 } from '../../../common/server-types';
 import { GuidelineAnnotation } from '../../../components/annotations/BrickAnnotations';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
+import WarningLevelAnnotation from '../../../components/annotations/WarningLevelAnnotation';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import {
@@ -65,6 +66,12 @@ const GuidelineDetail = ({
                     annotation={annotation}
                     serverData={guideline}
                     category="recommendation"
+                />
+                <WarningLevelAnnotation
+                    refetch={refetch}
+                    annotation={annotation}
+                    serverData={guideline}
+                    displayContext={displayContext}
                 />
             </div>
         </>
