@@ -14,31 +14,33 @@ type Props = {
 
 const ControlPanel = ({ updates, hide }: Props) => {
     const { mutate } = useSWRConfig();
-    const [isLoading, setIsLoading] = useState(false);
+    const [loadingState, setLoadingState] = useState<string | null>(null);
     const [message, setMessage] = useState('');
     const fetchServerData = async (target: FetchTarget) => {
-        setIsLoading(true);
         setMessage('');
         try {
+            setLoadingState('Fetching external data');
             await axios.post('/api/server-update', { target });
+            setLoadingState('Uploading curated annotations');
+            await axios.patch('/api/annotations/sync');
             setMessage('Success!');
         } catch {
             setMessage(
-                `An unexpected error occured. Try again or contact the Annotation Server's maintainer`,
+                `An unexpected error occured. Try again or contact the PharMe's maintainer.`,
             );
         }
         mutate('/api/server-update');
-        setIsLoading(false);
+        setLoadingState(null);
     };
     return (
         <PageOverlay
-            hide={() => !isLoading && hide()}
+            hide={() => !loadingState && hide()}
             heading="Fetch new data"
             explanation="Note that fetching data may take up to ten minutes and users may experience undefined behavior during this time period. Use with caution and keep this page open while fetching data."
             className="space-y-6"
         >
             <p>{message}</p>
-            {isLoading ? (
+            {loadingState ? (
                 <div className="flex justify-center">
                     <div className="relative">
                         <WithIcon
@@ -46,7 +48,7 @@ const ControlPanel = ({ updates, hide }: Props) => {
                             className="absolute animate-ping top-0 left-0"
                         />
                         <WithIcon icon={CloudDownloadIcon}>
-                            Fetching data ...
+                            {loadingState}
                         </WithIcon>
                     </div>
                 </div>

@@ -76,7 +76,7 @@ export class GuidelinesService {
                 implication: true,
                 recommendation: true,
                 warningLevel: true,
-                medication: { name: true },
+                medication: { name: true, rxcui: true },
                 phenotype: {
                     id: true,
                     geneSymbol: { name: true },
