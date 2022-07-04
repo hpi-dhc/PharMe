@@ -78,9 +78,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SvgPicture.asset(
-          'assets/images/pharme_logo_horizontal.svg',
-        ),
+        Image.asset('assets/images/logo-horizontal.png'),
         CircularProgressIndicator(),
         SizedBox(
           width: double.infinity,
@@ -104,9 +102,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SvgPicture.asset(
-          'assets/images/pharme_logo_horizontal.svg',
-        ),
+        Image.asset('assets/images/logo-horizontal.png'),
         Column(
           children: [
             Icon(
