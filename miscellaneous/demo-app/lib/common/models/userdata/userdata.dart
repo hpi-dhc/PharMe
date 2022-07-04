@@ -25,6 +25,9 @@ class UserData {
   static Future<void> save() async =>
       Hive.box<UserData>(_boxName).put('data', _instance);
 
+  static Future<void> deleteFromDisk() async =>
+      Hive.box<UserData>(_boxName).deleteFromDisk();
+
   @HiveField(0)
   List<Diplotype>? diplotypes;
 
@@ -54,4 +57,11 @@ Future<void> initUserData() async {
   );
   final userData = Hive.box<UserData>(_boxName);
   userData.get('data') ?? UserData();
+}
+
+Future<void> deleteBoFromDisk() async {
+  final encryptionKey = await retrieveExistingOrGenerateKey();
+  final box = await Hive.openBox<UserData>(_boxName,
+      encryptionCipher: HiveAesCipher(encryptionKey));
+  await box.deleteFromDisk();
 }

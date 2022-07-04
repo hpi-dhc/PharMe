@@ -24,6 +24,9 @@ class MetaData {
   static Future<void> save() async =>
       Hive.box<MetaData>(_boxName).put('data', _instance);
 
+  static Future<void> deleteFromDisk() async =>
+      Hive.box<MetaData>(_boxName).deleteFromDisk();
+
   @HiveField(0)
   DateTime? lookupsLastFetchDate;
 

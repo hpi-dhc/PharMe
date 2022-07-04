@@ -22,6 +22,9 @@ class CachedMedications {
   static Future<void> save() async =>
       Hive.box<CachedMedications>(_boxName).put('data', _instance);
 
+  static Future<void> deleteFromDisk() async =>
+      Hive.box<CachedMedications>(_boxName).deleteFromDisk();
+
   /// Caches a list of medications along with their guidelines
   ///
   /// Internally calls cache on each medication seperately
@@ -94,4 +97,9 @@ Future<void> _cacheWhenLimitReached(
   cachedMedList.removeAt(index);
   cachedMedList.add(med);
   return CachedMedications.save();
+}
+
+Future<void> deleteBoxFromDisk() async {
+  final box = Hive.box<CachedMedications>(_boxName);
+  await box.deleteFromDisk();
 }
