@@ -27,29 +27,81 @@ class ReportsPage extends StatelessWidget {
     List<MedicationWithGuidelines> medications,
     BuildContext context,
   ) {
-    return CustomScrollView(slivers: [
-      SliverPersistentHeader(
-        delegate: SliverReportsHeaderDelegate(48, 96, 136),
-        floating: true,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            _buildHeaderCard(context),
+            SizedBox(height: 8),
+            _buildMedicationsList(context, medications)
+          ],
+        ),
       ),
-      _buildMedicationsList(medications),
-    ]);
+    );
   }
 
-  Widget _buildMedicationsList(List<MedicationWithGuidelines> medications) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final med = medications[index];
-          return ReportCard(
-            warningLevel: _getWarningLevel(med.guidelines),
-            onTap: () => context.router.push(MedicationRoute(id: med.id)),
-            medicationName: med.name,
-            medicationDescription: med.description,
-          );
-        },
-        childCount: medications.length,
+  Widget _buildHeaderCard(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            PharmeTheme.primaryColor.shade500,
+            PharmeTheme.primaryColor.shade800,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
       ),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: SvgPicture.asset(
+              'assets/images/reports_icon.svg',
+              width: 70,
+            ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.reports_page_disclaimer_title,
+                  style: PharmeTheme.textTheme.titleMedium!
+                      .copyWith(color: Colors.white, fontSize: 16),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  context.l10n.reports_page_disclaimer_text,
+                  style: PharmeTheme.textTheme.bodyMedium!
+                      .copyWith(color: Colors.white, fontSize: 13),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMedicationsList(
+    BuildContext context,
+    List<MedicationWithGuidelines> medications,
+  ) {
+    return Column(
+      children: [
+        ...medications.map(
+          (medication) => ReportCard(
+            warningLevel: _getWarningLevel(medication.guidelines),
+            medicationName: medication.name,
+            medicationDescription: medication.indication,
+            onTap: () =>
+                context.router.push(MedicationRoute(id: medication.id)),
+          ),
+        ),
+      ],
     );
   }
 
@@ -60,73 +112,6 @@ class ReportsPage extends StatelessWidget {
       }
     }
     return WarningLevel.warning;
-  }
-}
-
-class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const SliverReportsHeaderDelegate(
-    this.toolBarHeight,
-    this.closedHeight,
-    this.openHeight,
-  ) : super();
-
-  final double toolBarHeight;
-  final double closedHeight;
-  final double openHeight;
-
-  @override
-  double get maxExtent => toolBarHeight + openHeight;
-
-  @override
-  double get minExtent => toolBarHeight + closedHeight;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      clipBehavior: Clip.hardEdge,
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              PharmeTheme.primaryColor.shade500,
-              PharmeTheme.primaryColor.shade800,
-            ],
-          ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(children: [
-          Text(
-            context.l10n.reports_page_disclaimer_title,
-            style:
-                PharmeTheme.textTheme.titleLarge!.copyWith(color: Colors.white),
-          ),
-          SizedBox(height: 8),
-          Expanded(
-            child: Row(children: [
-              Flexible(
-                child: Text(
-                  context.l10n.reports_page_disclaimer_text,
-                  style: PharmeTheme.textTheme.bodyMedium!
-                      .copyWith(color: Colors.white),
-                ),
-              ),
-              SvgPicture.asset('assets/images/reports_icon.svg'),
-            ]),
-          ),
-        ]),
-      ),
-    );
   }
 }
 
@@ -156,31 +141,34 @@ class ReportCard extends StatelessWidget {
             ? Color(0xFFFFAFAF)
             : Color(0xFFFFEBCC),
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Column(children: [
-                  Row(children: [
-                    Icon(
-                      warningLevel == WarningLevel.danger
-                          ? Icons.block_flipped
-                          : Icons.warning_amber,
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      medicationName,
-                      style: PharmeTheme.textTheme.titleMedium,
-                    ),
-                  ]),
-                  SizedBox(height: 12),
-                  if (medicationDescription.isNotNullOrBlank)
-                    Text(
-                      medicationDescription!,
-                      style: PharmeTheme.textTheme.titleSmall,
-                    ),
-                ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Icon(
+                        warningLevel == WarningLevel.danger
+                            ? Icons.block_flipped
+                            : Icons.warning_amber,
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        medicationName,
+                        style: PharmeTheme.textTheme.titleMedium,
+                      ),
+                    ]),
+                    SizedBox(height: 12),
+                    if (medicationDescription.isNotNullOrBlank)
+                      Text(
+                        medicationDescription!,
+                        style: PharmeTheme.textTheme.titleSmall,
+                      ),
+                  ],
+                ),
               ),
               Icon(Icons.arrow_forward_ios),
             ],

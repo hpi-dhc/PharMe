@@ -95,14 +95,14 @@ class MedicationWithGuidelines {
       rxcui: '5640',
       synonyms: ['Ibuprofen'],
       drugclass: 'Pain killer',
-      indication: 'Ibuprofen is used to treat pain and arthritis',
+      indication: 'Ibuprofen is used to treat pain and arthritis.',
       guidelines: [
         Guideline(
           id: 1,
           implication:
-              'You have normal CYP2C9 gene function. This makes you activate Ibuprofen as normal',
+              'You have normal CYP2C9 gene function. This makes you activate Ibuprofen as normal.',
           recommendation:
-              'You can use Ibuprofen at standard doses. Consult your doctor for more information',
+              'You can use Ibuprofen at standard doses. Consult your doctor for more information.',
           warningLevel: 'ok',
           cpicRecommendation:
               'Initiate therapy with recommended starting dose. In accordance with the prescribing information, use the lowest effective dosage for shortest duration consistent with individual patient treatment goals.',
@@ -122,14 +122,14 @@ class MedicationWithGuidelines {
         Guideline(
           id: 1,
           implication:
-              'You have decreased CYP2C9 gene function. This makes your body slow in clearing Ibuprofen from your system',
+              'You have decreased CYP2C9 gene function. This makes your body slow in clearing Ibuprofen from your system.',
           recommendation:
-              'Ibuprofen may be used at a different dose. Consult your doctor for more informaton',
+              'Ibuprofen may be used at a different dose. Consult your doctor for more informaton.',
           warningLevel: 'danger',
           cpicRecommendation:
               'Initiate therapy with 25-50% of the lowest recommended starting dose. Titrate dose upward to clinical effect or 25-50% of the maximum recommended dose with caution. In accordance with the prescribing information, use the lowest effective dosage for shortest duration consistent with individual patient treatment goals. Upward dose titration should not occur until after steady state is reached (at least 8 days for celecoxib after first dose in PMs). Carefully monitor adverse events such as blood pressure and kidney function during course of therapy. Alternatively, consider an alternate therapy not metabolized by CYP2C9 or not significantly impacted by CYP2C9 genetic variants in vivo.',
           cpicImplication:
-              'Significantly reduced metabolism and prolonged half-life; higher plasma concentrations may increase probability and/or severity of toxicities',
+              'Significantly reduced metabolism and prolonged half-life; higher plasma concentrations may increase probability and/or severity of toxicities.',
           cpicClassification: 'Moderate',
           cpicComment:
               'Alternative therapies not primarily metabolized by CYP2C9 include aspirin, ketorolac, naproxen and sulindac. Selection of therapy will depend on individual patient treatment goals and risks for toxicity.',

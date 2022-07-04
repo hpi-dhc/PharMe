@@ -206,7 +206,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
       ),
       color: Colors.red[200],
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(12),
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

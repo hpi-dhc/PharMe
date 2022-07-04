@@ -33,7 +33,10 @@ class SearchPage extends HookWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset('assets/images/logo.svg'),
+                    Image.asset(
+                      'assets/images/logo-vertical.png',
+                      width: MediaQuery.of(context).size.width * 0.8,
+                    ),
                     Text(
                       context.l10n.search_page_typeInMedication,
                       style: PharmeTheme.textTheme.bodyLarge!.copyWith(
