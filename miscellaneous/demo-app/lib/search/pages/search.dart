@@ -30,26 +30,38 @@ class SearchPage extends HookWidget {
                     ],
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
+              ),
+              Positioned(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 200),
+                    child: Image.asset(
                       'assets/images/logo-vertical.png',
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.5,
                     ),
-                    Text(
-                      context.l10n.search_page_typeInMedication,
-                      style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+                  ),
+                ),
+              ),
+              Positioned(
+                child: SizedBox.expand(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        context.l10n.search_page_typeInMedication,
+                        style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_downward,
+                        size: 30,
                         color: Colors.white,
                       ),
-                    ),
-                    Icon(
-                      Icons.arrow_downward,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                    SizedBox(height: 120),
-                  ],
+                      SizedBox(height: 150),
+                    ],
+                  ),
                 ),
               ),
               SlidingUpPanelWidget(

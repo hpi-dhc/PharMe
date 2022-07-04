@@ -258,10 +258,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
-          gradient: LinearGradient(colors: [
-            PharmeTheme.primaryColor.withOpacity(0.8),
-            PharmeTheme.secondaryColor.withOpacity(0.8),
-          ]),
+          color: PharmeTheme.primaryColor.withOpacity(0.8),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8),

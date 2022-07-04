@@ -43,7 +43,7 @@ class ReportsPage extends StatelessWidget {
 
   Widget _buildHeaderCard(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(32),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -56,10 +56,10 @@ class ReportsPage extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: 32),
             child: SvgPicture.asset(
               'assets/images/reports_icon.svg',
-              width: 70,
+              height: 110,
             ),
           ),
           Expanded(
@@ -69,14 +69,14 @@ class ReportsPage extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.reports_page_disclaimer_title,
-                  style: PharmeTheme.textTheme.titleMedium!
-                      .copyWith(color: Colors.white, fontSize: 16),
+                  style: PharmeTheme.textTheme.titleLarge!
+                      .copyWith(color: Colors.white),
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 8),
                 Text(
                   context.l10n.reports_page_disclaimer_text,
                   style: PharmeTheme.textTheme.bodyMedium!
-                      .copyWith(color: Colors.white, fontSize: 13),
+                      .copyWith(color: Colors.white),
                 ),
               ],
             ),

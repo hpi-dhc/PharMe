@@ -40,7 +40,10 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset('assets/images/logo-horizontal.png'),
+        Image.asset(
+          'assets/images/logo-horizontal.png',
+          width: MediaQuery.of(context).size.width * 0.6,
+        ),
         Column(
           children: [
             Icon(

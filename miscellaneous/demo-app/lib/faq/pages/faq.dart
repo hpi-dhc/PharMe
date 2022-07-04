@@ -22,8 +22,7 @@ class FaqPage extends StatelessWidget {
 
   Widget _buildHeaderCard(BuildContext context) {
     return Container(
-      height: 150,
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(32),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -36,10 +35,10 @@ class FaqPage extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.only(right: 16),
             child: SvgPicture.asset(
               'assets/images/pgx_faq.svg',
-              width: 120,
+              height: 80,
             ),
           ),
           Expanded(
