@@ -64,6 +64,9 @@ class _LoginPageState extends State<LoginPage> {
           child: ElevatedButton(
             onPressed: context.read<LoginPageCubit>().fakeLoadGeneticData,
             style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical: 12),
+              ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
@@ -81,13 +84,19 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset('assets/images/logo-horizontal.png'),
+        Image.asset(
+          'assets/images/logo-horizontal.png',
+          width: MediaQuery.of(context).size.width * 0.6,
+        ),
         CircularProgressIndicator(),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
             onPressed: null, // disabled state
             style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical: 12),
+              ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
@@ -105,7 +114,10 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Image.asset('assets/images/logo-horizontal.png'),
+        Image.asset(
+          'assets/images/logo-horizontal.png',
+          width: MediaQuery.of(context).size.width * 0.6,
+        ),
         Column(
           children: [
             Icon(
@@ -126,6 +138,9 @@ class _LoginPageState extends State<LoginPage> {
           child: ElevatedButton(
             onPressed: () => context.router.replace(MainRoute()),
             style: ButtonStyle(
+              padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical: 12),
+              ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),

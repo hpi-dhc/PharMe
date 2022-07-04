@@ -4,9 +4,9 @@ import '../common/models/medication/cached_medications.dart';
 import '../common/module.dart';
 
 Future<void> deleteAllAppData() async {
-  await MetaData.deleteFromDisk();
-  await UserData.deleteFromDisk();
-  await CachedMedications.deleteFromDisk();
+  await MetaData.clearBox();
+  await UserData.clearBox();
+  await CachedMedications.clearBox();
   // await _deleteCacheDir();
   // await _deleteAppDir();
 }

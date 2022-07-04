@@ -25,8 +25,7 @@ class UserData {
   static Future<void> save() async =>
       Hive.box<UserData>(_boxName).put('data', _instance);
 
-  static Future<void> deleteFromDisk() async =>
-      Hive.box<UserData>(_boxName).deleteFromDisk();
+  static Future<void> clearBox() async => Hive.box<UserData>(_boxName).clear();
 
   @HiveField(0)
   List<Diplotype>? diplotypes;
