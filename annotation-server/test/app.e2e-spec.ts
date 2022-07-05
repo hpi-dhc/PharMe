@@ -23,7 +23,7 @@ describe('App (e2e)', () => {
 
         medicationService =
             moduleFixture.get<MedicationsService>(MedicationsService);
-        medicationService.clearAllMedicationData();
+        await medicationService.clearAllMedicationData();
     });
 
     describe('Pre-initialization', () => {
