@@ -14,7 +14,7 @@ class Medication with _$Medication {
   const factory Medication(
     int id,
     String name,
-    String description,
+    String? description,
     String? drugclass,
     String? indication,
   ) = _Medication;
