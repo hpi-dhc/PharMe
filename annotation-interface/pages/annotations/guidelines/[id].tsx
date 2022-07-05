@@ -12,6 +12,7 @@ import {
     serverEndpointGuidelines,
     ServerGuideline,
 } from '../../../common/server-types';
+import { BackToAnnotations } from '../../../components/annotations/AbstractAnnotation';
 import { GuidelineAnnotation } from '../../../components/annotations/BrickAnnotations';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
 import WarningLevelAnnotation from '../../../components/annotations/WarningLevelAnnotation';
@@ -50,6 +51,7 @@ const GuidelineDetail = ({
                 implication, recommendation and resulting warning level.
             </PageHeading>
             <div className="space-y-4">
+                <BackToAnnotations />
                 {guideline && <CpicGuidelineBox guideline={guideline} />}
                 <GuidelineAnnotation
                     refetch={refetch}

@@ -12,6 +12,7 @@ import {
     serverEndpointMeds,
     ServerMedication,
 } from '../../../common/server-types';
+import { BackToAnnotations } from '../../../components/annotations/AbstractAnnotation';
 import { MedAnnotation } from '../../../components/annotations/BrickAnnotations';
 import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
@@ -44,6 +45,7 @@ const MedicationDetail = ({
                 patient-friendly drug class and its indication.
             </PageHeading>
             <div className="space-y-4">
+                <BackToAnnotations />
                 <MedAnnotation
                     refetch={refetch}
                     resolvedBricks={definedResolvedMap(classBricks)}

@@ -1,4 +1,9 @@
-import { ExclamationIcon, PencilAltIcon } from '@heroicons/react/solid';
+import {
+    ChevronLeftIcon,
+    ExclamationIcon,
+    PencilAltIcon,
+} from '@heroicons/react/solid';
+import Link from 'next/link';
 import {
     forwardRef,
     PropsWithChildren,
@@ -21,6 +26,14 @@ type Props = PropsWithChildren<{
 
 export const AnnotationMissing = () => (
     <WithIcon icon={ExclamationIcon}>Not set</WithIcon>
+);
+
+export const BackToAnnotations = () => (
+    <Link href="/annotations">
+        <a className="underline">
+            <WithIcon icon={ChevronLeftIcon}>Back</WithIcon>
+        </a>
+    </Link>
 );
 
 const AbstractAnnotation = forwardRef<AbstractAnnotationRef, Props>(
