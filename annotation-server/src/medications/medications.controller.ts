@@ -1,7 +1,9 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { ApiBodyPatch } from '../common/api/bodies';
 import { ApiParamGetById } from '../common/api/params';
+import { PatchBodyDto } from '../common/dtos/patch-body.dto';
 import {
     ApiFindMedicationsQueries,
     ApiFindMedicationQueries,
@@ -19,6 +21,23 @@ export class MedicationsController {
     @Get('last_update')
     getLastUpdate(): Promise<Date | undefined> {
         return this.medicationsService.getLastUpdate();
+    }
+
+    @ApiOperation({
+        summary: 'Supplement matching medication data from a Google Sheet',
+    })
+    @Patch('sheet')
+    async supplementSheetData(): Promise<void> {
+        return this.medicationsService.supplementSheetData();
+    }
+
+    @ApiOperation({ summary: 'Patch medications' })
+    @ApiBodyPatch('medication')
+    @Patch()
+    async patchMedications(
+        @Body() patch: PatchBodyDto<Medication>,
+    ): Promise<void> {
+        return this.medicationsService.patch(patch);
     }
 
     @ApiOperation({ summary: 'Fetch all medications' })

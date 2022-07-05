@@ -1,11 +1,12 @@
-export type WarningLevel = 'ok' | 'warning' | 'danger';
+export const warningLevelValues = ['ok', 'warning', 'danger'] as const;
+export type WarningLevel = typeof warningLevelValues[number];
 
 export type ServerGuidelineOverview = {
     id: number;
     implication: string | null;
     recommendation: string | null;
     warningLevel: WarningLevel | null;
-    medication: { name: string };
+    medication: ServerMedication;
     phenotype: {
         geneResult: { name: string };
         geneSymbol: { name: string };
@@ -33,3 +34,10 @@ export type ServerMedication = {
     drugclass: string | null;
     indication: string | null;
 };
+
+const serverEndpoint = `http://${process.env.AS_API}/`;
+export const serverEndpointInit = serverEndpoint + 'init/';
+export const serverEndpointMeds = (query?: string): string =>
+    `${serverEndpoint}medications/${query ?? ''}`;
+export const serverEndpointGuidelines = (query?: string): string =>
+    `${serverEndpoint}guidelines/${query ?? ''}`;

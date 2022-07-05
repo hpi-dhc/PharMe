@@ -1,11 +1,10 @@
 import { CloudDownloadIcon, ExclamationIcon } from '@heroicons/react/solid';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import RelativeTime from 'dayjs/plugin/relativeTime';
 import { useState } from 'react';
-import useSWR from 'swr';
 
+import { useSwrFetcher } from '../common/react-helpers';
 import PageHeading from '../components/common/PageHeading';
 import WithIcon from '../components/common/WithIcon';
 import ControlPanel from '../components/home/ControlPanel';
@@ -13,9 +12,6 @@ import { LastUpdatesDto } from './api/server-update';
 
 dayjs.extend(RelativeTime);
 dayjs.extend(LocalizedFormat);
-
-const fetchLastUpdateDates = async (url: string) =>
-    await axios.get<LastUpdatesDto>(url);
 
 const dateDisplay = (
     lastUpdates: LastUpdatesDto | undefined,
@@ -36,10 +32,8 @@ const dateDisplay = (
 };
 
 const Home = () => {
-    const { data: updatesResponse, error } = useSWR(
-        '/api/server-update',
-        fetchLastUpdateDates,
-    );
+    const { data: updatesResponse, error } =
+        useSwrFetcher<LastUpdatesDto>('/api/server-update');
     const lastUpdates = updatesResponse?.data;
     const [controlVisible, setControlVisible] = useState(false);
     return (

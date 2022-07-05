@@ -35,7 +35,7 @@ const tabDefinitions: TabDefinition[] = [
         activePaths: /^\/annotations.*$/,
         title: 'Annotations',
         linkPath: '/annotations',
-        providers: [LanguageContextProvider, AnnotationFilterContextProvider],
+        providers: [AnnotationFilterContextProvider],
     },
     {
         activePaths: /^\/bricks.*$/,
@@ -68,7 +68,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                     ))}
                 </ul>
             </div>
-            <div className="max-w-screen-md mx-auto pt-4">
+            <div className="max-w-screen-md mx-auto pt-4 pb-48">
                 {activeIndex === -1 ? (
                     children
                 ) : (

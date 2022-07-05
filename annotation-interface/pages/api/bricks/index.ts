@@ -1,24 +1,9 @@
 import { NextApiHandler } from 'next';
 
-import dbConnect from '../../../database/connect';
+import { createApi } from '../../../common/api-helpers';
 import TextBrick from '../../../database/models/TextBrick';
 
-const brickApi: NextApiHandler = async (req, res) => {
-    const { method } = req;
-    await dbConnect();
+const api: NextApiHandler = async (req, res) =>
+    await createApi(TextBrick!, req, res);
 
-    try {
-        switch (method) {
-            case 'POST':
-                const brick = await TextBrick!.create(req.body);
-                res.status(201).json({ brick });
-                return;
-            default:
-                throw new Error();
-        }
-    } catch (error) {
-        res.status(400).json({ success: false });
-    }
-};
-
-export default brickApi;
+export default api;

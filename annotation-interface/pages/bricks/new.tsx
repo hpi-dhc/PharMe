@@ -1,6 +1,7 @@
 import { BrickUsage, brickUsages } from '../../common/constants';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
+import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';
 import FilterTabs from '../../components/common/FilterTabs';
 import PageHeading from '../../components/common/PageHeading';
 import {
@@ -23,8 +24,12 @@ const NewBrick = () => {
     return (
         <>
             <PageHeading title="Create new Brick">
-                Create a new Brick by specifying the annotation text category
-                it&apos;ll be used for and defining it in at least one language.
+                <p>
+                    Create a new Brick by specifying the annotation text
+                    category it&apos;ll be used for and defining it in at least
+                    one language.
+                </p>
+                <PlaceholderInfo />
             </PageHeading>
             <FilterTabs
                 titles={[...brickUsages]}

@@ -22,3 +22,9 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 - Start the database by running `docker compose up` in this directory
 - Start the development server with `yarn dev`
 - You can now access the annotation interface app on `localhost:3001`
+
+If you have all prerequisites (Annotation Server & Interface) met and use
+[kitty](https://sw.kovidgoyal.net/kitty/), you can conveniently run the
+[annotation-dev](../.kitty/annotation-dev) script from this repository's root to
+start both the Annotation Server and Interface along with both databases in
+split windows.

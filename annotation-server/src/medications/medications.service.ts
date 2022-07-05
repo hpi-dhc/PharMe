@@ -18,6 +18,7 @@ import {
     FindOptionsOrderValue,
 } from 'typeorm';
 
+import { PatchBodyDto } from '../common/dtos/patch-body.dto';
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { FetchTarget } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
@@ -100,52 +101,8 @@ export class MedicationsService {
         const jsonPath = await this.getJSONfromZip();
         this.logger.log('Extracting medications from JSON ...');
         const drugs = await this.getDataFromJSON(jsonPath);
-        this.logger.log(
-            'Fetching additional medication data from Google Sheet ...',
-        );
-        const [medicationNames, drugClasses, indications] =
-            await fetchSpreadsheetCells(
-                this.configService.get<string>('GOOGLESHEET_ID'),
-                this.configService.get<string>('GOOGLESHEET_APIKEY'),
-                [
-                    this.configService.get<string>(
-                        'GOOGLESHEET_RANGE_MEDICATIONS',
-                    ),
-                    this.configService.get<string>(
-                        'GOOGLESHEET_RANGE_DRUGCLASSES',
-                    ),
-                    this.configService.get<string>(
-                        'GOOGLESHEET_RANGE_INDICATIONS',
-                    ),
-                ],
-            );
-        const spreadsheetMedications = new Map<
-            string,
-            { drugClass?: string; indication?: string }
-        >();
-        for (let row = 0; row < medicationNames.length; row++) {
-            const drugClass = drugClasses[row]?.[0].value;
-            const indication = indications[row]?.[0].value;
-            const medicationName = medicationNames[row][0].value;
-            if (!medicationName || (!drugClass && !indication)) continue;
-            spreadsheetMedications.set(medicationName.toLowerCase(), {
-                drugClass: drugClass,
-                indication: indication,
-            });
-        }
         this.logger.log('Writing to database ...');
-        const medications = drugs.map((drug) => {
-            const medication = Medication.fromDrug(drug);
-            if (spreadsheetMedications.has(medication.name.toLowerCase())) {
-                const spreadsheetMedication = spreadsheetMedications.get(
-                    medication.name.toLowerCase(),
-                );
-                medication.drugclass = spreadsheetMedication.drugClass?.trim();
-                medication.indication =
-                    spreadsheetMedication.indication?.trim();
-            }
-            return medication;
-        });
+        const medications = drugs.map((drug) => Medication.fromDrug(drug));
         const savedMedications = await this.medicationRepository.save(
             medications,
         );
@@ -153,6 +110,45 @@ export class MedicationsService {
         this.logger.log(
             `Successfully saved ${savedMedications.length} medications!`,
         );
+    }
+
+    async supplementSheetData(): Promise<void> {
+        this.logger.log('Fetching medication data from Google Sheet ...');
+        const [names, drugclasses, indications] = await fetchSpreadsheetCells(
+            this.configService.get<string>('GOOGLESHEET_ID'),
+            this.configService.get<string>('GOOGLESHEET_APIKEY'),
+            [
+                this.configService.get<string>('GOOGLESHEET_RANGE_MEDICATIONS'),
+                this.configService.get<string>('GOOGLESHEET_RANGE_DRUGCLASSES'),
+                this.configService.get<string>('GOOGLESHEET_RANGE_INDICATIONS'),
+            ],
+        );
+
+        const updateQueries = new Array<Promise<void>>();
+        const updateMedication = async (
+            name: string,
+            drugclass?: string,
+            indication?: string,
+        ) => {
+            const medication = await this.medicationRepository.findOne({
+                where: { name },
+            });
+            if (!medication) return;
+            medication.drugclass = drugclass;
+            medication.indication = indication;
+            await this.medicationRepository.save(medication);
+        };
+
+        for (let row = 0; row < names.length; row++) {
+            const drugclass = drugclasses[row]?.[0].value;
+            const indication = indications[row]?.[0].value;
+            const name = names[row][0].value;
+            if (!name || (!drugclass && !indication)) continue;
+            updateQueries.push(updateMedication(name, drugclass, indication));
+        }
+
+        await Promise.all(updateQueries);
+        this.logger.log('Successfully supplemented matching data!');
     }
 
     async getLastUpdate(): Promise<Date | undefined> {
@@ -165,6 +161,14 @@ export class MedicationsService {
 
     async hasData(): Promise<boolean> {
         return (await this.medicationRepository.count()) > 0;
+    }
+
+    async patch(patch: PatchBodyDto<Medication>): Promise<void> {
+        await Promise.all(
+            patch.map(({ id, ...update }) =>
+                this.medicationRepository.update(id, update),
+            ),
+        );
     }
 
     getJSONfromZip(): Promise<string> {

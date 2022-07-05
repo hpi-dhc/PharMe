@@ -4,6 +4,8 @@ import { GetServerSidePropsResult, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 import {
+    serverEndpointGuidelines,
+    serverEndpointMeds,
     ServerGuidelineOverview,
     ServerMedication,
 } from '../../common/server-types';
@@ -41,8 +43,15 @@ function filteredElements<T extends { labels: JSX.Element[] }>(
     );
 }
 
-const matches = (test: string, query: string) =>
-    test.toLowerCase().includes(query);
+const matches = (test: string, query: string) => {
+    test = test.toLowerCase();
+    return (
+        query
+            .toLowerCase()
+            .split(/\s+/)
+            .filter((word) => !test.includes(word)).length === 0
+    );
+};
 
 const Annotations = ({
     medications,
@@ -71,10 +80,13 @@ const Annotations = ({
     );
     const guidelinesWithLabels = filteredElements(
         guidelines
-            .filter(
-                (guideline) =>
-                    matches(guideline.medication.name, searchQuery) ||
-                    matches(guideline.phenotype.geneSymbol.name, searchQuery),
+            .filter((guideline) =>
+                matches(
+                    guideline.medication.name +
+                        guideline.phenotype.geneSymbol.name +
+                        guideline.phenotype.geneResult.name,
+                    searchQuery,
+                ),
             )
             .map((guideline) => {
                 const labels = getMissingLabels(guideline, [
@@ -170,13 +182,10 @@ export const getServerSideProps = async (): Promise<
 > => {
     try {
         const [medicationResponse, guidelineResponse] = await Promise.all([
-            axios.get<ServerMedication[]>(
-                `http://${process.env.AS_API}/medications`,
-                { params: { withGuidelines: true } },
-            ),
-            axios.get<ServerGuidelineOverview[]>(
-                `http://${process.env.AS_API}/guidelines`,
-            ),
+            axios.get<ServerMedication[]>(serverEndpointMeds(), {
+                params: { withGuidelines: true },
+            }),
+            axios.get<ServerGuidelineOverview[]>(serverEndpointGuidelines()),
         ]);
         return {
             props: {
