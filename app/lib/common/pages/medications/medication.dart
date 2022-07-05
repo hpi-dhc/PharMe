@@ -143,8 +143,12 @@ class ClinicalAnnotationCard extends StatelessWidget {
               _buildImplicationInfo(context),
               SizedBox(height: 16),
             ],
-            _buildRecommendationCard(context),
-            SizedBox(height: 16),
+            if (medication.guidelines[0].recommendation.isNotNullOrBlank ||
+                medication
+                    .guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
+              _buildRecommendationCard(context),
+              SizedBox(height: 16),
+            ],
             _buildSourcesSection(context),
             SizedBox(height: 16),
           ]),
@@ -219,7 +223,8 @@ class ClinicalAnnotationCard extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            medication.guidelines[0].recommendation!,
+            medication.guidelines[0].recommendation ??
+                medication.guidelines[0].cpicRecommendation!,
             style: PharmeTheme.textTheme.bodyLarge,
           ),
         ]),
@@ -233,12 +238,14 @@ class ClinicalAnnotationCard extends StatelessWidget {
         context.l10n.medications_page_header_further_info,
         tooltip: context.l10n.medications_page_tooltip_further_info,
       ),
-      SizedBox(height: 8),
-      _buildSourceCard(
-        context.l10n.medications_page_sources_pharmGkb_name,
-        context.l10n.medications_page_sources_pharmGkb_description,
-        () => _launchPharmGkbUrl(medication.pharmgkbId),
-      ),
+      if (medication.pharmgkbId.isNotNullOrBlank) ...[
+        SizedBox(height: 8),
+        _buildSourceCard(
+          context.l10n.medications_page_sources_pharmGkb_name,
+          context.l10n.medications_page_sources_pharmGkb_description,
+          () => _launchPharmGkbUrl(medication.pharmgkbId),
+        ),
+      ],
       SizedBox(height: 8),
       _buildSourceCard(
         context.l10n.medications_page_sources_cpic_name,
