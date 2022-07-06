@@ -49,7 +49,7 @@ export class MedicationsController {
             dto.offset ?? 0,
             dto.search ?? '',
             dto.sortby ?? 'name',
-            dto.orderby ?? 'asc',
+            dto.orderby ?? 'ASC',
             FindMedicationQueryDto.isTrueString(dto.withGuidelines),
             FindMedicationQueryDto.isTrueString(dto.getGuidelines),
             FindMedicationQueryDto.isTrueString(dto.onlyIds),
