@@ -139,7 +139,8 @@ class ClinicalAnnotationCard extends StatelessWidget {
           child: Column(children: [
             _buildHeader(context),
             SizedBox(height: 16),
-            if (medication.guidelines[0].implication.isNotNullOrBlank) ...[
+            if (medication.guidelines[0].implication.isNotNullOrBlank ||
+                medication.guidelines[0].cpicImplication.isNotNullOrBlank) ...[
               _buildImplicationInfo(context),
               SizedBox(height: 16),
             ],
@@ -169,7 +170,8 @@ class ClinicalAnnotationCard extends StatelessWidget {
       SizedBox(width: 24),
       Flexible(
         child: Text(
-          medication.guidelines[0].implication!,
+          medication.guidelines[0].implication ??
+              medication.guidelines[0].cpicImplication!,
           style: PharmeTheme.textTheme.bodySmall,
         ),
       ),
