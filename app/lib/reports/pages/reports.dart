@@ -159,7 +159,7 @@ class ReportCard extends StatelessWidget {
                       Row(children: [
                         Icon(
                           warningLevel == WarningLevel.danger
-                              ? Icons.block_flipped
+                              ? Icons.dangerous_rounded
                               : Icons.warning_amber,
                         ),
                         SizedBox(width: 12),
@@ -175,7 +175,8 @@ class ReportCard extends StatelessWidget {
                           style: PharmeTheme.textTheme.titleSmall,
                         ),
                       ]
-                    ]),
+                    ],
+                 ),
               ),
               Icon(Icons.arrow_forward_ios),
             ],
