@@ -13,9 +13,7 @@ class ComprehensionMeasurement {
 
   static void measure(BuildContext context) {
     if (!shouldMeasure) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('TODO: Measure Comprehension'),
-    ));
+    // TODO(LeonHermann322): measure comprehension
     shouldMeasure = false;
   }
 }
