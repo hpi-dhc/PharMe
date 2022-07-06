@@ -3,6 +3,7 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../reports/models/warning_level.dart';
 import '../../module.dart';
 import '../../utilities/pdf_utils.dart';
 import 'cubit.dart';
@@ -210,7 +211,11 @@ class ClinicalAnnotationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color: Colors.red[200],
+      color: medication.guidelines[0].warningLevel == WarningLevel.danger.name
+          ? Color(0xFFFFAFAF)
+          : medication.guidelines[0].warningLevel == WarningLevel.ok.name
+              ? Color(0xFF00FF00)
+              : Color(0xFFFFEBCC),
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(children: [
@@ -220,7 +225,15 @@ class ClinicalAnnotationCard extends StatelessWidget {
               _SubHeader(
                 context.l10n.medications_page_header_recommendation,
               ),
-              Icon(Icons.warning_rounded, size: 32),
+              Icon(
+                  medication.guidelines[0].warningLevel ==
+                          WarningLevel.danger.name
+                      ? Icons.dangerous_rounded
+                      : medication.guidelines[0].warningLevel ==
+                              WarningLevel.ok.name
+                          ? Icons.check_circle_rounded
+                          : Icons.warning_rounded,
+                  size: 32),
             ],
           ),
           SizedBox(height: 4),

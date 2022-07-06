@@ -157,8 +157,8 @@ class ReportCard extends StatelessWidget {
                   Row(children: [
                     Icon(
                       warningLevel == WarningLevel.danger
-                          ? Icons.block_flipped
-                          : Icons.warning_amber,
+                          ? Icons.dangerous_rounded
+                          : Icons.warning_rounded,
                     ),
                     SizedBox(width: 12),
                     Text(
