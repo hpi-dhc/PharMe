@@ -7,16 +7,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
-import {
-    FindOptionsWhere,
-    FindManyOptions,
-    FindOneOptions,
-    In,
-    IsNull,
-    Not,
-    Repository,
-    FindOptionsOrderValue,
-} from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 import { PatchBodyDto } from '../common/dtos/patch-body.dto';
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
@@ -41,37 +32,49 @@ export class MedicationsService {
         offset: number,
         search: string,
         sortBy: string,
-        orderBy: FindOptionsOrderValue,
+        orderBy: 'ASC' | 'DESC',
         withGuidelines: boolean,
         getGuidelines: boolean,
         onlyIds: boolean,
     ): Promise<Medication[]> {
         if (onlyIds) return this.getAllIds();
 
-        const whereClause: FindOptionsWhere<Medication> = {};
-        const findOptions = <FindManyOptions<Medication>>{
-            where: whereClause,
-            take: limit,
-            skip: offset,
-            order: { [sortBy]: orderBy },
-        };
+        const query =
+            this.medicationRepository.createQueryBuilder('medication');
 
-        if (search) {
-            const matchingIds = await this.findIdsMatching(search);
-            whereClause.id = In(matchingIds);
+        if (withGuidelines && getGuidelines) {
+            query.innerJoinAndSelect('medication.guidelines', 'guidelines');
+        } else if (withGuidelines) {
+            query.innerJoin('medication.guidelines', 'guidelines');
+        } else if (getGuidelines) {
+            query.leftJoinAndSelect('medication.guidelines', 'guidelines');
         }
-
-        if (withGuidelines) whereClause.guidelines = { id: Not(IsNull()) };
 
         if (getGuidelines) {
-            findOptions.relations = [
-                'guidelines',
-                'guidelines.phenotype.geneResult',
-                'guidelines.phenotype.geneSymbol',
-            ];
+            query
+                .leftJoinAndSelect('guidelines.phenotype', 'phenotype')
+                .leftJoinAndSelect('phenotype.geneResult', 'geneResult')
+                .leftJoinAndSelect('phenotype.geneSymbol', 'geneSymbol');
         }
 
-        return await this.medicationRepository.find(findOptions);
+        if (search) {
+            query
+                .leftJoinAndSelect(
+                    MedicationSearchView,
+                    'searchView',
+                    'searchView.id = medication.id',
+                )
+                .where('searchView.searchString ilike :searchString', {
+                    searchString: `%${search}%`,
+                })
+                .orderBy('searchView.priority', 'ASC');
+        }
+
+        return await query
+            .skip(offset)
+            .take(limit)
+            .addOrderBy('medication.' + sortBy, orderBy)
+            .getMany();
     }
 
     async getAllIds(): Promise<Medication[]> {

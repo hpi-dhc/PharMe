@@ -45,7 +45,7 @@ class ReportsPage extends StatelessWidget {
             warningLevel: _getWarningLevel(med.guidelines),
             onTap: () => context.router.push(MedicationRoute(id: med.id)),
             medicationName: med.name,
-            medicationDescription: med.description,
+            medicationIndication: med.indication,
           );
         },
         childCount: medications.length,
@@ -127,13 +127,13 @@ class ReportCard extends StatelessWidget {
     required this.warningLevel,
     required this.onTap,
     required this.medicationName,
-    this.medicationDescription,
+    this.medicationIndication,
   }) : super();
 
   final WarningLevel warningLevel;
   final VoidCallback onTap;
   final String medicationName;
-  final String? medicationDescription;
+  final String? medicationIndication;
 
   @override
   Widget build(BuildContext context) {
@@ -153,26 +153,30 @@ class ReportCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Column(children: [
-                  Row(children: [
-                    Icon(
-                      warningLevel == WarningLevel.danger
-                          ? Icons.dangerous_rounded
-                          : Icons.warning_rounded,
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      medicationName,
-                      style: PharmeTheme.textTheme.titleMedium,
-                    ),
-                  ]),
-                  SizedBox(height: 12),
-                  if (medicationDescription.isNotNullOrBlank)
-                    Text(
-                      medicationDescription!,
-                      style: PharmeTheme.textTheme.titleSmall,
-                    ),
-                ]),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(children: [
+                        Icon(
+                          warningLevel == WarningLevel.danger
+                              ? Icons.dangerous_rounded
+                              : Icons.warning_amber,
+                        ),
+                        SizedBox(width: 12),
+                        Text(
+                          medicationName,
+                          style: PharmeTheme.textTheme.titleMedium,
+                        ),
+                      ]),
+                      if (medicationIndication.isNotNullOrBlank) ...[
+                        SizedBox(height: 12),
+                        Text(
+                          medicationIndication!,
+                          style: PharmeTheme.textTheme.titleSmall,
+                        ),
+                      ]
+                    ],
+                 ),
               ),
               Icon(Icons.arrow_forward_ios),
             ],
