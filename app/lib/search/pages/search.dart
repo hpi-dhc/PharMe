@@ -99,11 +99,8 @@ class SearchPage extends HookWidget {
                 context.router.push(MedicationRoute(id: med.id)),
                 context: context,
                 surveyId: 4,
-                introText:
-                    '''Would you like to participate in a survey with the aim to measure user comprehension 
-                of the applications content? This would help the developer team greatly to improve PharMe 
-                and make it understandable for everyone!''',
-                surveyButtonText: 'Continue to survey',
+                introText: context.l10n.comprehension_intro_text,
+                surveyButtonText: context.l10n.comprehension_survey_button_text,
                 supabaseConfig: supabaseConfig,
               );
             },
