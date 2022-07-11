@@ -17,7 +17,6 @@ dependencies:
     git: 
       url: https://github.com/hpi-dhc/comprehension-measurement.git
       ref: main
-  cupertino_icons: ^1.0.4
   dartx: ^1.1.0
   debug_overlay: ^0.1.4
   dropdown_button2: ^1.6.2
