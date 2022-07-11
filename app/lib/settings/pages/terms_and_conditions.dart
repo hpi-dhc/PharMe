@@ -1,11 +1,7 @@
 import '../../common/module.dart';
 
 class TermsAndConditionsPage extends StatelessWidget {
-  const TermsAndConditionsPage({
-    Key? key,
-  }) : super(
-          key: key,
-        );
+  const TermsAndConditionsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

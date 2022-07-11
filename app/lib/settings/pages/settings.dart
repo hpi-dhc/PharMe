@@ -1,9 +1,9 @@
-import 'package:comprehension_measurement/comprehension_measurement.dart';
-
 import '../../common/module.dart';
 import '../utils.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
@@ -47,25 +47,6 @@ class SettingsPage extends StatelessWidget {
         title: Text(context.l10n.settings_page_terms_and_conditions),
         trailing: Icon(Icons.chevron_right),
         onTap: () => context.router.push(TermsAndConditionsRoute()),
-      ),
-      Divider(),
-      ListTile(
-        title: Text(
-          'Comprehension Measurment',
-          style: PharmeTheme.textTheme.bodyLarge,
-        ),
-      ),
-      ListTile(
-        title: Text('Measure comprehension'),
-        trailing: Icon(Icons.chevron_right),
-        onTap: () => measureComprehension(
-          context: context,
-          surveyId: 1,
-          introText: 'Was the last page understandable for you?',
-          surveyButtonText: 'Yes',
-          feedbackButtonText: 'No',
-          supabaseConfig: supabaseConfig,
-        ),
       ),
     ]);
   }
