@@ -28,11 +28,11 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     }
     final medication = medicationWithGuidelinesFromHTTPResponse(response);
     await CachedMedications.cache(medication);
-    initializeComprehensionContext(medication);
+    _initializeComprehensionContext(medication);
     emit(MedicationsState.loaded(medication));
   }
 
-  void initializeComprehensionContext(MedicationWithGuidelines medication) {
+  void _initializeComprehensionContext(MedicationWithGuidelines medication) {
     if (medication.guidelines.isEmpty) return;
     switch (medication.guidelines[0].warningLevel) {
       case 'danger':
@@ -46,6 +46,9 @@ class MedicationsCubit extends Cubit<MedicationsState> {
         break;
     }
     switch (medication.guidelines[0].phenotype.geneResult.name) {
+      case 'Ultrarapid Metabolizer':
+        ComprehensionHelper.questionContext['metabolization_class'] = [32];
+        break;
       case 'Rapid Metabolizer':
         ComprehensionHelper.questionContext['metabolization_class'] = [15];
         break;
