@@ -1,12 +1,5 @@
-<div style="display: flex; align-items: center">
-  <div>
-    <img width="150" alt="pharme-logo" src="https://user-images.githubusercontent.com/38653851/158404648-906d5741-66f1-4a90-be1a-4cea92631b90.png"/>
-  </div>
-  <div style="padding-left: 20px">
-    <h1 style="padding: 0; margin: 0">PharMe</h1>
-    <p>Pharmaceutical insights tailored to your personal genome</p>
-  </div>
-</div>
+
+![PharMeBanner](https://user-images.githubusercontent.com/61618825/178254913-01b8ca46-c530-454c-9a64-a1eaa7a238e5.png)
 
 ---
 
