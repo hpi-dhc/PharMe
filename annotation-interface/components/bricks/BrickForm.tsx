@@ -10,18 +10,25 @@ import {
     supportedLanguages,
 } from '../../common/constants';
 import {
-    ITextBrick,
-    ITextBrickTranslation,
     translationIsValid,
     translationsToArray,
     translationsToMap,
+} from '../../database/helpers/brick-translations';
+import {
+    allBrickPlaceholders,
+    medicationBrickPlaceholders,
+} from '../../database/helpers/resolve-bricks';
+import {
+    ITextBrick,
+    ITextBrickTranslation,
 } from '../../database/models/TextBrick';
 import SelectionPopover from '../common/SelectionPopover';
 import WithIcon from '../common/WithIcon';
+import AutocompleteArea from './AutocompleteArea';
 
 type Props = {
     usage: BrickUsage | null;
-    brick?: ITextBrick | null;
+    brick?: ITextBrick<string> | null;
 };
 
 const BrickForm = ({ usage, brick }: Props) => {
@@ -83,7 +90,7 @@ const BrickForm = ({ usage, brick }: Props) => {
     };
     const deleteBrick = async () => {
         try {
-            axios.delete(`/api/bricks/${id}`);
+            await axios.delete(`/api/bricks/${id}`);
             done();
         } catch (error) {
             setMessage('Failed to delete Brick.');
@@ -114,13 +121,17 @@ const BrickForm = ({ usage, brick }: Props) => {
                                 Delete translation
                             </WithIcon>
                         </div>
-                        <textarea
-                            className="resize-y w-full border border-black border-opacity-10 p-2"
-                            value={translations.get(language)}
-                            onChange={(e) =>
-                                updateTranslation(language, e.target.value)
+                        <AutocompleteArea
+                            value={translations.get(language) ?? ''}
+                            onChange={(text) =>
+                                updateTranslation(language, text)
                             }
-                        ></textarea>
+                            validPlaceholders={
+                                usage.startsWith('Drug')
+                                    ? [...medicationBrickPlaceholders]
+                                    : [...allBrickPlaceholders]
+                            }
+                        />
                     </div>
                 ))}
             {missingLanguages.length > 0 && (

@@ -3,6 +3,7 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../reports/models/warning_level.dart';
 import '../../module.dart';
 import '../../utilities/pdf_utils.dart';
 import 'cubit.dart';
@@ -139,12 +140,17 @@ class ClinicalAnnotationCard extends StatelessWidget {
           child: Column(children: [
             _buildHeader(context),
             SizedBox(height: 16),
-            if (medication.guidelines[0].implication.isNotNullOrBlank) ...[
+            if (medication.guidelines[0].implication.isNotNullOrBlank ||
+                medication.guidelines[0].cpicImplication.isNotNullOrBlank) ...[
               _buildImplicationInfo(context),
               SizedBox(height: 16),
             ],
-            _buildRecommendationCard(context),
-            SizedBox(height: 16),
+            if (medication.guidelines[0].recommendation.isNotNullOrBlank ||
+                medication
+                    .guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
+              _buildRecommendationCard(context),
+              SizedBox(height: 16),
+            ],
             _buildSourcesSection(context),
             SizedBox(height: 16),
           ]),
@@ -165,7 +171,8 @@ class ClinicalAnnotationCard extends StatelessWidget {
       SizedBox(width: 24),
       Flexible(
         child: Text(
-          medication.guidelines[0].implication!,
+          medication.guidelines[0].implication ??
+              medication.guidelines[0].cpicImplication!,
           style: PharmeTheme.textTheme.bodySmall,
         ),
       ),
@@ -204,7 +211,11 @@ class ClinicalAnnotationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color: Colors.red[200],
+      color: medication.guidelines[0].warningLevel == WarningLevel.danger.name
+          ? Color(0xFFFFAFAF)
+          : medication.guidelines[0].warningLevel == WarningLevel.ok.name
+              ? Color(0xFF00FF00)
+              : Color(0xFFFFEBCC),
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(children: [
@@ -214,12 +225,21 @@ class ClinicalAnnotationCard extends StatelessWidget {
               _SubHeader(
                 context.l10n.medications_page_header_recommendation,
               ),
-              Icon(Icons.warning_rounded, size: 32),
+              Icon(
+                  medication.guidelines[0].warningLevel ==
+                          WarningLevel.danger.name
+                      ? Icons.dangerous_rounded
+                      : medication.guidelines[0].warningLevel ==
+                              WarningLevel.ok.name
+                          ? Icons.check_circle_rounded
+                          : Icons.warning_rounded,
+                  size: 32),
             ],
           ),
           SizedBox(height: 4),
           Text(
-            medication.guidelines[0].recommendation!,
+            medication.guidelines[0].recommendation ??
+                medication.guidelines[0].cpicRecommendation!,
             style: PharmeTheme.textTheme.bodyLarge,
           ),
         ]),
@@ -233,12 +253,14 @@ class ClinicalAnnotationCard extends StatelessWidget {
         context.l10n.medications_page_header_further_info,
         tooltip: context.l10n.medications_page_tooltip_further_info,
       ),
-      SizedBox(height: 8),
-      _buildSourceCard(
-        context.l10n.medications_page_sources_pharmGkb_name,
-        context.l10n.medications_page_sources_pharmGkb_description,
-        () => _launchPharmGkbUrl(medication.pharmgkbId),
-      ),
+      if (medication.pharmgkbId.isNotNullOrBlank) ...[
+        SizedBox(height: 8),
+        _buildSourceCard(
+          context.l10n.medications_page_sources_pharmGkb_name,
+          context.l10n.medications_page_sources_pharmGkb_description,
+          () => _launchPharmGkbUrl(medication.pharmgkbId),
+        ),
+      ],
       SizedBox(height: 8),
       _buildSourceCard(
         context.l10n.medications_page_sources_cpic_name,

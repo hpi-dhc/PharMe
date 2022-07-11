@@ -1,7 +1,17 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { ApiBodyPatch } from '../common/api/bodies';
 import { ApiParamGetById } from '../common/api/params';
+import { PatchBodyDto } from '../common/dtos/patch-body.dto';
 import {
     ApiFindGuidelineErrorsQueries,
     FindGuidelineErrorQueryDto,
@@ -29,6 +39,23 @@ export class GuidelinesController {
     @Get('last_update')
     getLastUpdate(): Promise<Date | undefined> {
         return this.guidelinesService.getLastUpdate();
+    }
+
+    @ApiOperation({
+        summary: 'Supplement matching guideline data from a Google Sheet',
+    })
+    @Patch('sheet')
+    async supplementSheetData(): Promise<void> {
+        return this.guidelinesService.supplementSheetData();
+    }
+
+    @ApiOperation({ summary: 'Patch medications' })
+    @ApiBodyPatch('guideline')
+    @Patch()
+    async patchGuidelines(
+        @Body() patch: PatchBodyDto<Guideline>,
+    ): Promise<void> {
+        return this.guidelinesService.patch(patch);
     }
 
     @ApiOperation({ summary: 'Fetch all guidelines' })

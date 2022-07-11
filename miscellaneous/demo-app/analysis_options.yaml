@@ -1,0 +1,63 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - lib/**.g.dart
+    - lib/**.gr.dart
+    - lib/**.freezed.dart
+
+linter:
+  rules:
+    always_declare_return_types: true
+    avoid_bool_literals_in_conditional_expressions: true
+    avoid_catching_errors: true
+    avoid_double_and_int_checks: true
+    avoid_field_initializers_in_const_classes: true
+    avoid_implementing_value_types: true
+    avoid_js_rounded_ints: true
+    avoid_positional_boolean_parameters: true
+    avoid_returning_this: true
+    avoid_setters_without_getters: true
+    avoid_slow_async_io: true
+    avoid_types_on_closure_parameters: true
+    avoid_unused_constructor_parameters: true
+    avoid_void_async: true
+    cancel_subscriptions: true
+    cast_nullable_to_non_nullable: true
+    close_sinks: true
+    comment_references: true
+    directives_ordering: true
+    flutter_style_todos: true
+    invariant_booleans: true
+    join_return_with_assignment: true
+    no_adjacent_strings_in_list: true
+    omit_local_variable_types: true
+    only_throw_errors: true
+    prefer_asserts_in_initializer_lists: true
+    prefer_const_constructors: false
+    prefer_const_literals_to_create_immutables: false
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    prefer_foreach: true
+    prefer_if_elements_to_conditional_expressions: true
+    prefer_int_literals: true
+    prefer_interpolation_to_compose_strings: true
+    prefer_relative_imports: true
+    prefer_single_quotes: true
+    sort_child_properties_last: true
+    sort_constructors_first: true
+    sort_pub_dependencies: true
+    sort_unnamed_constructors_first: true
+    test_types_in_equals: true
+    throw_in_finally: true
+    tighten_type_of_initializing_formals: true
+    unawaited_futures: true
+    unnecessary_await_in_return: true
+    unnecessary_lambdas: true
+    unnecessary_null_aware_assignments: true
+    unnecessary_parenthesis: true
+    unnecessary_statements: true
+    unsafe_html: true
+    use_key_in_widget_constructors: false
+    use_setters_to_change_properties: true
+    use_string_buffers: true

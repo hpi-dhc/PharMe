@@ -1,0 +1,90 @@
+{
+  "app_feature_coming_soon": "Have a little patience, this feature is coming soon!",
+  
+  "auth_choose_lab": "Please select your lab",
+  "auth_sign_in": "Sign in",
+  "auth_success": "Successfully imported data",
+  
+  "err_could_not_launch": "Could not launch {url}",
+  "@err_could_not_launch": {
+    "description": "Error message when (auth-related) url cannot be launched.",
+    "placeholders": {
+      "url": {
+        "type": "String",
+        "example": "https://www.google.de"
+      }
+    }
+  },
+  "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
+  "err_generic": "Error!",
+  
+  "faq_page_description": "On this page we will answer common questions regarding PGx",
+  "faq_pharmacogenomics": "Pharmacogenomics",
+
+  "general_appName": "PharMe",
+  "general_continue": "Continue",
+  "general_retry": "Retry",
+  
+  "medications_page_disclaimer": "This assessment is only based on your genomic data. It does not consider other factors such as weight, age and pre-existing conditions.",
+  "medications_page_gene_name": "Gene: {geneName}",
+  "@medications_page_gene_name": {
+    "description": "Name of the Gene.",
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "medications_page_header_further_info": "Further Information",
+  "medications_page_header_guideline": "Clinical Guideline",
+  "medications_page_header_recommendation": "Recommendation",
+  "medications_page_info_big_i": "i",
+  "medications_page_no_guidelines_for_phenotype": "No guidelines found matching your genetic profile.",
+  "medications_page_sources_cpic_name": "CPIC",
+  "medications_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
+  "medications_page_sources_pharmGkb_name": "PharmGKB",
+  "medications_page_sources_pharmGkb_description": "Curated pharmacogenetic studies for this drug-gene reaction",
+  "medications_page_tooltip_classification": "The better the evidence level, the more scientifically accepted is the clinical annotation it refers to. Many studies and good studies mean a high evidence level.",
+  "medications_page_tooltip_further_info": "Get to know the source material! CPIC, DPWG and PharmGKB are well-known for their clinical guidelines regarding drug-gene-interactions. Also see the PGx-Tab for more information ",
+  "medications_page_tooltip_guideline": "Clinical guidelines are designed to help you understand how genetic test results should be used to optimize drug therapy.",
+
+  "nav_search": "Search",
+  "nav_faq": "FAQ",
+  "nav_reports": "Reports",
+  "nav_more": "More",
+  
+  "onboarding_get_started": "Get started",
+  "onboarding_next": "Next",
+  "onboarding_1_header": "Welcome to PharMe",
+  "onboarding_1_text": "Your genome has more influence on your life than you might think!\nMore than 90% of people are vulnerable to unintended drug reactions.\n\nUse PharMe to find out about yours.",
+  "onboarding_2_header": "One size does not fit all",
+  "onboarding_2_text": "Your body reacts to medications uniquely.\n\nMedications that are effective for a majority of people can be toxic to you.",
+  "onboarding_3_header": "Genome power unlocked to improve human health",
+  "onboarding_3_text": "PharMe warns about unintended drug responses according to your genome.\nThis enables you to avoid medications that are ineffective or have side-effects.",
+  "onboarding_3_disclaimer": "It does not recommend medications for specific symptoms or illnesses!",
+  "onboarding_4_header": "Tailored to your genome",
+  "onboarding_4_text": "For PharMe to work we need your genetic data. But we don’t provide such tests and you cannot make an account. This is why you need to get a test done at a labratory.",
+  "onboarding_4_button": "Find out more about gene tests here.",
+  "onboarding_5_header": "We care about your data protection",
+  "onboarding_5_text": "When using PharMe, your genetic data is sent from the lab that took the test straight onto your phone.\n\nOur servers never get to see this data and even our app doesn’t know your identity, only your genetics.",
+    
+  "reports_page_disclaimer_text": "All medications shown here should be used with extreme caution, used in different doses or not be used at all. Check specific medications for details.",
+  "reports_page_disclaimer_title": "Pharmacogenomics report",
+  
+  "search_page_typeInMedication": "Type in a medication",
+  
+  "settings_page_account_settings": "Account Settings",
+  "settings_page_cancel": "Cancel",
+  "settings_page_continue": "Continue",
+  "settings_page_delete_data": "Delete App Data",
+  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data and cannot be undone.",
+  "settings_page_more": "More",
+  "settings_page_onboarding": "Onboarding",
+  "settings_page_about_us": "About us",
+  "settings_page_about_us_text": "PharMe was created as a bachelors project at Hasso-Plattner-Institut (HPI) Potsdam. The aim of the project is to provide a proof of concept for digital health apps that use pharmacogenomic information to improve the users health. We work together with the Digital Health chair at HPI and health professionals from Mount Sinai hospital in New York who helped us tremendously with medical knowledge.",
+  "settings_page_privacy_policy": "Privacy policy",
+  "settings_page_privacy_policy_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "settings_page_terms_and_conditions": "Terms and conditions",
+  "settings_page_terms_and_conditions_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+}

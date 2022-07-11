@@ -7,6 +7,7 @@ import {
 import { BrickUsage, brickUsages } from '../../common/constants';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
+import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';
 import FilterTabs from '../../components/common/FilterTabs';
 import PageHeading from '../../components/common/PageHeading';
 import {
@@ -15,7 +16,7 @@ import {
     displayCategoryForIndex,
     indexForDisplayCategory,
 } from '../../contexts/brickFilter';
-import dbConnect from '../../database/connect';
+import dbConnect from '../../database/helpers/connect';
 import TextBrick, { ITextBrick } from '../../database/models/TextBrick';
 
 const EditBrick = ({
@@ -33,9 +34,12 @@ const EditBrick = ({
     return (
         <>
             <PageHeading title="Edit Brick">
-                View your Brick or edit it by changing its usage category, its
-                different translations or by deleting it. Hit cancel below to
-                exit without making any changes.
+                <p>
+                    View your Brick or edit it by changing its usage category,
+                    its different translations or by deleting it. Hit cancel
+                    below to exit without making any changes.
+                </p>
+                <PlaceholderInfo />
             </PageHeading>
             <FilterTabs
                 titles={[...brickUsages]}
@@ -51,7 +55,7 @@ export default EditBrick;
 
 export const getServerSideProps = async (
     context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ brick: ITextBrick }>> => {
+): Promise<GetServerSidePropsResult<{ brick: ITextBrick<string> }>> => {
     if (!context.params?.id) return { notFound: true };
     await dbConnect();
     const brick = await TextBrick!.findById(context.params.id).lean().exec();
