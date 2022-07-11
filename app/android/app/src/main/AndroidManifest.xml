@@ -1,11 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.hpi.pharme">
    <uses-permission android:name="android.permission.INTERNET" />
+   <!-- If you wish to run the app on a local setup (i.e local lab server, annotation server,
+        etc.) set the parameter 'android:usesCleartextTraffic' to 'true' -->
    <application
         android:label="PharMe"
         android:icon="@mipmap/launcher_icon"
-        android:usesCleartextTraffic="true">
-        <!--TODO Delete line above when in production, http requests-->
+        android:usesCleartextTraffic="false"
+   >
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
