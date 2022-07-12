@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:comprehension_measurement/comprehension_measurement.dart';
 import 'package:flutter/material.dart';
 
-import '../../comprehension_measurement.dart';
+import '../../constants.dart';
 import '../../l10n.dart';
 import '../../routing/router.dart';
 
@@ -29,7 +30,13 @@ class MainPage extends StatelessWidget {
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) {
             tabsRouter.setActiveIndex(index);
-            ComprehensionMeasurement.measure(context);
+            ComprehensionHelper.measure(
+              context: context,
+              surveyId: 4,
+              introText: context.l10n.comprehension_intro_text,
+              surveyButtonText: context.l10n.comprehension_survey_button_text,
+              supabaseConfig: supabaseConfig,
+            );
           },
           items: _bottomNavigationBarItems(context),
         );

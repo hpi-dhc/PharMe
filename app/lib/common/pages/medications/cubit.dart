@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:comprehension_measurement/comprehension_measurement.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 
@@ -28,7 +29,40 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     }
     final medication = medicationWithGuidelinesFromHTTPResponse(response);
     await CachedMedications.cache(medication);
+    _initializeComprehensionContext(medication);
     emit(MedicationsState.loaded(medication));
+  }
+
+  void _initializeComprehensionContext(MedicationWithGuidelines medication) {
+    if (medication.guidelines.isEmpty) return;
+    switch (medication.guidelines[0].warningLevel) {
+      case 'danger':
+        ComprehensionHelper.questionContext['danger_level'] = [12];
+        break;
+      case 'warning':
+        ComprehensionHelper.questionContext['danger_level'] = [11];
+        break;
+      case 'ok':
+        ComprehensionHelper.questionContext['danger_level'] = [10];
+        break;
+    }
+    switch (medication.guidelines[0].phenotype.geneResult.name) {
+      case 'Ultrarapid Metabolizer':
+        ComprehensionHelper.questionContext['metabolization_class'] = [32];
+        break;
+      case 'Rapid Metabolizer':
+        ComprehensionHelper.questionContext['metabolization_class'] = [15];
+        break;
+      case 'Normal Metabolizer':
+        ComprehensionHelper.questionContext['metabolization_class'] = [16];
+        break;
+      case 'Intermediate Metabolizer':
+        ComprehensionHelper.questionContext['metabolization_class'] = [17];
+        break;
+      case 'Poor Metabolizer':
+        ComprehensionHelper.questionContext['metabolization_class'] = [18];
+        break;
+    }
   }
 
   void _findCachedMedication(int id) {
