@@ -17,7 +17,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 
   Future<void> loadMedications() async {
     emit(MedicationsState.loading());
-    final isOnline = await hasConnectionTo(annotationServerUrl.authority);
+    final isOnline = await hasConnectionTo(annotationServerUrl.host);
     if (!isOnline) {
       _findCachedMedication(_id);
       return;
