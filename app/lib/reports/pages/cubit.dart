@@ -16,12 +16,12 @@ class ReportsCubit extends Cubit<ReportsState> {
     final requestUri = annotationServerUrl.replace(
       path: 'api/v1/medications',
       queryParameters: {
-          'withGuidelines': 'true',
-          'getGuidelines': 'true',
+        'withGuidelines': 'true',
+        'getGuidelines': 'true',
       },
     );
 
-    final isOnline = await hasConnectionTo(requestUri.authority);
+    final isOnline = await hasConnectionTo(requestUri.host);
     if (!isOnline) {
       emit(
         ReportsState.loaded(

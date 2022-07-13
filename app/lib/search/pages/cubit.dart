@@ -36,7 +36,7 @@ class SearchCubit extends Cubit<SearchState> {
         );
         emit(SearchState.loading());
 
-        final isOnline = await hasConnectionTo(requestUri.authority);
+        final isOnline = await hasConnectionTo(requestUri.host);
         if (!isOnline) {
           _findInCachedMedications(value);
           return;
