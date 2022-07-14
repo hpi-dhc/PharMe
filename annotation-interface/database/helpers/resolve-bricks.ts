@@ -1,4 +1,8 @@
-import { pharMeLanguage, SupportedLanguage } from '../../common/constants';
+import {
+    BrickUsage,
+    pharMeLanguage,
+    SupportedLanguage,
+} from '../../common/constants';
 import {
     ServerGuidelineOverview,
     ServerMedication,
@@ -9,12 +13,22 @@ import { ITextBrick } from '../models/TextBrick';
 import { translationsToMap } from './brick-translations';
 import { MongooseId, OptionalId } from './types';
 
-export const medicationBrickPlaceholders = ['drug-name'] as const;
-export const allBrickPlaceholders = [
+const medicationBrickPlaceholders = ['drug-name'] as const;
+const allBrickPlaceholders = [
     ...medicationBrickPlaceholders,
     'gene-symbol',
     'gene-result',
 ] as const;
+export const placeHoldersForBrick = (category: BrickUsage): string[] => {
+    switch (category) {
+        case 'Drug class':
+        case 'Drug indication':
+            return [...medicationBrickPlaceholders];
+        case 'Implication':
+        case 'Recommendation':
+            return [...allBrickPlaceholders];
+    }
+};
 type BrickPlaceholderValues = {
     [Property in typeof allBrickPlaceholders[number]]?: string;
 };
