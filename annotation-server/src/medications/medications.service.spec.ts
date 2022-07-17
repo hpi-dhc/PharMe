@@ -2,6 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { AppModule } from '../app.module';
 import { FetchDate } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { Medication } from './medication.entity';
@@ -9,11 +10,13 @@ import { MedicationsService } from './medications.service';
 
 describe('MedicationsService', () => {
     let medicationsService: MedicationsService;
+    let app;
 
-    beforeEach(async () => {
+    beforeAll(async () => {
         const modelFixture: TestingModule = await Test.createTestingModule({
             imports: [
                 ConfigModule.forRoot({ envFilePath: ['test/.env', '.env'] }),
+                AppModule,
             ],
             providers: [
                 MedicationsService,
@@ -31,6 +34,21 @@ describe('MedicationsService', () => {
 
         medicationsService =
             modelFixture.get<MedicationsService>(MedicationsService);
+        app = modelFixture.createNestApplication();
+        await app.init();
+    });
+
+    afterAll(async () => {
+        await app.close();
+    });
+
+    describe('test database', () => {
+        it('should fetch meds', async () => {
+            await medicationsService.clearAllMedicationData();
+            expect(await medicationsService.getAllIds()).toStrictEqual([]);
+            await medicationsService.fetchAllMedications();
+            expect((await medicationsService.getAllIds()).length).toBe(3);
+        });
     });
 
     describe('getJSONFromZip', () => {
