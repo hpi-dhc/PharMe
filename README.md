@@ -2,6 +2,13 @@
 
 # Pharmaceutical insights tailored to your personal genome
 
+PharMe is a resource for personalized pharmacogenomic information developed
+within the context of a bachelor project at Prof. Böttinger's chair
+*[Digital Health - Personalized Medicine](https://hpi.de/en/research/research-groups/digital-health-personalized-medicine.html)*
+at [HPI](https://hpi.de).
+
+## System status
+
 | System component                                          | CI/CD                           | Code Coverage           |
 | --------------------------------------------------------- | ------------------------------- | ----------------------- |
 | 🧑‍💻 [Annotation Interface](./annotation-interface) | ![GitHub Workflow Status][AI_B] | ![Codecov branch][AI_C] |
