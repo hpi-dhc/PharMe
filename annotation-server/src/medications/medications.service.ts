@@ -242,28 +242,4 @@ export class MedicationsService {
             });
         });
     }
-
-    private async findIdsMatching(search: string): Promise<number[]> {
-        const queryRes = await this.medicationRepository
-            .createQueryBuilder('medication')
-            .select([
-                'medication.id',
-                'medication.name',
-                'medication.description',
-                'medication.drugclass',
-                'medication.indication',
-            ])
-            .leftJoinAndSelect(
-                MedicationSearchView,
-                'searchView',
-                'searchView.id = medication.id',
-            )
-            .where('searchView.searchString ilike :searchString', {
-                searchString: `%${search}%`,
-            })
-            .orderBy('searchView.priority', 'ASC')
-            .getMany();
-
-        return queryRes.map((e) => e.id);
-    }
 }
