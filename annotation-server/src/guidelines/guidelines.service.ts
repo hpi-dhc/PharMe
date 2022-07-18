@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validateOrReject } from 'class-validator';
 import { lastValueFrom } from 'rxjs';
 import { FindOptionsOrder, FindOptionsOrderValue, Repository } from 'typeorm';
 
@@ -167,7 +168,13 @@ export class GuidelinesService {
         );
         const recommendationDtos: CpicRecommendationDto[] = (
             await lastValueFrom(response)
-        ).data;
+        ).data.map(
+            (response: CpicRecommendationDto) =>
+                new CpicRecommendationDto(response),
+        );
+        await Promise.all(
+            recommendationDtos.map((dto) => validateOrReject(dto)),
+        );
 
         const guidelinesByMeds: Map<string, Guideline[]> = new Map();
         const guidelineErrors: Set<GuidelineError> = new Set();
@@ -234,7 +241,9 @@ export class GuidelinesService {
         );
         const guidelineDtos: CpicGuidelineDto[] = (
             await lastValueFrom(response)
-        ).data;
+        ).data.map((data: CpicGuidelineDto) => new CpicGuidelineDto(data));
+        await Promise.all(guidelineDtos.map((dto) => validateOrReject(dto)));
+
         const guidelineDtoById: Map<number, CpicGuidelineDto> = new Map();
         guidelineDtos.forEach((guidelineDto) =>
             guidelineDtoById.set(guidelineDto.id, guidelineDto),
