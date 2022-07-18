@@ -16,6 +16,16 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 - Within the `annotation-server` directory, create a file with the name `.env`
   according to the `.env.example`
 
+## Preparing DrugBank data for deployment
+
+Since DrugBank's XML is very big and has lots of data the Annotation Server
+doesn't need, it can be minimized to preserve only necessary information to
+decrease the memory footprint during data initialization.
+
+Use `scripts/minimize-xml.py` to minimize the XML accordingly. Note that
+DrugBank provides its data in zipped format, meaning it has to be unzipped
+before using the script and re-zipped after.
+
 ## Setup for local development
 
 - Make sure your `.env` and `test/.env` are configured correctly and up to date
