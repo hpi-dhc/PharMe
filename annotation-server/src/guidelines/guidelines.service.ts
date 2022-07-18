@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom } from 'rxjs';
 import { FindOptionsOrder, FindOptionsOrderValue, Repository } from 'typeorm';
 
-import { PatchBodyDto } from '../common/dtos/patch-body.dto';
+import { PatchGuidelineDto } from '../common/dtos/patch-body.dto';
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { FetchTarget } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
@@ -405,11 +405,13 @@ export class GuidelinesService {
         return guidelinesForPhenotype;
     }
 
-    async patch(patch: PatchBodyDto<Guideline>): Promise<void> {
+    async patch(patches: PatchGuidelineDto[]): Promise<void> {
         await Promise.all(
-            patch.map(({ id, ...update }) =>
-                this.guidelinesRepository.update(id, update),
-            ),
+            patches
+                .filter((patch) => Object.keys(patch).length > 1)
+                .map(({ id, ...update }) =>
+                    this.guidelinesRepository.update(id, update),
+                ),
         );
     }
 
