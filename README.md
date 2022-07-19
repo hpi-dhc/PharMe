@@ -1,15 +1,35 @@
-![PharMeBanner](https://user-images.githubusercontent.com/61618825/178254913-01b8ca46-c530-454c-9a64-a1eaa7a238e5.png)
+![PharMe Banner](https://user-images.githubusercontent.com/61618825/178254913-01b8ca46-c530-454c-9a64-a1eaa7a238e5.png)
 
-**<h1 style="text-align: center;">
-Pharmaceutical insights tailored to your personal genome</h1>**
+# Pharmaceutical insights tailored to your personal genome
 
-| | CI/CD | Code Coverage |
-| --- | --- | --- |
-| 📝 Annotation Server | ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Annotation%20Server?color=f97316&label=Build&logo=github&logoColor=f97316&style=for-the-badge) | ![Codecov branch](https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=f97316&flag=annotation-server&label=Coverage&logo=codecov&logoColor=f97316&style=for-the-badge&token=1Q3F9M0SJN) |
-| 📱 App               | ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/hpi-dhc/pharme/App?color=3b82f6&label=Build&logo=github&logoColor=3b82f6&style=for-the-badge)                 | ![Codecov branch](https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=3b82f6&flag=app&label=Coverage&logo=codecov&logoColor=3b82f6&style=for-the-badge&token=1Q3F9M0SJN)               |
-| 🧪 Lab Server        | ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Lab%20Server?color=d946ef&label=Build&logo=github&logoColor=d946ef&style=for-the-badge)        | ![Codecov branch](https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=d946ef&flag=lab-server&label=Coverage&logo=codecov&logoColor=d946ef&style=for-the-badge&token=1Q3F9M0SJN)        |
+PharMe is a resource for personalized pharmacogenomic information developed
+within the context of a bachelor project at Prof. Böttinger's chair
+*[Digital Health - Personalized Medicine](https://hpi.de/en/research/research-groups/digital-health-personalized-medicine.html)*
+at [HPI](https://hpi.de).
+
+## System status
+
+| System component                                          | CI/CD                           | Code Coverage           |
+| --------------------------------------------------------- | ------------------------------- | ----------------------- |
+| 🧑‍💻 [Annotation Interface](./annotation-interface) | ![GitHub Workflow Status][AI_B] | ![Codecov branch][AI_C] |
+| 📝 [Annotation Server](./annotation-server)               | ![GitHub Workflow Status][AS_B] | ![Codecov branch][AS_C] |
+| 📱 [App](./app)                                           | ![GitHub Workflow Status][AP_B] | ![Codecov branch][AP_C] |
+| 🧪 [Lab Server](./lab-server)                             | ![GitHub Workflow Status][LS_B] | ![Codecov branch][LS_C] |
 
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome. Please read our
 [Contribution Guide](CONTRIBUTING.md) to get started.
+
+<!-- References to badges -->
+<!-- This won't be visible, keep it at the bottom of the file. -->
+<!-- Build -->
+[AI_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Annotation%20Interface?color=B079FF&label=Build&logo=github&logoColor=B079FF&style=for-the-badge
+[AS_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Annotation%20Server?color=926CFF&label=Build&logo=github&logoColor=926CFF&style=for-the-badge
+[AP_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/App?color=7277FF&label=Build&logo=github&logoColor=7277FF&style=for-the-badge
+[LS_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Lab%20Server?color=769FFF&label=Build&logo=github&logoColor=769FFF&style=for-the-badge
+<!-- Coverage -->
+[AI_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=B079FF&flag=annotation-interface&label=Coverage&logo=codecov&logoColor=B079FF&style=for-the-badge&token=1Q3F9M0SJN
+[AS_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=926CFF&flag=annotation-server&label=Coverage&logo=codecov&logoColor=926CFF&style=for-the-badge&token=1Q3F9M0SJN
+[AP_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=7277FF&flag=app&label=Coverage&logo=codecov&logoColor=7277FF&style=for-the-badge&token=1Q3F9M0SJN
+[LS_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=769FFF&flag=lab-server&label=Coverage&logo=codecov&logoColor=769FFF&style=for-the-badge&token=1Q3F9M0SJN
