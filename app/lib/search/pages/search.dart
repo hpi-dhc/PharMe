@@ -1,4 +1,4 @@
-import 'package:comprehension_measurement/comprehension_measurement.dart';
+import 'package:comprehension_measurement/scio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 
@@ -95,7 +95,7 @@ class SearchPage extends HookWidget {
           final med = medications[index];
           return MedicationCard(
             onTap: () {
-              ComprehensionHelper.attach(
+              ComprehensionHelper.instance.attach(
                 context.router.push(MedicationRoute(id: med.id)),
                 context: context,
                 surveyId: 4,

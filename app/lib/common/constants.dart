@@ -1,4 +1,4 @@
-import 'package:comprehension_measurement/comprehension_measurement.dart';
+import 'package:comprehension_measurement/scio.dart';
 
 final labServerIp = Uri.https('lab-server-pharme.dhc-lab.hpi.de', '');
 final annotationServerIp = Uri.https(

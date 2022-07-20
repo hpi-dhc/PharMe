@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:comprehension_measurement/comprehension_measurement.dart';
+import 'package:comprehension_measurement/scio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 
@@ -35,32 +35,35 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 
   void _initializeComprehensionContext(MedicationWithGuidelines medication) {
     if (medication.guidelines.isEmpty) return;
+
+    final questionContext = ComprehensionHelper.instance.questionContext;
+
     switch (medication.guidelines[0].warningLevel) {
       case 'danger':
-        ComprehensionHelper.questionContext['danger_level'] = [12];
+        questionContext['danger_level'] = [12];
         break;
       case 'warning':
-        ComprehensionHelper.questionContext['danger_level'] = [11];
+        questionContext['danger_level'] = [11];
         break;
       case 'ok':
-        ComprehensionHelper.questionContext['danger_level'] = [10];
+        questionContext['danger_level'] = [10];
         break;
     }
     switch (medication.guidelines[0].phenotype.geneResult.name) {
       case 'Ultrarapid Metabolizer':
-        ComprehensionHelper.questionContext['metabolization_class'] = [32];
+        questionContext['metabolization_class'] = [32];
         break;
       case 'Rapid Metabolizer':
-        ComprehensionHelper.questionContext['metabolization_class'] = [15];
+        questionContext['metabolization_class'] = [15];
         break;
       case 'Normal Metabolizer':
-        ComprehensionHelper.questionContext['metabolization_class'] = [16];
+        questionContext['metabolization_class'] = [16];
         break;
       case 'Intermediate Metabolizer':
-        ComprehensionHelper.questionContext['metabolization_class'] = [17];
+        questionContext['metabolization_class'] = [17];
         break;
       case 'Poor Metabolizer':
-        ComprehensionHelper.questionContext['metabolization_class'] = [18];
+        questionContext['metabolization_class'] = [18];
         break;
     }
   }

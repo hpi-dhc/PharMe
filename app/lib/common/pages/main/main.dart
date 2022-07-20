@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:comprehension_measurement/comprehension_measurement.dart';
+import 'package:comprehension_measurement/scio.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
@@ -30,7 +30,7 @@ class MainPage extends StatelessWidget {
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) {
             tabsRouter.setActiveIndex(index);
-            ComprehensionHelper.measure(
+            ComprehensionHelper.instance.measure(
               context: context,
               surveyId: 4,
               introText: context.l10n.comprehension_intro_text,
