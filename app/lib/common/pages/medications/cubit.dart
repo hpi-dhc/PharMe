@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:comprehension_measurement/comprehension_measurement.dart';
+import 'package:comprehension_measurement/scio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 
@@ -36,8 +36,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
   void _initializeComprehensionContext(MedicationWithGuidelines medication) {
     if (medication.guidelines.isEmpty) return;
 
-    Map<String, List<int>> questionContext =
-        ComprehensionHelper.instance.questionContext;
+    final questionContext = ComprehensionHelper.instance.questionContext;
 
     switch (medication.guidelines[0].warningLevel) {
       case 'danger':

@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:comprehension_measurement/comprehension_measurement.dart';
+import 'package:comprehension_measurement/scio.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
