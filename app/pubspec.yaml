@@ -44,6 +44,8 @@ dependencies:
 dev_dependencies:
   auto_route_generator: ^4.2.0
   build_runner: ^2.1.11
+  integration_test:
+    sdk: flutter
   flutter_launcher_icons: ^0.9.3
   flutter_lints: ^2.0.1
   flutter_test:
