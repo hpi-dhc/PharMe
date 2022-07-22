@@ -27,6 +27,8 @@ export const placeHoldersForBrick = (category: BrickUsage): string[] => {
         case 'Implication':
         case 'Recommendation':
             return [...allBrickPlaceholders];
+        default:
+            return [];
     }
 };
 type BrickPlaceholderValues = {
