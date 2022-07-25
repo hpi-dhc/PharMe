@@ -3,10 +3,11 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validateOrReject } from 'class-validator';
 import { lastValueFrom } from 'rxjs';
 import { FindOptionsOrder, FindOptionsOrderValue, Repository } from 'typeorm';
 
-import { PatchBodyDto } from '../common/dtos/patch-body.dto';
+import { PatchGuidelineDto } from '../common/dtos/patch-body.dto';
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { FetchTarget } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
@@ -167,7 +168,13 @@ export class GuidelinesService {
         );
         const recommendationDtos: CpicRecommendationDto[] = (
             await lastValueFrom(response)
-        ).data;
+        ).data.map(
+            (response: CpicRecommendationDto) =>
+                new CpicRecommendationDto(response),
+        );
+        await Promise.all(
+            recommendationDtos.map((dto) => validateOrReject(dto)),
+        );
 
         const guidelinesByMeds: Map<string, Guideline[]> = new Map();
         const guidelineErrors: Set<GuidelineError> = new Set();
@@ -234,7 +241,9 @@ export class GuidelinesService {
         );
         const guidelineDtos: CpicGuidelineDto[] = (
             await lastValueFrom(response)
-        ).data;
+        ).data.map((data: CpicGuidelineDto) => new CpicGuidelineDto(data));
+        await Promise.all(guidelineDtos.map((dto) => validateOrReject(dto)));
+
         const guidelineDtoById: Map<number, CpicGuidelineDto> = new Map();
         guidelineDtos.forEach((guidelineDto) =>
             guidelineDtoById.set(guidelineDto.id, guidelineDto),
@@ -405,11 +414,13 @@ export class GuidelinesService {
         return guidelinesForPhenotype;
     }
 
-    async patch(patch: PatchBodyDto<Guideline>): Promise<void> {
+    async patch(patches: PatchGuidelineDto[]): Promise<void> {
         await Promise.all(
-            patch.map(({ id, ...update }) =>
-                this.guidelinesRepository.update(id, update),
-            ),
+            patches
+                .filter((patch) => Object.keys(patch).length > 1)
+                .map(({ id, ...update }) =>
+                    this.guidelinesRepository.update(id, update),
+                ),
         );
     }
 

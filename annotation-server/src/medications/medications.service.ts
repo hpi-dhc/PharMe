@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as JSONStream from 'JSONStream';
 import { FindOneOptions, Repository } from 'typeorm';
 
-import { PatchBodyDto } from '../common/dtos/patch-body.dto';
+import { PatchMedicationDto } from '../common/dtos/patch-body.dto';
 import { fetchSpreadsheetCells } from '../common/utils/google-sheets';
 import { FetchTarget } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
@@ -166,11 +166,13 @@ export class MedicationsService {
         return (await this.medicationRepository.count()) > 0;
     }
 
-    async patch(patch: PatchBodyDto<Medication>): Promise<void> {
+    async patch(patches: PatchMedicationDto[]): Promise<void> {
         await Promise.all(
-            patch.map(({ id, ...update }) =>
-                this.medicationRepository.update(id, update),
-            ),
+            patches
+                .filter((patch) => Object.keys(patch).length > 1)
+                .map(({ id, ...update }) =>
+                    this.medicationRepository.update(id, update),
+                ),
         );
     }
 

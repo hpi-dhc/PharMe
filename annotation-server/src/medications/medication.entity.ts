@@ -1,3 +1,4 @@
+import { IsString } from 'class-validator';
 import { Entity, Column, OneToMany, ViewEntity, ViewColumn } from 'typeorm';
 
 import { BaseEntity } from '../common/entities/base.entity';
@@ -22,9 +23,11 @@ export class Medication extends BaseEntity {
     synonyms: string[];
 
     @Column({ nullable: true })
+    @IsString()
     drugclass: string;
 
     @Column({ nullable: true })
+    @IsString()
     indication: string;
 
     @OneToMany(() => Guideline, (guideline) => guideline.medication)

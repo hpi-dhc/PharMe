@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { IsBooleanString, IsIn } from 'class-validator';
+import { IsBooleanString, IsIn, IsOptional } from 'class-validator';
 
 import {
     ApiQueryLimit,
@@ -16,13 +16,16 @@ export class FindMedicationQueryDto extends SearchableFindQueryDto {
     sortby: string;
 
     @IsBooleanString()
-    withGuidelines: string;
+    @IsOptional()
+    withGuidelines?: string;
 
     @IsBooleanString()
-    getGuidelines: string;
+    @IsOptional()
+    getGuidelines?: string;
 
     @IsBooleanString()
-    onlyIds: string;
+    @IsOptional()
+    onlyIds?: string;
 }
 
 export function ApiFindMedicationsQueries(): MethodDecorator {

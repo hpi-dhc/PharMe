@@ -3,7 +3,10 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiBodyPatch } from '../common/api/bodies';
 import { ApiParamGetById } from '../common/api/params';
-import { PatchBodyDto } from '../common/dtos/patch-body.dto';
+import {
+    getPatchArrayPipe,
+    PatchMedicationDto,
+} from '../common/dtos/patch-body.dto';
 import {
     ApiFindMedicationsQueries,
     ApiFindMedicationQueries,
@@ -35,9 +38,10 @@ export class MedicationsController {
     @ApiBodyPatch('medication')
     @Patch()
     async patchMedications(
-        @Body() patch: PatchBodyDto<Medication>,
+        @Body(getPatchArrayPipe(PatchMedicationDto))
+        patches: PatchMedicationDto[],
     ): Promise<void> {
-        return this.medicationsService.patch(patch);
+        return this.medicationsService.patch(patches);
     }
 
     @ApiOperation({ summary: 'Fetch all medications' })

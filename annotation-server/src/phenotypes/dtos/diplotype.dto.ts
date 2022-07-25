@@ -1,6 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class DiplotypeDto {
+import { InstantiableDto } from '../../common/dtos/instantiable.dto';
+
+export class DiplotypeDto extends InstantiableDto<DiplotypeDto> {
     @IsString()
     @IsNotEmpty()
     genesymbol: string;
@@ -10,6 +12,6 @@ export class DiplotypeDto {
     generesult: string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     consultationtext: string;
 }

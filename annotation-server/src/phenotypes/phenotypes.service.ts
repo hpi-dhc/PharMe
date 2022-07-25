@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validateOrReject } from 'class-validator';
 import { lastValueFrom } from 'rxjs';
 import { FindOneOptions, Repository } from 'typeorm';
 
@@ -40,8 +41,10 @@ export class PhenotypesService {
             },
         );
 
-        const diplotypeDtos: DiplotypeDto[] = (await lastValueFrom(response))
-            .data;
+        const diplotypeDtos: DiplotypeDto[] = (
+            await lastValueFrom(response)
+        ).data.map((data: DiplotypeDto) => new DiplotypeDto(data));
+        await Promise.all(diplotypeDtos.map((dto) => validateOrReject(dto)));
 
         this.savePhenotypes(diplotypeDtos);
 
