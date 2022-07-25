@@ -1,7 +1,9 @@
+import 'dart:convert' show jsonDecode;
+
+import 'package:flutter/services.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:openid_client/openid_client_io.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../common/module.dart';
 import '../models/lab.dart';
@@ -16,10 +18,25 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   // signInAndLoadUserData authenticates a user with a Lab and fetches their
   // genomic data from it's endpoint.
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
+    emit(LoginPageState.loadingUserData());
+
     try {
       // authenticate
-      final token = await _getAccessToken(context, lab.authUrl);
-      emit(LoginPageState.loadingUserData());
+      String token;
+      try {
+        token = await _getAccessToken(
+          context,
+          authUrl: lab.authUrl,
+          tokenUrl: lab.tokenUrl,
+        );
+      } on PlatformException catch (e) {
+        if (e.code == 'CANCELED') {
+          revertToInitialState();
+        } else {
+          emit(LoginPageState.error(context.l10n.err_generic));
+        }
+        return;
+      }
 
       // get data
       await fetchAndSaveDiplotypes(token, lab.endpoint);
@@ -34,30 +51,41 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     }
   }
 
-  Future<String> _getAccessToken(BuildContext context, String authUrl) async {
-    final uri = Uri.parse(authUrl);
+  Future<String> _getAccessToken(
+    BuildContext context, {
+    required Uri authUrl,
+    required Uri tokenUrl,
+  }) async {
     const clientId = 'pharme-app';
-    final scopes = List<String>.of(['openid', 'profile']);
-    const port = 4200;
+    const callbackUrlScheme = 'localhost';
 
-    final issuer = await Issuer.discover(uri);
-    final client = Client(issuer, clientId);
+    // Construct the url
+    final url = authUrl.replace(queryParameters: {
+      'response_type': 'code',
+      'client_id': clientId,
+      'redirect_uri': '$callbackUrlScheme:/',
+      'scope': 'openid profile',
+    });
 
-    final authenticator = Authenticator(
-      client,
-      scopes: scopes,
-      port: port,
-      urlLancher: (url) async {
-        if (await canLaunchUrlString(url)) {
-          await launchUrlString(url);
-        } else {
-          throw Exception(context.l10n.err_could_not_launch(url));
-        }
-      },
+    // Present the dialog to the user
+    final result = await FlutterWebAuth.authenticate(
+      url: url.toString(),
+      callbackUrlScheme: callbackUrlScheme,
     );
-    final credentials = await authenticator.authorize();
-    await closeInAppWebView();
-    return credentials.getTokenResponse().then((res) => res.accessToken ?? '');
+
+    // Extract code from resulting url
+    final code = Uri.parse(result).queryParameters['code'];
+
+    // Use this code to get an access token
+    final response = await http.post(tokenUrl, body: {
+      'client_id': clientId,
+      'redirect_uri': '$callbackUrlScheme:/',
+      'grant_type': 'authorization_code',
+      'code': code,
+    });
+
+    // Get the access token from the response
+    return jsonDecode(response.body)['access_token'] as String;
   }
 }
 
