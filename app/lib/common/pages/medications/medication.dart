@@ -31,8 +31,6 @@ class MedicationPage extends StatelessWidget {
               loading: () => Center(child: CircularProgressIndicator()),
               loaded: (medication) => _buildMedicationsPage(
                 filterUserGuidelines(medication),
-                isOkGuideline: medication.guidelines[0].warningLevel ==
-                    WarningLevel.ok.toString(),
                 context: context,
               ),
             ),
@@ -44,7 +42,6 @@ class MedicationPage extends StatelessWidget {
 
   Widget _buildMedicationsPage(
     MedicationWithGuidelines medication, {
-    required bool isOkGuideline,
     required BuildContext context,
   }) {
     return Column(
@@ -60,7 +57,7 @@ class MedicationPage extends StatelessWidget {
         ),
         SizedBox(height: 12),
         if (medication.guidelines.isNotEmpty)
-          ClinicalAnnotationCard(medication, isOkGuideline: isOkGuideline)
+          ClinicalAnnotationCard(medication)
         else
           Text(context.l10n.medications_page_no_guidelines_for_phenotype),
       ],

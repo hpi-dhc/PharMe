@@ -13,10 +13,9 @@ import 'sub_header.dart';
 import 'tooltip_icon.dart';
 
 class ClinicalAnnotationCard extends StatelessWidget {
-  const ClinicalAnnotationCard(this.medication, {required this.isOkGuideline});
+  const ClinicalAnnotationCard(this.medication);
 
   final MedicationWithGuidelines medication;
-  final bool isOkGuideline;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,6 @@ class ClinicalAnnotationCard extends StatelessWidget {
                     .guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
               RecommendationCard(
                 medication,
-                isOkGuideline: isOkGuideline,
                 context: context,
               ),
               SizedBox(height: 16),
