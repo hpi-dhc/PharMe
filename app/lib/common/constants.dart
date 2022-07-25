@@ -1,16 +1,10 @@
 import 'package:comprehension_measurement/scio.dart';
 
-final labServerIp = Uri.https('lab-server-pharme.dhc-lab.hpi.de', '');
-final annotationServerIp = Uri.https(
-  'annotation-server-pharme.dhc-lab.hpi.de',
-  '',
-);
-final annotationServerUrl = annotationServerIp.replace(path: 'api/v1');
-final labServerUrl = labServerIp.replace(path: 'api/v1');
-final keycloakUrl = Uri.https(
-  'keycloak.k8s.kunst.me',
-  '',
-);
+final annotationServerUrl =
+    Uri.https('annotation-server-pharme.dhc-lab.hpi.de/api/v1', '');
+final labServerUrl = Uri.https('lab-server-pharme.dhc-lab.hpi.de/api/v1', '');
+final keycloakUrl = Uri.https('keycloak.k8s.kunst.me', '');
+
 final cpicMaxCacheTime = Duration(days: 90);
 const maxCachedMedications = 10;
 const cpicLookupUrl =

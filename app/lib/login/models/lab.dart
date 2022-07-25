@@ -5,13 +5,13 @@ class Lab {
     required this.name,
     required this.authUrl,
     required this.tokenUrl,
-    required this.endpoint,
+    required this.starAllelesUrl,
   });
 
   String name;
   Uri authUrl;
   Uri tokenUrl;
-  String endpoint;
+  Uri starAllelesUrl;
 }
 
 final labs = [
@@ -23,7 +23,7 @@ final labs = [
     tokenUrl: keycloakUrl.replace(
       path: '/auth/realms/pharme/protocol/openid-connect/token',
     ),
-    endpoint: '$labServerUrl/star-alleles',
+    starAllelesUrl: labServerUrl.replace(path: '/star-alleles'),
   ),
   Lab(
     name: 'Mount Sinai Hospital (NYC)',
@@ -33,6 +33,6 @@ final labs = [
     tokenUrl: keycloakUrl.replace(
       path: '/auth/realms/pharme/protocol/openid-connect/token',
     ),
-    endpoint: '$labServerUrl/star-alleles',
+    starAllelesUrl: labServerUrl.replace(path: '/star-alleles'),
   )
 ];
