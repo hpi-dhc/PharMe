@@ -41,7 +41,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
     try {
       // get data
-      await fetchAndSaveDiplotypes(token, lab.endpoint);
+      await fetchAndSaveDiplotypes(token, lab.starAllelesUrl.toString());
       await fetchAndSaveLookups();
 
       // login + fetching of data successful
