@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../reports/models/warning_level.dart';
 import '../../../l10n.dart';
 import '../../../models/module.dart';
 import '../../../theme.dart';

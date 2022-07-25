@@ -1,5 +1,4 @@
 import '../../common/module.dart';
-import '../models/warning_level.dart';
 import 'cubit.dart';
 
 class ReportsPage extends StatelessWidget {
@@ -154,29 +153,29 @@ class ReportCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(children: [
-                        Icon(
-                          warningLevel == WarningLevel.danger
-                              ? Icons.dangerous_rounded
-                              : Icons.warning_amber,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          medicationName,
-                          style: PharmeTheme.textTheme.titleMedium,
-                        ),
-                      ]),
-                      if (medicationIndication.isNotNullOrBlank) ...[
-                        SizedBox(height: 12),
-                        Text(
-                          medicationIndication!,
-                          style: PharmeTheme.textTheme.titleSmall,
-                        ),
-                      ]
-                    ],
-                 ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Icon(
+                        warningLevel == WarningLevel.danger
+                            ? Icons.dangerous_rounded
+                            : Icons.warning_amber,
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        medicationName,
+                        style: PharmeTheme.textTheme.titleMedium,
+                      ),
+                    ]),
+                    if (medicationIndication.isNotNullOrBlank) ...[
+                      SizedBox(height: 12),
+                      Text(
+                        medicationIndication!,
+                        style: PharmeTheme.textTheme.titleSmall,
+                      ),
+                    ]
+                  ],
+                ),
               ),
               Icon(Icons.arrow_forward_ios),
             ],

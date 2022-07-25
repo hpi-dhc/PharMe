@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../reports/models/warning_level.dart';
 import '../../l10n.dart';
-import '../../models/medication/medication.dart';
+import '../../models/module.dart';
 import '../../theme.dart';
 import '../../utilities/module.dart';
 import '../../utilities/pdf_utils.dart';

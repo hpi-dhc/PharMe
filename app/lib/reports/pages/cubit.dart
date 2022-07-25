@@ -3,7 +3,6 @@ import 'package:http/http.dart';
 
 import '../../common/models/medication/cached_medications.dart';
 import '../../common/module.dart';
-import '../models/warning_level.dart';
 
 part 'cubit.freezed.dart';
 
