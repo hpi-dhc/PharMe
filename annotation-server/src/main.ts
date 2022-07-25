@@ -3,10 +3,12 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
+import { TypeormErrorInterceptor } from './common/interceptors/typeorm-error.interceptor';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     app.setGlobalPrefix('/api/v1');
+    app.useGlobalInterceptors(new TypeormErrorInterceptor());
 
     const config = new DocumentBuilder()
         .setTitle('Annotation Server')
