@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "plugins": ["@nestjs/swagger"],
         "assets": ["medications/scripts"],
         "watchAssets": true
     },
