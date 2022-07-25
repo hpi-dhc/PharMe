@@ -20,24 +20,26 @@ class LoginPageCubit extends Cubit<LoginPageState> {
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
     emit(LoginPageState.loadingUserData());
 
+    // authenticate
+    String? token;
     try {
-      // authenticate
-      String token;
-      try {
-        token = await _getAccessToken(
-          context,
-          authUrl: lab.authUrl,
-          tokenUrl: lab.tokenUrl,
-        );
-      } on PlatformException catch (e) {
-        if (e.code == 'CANCELED') {
-          revertToInitialState();
-        } else {
-          emit(LoginPageState.error(context.l10n.err_generic));
-        }
-        return;
-      }
+      token = await _getAccessToken(
+        context,
+        authUrl: lab.authUrl,
+        tokenUrl: lab.tokenUrl,
+      );
+    } on PlatformException catch (e) {
+      if (e.code == 'CANCELED') revertToInitialState();
+    }
 
+    if (token == null) {
+      emit(LoginPageState.error(
+        context.l10n.err_could_not_retrieve_access_token,
+      ));
+      return;
+    }
+
+    try {
       // get data
       await fetchAndSaveDiplotypes(token, lab.endpoint);
       await fetchAndSaveLookups();
