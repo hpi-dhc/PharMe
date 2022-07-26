@@ -26,7 +26,7 @@ Wrap arguments with trailing comma if they exceed the char limit of 80 per line:
 
 ```dart
 return Container(
-  color: PharmeTheme.primaryColor,
+  color: PharMeTheme.primaryColor,
   padding: EdgeInsets.symmetric(horizontal: 16),
   child: myChild,
 );

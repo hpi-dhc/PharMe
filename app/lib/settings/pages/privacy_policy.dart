@@ -6,7 +6,7 @@ class PrivacyPolicyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: PharmeTheme.backgroundColor,
+      color: PharMeTheme.backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -16,7 +16,7 @@ class PrivacyPolicyPage extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 16),
               child: Text(
                 context.l10n.settings_page_privacy_policy,
-                style: PharmeTheme.textTheme.headlineSmall,
+                style: PharMeTheme.textTheme.headlineSmall,
               ),
             ),
             Text(context.l10n.settings_page_privacy_policy_text)

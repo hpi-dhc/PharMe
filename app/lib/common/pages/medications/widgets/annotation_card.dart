@@ -62,7 +62,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
         child: Text(
           medication.guidelines[0].implication ??
               medication.guidelines[0].cpicImplication!,
-          style: PharmeTheme.textTheme.bodySmall,
+          style: PharMeTheme.textTheme.bodySmall,
         ),
       ),
     ]);
@@ -76,14 +76,14 @@ class ClinicalAnnotationCard extends StatelessWidget {
           context.l10n.medications_page_gene_name(
             medication.guidelines[0].phenotype.geneSymbol.name,
           ),
-          style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+          style: PharMeTheme.textTheme.bodyLarge!.copyWith(
             color: Colors.black.withOpacity(0.5),
           ),
         ),
         Row(children: [
           Text(
             medication.guidelines[0].cpicClassification!.toUpperCase(),
-            style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+            style: PharMeTheme.textTheme.bodyLarge!.copyWith(
               fontWeight: FontWeight.bold,
               color: Colors.black.withOpacity(0.7),
             ),

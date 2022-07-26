@@ -10,7 +10,7 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(
           context.l10n.settings_page_account_settings,
-          style: PharmeTheme.textTheme.bodyLarge,
+          style: PharMeTheme.textTheme.bodyLarge,
         ),
       ),
       ListTile(
@@ -25,7 +25,7 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(
           context.l10n.settings_page_more,
-          style: PharmeTheme.textTheme.bodyLarge,
+          style: PharMeTheme.textTheme.bodyLarge,
         ),
       ),
       ListTile(
