@@ -30,8 +30,7 @@ class SearchCubit extends Cubit<SearchState> {
     searchTimeout = Timer(
       duration,
       () async {
-        final requestUri = annotationServerUrl.replace(
-          path: 'api/v1/medications',
+        final requestUri = annotationServerUrl('medications').replace(
           queryParameters: {'search': value},
         );
         emit(SearchState.loading());

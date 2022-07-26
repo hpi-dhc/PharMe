@@ -29,7 +29,10 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         tokenUrl: lab.tokenUrl,
       );
     } on PlatformException catch (e) {
-      if (e.code == 'CANCELED') revertToInitialState();
+      if (e.code == 'CANCELED') {
+        revertToInitialState();
+        return;
+      }
     }
 
     if (token == null) {
