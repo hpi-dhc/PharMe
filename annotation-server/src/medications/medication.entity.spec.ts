@@ -52,7 +52,7 @@ describe('Medication Entity', () => {
             expect(medication.synonyms.length).toBe(2);
         });
 
-        it('should able to handle only one external-identifier and international-brand', () => {
+        it('should handle only one external-identifier and international-brand', () => {
             const exampleDrug = new DrugDto();
             exampleDrug.name = exampleName;
             exampleDrug.description = exampleDescription;
