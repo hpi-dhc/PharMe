@@ -57,8 +57,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildInitialScreen(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    Future<void> action() async {
+      final selectedLab = labs.firstWhere(
+        (el) => el.name == dropdownValue,
+      );
+      await context
+          .read<LoginPageCubit>()
+          .signInAndLoadUserData(context, selectedLab);
+    }
+
+    return _buildColumnWrapper(
+      action: action,
+      actionText: context.l10n.auth_sign_in,
       children: [
         DropdownButtonHideUnderline(
           child: DropdownButton2(
@@ -87,35 +97,14 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-        SizedBox(height: 8),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () async {
-              final selectedLab = labs.firstWhere(
-                (el) => el.name == dropdownValue,
-              );
-              await context
-                  .read<LoginPageCubit>()
-                  .signInAndLoadUserData(context, selectedLab);
-            },
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-            ),
-            child: Text(context.l10n.auth_sign_in),
-          ),
-        )
       ],
     );
   }
 
   Widget _buildLoadedScreen(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return _buildColumnWrapper(
+      action: () => context.router.replace(MainRoute()),
+      actionText: context.l10n.general_continue,
       children: [
         Icon(
           Icons.check_circle_outline,
@@ -128,28 +117,14 @@ class _LoginPageState extends State<LoginPage> {
           style: context.textTheme.headline6,
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () => context.router.replace(MainRoute()),
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-            ),
-            child: Text(context.l10n.general_continue),
-          ),
-        ),
       ],
     );
   }
 
   Widget _buildErrorScreen(BuildContext context, String message) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return _buildColumnWrapper(
+      action: () => context.read<LoginPageCubit>().revertToInitialState(),
+      actionText: context.l10n.general_retry,
       children: [
         Icon(
           Icons.error_outline_rounded,
@@ -162,12 +137,24 @@ class _LoginPageState extends State<LoginPage> {
           style: context.textTheme.headline6,
           textAlign: TextAlign.center,
         ),
+      ],
+    );
+  }
+
+  Widget _buildColumnWrapper({
+    required void Function()? action,
+    required String actionText,
+    required List<Widget> children,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ...children,
         SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () =>
-                context.read<LoginPageCubit>().revertToInitialState(),
+            onPressed: action,
             style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
@@ -175,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            child: Text(context.l10n.general_retry),
+            child: Text(actionText),
           ),
         ),
       ],
