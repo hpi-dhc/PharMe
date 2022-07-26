@@ -23,9 +23,6 @@ credentials.
 You can find all available API endpoints of the currently deployed lab server
 [here](https://lab-server-pharme.dhc-lab.hpi.de/api).
 
-> Please note that this endpoint is only available in the HPI network.
-> That means you either need to be connected directly or through a VPN.
-
 ## Getting Started
 
 See our [Contribution Guide](CONTRIBUTING.md) to get started.
