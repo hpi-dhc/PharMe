@@ -16,7 +16,7 @@ class PharMeApp extends StatelessWidget {
       routerDelegate: _appRouter.delegate(
         initialDeepLink: _isLoggedIn ? 'main' : 'onboarding',
       ),
-      theme: PharmeTheme.light,
+      theme: PharMeTheme.light,
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

@@ -6,7 +6,7 @@ class TermsAndConditionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: PharmeTheme.backgroundColor,
+      color: PharMeTheme.backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -16,7 +16,7 @@ class TermsAndConditionsPage extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 16),
               child: Text(
                 context.l10n.settings_page_terms_and_conditions,
-                style: PharmeTheme.textTheme.headlineSmall,
+                style: PharMeTheme.textTheme.headlineSmall,
               ),
             ),
             Text(context.l10n.settings_page_terms_and_conditions_text)

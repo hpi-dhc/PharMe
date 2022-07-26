@@ -20,7 +20,7 @@ class SubHeader extends StatelessWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: PharmeTheme.textTheme.bodySmall!.copyWith(letterSpacing: 2),
+          style: PharMeTheme.textTheme.bodySmall!.copyWith(letterSpacing: 2),
         ),
         if (tooltip.isNotNullOrBlank) ...[
           SizedBox(width: 8),

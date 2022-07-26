@@ -73,13 +73,13 @@ class MedicationPage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(medication.name, style: PharmeTheme.textTheme.displaySmall),
+            Text(medication.name, style: PharMeTheme.textTheme.displaySmall),
             IconButton(
               onPressed: () => sharePdf(medication),
               icon: Icon(
                 Icons.ios_share,
                 size: 32,
-                color: PharmeTheme.primaryColor,
+                color: PharMeTheme.primaryColor,
               ),
             ),
           ],
@@ -88,12 +88,12 @@ class MedicationPage extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: PharmeTheme.onSurfaceColor,
+              color: PharMeTheme.onSurfaceColor,
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
             child: Text(
               medication.drugclass!,
-              style: PharmeTheme.textTheme.titleMedium!.copyWith(
+              style: PharMeTheme.textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.w100,
               ),
             ),

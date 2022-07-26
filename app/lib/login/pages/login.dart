@@ -102,8 +102,8 @@ class _LoginPageState extends State<LoginPage> {
         height: 200,
         child: RadiantGradientMask(
           colors: [
-            PharmeTheme.primaryContainer,
-            PharmeTheme.secondaryContainer,
+            PharMeTheme.primaryContainer,
+            PharMeTheme.secondaryContainer,
           ],
           child: CircularProgressIndicator(
             color: Colors.white,
@@ -117,8 +117,8 @@ class _LoginPageState extends State<LoginPage> {
     return [
       RadiantGradientMask(
         colors: [
-          PharmeTheme.primaryContainer,
-          PharmeTheme.secondaryContainer,
+          PharMeTheme.primaryContainer,
+          PharMeTheme.secondaryContainer,
         ],
         child: Icon(
           Icons.task_alt,
@@ -142,8 +142,8 @@ class _LoginPageState extends State<LoginPage> {
     return [
       RadiantGradientMask(
         colors: [
-          PharmeTheme.primaryContainer,
-          PharmeTheme.secondaryContainer,
+          PharMeTheme.primaryContainer,
+          PharMeTheme.secondaryContainer,
         ],
         child: Icon(
           Icons.warning_amber_outlined,
