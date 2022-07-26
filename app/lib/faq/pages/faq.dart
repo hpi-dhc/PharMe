@@ -27,8 +27,8 @@ class FaqPage extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            PharmeTheme.primaryColor.shade500,
-            PharmeTheme.primaryColor.shade800,
+            PharMeTheme.primaryColor.shade500,
+            PharMeTheme.primaryColor.shade800,
           ],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -49,13 +49,13 @@ class FaqPage extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.faq_pharmacogenomics,
-                  style: PharmeTheme.textTheme.titleLarge!
+                  style: PharMeTheme.textTheme.titleLarge!
                       .copyWith(color: Colors.white),
                 ),
                 SizedBox(height: 8),
                 Text(
                   context.l10n.faq_page_description,
-                  style: PharmeTheme.textTheme.bodyMedium!
+                  style: PharMeTheme.textTheme.bodyMedium!
                       .copyWith(color: Colors.white),
                 ),
               ],

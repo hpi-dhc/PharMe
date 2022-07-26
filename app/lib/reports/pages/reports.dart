@@ -92,7 +92,7 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      color: PharmeTheme.secondaryColor,
+      color: PharMeTheme.secondaryColor,
       clipBehavior: Clip.hardEdge,
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -100,7 +100,7 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
           Text(
             context.l10n.reports_page_disclaimer_title,
             style:
-                PharmeTheme.textTheme.titleLarge!.copyWith(color: Colors.white),
+                PharMeTheme.textTheme.titleLarge!.copyWith(color: Colors.white),
           ),
           SizedBox(height: 8),
           Expanded(
@@ -108,7 +108,7 @@ class SliverReportsHeaderDelegate extends SliverPersistentHeaderDelegate {
               Flexible(
                 child: Text(
                   context.l10n.reports_page_disclaimer_text,
-                  style: PharmeTheme.textTheme.bodyMedium!
+                  style: PharMeTheme.textTheme.bodyMedium!
                       .copyWith(color: Colors.white),
                 ),
               ),
@@ -164,14 +164,14 @@ class ReportCard extends StatelessWidget {
                       SizedBox(width: 12),
                       Text(
                         medicationName,
-                        style: PharmeTheme.textTheme.titleMedium,
+                        style: PharMeTheme.textTheme.titleMedium,
                       ),
                     ]),
                     if (medicationIndication.isNotNullOrBlank) ...[
                       SizedBox(height: 12),
                       Text(
                         medicationIndication!,
-                        style: PharmeTheme.textTheme.titleSmall,
+                        style: PharMeTheme.textTheme.titleSmall,
                       ),
                     ]
                   ],

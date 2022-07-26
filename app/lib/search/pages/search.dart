@@ -26,8 +26,8 @@ class SearchPage extends HookWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      PharmeTheme.primaryColor,
-                      PharmeTheme.secondaryColor,
+                      PharMeTheme.primaryColor,
+                      PharMeTheme.secondaryColor,
                     ],
                   ),
                 ),
@@ -37,7 +37,7 @@ class SearchPage extends HookWidget {
                     SvgPicture.asset('assets/images/logo.svg'),
                     Text(
                       context.l10n.search_page_typeInMedication,
-                      style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+                      style: PharMeTheme.textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
                     ),
@@ -145,7 +145,7 @@ class MedicationCard extends StatelessWidget {
                   Flexible(
                     child: Text(
                       medicationName,
-                      style: PharmeTheme.textTheme.titleMedium,
+                      style: PharMeTheme.textTheme.titleMedium,
                     ),
                   ),
                   Icon(Icons.arrow_forward_ios),
@@ -155,7 +155,7 @@ class MedicationCard extends StatelessWidget {
               if (medicationDescription.isNotNullOrBlank)
                 Text(
                   medicationDescription!,
-                  style: PharmeTheme.textTheme.titleSmall,
+                  style: PharMeTheme.textTheme.titleSmall,
                 )
             ],
           ),
