@@ -21,8 +21,8 @@ class SourceCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           gradient: LinearGradient(colors: [
-            PharmeTheme.primaryColor.withOpacity(0.8),
-            PharmeTheme.secondaryColor.withOpacity(0.8),
+            PharMeTheme.primaryColor.withOpacity(0.8),
+            PharMeTheme.secondaryColor.withOpacity(0.8),
           ]),
         ),
         child: Padding(
@@ -32,7 +32,7 @@ class SourceCard extends StatelessWidget {
               flex: 3,
               child: Text(
                 name,
-                style: PharmeTheme.textTheme.bodyMedium!.copyWith(
+                style: PharMeTheme.textTheme.bodyMedium!.copyWith(
                   color: Colors.white,
                 ),
               ),
@@ -42,7 +42,7 @@ class SourceCard extends StatelessWidget {
               flex: 10,
               child: Text(
                 description,
-                style: PharmeTheme.textTheme.bodySmall!.copyWith(
+                style: PharMeTheme.textTheme.bodySmall!.copyWith(
                   color: Colors.white,
                 ),
               ),

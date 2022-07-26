@@ -133,7 +133,7 @@ class OnboardingPage extends HookWidget {
       height: 8,
       width: isActive ? 24 : 16,
       decoration: BoxDecoration(
-        color: isActive ? Colors.white : PharmeTheme.onSurfaceColor,
+        color: isActive ? Colors.white : PharMeTheme.onSurfaceColor,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -165,7 +165,7 @@ class OnboardingPage extends HookWidget {
             isLastPage
                 ? context.l10n.onboarding_get_started
                 : context.l10n.onboarding_next,
-            style: PharmeTheme.textTheme.headlineSmall!
+            style: PharMeTheme.textTheme.headlineSmall!
                 .copyWith(color: Colors.white),
           ),
           SizedBox(width: 8),
@@ -215,14 +215,14 @@ class OnboardingSubPage extends StatelessWidget {
           SizedBox(height: 32),
           Text(
             getHeader(context),
-            style: PharmeTheme.textTheme.headlineLarge!.copyWith(
+            style: PharMeTheme.textTheme.headlineLarge!.copyWith(
               color: Colors.white,
             ),
           ),
           SizedBox(height: 16),
           Text(
             getText(context),
-            style: PharmeTheme.textTheme.bodyMedium!.copyWith(
+            style: PharMeTheme.textTheme.bodyMedium!.copyWith(
               color: Colors.white,
             ),
           ),
@@ -253,7 +253,7 @@ class BottomCard extends StatelessWidget {
           Expanded(
             child: Text(
               getText(context),
-              style: PharmeTheme.textTheme.bodyMedium,
+              style: PharMeTheme.textTheme.bodyMedium,
               textAlign: (icon != null) ? TextAlign.start : TextAlign.center,
             ),
           ),

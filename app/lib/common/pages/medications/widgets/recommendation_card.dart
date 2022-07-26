@@ -42,7 +42,7 @@ class RecommendationCard extends StatelessWidget {
           Text(
             medication.guidelines[0].recommendation ??
                 medication.guidelines[0].cpicRecommendation!,
-            style: PharmeTheme.textTheme.bodyLarge,
+            style: PharMeTheme.textTheme.bodyLarge,
           ),
         ]),
       ),
