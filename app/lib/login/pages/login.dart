@@ -77,10 +77,12 @@ class _LoginPageState extends State<LoginPage> {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () async {
-            final found = labs.firstWhere((el) => el.name == dropdownValue);
+            final selectedLab = labs.firstWhere(
+              (el) => el.name == dropdownValue,
+            );
             await context
                 .read<LoginPageCubit>()
-                .signInAndLoadUserData(context, found);
+                .signInAndLoadUserData(context, selectedLab);
           },
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

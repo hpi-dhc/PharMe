@@ -15,6 +15,7 @@
       }
     }
   },
+  "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   "err_generic": "Error!",
   
