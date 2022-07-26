@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String dropdownValue = 'Illumina Solutions Center Berlin';
+  String dropdownValue = labs.first.name;
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +21,30 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state) {
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            body: SafeArea(
+              child: Stack(
                 children: [
-                  SvgPicture.asset('assets/images/pharme_logo_horizontal.svg'),
-                  Column(
-                    children: state.when(
-                      initial: () => _buildInitialScreen(context),
-                      loadingUserData: () => _buildLoadingScreen(context),
-                      loadedUserData: () => _buildLoadedScreen(context),
-                      error: (message) => _buildErrorScreen(context, message),
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        'assets/images/pharme_logo_horizontal.svg',
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: state.when(
+                          initial: () => _buildInitialScreen(context),
+                          loadingUserData: CircularProgressIndicator.new,
+                          loadedUserData: () => _buildLoadedScreen(context),
+                          error: (message) =>
+                              _buildErrorScreen(context, message),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -44,125 +56,116 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  List<Widget> _buildInitialScreen(BuildContext context) {
-    return [
-      DropdownButtonHideUnderline(
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Text(context.l10n.auth_choose_lab),
-          value: dropdownValue,
-          onChanged: (value) {
-            setState(() {
-              dropdownValue = value.toString();
-            });
-          },
-          items: labs
-              .map((lab) => DropdownMenuItem(
-                    value: lab.name,
-                    child: Text(lab.name),
-                  ))
-              .toList(),
-          buttonPadding: const EdgeInsets.only(left: 16, right: 16),
-          buttonDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32),
-            border: Border.all(color: Colors.black26),
-          ),
-          dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
-      SizedBox(height: 8),
-      SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () async {
-            final selectedLab = labs.firstWhere(
-              (el) => el.name == dropdownValue,
-            );
-            await context
-                .read<LoginPageCubit>()
-                .signInAndLoadUserData(context, selectedLab);
-          },
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
+  Widget _buildInitialScreen(BuildContext context) {
+    Future<void> action() async {
+      final selectedLab = labs.firstWhere(
+        (el) => el.name == dropdownValue,
+      );
+      await context
+          .read<LoginPageCubit>()
+          .signInAndLoadUserData(context, selectedLab);
+    }
+
+    return _buildColumnWrapper(
+      action: action,
+      actionText: context.l10n.auth_sign_in,
+      children: [
+        DropdownButtonHideUnderline(
+          child: DropdownButton2(
+            isExpanded: true,
+            dropdownOverButton: true,
+            hint: Text(context.l10n.auth_choose_lab),
+            value: dropdownValue,
+            onChanged: (value) {
+              setState(() {
+                dropdownValue = value.toString();
+              });
+            },
+            items: labs
+                .map((lab) => DropdownMenuItem(
+                      value: lab.name,
+                      child: Text(lab.name),
+                    ))
+                .toList(),
+            buttonPadding: const EdgeInsets.only(left: 16, right: 16),
+            buttonDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(color: Colors.black26),
+            ),
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
-          child: Text(context.l10n.auth_sign_in),
         ),
-      )
-    ];
+      ],
+    );
   }
 
-  List<Widget> _buildLoadingScreen(BuildContext context) {
-    return [
-      SizedBox(
-        width: 200,
-        height: 200,
-        child: RadiantGradientMask(
-          colors: [
-            PharmeTheme.primaryContainer,
-            PharmeTheme.secondaryContainer,
-          ],
-          child: CircularProgressIndicator(
-            color: Colors.white,
+  Widget _buildLoadedScreen(BuildContext context) {
+    return _buildColumnWrapper(
+      action: () => context.router.replace(MainRoute()),
+      actionText: context.l10n.general_continue,
+      children: [
+        Icon(
+          Icons.check_circle_outline,
+          color: Colors.green,
+          size: 96,
+        ),
+        SizedBox(height: 16),
+        Text(
+          context.l10n.auth_success,
+          style: context.textTheme.headline6,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildErrorScreen(BuildContext context, String message) {
+    return _buildColumnWrapper(
+      action: () => context.read<LoginPageCubit>().revertToInitialState(),
+      actionText: context.l10n.general_retry,
+      children: [
+        Icon(
+          Icons.error_outline_rounded,
+          color: Colors.red,
+          size: 96,
+        ),
+        SizedBox(height: 16),
+        Text(
+          message,
+          style: context.textTheme.headline6,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColumnWrapper({
+    required void Function()? action,
+    required String actionText,
+    required List<Widget> children,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ...children,
+        SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: action,
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+              ),
+            ),
+            child: Text(actionText),
           ),
         ),
-      ),
-    ];
-  }
-
-  List<Widget> _buildLoadedScreen(BuildContext context) {
-    return [
-      RadiantGradientMask(
-        colors: [
-          PharmeTheme.primaryContainer,
-          PharmeTheme.secondaryContainer,
-        ],
-        child: Icon(
-          Icons.task_alt,
-          size: 152,
-          color: Colors.white,
-        ),
-      ),
-      Text(context.l10n.auth_success),
-      SizedBox(height: 24),
-      SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () => context.router.replace(MainRoute()),
-          child: Text(context.l10n.general_continue),
-        ),
-      ),
-    ];
-  }
-
-  List<Widget> _buildErrorScreen(BuildContext context, String message) {
-    return [
-      RadiantGradientMask(
-        colors: [
-          PharmeTheme.primaryContainer,
-          PharmeTheme.secondaryContainer,
-        ],
-        child: Icon(
-          Icons.warning_amber_outlined,
-          size: 152,
-          color: Colors.white,
-        ),
-      ),
-      Text(message),
-      SizedBox(height: 24),
-      SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () =>
-              context.read<LoginPageCubit>().revertToInitialState(),
-          child: Text(context.l10n.general_retry),
-        ),
-      ),
-    ];
+      ],
+    );
   }
 }

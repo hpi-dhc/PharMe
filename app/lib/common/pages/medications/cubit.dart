@@ -17,7 +17,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 
   Future<void> loadMedications() async {
     emit(MedicationsState.loading());
-    final isOnline = await hasConnectionTo(annotationServerUrl.host);
+    final isOnline = await hasConnectionTo(annotationServerUrl().host);
     if (!isOnline) {
       _findCachedMedication(_id);
       return;
@@ -80,10 +80,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
   }
 
   Future<Response?> sendRequest() async {
-    final requestIdsUri = annotationServerUrl.replace(
-      path: 'api/v1/medications',
-      queryParameters: {'onlyIds': 'true'},
-    );
+    final requestIdsUri = annotationServerUrl('medications')
+        .replace(queryParameters: {'onlyIds': 'true'});
     final idsResponse = await get(requestIdsUri);
     if (idsResponse.statusCode != 200) {
       emit(MedicationsState.error());
@@ -94,10 +92,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     randomIds.shuffle();
     Response? response;
     for (final id in randomIds) {
-      final requestMedicationUri = annotationServerUrl.replace(
-        path: 'api/v1/medications/$id',
-        queryParameters: {'getGuidelines': 'true'},
-      );
+      final requestMedicationUri = annotationServerUrl('medications/$id')
+          .replace(queryParameters: {'getGuidelines': 'true'});
 
       final tempResponse = await get(requestMedicationUri);
       if (tempResponse.statusCode != 200) {
