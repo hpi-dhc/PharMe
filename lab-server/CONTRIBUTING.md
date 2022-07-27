@@ -16,11 +16,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Setup for local development
 
-- Create an `.env` file according to the the `.env.example`
-- Open a terminal in VSCode in the `lab-server` directory
-  - Run `docker compose up` to build and start the necessary containers (e.g.
-    database)
-- Open another terminal in VSCode in the `lab-server` directory
+- Open a terminal in the `lab-server` directory
   - Run `yarn` to install the project dependencies
   - You can now start the server using `yarn start:dev`
 
@@ -63,7 +59,7 @@ To receive authentication tokens, send a POST request to:
 the following body (x-www-form-urlencoded):
 
 | Type       | Value                     |
-|------------|---------------------------|
+| ---------- | ------------------------- |
 | grant_type | password                  |
 | username   | \<username-of-your-user\> |
 | password   | \<password-of-your-user\> |
