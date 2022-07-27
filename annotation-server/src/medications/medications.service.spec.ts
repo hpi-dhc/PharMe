@@ -2,7 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { envSchema } from '../common/validations/env.validation';
+import { testEnvSchema } from '../common/validations/env.validation';
 import { FetchDate } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { Medication } from './medication.entity';
@@ -16,7 +16,7 @@ describe('MedicationsService', () => {
             imports: [
                 ConfigModule.forRoot({
                     envFilePath: ['test/.env', '.env'],
-                    validationSchema: envSchema,
+                    validationSchema: testEnvSchema,
                 }),
             ],
             providers: [

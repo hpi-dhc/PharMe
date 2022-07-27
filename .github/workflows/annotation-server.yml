@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GOOGLESHEET_ID: ${{ secrets.GOOGLESHEET_ID }}
+      EMPTY_GOOGLESHEET_ID: ${{ secrets.EMPTY_GOOGLESHEET_ID }}
       GOOGLESHEET_APIKEY: ${{ secrets.GOOGLESHEET_APIKEY }}
     container:
       image: node:17

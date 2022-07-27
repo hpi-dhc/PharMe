@@ -27,3 +27,7 @@ export const envSchema = Joi.object({
     GOOGLESHEET_RANGE_RECOMMENDATIONS:
         Joi.string().default('HPI List v1!W4:AE'),
 });
+
+export const testEnvSchema = envSchema.keys({
+    EMPTY_GOOGLESHEET_ID: Joi.string().required(),
+});
