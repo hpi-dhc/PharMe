@@ -29,7 +29,12 @@ class MainPage extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) {
-            tabsRouter.setActiveIndex(index);
+            if (index != tabsRouter.activeIndex) {
+              tabsRouter.setActiveIndex(index);
+            } else {
+              tabsRouter.stackRouterOfIndex(index)?.popUntilRoot();
+            }
+
             ComprehensionHelper.instance.measure(
               context: context,
               surveyId: 4,
