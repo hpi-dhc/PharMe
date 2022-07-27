@@ -23,6 +23,7 @@ jobs:
     name: Test E2E and Unit
     runs-on: ubuntu-latest
     env:
+      DB_HOST: postgres
       GOOGLESHEET_ID: ${{ secrets.GOOGLESHEET_ID }}
       EMPTY_GOOGLESHEET_ID: ${{ secrets.EMPTY_GOOGLESHEET_ID }}
       GOOGLESHEET_APIKEY: ${{ secrets.GOOGLESHEET_APIKEY }}
