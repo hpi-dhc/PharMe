@@ -1,6 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { envSchema } from '../validations/env.validation';
 import { fetchSpreadsheetCells } from './google-sheets';
 
 describe('Helper to fetch spreadsheet', () => {
@@ -9,7 +10,10 @@ describe('Helper to fetch spreadsheet', () => {
     beforeEach(async () => {
         const modelFixture: TestingModule = await Test.createTestingModule({
             imports: [
-                ConfigModule.forRoot({ envFilePath: ['test/.env', '.env'] }),
+                ConfigModule.forRoot({
+                    envFilePath: ['test/.env', '.env'],
+                    validationSchema: envSchema,
+                }),
             ],
         }).compile();
 
