@@ -43,6 +43,7 @@ dependencies:
 
 dev_dependencies:
   auto_route_generator: ^4.2.0
+  bloc_test: ^9.0.3
   build_runner: ^2.1.11
   flutter_launcher_icons: ^0.9.3
   flutter_lints: ^2.0.1
