@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { envSchema } from './common/validations/env.validation';
 import { FetchDatesModule } from './fetch-dates/fetch-dates.module';
 import { GuidelinesModule } from './guidelines/guidelines.module';
 import { MedicationsModule } from './medications/medications.module';
@@ -17,6 +18,7 @@ import { PhenotypesModule } from './phenotypes/phenotypes.module';
                 ? ['test/.env']
                 : []
             ).concat(['.env']),
+            validationSchema: envSchema,
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
