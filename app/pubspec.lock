@@ -176,15 +176,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  comprehension_measurement:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: main
-      resolved-ref: d55294764461004558412fe586a34f4cf74a5bbc
-      url: "https://github.com/hpi-dhc/comprehension-measurement.git"
-    source: git
-    version: "0.0.1"
   convert:
     dependency: transitive
     description:
@@ -863,6 +854,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.15"
+  scio:
+    dependency: "direct main"
+    description:
+      name: scio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   sensors_plus:
     dependency: transitive
     description:
@@ -1028,7 +1026,7 @@ packages:
       name: supabase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.4"
+    version: "0.3.6"
   term_glyph:
     dependency: transitive
     description:

@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:comprehension_measurement/scio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
+import 'package:scio/scio.dart';
 
 import '../../models/medication/cached_medications.dart';
 import '../../module.dart';

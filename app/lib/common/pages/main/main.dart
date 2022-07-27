@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:comprehension_measurement/scio.dart';
 import 'package:flutter/material.dart';
+import 'package:scio/scio.dart';
 
 import '../../constants.dart';
 import '../../l10n.dart';

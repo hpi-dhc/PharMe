@@ -1,4 +1,4 @@
-import 'package:comprehension_measurement/scio.dart';
+import 'package:scio/scio.dart';
 
 Uri annotationServerUrl([String slug = '']) =>
     Uri.https('annotation-server-pharme.dhc-lab.hpi.de', 'api/v1/$slug');
