@@ -21,9 +21,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=${ANNOTATION_DB_USER}
-      - POSTGRES_PASSWORD=${ANNOTATION_DB_PASS}
-      - POSTGRES_DB=${ANNOTATION_DB_NAME}
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=annotation_db
 
 volumes:
   annotation_server_db:
