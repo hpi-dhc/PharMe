@@ -7,6 +7,9 @@ within the context of a bachelor project at Prof. Böttinger's chair
 *[Digital Health - Personalized Medicine](https://hpi.de/en/research/research-groups/digital-health-personalized-medicine.html)*
 at [HPI](https://hpi.de).
 
+See our [glossary](./docs/GLOSSARY.md) for terms commonly used within this
+project.
+
 ## System status
 
 | System component                                          | CI/CD                           | Code Coverage           |
@@ -15,6 +18,9 @@ at [HPI](https://hpi.de).
 | 📝 [Annotation Server](./annotation-server)               | ![GitHub Workflow Status][AS_B] | ![Codecov branch][AS_C] |
 | 📱 [App](./app)                                           | ![GitHub Workflow Status][AP_B] | ![Codecov branch][AP_C] |
 | 🧪 [Lab Server](./lab-server)                             | ![GitHub Workflow Status][LS_B] | ![Codecov branch][LS_C] |
+
+See PharMe's [archicture diagram](./docs/ARCHITECHTURE.md) for an overview of
+system components.
 
 ## 🤝 Contributing
 
