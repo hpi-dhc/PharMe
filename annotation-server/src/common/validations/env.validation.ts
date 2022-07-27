@@ -13,8 +13,8 @@ export const envSchema = Joi.object({
     DB_PASS: Joi.string().default('admin'),
     DB_NAME: Joi.string().default('annotation_db'),
     // Medications
-    DRUGBANK_ZIP: Joi.string().default('data/minimal-full-database.zip'),
-    DRUGBANK_XML: Joi.string().default('minimal-full-database.xml'),
+    DRUGBANK_ZIP: Joi.string().default('data/example-database.zip'),
+    DRUGBANK_XML: Joi.string().default('example-database.xml'),
     // Google Sheets
     GOOGLESHEET_ID: Joi.string().required(),
     GOOGLESHEET_APIKEY: Joi.string().required(),

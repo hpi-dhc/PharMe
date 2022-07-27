@@ -1,4 +1,4 @@
-name: Annotation Server1
+name: Annotation Server
 
 on:
   push:
