@@ -15,13 +15,13 @@ class OnboardingPage extends HookWidget {
       illustrationPath: 'assets/images/onboarding/2.gif',
       getHeader: (context) => context.l10n.onboarding_2_header,
       getText: (context) => context.l10n.onboarding_2_text,
-      color: Color(0xFFCC0700),
+      color: Color(0xCCCC0700),
     ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/3.gif',
       getHeader: (context) => context.l10n.onboarding_3_header,
       getText: (context) => context.l10n.onboarding_3_text,
-      color: Color(0xFF359600),
+      color: Color(0xCC359600),
       child: BottomCard(
         icon: Icon(Icons.warning_rounded, size: 32),
         getText: (context) => context.l10n.onboarding_3_disclaimer,
