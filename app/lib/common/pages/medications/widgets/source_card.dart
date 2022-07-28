@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../../theme.dart';
@@ -30,11 +31,12 @@ class SourceCard extends StatelessWidget {
           child: Row(children: [
             Expanded(
               flex: 3,
-              child: Text(
+              child: AutoSizeText(
                 name,
                 style: PharMeTheme.textTheme.bodyMedium!.copyWith(
                   color: Colors.white,
                 ),
+                maxLines: 1,
               ),
             ),
             SizedBox(width: 4),

@@ -64,9 +64,7 @@ class MedicationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(
-    MedicationWithGuidelines medication,
-  ) {
+  Widget _buildHeader(MedicationWithGuidelines medication) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
