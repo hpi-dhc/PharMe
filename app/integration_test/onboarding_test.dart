@@ -46,7 +46,7 @@ void main() {
 
       await tester.tap(find.byKey(ValueKey('next_button')));
       await tester.pumpAndSettle();
-      expect(find.text(context.l10n.onboarding_4_header), findsOneWidget);
+      expect(find.text(context.l10n.onboarding_5_header), findsOneWidget);
     });
   });
 }

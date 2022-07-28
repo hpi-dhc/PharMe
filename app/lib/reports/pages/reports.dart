@@ -2,10 +2,14 @@ import '../../common/module.dart';
 import 'cubit.dart';
 
 class ReportsPage extends StatelessWidget {
+  const ReportsPage({@visibleForTesting this.cubit});
+
+  final ReportsCubit? cubit;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ReportsCubit(),
+      create: (context) => cubit ?? ReportsCubit(),
       child: BlocBuilder<ReportsCubit, ReportsState>(
         builder: (context, state) {
           return RoundedCard(
@@ -143,9 +147,7 @@ class ReportCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 5,
-        color: warningLevel == WarningLevel.danger
-            ? Color(0xFFFFAFAF)
-            : Color(0xFFFFEBCC),
+        color: recommendationColorMap[warningLevel.name],
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(
