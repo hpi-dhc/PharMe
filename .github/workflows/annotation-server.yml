@@ -112,3 +112,55 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+        name: Deploy
+        # TODO: re-enable this before merge to main
+        # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        needs: [build-and-push-image]
+        runs-on: ubuntu-latest
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+
+          - name: Create namespace
+            uses: actions-hub/kubectl@master
+            with:
+              # creates ns only if it does not exist
+              args: apply -f ./annotation-server/deployment/namespace.yml
+
+          # Apply, deploy, and observe status of annotation server
+          - name: Apply deployment (annotation Server)
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n annotation-server apply -f ./annotation-server/deployment/app/deployment.yml
+
+          - name: Deploy annotation server
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n annotation-server rollout restart deploy annotation-server
+
+          - name: Watch deployment (annotation server)
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n annotation-server rollout status -w deployment/annotation-server
+
+          # Apply, deploy, and observe status of database
+          - name: Apply deployment (database)
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n annotation-server apply -f ./annotation-server/deployment/app/db.yml
+
+          - name: Deploy database
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n annotation-server rollout restart deploy annotation-server-db
+
+          - name: Watch deployment (database)
+            uses: actions-hub/kubectl@master
+            with:
+              args: -n annotation-server rollout status -w deployment/annotation-server-db
+
