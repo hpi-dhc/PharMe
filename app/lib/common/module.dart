@@ -1,5 +1,6 @@
 // Widely used across the app
 export 'package:auto_route/auto_route.dart';
+export 'package:auto_size_text/auto_size_text.dart';
 export 'package:black_hole_flutter/black_hole_flutter.dart';
 export 'package:dartx/dartx.dart';
 export 'package:flutter/material.dart' hide MetaData;

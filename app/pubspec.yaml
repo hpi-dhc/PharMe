@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   auto_route: ^4.2.0
+  auto_size_text: ^3.0.0
   black_hole_flutter: ^0.3.5
   bloc: ^8.0.3
   collection: ^1.16.0
