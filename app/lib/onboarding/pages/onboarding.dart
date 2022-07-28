@@ -90,6 +90,7 @@ class OnboardingPage extends HookWidget {
           alignment: Alignment.topCenter,
           children: [
             Positioned.fill(
+              bottom: 96,
               child: PageView(
                 controller: pageController,
                 onPageChanged: (newPage) => currentPage.value = newPage,
@@ -200,33 +201,41 @@ class OnboardingSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.fromLTRB(32, 16, 32, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(height: 16),
           Center(
-            child: Image.asset(
-              illustrationPath,
-              width: 320,
-              height: 320,
+            child: FractionallySizedBox(
+              alignment: Alignment.topCenter,
+              widthFactor: 0.75,
+              child: Image.asset(
+                illustrationPath,
+                width: 320,
+              ),
             ),
           ),
-          SizedBox(height: 32),
-          Text(
-            getHeader(context),
-            style: PharMeTheme.textTheme.headlineLarge!.copyWith(
-              color: Colors.white,
+          Column(children: [
+            AutoSizeText(
+              getHeader(context),
+              style: PharMeTheme.textTheme.headlineLarge!.copyWith(
+                color: Colors.white,
+              ),
+              maxLines: 2,
             ),
-          ),
-          SizedBox(height: 16),
-          Text(
-            getText(context),
-            style: PharMeTheme.textTheme.bodyMedium!.copyWith(
-              color: Colors.white,
+            SizedBox(height: 8),
+            Text(
+              getText(context),
+              style: PharMeTheme.textTheme.bodyMedium!.copyWith(
+                color: Colors.white,
+              ),
             ),
-          ),
-          if (child != null) ...[SizedBox(height: 8), child!],
+            if (child != null) ...[SizedBox(height: 8), child!],
+          ]),
+          // Empty widget for spaceBetween in this column to work properly
+          Container(),
         ],
       ),
     );
