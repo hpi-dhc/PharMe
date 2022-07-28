@@ -27,25 +27,26 @@ void main() {
       ));
 
       await tester.pumpAndSettle();
-      expect(find.text('Welcome to PharMe'), findsOneWidget);
+
+      final BuildContext context = tester.element(find.byType(Scaffold).first);
+      expect(find.text(context.l10n.onboarding_1_header), findsOneWidget);
 
       // change page
       await tester.tap(find.byKey(ValueKey('next_button')));
       await tester.pumpAndSettle();
-      expect(find.text('One size does not fit all'), findsOneWidget);
+      expect(find.text(context.l10n.onboarding_2_header), findsOneWidget);
       // change page
       await tester.tap(find.byKey(ValueKey('next_button')));
       await tester.pumpAndSettle();
-      expect(find.text('Genome power unlocked to improve human health'),
-          findsOneWidget);
+      expect(find.text(context.l10n.onboarding_3_header), findsOneWidget);
 
       await tester.tap(find.byKey(ValueKey('next_button')));
       await tester.pumpAndSettle();
-      expect(find.text('Tailored to your genome'), findsOneWidget);
+      expect(find.text(context.l10n.onboarding_4_header), findsOneWidget);
 
       await tester.tap(find.byKey(ValueKey('next_button')));
       await tester.pumpAndSettle();
-      expect(find.text('We care about your data protection'), findsOneWidget);
+      expect(find.text(context.l10n.onboarding_4_header), findsOneWidget);
     });
   });
 }

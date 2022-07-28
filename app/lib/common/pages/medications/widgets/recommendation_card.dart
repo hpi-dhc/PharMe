@@ -17,6 +17,7 @@ class RecommendationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: Key('recommendationCard'),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

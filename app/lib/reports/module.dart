@@ -4,6 +4,7 @@ import '../common/pages/medications/medication.dart';
 import 'pages/reports.dart';
 
 // We need to expose all pages for AutoRouter
+export '../common/pages/medications/cubit.dart';
 export '../common/pages/medications/medication.dart';
 export 'pages/reports.dart';
 

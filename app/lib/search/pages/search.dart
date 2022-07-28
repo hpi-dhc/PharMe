@@ -8,12 +8,19 @@ import 'cubit.dart';
 final _panelController = SlidingUpPanelController();
 
 class SearchPage extends HookWidget {
+  const SearchPage({
+    Key? key,
+    @visibleForTesting this.cubit,
+  }) : super(key: key);
+
+  final SearchCubit? cubit;
+
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
 
     return BlocProvider(
-      create: (context) => SearchCubit(),
+      create: (context) => cubit ?? SearchCubit(),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
           return Stack(
