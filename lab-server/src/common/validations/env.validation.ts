@@ -12,12 +12,6 @@ export const envSchema = Joi.object({
     DB_USER: Joi.string().default('admin'),
     DB_PASS: Joi.string().default('admin'),
     DB_NAME: Joi.string().default('lab_server_db'),
-    // Keycloak
-    KEYCLOAK_USER: Joi.string().default('admin'),
-    KEYCLOAK_PASS: Joi.string().default('admin'),
-    KEYCLOAK_DB_USER: Joi.string().default('admin'),
-    KEYCLOAK_DB_PASS: Joi.string().default('admin'),
-    KEYCLOAK_DB_NAME: Joi.string().default('keycloak_db'),
     // Keycloak Connect Module
     KEYCLOAK_AUTH_SERVER_URL: Joi.string()
         .uri()
