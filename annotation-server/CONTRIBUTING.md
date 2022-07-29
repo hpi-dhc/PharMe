@@ -41,3 +41,4 @@ before using the script and re-zipped after.
   - You can now start the server using `yarn start:dev`
 - Initialize the database with the zipped data specified in `.env` by sending a
   POST-Request to `api/v1/init`
+  (e.g. using `curl`: `curl -X POST http://localhost:3000/api/v1/init`)

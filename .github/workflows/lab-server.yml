@@ -18,9 +18,6 @@ env:
 
   DB_HOST: postgres
   DB_PORT: 5432
-  DB_USER: postgres
-  DB_PASS: postgres
-  DB_NAME: lab_server_db
 
   MINIO_PORT: 9000
   MINIO_ENDPOINT: minio
@@ -52,9 +49,9 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: ${{ env.DB_USER }}
-          POSTGRES_PASSWORD: ${{ env.DB_PASS }}
-          POSTGRES_DB: ${{ env.DB_NAME }}
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: lab_server_db
         options: >-
           --health-cmd pg_isready
           --health-interval 10s

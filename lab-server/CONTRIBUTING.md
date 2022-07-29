@@ -20,12 +20,10 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
   - Run `yarn` to install the project dependencies
   - You can now start the server using `yarn start:dev`
 
-## Local set-up for Keycloak / Minio (for debugging)
+Afterwards, complete the [Keycloak setup (local)](#keycloak-setup-local)
+and [MinIO setup (local)](#minio-setup-local).
 
-For local debugging pass the "local" profile flag when running docker-compose
-by using the following command: `docker compose --profile local up`
-
-### Keycloak set-up (local)
+### Keycloak setup (local)
 
 - Open `http://localhost:28080` in your browser to access the keycloak admin
   console. Login using the credentials from your `.env` file
@@ -70,7 +68,7 @@ To test the application, send a GET request to
 up and running. You should now be able to make an authentication request to
 Keycloak and use the returned access token to make requests to the lab server.
 
-### MinIO set-up (local)
+### MinIO setup (local)
 
 - Open `http://localhost:9001` in your browser
 - Open the administration console. Login with the credentials you have set in

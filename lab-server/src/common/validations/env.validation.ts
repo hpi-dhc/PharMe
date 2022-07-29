@@ -5,7 +5,7 @@ export const envSchema = Joi.object({
     NODE_ENV: Joi.string()
         .valid('development', 'production', 'test')
         .default('development'),
-    PORT: Joi.number().port().default(3000),
+    PORT: Joi.number().port().default(3001),
     // Database
     DB_HOST: Joi.string().default('localhost'),
     DB_PORT: Joi.number().port().default(6543),
@@ -24,7 +24,7 @@ export const envSchema = Joi.object({
         .default('http://127.0.0.1:28080/auth'),
     KEYCLOAK_REALM: Joi.string().default('pharme'),
     KEYCLOAK_CLIENT_ID: Joi.string().default('pharme-lab-server'),
-    KEYCLOAK_SECRET: Joi.string().default('secret'),
+    KEYCLOAK_SECRET: Joi.string().required(),
     // Minio
     MINIO_PORT: Joi.number().port().default(9000),
     MINIO_ENDPOINT: Joi.string().default('127.0.0.1'),

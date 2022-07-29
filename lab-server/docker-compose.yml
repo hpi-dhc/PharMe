@@ -3,7 +3,6 @@ services:
         build:
             dockerfile: ./lab-server/Dockerfile
             context: ../
-        # env_file: .env
         ports:
             - 8081:3001
         depends_on:
@@ -36,8 +35,6 @@ services:
             - 28080:8080
         depends_on:
             - keycloak-db
-        profiles:
-            - local
 
     keycloak-db:
         image: postgres:13
@@ -49,8 +46,6 @@ services:
             - POSTGRES_USER=admin
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=keycloak_db
-        profiles:
-            - local
 
     minio:
         image: minio/minio
@@ -63,8 +58,6 @@ services:
             - 9000:9000
             - 9001:9001
         command: server /data --console-address ":9001"
-        profiles:
-            - local
 
 volumes:
     lab_server_db:
