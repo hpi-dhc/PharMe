@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -7,6 +8,8 @@ import { TypeormErrorInterceptor } from './common/interceptors/typeorm-error.int
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const configService = app.get(ConfigService);
+
     app.setGlobalPrefix('/api/v1');
     app.useGlobalInterceptors(new TypeormErrorInterceptor());
 
@@ -25,6 +28,6 @@ async function bootstrap() {
         customCssUrl: `${process.env.ASSETS_URL}/styles.css`,
     });
 
-    await app.listen(3000);
+    await app.listen(configService.get('PORT'));
 }
 bootstrap();

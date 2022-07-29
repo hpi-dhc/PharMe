@@ -30,10 +30,7 @@ before using the script and re-zipped after.
 
 - Make sure your `.env` and `test/.env` are configured correctly and up to date
   with the `.env.example` and `test/.env.example` files
-- Open a terminal in VSCode in the `annotation-server` directory
-  - Run `docker compose up` to build and start the necessary containers (e.g.
-    database)
-- Open another terminal in VSCode in the `annotation-server` directory
+- Open a terminal in the `annotation-server` directory
   - Run `yarn` to install the project's Node.js dependencies
   - Run `python3 -m pip install -r requirements.txt` to install
     the project's Python dependencies
@@ -42,5 +39,6 @@ before using the script and re-zipped after.
   - Optionally download DrugBank datasets from our Google Drive, place them in
     `data/` and adjust your `.env` accordingly
   - You can now start the server using `yarn start:dev`
-- initialize the database with the zipped data specified in `.env` by sending a
+- Initialize the database with the zipped data specified in `.env` by sending a
   POST-Request to `api/v1/init`
+  (e.g. using `curl`: `curl -X POST http://localhost:3000/api/v1/init`)
