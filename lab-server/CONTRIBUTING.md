@@ -26,7 +26,7 @@ and [MinIO setup (local)](#minio-setup-local).
 ### Keycloak setup (local)
 
 - Open `http://localhost:28080` in your browser to access the keycloak admin
-  console. Login using the credentials from your `.env` file
+  console. Login using the credentials `admin` and `admin`.
 - Follow
   [this](https://medium.com/devops-dudes/secure-nestjs-rest-api-with-keycloak-745ef32a2370)
   guide to set up your local Keycloak. A lot of the steps including the
@@ -36,7 +36,7 @@ and [MinIO setup (local)](#minio-setup-local).
     - Create clients (one for the backend and one for the frontend)
       - For the backend the name should be "pharme-lab-server" and the
         "access-type" should be "bearer only". In the credentials tab you need
-        to create a secret and update the value `KEYCLOAK_SECRET` accordingly
+        to create a secret and update the env value `KEYCLOAK_SECRET` accordingly
       - For the frontend the name should be "pharme-app". The "access-type"
         should be set to "public" and the redirect URI should be `*`. Note that
         this is bad practice security-wise and should only be done in a local
