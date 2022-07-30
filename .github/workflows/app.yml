@@ -16,27 +16,39 @@ env:
   FLUTTER_VERSION: 3.0.3
 
 jobs:
-  build:
-    runs-on: macos-latest
+  drive:
+    runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v1
+    - uses: subosito/flutter-action@v1
+      with:
+        channel: 'beta'
+    - run: |
+           flutter create --platforms=windows .
+           flutter pub run build_runner build
+           flutter config --enable-windows-desktop
+           flutter test -d windows integration_test/faq_test.dart
+  # build:
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.0.3'
-          channel: 'stable'
-      - run: flutter build apk
+  #     - name: Install Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: '3.0.3'
+  #         channel: 'stable'
+  #     - run: flutter build apk
 
-      - name: Install dependencies
-        run: flutter pub get
+  #     - name: Install dependencies
+  #       run: flutter pub get
 
-      - name: Run integration tests
-        uses: reactivecircus/android-emulator-runner@v1
-        with:
-          api-level: 31
-          script: flutter test integration_test
+  #     - name: Run integration tests
+  #       uses: reactivecircus/android-emulator-runner@v1
+  #       with:
+  #         api-level: 31
+  #         script: flutter test integration_test
   # lint:
   #   name: Lint
   #   runs-on: ubuntu-latest
