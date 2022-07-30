@@ -26,21 +26,21 @@ spec:
           ports:
             - containerPort: 3001
           env:
-            - name: LAB_SERVER_DB_HOST
+            - name: DB_HOST
               value: lab-server-db-service
-            - name: LAB_SERVER_DB_PORT
+            - name: DB_PORT
               value: "5432"
-            - name: LAB_SERVER_DB_USER
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: lab-server-secrets
                   key: lab_server_db_user
-            - name: LAB_SERVER_DB_PASS
+            - name: DB_PASS
               valueFrom:
                 secretKeyRef:
                   name: lab-server-secrets
                   key: lab_server_db_pass
-            - name: LAB_SERVER_DB_NAME
+            - name: DB_NAME
               value: db
             - name: MINIO_PORT
               value: "9000"
