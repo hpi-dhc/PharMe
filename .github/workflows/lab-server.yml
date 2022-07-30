@@ -94,7 +94,7 @@ jobs:
       - run: yarn build
 
   build-and-push-image:
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [lint, test-e2e, build]
     runs-on: ubuntu-latest
     permissions:
