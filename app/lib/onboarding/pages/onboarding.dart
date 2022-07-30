@@ -146,7 +146,7 @@ class OnboardingPage extends HookWidget {
     bool isLastPage,
   ) {
     return TextButton(
-      key: Key('next_button'),
+      key: Key('nextButton'),
       onPressed: () {
         if (isLastPage) {
           _isLoggedIn

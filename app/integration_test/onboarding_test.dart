@@ -32,19 +32,19 @@ void main() {
       expect(find.text(context.l10n.onboarding_1_header), findsOneWidget);
 
       // change page
-      await tester.tap(find.byKey(ValueKey('next_button')));
+      await tester.tap(find.byKey(ValueKey('nextButton')));
       await tester.pumpAndSettle();
       expect(find.text(context.l10n.onboarding_2_header), findsOneWidget);
       // change page
-      await tester.tap(find.byKey(ValueKey('next_button')));
+      await tester.tap(find.byKey(ValueKey('nextButton')));
       await tester.pumpAndSettle();
       expect(find.text(context.l10n.onboarding_3_header), findsOneWidget);
 
-      await tester.tap(find.byKey(ValueKey('next_button')));
+      await tester.tap(find.byKey(ValueKey('nextButton')));
       await tester.pumpAndSettle();
       expect(find.text(context.l10n.onboarding_4_header), findsOneWidget);
 
-      await tester.tap(find.byKey(ValueKey('next_button')));
+      await tester.tap(find.byKey(ValueKey('nextButton')));
       await tester.pumpAndSettle();
       expect(find.text(context.l10n.onboarding_5_header), findsOneWidget);
     });
