@@ -29,21 +29,21 @@ spec:
           ports:
             - containerPort: 3000
           env:
-            - name: ANNOTATION_DB_HOST
+            - name: DB_HOST
               value: annotation-server-db-service
-            - name: ANNOTATION_DB_PORT
+            - name: DB_PORT
               value: "5432"
-            - name: ANNOTATION_DB_USER
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: annotation-server-secrets
                   key: db_user
-            - name: ANNOTATION_DB_PASS
+            - name: DB_PASS
               valueFrom:
                 secretKeyRef:
                   name: annotation-server-secrets
                   key: db_pass
-            - name: ANNOTATION_DB_NAME
+            - name: DB_NAME
               value: annotation_db
             - name: DRUGBANK_ZIP
               value: data/example-database.zip
