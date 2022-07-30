@@ -12,7 +12,6 @@ void main() {
   group('integration test for the faq page', () {
     final appRouter = AppRouter();
     final faqWidget = MaterialApp.router(
-      debugShowCheckedModeBanner: false,
       routeInformationParser: appRouter.defaultRouteParser(),
       routerDelegate: appRouter.delegate(
         initialDeepLink: 'main/faq',
