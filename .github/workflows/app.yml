@@ -50,7 +50,7 @@ jobs:
       - run: flutter build apk
 
   build-ios:
-    name: Build iOS Package & Test
+    name: Build iOS Package
     needs: [lint]
     runs-on: macos-latest
     steps:
@@ -67,6 +67,7 @@ jobs:
       - run: flutter build ios --release --no-codesign
 
   test:
+    name: Test
     needs: [lint, build-android, build-ios]
     runs-on: macos-latest
     steps:
