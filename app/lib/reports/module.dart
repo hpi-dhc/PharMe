@@ -6,6 +6,7 @@ import 'pages/reports.dart';
 // We need to expose all pages for AutoRouter
 export '../common/pages/medications/cubit.dart';
 export '../common/pages/medications/medication.dart';
+export '../reports/pages/cubit.dart';
 export 'pages/reports.dart';
 
 const reportsRoutes = AutoRoute(
