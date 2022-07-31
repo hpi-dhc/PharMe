@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:comprehension_measurement/comprehension_measurement.dart';
 import 'package:flutter/material.dart';
+import 'package:scio/scio.dart';
 
 import '../../constants.dart';
 import '../../l10n.dart';
@@ -29,8 +29,13 @@ class MainPage extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) {
-            tabsRouter.setActiveIndex(index);
-            ComprehensionHelper.measure(
+            if (index != tabsRouter.activeIndex) {
+              tabsRouter.setActiveIndex(index);
+            } else {
+              tabsRouter.stackRouterOfIndex(index)?.popUntilRoot();
+            }
+
+            ComprehensionHelper.instance.measure(
               context: context,
               surveyId: 4,
               introText: context.l10n.comprehension_intro_text,

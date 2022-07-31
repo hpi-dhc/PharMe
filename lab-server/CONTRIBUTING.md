@@ -16,23 +16,17 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Setup for local development
 
-- Create an `.env` file according to the the `.env.example`
-- Open a terminal in VSCode in the `lab-server` directory
-  - Run `docker compose up` to build and start the necessary containers (e.g.
-    database)
-- Open another terminal in VSCode in the `lab-server` directory
+- Open a terminal in the `lab-server` directory
   - Run `yarn` to install the project dependencies
   - You can now start the server using `yarn start:dev`
 
-## Local set-up for Keycloak / Minio (for debugging)
+Afterwards, complete the [Keycloak setup (local)](#keycloak-setup-local)
+and [MinIO setup (local)](#minio-setup-local).
 
-For local debugging pass the "local" profile flag when running docker-compose
-by using the following command: `docker compose --profile local up`
-
-### Keycloak set-up (local)
+### Keycloak setup (local)
 
 - Open `http://localhost:28080` in your browser to access the keycloak admin
-  console. Login using the credentials from your `.env` file
+  console. Login using the credentials `admin` and `admin`.
 - Follow
   [this](https://medium.com/devops-dudes/secure-nestjs-rest-api-with-keycloak-745ef32a2370)
   guide to set up your local Keycloak. A lot of the steps including the
@@ -42,7 +36,7 @@ by using the following command: `docker compose --profile local up`
     - Create clients (one for the backend and one for the frontend)
       - For the backend the name should be "pharme-lab-server" and the
         "access-type" should be "bearer only". In the credentials tab you need
-        to create a secret and update the value `KEYCLOAK_SECRET` accordingly
+        to create a secret and update the env value `KEYCLOAK_SECRET` accordingly
       - For the frontend the name should be "pharme-app". The "access-type"
         should be set to "public" and the redirect URI should be `*`. Note that
         this is bad practice security-wise and should only be done in a local
@@ -63,7 +57,7 @@ To receive authentication tokens, send a POST request to:
 the following body (x-www-form-urlencoded):
 
 | Type       | Value                     |
-|------------|---------------------------|
+| ---------- | ------------------------- |
 | grant_type | password                  |
 | username   | \<username-of-your-user\> |
 | password   | \<password-of-your-user\> |
@@ -74,7 +68,7 @@ To test the application, send a GET request to
 up and running. You should now be able to make an authentication request to
 Keycloak and use the returned access token to make requests to the lab server.
 
-### MinIO set-up (local)
+### MinIO setup (local)
 
 - Open `http://localhost:9001` in your browser
 - Open the administration console. Login with the credentials you have set in

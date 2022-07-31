@@ -14,10 +14,7 @@ import {
     translationsToArray,
     translationsToMap,
 } from '../../database/helpers/brick-translations';
-import {
-    allBrickPlaceholders,
-    medicationBrickPlaceholders,
-} from '../../database/helpers/resolve-bricks';
+import { placeHoldersForBrick } from '../../database/helpers/resolve-bricks';
 import {
     ITextBrick,
     ITextBrickTranslation,
@@ -126,11 +123,7 @@ const BrickForm = ({ usage, brick }: Props) => {
                             onChange={(text) =>
                                 updateTranslation(language, text)
                             }
-                            validPlaceholders={
-                                usage.startsWith('Drug')
-                                    ? [...medicationBrickPlaceholders]
-                                    : [...allBrickPlaceholders]
-                            }
+                            validPlaceholders={placeHoldersForBrick(usage)}
                         />
                     </div>
                 ))}

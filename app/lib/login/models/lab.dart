@@ -1,22 +1,30 @@
 import '../../common/module.dart';
 
 class Lab {
-  Lab(this.name, this.authUrl, this.endpoint);
+  Lab({
+    required this.name,
+    required this.authUrl,
+    required this.tokenUrl,
+    required this.starAllelesUrl,
+  });
 
   String name;
-  String authUrl;
-  String endpoint;
+  Uri authUrl;
+  Uri tokenUrl;
+  Uri starAllelesUrl;
 }
 
 final labs = [
   Lab(
-    'Illumina Solutions Center Berlin',
-    '$keycloakUrl/auth/realms/pharme',
-    '$labServerUrl/star-alleles',
+    name: 'Illumina Solutions Center Berlin',
+    authUrl: keycloakUrl('/auth/realms/pharme/protocol/openid-connect/auth'),
+    tokenUrl: keycloakUrl('/auth/realms/pharme/protocol/openid-connect/token'),
+    starAllelesUrl: labServerUrl('/star-alleles'),
   ),
   Lab(
-    'Mount Sinai Hospital (NYC)',
-    '$keycloakUrl/auth/realms/pharme',
-    '$labServerUrl/star-alleles',
+    name: 'Mount Sinai Hospital (NYC)',
+    authUrl: keycloakUrl('/auth/realms/pharme/protocol/openid-connect/auth'),
+    tokenUrl: keycloakUrl('/auth/realms/pharme/protocol/openid-connect/token'),
+    starAllelesUrl: labServerUrl('/star-alleles'),
   )
 ];

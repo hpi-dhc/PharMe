@@ -3,8 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../models/metadata.dart';
 import '../module.dart' hide MetaData;
 
-class PharmeApp extends StatelessWidget {
-  PharmeApp({Key? key}) : super(key: key);
+class PharMeApp extends StatelessWidget {
+  PharMeApp({Key? key}) : super(key: key);
 
   final _appRouter = AppRouter();
   final _isLoggedIn = MetaData.instance.isLoggedIn ?? false;
@@ -16,7 +16,7 @@ class PharmeApp extends StatelessWidget {
       routerDelegate: _appRouter.delegate(
         initialDeepLink: _isLoggedIn ? 'main' : 'onboarding',
       ),
-      theme: PharmeTheme.light,
+      theme: PharMeTheme.light,
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

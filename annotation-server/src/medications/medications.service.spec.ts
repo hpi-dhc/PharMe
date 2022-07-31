@@ -2,6 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { testEnvSchema } from '../common/validations/env.validation';
 import { FetchDate } from '../fetch-dates/fetch-date.entity';
 import { FetchDatesService } from '../fetch-dates/fetch-dates.service';
 import { Medication } from './medication.entity';
@@ -13,7 +14,10 @@ describe('MedicationsService', () => {
     beforeEach(async () => {
         const modelFixture: TestingModule = await Test.createTestingModule({
             imports: [
-                ConfigModule.forRoot({ envFilePath: ['test/.env', '.env'] }),
+                ConfigModule.forRoot({
+                    envFilePath: ['test/.env', '.env'],
+                    validationSchema: testEnvSchema,
+                }),
             ],
             providers: [
                 MedicationsService,

@@ -34,7 +34,7 @@ describe('App (e2e)', () => {
             expect(createResponse.status).toEqual(400);
         });
 
-        it(`should verify guidelines haven't been fetched`, async () => {
+        it(`should get null for last guideline update`, async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/guidelines/last_update',
             );
@@ -42,7 +42,7 @@ describe('App (e2e)', () => {
             expect(new Date(getResponse.body).getTime()).toBeNaN();
         });
 
-        it(`should verify medications haven't been fetched`, async () => {
+        it(`should get null for last medication update`, async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications/last_update',
             );
@@ -76,7 +76,7 @@ describe('App (e2e)', () => {
         }, 30000);
     });
 
-    describe('Retrieve data for all medications & guidelines', () => {
+    describe('get data for all medications & guidelines', () => {
         const verifyLastUpdate = (dateString: string) => {
             const lastUpdate = new Date(dateString).getTime();
             const now = new Date().getTime();
@@ -85,7 +85,7 @@ describe('App (e2e)', () => {
             expect(interval).toBeLessThanOrEqual(5 * 60 * 1000);
         };
 
-        it('should verify guidelines have been fetched in the last 5 minutes', async () => {
+        it('should get last guideline update date within the last 5 minutes', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/guidelines/last_update',
             );
@@ -93,7 +93,7 @@ describe('App (e2e)', () => {
             verifyLastUpdate(getResponse.body);
         });
 
-        it('should verify medications have been fetched in the last 5 minutes', async () => {
+        it('should get last medication update date within the last 5 minutes', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications/last_update',
             );
@@ -101,7 +101,7 @@ describe('App (e2e)', () => {
             verifyLastUpdate(getResponse.body);
         });
 
-        it('should verify that data errors have been saved', async () => {
+        it('should get more than 0 data errors', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/guidelines/errors',
             );
@@ -124,7 +124,7 @@ describe('App (e2e)', () => {
             codeineId = getResponse.body[1].id;
         });
 
-        it('should return 3 medication ids', async () => {
+        it('should get 3 medication ids', async () => {
             const getResponse = await request(app.getHttpServer())
                 .get('/medications')
                 .query({ onlyIds: true });
@@ -140,7 +140,7 @@ describe('App (e2e)', () => {
             expect(getResponse.body.length).toEqual(2);
         });
 
-        it('should return 2 medications matching a search query', async () => {
+        it('should get 2 medications matching a search query', async () => {
             const getResponse = await request(app.getHttpServer())
                 .get('/medications')
                 .query({ search: 'cod' });
@@ -148,7 +148,7 @@ describe('App (e2e)', () => {
             expect(getResponse.body.length).toEqual(2);
         });
 
-        it('should return 1 medications matching a search query with guidelines', async () => {
+        it('should get 1 medication matching a search query with guidelines', async () => {
             const getResponse = await request(app.getHttpServer())
                 .get('/medications')
                 .query({
@@ -171,8 +171,8 @@ describe('App (e2e)', () => {
         });
     });
 
-    describe('Retrieve data for a specific medication', () => {
-        it('should verify details for one medication', async () => {
+    describe('Get data for a specific medication', () => {
+        it('should get correct details for one medication', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications/' + codeineId,
             );
@@ -188,7 +188,7 @@ describe('App (e2e)', () => {
             expect(getResponse.status).toEqual(200);
         });
 
-        it('should verify guidelines for one medication', async () => {
+        it('should get correct guidelines for one medication', async () => {
             const getResponse = await request(app.getHttpServer())
                 .get('/medications/' + codeineId)
                 .query({ getGuidelines: true });
@@ -230,7 +230,7 @@ describe('App (e2e)', () => {
     });
 
     describe('Verify modified data', () => {
-        it('should verify details for one medication', async () => {
+        it('should get correct details for one medication', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/medications/' + codeineId,
             );
@@ -239,7 +239,7 @@ describe('App (e2e)', () => {
             expect(getResponse.body.indication).toEqual('Codeine/indication');
         });
 
-        it('should verify details for one medication', async () => {
+        it('should get correct details for one medication', async () => {
             const getResponse = await request(app.getHttpServer()).get(
                 '/guidelines/' + guidelineId,
             );

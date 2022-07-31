@@ -1,6 +1,6 @@
-import 'package:comprehension_measurement/comprehension_measurement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
+import 'package:scio/scio.dart';
 
 import '../../../common/module.dart';
 import 'cubit.dart';
@@ -26,8 +26,8 @@ class SearchPage extends HookWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      PharmeTheme.primaryColor,
-                      PharmeTheme.secondaryColor,
+                      PharMeTheme.primaryColor,
+                      PharMeTheme.secondaryColor,
                     ],
                   ),
                 ),
@@ -37,7 +37,7 @@ class SearchPage extends HookWidget {
                     SvgPicture.asset('assets/images/logo.svg'),
                     Text(
                       context.l10n.search_page_typeInMedication,
-                      style: PharmeTheme.textTheme.bodyLarge!.copyWith(
+                      style: PharMeTheme.textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
                     ),
@@ -95,7 +95,7 @@ class SearchPage extends HookWidget {
           final med = medications[index];
           return MedicationCard(
             onTap: () {
-              ComprehensionHelper.attach(
+              ComprehensionHelper.instance.attach(
                 context.router.push(MedicationRoute(id: med.id)),
                 context: context,
                 surveyId: 4,
@@ -145,7 +145,7 @@ class MedicationCard extends StatelessWidget {
                   Flexible(
                     child: Text(
                       medicationName,
-                      style: PharmeTheme.textTheme.titleMedium,
+                      style: PharMeTheme.textTheme.titleMedium,
                     ),
                   ),
                   Icon(Icons.arrow_forward_ios),
@@ -155,7 +155,7 @@ class MedicationCard extends StatelessWidget {
               if (medicationDescription.isNotNullOrBlank)
                 Text(
                   medicationDescription!,
-                  style: PharmeTheme.textTheme.titleSmall,
+                  style: PharMeTheme.textTheme.titleSmall,
                 )
             ],
           ),
