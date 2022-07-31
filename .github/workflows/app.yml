@@ -20,13 +20,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
-          channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
       - run: flutter pub get
       - run: flutter pub run build_runner build
-      - run: flutter test integration_test
+      - run: open -a Simulator.app
+      - run: flutter test integration_test -d iPhone
 
   # drive:
   #   runs-on: windows-latest
