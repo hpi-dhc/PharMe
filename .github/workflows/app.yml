@@ -16,18 +16,30 @@ env:
   FLUTTER_VERSION: 3.0.3
 
 jobs:
-  drive:
-    runs-on: windows-latest
+  test:
+    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: subosito/flutter-action@v1
-      with:
-        channel: 'beta'
-    - run: |
-           flutter create --platforms=windows .
-           flutter pub run build_runner build
-           flutter config --enable-windows-desktop
-           flutter test -d windows integration_test/faq_test.dart
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+      - run: flutter pub get
+      - run: flutter pub run build_runner build
+      - run: flutter test integration_test
+
+  # drive:
+  #   runs-on: windows-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - uses: subosito/flutter-action@v1
+  #     with:
+  #       channel: 'beta'
+  #   - run: |
+  #          flutter create --platforms=windows .
+  #          flutter pub run build_runner build
+  #          flutter config --enable-windows-desktop
+  #          flutter test -d windows integration_test/faq_test.dart
   # build:
   #   runs-on: macos-latest
   #   steps:
@@ -64,8 +76,7 @@ jobs:
   #     - run: flutter pub get
   #     - run: flutter pub run build_runner build
   #     - run: flutter analyze
-      
-  
+
   # build-android:
   #   name: Build Android APK
   #   needs: [lint]
