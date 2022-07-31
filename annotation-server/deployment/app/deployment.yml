@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: annotation-server
+  labels:
+    app: annotation-server
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: annotation-server
+  template:
+    metadata:
+      labels:
+        app: annotation-server
+    spec:
+      containers:
+        - image: ghcr.io/hpi-dhc/pharme-annotation-server:main
+          imagePullPolicy: "Always"
+          volumeMounts:
+            - name: sample-data
+              mountPath: /app/annotation-server/data
+          name: annotation-server
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_HOST
+              value: annotation-server-db-service
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: annotation-server-secrets
+                  key: db_user
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: annotation-server-secrets
+                  key: db_pass
+            - name: DB_NAME
+              value: annotation_db
+            - name: DRUGBANK_ZIP
+              value: data/example-database.zip
+            - name: DRUGBANK_XML
+              value: example-database.xml
+            - name: GOOGLESHEET_ID
+              valueFrom:
+                secretKeyRef:
+                  name: annotation-server-secrets
+                  key: googlesheet_id
+            - name: GOOGLESHEET_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: annotation-server-secrets
+                  key: googlesheet_apikey
+            - name: GOOGLESHEET_RANGE_MEDICATIONS
+              value: "HPI List v1!D4:D"
+            - name: GOOGLESHEET_RANGE_DRUGCLASSES
+              value: "HPI List v1!A4:A"
+            - name: GOOGLESHEET_RANGE_INDICATIONS
+              value: "HPI List v1!M4:M"
+            - name: GOOGLESHEET_RANGE_GENES
+              value: "HPI List v1!E4:E"
+            - name: GOOGLESHEET_RANGE_PHENOTYPES
+              value: "HPI List v1!N3:V3"
+            - name: GOOGLESHEET_RANGE_IMPLICATIONS
+              value: "HPI List v1!N4:V"
+            - name: GOOGLESHEET_RANGE_RECOMMENDATIONS
+              value: "HPI List v1!W4:AE"
+      volumes:
+        - name: sample-data
+          hostPath:
+            path: /home/kubernetes/data
+            type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-annotation-server
+  labels:
+    app: annotation-server
+spec:
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+  selector:
+    app: annotation-server
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-annotation-server
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: annotation-server-pharme.dhc-lab.hpi.de
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-annotation-server
+                port:
+                  number: 3000

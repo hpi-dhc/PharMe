@@ -4,7 +4,7 @@ Uri annotationServerUrl([String slug = '']) =>
     Uri.https('annotation-server-pharme.dhc-lab.hpi.de', 'api/v1/$slug');
 Uri labServerUrl([String slug = '']) =>
     Uri.https('lab-server-pharme.dhc-lab.hpi.de', 'api/v1/$slug');
-Uri keycloakUrl([String slug = '']) => Uri.https('keycloak.k8s.kunst.me', slug);
+Uri keycloakUrl([String slug = '']) => Uri.https('keycloak-pharme.dhc-lab.hpi.de', slug);
 
 final cpicMaxCacheTime = Duration(days: 90);
 const maxCachedMedications = 10;
