@@ -2,7 +2,9 @@ import '../../common/module.dart';
 import 'cubit.dart';
 
 class ReportsPage extends StatelessWidget {
-  const ReportsPage({@visibleForTesting this.cubit});
+  const ReportsPage({
+    @visibleForTesting this.cubit,
+  });
 
   final ReportsCubit? cubit;
 

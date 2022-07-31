@@ -5,7 +5,10 @@ import '../models/lab.dart';
 import 'cubit.dart';
 
 class LoginPage extends HookWidget {
-  const LoginPage({Key? key, @visibleForTesting this.cubit}) : super(key: key);
+  const LoginPage({
+    Key? key,
+    @visibleForTesting this.cubit,
+  }) : super(key: key);
 
   final LoginPageCubit? cubit;
 
