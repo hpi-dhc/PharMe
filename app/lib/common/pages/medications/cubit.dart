@@ -30,7 +30,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     final medication = medicationWithGuidelinesFromHTTPResponse(response);
     await CachedMedications.cache(medication);
     _initializeComprehensionContext(medication);
-    emit(MedicationsState.loaded(medication));
+    final filteredMedication = filterUserGuidelines(medication);
+    emit(MedicationsState.loaded(filteredMedication));
   }
 
   void _initializeComprehensionContext(MedicationWithGuidelines medication) {

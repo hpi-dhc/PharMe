@@ -4,20 +4,20 @@ import '../../../common/module.dart';
 import '../models/lab.dart';
 import 'cubit.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends HookWidget {
+  const LoginPage({
+    Key? key,
+    @visibleForTesting this.cubit,
+  }) : super(key: key);
 
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  String dropdownValue = labs.first.name;
+  final LoginPageCubit? cubit;
 
   @override
   Widget build(BuildContext context) {
+    final dropdownValue = useState(labs.first.name);
+
     return BlocProvider(
-      create: (context) => LoginPageCubit(),
+      create: (context) => cubit ?? LoginPageCubit(),
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state) {
           return Scaffold(
@@ -38,7 +38,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: state.when(
-                          initial: () => _buildInitialScreen(context),
+                          initial: () =>
+                              _buildInitialScreen(context, dropdownValue),
                           loadingUserData: CircularProgressIndicator.new,
                           loadedUserData: () => _buildLoadedScreen(context),
                           error: (message) =>
@@ -56,10 +57,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildInitialScreen(BuildContext context) {
+  Widget _buildInitialScreen(
+    BuildContext context,
+    ValueNotifier<String> dropdownValue,
+  ) {
     Future<void> action() async {
       final selectedLab = labs.firstWhere(
-        (el) => el.name == dropdownValue,
+        (el) => el.name == dropdownValue.value,
       );
       await context
           .read<LoginPageCubit>()
@@ -75,11 +79,9 @@ class _LoginPageState extends State<LoginPage> {
             isExpanded: true,
             dropdownOverButton: true,
             hint: Text(context.l10n.auth_choose_lab),
-            value: dropdownValue,
+            value: dropdownValue.value,
             onChanged: (value) {
-              setState(() {
-                dropdownValue = value.toString();
-              });
+              dropdownValue.value = value.toString();
             },
             items: labs
                 .map((lab) => DropdownMenuItem(

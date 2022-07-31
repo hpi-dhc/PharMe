@@ -10,6 +10,7 @@ class FaqPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
+          key: Key('questionsColumn'),
           children: [
             _buildHeaderCard(context),
             SizedBox(height: 8),

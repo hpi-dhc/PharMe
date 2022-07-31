@@ -15,6 +15,10 @@ flag_management:
       paths:
         - annotation-server/src
       carryforward: true
+    - name: app
+      paths:
+        - app/lib
+      carryforward: true
     - name: lab-server
       paths:
         - lab-server/src
