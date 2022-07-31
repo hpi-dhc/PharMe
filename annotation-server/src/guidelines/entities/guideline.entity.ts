@@ -1,3 +1,4 @@
+import { IsEnum, IsString } from 'class-validator';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 import { BaseEntity } from '../../common/entities/base.entity';
@@ -15,9 +16,11 @@ export enum WarningLevel {
 @Entity()
 export class Guideline extends BaseEntity {
     @Column({ nullable: true })
+    @IsString()
     implication: string;
 
     @Column({ nullable: true })
+    @IsString()
     recommendation: string;
 
     @Column({
@@ -25,6 +28,7 @@ export class Guideline extends BaseEntity {
         enum: WarningLevel,
         nullable: true,
     })
+    @IsEnum(WarningLevel)
     warningLevel: WarningLevel;
 
     @ManyToOne(() => Medication, (medication) => medication.guidelines, {

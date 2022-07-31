@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -11,6 +12,7 @@ async function bootstrap() {
     const configService = app.get(ConfigService);
 
     app.setGlobalPrefix('/api/v1');
+    app.useGlobalPipes(new ValidationPipe());
     app.useGlobalInterceptors(new TypeormErrorInterceptor());
 
     const config = new DocumentBuilder()

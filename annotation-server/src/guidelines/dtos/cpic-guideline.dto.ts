@@ -1,6 +1,8 @@
 import { IsNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
 
-export class CpicGuidelineDto {
+import { InstantiableDto } from '../../common/dtos/instantiable.dto';
+
+export class CpicGuidelineDto extends InstantiableDto<CpicGuidelineDto> {
     @IsNumber()
     @IsNotEmpty()
     id: number;

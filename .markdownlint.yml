@@ -4,6 +4,9 @@ default: true
 # Allow inline html by disabling rule MD033
 MD033: false
 
+# Allow bare urls
+MD034: false
+
 # Allow other elements but h1 in first line
 MD041: false
 
