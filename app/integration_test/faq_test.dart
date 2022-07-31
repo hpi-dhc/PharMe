@@ -33,7 +33,7 @@ void main() {
       expect(
         find
             .descendant(
-              of: find.byKey(ValueKey('questions_column')),
+              of: find.byKey(ValueKey('questionsColumn')),
               matching: find.byType(ExpansionTile),
             )
             .evaluate()
