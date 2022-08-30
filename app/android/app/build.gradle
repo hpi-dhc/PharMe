@@ -25,6 +25,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+def secretsPropertiesFile = new File(rootProject.projectDir, "secrets.properties")
+def secrets = new Properties()
+secretsPropertiesFile.withReader("UTF-8") { reader -> secrets.load(reader) }
+
 android {
     compileSdkVersion 31
 
@@ -44,13 +48,27 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "de.hpi.pharme"
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        manifestPlaceholders += [
+                platform      : "s4h",
+                environment   : "staging",
+                clientId      : secrets.getProperty("d4l.clientId"),
+                clientSecret  : secrets.getProperty("d4l.clientSecret"),
+                redirectScheme: "eu.smart4health.7cf2befc-a010-4290-996c-a94426b5ce65",
+                debug         : "false"
+        ]
     }
 
     buildTypes {
+
+        debug {
+            matchingFallbacks = ["release", "debug"]
+        }
+
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
@@ -65,4 +83,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "care.data4life.hc-sdk-kmp:sdk-android:1.15.1"
+    implementation "care.data4life.hc-fhir-sdk-java:fhir-java:1.6.2"
 }
