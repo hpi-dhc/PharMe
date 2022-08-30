@@ -2,11 +2,17 @@ import 'dart:io';
 import 'dart:math';
 
 import '../../common/module.dart';
+import '../chdp_state.dart';
 import '../utils.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -26,12 +32,12 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
       if (Platform.isAndroid)
-        ListTile(
-          title: Text(context.l10n.settings_page_login_smart4health),
-          trailing: Icon(Icons.chevron_right),
-          onTap: () => {
-            debugPrint("logging in")
-          },
+        ChdpListTile(
+          // title: Text(context.l10n.settings_page_login_smart4health),
+          // trailing: Icon(Icons.chevron_right),
+          // onTap: () => {
+          //   debugPrint("logging in")
+          // },
         )
       else
         null,

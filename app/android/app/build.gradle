@@ -86,4 +86,5 @@ dependencies {
 
     implementation "care.data4life.hc-sdk-kmp:sdk-android:1.15.1"
     implementation "care.data4life.hc-fhir-sdk-java:fhir-java:1.6.2"
+    implementation "com.jakewharton.threetenabp:threetenabp:1.4.0"
 }
