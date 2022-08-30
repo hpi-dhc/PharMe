@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import '../../common/module.dart';
 import '../utils.dart';
 
@@ -6,7 +9,8 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
+    return ListView(
+        children: [
       ListTile(
         title: Text(
           context.l10n.settings_page_account_settings,
@@ -21,6 +25,16 @@ class SettingsPage extends StatelessWidget {
           builder: (_) => _deleteDataDialog(context),
         ),
       ),
+      if (Platform.isAndroid)
+        ListTile(
+          title: Text(context.l10n.settings_page_login_smart4health),
+          trailing: Icon(Icons.chevron_right),
+          onTap: () => {
+            debugPrint("logging in")
+          },
+        )
+      else
+        null,
       Divider(),
       ListTile(
         title: Text(
@@ -48,7 +62,7 @@ class SettingsPage extends StatelessWidget {
         trailing: Icon(Icons.chevron_right),
         onTap: () => context.router.push(TermsAndConditionsRoute()),
       ),
-    ]);
+    ].whereType<Widget>().toList());
   }
 
   Widget _deleteDataDialog(BuildContext context) {

@@ -72,6 +72,8 @@ class ReportsCubit extends Cubit<ReportsState> {
 class ReportsState with _$ReportsState {
   const factory ReportsState.initial() = _InitialState;
   const factory ReportsState.loading() = _LoadingState;
+  // add a member here that indicates showing the s4h button, load in the cubit by asking android
+  // button then talks to android again
   const factory ReportsState.loaded(
     List<MedicationWithGuidelines> medications,
   ) = _LoadedState;
