@@ -6,6 +6,7 @@
    <application
         android:label="PharMe"
         android:icon="@mipmap/launcher_icon"
+       android:theme="@style/NormalTheme"
         android:usesCleartextTraffic="false"
        android:name="${applicationName}"
    >
