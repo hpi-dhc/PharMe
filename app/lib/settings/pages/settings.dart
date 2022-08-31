@@ -32,13 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       if (Platform.isAndroid)
-        ChdpListTile(
-          // title: Text(context.l10n.settings_page_login_smart4health),
-          // trailing: Icon(Icons.chevron_right),
-          // onTap: () => {
-          //   debugPrint("logging in")
-          // },
-        )
+        ChdpListTile()
       else
         null,
       Divider(),

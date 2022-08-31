@@ -8,6 +8,15 @@ import io.flutter.plugin.common.MethodChannel
 import android.os.Bundle
 import care.data4life.sdk.listener.ResultListener
 import care.data4life.sdk.lang.D4LException
+import care.data4life.fhir.r4.model.Attachment
+import care.data4life.fhir.r4.model.CodeSystemDocumentReferenceStatus
+import care.data4life.fhir.r4.model.DocumentReference
+import android.util.Base64
+import java.io.File
+import java.security.MessageDigest
+import care.data4life.sdk.call.Fhir4Record
+import java.util.Calendar
+import care.data4life.fhir.r4.util.FhirDateTimeConverter
 
 class MainActivity : FlutterActivity() {
 
@@ -71,6 +80,31 @@ class MainActivity : FlutterActivity() {
                         )
 
                     }
+                    "upload" -> {
+                        val path: String = call.argument("path")!!
+                        val title: String = call.argument("title")!!
+                        val docRef = makeDocumentReference(path, title)
+
+                        Data4LifeClient.getInstance().fhir4.create(
+                            resource = docRef,
+                            annotations = listOf("pharme"),
+                            callback = object :
+                                care.data4life.sdk.call.Callback<Fhir4Record<DocumentReference>> {
+                                override fun onSuccess(_result: Fhir4Record<DocumentReference>) {
+                                    result.success(true)
+                                }
+
+                                override fun onError(exception: D4LException) {
+                                    result.success(false)
+                                }
+                            }
+                        )
+                    }
+                    "toast" -> {
+                        val msg: String = call.argument("msg")!!
+
+                        android.widget.Toast.makeText(this, msg, android.widget.Toast.LENGTH_SHORT).show()
+                    }
                     else -> result.notImplemented()
                 }
             }
@@ -88,5 +122,30 @@ class MainActivity : FlutterActivity() {
                 android.util.Log.i("PHARME", "login successful")
             }
         }
+    }
+}
+
+fun makeDocumentReference(path: String, title: String): DocumentReference {
+    val bytes = File(path).readBytes()
+    return DocumentReference(
+        CodeSystemDocumentReferenceStatus.CURRENT,
+        listOf(
+            DocumentReference.DocumentReferenceContent(
+                Attachment().apply {
+                    contentType = "application/pdf"
+                    data = Base64.encodeToString(
+                        bytes,
+                        Base64.NO_WRAP,
+                    )
+                    size = bytes.size
+                    hash = with(MessageDigest.getInstance("SHA-1")) {
+                        Base64.encodeToString(digest(bytes), Base64.NO_WRAP)
+                    }
+                },
+            ),
+        ),
+    ).apply {
+        description = title
+        date = FhirDateTimeConverter.toFhirInstant(Calendar.getInstance().time)
     }
 }
