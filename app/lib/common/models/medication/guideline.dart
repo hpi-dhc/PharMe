@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-import '../../module.dart';
-
 part 'guideline.g.dart';
 
 @HiveType(typeId: 9)
@@ -70,7 +68,7 @@ class Guideline {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       implication,
       recommendation,
       warningLevel,
@@ -115,7 +113,7 @@ class Phenotype {
   }
 
   @override
-  int get hashCode => hashValues(geneResult.name, geneSymbol.name);
+  int get hashCode => Object.hash(geneResult.name, geneSymbol.name);
 }
 
 @HiveType(typeId: 11)

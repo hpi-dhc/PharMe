@@ -58,7 +58,7 @@ class _ChdpState extends State<ChdpListTile> with WidgetsBindingObserver {
     try {
       isLoggedIn = await platform.invokeMethod('isLoggedIn');
     } on PlatformException catch (e) {
-      debugPrint('platform exception in getIsLoggedIn');
+      debugPrint('platform exception in getIsLoggedIn: ${e.toString()}');
     }
 
     setState(() {
@@ -70,7 +70,7 @@ class _ChdpState extends State<ChdpListTile> with WidgetsBindingObserver {
     try {
       await platform.invokeMethod('login');
     } on PlatformException catch (e) {
-      debugPrint('platform exception in login');
+      debugPrint('platform exception in login: ${e.toString()}');
     }
   }
 
@@ -78,7 +78,7 @@ class _ChdpState extends State<ChdpListTile> with WidgetsBindingObserver {
     try {
       await platform.invokeMethod('logout');
     } on PlatformException catch (e) {
-      debugPrint('platform exception in logout');
+      debugPrint('platform exception in logout: ${e.toString()}');
     }
   }
 }

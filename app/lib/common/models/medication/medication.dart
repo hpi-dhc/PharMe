@@ -77,7 +77,7 @@ class MedicationWithGuidelines {
       guidelines.contentEquals(other.guidelines);
 
   @override
-  int get hashCode => hashValues(name, guidelines);
+  int get hashCode => Object.hash(name, guidelines);
 }
 
 List<Medication> medicationsFromHTTPResponse(Response resp) {

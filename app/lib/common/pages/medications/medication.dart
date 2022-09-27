@@ -2,18 +2,12 @@
 
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../l10n.dart';
-import '../../models/module.dart';
-import '../../theme.dart';
+import '../../../common/module.dart';
 import '../../utilities/pdf_utils.dart';
-import '../../widgets/module.dart';
 import 'cubit.dart';
 import 'widgets/module.dart';
-import '../../../common/module.dart';
 
 class MedicationPage extends StatelessWidget {
   const MedicationPage(
