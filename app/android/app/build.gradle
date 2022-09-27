@@ -25,9 +25,20 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-def secretsPropertiesFile = new File(rootProject.projectDir, "secrets.properties")
 def secrets = new Properties()
-secretsPropertiesFile.withReader("UTF-8") { reader -> secrets.load(reader) }
+def secretsPropertiesFile = new File(rootProject.projectDir, "secrets.properties")
+if (secretsPropertiesFile.isFile()) {
+    secretsPropertiesFile.withReader("UTF-8") { reader -> secrets.load(reader) }
+} else {
+    assert System.getenv('GPR_USER')
+    assert System.getenv('GPR_TOKEN')
+    assert System.getenv('D4L_CLIENT_ID')
+    assert System.getenv('D4L_CLIENT_SECRET')
+    secrets.setProperty("gpr.user", System.getenv('GPR_USER'))
+    secrets.setProperty("gpr.token", System.getenv('GPR_TOKEN'))
+    secrets.setProperty("d4l.clientId", System.getenv('D4L_CLIENT_ID'))
+    secrets.setProperty("d4l.clientSecret", System.getenv('D4L_CLIENT_SECRET'))
+}
 
 android {
     compileSdkVersion 31
