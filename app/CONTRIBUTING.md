@@ -18,9 +18,9 @@ pressing the green triangle at the top (or using the shortcut <kbd>F5</kbd>).
 
 ### `secrets.properties`
 
-The CHDP libraries require a few secrets to build. In 
-[`android/secrets.properties`](android/secrets.properties) (gitignored) add the following keys
-and appropriate values:
+The CHDP libraries require a few secrets to build. In
+[`android/secrets.properties`](android/secrets.properties) (gitignored) add the
+following keys and appropriate values:
 
 ```properties
 gpr.user=
@@ -30,10 +30,12 @@ d4l.clientId=
 d4l.clientSecret=
 ```
 
-The first two are a Github username and Personal Access Token with the `read:packages` scope. This
-is used by gradle to download the SDK from D4L's private repositories.
+The first two are a Github username and Personal Access Token with the
+`read:packages` scope. This is used by gradle to download the SDK from D4L's
+private repositories.
 
-The next two are secrets given by D4L.  Ask Thomas at Thomas.Harris (at) hpi.de for them.
+The next two are secrets given by D4L.  Ask Thomas at Thomas.Harris (at) hpi.de
+for them.
 
 ## Architecture
 
