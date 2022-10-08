@@ -34,7 +34,7 @@ pw.Widget buildPdfPage(
   pw.Context context,
   MedicationWithGuidelines medication,
 ) {
-  final relevantGuidelines = filterUserGuidelines(medication).guidelines;
+  final relevantGuidelines = medication.filterUserGuidelines().guidelines;
   return pw.Wrap(
     children: [
       _PdfSegment(

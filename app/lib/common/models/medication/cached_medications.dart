@@ -1,7 +1,6 @@
 import 'package:hive/hive.dart';
 
 import '../../constants.dart';
-import '../../utilities/medication_utils.dart';
 import '../module.dart';
 
 part 'cached_medications.g.dart';
@@ -74,7 +73,7 @@ Future<void> _cacheMedication(MedicationWithGuidelines medication) async {
   // index is negative if no match is found
   final medicationAlreadyExists = index >= 0;
   if (medicationAlreadyExists) {
-    final filteredMedication = filterUserGuidelines(medication);
+    final filteredMedication = medication.filterUserGuidelines();
     cachedMedList[index] = filteredMedication;
     return CachedMedications.save();
   }

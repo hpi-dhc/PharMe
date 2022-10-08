@@ -51,7 +51,7 @@ class ReportsCubit extends Cubit<ReportsState> {
   List<MedicationWithGuidelines> _filterMedications(
     List<MedicationWithGuidelines> medications,
   ) {
-    final filteredMedications = medications.map(filterUserGuidelines).toList();
+    final filteredMedications = medications.filterUserGuidelines();
     return filteredMedications
         .where(
           (element) =>

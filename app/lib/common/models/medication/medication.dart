@@ -104,3 +104,35 @@ List<int> idsFromHTTPResponse(Response resp) {
   final idsList = jsonDecode(resp.body) as List<dynamic>;
   return idsList.map((e) => e['id'] as int).toList();
 }
+
+/// Removes the guidelines that are not relevant to the user
+extension MedicationWithUserGuidelines on MedicationWithGuidelines {
+  MedicationWithGuidelines filterUserGuidelines() {
+    final matchingGuidelines = guidelines.where((guideline) {
+      final phenotype = guideline.phenotype;
+      final foundEntry =
+          UserData.instance.lookups![guideline.phenotype.geneSymbol.name];
+      return foundEntry.isNotNullOrBlank &&
+          foundEntry == phenotype.geneResult.name;
+    });
+
+    return MedicationWithGuidelines(
+      id: id,
+      name: name,
+      description: description,
+      pharmgkbId: pharmgkbId,
+      rxcui: rxcui,
+      synonyms: synonyms,
+      drugclass: drugclass,
+      indication: indication,
+      guidelines: matchingGuidelines.toList(),
+    );
+  }
+}
+
+/// Removes the guidelines that are not relevant to the user
+extension MedicationsWithUserGuidelines on List<MedicationWithGuidelines> {
+  List<MedicationWithGuidelines> filterUserGuidelines() {
+    return map((medication) => medication.filterUserGuidelines()).toList();
+  }
+}
