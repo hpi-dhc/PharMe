@@ -1,8 +1,11 @@
 import 'package:path_provider/path_provider.dart';
 
+import '../common/module.dart';
+
 Future<void> deleteAllAppData() async {
   await _deleteCacheDir();
   await _deleteAppDir();
+  await UserData.erase();
 }
 
 Future<void> _deleteCacheDir() async {

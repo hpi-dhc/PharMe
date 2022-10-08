@@ -18,12 +18,17 @@ class UserData {
   // private constructor
   UserData._();
 
-  static final UserData _instance = UserData._();
+  static UserData _instance = UserData._();
   static UserData get instance => _instance;
 
   /// Writes the current instance to local storage
   static Future<void> save() async =>
       Hive.box<UserData>(_boxName).put('data', _instance);
+
+  static Future<void> erase() async {
+    _instance = UserData._();
+    await UserData.save();
+  }
 
   @HiveField(0)
   List<Diplotype>? diplotypes;
