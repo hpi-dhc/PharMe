@@ -52,17 +52,18 @@ class MedicationPage extends StatelessWidget {
       children: [
         _buildHeader(medication),
         SizedBox(height: 20),
-        Disclaimer(),
-        SizedBox(height: 20),
         SubHeader(
           context.l10n.medications_page_header_guideline,
           tooltip: context.l10n.medications_page_tooltip_guideline,
         ),
         SizedBox(height: 12),
-        if (medication.guidelines.isNotEmpty)
-          ClinicalAnnotationCard(medication)
-        else
-          Text(context.l10n.medications_page_no_guidelines_for_phenotype),
+        ...(medication.guidelines.isNotEmpty)
+            ? [
+                Disclaimer(),
+                SizedBox(height: 12),
+                ClinicalAnnotationCard(medication)
+              ]
+            : [Text(context.l10n.medications_page_no_guidelines_for_phenotype)]
       ],
     );
   }
@@ -99,6 +100,11 @@ class MedicationPage extends StatelessWidget {
               ),
             ),
           ),
+        if (medication.indication != null)
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+            child: Text(medication.indication!),
+          )
       ],
     );
   }
