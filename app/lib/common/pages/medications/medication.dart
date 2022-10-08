@@ -99,6 +99,11 @@ class MedicationPage extends StatelessWidget {
               ),
             ),
           ),
+        if (medication.indication != null)
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+            child: Text(medication.indication!),
+          )
       ],
     );
   }
