@@ -57,12 +57,13 @@ class MedicationPage extends StatelessWidget {
           tooltip: context.l10n.medications_page_tooltip_guideline,
         ),
         SizedBox(height: 12),
-        Disclaimer(),
-        SizedBox(height: 12),
-        if (medication.guidelines.isNotEmpty)
-          ClinicalAnnotationCard(medication)
-        else
-          Text(context.l10n.medications_page_no_guidelines_for_phenotype),
+        ...(medication.guidelines.isNotEmpty)
+            ? [
+                Disclaimer(),
+                SizedBox(height: 12),
+                ClinicalAnnotationCard(medication)
+              ]
+            : [Text(context.l10n.medications_page_no_guidelines_for_phenotype)]
       ],
     );
   }
