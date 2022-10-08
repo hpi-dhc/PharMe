@@ -136,3 +136,23 @@ extension MedicationsWithUserGuidelines on List<MedicationWithGuidelines> {
     return map((medication) => medication.filterUserGuidelines()).toList();
   }
 }
+
+/// Filters for medications with non-OK warning level
+extension CriticalMedications on List<MedicationWithGuidelines> {
+  List<MedicationWithGuidelines> filterCritical() {
+    final withRelevantGuidelines =
+        map((medication) => medication.filterUserGuidelines());
+
+    final withCriticalGuidelines = withRelevantGuidelines.where((element) {
+      if (element.guidelines.isEmpty) return false;
+      final warningLevels = element.guidelines.map((e) => e.warningLevel);
+      return !warningLevels
+          .every((warningLevel) => warningLevel == WarningLevel.ok.name);
+    }).map((medication) {
+      medication.isCritical = true;
+      return medication;
+    });
+
+    return withCriticalGuidelines.toList();
+  }
+}

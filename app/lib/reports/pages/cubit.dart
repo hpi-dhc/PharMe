@@ -22,9 +22,9 @@ class ReportsCubit extends Cubit<ReportsState> {
     final isOnline = await hasConnectionTo(requestUri.host);
     if (!isOnline) {
       emit(
-        ReportsState.loaded(
-          _filterMedications(CachedMedications.instance.medications ?? []),
-        ),
+        ReportsState.loaded(CachedMedications.instance.medications != null
+            ? CachedMedications.instance.medications!.filterCritical()
+            : []),
       );
       return;
     }
@@ -35,36 +35,10 @@ class ReportsCubit extends Cubit<ReportsState> {
       return;
     }
     final medications = medicationsWithGuidelinesFromHTTPResponse(response);
-    final filteredMedications = _filterMedications(medications);
+    final filteredMedications = medications.filterCritical();
     await CachedMedications.cacheAll(filteredMedications);
     await CachedMedications.save();
     emit(ReportsState.loaded(filteredMedications));
-  }
-
-  bool _containsOnlyOkGuidelines(List<Guideline> guidelines) {
-    final warningLevels = guidelines.map((e) => e.warningLevel);
-    return warningLevels.every((warningLevel) {
-      return warningLevel == WarningLevel.ok.name;
-    });
-  }
-
-  List<MedicationWithGuidelines> _filterMedications(
-    List<MedicationWithGuidelines> medications,
-  ) {
-    final filteredMedications = medications.filterUserGuidelines();
-    return filteredMedications
-        .where(
-          (element) =>
-              element.guidelines.isNotEmpty &&
-              !_containsOnlyOkGuidelines(element.guidelines),
-        )
-        .map(_setCritical)
-        .toList();
-  }
-
-  MedicationWithGuidelines _setCritical(MedicationWithGuidelines med) {
-    med.isCritical = true;
-    return med;
   }
 }
 
