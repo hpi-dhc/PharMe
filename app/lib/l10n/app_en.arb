@@ -68,6 +68,7 @@
   "settings_page_continue": "Continue",
   "settings_page_delete_data": "Delete App Data",
   "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data.",
+  "settings_page_login_smart4health": "Log in to Smart4Health",
   "settings_page_more": "More",
   "settings_page_onboarding": "Onboarding",
   "settings_page_about_us": "About us",

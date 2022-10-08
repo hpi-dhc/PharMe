@@ -16,6 +16,27 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 You should now be able to run the app by opening the debug panel on the left and
 pressing the green triangle at the top (or using the shortcut <kbd>F5</kbd>).
 
+### `secrets.properties`
+
+The CHDP libraries require a few secrets to build. In
+[`android/secrets.properties`](android/secrets.properties) (gitignored) add the
+following keys and appropriate values:
+
+```properties
+gpr.user=
+gpr.token=
+
+d4l.clientId=
+d4l.clientSecret=
+```
+
+The first two are a Github username and Personal Access Token with the
+`read:packages` scope. This is used by gradle to download the SDK from D4L's
+private repositories.
+
+The next two are secrets given by D4L.  Ask Thomas at Thomas.Harris (at) hpi.de
+for them.
+
 ## Architecture
 
 The app consists of multiple so-called modules. Our main modules correspond to

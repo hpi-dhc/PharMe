@@ -48,6 +48,11 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: flutter build apk
+        env:
+          GPR_USER: ${{ secrets.GPR_USER }}
+          GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
+          D4L_CLIENT_ID: ${{ secrets.D4L_CLIENT_ID }}
+          D4L_CLIENT_SECRET: ${{ secrets.D4L_CLIENT_SECRET }}
 
   build-ios:
     name: Build iOS Package

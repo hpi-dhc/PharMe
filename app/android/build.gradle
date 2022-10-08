@@ -11,10 +11,50 @@ buildscript {
     }
 }
 
+def secrets = new Properties()
+def secretsPropertiesFile = new File(rootProject.projectDir, "secrets.properties")
+if (secretsPropertiesFile.isFile()) {
+    secretsPropertiesFile.withReader("UTF-8") { reader -> secrets.load(reader) }
+} else {
+    assert System.getenv('GPR_USER')
+    assert System.getenv('GPR_TOKEN')
+    assert System.getenv('D4L_CLIENT_ID')
+    assert System.getenv('D4L_CLIENT_SECRET')
+    secrets.setProperty("gpr.user", System.getenv('GPR_USER'))
+    secrets.setProperty("gpr.token", System.getenv('GPR_TOKEN'))
+    secrets.setProperty("d4l.clientId", System.getenv('D4L_CLIENT_ID'))
+    secrets.setProperty("d4l.clientSecret", System.getenv('D4L_CLIENT_SECRET'))
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
+
+        // tried to loop over a list of urls like in kotlin but no dice
+        maven {
+            url "https://maven.pkg.github.com/d4l-data4life/hc-util-sdk-kmp"
+            credentials {
+                username secrets.getProperty("gpr.user")
+                password secrets.getProperty("gpr.token")
+            }
+        }
+
+        maven {
+            url "https://maven.pkg.github.com/d4l-data4life/hc-fhir-sdk-java"
+            credentials {
+                username secrets.getProperty("gpr.user")
+                password secrets.getProperty("gpr.token")
+            }
+        }
+
+        maven {
+            url "https://maven.pkg.github.com/d4l-data4life/hc-fhir-helper-sdk-kmp"
+            credentials {
+                username secrets.getProperty("gpr.user")
+                password secrets.getProperty("gpr.token")
+            }
+        }
     }
 }
 

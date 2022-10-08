@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -28,6 +29,14 @@ Future<String> createPdf(MedicationWithGuidelines medication) async {
 Future<void> sharePdf(MedicationWithGuidelines medication) async {
   final path = await createPdf(medication);
   await FlutterShare.shareFile(title: medication.name, filePath: path);
+}
+
+Future<bool> sharePdfSmart4Health(MedicationWithGuidelines medication) async {
+  final path = await createPdf(medication);
+  return await MethodChannel('chdp').invokeMethod('upload', <String, String>{
+    'path': path,
+    'title': 'PharMe Report: ${medication.name}'
+  });
 }
 
 pw.Widget buildPdfPage(
@@ -140,6 +149,7 @@ class _PdfSegment extends pw.StatelessWidget {
   _PdfSegment({required this.child});
 
   final pw.Widget child;
+
   @override
   pw.Widget build(Context context) {
     return pw.SizedBox(
@@ -154,6 +164,7 @@ class _PdfText extends pw.StatelessWidget {
 
   final String title;
   final String? text;
+
   @override
   pw.Widget build(Context context) {
     return pw.RichText(

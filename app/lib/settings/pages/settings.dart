@@ -1,12 +1,21 @@
+import 'dart:io';
+
 import '../../common/module.dart';
+import '../chdp_state.dart';
 import '../utils.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  @override
   Widget build(BuildContext context) {
-    return ListView(children: [
+    return ListView(
+        children: [
       ListTile(
         title: Text(
           context.l10n.settings_page_account_settings,
@@ -21,6 +30,10 @@ class SettingsPage extends StatelessWidget {
           builder: (_) => _deleteDataDialog(context),
         ),
       ),
+      if (Platform.isAndroid)
+        ChdpListTile()
+      else
+        null,
       Divider(),
       ListTile(
         title: Text(
@@ -48,7 +61,7 @@ class SettingsPage extends StatelessWidget {
         trailing: Icon(Icons.chevron_right),
         onTap: () => context.router.push(TermsAndConditionsRoute()),
       ),
-    ]);
+    ].whereType<Widget>().toList());
   }
 
   Widget _deleteDataDialog(BuildContext context) {
