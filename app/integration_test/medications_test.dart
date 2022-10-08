@@ -23,6 +23,7 @@ void main() {
     id: 1,
     name: 'Codeine',
     drugclass: 'Pain killer',
+    indication: 'Codeine is used to treat pain and coughing.',
     guidelines: [
       Guideline(
         id: 1,
@@ -39,6 +40,11 @@ void main() {
         ),
       )
     ],
+  );
+  final testMedicationWithoutGuidelines = MedicationWithGuidelines(
+    id: 2,
+    name: 'Acetaminophen',
+    guidelines: []
   );
 
   group('integration test for the medications page', () {
@@ -118,6 +124,7 @@ void main() {
 
       expect(find.text(testMedication.name), findsOneWidget);
       expect(find.text(testMedication.drugclass as String), findsOneWidget);
+      expect(find.text(testMedication.indication as String), findsOneWidget);
       expect(
         find.text(
           testMedication.guidelines.first.cpicClassification!.toUpperCase(),
@@ -163,6 +170,33 @@ void main() {
         find.byTooltip(context.l10n.medications_page_tooltip_further_info),
         findsOneWidget,
       );
+    });
+
+    testWidgets('test loaded page without guidelines', (tester) async {
+      when(() => mockMedicationsCubit.state)
+          .thenReturn(MedicationsState.loaded(testMedicationWithoutGuidelines));
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) {
+                return MedicationPage(2, cubit: mockMedicationsCubit);
+              },
+            ),
+          ),
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [Locale('en', '')],
+        ),
+      );
+
+      expect(find.text(testMedicationWithoutGuidelines.name), findsOneWidget);
+      expect(find.byType(Disclaimer), findsNothing);
     });
   });
 }
