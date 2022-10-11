@@ -53,19 +53,19 @@ class MainPage extends StatelessWidget {
       BuildContext context) {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.search),
+        icon: Icon(Icons.search_rounded),
         label: context.l10n.nav_search,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.assessment),
+        icon: Icon(Icons.assessment_rounded),
         label: context.l10n.nav_reports,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.lightbulb),
+        icon: Icon(Icons.lightbulb_rounded),
         label: context.l10n.nav_faq,
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.more_horiz),
+        icon: Icon(Icons.more_horiz_rounded),
         label: context.l10n.nav_more,
       ),
     ];

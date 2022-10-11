@@ -172,7 +172,7 @@ class OnboardingPage extends HookWidget {
           ),
           SizedBox(width: 8),
           Icon(
-            Icons.arrow_forward,
+            Icons.arrow_forward_rounded,
             color: Colors.white,
             size: 32,
           ),

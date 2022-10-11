@@ -163,7 +163,7 @@ class ReportCard extends StatelessWidget {
                       Icon(
                         warningLevel == WarningLevel.danger
                             ? Icons.dangerous_rounded
-                            : Icons.warning_amber,
+                            : Icons.warning_rounded,
                       ),
                       SizedBox(width: 12),
                       Text(
@@ -181,7 +181,7 @@ class ReportCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios),
+              Icon(Icons.arrow_forward_ios_rounded),
             ],
           ),
         ),

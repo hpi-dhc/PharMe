@@ -109,7 +109,7 @@ class LoginPage extends HookWidget {
       actionText: context.l10n.general_continue,
       children: [
         Icon(
-          Icons.check_circle_outline,
+          Icons.check_circle_outline_rounded,
           color: Colors.green,
           size: 96,
         ),
