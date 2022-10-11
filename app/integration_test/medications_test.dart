@@ -46,6 +46,7 @@ void main() {
     name: 'Acetaminophen',
     guidelines: []
   );
+  UserData.instance.starredMediationIds = [2];
 
   group('integration test for the medications page', () {
     testWidgets('test loading', (tester) async {
@@ -99,7 +100,7 @@ void main() {
 
     testWidgets('test loaded page', (tester) async {
       when(() => mockMedicationsCubit.state)
-          .thenReturn(MedicationsState.loaded(testMedication));
+          .thenReturn(MedicationsState.loaded(testMedication, isStarred: false));
 
       late BuildContext context;
 
@@ -174,7 +175,7 @@ void main() {
 
     testWidgets('test loaded page without guidelines', (tester) async {
       when(() => mockMedicationsCubit.state)
-          .thenReturn(MedicationsState.loaded(testMedicationWithoutGuidelines));
+          .thenReturn(MedicationsState.loaded(testMedicationWithoutGuidelines, isStarred: true));
 
       await tester.pumpWidget(
         MaterialApp(

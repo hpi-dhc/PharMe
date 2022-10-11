@@ -19,7 +19,12 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     emit(MedicationsState.loading());
     final isOnline = await hasConnectionTo(annotationServerUrl().host);
     if (!isOnline) {
-      _findCachedMedication(_id);
+      final medication = _findCachedMedication(_id);
+      if (medication == null) {
+        emit(MedicationsState.error());
+      } else {
+        emit(MedicationsState.loaded(medication, isStarred: medication.isStarred()));
+      }
       return;
     }
     final response = await sendRequest();
@@ -31,7 +36,18 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     await CachedMedications.cache(medication);
     _initializeComprehensionContext(medication);
     final filteredMedication = medication.filterUserGuidelines();
-    emit(MedicationsState.loaded(filteredMedication));
+    emit(MedicationsState.loaded(filteredMedication, isStarred: medication.isStarred()));
+  }
+
+  Future<void> toggleStarred(MedicationWithGuidelines medication) async {
+    final stars = UserData.instance.starredMediationIds ?? [];
+    if (medication.isStarred()) {
+      UserData.instance.starredMediationIds = stars.filter((element) => element != _id).toList();
+    } else {
+      UserData.instance.starredMediationIds = stars + [_id];
+    }
+    await UserData.save();
+    emit(MedicationsState.loaded(medication, isStarred: medication.isStarred()));
   }
 
   void _initializeComprehensionContext(MedicationWithGuidelines medication) {
@@ -69,15 +85,11 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     }
   }
 
-  void _findCachedMedication(int id) {
-    CachedMedications.instance.medications ??= [];
-    try {
-      final foundMedication = CachedMedications.instance.medications!
-          .firstWhere((element) => element.id == id);
-      emit(MedicationsState.loaded(foundMedication));
-    } catch (e) {
-      emit(MedicationsState.error());
-    }
+  MedicationWithGuidelines? _findCachedMedication(int id) {
+    final cachedMedications = CachedMedications.instance.medications ?? [];
+    final foundMedication = cachedMedications
+        .firstWhereOrNull((element) => element.id == id);
+    return foundMedication;
   }
 
   Future<Response?> sendRequest() async {
@@ -111,7 +123,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 class MedicationsState with _$MedicationsState {
   const factory MedicationsState.initial() = _InitialState;
   const factory MedicationsState.loading() = _LoadingState;
-  const factory MedicationsState.loaded(MedicationWithGuidelines medication) =
+  const factory MedicationsState.loaded(MedicationWithGuidelines medication, {required bool isStarred}) =
       _LoadedState;
   const factory MedicationsState.error() = _ErrorState;
 }
