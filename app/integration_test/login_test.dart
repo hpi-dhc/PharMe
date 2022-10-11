@@ -81,7 +81,7 @@ void main() {
 
       final BuildContext context = tester.element(find.byType(Scaffold).first);
 
-      expect(find.byIcon(Icons.check_circle_outline), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle_outline_rounded), findsOneWidget);
       expect(find.text(context.l10n.auth_success), findsOneWidget);
     });
 

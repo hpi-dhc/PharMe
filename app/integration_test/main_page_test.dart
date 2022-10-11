@@ -33,17 +33,17 @@ void main() {
 
       expect(find.text(context.l10n.general_appName), findsOneWidget);
 
-      expect(find.byIcon(Icons.search), findsOneWidget);
-      expect(find.byIcon(Icons.assessment), findsOneWidget);
-      expect(find.byIcon(Icons.lightbulb), findsOneWidget);
-      expect(find.byIcon(Icons.more_horiz), findsOneWidget);
+      expect(find.byIcon(Icons.search_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.assessment_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.lightbulb_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.more_horiz_rounded), findsOneWidget);
 
       // ignore: omit_local_variable_types
       BottomNavigationBar bar = tester.widget(find.byType(BottomNavigationBar));
 
       expect(bar.currentIndex, 0);
 
-      await tester.tap(find.byIcon(Icons.lightbulb));
+      await tester.tap(find.byIcon(Icons.lightbulb_rounded));
       await tester.pumpAndSettle();
 
       bar = tester.widget(find.byType(BottomNavigationBar));

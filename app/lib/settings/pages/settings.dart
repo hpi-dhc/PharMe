@@ -15,7 +15,7 @@ class SettingsPage extends StatelessWidget {
       ),
       ListTile(
         title: Text(context.l10n.settings_page_delete_data),
-        trailing: Icon(Icons.chevron_right),
+        trailing: Icon(Icons.chevron_right_rounded),
         onTap: () => showDialog(
           context: context,
           builder: (_) => _deleteDataDialog(context),
@@ -30,22 +30,22 @@ class SettingsPage extends StatelessWidget {
       ),
       ListTile(
         title: Text(context.l10n.settings_page_onboarding),
-        trailing: Icon(Icons.chevron_right),
+        trailing: Icon(Icons.chevron_right_rounded),
         onTap: () => context.router.push(OnboardingRouter()),
       ),
       ListTile(
         title: Text(context.l10n.settings_page_about_us),
-        trailing: Icon(Icons.chevron_right),
+        trailing: Icon(Icons.chevron_right_rounded),
         onTap: () => context.router.push(AboutUsRoute()),
       ),
       ListTile(
         title: Text(context.l10n.settings_page_privacy_policy),
-        trailing: Icon(Icons.chevron_right),
+        trailing: Icon(Icons.chevron_right_rounded),
         onTap: () => context.router.push(PrivacyPolicyRoute()),
       ),
       ListTile(
         title: Text(context.l10n.settings_page_terms_and_conditions),
-        trailing: Icon(Icons.chevron_right),
+        trailing: Icon(Icons.chevron_right_rounded),
         onTap: () => context.router.push(TermsAndConditionsRoute()),
       ),
     ]);

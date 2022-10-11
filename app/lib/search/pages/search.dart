@@ -49,7 +49,7 @@ class SearchPage extends HookWidget {
                       ),
                     ),
                     Icon(
-                      Icons.arrow_downward,
+                      Icons.arrow_downward_rounded,
                       size: 30,
                       color: Colors.white,
                     ),
@@ -155,7 +155,7 @@ class MedicationCard extends StatelessWidget {
                       style: PharMeTheme.textTheme.titleMedium,
                     ),
                   ),
-                  Icon(Icons.arrow_forward_ios),
+                  Icon(Icons.arrow_forward_ios_rounded),
                 ],
               ),
               SizedBox(height: 6),

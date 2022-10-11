@@ -79,7 +79,7 @@ class MedicationPage extends StatelessWidget {
             IconButton(
               onPressed: () => sharePdf(medication),
               icon: Icon(
-                Icons.ios_share,
+                Icons.ios_share_rounded,
                 size: 32,
                 color: PharMeTheme.primaryColor,
               ),
