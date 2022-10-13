@@ -20,10 +20,8 @@ class SearchCubit extends Cubit<SearchState> {
   void loadMedications(String value, {bool? filterStarred}) {
     final filter = filterStarred ?? isFiltered();
     searchValue = value;
-    if (value.isEmpty) {
-      emit(
-        SearchState.loaded([], filterStarred: filter),
-      );
+    if (value.isEmpty && !filter) {
+      emit(SearchState.loaded([], filterStarred: filter));
       if (searchTimeout != null) searchTimeout!.cancel();
       return;
     }
