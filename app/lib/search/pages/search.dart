@@ -88,11 +88,11 @@ class SearchPage extends HookWidget {
                         ),
                       ]),
                       state.when(
-                        initial: Container.new,
-                        error: () => Text(context.l10n.err_generic),
+                        initial: (_) => Container(),
+                        error: (_) => Text(context.l10n.err_generic),
                         loaded: (medications, _) =>
                             _buildMedicationsList(medications),
-                        loading: () => Center(
+                        loading: (_) => Center(
                           child: CircularProgressIndicator(),
                         ),
                       ),

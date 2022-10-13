@@ -20,7 +20,8 @@ void main() {
   ];
   group('integration test for the search page', () {
     testWidgets('test search page in loading state', (tester) async {
-      when(() => mockSearchCubit.state).thenReturn(SearchState.loading());
+      when(() => mockSearchCubit.state)
+          .thenReturn(SearchState.loading(filterStarred: false));
       await tester.pumpWidget(BlocProvider.value(
         value: mockSearchCubit,
         child: MaterialApp(

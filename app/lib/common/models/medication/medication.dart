@@ -105,7 +105,13 @@ List<int> idsFromHTTPResponse(Response resp) {
   return idsList.map((e) => e['id'] as int).toList();
 }
 
-extension MedicationIsStarred on MedicationWithGuidelines {
+extension MedicationIsStarred on Medication {
+  bool isStarred() {
+    return UserData.instance.starredMediationIds?.contains(id) ?? false;
+  }
+}
+
+extension MedicationWithGuidelinesIsStarred on MedicationWithGuidelines {
   bool isStarred() {
     return UserData.instance.starredMediationIds?.contains(id) ?? false;
   }

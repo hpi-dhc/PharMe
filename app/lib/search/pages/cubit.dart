@@ -9,65 +9,73 @@ import '../../common/module.dart';
 part 'cubit.freezed.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(SearchState.initial()) {
-    loadMedications('');
+  SearchCubit() : super(SearchState.initial(filterStarred: true)) {
+    loadMedications(searchValue);
   }
 
   Timer? searchTimeout;
+  String searchValue = '';
   final duration = Duration(milliseconds: 500);
 
-  void loadMedications(String value) {
+  void loadMedications(String value, {bool? filterStarred}) {
+    final filter = filterStarred ?? isFiltered();
+    searchValue = value;
     if (value.isEmpty) {
       emit(
-        SearchState.loaded([], filterStarred: isFiltered()),
+        SearchState.loaded([], filterStarred: filter),
       );
-      if (searchTimeout != null) {
-        searchTimeout!.cancel();
-      }
+      if (searchTimeout != null) searchTimeout!.cancel();
       return;
     }
-    if (searchTimeout != null) {
-      searchTimeout!.cancel();
-    }
+    if (searchTimeout != null) searchTimeout!.cancel();
     searchTimeout = Timer(
       duration,
       () async {
-        final requestUri = annotationServerUrl('medications').replace(
-          queryParameters: {'search': value},
-        );
-        emit(SearchState.loading());
-
-        final isOnline = await hasConnectionTo(requestUri.host);
-        if (!isOnline) {
-          _findInCachedMedications(value);
+        emit(SearchState.loading(filterStarred: filter));
+        var medications = await _findMedications(value);
+        if (medications == null) {
+          emit(SearchState.error(filterStarred: filter));
           return;
         }
-
-        final response = await http.get(requestUri);
-        if (response.statusCode != 200) {
-          emit(SearchState.error());
-          return;
+        if (filter) {
+          medications = medications
+              .filter((medication) => medication.isStarred())
+              .toList();
         }
-        final medications = medicationsFromHTTPResponse(response);
-
-        emit(SearchState.loaded(medications, filterStarred: isFiltered()));
+        emit(SearchState.loaded(medications, filterStarred: filter));
       },
     );
   }
 
   void toggleFilter() {
-    final medications =
-        state.whenOrNull(loaded: (medications, _) => medications);
-    if (medications == null) return;
-    emit(SearchState.loaded(medications, filterStarred: !isFiltered()));
+    loadMedications(searchValue, filterStarred: !isFiltered());
   }
 
   bool isFiltered() {
-    return state.whenOrNull(loaded: (_, filterStarred) => filterStarred) ??
-        true;
+    return state.when(
+        initial: (filterStarred) => filterStarred,
+        loading: (filterStarred) => filterStarred,
+        loaded: (_, filterStarred) => filterStarred,
+        error: (filterStarred) => filterStarred);
   }
 
-  void _findInCachedMedications(String value) {
+  Future<List<Medication>?> _findMedications(String value) async {
+    final requestUri = annotationServerUrl('medications').replace(
+      queryParameters: {'search': value},
+    );
+    final isOnline = await hasConnectionTo(requestUri.host);
+    if (!isOnline) {
+      return _findInCachedMedications(value);
+    }
+
+    final response = await http.get(requestUri);
+    if (response.statusCode != 200) {
+      return null;
+    }
+    return medicationsFromHTTPResponse(response);
+  }
+
+  List<Medication> _findInCachedMedications(String value) {
     CachedMedications.instance.medications ??= [];
     final foundMeds = CachedMedications.instance.medications!
         .where(
@@ -89,7 +97,7 @@ class SearchCubit extends Cubit<SearchState> {
       },
     ).toList();
 
-    emit(SearchState.loaded(foundMeds, filterStarred: isFiltered()));
+    return foundMeds;
   }
 
   bool _medDescriptionMatches(String value, MedicationWithGuidelines med) {
@@ -122,9 +130,11 @@ extension _Ilike on String {
 
 @freezed
 class SearchState with _$SearchState {
-  const factory SearchState.initial() = _InitialState;
-  const factory SearchState.loading() = _LoadingState;
+  const factory SearchState.initial({required bool filterStarred}) =
+      _InitialState;
+  const factory SearchState.loading({required bool filterStarred}) =
+      _LoadingState;
   const factory SearchState.loaded(List<Medication> medications,
       {required bool filterStarred}) = _LoadedState;
-  const factory SearchState.error() = _ErrorState;
+  const factory SearchState.error({required bool filterStarred}) = _ErrorState;
 }
