@@ -39,6 +39,8 @@ class SearchCubit extends Cubit<SearchState> {
           medications = medications
               .filter((medication) => medication.isStarred())
               .toList();
+          await CachedMedications.cacheAll(medications);
+          await CachedMedications.save();
         }
         emit(SearchState.loaded(medications, filterStarred: filter));
       },
