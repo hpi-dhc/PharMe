@@ -86,12 +86,7 @@ class MedicationPage extends StatelessWidget {
                   onPressed: () => context
                       .read<MedicationsCubit>()
                       .toggleStarred(medication),
-                  icon: Icon(
-                      isStarred
-                          ? Icons.star_rounded
-                          : Icons.star_border_rounded,
-                      size: 32,
-                      color: PharMeTheme.primaryColor),
+                  icon: PharMeTheme.starIcon(isStarred: isStarred, size: 32),
                 ),
                 IconButton(
                   onPressed: () => sharePdf(medication),
