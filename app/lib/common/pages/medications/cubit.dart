@@ -63,15 +63,16 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     final questionContext = ComprehensionHelper.instance.questionContext;
 
     switch (medication.guidelines[0].warningLevel) {
-      case 'danger':
+      case WarningLevel.danger:
         questionContext['danger_level'] = [12];
         break;
-      case 'warning':
+      case WarningLevel.warning:
         questionContext['danger_level'] = [11];
         break;
-      case 'ok':
+      case WarningLevel.ok:
         questionContext['danger_level'] = [10];
         break;
+      default: break;
     }
     switch (medication.guidelines[0].phenotype.geneResult.name) {
       case 'Ultrarapid Metabolizer':

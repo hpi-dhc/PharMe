@@ -27,7 +27,7 @@ void main() {
     guidelines: [
       Guideline(
         id: 1,
-        warningLevel: 'danger',
+        warningLevel: WarningLevel.danger,
         recommendation: 'Dont take too much from this medication',
         implication:
             'Because of your gene, you cannot digest this medication so well',
@@ -41,11 +41,8 @@ void main() {
       )
     ],
   );
-  final testMedicationWithoutGuidelines = MedicationWithGuidelines(
-    id: 2,
-    name: 'Acetaminophen',
-    guidelines: []
-  );
+  final testMedicationWithoutGuidelines =
+      MedicationWithGuidelines(id: 2, name: 'Acetaminophen', guidelines: []);
   UserData.instance.starredMediationIds = [2];
 
   group('integration test for the medications page', () {
@@ -99,8 +96,8 @@ void main() {
     });
 
     testWidgets('test loaded page', (tester) async {
-      when(() => mockMedicationsCubit.state)
-          .thenReturn(MedicationsState.loaded(testMedication, isStarred: false));
+      when(() => mockMedicationsCubit.state).thenReturn(
+          MedicationsState.loaded(testMedication, isStarred: false));
 
       late BuildContext context;
 
@@ -157,7 +154,7 @@ void main() {
       );
       expect(
         card.color,
-        recommendationColorMap[testMedication.guidelines.first.warningLevel],
+        testMedication.guidelines.first.warningLevel?.color,
       );
 
       context = tester.element(find.byType(Tooltip).first);
@@ -174,8 +171,9 @@ void main() {
     });
 
     testWidgets('test loaded page without guidelines', (tester) async {
-      when(() => mockMedicationsCubit.state)
-          .thenReturn(MedicationsState.loaded(testMedicationWithoutGuidelines, isStarred: true));
+      when(() => mockMedicationsCubit.state).thenReturn(MedicationsState.loaded(
+          testMedicationWithoutGuidelines,
+          isStarred: true));
 
       await tester.pumpWidget(
         MaterialApp(

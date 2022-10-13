@@ -60,7 +60,7 @@ class ReportsPage extends StatelessWidget {
 
   WarningLevel _getWarningLevel(List<Guideline> guidelines) {
     for (final guideline in guidelines) {
-      if (guideline.warningLevel == WarningLevel.danger.name) {
+      if (guideline.warningLevel == WarningLevel.danger) {
         return WarningLevel.danger;
       }
     }
@@ -149,7 +149,7 @@ class ReportCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 5,
-        color: recommendationColorMap[warningLevel.name],
+        color: warningLevel.color,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

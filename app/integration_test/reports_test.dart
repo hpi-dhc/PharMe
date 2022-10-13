@@ -24,7 +24,7 @@ void main() {
       guidelines: [
         Guideline(
           id: 1,
-          warningLevel: 'danger',
+          warningLevel: WarningLevel.danger,
           recommendation: 'Dont take too much from this medication',
           implication:
               'Because of your gene, you cannot digest this medication so well',
@@ -45,7 +45,7 @@ void main() {
       guidelines: [
         Guideline(
           id: 1,
-          warningLevel: 'warning',
+          warningLevel: WarningLevel.warning,
           recommendation: 'Dont take too much from this medication',
           implication:
               'Because of your gene, you cannot digest this medication so well',
@@ -66,7 +66,7 @@ void main() {
       guidelines: [
         Guideline(
           id: 1,
-          warningLevel: 'warning',
+          warningLevel: WarningLevel.warning,
           recommendation: 'Dont take too much from this medication',
           implication:
               'Because of your gene, you cannot digest this medication so well',
@@ -153,8 +153,7 @@ void main() {
       for (var i = 0; i < result.length; i++) {
         expect(
           (result[i] as Card).color,
-          recommendationColorMap[
-              testMedications[i].guidelines.first.warningLevel],
+          testMedications[i].guidelines.first.warningLevel?.color,
         );
       }
     });

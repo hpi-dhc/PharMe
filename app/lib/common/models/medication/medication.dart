@@ -168,7 +168,7 @@ extension CriticalMedications on List<MedicationWithGuidelines> {
       if (element.guidelines.isEmpty) return false;
       final warningLevels = element.guidelines.map((e) => e.warningLevel);
       return !warningLevels
-          .every((warningLevel) => warningLevel == WarningLevel.ok.name);
+          .every((warningLevel) => warningLevel == WarningLevel.ok);
     }).map((medication) {
       medication.isCritical = true;
       return medication;

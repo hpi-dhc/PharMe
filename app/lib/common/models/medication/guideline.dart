@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
+import '../../../common/module.dart';
 part 'guideline.g.dart';
 
 @HiveType(typeId: 9)
@@ -30,7 +31,7 @@ class Guideline {
   String? recommendation;
 
   @HiveField(3)
-  String? warningLevel;
+  WarningLevel? warningLevel;
 
   @HiveField(4)
   String? cpicRecommendation;
