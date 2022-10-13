@@ -32,3 +32,12 @@ extension WarningLevelIcon on WarningLevel {
 
   IconData get icon => WarningLevelIcon._iconMap[name]!;
 }
+
+extension WarningLevelSeverity on WarningLevel {
+  static final _severityMap = {
+    WarningLevel.danger.name: 2,
+    WarningLevel.warning.name: 1,
+    WarningLevel.ok.name: 0
+  };
+  int get severity => WarningLevelSeverity._severityMap[name]!;
+}

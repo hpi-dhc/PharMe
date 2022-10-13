@@ -161,19 +161,20 @@ extension MedicationsWithUserGuidelines on List<MedicationWithGuidelines> {
 /// Filters for medications with non-OK warning level
 extension CriticalMedications on List<MedicationWithGuidelines> {
   List<MedicationWithGuidelines> filterCritical() {
-    final withRelevantGuidelines =
-        map((medication) => medication.filterUserGuidelines());
+    return filter((medication) {
+      final warningLevel = medication.highestWarningLevel();
+      return warningLevel != null && warningLevel != WarningLevel.ok;
+    }).toList();
+  }
+}
 
-    final withCriticalGuidelines = withRelevantGuidelines.where((element) {
-      if (element.guidelines.isEmpty) return false;
-      final warningLevels = element.guidelines.map((e) => e.warningLevel);
-      return !warningLevels
-          .every((warningLevel) => warningLevel == WarningLevel.ok);
-    }).map((medication) {
-      medication.isCritical = true;
-      return medication;
-    });
-
-    return withCriticalGuidelines.toList();
+/// Gets most severe warning level
+extension MedicationWarningLevel on MedicationWithGuidelines {
+  WarningLevel? highestWarningLevel() {
+    final filtered = filterUserGuidelines();
+    return filtered.guidelines
+        .map((guideline) => guideline.warningLevel)
+        .filterNotNull()
+        .maxBy((level) => level.severity);
   }
 }
