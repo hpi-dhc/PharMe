@@ -14,9 +14,27 @@ void main() {
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
   final loadedMedications = [
-    Medication(1, 'Codeine', 'test description', 'test class', 'test'),
-    Medication(2, 'Clopidogrel', 'test description', 'test class', 'test'),
-    Medication(3, 'Ibuprofen', 'test description', 'test class', 'test'),
+    MedicationWithGuidelines(
+        id: 1,
+        name: 'Codeine',
+        description: 'test description',
+        drugclass: 'test class',
+        indication: 'test',
+        guidelines: []),
+    MedicationWithGuidelines(
+        id: 2,
+        name: 'Clopidogrel',
+        description: 'test description',
+        drugclass: 'test class',
+        indication: 'test',
+        guidelines: []),
+    MedicationWithGuidelines(
+        id: 3,
+        name: 'Ibuprofen',
+        description: 'test description',
+        drugclass: 'test class',
+        indication: 'test',
+        guidelines: []),
   ];
   group('integration test for the search page', () {
     testWidgets('test search page in loading state', (tester) async {

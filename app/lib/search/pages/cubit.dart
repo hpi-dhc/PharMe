@@ -57,9 +57,9 @@ class SearchCubit extends Cubit<SearchState> {
         error: (filterStarred) => filterStarred);
   }
 
-  Future<List<Medication>?> _findMedications(String value) async {
+  Future<List<MedicationWithGuidelines>?> _findMedications(String value) async {
     final requestUri = annotationServerUrl('medications').replace(
-      queryParameters: {'search': value},
+      queryParameters: {'getGuidelines': 'true', 'search': value},
     );
     final isOnline = await hasConnectionTo(requestUri.host);
     if (!isOnline) {
@@ -70,25 +70,14 @@ class SearchCubit extends Cubit<SearchState> {
     if (response.statusCode != 200) {
       return null;
     }
-    return medicationsFromHTTPResponse(response);
+    return medicationsWithGuidelinesFromHTTPResponse(response);
   }
 
-  List<Medication> _findInCachedMedications(String value) {
+  List<MedicationWithGuidelines> _findInCachedMedications(String value) {
     CachedMedications.instance.medications ??= [];
     final foundMeds = CachedMedications.instance.medications!
         .where((med) => med.matches(query: value))
-        .map(
-      (e) {
-        return Medication(
-          e.id,
-          e.name,
-          e.description!,
-          e.drugclass,
-          e.indication,
-        );
-      },
-    ).toList();
-
+        .toList();
     return foundMeds;
   }
 }
@@ -99,7 +88,7 @@ class SearchState with _$SearchState {
       _InitialState;
   const factory SearchState.loading({required bool filterStarred}) =
       _LoadingState;
-  const factory SearchState.loaded(List<Medication> medications,
+  const factory SearchState.loaded(List<MedicationWithGuidelines> medications,
       {required bool filterStarred}) = _LoadedState;
   const factory SearchState.error({required bool filterStarred}) = _ErrorState;
 }

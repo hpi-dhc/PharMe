@@ -107,7 +107,7 @@ class SearchPage extends HookWidget {
     );
   }
 
-  Flexible _buildMedicationsList(List<Medication> medications) {
+  Flexible _buildMedicationsList(List<MedicationWithGuidelines> medications) {
     return Flexible(
       child: ListView.separated(
         padding: EdgeInsets.symmetric(vertical: 14),
