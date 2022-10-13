@@ -16,8 +16,8 @@ enum WarningLevel {
 extension WarningLevelColor on WarningLevel {
   static final _colorMap = {
     WarningLevel.danger.name: Color(0xFFFFAFAF),
-    WarningLevel.ok.name: Color(0xFF00FF00),
     WarningLevel.warning.name: Color(0xFFFFEBCC),
+    WarningLevel.ok.name: Color(0xFFCFE8CF),
   };
 
   Color get color => WarningLevelColor._colorMap[name]!;
@@ -26,8 +26,8 @@ extension WarningLevelColor on WarningLevel {
 extension WarningLevelIcon on WarningLevel {
   static final _iconMap = {
     WarningLevel.danger.name: Icons.dangerous_rounded,
-    WarningLevel.ok.name: Icons.check_circle_rounded,
     WarningLevel.warning.name: Icons.warning_rounded,
+    WarningLevel.ok.name: Icons.check_circle_rounded,
   };
 
   IconData get icon => WarningLevelIcon._iconMap[name]!;
