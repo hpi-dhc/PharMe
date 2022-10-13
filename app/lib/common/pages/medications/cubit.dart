@@ -23,7 +23,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
       if (medication == null) {
         emit(MedicationsState.error());
       } else {
-        emit(MedicationsState.loaded(medication, isStarred: medication.isStarred()));
+        emit(MedicationsState.loaded(medication,
+            isStarred: medication.isStarred()));
       }
       return;
     }
@@ -36,18 +37,24 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     await CachedMedications.cache(medication);
     _initializeComprehensionContext(medication);
     final filteredMedication = medication.filterUserGuidelines();
-    emit(MedicationsState.loaded(filteredMedication, isStarred: medication.isStarred()));
+    emit(MedicationsState.loaded(filteredMedication,
+        isStarred: medication.isStarred()));
   }
 
-  Future<void> toggleStarred(MedicationWithGuidelines medication) async {
+  Future<void> toggleStarred() async {
+    final medication = state.whenOrNull(loaded: (medication, _) => medication);
+    if (medication == null) return;
+
     final stars = UserData.instance.starredMediationIds ?? [];
     if (medication.isStarred()) {
-      UserData.instance.starredMediationIds = stars.filter((element) => element != _id).toList();
+      UserData.instance.starredMediationIds =
+          stars.filter((element) => element != _id).toList();
     } else {
       UserData.instance.starredMediationIds = stars + [_id];
     }
     await UserData.save();
-    emit(MedicationsState.loaded(medication, isStarred: medication.isStarred()));
+    emit(
+        MedicationsState.loaded(medication, isStarred: medication.isStarred()));
   }
 
   void _initializeComprehensionContext(MedicationWithGuidelines medication) {
@@ -87,8 +94,8 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 
   MedicationWithGuidelines? _findCachedMedication(int id) {
     final cachedMedications = CachedMedications.instance.medications ?? [];
-    final foundMedication = cachedMedications
-        .firstWhereOrNull((element) => element.id == id);
+    final foundMedication =
+        cachedMedications.firstWhereOrNull((element) => element.id == id);
     return foundMedication;
   }
 
@@ -123,7 +130,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 class MedicationsState with _$MedicationsState {
   const factory MedicationsState.initial() = _InitialState;
   const factory MedicationsState.loading() = _LoadingState;
-  const factory MedicationsState.loaded(MedicationWithGuidelines medication, {required bool isStarred}) =
-      _LoadedState;
+  const factory MedicationsState.loaded(MedicationWithGuidelines medication,
+      {required bool isStarred}) = _LoadedState;
   const factory MedicationsState.error() = _ErrorState;
 }

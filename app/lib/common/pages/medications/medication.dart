@@ -85,7 +85,7 @@ class MedicationPage extends StatelessWidget {
                 IconButton(
                   onPressed: () => context
                       .read<MedicationsCubit>()
-                      .toggleStarred(medication),
+                      .toggleStarred(),
                   icon: PharMeTheme.starIcon(isStarred: isStarred, size: 32),
                 ),
                 IconButton(
