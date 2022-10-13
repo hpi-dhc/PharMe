@@ -83,8 +83,11 @@ class SearchPage extends HookWidget {
                           onPressed: () =>
                               context.read<SearchCubit>().toggleFilter(),
                           icon: PharMeTheme.starIcon(
-                              isStarred:
-                                  context.read<SearchCubit>().isFiltered()),
+                              isStarred: state.when(
+                                  initial: (filter) => filter,
+                                  loading: (filter) => filter,
+                                  loaded: (_, filter) => filter,
+                                  error: (filter) => filter)),
                         ),
                       ]),
                       state.when(
