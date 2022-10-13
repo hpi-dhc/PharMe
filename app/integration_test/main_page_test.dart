@@ -10,6 +10,7 @@ void main() {
 
   group('test the main page', () {
     testWidgets('test that tabs change pages', (tester) async {
+      await initServices();
       final appRouter = AppRouter();
       await tester.pumpWidget(
         MaterialApp.router(
@@ -34,7 +35,6 @@ void main() {
       expect(find.text(context.l10n.general_appName), findsOneWidget);
 
       expect(find.byIcon(Icons.search_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.assessment_rounded), findsOneWidget);
       expect(find.byIcon(Icons.lightbulb_rounded), findsOneWidget);
       expect(find.byIcon(Icons.more_horiz_rounded), findsOneWidget);
 
@@ -47,7 +47,7 @@ void main() {
       await tester.pumpAndSettle();
 
       bar = tester.widget(find.byType(BottomNavigationBar));
-      expect(bar.currentIndex, 2);
+      expect(bar.currentIndex, 1);
     });
   });
 }
