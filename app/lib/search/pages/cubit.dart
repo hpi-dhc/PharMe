@@ -76,13 +76,7 @@ class SearchCubit extends Cubit<SearchState> {
   List<Medication> _findInCachedMedications(String value) {
     CachedMedications.instance.medications ??= [];
     final foundMeds = CachedMedications.instance.medications!
-        .where(
-      (med) =>
-          med.name.ilike(value) ||
-          _medDescriptionMatches(value, med) ||
-          _medSynonymsMatch(value, med) ||
-          _medDrugclassMatches(value, med),
-    )
+        .where((med) => med.matches(query: value))
         .map(
       (e) {
         return Medication(
@@ -96,33 +90,6 @@ class SearchCubit extends Cubit<SearchState> {
     ).toList();
 
     return foundMeds;
-  }
-
-  bool _medDescriptionMatches(String value, MedicationWithGuidelines med) {
-    if (med.description.isNotNullOrBlank) {
-      return med.description!.ilike(value);
-    }
-    return false;
-  }
-
-  bool _medSynonymsMatch(String value, MedicationWithGuidelines med) {
-    if (med.synonyms != null) {
-      return med.synonyms!.any((element) => element.ilike(value));
-    }
-    return false;
-  }
-
-  bool _medDrugclassMatches(String value, MedicationWithGuidelines med) {
-    if (med.drugclass.isNotNullOrBlank) {
-      return med.drugclass!.ilike(value);
-    }
-    return false;
-  }
-}
-
-extension _Ilike on String {
-  bool ilike(String matcher) {
-    return toLowerCase().contains(matcher.toLowerCase());
   }
 }
 

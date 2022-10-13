@@ -117,6 +117,15 @@ extension MedicationWithGuidelinesIsStarred on MedicationWithGuidelines {
   }
 }
 
+extension MedicationWithGuidelinesMatchesQuery on MedicationWithGuidelines {
+  bool matches({required String query}) {
+    return name.ilike(query) ||
+        (description.isNotNullOrBlank && description!.ilike(query)) ||
+        (drugclass.isNotNullOrBlank && drugclass!.ilike(query)) ||
+        (synonyms != null && synonyms!.any((synonym) => synonym.ilike(query)));
+  }
+}
+
 /// Removes the guidelines that are not relevant to the user
 extension MedicationWithUserGuidelines on MedicationWithGuidelines {
   MedicationWithGuidelines filterUserGuidelines() {
