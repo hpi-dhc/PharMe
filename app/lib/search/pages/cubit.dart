@@ -9,7 +9,9 @@ import '../../common/module.dart';
 part 'cubit.freezed.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(SearchState.initial());
+  SearchCubit() : super(SearchState.initial()) {
+    loadMedications('');
+  }
 
   Timer? searchTimeout;
   final duration = Duration(milliseconds: 500);
@@ -17,7 +19,7 @@ class SearchCubit extends Cubit<SearchState> {
   void loadMedications(String value) {
     if (value.isEmpty) {
       emit(
-        SearchState.loaded([]),
+        SearchState.loaded([], filterStarred: isFiltered()),
       );
       if (searchTimeout != null) {
         searchTimeout!.cancel();
@@ -48,9 +50,21 @@ class SearchCubit extends Cubit<SearchState> {
         }
         final medications = medicationsFromHTTPResponse(response);
 
-        emit(SearchState.loaded(medications));
+        emit(SearchState.loaded(medications, filterStarred: isFiltered()));
       },
     );
+  }
+
+  void toggleFilter() {
+    final medications =
+        state.whenOrNull(loaded: (medications, _) => medications);
+    if (medications == null) return;
+    emit(SearchState.loaded(medications, filterStarred: !isFiltered()));
+  }
+
+  bool isFiltered() {
+    return state.whenOrNull(loaded: (_, filterStarred) => filterStarred) ??
+        true;
   }
 
   void _findInCachedMedications(String value) {
@@ -75,7 +89,7 @@ class SearchCubit extends Cubit<SearchState> {
       },
     ).toList();
 
-    emit(SearchState.loaded(foundMeds));
+    emit(SearchState.loaded(foundMeds, filterStarred: isFiltered()));
   }
 
   bool _medDescriptionMatches(String value, MedicationWithGuidelines med) {
@@ -110,6 +124,7 @@ extension _Ilike on String {
 class SearchState with _$SearchState {
   const factory SearchState.initial() = _InitialState;
   const factory SearchState.loading() = _LoadingState;
-  const factory SearchState.loaded(List<Medication> medications) = _LoadedState;
+  const factory SearchState.loaded(List<Medication> medications,
+      {required bool filterStarred}) = _LoadedState;
   const factory SearchState.error() = _ErrorState;
 }

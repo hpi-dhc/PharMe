@@ -40,8 +40,8 @@ void main() {
     });
 
     testWidgets('test search page in loaded state', (tester) async {
-      when(() => mockSearchCubit.state)
-          .thenReturn(SearchState.loaded(loadedMedications));
+      when(() => mockSearchCubit.state).thenReturn(
+          SearchState.loaded(loadedMedications, filterStarred: false));
 
       await tester.pumpWidget(BlocProvider.value(
         value: mockSearchCubit,

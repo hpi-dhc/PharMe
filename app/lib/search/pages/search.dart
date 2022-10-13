@@ -64,20 +64,34 @@ class SearchPage extends HookWidget {
                 child: RoundedCard(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: CupertinoSearchTextField(
-                          onTap: _panelController.expand,
-                          controller: searchController,
-                          onChanged: (value) {
-                            context.read<SearchCubit>().loadMedications(value);
-                          },
+                      Row(children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: CupertinoSearchTextField(
+                              onTap: _panelController.expand,
+                              controller: searchController,
+                              onChanged: (value) {
+                                context
+                                    .read<SearchCubit>()
+                                    .loadMedications(value);
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                        IconButton(
+                          onPressed: () =>
+                              context.read<SearchCubit>().toggleFilter(),
+                          icon: PharMeTheme.starIcon(
+                              isStarred:
+                                  context.read<SearchCubit>().isFiltered()),
+                        ),
+                      ]),
                       state.when(
                         initial: Container.new,
                         error: () => Text(context.l10n.err_generic),
-                        loaded: _buildMedicationsList,
+                        loaded: (medications, _) =>
+                            _buildMedicationsList(medications),
                         loading: () => Center(
                           child: CircularProgressIndicator(),
                         ),
