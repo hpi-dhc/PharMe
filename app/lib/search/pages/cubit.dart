@@ -98,8 +98,6 @@ class SearchCubit extends Cubit<SearchState> {
     }
     return false;
   }
-
-  void setState(SearchState state) => emit(state);
 }
 
 extension _Ilike on String {
