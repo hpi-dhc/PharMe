@@ -34,7 +34,6 @@ class MedicationWithGuidelines {
     this.drugclass,
     this.indication,
     required this.guidelines,
-    this.isCritical = false,
   });
   factory MedicationWithGuidelines.fromJson(dynamic json) =>
       _$MedicationWithGuidelinesFromJson(json);
@@ -65,10 +64,6 @@ class MedicationWithGuidelines {
 
   @HiveField(8)
   List<Guideline> guidelines;
-
-  // Indicates whether this medication is used in the reports
-  @HiveField(9)
-  bool isCritical;
 
   @override
   bool operator ==(other) =>

@@ -15,7 +15,6 @@ class MainPage extends StatelessWidget {
       routes: const [
         // The order maps to BottomNavigationBar
         SearchRouter(),
-        ReportsRouter(),
         FaqRouter(),
         SettingsRouter(),
       ],
@@ -55,10 +54,6 @@ class MainPage extends StatelessWidget {
       BottomNavigationBarItem(
         icon: Icon(Icons.search_rounded),
         label: context.l10n.nav_search,
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.assessment_rounded),
-        label: context.l10n.nav_reports,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.lightbulb_rounded),

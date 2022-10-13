@@ -40,7 +40,6 @@
 
   "nav_search": "Search",
   "nav_faq": "FAQ",
-  "nav_reports": "Reports",
   "nav_more": "More",
   
   "onboarding_get_started": "Get started",
@@ -58,9 +57,6 @@
   "onboarding_5_header": "We care about your data protection",
   "onboarding_5_text": "After signing in to the lab, your genetic data is sent straight onto your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
     
-  "reports_page_disclaimer_text": "All drugs listed here should be used with high caution. Consult your physician with these results before taking one of them. Click on a specific medication for details.",
-  "reports_page_disclaimer_title": "Pharmacogenomics report",
-  
   "search_page_typeInMedication": "Type in a medication",
   
   "settings_page_account_settings": "Account Settings",
