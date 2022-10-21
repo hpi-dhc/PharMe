@@ -31,13 +31,9 @@ class MedicationPage extends StatelessWidget {
           return state.when(
             initial: () => pageScaffold(title: name, body: []),
             error: () => pageScaffold(
-                title: name, body: [Text(context.l10n.err_generic)]),
-            loading: () => pageScaffold(title: name, body: [
-              Center(
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: CircularProgressIndicator()))
-            ]),
+                title: name, body: [errorIndicator(context.l10n.err_generic)]),
+            loading: () =>
+                pageScaffold(title: name, body: [loadingIndicator()]),
             loaded: (medication, isStarred) =>
                 pageScaffold(title: medication.name, actions: [
               IconButton(

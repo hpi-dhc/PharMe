@@ -41,14 +41,10 @@ class SearchPage extends HookWidget {
               ]),
               body: state.when(
                 initial: (_) => [Container()],
-                error: (_) => [Text(context.l10n.err_generic)],
+                error: (_) => [errorIndicator(context.l10n.err_generic)],
                 loaded: (medications, _) =>
                     _buildMedicationsList(context, medications),
-                loading: (_) => [
-                  Center(
-                    child: CircularProgressIndicator(),
-                  )
-                ],
+                loading: (_) => [loadingIndicator()],
               ));
         }));
   }
