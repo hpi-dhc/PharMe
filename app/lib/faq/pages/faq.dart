@@ -6,8 +6,8 @@ class FaqPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
+    return pageScaffold(title: context.l10n.tab_faq, body: [
+      Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
           key: Key('questionsColumn'),
@@ -18,7 +18,7 @@ class FaqPage extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ]);
   }
 
   Widget _buildHeaderCard(BuildContext context) {
