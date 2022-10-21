@@ -19,43 +19,27 @@ class SearchPage extends HookWidget {
     return BlocProvider(
         create: (context) => cubit ?? SearchCubit(),
         child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
-          return Scaffold(
-            body: CustomScrollView(slivers: [
-              SliverAppBar(
-                backgroundColor: PharMeTheme.surfaceColor,
-                elevation: 0,
-                floating: true,
-                pinned: true,
-                snap: false,
-                centerTitle: false,
-                title: Text(context.l10n.nav_medications,
-                    style: PharMeTheme.textTheme.headlineLarge),
-                bottom: AppBar(
-                  backgroundColor: PharMeTheme.backgroundColor,
-                  elevation: 0,
-                  title: Row(children: [
-                    Expanded(
-                        child: CupertinoSearchTextField(
-                      controller: searchController,
-                      onChanged: (value) {
-                        context.read<SearchCubit>().loadMedications(value);
-                      },
-                    )),
-                    IconButton(
-                      onPressed: () =>
-                          context.read<SearchCubit>().toggleFilter(),
-                      icon: PharMeTheme.starIcon(
-                          isStarred: state.when(
-                              initial: (filter) => filter,
-                              loading: (filter) => filter,
-                              loaded: (_, filter) => filter,
-                              error: (filter) => filter)),
-                    ),
-                  ]),
+          return pageScaffold(
+              title: context.l10n.nav_medications,
+              barBottom: Row(children: [
+                Expanded(
+                    child: CupertinoSearchTextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    context.read<SearchCubit>().loadMedications(value);
+                  },
+                )),
+                IconButton(
+                  onPressed: () => context.read<SearchCubit>().toggleFilter(),
+                  icon: PharMeTheme.starIcon(
+                      isStarred: state.when(
+                          initial: (filter) => filter,
+                          loading: (filter) => filter,
+                          loaded: (_, filter) => filter,
+                          error: (filter) => filter)),
                 ),
-              ),
-              SliverList(
-                  delegate: SliverChildListDelegate(state.when(
+              ]),
+              body: state.when(
                 initial: (_) => [Container()],
                 error: (_) => [Text(context.l10n.err_generic)],
                 loaded: (medications, _) =>
@@ -65,9 +49,7 @@ class SearchPage extends HookWidget {
                     child: CircularProgressIndicator(),
                   )
                 ],
-              )))
-            ]),
-          );
+              ));
         }));
   }
 
