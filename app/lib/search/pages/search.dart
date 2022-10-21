@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 import 'package:scio/scio.dart';
 
 import '../../../common/module.dart';
 import 'cubit.dart';
-
-final _panelController = SlidingUpPanelController();
 
 class SearchPage extends HookWidget {
   const SearchPage({
@@ -23,84 +20,36 @@ class SearchPage extends HookWidget {
       create: (context) => cubit ?? SearchCubit(),
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
-          return Stack(
+          return Column(
             children: [
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      PharMeTheme.primaryColor,
-                      PharMeTheme.secondaryColor,
-                    ],
+              Row(children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: CupertinoSearchTextField(
+                      controller: searchController,
+                      onChanged: (value) {
+                        context.read<SearchCubit>().loadMedications(value);
+                      },
+                    ),
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/logo.svg'),
-                    Text(
-                      context.l10n.search_page_typeInMedication,
-                      style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_downward_rounded,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                    SizedBox(height: 120),
-                  ],
+                IconButton(
+                  onPressed: () => context.read<SearchCubit>().toggleFilter(),
+                  icon: PharMeTheme.starIcon(
+                      isStarred: state.when(
+                          initial: (filter) => filter,
+                          loading: (filter) => filter,
+                          loaded: (_, filter) => filter,
+                          error: (filter) => filter)),
                 ),
-              ),
-              SlidingUpPanelWidget(
-                onTap: _panelController.expand,
-                controlHeight: 150,
-                panelController: _panelController,
-                child: RoundedCard(
-                  child: Column(
-                    children: [
-                      Row(children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: CupertinoSearchTextField(
-                              onTap: _panelController.expand,
-                              controller: searchController,
-                              onChanged: (value) {
-                                context
-                                    .read<SearchCubit>()
-                                    .loadMedications(value);
-                              },
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () =>
-                              context.read<SearchCubit>().toggleFilter(),
-                          icon: PharMeTheme.starIcon(
-                              isStarred: state.when(
-                                  initial: (filter) => filter,
-                                  loading: (filter) => filter,
-                                  loaded: (_, filter) => filter,
-                                  error: (filter) => filter)),
-                        ),
-                      ]),
-                      state.when(
-                        initial: (_) => Container(),
-                        error: (_) => Text(context.l10n.err_generic),
-                        loaded: (medications, _) =>
-                            _buildMedicationsList(medications),
-                        loading: (_) => Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    ],
-                  ),
+              ]),
+              state.when(
+                initial: (_) => Container(),
+                error: (_) => Text(context.l10n.err_generic),
+                loaded: (medications, _) => _buildMedicationsList(medications),
+                loading: (_) => Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
             ],
