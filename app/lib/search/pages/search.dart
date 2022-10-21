@@ -17,72 +17,83 @@ class SearchPage extends HookWidget {
     final searchController = useTextEditingController();
 
     return BlocProvider(
-      create: (context) => cubit ?? SearchCubit(),
-      child: BlocBuilder<SearchCubit, SearchState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              Row(children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: CupertinoSearchTextField(
+        create: (context) => cubit ?? SearchCubit(),
+        child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
+          return Scaffold(
+            body: CustomScrollView(slivers: [
+              SliverAppBar(
+                backgroundColor: PharMeTheme.surfaceColor,
+                elevation: 0,
+                floating: true,
+                pinned: true,
+                snap: false,
+                centerTitle: false,
+                title: Text(context.l10n.nav_medications,
+                    style: PharMeTheme.textTheme.headlineLarge),
+                bottom: AppBar(
+                  backgroundColor: PharMeTheme.backgroundColor,
+                  elevation: 0,
+                  title: Row(children: [
+                    Expanded(
+                        child: CupertinoSearchTextField(
                       controller: searchController,
                       onChanged: (value) {
                         context.read<SearchCubit>().loadMedications(value);
                       },
+                    )),
+                    IconButton(
+                      onPressed: () =>
+                          context.read<SearchCubit>().toggleFilter(),
+                      icon: PharMeTheme.starIcon(
+                          isStarred: state.when(
+                              initial: (filter) => filter,
+                              loading: (filter) => filter,
+                              loaded: (_, filter) => filter,
+                              error: (filter) => filter)),
                     ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => context.read<SearchCubit>().toggleFilter(),
-                  icon: PharMeTheme.starIcon(
-                      isStarred: state.when(
-                          initial: (filter) => filter,
-                          loading: (filter) => filter,
-                          loaded: (_, filter) => filter,
-                          error: (filter) => filter)),
-                ),
-              ]),
-              state.when(
-                initial: (_) => Container(),
-                error: (_) => Text(context.l10n.err_generic),
-                loaded: (medications, _) => _buildMedicationsList(medications),
-                loading: (_) => Center(
-                  child: CircularProgressIndicator(),
+                  ]),
                 ),
               ),
-            ],
+              SliverList(
+                  delegate: SliverChildListDelegate(state.when(
+                initial: (_) => [Container()],
+                error: (_) => [Text(context.l10n.err_generic)],
+                loaded: (medications, _) =>
+                    _buildMedicationsList(context, medications),
+                loading: (_) => [
+                  Center(
+                    child: CircularProgressIndicator(),
+                  )
+                ],
+              )))
+            ]),
           );
-        },
-      ),
-    );
+        }));
   }
 
-  Flexible _buildMedicationsList(List<MedicationWithGuidelines> medications) {
-    return Flexible(
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(vertical: 14),
-        itemCount: medications.length,
-        itemBuilder: (context, index) {
-          final med = medications[index];
-          return MedicationCard(
-              onTap: () {
-                ComprehensionHelper.instance.attach(
-                  context.router.push(MedicationRoute(id: med.id)),
-                  context: context,
-                  surveyId: 4,
-                  introText: context.l10n.comprehension_intro_text,
-                  surveyButtonText:
-                      context.l10n.comprehension_survey_button_text,
-                  supabaseConfig: supabaseConfig,
-                );
-              },
-              medication: med);
-        },
-        separatorBuilder: (_, __) => SizedBox(height: 8),
-      ),
-    );
+  List<Widget> _buildMedicationsList(
+      BuildContext context, List<MedicationWithGuidelines> medications) {
+    return [
+      SizedBox(height: 8),
+      ...medications.map((medication) => Column(children: [
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: MedicationCard(
+                    onTap: () {
+                      ComprehensionHelper.instance.attach(
+                        context.router.push(MedicationRoute(id: medication.id)),
+                        context: context,
+                        surveyId: 4,
+                        introText: context.l10n.comprehension_intro_text,
+                        surveyButtonText:
+                            context.l10n.comprehension_survey_button_text,
+                        supabaseConfig: supabaseConfig,
+                      );
+                    },
+                    medication: medication)),
+            SizedBox(height: 8)
+          ]))
+    ];
   }
 }
 
