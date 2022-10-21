@@ -4,8 +4,10 @@ Scaffold pageScaffold(
     {required String title,
     Widget? barBottom,
     List<Widget>? actions,
-    required List<Widget> body}) {
+    required List<Widget> body,
+    Key? key}) {
   return Scaffold(
+    key: key,
     body: CustomScrollView(slivers: [
       SliverAppBar(
         backgroundColor: PharMeTheme.surfaceColor,
