@@ -17,12 +17,17 @@ class MetaData {
   // private constructor
   MetaData._();
 
-  static final MetaData _instance = MetaData._();
+  static MetaData _instance = MetaData._();
   static MetaData get instance => _instance;
 
   /// Writes the current instance to local storage
   static Future<void> save() async =>
       Hive.box<MetaData>(_boxName).put('data', _instance);
+
+  static Future<void> erase() async {
+    _instance = MetaData._();
+    await MetaData.save();
+  }
 
   @HiveField(0)
   DateTime? lookupsLastFetchDate;

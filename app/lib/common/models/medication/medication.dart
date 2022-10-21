@@ -34,7 +34,6 @@ class MedicationWithGuidelines {
     this.drugclass,
     this.indication,
     required this.guidelines,
-    this.isCritical = false,
   });
   factory MedicationWithGuidelines.fromJson(dynamic json) =>
       _$MedicationWithGuidelinesFromJson(json);
@@ -65,10 +64,6 @@ class MedicationWithGuidelines {
 
   @HiveField(8)
   List<Guideline> guidelines;
-
-  // Indicates whether this medication is used in the reports
-  @HiveField(9)
-  bool isCritical;
 
   @override
   bool operator ==(other) =>
@@ -103,4 +98,78 @@ MedicationWithGuidelines medicationWithGuidelinesFromHTTPResponse(
 List<int> idsFromHTTPResponse(Response resp) {
   final idsList = jsonDecode(resp.body) as List<dynamic>;
   return idsList.map((e) => e['id'] as int).toList();
+}
+
+extension MedicationIsStarred on Medication {
+  bool isStarred() {
+    return UserData.instance.starredMediationIds?.contains(id) ?? false;
+  }
+}
+
+extension MedicationWithGuidelinesIsStarred on MedicationWithGuidelines {
+  bool isStarred() {
+    return UserData.instance.starredMediationIds?.contains(id) ?? false;
+  }
+}
+
+extension MedicationWithGuidelinesMatchesQuery on MedicationWithGuidelines {
+  bool matches({required String query}) {
+    return name.ilike(query) ||
+        (description.isNotNullOrBlank && description!.ilike(query)) ||
+        (drugclass.isNotNullOrBlank && drugclass!.ilike(query)) ||
+        (synonyms != null && synonyms!.any((synonym) => synonym.ilike(query)));
+  }
+}
+
+/// Removes the guidelines that are not relevant to the user
+extension MedicationWithUserGuidelines on MedicationWithGuidelines {
+  MedicationWithGuidelines filterUserGuidelines() {
+    final matchingGuidelines = guidelines.where((guideline) {
+      final phenotype = guideline.phenotype;
+      final foundEntry =
+          UserData.instance.lookups![guideline.phenotype.geneSymbol.name];
+      return foundEntry.isNotNullOrBlank &&
+          foundEntry == phenotype.geneResult.name;
+    });
+
+    return MedicationWithGuidelines(
+      id: id,
+      name: name,
+      description: description,
+      pharmgkbId: pharmgkbId,
+      rxcui: rxcui,
+      synonyms: synonyms,
+      drugclass: drugclass,
+      indication: indication,
+      guidelines: matchingGuidelines.toList(),
+    );
+  }
+}
+
+/// Removes the guidelines that are not relevant to the user
+extension MedicationsWithUserGuidelines on List<MedicationWithGuidelines> {
+  List<MedicationWithGuidelines> filterUserGuidelines() {
+    return map((medication) => medication.filterUserGuidelines()).toList();
+  }
+}
+
+/// Filters for medications with non-OK warning level
+extension CriticalMedications on List<MedicationWithGuidelines> {
+  List<MedicationWithGuidelines> filterCritical() {
+    return filter((medication) {
+      final warningLevel = medication.highestWarningLevel();
+      return warningLevel != null && warningLevel != WarningLevel.ok;
+    }).toList();
+  }
+}
+
+/// Gets most severe warning level
+extension MedicationWarningLevel on MedicationWithGuidelines {
+  WarningLevel? highestWarningLevel() {
+    final filtered = filterUserGuidelines();
+    return filtered.guidelines
+        .map((guideline) => guideline.warningLevel)
+        .filterNotNull()
+        .maxBy((level) => level.severity);
+  }
 }

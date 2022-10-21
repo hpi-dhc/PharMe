@@ -6,6 +6,7 @@ Future<void> deleteAllAppData() async {
   await _deleteCacheDir();
   await _deleteAppDir();
   await UserData.erase();
+  await MetaData.erase();
 }
 
 Future<void> _deleteCacheDir() async {

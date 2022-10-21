@@ -32,8 +32,9 @@ class MedicationPage extends StatelessWidget {
               initial: Container.new,
               error: () => Text(context.l10n.err_generic),
               loading: () => Center(child: CircularProgressIndicator()),
-              loaded: (medication) => _buildMedicationsPage(
+              loaded: (medication, isStarred) => _buildMedicationsPage(
                 medication,
+                isStarred: isStarred,
                 context: context,
               ),
             ),
@@ -45,12 +46,13 @@ class MedicationPage extends StatelessWidget {
 
   Widget _buildMedicationsPage(
     MedicationWithGuidelines medication, {
+    required bool isStarred,
     required BuildContext context,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeader(medication),
+        _buildHeader(medication, isStarred: isStarred, context: context),
         SizedBox(height: 20),
         SubHeader(
           context.l10n.medications_page_header_guideline,
@@ -68,7 +70,8 @@ class MedicationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(MedicationWithGuidelines medication) {
+  Widget _buildHeader(MedicationWithGuidelines medication,
+      {required bool isStarred, required BuildContext context}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -76,13 +79,24 @@ class MedicationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(medication.name, style: PharMeTheme.textTheme.displaySmall),
-            IconButton(
-              onPressed: () => sharePdf(medication),
-              icon: Icon(
-                Icons.ios_share_rounded,
-                size: 32,
-                color: PharMeTheme.primaryColor,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () => context
+                      .read<MedicationsCubit>()
+                      .toggleStarred(),
+                  icon: PharMeTheme.starIcon(isStarred: isStarred, size: 32),
+                ),
+                IconButton(
+                  onPressed: () => sharePdf(medication),
+                  icon: Icon(
+                    Icons.ios_share_rounded,
+                    size: 32,
+                    color: PharMeTheme.primaryColor,
+                  ),
+                )
+              ],
             ),
           ],
         ),

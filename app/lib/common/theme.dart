@@ -88,4 +88,9 @@ class PharMeTheme {
   static const onSurfaceColor = Color(0xFFE5E5E5);
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xCCF52A2A);
+
+  static Icon starIcon({required bool isStarred, double? size}) {
+    return Icon(isStarred ? Icons.star_rounded : Icons.star_border_rounded,
+        size: size, color: primaryColor);
+  }
 }

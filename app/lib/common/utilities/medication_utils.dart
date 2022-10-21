@@ -1,27 +1,28 @@
-import 'package:dartx/dartx.dart';
+import 'package:http/http.dart';
 
-import '../models/module.dart';
+import '../module.dart';
 
-/// Removes the guidelines that are not relevant to the user
-MedicationWithGuidelines filterUserGuidelines(
-  MedicationWithGuidelines medication,
-) {
-  final matchingGuidelines = medication.guidelines.where((guideline) {
-    final phenotype = guideline.phenotype;
-    final foundEntry =
-        UserData.instance.lookups![guideline.phenotype.geneSymbol.name];
-    return foundEntry.isNotNullOrBlank &&
-        foundEntry == phenotype.geneResult.name;
-  });
-  return MedicationWithGuidelines(
-    id: medication.id,
-    name: medication.name,
-    description: medication.description,
-    pharmgkbId: medication.pharmgkbId,
-    rxcui: medication.rxcui,
-    synonyms: medication.synonyms,
-    drugclass: medication.drugclass,
-    indication: medication.indication,
-    guidelines: matchingGuidelines.toList(),
+Future<List<MedicationWithGuidelines>> fetchMedicationsWithGuidlines() async {
+  final requestUri = annotationServerUrl('medications').replace(
+    queryParameters: {
+      'withGuidelines': 'true',
+      'getGuidelines': 'true',
+    },
   );
+
+  final isOnline = await hasConnectionTo(requestUri.host);
+  if (!isOnline) throw Exception();
+
+  final response = await get(requestUri);
+  if (response.statusCode != 200) throw Exception();
+
+  return medicationsWithGuidelinesFromHTTPResponse(response);
+}
+
+Future<void> starCriticalMedications() async {
+  final medications = await fetchMedicationsWithGuidlines();
+  final criticalMedications = medications.filterCritical();
+  UserData.instance.starredMediationIds =
+      criticalMedications.map((medication) => medication.id).toList();
+  await UserData.save();
 }

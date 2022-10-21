@@ -36,7 +36,7 @@ class Diplotype {
   String allelesTested;
 }
 
-extension FilteredList on List<Diplotype> {
+extension ValidDiplotypes on List<Diplotype> {
   List<Diplotype> filterValidDiplotypes() {
     final acceptedResultTypes = ['Diplotype'];
     return where((element) => acceptedResultTypes.contains(element.resultType))

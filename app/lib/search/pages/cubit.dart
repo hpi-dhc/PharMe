@@ -9,109 +9,88 @@ import '../../common/module.dart';
 part 'cubit.freezed.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(SearchState.initial());
+  SearchCubit() : super(SearchState.initial(filterStarred: true)) {
+    loadMedications(searchValue);
+  }
 
   Timer? searchTimeout;
+  String searchValue = '';
   final duration = Duration(milliseconds: 500);
 
-  void loadMedications(String value) {
-    if (value.isEmpty) {
-      emit(
-        SearchState.loaded([]),
-      );
-      if (searchTimeout != null) {
-        searchTimeout!.cancel();
-      }
+  void loadMedications(String value, {bool? filterStarred}) {
+    final filter = filterStarred ?? isFiltered();
+    searchValue = value;
+    if (value.isEmpty && !filter) {
+      emit(SearchState.loaded([], filterStarred: filter));
+      if (searchTimeout != null) searchTimeout!.cancel();
       return;
     }
-    if (searchTimeout != null) {
-      searchTimeout!.cancel();
-    }
+    if (searchTimeout != null) searchTimeout!.cancel();
     searchTimeout = Timer(
       duration,
       () async {
-        final requestUri = annotationServerUrl('medications').replace(
-          queryParameters: {'search': value},
-        );
-        emit(SearchState.loading());
-
-        final isOnline = await hasConnectionTo(requestUri.host);
-        if (!isOnline) {
-          _findInCachedMedications(value);
+        emit(SearchState.loading(filterStarred: filter));
+        var medications = await _findMedications(value);
+        if (medications == null) {
+          emit(SearchState.error(filterStarred: filter));
           return;
         }
-
-        final response = await http.get(requestUri);
-        if (response.statusCode != 200) {
-          emit(SearchState.error());
-          return;
+        if (filter) {
+          medications = medications
+              .filter((medication) => medication.isStarred())
+              .toList();
+          await CachedMedications.cacheAll(medications);
+          await CachedMedications.save();
         }
-        final medications = medicationsFromHTTPResponse(response);
-
-        emit(SearchState.loaded(medications));
+        emit(SearchState.loaded(medications, filterStarred: filter));
       },
     );
   }
 
-  void _findInCachedMedications(String value) {
+  void toggleFilter() {
+    loadMedications(searchValue, filterStarred: !isFiltered());
+  }
+
+  bool isFiltered() {
+    return state.when(
+        initial: (filterStarred) => filterStarred,
+        loading: (filterStarred) => filterStarred,
+        loaded: (_, filterStarred) => filterStarred,
+        error: (filterStarred) => filterStarred);
+  }
+
+  Future<List<MedicationWithGuidelines>?> _findMedications(String value) async {
+    final requestUri = annotationServerUrl('medications').replace(
+      queryParameters: {'getGuidelines': 'true', 'search': value},
+    );
+    final isOnline = await hasConnectionTo(requestUri.host);
+    if (!isOnline) {
+      return _findInCachedMedications(value);
+    }
+
+    final response = await http.get(requestUri);
+    if (response.statusCode != 200) {
+      return null;
+    }
+    return medicationsWithGuidelinesFromHTTPResponse(response);
+  }
+
+  List<MedicationWithGuidelines> _findInCachedMedications(String value) {
     CachedMedications.instance.medications ??= [];
     final foundMeds = CachedMedications.instance.medications!
-        .where(
-      (med) =>
-          med.name.ilike(value) ||
-          _medDescriptionMatches(value, med) ||
-          _medSynonymsMatch(value, med) ||
-          _medDrugclassMatches(value, med),
-    )
-        .map(
-      (e) {
-        return Medication(
-          e.id,
-          e.name,
-          e.description!,
-          e.drugclass,
-          e.indication,
-        );
-      },
-    ).toList();
-
-    emit(SearchState.loaded(foundMeds));
-  }
-
-  bool _medDescriptionMatches(String value, MedicationWithGuidelines med) {
-    if (med.description.isNotNullOrBlank) {
-      return med.description!.ilike(value);
-    }
-    return false;
-  }
-
-  bool _medSynonymsMatch(String value, MedicationWithGuidelines med) {
-    if (med.synonyms != null) {
-      return med.synonyms!.any((element) => element.ilike(value));
-    }
-    return false;
-  }
-
-  bool _medDrugclassMatches(String value, MedicationWithGuidelines med) {
-    if (med.drugclass.isNotNullOrBlank) {
-      return med.drugclass!.ilike(value);
-    }
-    return false;
-  }
-
-  void setState(SearchState state) => emit(state);
-}
-
-extension _Ilike on String {
-  bool ilike(String matcher) {
-    return toLowerCase().contains(matcher.toLowerCase());
+        .where((med) => med.matches(query: value))
+        .toList();
+    return foundMeds;
   }
 }
 
 @freezed
 class SearchState with _$SearchState {
-  const factory SearchState.initial() = _InitialState;
-  const factory SearchState.loading() = _LoadingState;
-  const factory SearchState.loaded(List<Medication> medications) = _LoadedState;
-  const factory SearchState.error() = _ErrorState;
+  const factory SearchState.initial({required bool filterStarred}) =
+      _InitialState;
+  const factory SearchState.loading({required bool filterStarred}) =
+      _LoadingState;
+  const factory SearchState.loaded(List<MedicationWithGuidelines> medications,
+      {required bool filterStarred}) = _LoadedState;
+  const factory SearchState.error({required bool filterStarred}) = _ErrorState;
 }

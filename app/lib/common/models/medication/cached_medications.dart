@@ -1,7 +1,6 @@
 import 'package:hive/hive.dart';
 
 import '../../constants.dart';
-import '../../utilities/medication_utils.dart';
 import '../module.dart';
 
 part 'cached_medications.g.dart';
@@ -45,6 +44,7 @@ Future<void> initCachedMedications() async {
     Hive.registerAdapter(GeneSymbolAdapter());
     Hive.registerAdapter(GeneResultAdapter());
     Hive.registerAdapter(PhenotypeAdapter());
+    Hive.registerAdapter(WarningLevelAdapter());
     Hive.registerAdapter(GuidelineAdapter());
     Hive.registerAdapter(MedicationWithGuidelinesAdapter());
   } catch (e) {
@@ -74,7 +74,7 @@ Future<void> _cacheMedication(MedicationWithGuidelines medication) async {
   // index is negative if no match is found
   final medicationAlreadyExists = index >= 0;
   if (medicationAlreadyExists) {
-    final filteredMedication = filterUserGuidelines(medication);
+    final filteredMedication = medication.filterUserGuidelines();
     cachedMedList[index] = filteredMedication;
     return CachedMedications.save();
   }
@@ -88,7 +88,8 @@ Future<void> _cacheWhenLimitReached(
   MedicationWithGuidelines med,
 ) async {
   // find first medication that's not used in the reports
-  final index = cachedMedList.indexWhere((e) => !e.isCritical);
+  final index = cachedMedList.indexWhere((medication) =>
+      !(UserData.instance.starredMediationIds ?? []).contains(medication.id));
   if (index < 0) return;
 
   cachedMedList.removeAt(index);

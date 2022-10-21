@@ -19,7 +19,13 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     emit(MedicationsState.loading());
     final isOnline = await hasConnectionTo(annotationServerUrl().host);
     if (!isOnline) {
-      _findCachedMedication(_id);
+      final medication = _findCachedMedication(_id);
+      if (medication == null) {
+        emit(MedicationsState.error());
+      } else {
+        emit(MedicationsState.loaded(medication,
+            isStarred: medication.isStarred()));
+      }
       return;
     }
     final response = await sendRequest();
@@ -30,8 +36,25 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     final medication = medicationWithGuidelinesFromHTTPResponse(response);
     await CachedMedications.cache(medication);
     _initializeComprehensionContext(medication);
-    final filteredMedication = filterUserGuidelines(medication);
-    emit(MedicationsState.loaded(filteredMedication));
+    final filteredMedication = medication.filterUserGuidelines();
+    emit(MedicationsState.loaded(filteredMedication,
+        isStarred: medication.isStarred()));
+  }
+
+  Future<void> toggleStarred() async {
+    final medication = state.whenOrNull(loaded: (medication, _) => medication);
+    if (medication == null) return;
+
+    final stars = UserData.instance.starredMediationIds ?? [];
+    if (medication.isStarred()) {
+      UserData.instance.starredMediationIds =
+          stars.filter((element) => element != _id).toList();
+    } else {
+      UserData.instance.starredMediationIds = stars + [_id];
+    }
+    await UserData.save();
+    emit(
+        MedicationsState.loaded(medication, isStarred: medication.isStarred()));
   }
 
   void _initializeComprehensionContext(MedicationWithGuidelines medication) {
@@ -40,15 +63,16 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     final questionContext = ComprehensionHelper.instance.questionContext;
 
     switch (medication.guidelines[0].warningLevel) {
-      case 'danger':
+      case WarningLevel.danger:
         questionContext['danger_level'] = [12];
         break;
-      case 'warning':
+      case WarningLevel.warning:
         questionContext['danger_level'] = [11];
         break;
-      case 'ok':
+      case WarningLevel.ok:
         questionContext['danger_level'] = [10];
         break;
+      default: break;
     }
     switch (medication.guidelines[0].phenotype.geneResult.name) {
       case 'Ultrarapid Metabolizer':
@@ -69,15 +93,11 @@ class MedicationsCubit extends Cubit<MedicationsState> {
     }
   }
 
-  void _findCachedMedication(int id) {
-    CachedMedications.instance.medications ??= [];
-    try {
-      final foundMedication = CachedMedications.instance.medications!
-          .firstWhere((element) => element.id == id);
-      emit(MedicationsState.loaded(foundMedication));
-    } catch (e) {
-      emit(MedicationsState.error());
-    }
+  MedicationWithGuidelines? _findCachedMedication(int id) {
+    final cachedMedications = CachedMedications.instance.medications ?? [];
+    final foundMedication =
+        cachedMedications.firstWhereOrNull((element) => element.id == id);
+    return foundMedication;
   }
 
   Future<Response?> sendRequest() async {
@@ -111,7 +131,7 @@ class MedicationsCubit extends Cubit<MedicationsState> {
 class MedicationsState with _$MedicationsState {
   const factory MedicationsState.initial() = _InitialState;
   const factory MedicationsState.loading() = _LoadingState;
-  const factory MedicationsState.loaded(MedicationWithGuidelines medication) =
-      _LoadedState;
+  const factory MedicationsState.loaded(MedicationWithGuidelines medication,
+      {required bool isStarred}) = _LoadedState;
   const factory MedicationsState.error() = _ErrorState;
 }
