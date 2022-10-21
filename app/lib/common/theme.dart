@@ -33,7 +33,7 @@ class PharMeTheme {
       fontSize: size,
       fontWeight: weight ?? FontWeight.w400,
       letterSpacing: spacing ?? 0,
-      color: color ?? Color(0xFF444648),
+      color: color ?? PharMeTheme.onSurfaceText,
     );
   }
 
@@ -86,6 +86,7 @@ class PharMeTheme {
 
   static const surfaceColor = Colors.white;
   static const onSurfaceColor = Color(0xFFE5E5E5);
+  static const onSurfaceText = Color(0xFF444648);
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xCCF52A2A);
 
