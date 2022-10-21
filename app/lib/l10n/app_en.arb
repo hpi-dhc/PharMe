@@ -38,7 +38,7 @@
   "medications_page_tooltip_further_info": "The results shown here are based on data from pharmacogenomic organizations like CPIC or PharmGKB. Check them out yourself by clicking on the buttons below! Also see the PGx-Tab for more information.",
   "medications_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a medication.",
 
-  "nav_search": "Search",
+  "nav_medications": "Medications",
   "nav_faq": "FAQ",
   "nav_more": "More",
   

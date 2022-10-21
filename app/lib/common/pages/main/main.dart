@@ -52,8 +52,8 @@ class MainPage extends StatelessWidget {
       BuildContext context) {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.search_rounded),
-        label: context.l10n.nav_search,
+        icon: Icon(Icons.medication_rounded),
+        label: context.l10n.nav_medications,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.lightbulb_rounded),

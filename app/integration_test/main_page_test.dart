@@ -34,7 +34,7 @@ void main() {
 
       expect(find.text(context.l10n.general_appName), findsOneWidget);
 
-      expect(find.byIcon(Icons.search_rounded), findsOneWidget);
+      expect(find.byIcon(Icons.medication_rounded), findsOneWidget);
       expect(find.byIcon(Icons.lightbulb_rounded), findsOneWidget);
       expect(find.byIcon(Icons.more_horiz_rounded), findsOneWidget);
 
