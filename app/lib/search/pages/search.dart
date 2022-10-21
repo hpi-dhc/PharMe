@@ -20,7 +20,7 @@ class SearchPage extends HookWidget {
         create: (context) => cubit ?? SearchCubit(),
         child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
           return pageScaffold(
-              title: context.l10n.nav_medications,
+              title: context.l10n.tab_medications,
               barBottom: Row(children: [
                 Expanded(
                     child: CupertinoSearchTextField(
