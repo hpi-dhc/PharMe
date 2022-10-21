@@ -13,11 +13,13 @@ import 'widgets/module.dart';
 
 class MedicationPage extends StatelessWidget {
   const MedicationPage(
-    this.id, {
+    this.id,
+    this.name, {
     @visibleForTesting this.cubit,
   });
 
   final int id;
+  final String name;
   final MedicationsCubit? cubit;
 
   @override
@@ -26,18 +28,34 @@ class MedicationPage extends StatelessWidget {
       create: (context) => cubit ?? MedicationsCubit(id),
       child: BlocBuilder<MedicationsCubit, MedicationsState>(
         builder: (context, state) {
-          return RoundedCard(
-            padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
-            child: state.when(
-              initial: Container.new,
-              error: () => Text(context.l10n.err_generic),
-              loading: () => Center(child: CircularProgressIndicator()),
-              loaded: (medication, isStarred) => _buildMedicationsPage(
-                medication,
-                isStarred: isStarred,
-                context: context,
+          return state.when(
+            initial: () => pageScaffold(title: name, body: []),
+            error: () => pageScaffold(
+                title: name, body: [Text(context.l10n.err_generic)]),
+            loading: () => pageScaffold(title: name, body: [
+              Center(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: CircularProgressIndicator()))
+            ]),
+            loaded: (medication, isStarred) =>
+                pageScaffold(title: medication.name, actions: [
+              IconButton(
+                onPressed: () =>
+                    context.read<MedicationsCubit>().toggleStarred(),
+                icon: PharMeTheme.starIcon(isStarred: isStarred),
               ),
-            ),
+              IconButton(
+                onPressed: () => sharePdf(medication),
+                icon: Icon(
+                  Icons.ios_share_rounded,
+                  color: PharMeTheme.primaryColor,
+                ),
+              )
+            ], body: [
+              _buildMedicationsPage(medication,
+                  isStarred: isStarred, context: context)
+            ]),
           );
         },
       ),
@@ -49,25 +67,30 @@ class MedicationPage extends StatelessWidget {
     required bool isStarred,
     required BuildContext context,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildHeader(medication, isStarred: isStarred, context: context),
-        SizedBox(height: 20),
-        SubHeader(
-          context.l10n.medications_page_header_guideline,
-          tooltip: context.l10n.medications_page_tooltip_guideline,
-        ),
-        SizedBox(height: 12),
-        ...(medication.guidelines.isNotEmpty)
-            ? [
-                Disclaimer(),
-                SizedBox(height: 12),
-                ClinicalAnnotationCard(medication)
-              ]
-            : [Text(context.l10n.medications_page_no_guidelines_for_phenotype)]
-      ],
-    );
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(medication, isStarred: isStarred, context: context),
+            SizedBox(height: 20),
+            SubHeader(
+              context.l10n.medications_page_header_guideline,
+              tooltip: context.l10n.medications_page_tooltip_guideline,
+            ),
+            SizedBox(height: 12),
+            ...(medication.guidelines.isNotEmpty)
+                ? [
+                    Disclaimer(),
+                    SizedBox(height: 12),
+                    ClinicalAnnotationCard(medication)
+                  ]
+                : [
+                    Text(context
+                        .l10n.medications_page_no_guidelines_for_phenotype)
+                  ]
+          ],
+        ));
   }
 
   Widget _buildHeader(MedicationWithGuidelines medication,
@@ -75,31 +98,6 @@ class MedicationPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(medication.name, style: PharMeTheme.textTheme.displaySmall),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () => context
-                      .read<MedicationsCubit>()
-                      .toggleStarred(),
-                  icon: PharMeTheme.starIcon(isStarred: isStarred, size: 32),
-                ),
-                IconButton(
-                  onPressed: () => sharePdf(medication),
-                  icon: Icon(
-                    Icons.ios_share_rounded,
-                    size: 32,
-                    color: PharMeTheme.primaryColor,
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
         if (medication.drugclass != null)
           Container(
             padding: EdgeInsets.all(6),

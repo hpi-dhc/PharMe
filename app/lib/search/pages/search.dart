@@ -63,7 +63,8 @@ class SearchPage extends HookWidget {
                 child: MedicationCard(
                     onTap: () {
                       ComprehensionHelper.instance.attach(
-                        context.router.push(MedicationRoute(id: medication.id)),
+                        context.router.push(MedicationRoute(
+                            id: medication.id, name: medication.name)),
                         context: context,
                         surveyId: 4,
                         introText: context.l10n.comprehension_intro_text,

@@ -19,31 +19,28 @@ class ClinicalAnnotationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: RoundedCard(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-        child: SingleChildScrollView(
-          child: Column(children: [
-            _buildHeader(context),
+    return RoundedCard(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: SingleChildScrollView(
+        child: Column(children: [
+          _buildHeader(context),
+          SizedBox(height: 16),
+          if (medication.guidelines[0].implication.isNotNullOrBlank ||
+              medication.guidelines[0].cpicImplication.isNotNullOrBlank) ...[
+            _buildImplicationInfo(context),
             SizedBox(height: 16),
-            if (medication.guidelines[0].implication.isNotNullOrBlank ||
-                medication.guidelines[0].cpicImplication.isNotNullOrBlank) ...[
-              _buildImplicationInfo(context),
-              SizedBox(height: 16),
-            ],
-            if (medication.guidelines[0].recommendation.isNotNullOrBlank ||
-                medication
-                    .guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
-              RecommendationCard(
-                medication,
-                context: context,
-              ),
-              SizedBox(height: 16),
-            ],
-            _buildSourcesSection(context),
+          ],
+          if (medication.guidelines[0].recommendation.isNotNullOrBlank ||
+              medication.guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
+            RecommendationCard(
+              medication,
+              context: context,
+            ),
             SizedBox(height: 16),
-          ]),
-        ),
+          ],
+          _buildSourcesSection(context),
+          SizedBox(height: 16),
+        ]),
       ),
     );
   }
@@ -59,12 +56,13 @@ class ClinicalAnnotationCard extends StatelessWidget {
       ),
       SizedBox(width: 24),
       Flexible(
-        child: Text(
-          medication.guidelines[0].implication ??
-              medication.guidelines[0].cpicImplication!,
-          style: PharMeTheme.textTheme.bodySmall,
-        ),
+        child:
+      Text(
+        medication.guidelines[0].implication ??
+            medication.guidelines[0].cpicImplication!,
+        style: PharMeTheme.textTheme.bodySmall,
       ),
+      )
     ]);
   }
 
