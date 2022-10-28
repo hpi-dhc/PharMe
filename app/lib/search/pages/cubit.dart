@@ -20,11 +20,6 @@ class SearchCubit extends Cubit<SearchState> {
   void loadMedications(String value, {bool? filterStarred}) {
     final filter = filterStarred ?? isFiltered();
     searchValue = value;
-    if (value.isEmpty && !filter) {
-      emit(SearchState.loaded([], filterStarred: filter));
-      if (searchTimeout != null) searchTimeout!.cancel();
-      return;
-    }
     if (searchTimeout != null) searchTimeout!.cancel();
     searchTimeout = Timer(
       duration,
@@ -61,7 +56,11 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<List<MedicationWithGuidelines>?> _findMedications(String value) async {
     final requestUri = annotationServerUrl('medications').replace(
-      queryParameters: {'getGuidelines': 'true', 'search': value},
+      queryParameters: {
+        'getGuidelines': 'true',
+        'withGuidelines': 'true',
+        'search': value
+      },
     );
     final isOnline = await hasConnectionTo(requestUri.host);
     if (!isOnline) {

@@ -30,10 +30,6 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final BuildContext context = tester.element(find.byType(Scaffold).first);
-
-      expect(find.text(context.l10n.general_appName), findsOneWidget);
-
       expect(find.byIcon(Icons.medication_rounded), findsOneWidget);
       expect(find.byIcon(Icons.lightbulb_rounded), findsOneWidget);
       expect(find.byIcon(Icons.more_horiz_rounded), findsOneWidget);

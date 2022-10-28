@@ -6,7 +6,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
+    return pageScaffold(title: context.l10n.tab_more, body: [
       ListTile(
         title: Text(
           context.l10n.settings_page_account_settings,

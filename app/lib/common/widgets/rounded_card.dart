@@ -11,9 +11,8 @@ class RoundedCard extends StatelessWidget {
   final VoidCallback? onTap;
   final Widget child;
 
-  final borderRadius = BorderRadius.only(
-    topLeft: Radius.circular(20),
-    topRight: Radius.circular(20),
+  final borderRadius = BorderRadius.all(
+    Radius.circular(20),
   );
 
   @override

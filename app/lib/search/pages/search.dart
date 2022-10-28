@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_sliding_up_panel/sliding_up_panel_widget.dart';
 import 'package:scio/scio.dart';
 
 import '../../../common/module.dart';
 import 'cubit.dart';
-
-final _panelController = SlidingUpPanelController();
 
 class SearchPage extends HookWidget {
   const SearchPage({
@@ -20,120 +17,62 @@ class SearchPage extends HookWidget {
     final searchController = useTextEditingController();
 
     return BlocProvider(
-      create: (context) => cubit ?? SearchCubit(),
-      child: BlocBuilder<SearchCubit, SearchState>(
-        builder: (context, state) {
-          return Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      PharMeTheme.primaryColor,
-                      PharMeTheme.secondaryColor,
-                    ],
-                  ),
+        create: (context) => cubit ?? SearchCubit(),
+        child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
+          return pageScaffold(
+              title: context.l10n.tab_medications,
+              barBottom: Row(children: [
+                Expanded(
+                    child: CupertinoSearchTextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    context.read<SearchCubit>().loadMedications(value);
+                  },
+                )),
+                IconButton(
+                  onPressed: () => context.read<SearchCubit>().toggleFilter(),
+                  icon: PharMeTheme.starIcon(
+                      isStarred: state.when(
+                          initial: (filter) => filter,
+                          loading: (filter) => filter,
+                          loaded: (_, filter) => filter,
+                          error: (filter) => filter)),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset('assets/images/logo.svg'),
-                    Text(
-                      context.l10n.search_page_typeInMedication,
-                      style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_downward_rounded,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                    SizedBox(height: 120),
-                  ],
-                ),
-              ),
-              SlidingUpPanelWidget(
-                onTap: _panelController.expand,
-                controlHeight: 150,
-                panelController: _panelController,
-                child: RoundedCard(
-                  child: Column(
-                    children: [
-                      Row(children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: CupertinoSearchTextField(
-                              onTap: _panelController.expand,
-                              controller: searchController,
-                              onChanged: (value) {
-                                context
-                                    .read<SearchCubit>()
-                                    .loadMedications(value);
-                              },
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () =>
-                              context.read<SearchCubit>().toggleFilter(),
-                          icon: PharMeTheme.starIcon(
-                              isStarred: state.when(
-                                  initial: (filter) => filter,
-                                  loading: (filter) => filter,
-                                  loaded: (_, filter) => filter,
-                                  error: (filter) => filter)),
-                        ),
-                      ]),
-                      state.when(
-                        initial: (_) => Container(),
-                        error: (_) => Text(context.l10n.err_generic),
-                        loaded: (medications, _) =>
-                            _buildMedicationsList(medications),
-                        loading: (_) => Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+              ]),
+              body: state.when(
+                initial: (_) => [Container()],
+                error: (_) => [errorIndicator(context.l10n.err_generic)],
+                loaded: (medications, _) =>
+                    _buildMedicationsList(context, medications),
+                loading: (_) => [loadingIndicator()],
+              ));
+        }));
   }
 
-  Flexible _buildMedicationsList(List<MedicationWithGuidelines> medications) {
-    return Flexible(
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(vertical: 14),
-        itemCount: medications.length,
-        itemBuilder: (context, index) {
-          final med = medications[index];
-          return MedicationCard(
-              onTap: () {
-                ComprehensionHelper.instance.attach(
-                  context.router.push(MedicationRoute(id: med.id)),
-                  context: context,
-                  surveyId: 4,
-                  introText: context.l10n.comprehension_intro_text,
-                  surveyButtonText:
-                      context.l10n.comprehension_survey_button_text,
-                  supabaseConfig: supabaseConfig,
-                );
-              },
-              medication: med);
-        },
-        separatorBuilder: (_, __) => SizedBox(height: 8),
-      ),
-    );
+  List<Widget> _buildMedicationsList(
+      BuildContext context, List<MedicationWithGuidelines> medications) {
+    return [
+      SizedBox(height: 8),
+      ...medications.map((medication) => Column(children: [
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: MedicationCard(
+                    onTap: () {
+                      ComprehensionHelper.instance.attach(
+                        context.router.push(MedicationRoute(
+                            id: medication.id, name: medication.name)),
+                        context: context,
+                        surveyId: 4,
+                        introText: context.l10n.comprehension_intro_text,
+                        surveyButtonText:
+                            context.l10n.comprehension_survey_button_text,
+                        supabaseConfig: supabaseConfig,
+                      );
+                    },
+                    medication: medication)),
+            SizedBox(height: 8)
+          ]))
+    ];
   }
 }
 

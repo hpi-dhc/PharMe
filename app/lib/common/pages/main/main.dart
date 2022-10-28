@@ -18,11 +18,6 @@ class MainPage extends StatelessWidget {
         FaqRouter(),
         SettingsRouter(),
       ],
-      appBarBuilder: (_, tabsRouter) => AppBar(
-        title: Text(context.l10n.general_appName),
-        centerTitle: true,
-        leading: const AutoLeadingButton(),
-      ),
       bottomNavigationBuilder: (_, tabsRouter) {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,

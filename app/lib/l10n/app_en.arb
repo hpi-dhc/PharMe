@@ -39,8 +39,11 @@
   "medications_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a medication.",
 
   "nav_medications": "Medications",
+  "tab_medications": "Medications",
   "nav_faq": "FAQ",
+  "tab_faq": "PGx Questions",
   "nav_more": "More",
+  "tab_more": "More",
   
   "onboarding_get_started": "Get started",
   "onboarding_next": "Next",
