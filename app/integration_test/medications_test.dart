@@ -52,7 +52,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: MedicationPage(1, cubit: mockMedicationsCubit),
+          home: MedicationPage(testMedication.id, testMedication.name,
+              cubit: mockMedicationsCubit),
           localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -76,7 +77,8 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return MedicationPage(1, cubit: mockMedicationsCubit);
+                return MedicationPage(testMedication.id, testMedication.name,
+                    cubit: mockMedicationsCubit);
               },
             ),
           ),
@@ -106,7 +108,8 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return MedicationPage(1, cubit: mockMedicationsCubit);
+                return MedicationPage(testMedication.id, testMedication.name,
+                    cubit: mockMedicationsCubit);
               },
             ),
           ),
@@ -180,7 +183,9 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return MedicationPage(2, cubit: mockMedicationsCubit);
+                return MedicationPage(testMedicationWithoutGuidelines.id,
+                    testMedicationWithoutGuidelines.name,
+                    cubit: mockMedicationsCubit);
               },
             ),
           ),
