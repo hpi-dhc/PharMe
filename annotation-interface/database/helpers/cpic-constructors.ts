@@ -1,6 +1,8 @@
+import { Types } from 'mongoose';
+
 import { CpicRecommendation } from '../../common/cpic-api';
+import { ILeanMedication } from '../../database/models/Medication';
 import { IGuideline } from '../models/Guideline';
-import { IMedication } from '../models/Medication';
 
 export function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
@@ -26,7 +28,7 @@ export function guidelineFromRecommendation(
 
 export function medicationFromRecommendation(
     recommendation: CpicRecommendation,
-): IMedication<string> {
+): ILeanMedication<Types.ObjectId, Types.ObjectId> {
     return {
         name: recommendation.drug.name,
         rxNorm: recommendation.drugid,
