@@ -4,6 +4,13 @@ import { IBaseModel, MongooseId, OptionalId } from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
 import { IGuideline } from './Guideline';
 
+export interface ILeanMedication<
+    BrickIdT extends MongooseId,
+    IdT extends OptionalId = undefined,
+> extends Omit<IMedication<BrickIdT, IdT>, 'guidelines'> {
+    guidelines: IdT[];
+}
+
 export interface IMedication<
     BrickIdT extends MongooseId,
     IdT extends OptionalId = undefined,
