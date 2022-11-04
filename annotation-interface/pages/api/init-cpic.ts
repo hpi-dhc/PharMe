@@ -14,7 +14,7 @@ import {
     medicationFromRecommendation,
 } from '../../database/helpers/cpic-constructors';
 import Guideline from '../../database/models/Guideline';
-import Medication, { ILeanMedication } from '../../database/models/Medication';
+import Medication, { IMedication_DB } from '../../database/models/Medication';
 
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
@@ -39,10 +39,7 @@ const api: NextApiHandler = async (req, res) =>
                 )
             ).map((guideline) => guideline._id) as Types.ObjectId[];
 
-            const medicationMap = new Map<
-                string,
-                ILeanMedication<Types.ObjectId, Types.ObjectId>
-            >();
+            const medicationMap = new Map<string, IMedication_DB>();
             cpicRecommendations.forEach((recommendation, index) => {
                 const id = recommendation.drugid;
                 const guidelineId = guidelineIds[index];

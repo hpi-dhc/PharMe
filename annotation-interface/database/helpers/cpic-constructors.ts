@@ -1,12 +1,10 @@
-import { Types } from 'mongoose';
-
 import { CpicRecommendation } from '../../common/cpic-api';
-import { ILeanMedication } from '../../database/models/Medication';
-import { IGuideline } from '../models/Guideline';
+import { IGuideline_DB } from '../models/Guideline';
+import { IMedication_DB } from '../models/Medication';
 
 export function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
-): IGuideline<string> {
+): IGuideline_DB {
     return {
         lookupkey: recommendation.lookupkey,
         cpicData: {
@@ -28,7 +26,7 @@ export function guidelineFromRecommendation(
 
 export function medicationFromRecommendation(
     recommendation: CpicRecommendation,
-): ILeanMedication<Types.ObjectId, Types.ObjectId> {
+): IMedication_DB {
     return {
         name: recommendation.drug.name,
         rxNorm: recommendation.drugid,

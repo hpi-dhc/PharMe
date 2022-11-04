@@ -1,11 +1,11 @@
 import mongoose, { Types } from 'mongoose';
 
 import { WarningLevel, warningLevelValues } from '../../common/server-types';
-import { IBaseModel, MongooseId, OptionalId } from '../helpers/types';
+import { BrickAnnotationT, IBaseModel, OptionalId } from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
 
 export interface IGuideline<
-    BrickIdT extends MongooseId,
+    AnnotationT extends BrickAnnotationT,
     IdT extends OptionalId = undefined,
 > extends IBaseModel<IdT> {
     lookupkey: { [key: string]: string }; // gene-symbol: phenotype
@@ -19,20 +19,17 @@ export interface IGuideline<
         comments?: string;
     };
     pharMeData: {
-        recommendation?: BrickIdT[];
-        implication?: BrickIdT[];
+        recommendation?: AnnotationT;
+        implication?: AnnotationT;
         warningLevel?: WarningLevel;
     };
 }
+export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId>;
+export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 
-type GuidelineModel = mongoose.Model<
-    IGuideline<Types.ObjectId, Types.ObjectId>
->;
+type GuidelineModel = mongoose.Model<IGuideline_DB>;
 
-const guidelineSchema = new mongoose.Schema<
-    IGuideline<Types.ObjectId, Types.ObjectId>,
-    GuidelineModel
->({
+const guidelineSchema = new mongoose.Schema<IGuideline_DB, GuidelineModel>({
     lookupkey: { type: {}, required: true },
     cpicData: {
         type: {
@@ -68,27 +65,24 @@ const guidelineSchema = new mongoose.Schema<
     },
 });
 
-guidelineSchema.pre<IGuideline<Types.ObjectId, Types.ObjectId>>(
-    'validate',
-    function (next) {
-        if (
-            JSON.stringify(Object.keys(this.lookupkey)) !==
-            JSON.stringify(Object.keys(this.cpicData.implications))
-        ) {
-            next(
-                new Error(
-                    `Lookup-Key inconsistent with CPIC implications (recommendationid: ${this.cpicData.recommendationId})`,
-                ),
-            );
-        }
-        next();
-    },
-);
+guidelineSchema.pre<IGuideline_DB>('validate', function (next) {
+    if (
+        JSON.stringify(Object.keys(this.lookupkey)) !==
+        JSON.stringify(Object.keys(this.cpicData.implications))
+    ) {
+        next(
+            new Error(
+                `Lookup-Key inconsistent with CPIC implications (recommendationid: ${this.cpicData.recommendationId})`,
+            ),
+        );
+    }
+    next();
+});
 
 export default !mongoose.models
     ? undefined
     : (mongoose.models.Guideline as GuidelineModel) ||
-      mongoose.model<
-          IGuideline<Types.ObjectId, Types.ObjectId>,
-          GuidelineModel
-      >('Guideline', guidelineSchema);
+      mongoose.model<IGuideline_DB, GuidelineModel>(
+          'Guideline',
+          guidelineSchema,
+      );
