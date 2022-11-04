@@ -105,7 +105,7 @@ const api: NextApiHandler = async (req, res) =>
                 axios.patch(serverEndpointGuidelines(), guidelinePatches),
             ]);
 
-            res.status(204).end();
+            return { successStatus: 204 };
         },
     });
 

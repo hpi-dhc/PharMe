@@ -49,7 +49,7 @@ const api: NextApiHandler = async (req, res) => {
     await handleApiMethods(req, res, {
         GET: async () => {
             const response: GetGuidelineDto = { serverGuideline, annotation };
-            res.status(200).json(response);
+            return { successStatus: 200, data: response };
         },
         PATCH: async () => {
             const { serverData: serverPatch, annotation: patch } =
@@ -90,7 +90,7 @@ const api: NextApiHandler = async (req, res) => {
                         .orFail();
                 }
             }
-            res.status(204).end();
+            return { successStatus: 204 };
         },
     });
 };

@@ -50,7 +50,7 @@ const api: NextApiHandler = async (req, res) => {
                 serverMedication,
                 annotation,
             };
-            res.status(200).json(response);
+            return { successStatus: 200, data: response };
         },
         PATCH: async () => {
             const { serverData: serverPatch, annotation: patch } =
@@ -80,7 +80,7 @@ const api: NextApiHandler = async (req, res) => {
                         .orFail();
                 }
             }
-            res.status(204).end();
+            return { successStatus: 204 };
         },
     });
 };

@@ -58,7 +58,7 @@ const api: NextApiHandler = async (req, res) =>
                 ),
             );
 
-            res.status(201).json({ success: true });
+            return { successStatus: 201 };
         },
     });
 

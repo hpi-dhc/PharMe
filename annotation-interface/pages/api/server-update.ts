@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NextApiHandler } from 'next';
+import { ApiError } from 'next/dist/server/api-utils';
 
 import { handleApiMethods } from '../../common/api-helpers';
 import {
@@ -26,7 +27,7 @@ const api: NextApiHandler = async (req, res) =>
                 medications: medicationsRes.data,
                 guidelines: guidelinesRes.data,
             };
-            res.status(200).json(lastUpdates);
+            return { successStatus: 200, data: lastUpdates };
         },
         POST: async () => {
             const target = req.body.target as FetchTarget;
@@ -38,9 +39,9 @@ const api: NextApiHandler = async (req, res) =>
                     await axios.post(serverEndpointGuidelines());
                     break;
                 default:
-                    throw new Error();
+                    throw new ApiError(400, 'Unknown target');
             }
-            res.status(201).json({ success: true });
+            return { successStatus: 201 };
         },
     });
 
