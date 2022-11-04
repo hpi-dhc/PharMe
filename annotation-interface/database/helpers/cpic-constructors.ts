@@ -1,10 +1,10 @@
 import { CpicRecommendation } from '../../common/cpic-api';
-import { IGuideline_DB } from '../models/Guideline';
+import { IGuideline_Any } from '../models/Guideline';
 import { IMedication_DB } from '../models/Medication';
 
 export function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
-): IGuideline_DB {
+): IGuideline_Any {
     return {
         lookupkey: recommendation.lookupkey,
         cpicData: {

@@ -24,7 +24,9 @@ export interface IGuideline<
         warningLevel?: WarningLevel;
     };
 }
-export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId>;
+export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
+    missingAnnotations: number;
+};
 export type IGuideline_Any = IGuideline<BrickAnnotationT, OptionalId>;
 export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 
@@ -79,6 +81,16 @@ guidelineSchema.pre<IGuideline_DB>('validate', function (next) {
     }
     next();
 });
+
+guidelineSchema
+    .virtual('missingAnnotations')
+    .get(function (this: IGuideline_DB) {
+        return [
+            this.pharMeData.implication,
+            this.pharMeData.recommendation,
+            this.pharMeData.warningLevel,
+        ].filter((annotation) => !annotation).length;
+    });
 
 export default !mongoose.models
     ? undefined
