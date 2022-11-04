@@ -7,11 +7,11 @@ import {
     OptionalId,
 } from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
-import { IGuideline } from './Guideline';
+import { IGuideline_Any } from './Guideline';
 
 export interface IMedication<
     AnnotationT extends BrickAnnotationT,
-    GuidelineT extends MongooseId | IGuideline<BrickAnnotationT, OptionalId>,
+    GuidelineT extends MongooseId | IGuideline_Any,
     IdT extends OptionalId = undefined,
 > extends IBaseModel<IdT> {
     name: string;
@@ -24,6 +24,11 @@ export type IMedication_DB = IMedication<
     Types.ObjectId[],
     Types.ObjectId,
     Types.ObjectId
+>;
+export type IMedication_Any = IMedication<
+    BrickAnnotationT,
+    MongooseId | IGuideline_Any,
+    OptionalId
 >;
 
 type MedicationModel = mongoose.Model<IMedication_DB>;

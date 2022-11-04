@@ -25,6 +25,7 @@ export interface IGuideline<
     };
 }
 export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId>;
+export type IGuideline_Any = IGuideline<BrickAnnotationT, OptionalId>;
 export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 
 type GuidelineModel = mongoose.Model<IGuideline_DB>;

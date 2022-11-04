@@ -7,8 +7,10 @@ import {
     ServerGuidelineOverview,
     ServerMedication,
 } from '../../common/server-types';
+import { IGuideline_Any } from '../models/Guideline';
 import { IGuidelineAnnotation } from '../models/GuidelineAnnotation';
 import { IMedAnnotation } from '../models/MedAnnotation';
+import { IMedication_Any } from '../models/Medication';
 import { ITextBrick } from '../models/TextBrick';
 import { translationsToMap } from './brick-translations';
 import { MongooseId, OptionalId } from './types';
@@ -16,8 +18,7 @@ import { MongooseId, OptionalId } from './types';
 const medicationBrickPlaceholders = ['drug-name'] as const;
 const allBrickPlaceholders = [
     ...medicationBrickPlaceholders,
-    'gene-symbol',
-    'gene-result',
+    'phenotype',
 ] as const;
 export const placeHoldersForBrick = (category: BrickUsage): string[] => {
     switch (category) {
@@ -35,7 +36,21 @@ type BrickPlaceholderValues = {
     [Property in typeof allBrickPlaceholders[number]]?: string;
 };
 
+const phenotypeDescription = (geneSymbol: string, geneResult: string): string =>
+    `${geneSymbol}-${geneResult}`;
+const polyPhenotypeDesciption = (lookupkey: {
+    [key: string]: string;
+}): string =>
+    Object.entries(lookupkey)
+        .map(([symbol, result]) => phenotypeDescription(symbol, result))
+        .join('/');
+
 export type BrickResolver =
+    | { from: 'medication'; with: IMedication_Any }
+    | {
+          from: 'guideline';
+          with: { medication: IMedication_Any; guideline: IGuideline_Any };
+      }
     | { from: 'medAnnotation'; with: IMedAnnotation<MongooseId> }
     | { from: 'serverMedication'; with: ServerMedication }
     | { from: 'guidelineAnnotation'; with: IGuidelineAnnotation<MongooseId> }
@@ -46,6 +61,15 @@ const getPlaceholders = ({
     with: resolver,
 }: BrickResolver): BrickPlaceholderValues => {
     switch (type) {
+        case 'medication':
+            return { 'drug-name': resolver.name };
+        case 'guideline':
+            return {
+                'drug-name': resolver.medication.name,
+                phenotype: polyPhenotypeDesciption(
+                    resolver.guideline.lookupkey,
+                ),
+            };
         case 'medAnnotation':
             return { 'drug-name': resolver.medicationName };
         case 'serverMedication':
@@ -53,14 +77,18 @@ const getPlaceholders = ({
         case 'guidelineAnnotation':
             return {
                 'drug-name': resolver.medicationName,
-                'gene-symbol': resolver.geneSymbol,
-                'gene-result': resolver.geneResult,
+                phenotype: phenotypeDescription(
+                    resolver.geneSymbol,
+                    resolver.geneResult,
+                ),
             };
         case 'serverGuideline':
             return {
                 'drug-name': resolver.medication.name,
-                'gene-symbol': resolver.phenotype.geneSymbol.name,
-                'gene-result': resolver.phenotype.geneResult.name,
+                phenotype: phenotypeDescription(
+                    resolver.phenotype.geneSymbol.name,
+                    resolver.phenotype.geneResult.name,
+                ),
             };
     }
 };
