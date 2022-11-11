@@ -7,7 +7,7 @@ import {
     OptionalId,
 } from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
-import { IGuideline_Any } from './Guideline';
+import Guideline, { IGuideline_Any } from './Guideline';
 
 export interface IMedication<
     AnnotationT extends BrickAnnotationT,
@@ -24,7 +24,9 @@ export type IMedication_DB = IMedication<
     Types.ObjectId[],
     Types.ObjectId,
     Types.ObjectId
->;
+> & {
+    missingAnnotations: () => Promise<number>;
+};
 export type IMedication_Any = IMedication<
     BrickAnnotationT,
     MongooseId | IGuideline_Any,
@@ -51,6 +53,26 @@ const medicationSchema = new mongoose.Schema<IMedication_DB, MedicationModel>({
         default: [],
     },
 });
+
+medicationSchema.methods.missingAnnotations = async function (
+    this: IMedication_DB,
+) {
+    const medCount = [this.drugclass, this.indication].filter(
+        (annotation) => !annotation,
+    ).length;
+
+    const guidelineCounts = await Promise.all(
+        this.guidelines.map(async (id) => {
+            const guideline = await Guideline!.findById(id);
+            return guideline?.missingAnnotations;
+        }),
+    );
+
+    return guidelineCounts.reduce(
+        (total, current) => total! + (current ?? 0),
+        medCount,
+    );
+};
 
 export default !mongoose.models
     ? undefined

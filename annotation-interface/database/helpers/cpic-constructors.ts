@@ -1,6 +1,6 @@
 import { CpicRecommendation } from '../../common/cpic-api';
 import { IGuideline_Any } from '../models/Guideline';
-import { IMedication_DB } from '../models/Medication';
+import { IMedication_Any } from '../models/Medication';
 
 export function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
@@ -26,7 +26,7 @@ export function guidelineFromRecommendation(
 
 export function medicationFromRecommendation(
     recommendation: CpicRecommendation,
-): IMedication_DB {
+): IMedication_Any {
     return {
         name: recommendation.drug.name,
         rxNorm: recommendation.drugid,
