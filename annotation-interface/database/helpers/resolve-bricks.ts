@@ -16,10 +16,7 @@ import { translationsToMap } from './brick-translations';
 import { MongooseId, OptionalId } from './types';
 
 const medicationBrickPlaceholders = ['drug-name'] as const;
-const allBrickPlaceholders = [
-    ...medicationBrickPlaceholders,
-    'phenotype',
-] as const;
+const allBrickPlaceholders = [...medicationBrickPlaceholders] as const;
 export const placeHoldersForBrick = (category: BrickUsage): string[] => {
     switch (category) {
         case 'Drug class':
@@ -35,15 +32,6 @@ export const placeHoldersForBrick = (category: BrickUsage): string[] => {
 type BrickPlaceholderValues = {
     [Property in typeof allBrickPlaceholders[number]]?: string;
 };
-
-const phenotypeDescription = (geneSymbol: string, geneResult: string): string =>
-    `${geneSymbol}-${geneResult}`;
-const polyPhenotypeDesciption = (lookupkey: {
-    [key: string]: string;
-}): string =>
-    Object.entries(lookupkey)
-        .map(([symbol, result]) => phenotypeDescription(symbol, result))
-        .join('/');
 
 export type BrickResolver =
     | { from: 'medication'; with: IMedication_Any }
@@ -66,9 +54,6 @@ const getPlaceholders = ({
         case 'guideline':
             return {
                 'drug-name': resolver.medication.name,
-                phenotype: polyPhenotypeDesciption(
-                    resolver.guideline.lookupkey,
-                ),
             };
         case 'medAnnotation':
             return { 'drug-name': resolver.medicationName };
@@ -77,18 +62,10 @@ const getPlaceholders = ({
         case 'guidelineAnnotation':
             return {
                 'drug-name': resolver.medicationName,
-                phenotype: phenotypeDescription(
-                    resolver.geneSymbol,
-                    resolver.geneResult,
-                ),
             };
         case 'serverGuideline':
             return {
                 'drug-name': resolver.medication.name,
-                phenotype: phenotypeDescription(
-                    resolver.phenotype.geneSymbol.name,
-                    resolver.phenotype.geneResult.name,
-                ),
             };
     }
 };

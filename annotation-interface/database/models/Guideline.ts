@@ -8,7 +8,7 @@ export interface IGuideline<
     AnnotationT extends BrickAnnotationT,
     IdT extends OptionalId = undefined,
 > extends IBaseModel<IdT> {
-    lookupkey: { [key: string]: string }; // gene-symbol: phenotype
+    lookupkey: { [key: string]: [string] }; // gene-symbol: phenotype-description
     cpicData: {
         recommendationId: number;
         recommendationVersion: number;

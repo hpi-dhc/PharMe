@@ -9,12 +9,9 @@ import {
     cpicRecommendationsURL,
 } from '../../common/cpic-api';
 import dbConnect from '../../database/helpers/connect';
-import {
-    guidelineFromRecommendation,
-    medicationFromRecommendation,
-} from '../../database/helpers/cpic-constructors';
+import { getDrugsWithContractedGuidelines } from '../../database/helpers/cpic-constructors';
 import Guideline from '../../database/models/Guideline';
-import Medication, { IMedication_Any } from '../../database/models/Medication';
+import Medication from '../../database/models/Medication';
 
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
@@ -27,37 +24,23 @@ const api: NextApiHandler = async (req, res) =>
                 Guideline!.deleteMany({}),
                 Medication!.deleteMany({}),
             ]);
-            const cpicRecommendations = cpicResponse.data;
+            const recommendations = cpicResponse.data;
+            const drugsWithGuidelines =
+                getDrugsWithContractedGuidelines(recommendations);
 
-            const guidelineIds = (
-                await Promise.all(
-                    cpicRecommendations.map((recommendation) =>
-                        Guideline!.create(
-                            guidelineFromRecommendation(recommendation),
+            // could parallelize more here but not worth the added complexity
+            // since we don't have too many drugs
+            for (const { drug, guidelines } of drugsWithGuidelines) {
+                const guidelineIds = (
+                    await Promise.all(
+                        guidelines.map((guideline) =>
+                            Guideline!.create(guideline),
                         ),
-                    ),
-                )
-            ).map((guideline) => guideline._id) as Types.ObjectId[];
-
-            const medicationMap = new Map<string, IMedication_Any>();
-            cpicRecommendations.forEach((recommendation, index) => {
-                const id = recommendation.drugid;
-                const guidelineId = guidelineIds[index];
-                if (medicationMap.has(id)) {
-                    medicationMap.get(id)!.guidelines.push(guidelineId);
-                } else {
-                    const medication =
-                        medicationFromRecommendation(recommendation);
-                    medication.guidelines = [guidelineId];
-                    medicationMap.set(id, medication);
-                }
-            });
-            await Promise.all(
-                Array.from(medicationMap.values()).map((medication) =>
-                    Medication!.create(medication),
-                ),
-            );
-
+                    )
+                ).map((guideline) => guideline._id) as Types.ObjectId[];
+                drug.guidelines = guidelineIds;
+                await Medication!.create(drug);
+            }
             return { successStatus: 201 };
         },
     });
