@@ -1,5 +1,5 @@
 import { Menu } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, AnnotationIcon } from '@heroicons/react/outline';
 
 import WithIcon from './WithIcon';
 
@@ -8,6 +8,7 @@ type SelectionPopoverProps<T extends string> = {
     options: T[];
     onSelect: (value: T) => void;
     selectedOption?: T;
+    icon?: typeof AnnotationIcon;
 };
 
 const SelectionPopover = <T extends string>({
@@ -15,9 +16,10 @@ const SelectionPopover = <T extends string>({
     options,
     selectedOption,
     onSelect,
+    icon,
 }: SelectionPopoverProps<T>) => (
-    <Menu as="div" className="inline">
-        <WithIcon as={Menu.Button} icon={ChevronDownIcon}>
+    <Menu as="div" className="inline self-center px-2">
+        <WithIcon as={Menu.Button} icon={icon ?? ChevronDownIcon}>
             {label ?? selectedOption}
         </WithIcon>
         <Menu.Items className="absolute bg-white p-4 border border-black border-opacity-10">
