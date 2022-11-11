@@ -7,7 +7,7 @@ type Props = {
 const SearchBar = ({ query, setQuery, placeholder }: Props) => {
     return (
         <input
-            className="w-full p-2 mb-6 border border-opacity-10 border-black"
+            className="w-full p-2 border border-opacity-10 border-black"
             type="text"
             placeholder={placeholder ?? 'Search'}
             value={query}

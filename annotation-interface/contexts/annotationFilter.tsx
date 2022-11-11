@@ -8,14 +8,12 @@ import {
 
 import { ContextProvider } from '../components/common/Layout';
 
-export const filterStates = ['all', 'missing', 'curated'] as const;
+export const filterStates = ['all', 'missing', 'fully curated'] as const;
 export type FilterState = typeof filterStates[number];
 
 interface IAnnotationFilterContext {
     curationState: FilterState;
     setCurationState: Dispatch<SetStateAction<FilterState>>;
-    categoryIndex: number;
-    setCategoryIndex: Dispatch<SetStateAction<number>>;
     searchQuery: string;
     setSearchQuery: Dispatch<SetStateAction<string>>;
 }
@@ -28,15 +26,12 @@ export const AnnotationFilterContextProvider: ContextProvider = ({
     children,
 }) => {
     const [curationState, setCurationState] = useState<FilterState>('all');
-    const [categoryIndex, setCategoryIndex] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     return (
         <AnnotationFilterContext.Provider
             value={{
                 curationState,
                 setCurationState,
-                categoryIndex,
-                setCategoryIndex,
                 searchQuery,
                 setSearchQuery,
             }}
