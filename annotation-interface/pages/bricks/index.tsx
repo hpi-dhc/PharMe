@@ -7,6 +7,7 @@ import DisplayLanguagePicker from '../../components/common/DisplayLanguagePicker
 import FilterTabs from '../../components/common/FilterTabs';
 import Label from '../../components/common/Label';
 import PageHeading from '../../components/common/PageHeading';
+import TableRow from '../../components/common/TableRow';
 import WithIcon from '../../components/common/WithIcon';
 import {
     displayCategories,
@@ -57,39 +58,33 @@ const AllTextBricks = ({
                             ? bricks.filter((brick) => brick.usage === category)
                             : bricks
                         ).map((brick, index) => (
-                            <p
-                                key={index}
-                                className="border-t border-black border-opacity-10 py-3 pl-3"
-                            >
-                                <Link key={index} href={`/bricks/${brick._id}`}>
-                                    <a className="self-start mr-2">
-                                        {brick.translations.find(
-                                            (translation) =>
-                                                translation.language ===
-                                                language,
-                                        )?.text ?? (
-                                            <WithIcon
-                                                icon={ExclamationIcon}
-                                                className="align-top"
-                                            >
-                                                This Brick is not translated to{' '}
-                                                {language}
-                                            </WithIcon>
-                                        )}
-                                    </a>
-                                </Link>
-                                <Label
-                                    as="button"
-                                    title={brick.usage}
-                                    onClick={() =>
-                                        setCategoryIndex(
-                                            displayCategories.indexOf(
-                                                brick.usage,
-                                            ),
-                                        )
-                                    }
-                                />
-                            </p>
+                            <TableRow key={index} link={`/bricks/${brick._id}`}>
+                                <>
+                                    {brick.translations.find(
+                                        (translation) =>
+                                            translation.language === language,
+                                    )?.text ?? (
+                                        <WithIcon
+                                            icon={ExclamationIcon}
+                                            className="align-top"
+                                        >
+                                            This Brick is not translated to{' '}
+                                            {language}
+                                        </WithIcon>
+                                    )}
+                                    <Label
+                                        as="button"
+                                        title={brick.usage}
+                                        onClick={() =>
+                                            setCategoryIndex(
+                                                displayCategories.indexOf(
+                                                    brick.usage,
+                                                ),
+                                            )
+                                        }
+                                    />
+                                </>
+                            </TableRow>
                         ))}
                     </Tab.Panel>
                 ))}

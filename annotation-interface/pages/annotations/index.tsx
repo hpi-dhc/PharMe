@@ -1,4 +1,4 @@
-import { ChevronRightIcon, FilterIcon } from '@heroicons/react/outline';
+import { FilterIcon } from '@heroicons/react/outline';
 import { GetServerSidePropsResult, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
@@ -6,7 +6,7 @@ import Label from '../../components/common/Label';
 import PageHeading from '../../components/common/PageHeading';
 import SearchBar from '../../components/common/SearchBar';
 import SelectionPopover from '../../components/common/SelectionPopover';
-import WithIcon from '../../components/common/WithIcon';
+import TableRow from '../../components/common/TableRow';
 import {
     filterStates,
     useAnnotationFilterContext,
@@ -61,23 +61,17 @@ const Annotations = ({
             </div>
             <div>
                 {filteredDrugs.map((drug) => (
-                    <Link
+                    <TableRow
                         key={drug.id}
-                        href={`/annotations/medications/${drug.id}`}
+                        link={`/annotations/medications/${drug.id}`}
                     >
-                        <a className="border-t border-black border-opacity-10 py-3 pl-3 block flex justify-between hover:bg-neutral-50">
+                        <div className="flex justify-between">
                             <span className="mr-2">{drug.name}</span>
-                            <WithIcon
-                                icon={ChevronRightIcon}
-                                reverse
-                                className="pr-2"
-                            >
-                                <span>
-                                    <Label title={`${drug.badge} missing`} />
-                                </span>
-                            </WithIcon>
-                        </a>
-                    </Link>
+                            <span>
+                                <Label title={`${drug.badge} missing`} />
+                            </span>
+                        </div>
+                    </TableRow>
                 ))}
             </div>
         </>
