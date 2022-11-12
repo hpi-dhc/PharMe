@@ -16,3 +16,25 @@ export interface IBaseModel<IdT extends OptionalId = undefined> {
 // - populated -> ITextBrick[]
 // - resolved -> string
 export type BrickAnnotationT = MongooseId[] | ITextBrick<OptionalId>[] | string;
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+function _makeIdsStrings(v: any): any {
+    if (v === undefined) return null;
+    if (!(v instanceof Object)) return v;
+    if (v instanceof Array) {
+        return v.map((e) => _makeIdsStrings(e));
+    } else {
+        return makeIdsStrings(v);
+    }
+}
+export function makeIdsStrings(doc: any): any {
+    let keys = Object.keys(doc);
+    if ('schema' in doc && 'paths' in doc['schema']) {
+        keys = Object.keys(doc.schema.paths);
+    }
+    return keys.reduce((newObj: any, p: string) => {
+        newObj[p] = p === '_id' ? doc[p].toString() : _makeIdsStrings(doc[p]);
+        return newObj;
+    }, new Object());
+}
