@@ -27,6 +27,7 @@ export interface IGuideline<
 export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
     missingAnnotations: number;
 };
+export type IGuideline_Str = IGuideline<string, string>;
 export type IGuideline_Any = IGuideline<BrickAnnotationT, OptionalId>;
 export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 

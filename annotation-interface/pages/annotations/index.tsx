@@ -69,7 +69,7 @@ const Annotations = () => {
                     filteredDrugs?.map((drug) => (
                         <TableRow
                             key={drug.id}
-                            link={`/annotations/medications/${drug.id}`}
+                            link={`/annotations/${drug.id}`}
                         >
                             <div className="flex justify-between">
                                 <span className="mr-2">{drug.name}</span>

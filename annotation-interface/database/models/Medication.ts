@@ -7,7 +7,7 @@ import {
     OptionalId,
 } from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
-import Guideline, { IGuideline_Any } from './Guideline';
+import Guideline, { IGuideline_Any, IGuideline_Str } from './Guideline';
 
 export interface IMedication<
     AnnotationT extends BrickAnnotationT,
@@ -27,6 +27,7 @@ export type IMedication_DB = IMedication<
 > & {
     missingAnnotations: () => Promise<number>;
 };
+export type IMedication_Str = IMedication<string, IGuideline_Str, string>;
 export type IMedication_Any = IMedication<
     BrickAnnotationT,
     MongooseId | IGuideline_Any,
