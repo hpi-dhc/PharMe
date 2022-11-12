@@ -2,7 +2,7 @@ import {
     BrickUsage,
     pharMeLanguage,
     SupportedLanguage,
-} from '../../common/constants';
+} from '../../common/definitions';
 import {
     ServerGuidelineOverview,
     ServerMedication,

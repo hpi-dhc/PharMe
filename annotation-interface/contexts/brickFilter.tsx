@@ -6,7 +6,7 @@ import {
     useState,
 } from 'react';
 
-import { brickUsages } from '../common/constants';
+import { brickUsages } from '../common/definitions';
 import { ContextProvider } from '../components/common/Layout';
 
 export const displayCategories = ['All', ...brickUsages] as const;

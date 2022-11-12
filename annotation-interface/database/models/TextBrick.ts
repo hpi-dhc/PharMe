@@ -6,7 +6,7 @@ import {
     BrickUsage,
     supportedLanguages,
     pharMeLanguage,
-} from '../../common/constants';
+} from '../../common/definitions';
 import { translationIsValid } from '../helpers/brick-translations';
 import {
     BrickResolver,

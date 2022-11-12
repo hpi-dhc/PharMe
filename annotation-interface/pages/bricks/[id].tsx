@@ -4,7 +4,7 @@ import {
     InferGetServerSidePropsType,
 } from 'next';
 
-import { BrickUsage, brickUsages } from '../../common/constants';
+import { BrickUsage, brickUsages } from '../../common/definitions';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
 import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';

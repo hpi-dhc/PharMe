@@ -1,4 +1,4 @@
-import { supportedLanguages } from '../../common/constants';
+import { supportedLanguages } from '../../common/definitions';
 import { useLanguageContext } from '../../contexts/language';
 import SelectionPopover from './SelectionPopover';
 

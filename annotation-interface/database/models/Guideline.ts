@@ -7,6 +7,7 @@ import {
     OptionalId,
 } from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
+import { ITextBrick_Str } from './TextBrick';
 
 export interface IGuideline<
     AnnotationT extends BrickAnnotationT,
@@ -34,6 +35,7 @@ export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
     missingAnnotations: number;
 };
 export type IGuideline_Str = IGuideline<string, string>;
+export type IGuideline_Populated = IGuideline<ITextBrick_Str[], string>;
 export type IGuideline_Any = IGuideline<BrickAnnotationT, OptionalId>;
 export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 

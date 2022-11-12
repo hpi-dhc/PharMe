@@ -8,7 +8,7 @@ import {
     BrickUsage,
     SupportedLanguage,
     supportedLanguages,
-} from '../../common/constants';
+} from '../../common/definitions';
 import {
     translationIsValid,
     translationsToArray,

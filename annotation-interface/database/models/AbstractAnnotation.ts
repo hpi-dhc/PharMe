@@ -1,6 +1,6 @@
 import mongoose, { SchemaValidator, Types } from 'mongoose';
 
-import { BrickUsage } from '../../common/constants';
+import { BrickUsage } from '../../common/definitions';
 import { IBaseModel, OptionalId } from '../helpers/types';
 import TextBrick from './TextBrick';
 
