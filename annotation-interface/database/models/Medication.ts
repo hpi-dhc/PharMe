@@ -8,6 +8,7 @@ import {
 } from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
 import Guideline, { IGuideline_Any, IGuideline_Str } from './Guideline';
+import { ITextBrick_Str } from './TextBrick';
 
 export interface IMedication<
     AnnotationT extends BrickAnnotationT,
@@ -28,6 +29,11 @@ export type IMedication_DB = IMedication<
     missingAnnotations: () => Promise<number>;
 };
 export type IMedication_Str = IMedication<string, IGuideline_Str, string>;
+export type IMedication_Populated = IMedication<
+    Array<ITextBrick_Str>,
+    IGuideline_Str,
+    string
+>;
 export type IMedication_Any = IMedication<
     BrickAnnotationT,
     MongooseId | IGuideline_Any,

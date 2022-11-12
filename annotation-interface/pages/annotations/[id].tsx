@@ -11,7 +11,10 @@ import PageHeading from '../../components/common/PageHeading';
 import dbConnect from '../../database/helpers/connect';
 import { makeIdsStrings } from '../../database/helpers/types';
 import { IGuideline_DB } from '../../database/models/Guideline';
-import Medication, { IMedication_Str } from '../../database/models/Medication';
+import Medication, {
+    IMedication_Populated,
+} from '../../database/models/Medication';
+import { ITextBrick_Str } from '../../database/models/TextBrick';
 
 const DrugDetail = ({
     drug,
@@ -39,7 +42,7 @@ export const getServerSideProps = async (
     context: GetServerSidePropsContext,
 ): Promise<
     GetServerSidePropsResult<{
-        drug: IMedication_Str;
+        drug: IMedication_Populated;
     }>
 > => {
     const id = context.params?.id as string;
@@ -49,10 +52,16 @@ export const getServerSideProps = async (
         await dbConnect();
         const drug = await Medication!
             .findById(id)
-            .populate<{ guidelines: IGuideline_DB }>('guidelines')
+            .populate<{
+                drugclass: Array<ITextBrick_Str> | undefined;
+                indication: Array<ITextBrick_Str> | undefined;
+                guidelines: IGuideline_DB;
+            }>(['drugclass', 'indication', 'guidelines'])
             .orFail()
             .exec();
-        return { props: { drug: makeIdsStrings(drug) as IMedication_Str } };
+        return {
+            props: { drug: makeIdsStrings(drug) as IMedication_Populated },
+        };
     } catch (error) {
         return { notFound: true };
     }
