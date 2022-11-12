@@ -17,6 +17,11 @@ export interface IBaseModel<IdT extends OptionalId = undefined> {
 // - resolved -> string
 export type BrickAnnotationT = MongooseId[] | ITextBrick<OptionalId>[] | string;
 
+export interface IAnnotationModel<IdT extends OptionalId, AT>
+    extends IBaseModel<IdT> {
+    annotations: AT;
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 function _makeIdsStrings(v: any): any {

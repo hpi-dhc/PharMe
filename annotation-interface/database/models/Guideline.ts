@@ -1,13 +1,24 @@
 import mongoose, { Types } from 'mongoose';
 
 import { WarningLevel, warningLevelValues } from '../../common/server-types';
-import { BrickAnnotationT, IBaseModel, OptionalId } from '../helpers/types';
+import {
+    BrickAnnotationT,
+    IAnnotationModel,
+    OptionalId,
+} from '../helpers/types';
 import { annotationBrickValidators } from './AbstractAnnotation';
 
 export interface IGuideline<
     AnnotationT extends BrickAnnotationT,
     IdT extends OptionalId = undefined,
-> extends IBaseModel<IdT> {
+> extends IAnnotationModel<
+        IdT,
+        {
+            recommendation?: AnnotationT;
+            implication?: AnnotationT;
+            warningLevel?: WarningLevel;
+        }
+    > {
     lookupkey: { [key: string]: [string] }; // gene-symbol: phenotype-description
     cpicData: {
         recommendationId: number;
@@ -17,11 +28,6 @@ export interface IGuideline<
         implications: { [key: string]: string }; // gene-symbol: implication
         recommendation: string;
         comments?: string;
-    };
-    pharMeData: {
-        recommendation?: AnnotationT;
-        implication?: AnnotationT;
-        warningLevel?: WarningLevel;
     };
 }
 export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
@@ -47,7 +53,7 @@ const guidelineSchema = new mongoose.Schema<IGuideline_DB, GuidelineModel>({
         },
         required: true,
     },
-    pharMeData: {
+    annotations: {
         type: {
             recommendation: {
                 type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
@@ -87,9 +93,9 @@ guidelineSchema
     .virtual('missingAnnotations')
     .get(function (this: IGuideline_DB) {
         return [
-            this.pharMeData.implication,
-            this.pharMeData.recommendation,
-            this.pharMeData.warningLevel,
+            this.annotations.implication,
+            this.annotations.recommendation,
+            this.annotations.warningLevel,
         ].filter((annotation) => !annotation).length;
     });
 

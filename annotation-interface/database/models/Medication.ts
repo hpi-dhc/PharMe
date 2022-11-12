@@ -2,7 +2,7 @@ import mongoose, { Types } from 'mongoose';
 
 import {
     BrickAnnotationT,
-    IBaseModel,
+    IAnnotationModel,
     MongooseId,
     OptionalId,
 } from '../helpers/types';
@@ -14,13 +14,18 @@ export interface IMedication<
     AnnotationT extends BrickAnnotationT,
     GuidelineT extends MongooseId | IGuideline_Any,
     IdT extends OptionalId = undefined,
-> extends IBaseModel<IdT> {
+> extends IAnnotationModel<
+        IdT,
+        {
+            drugclass?: AnnotationT;
+            indication?: AnnotationT;
+        }
+    > {
     name: string;
     rxNorm: string;
-    drugclass?: AnnotationT;
-    indication?: AnnotationT;
     guidelines: GuidelineT[];
 }
+
 export type IMedication_DB = IMedication<
     Types.ObjectId[],
     Types.ObjectId,
@@ -45,15 +50,20 @@ type MedicationModel = mongoose.Model<IMedication_DB>;
 const medicationSchema = new mongoose.Schema<IMedication_DB, MedicationModel>({
     name: { type: String, required: true },
     rxNorm: { type: String, required: true },
-    drugclass: {
-        type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
-        default: undefined,
-        validate: annotationBrickValidators('Drug class'),
-    },
-    indication: {
-        type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
-        default: undefined,
-        validate: annotationBrickValidators('Drug indication'),
+    annotations: {
+        type: {
+            drugclass: {
+                type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
+                default: undefined,
+                validate: annotationBrickValidators('Drug class'),
+            },
+            indication: {
+                type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
+                default: undefined,
+                validate: annotationBrickValidators('Drug indication'),
+            },
+        },
+        required: true,
     },
     guidelines: {
         type: [{ type: Types.ObjectId, ref: 'Guideline' }],
@@ -64,9 +74,10 @@ const medicationSchema = new mongoose.Schema<IMedication_DB, MedicationModel>({
 medicationSchema.methods.missingAnnotations = async function (
     this: IMedication_DB,
 ) {
-    const medCount = [this.drugclass, this.indication].filter(
-        (annotation) => !annotation,
-    ).length;
+    const medCount = [
+        this.annotations.drugclass,
+        this.annotations.indication,
+    ].filter((annotation) => !annotation).length;
 
     const guidelineCounts = await Promise.all(
         this.guidelines.map(async (id) => {

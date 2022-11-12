@@ -3,7 +3,7 @@ import {
     GetServerSidePropsResult,
     InferGetServerSidePropsType,
 } from 'next';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import { resetServerContext } from 'react-beautiful-dnd';
 
 import { BackToAnnotations } from '../../components/annotations/AbstractAnnotation';
@@ -19,10 +19,10 @@ import { ITextBrick_Str } from '../../database/models/TextBrick';
 const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const router = useRouter();
-    const mutate = () => {
-        router.replace(router.asPath);
-    };
+    // const router = useRouter();
+    // const mutate = () => {
+    //     router.replace(router.asPath);
+    // };
     return (
         <>
             <PageHeading title={`Drug: ${drug.name}`}>
@@ -53,10 +53,15 @@ export const getServerSideProps = async (
         const drug = await Medication!
             .findById(id)
             .populate<{
-                drugclass: Array<ITextBrick_Str> | undefined;
-                indication: Array<ITextBrick_Str> | undefined;
+                'annotations.drugclass': Array<ITextBrick_Str> | undefined;
+                'annotations.indication': Array<ITextBrick_Str> | undefined;
                 guidelines: IGuideline_DB;
-            }>(['drugclass', 'indication', 'guidelines'])
+            }>([
+                'annotations',
+                'annotations.drugclass',
+                'annotations.indication',
+                'guidelines',
+            ])
             .orFail()
             .exec();
         return {

@@ -22,7 +22,7 @@ function guidelineFromRecommendation(
             recommendation: recommendation.drugrecommendation,
             comments: recommendation.comments,
         },
-        pharMeData: {
+        annotations: {
             recommendation: undefined,
             implication: undefined,
             warningLevel: undefined,
@@ -47,8 +47,10 @@ function drugFromRecommendation(
     return {
         name: recommendation.drug.name,
         rxNorm: recommendation.drugid,
-        drugclass: undefined,
-        indication: undefined,
+        annotations: {
+            drugclass: undefined,
+            indication: undefined,
+        },
         guidelines: [],
     };
 }
