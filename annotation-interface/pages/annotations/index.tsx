@@ -1,17 +1,16 @@
 import { FilterIcon } from '@heroicons/react/outline';
-import { GetServerSidePropsResult, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
+import { useSwrFetcher } from '../../common/react-helpers';
+import GenericError from '../../components/common/GenericError';
 import Label from '../../components/common/Label';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 import PageHeading from '../../components/common/PageHeading';
 import SearchBar from '../../components/common/SearchBar';
 import SelectionPopover from '../../components/common/SelectionPopover';
 import TableRow from '../../components/common/TableRow';
-import {
-    filterStates,
-    useAnnotationFilterContext,
-} from '../../contexts/annotationFilter';
-import Medication from '../../database/models/Medication';
+import { filterStates, useAnnotationContext } from '../../contexts/annotations';
+import { GetAnnotationsReponse } from '../api/annotations';
 
 const matches = (test: string, query: string) => {
     test = test.toLowerCase();
@@ -23,13 +22,15 @@ const matches = (test: string, query: string) => {
     );
 };
 
-const Annotations = ({
-    drugs,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Annotations = () => {
     const { curationState, setCurationState, searchQuery, setSearchQuery } =
-        useAnnotationFilterContext();
+        useAnnotationContext();
 
-    const filteredDrugs = drugs.filter(
+    const { data: response, error } =
+        useSwrFetcher<GetAnnotationsReponse>('/api/annotations');
+    const drugs = response?.data.data.drugs;
+
+    const filteredDrugs = drugs?.filter(
         ({ name, badge }) =>
             matches(name, searchQuery) &&
             (curationState === 'all' ||
@@ -60,48 +61,28 @@ const Annotations = ({
                 />
             </div>
             <div>
-                {filteredDrugs.map((drug) => (
-                    <TableRow
-                        key={drug.id}
-                        link={`/annotations/medications/${drug.id}`}
-                    >
-                        <div className="flex justify-between">
-                            <span className="mr-2">{drug.name}</span>
-                            <span>
-                                <Label title={`${drug.badge} missing`} />
-                            </span>
-                        </div>
-                    </TableRow>
-                ))}
+                {error ? (
+                    <GenericError />
+                ) : !filteredDrugs ? (
+                    <LoadingSpinner />
+                ) : (
+                    filteredDrugs?.map((drug) => (
+                        <TableRow
+                            key={drug.id}
+                            link={`/annotations/medications/${drug.id}`}
+                        >
+                            <div className="flex justify-between">
+                                <span className="mr-2">{drug.name}</span>
+                                <span>
+                                    <Label title={`${drug.badge} missing`} />
+                                </span>
+                            </div>
+                        </TableRow>
+                    ))
+                )}
             </div>
         </>
     );
 };
 
 export default Annotations;
-
-export const getServerSideProps = async (): Promise<
-    GetServerSidePropsResult<{
-        drugs: Array<{ id: string; name: string; badge: number }>;
-    }>
-> => {
-    try {
-        const drugs = await Medication!.find({}).orFail().exec();
-        const badges = await Promise.all(
-            drugs.map((drug) => drug.missingAnnotations()),
-        );
-        return {
-            props: {
-                drugs: drugs.map((drug, index) => {
-                    return {
-                        id: drug._id!.toString(),
-                        name: drug.name,
-                        badge: badges[index],
-                    };
-                }),
-            },
-        };
-    } catch (error) {
-        return { notFound: true };
-    }
-};

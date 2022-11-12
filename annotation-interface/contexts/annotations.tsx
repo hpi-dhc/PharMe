@@ -5,28 +5,33 @@ import {
     useContext,
     useState,
 } from 'react';
+import { mutate } from 'swr';
 
 import { ContextProvider } from '../components/common/Layout';
 
 export const filterStates = ['all', 'missing', 'fully curated'] as const;
 export type FilterState = typeof filterStates[number];
 
-interface IAnnotationFilterContext {
+interface IAnnotationContext {
     curationState: FilterState;
     setCurationState: Dispatch<SetStateAction<FilterState>>;
     searchQuery: string;
     setSearchQuery: Dispatch<SetStateAction<string>>;
+    mutateAnnotations: () => void;
 }
 
-const AnnotationFilterContext = createContext<
-    IAnnotationFilterContext | undefined
->(undefined);
+const AnnotationFilterContext = createContext<IAnnotationContext | undefined>(
+    undefined,
+);
 
 export const AnnotationFilterContextProvider: ContextProvider = ({
     children,
 }) => {
     const [curationState, setCurationState] = useState<FilterState>('all');
     const [searchQuery, setSearchQuery] = useState('');
+    const mutateAnnotations = () => {
+        mutate('api/annotations');
+    };
     return (
         <AnnotationFilterContext.Provider
             value={{
@@ -34,6 +39,7 @@ export const AnnotationFilterContextProvider: ContextProvider = ({
                 setCurationState,
                 searchQuery,
                 setSearchQuery,
+                mutateAnnotations,
             }}
         >
             {children}
@@ -41,7 +47,7 @@ export const AnnotationFilterContextProvider: ContextProvider = ({
     );
 };
 
-export const useAnnotationFilterContext = (): IAnnotationFilterContext => {
+export const useAnnotationContext = (): IAnnotationContext => {
     const context = useContext(AnnotationFilterContext);
     if (!context) throw Error('Missing provider for annotation filter context');
     return context;

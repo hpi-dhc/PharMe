@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createElement, PropsWithChildren } from 'react';
 
-import { AnnotationFilterContextProvider } from '../../contexts/annotationFilter';
+import { AnnotationFilterContextProvider } from '../../contexts/annotations';
 import { BrickFilterContextProvider } from '../../contexts/brickFilter';
 import { LanguageContextProvider } from '../../contexts/language';
 

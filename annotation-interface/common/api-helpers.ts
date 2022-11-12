@@ -4,6 +4,11 @@ import { ApiError } from 'next/dist/server/api-utils';
 
 import dbConnect from '../database/helpers/connect';
 
+export interface ApiResponse<T> {
+    success: true;
+    data: T;
+}
+
 type ApiMethodHandlers = {
     [key: string]: () => Promise<{ successStatus: number; data?: object }>;
 };
