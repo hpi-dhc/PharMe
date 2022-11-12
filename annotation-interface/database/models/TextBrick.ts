@@ -26,17 +26,18 @@ export interface ITextBrick<IdT extends OptionalId = undefined>
     usage: BrickUsage;
     translations: ITextBrickTranslation<IdT>[];
 }
+export type ITextBrick_DB = ITextBrick<Types.ObjectId>;
+export type ITextBrick_Str = ITextBrick<string>;
 
-export interface TextBrickModel
-    extends mongoose.Model<ITextBrick<Types.ObjectId>> {
+export interface TextBrickModel extends mongoose.Model<ITextBrick_DB> {
     findResolved(
         resolver: BrickResolver,
-        filter: FilterQuery<ITextBrick<Types.ObjectId>>,
+        filter: FilterQuery<ITextBrick_DB>,
         language?: SupportedLanguage,
     ): Promise<ResolvedBrick<Types.ObjectId>[]>;
 }
 
-const textBrickSchema = new mongoose.Schema<ITextBrick<Types.ObjectId>>({
+const textBrickSchema = new mongoose.Schema<ITextBrick_DB>({
     usage: {
         type: String,
         enum: brickUsages,
@@ -88,7 +89,7 @@ textBrickSchema.static(
     'findResolved',
     async function (
         resolver: BrickResolver,
-        filter: FilterQuery<ITextBrick<Types.ObjectId>>,
+        filter: FilterQuery<ITextBrick_DB>,
         language?: SupportedLanguage,
     ): Promise<ResolvedBrick<Types.ObjectId>[]> {
         const bricks = await this.find(filter).lean().exec();
