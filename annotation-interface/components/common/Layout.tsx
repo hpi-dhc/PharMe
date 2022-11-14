@@ -5,6 +5,7 @@ import { createElement, PropsWithChildren } from 'react';
 import { AnnotationFilterContextProvider } from '../../contexts/annotations';
 import { BrickFilterContextProvider } from '../../contexts/brickFilter';
 import { LanguageContextProvider } from '../../contexts/language';
+import DisplayLanguagePicker from './DisplayLanguagePicker';
 
 export type ContextProvider = ({ children }: PropsWithChildren) => JSX.Element;
 
@@ -35,13 +36,13 @@ const tabDefinitions: TabDefinition[] = [
         activePaths: /^\/annotations.*$/,
         title: 'Annotations',
         linkPath: '/annotations',
-        providers: [LanguageContextProvider, AnnotationFilterContextProvider],
+        providers: [AnnotationFilterContextProvider],
     },
     {
         activePaths: /^\/bricks.*$/,
         title: 'Bricks',
         linkPath: '/bricks',
-        providers: [LanguageContextProvider, BrickFilterContextProvider],
+        providers: [BrickFilterContextProvider],
     },
 ];
 
@@ -52,33 +53,38 @@ const Layout = ({ children }: PropsWithChildren) => {
     );
     return (
         <>
-            <div className="h-screen fixed px-8 py-16">
-                <ul className="space-y-2">
-                    {tabDefinitions.map((tabDefinition, index) => (
-                        <li
-                            key={index}
-                            className={`font-medium ${
-                                index === activeIndex && 'underline'
-                            }`}
+            <LanguageContextProvider>
+                <div className="h-screen fixed px-8 py-16 flex flex-col justify-between">
+                    <div>
+                        <ul className="space-y-2">
+                            {tabDefinitions.map((tabDefinition, index) => (
+                                <li
+                                    key={index}
+                                    className={`font-medium ${
+                                        index === activeIndex && 'underline'
+                                    }`}
+                                >
+                                    <Link href={tabDefinition.linkPath}>
+                                        <a>{tabDefinition.title}</a>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <DisplayLanguagePicker />
+                </div>
+                <div className="max-w-screen-md mx-auto pt-4 pb-48">
+                    {activeIndex === -1 ? (
+                        children
+                    ) : (
+                        <ResolvedProviders
+                            providers={tabDefinitions[activeIndex].providers}
                         >
-                            <Link href={tabDefinition.linkPath}>
-                                <a>{tabDefinition.title}</a>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="max-w-screen-md mx-auto pt-4 pb-48">
-                {activeIndex === -1 ? (
-                    children
-                ) : (
-                    <ResolvedProviders
-                        providers={tabDefinitions[activeIndex].providers}
-                    >
-                        {children}
-                    </ResolvedProviders>
-                )}
-            </div>
+                            {children}
+                        </ResolvedProviders>
+                    )}
+                </div>
+            </LanguageContextProvider>
         </>
     );
 };
