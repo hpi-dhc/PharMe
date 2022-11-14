@@ -58,18 +58,21 @@ const AllTextBricks = ({
                         ).map((brick, index) => (
                             <TableRow key={index} link={`/bricks/${brick._id}`}>
                                 <>
-                                    {brick.translations.find(
-                                        (translation) =>
-                                            translation.language === language,
-                                    )?.text ?? (
-                                        <WithIcon
-                                            icon={ExclamationIcon}
-                                            className="align-top"
-                                        >
-                                            This Brick is not translated to{' '}
-                                            {language}
-                                        </WithIcon>
-                                    )}
+                                    <span className="mr-2">
+                                        {brick.translations.find(
+                                            (translation) =>
+                                                translation.language ===
+                                                language,
+                                        )?.text ?? (
+                                            <WithIcon
+                                                icon={ExclamationIcon}
+                                                className="align-top"
+                                            >
+                                                This Brick is not translated to{' '}
+                                                {language}
+                                            </WithIcon>
+                                        )}
+                                    </span>
                                     <Label
                                         as="button"
                                         title={brick.usage}
