@@ -10,7 +10,6 @@ import Medication from '../../../database/models/Medication';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export interface UpdateAnnotationBody {
-    _id: string;
     key: AnnotationKey;
     newValue: any;
 }
@@ -21,7 +20,10 @@ const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
         PATCH: async () => {
             await dbConnect();
-            const { _id, key, newValue } = req.body as UpdateAnnotationBody;
+            const {
+                query: { id },
+            } = req;
+            const { key, newValue } = req.body as UpdateAnnotationBody;
             const model = allAnnotationModels.find((model) =>
                 Object.keys(
                     model.schema.paths.annotations.schema.paths,
@@ -31,7 +33,7 @@ const api: NextApiHandler = async (req, res) =>
                 throw new ApiError(400, 'Unknown Annotation type');
             }
             await (model as any)
-                .findByIdAndUpdate(_id, {
+                .findByIdAndUpdate(id, {
                     annotations: { [key]: newValue },
                 })
                 .orFail();
