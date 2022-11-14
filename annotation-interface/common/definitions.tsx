@@ -66,9 +66,10 @@ const _drugAnnotation = (
     key: DrugAnnotationKey,
 ): JSX.Element => (
     <BrickAnnotation
-        _id={drug._id}
+        _id={drug._id!}
+        _key={key}
         annotation={drug.annotations[key]}
-        key={key}
+        brickResolver={{ from: 'medication', with: drug }}
     />
 );
 
@@ -83,9 +84,22 @@ const _guidelineAnnotation = (
         default:
             return (
                 <BrickAnnotation
-                    _id={guideline._id}
+                    _id={guideline._id!}
+                    _key={key}
                     annotation={guideline.annotations[key]}
-                    key={key}
+                    // TODO: how to get drug name
+                    brickResolver={{
+                        from: 'guideline',
+                        with: {
+                            medication: {
+                                name: 'drug name',
+                                rxNorm: 'rxcui',
+                                guidelines: [],
+                                annotations: {},
+                            },
+                            guideline,
+                        },
+                    }}
                 />
             );
     }

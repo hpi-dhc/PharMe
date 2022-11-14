@@ -3,9 +3,9 @@ import {
     GetServerSidePropsResult,
     InferGetServerSidePropsType,
 } from 'next';
-// import { useRouter } from 'next/router';
 import { resetServerContext } from 'react-beautiful-dnd';
 
+import { annotationComponent } from '../../common/definitions';
 import { BackToAnnotations } from '../../components/annotations/AbstractAnnotation';
 import PageHeading from '../../components/common/PageHeading';
 import dbConnect from '../../database/helpers/connect';
@@ -19,10 +19,6 @@ import { ITextBrick_Str } from '../../database/models/TextBrick';
 const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    // const router = useRouter();
-    // const mutate = () => {
-    //     router.replace(router.asPath);
-    // };
     return (
         <>
             <PageHeading title={`Drug: ${drug.name}`}>
@@ -31,6 +27,8 @@ const DrugDetail = ({
             </PageHeading>
             <div className="space-y-4">
                 <BackToAnnotations />
+                {annotationComponent.drugclass(drug)}
+                {annotationComponent.indication(drug)}
             </div>
         </>
     );
