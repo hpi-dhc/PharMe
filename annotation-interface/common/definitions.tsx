@@ -34,6 +34,16 @@ export const brickCategoryForAnnotationKey: {
     warningLevel: null,
 } as const;
 
+export const displayNameForAnnotationKey: {
+    [k in AnnotationKey]: string;
+} = {
+    indication: 'Drug indication',
+    drugclass: 'Patient-friendly drug class',
+    implication: 'Implication',
+    recommendation: 'Recommendation',
+    warningLevel: 'Warning level',
+} as const;
+
 export const annotationComponent: Record<
     DrugAnnotationKey,
     (drug: IMedication_Populated) => JSX.Element
