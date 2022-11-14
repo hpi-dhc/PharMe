@@ -35,7 +35,7 @@ const tabDefinitions: TabDefinition[] = [
         activePaths: /^\/annotations.*$/,
         title: 'Annotations',
         linkPath: '/annotations',
-        providers: [AnnotationFilterContextProvider],
+        providers: [LanguageContextProvider, AnnotationFilterContextProvider],
     },
     {
         activePaths: /^\/bricks.*$/,
