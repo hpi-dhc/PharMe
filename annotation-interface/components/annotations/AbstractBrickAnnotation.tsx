@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 import WithIcon from '../common/WithIcon';
-import AbstractAnnotation, {
+import AbstractAnnotationOld, {
     AbstractAnnotationRef,
     AnnotationMissing,
-} from './AbstractAnnotation';
+} from './AbstractAnnotationOld';
 import DraggableBrick from './drag-drop/DraggableBrick';
 import GenericDroppable from './drag-drop/GenericDroppable';
 import TrashDroppable from './drag-drop/TrashDroppable';
@@ -137,7 +137,7 @@ const AbstractBrickAnnotation = ({
     );
 
     return (
-        <AbstractAnnotation
+        <AbstractAnnotationOld
             serverValue={serverText}
             hasChanges={serverText !== annotationText}
             displayContext={displayContext}
@@ -157,7 +157,7 @@ const AbstractBrickAnnotation = ({
                     to create a new Brick!
                 </p>
             )}
-        </AbstractAnnotation>
+        </AbstractAnnotationOld>
     );
 };
 

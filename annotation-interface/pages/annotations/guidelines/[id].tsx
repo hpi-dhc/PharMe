@@ -12,7 +12,7 @@ import {
     serverEndpointGuidelines,
     ServerGuideline,
 } from '../../../common/server-types';
-import { BackToAnnotations } from '../../../components/annotations/AbstractAnnotation';
+import { BackToAnnotations } from '../../../components/annotations/AbstractAnnotationOld';
 import { GuidelineAnnotation } from '../../../components/annotations/BrickAnnotations';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
 import WarningLevelAnnotation from '../../../components/annotations/WarningLevelAnnotation';

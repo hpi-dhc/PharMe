@@ -36,7 +36,7 @@ export const BackToAnnotations = () => (
     </Link>
 );
 
-const AbstractAnnotation = forwardRef<AbstractAnnotationRef, Props>(
+const AbstractAnnotationOld = forwardRef<AbstractAnnotationRef, Props>(
     (
         { serverValue, hasChanges, displayContext, displayName, children },
         ref,
@@ -77,6 +77,6 @@ const AbstractAnnotation = forwardRef<AbstractAnnotationRef, Props>(
         );
     },
 );
-AbstractAnnotation.displayName = 'AbstractAnnotation';
+AbstractAnnotationOld.displayName = 'AbstractAnnotation';
 
-export default AbstractAnnotation;
+export default AbstractAnnotationOld;

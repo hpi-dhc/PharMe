@@ -16,10 +16,10 @@ import {
 } from '../../common/server-types';
 import { IGuidelineAnnotation } from '../../database/models/GuidelineAnnotation';
 import WithIcon from '../common/WithIcon';
-import AbstractAnnotation, {
+import AbstractAnnotationOld, {
     AbstractAnnotationRef,
     AnnotationMissing,
-} from './AbstractAnnotation';
+} from './AbstractAnnotationOld';
 
 type Props = {
     refetch: () => void;
@@ -65,7 +65,7 @@ const WarningLevelAnnotation = ({
     };
 
     return (
-        <AbstractAnnotation
+        <AbstractAnnotationOld
             serverValue={serverData?.warningLevel}
             hasChanges={serverData?.warningLevel !== selection}
             displayContext={displayContext}
@@ -113,7 +113,7 @@ const WarningLevelAnnotation = ({
                     </WithIcon>
                 </div>
             </div>
-        </AbstractAnnotation>
+        </AbstractAnnotationOld>
     );
 };
 
