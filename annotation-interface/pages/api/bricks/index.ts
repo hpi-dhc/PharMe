@@ -16,13 +16,13 @@ const api: NextApiHandler = async (req, res) =>
         GET: async () => {
             await dbConnect();
             const filter = req.query;
-            const docs = await TextBrick!.find(filter).lean().orFail().exec();
-            const bricks: Response = {
+            const docs = await TextBrick!.find(filter).lean().exec();
+            const data: Response = {
                 bricks: docs.map(
                     (doc) => makeIdsStrings(doc) as ITextBrick_Str,
                 ),
             };
-            return { successStatus: 200, data: { bricks } };
+            return { successStatus: 200, data };
         },
     });
 
