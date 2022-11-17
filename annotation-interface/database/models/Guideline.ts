@@ -2,6 +2,7 @@ import mongoose, { Types } from 'mongoose';
 
 import { WarningLevel, warningLevelValues } from '../../common/definitions';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
+import { missingGuidelineAnnotations } from '../helpers/guideline-data';
 import {
     BrickAnnotationT,
     IAnnotationModel,
@@ -94,11 +95,7 @@ guidelineSchema.pre<IGuideline_DB>('validate', function (next) {
 guidelineSchema
     .virtual('missingAnnotations')
     .get(function (this: IGuideline_DB) {
-        return [
-            this.annotations.implication,
-            this.annotations.recommendation,
-            this.annotations.warningLevel,
-        ].filter((annotation) => !annotation).length;
+        return missingGuidelineAnnotations(this);
     });
 
 export default !mongoose.models
