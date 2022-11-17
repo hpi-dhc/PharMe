@@ -5,7 +5,7 @@ type Props = {
     setQuery: (newQuery: string) => void;
     placeholder?: string;
     dark?: boolean;
-    onEnter?: () => void;
+    onEnter?: () => boolean;
 };
 
 const SearchBar = ({ query, setQuery, placeholder, dark, onEnter }: Props) => {
@@ -24,11 +24,11 @@ const SearchBar = ({ query, setQuery, placeholder, dark, onEnter }: Props) => {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' && onEnter) {
-                        onEnter();
-                        setQuery('');
+                        onEnter() && setQuery('');
                         e.preventDefault();
                     }
                 }}
+                autoFocus
             />
         </div>
     );

@@ -1,5 +1,6 @@
 import { FilterIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { matches } from '../../common/generic-helpers';
 import { useSwrFetcher } from '../../common/react-helpers';
@@ -29,6 +30,8 @@ const Annotations = () => {
                 (curationState === 'fully curated' && !badge)),
     );
 
+    const router = useRouter();
+
     return (
         <>
             <PageHeading title="Annotations">
@@ -42,7 +45,15 @@ const Annotations = () => {
                 .
             </PageHeading>
             <div className="flex mb-6 space-x-2">
-                <SearchBar query={searchQuery} setQuery={setSearchQuery} />
+                <SearchBar
+                    query={searchQuery}
+                    setQuery={setSearchQuery}
+                    onEnter={() => {
+                        if (!filteredDrugs?.length) return false;
+                        router.replace(`/annotations/${filteredDrugs[0].id}`);
+                        return false;
+                    }}
+                />
                 <SelectionPopover
                     label={`Filter`}
                     options={[...filterStates]}

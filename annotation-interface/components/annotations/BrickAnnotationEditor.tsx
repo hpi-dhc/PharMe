@@ -60,6 +60,7 @@ const BrickAnnotationEditor = ({ allBricks, usedIds, setUsedIds }: Props) => {
                     onEnter={() => {
                         const first = unusedIds.values().next()?.value;
                         if (first) removeOrInsert(usedIds?.size ?? 0, first);
+                        return true;
                     }}
                 />
                 <GenericDroppable droppableId="unused" disableDrop>
