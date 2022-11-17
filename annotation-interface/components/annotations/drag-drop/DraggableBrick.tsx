@@ -20,3 +20,16 @@ const DraggableBrick = ({ id, index, text }: Props) => (
 );
 
 export default DraggableBrick;
+
+export const draggableBricks = (
+    ids: Array<string>,
+    resolvedBricks: Map<string, string>,
+) =>
+    ids.map((id, index) => (
+        <DraggableBrick
+            key={id}
+            id={id}
+            index={index}
+            text={resolvedBricks.get(id)!}
+        />
+    ));

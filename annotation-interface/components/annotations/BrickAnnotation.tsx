@@ -15,6 +15,7 @@ import { GetBricksResponse } from '../../pages/api/bricks';
 import GenericError from '../common/GenericError';
 import LoadingSpinner from '../common/LoadingSpinner';
 import AbstractAnnotation from './AbstractAnnotation';
+import BrickAnnotationEditor from './BrickAnnotationEditor';
 
 interface Props {
     _id: string;
@@ -49,11 +50,6 @@ function BrickAnnotation({
           )
         : undefined;
 
-    const unusedBrickIds = new Set<string>();
-    allBricks?.forEach(
-        (_, id) => usedBrickIds?.has(id) || unusedBrickIds.add(id),
-    );
-
     const stringValue = usedBrickIds
         ? Array.from(usedBrickIds)
               .map((id) => allBricks?.get(id))
@@ -74,7 +70,11 @@ function BrickAnnotation({
             ) : !allBricks ? (
                 <LoadingSpinner />
             ) : (
-                <p>editor</p>
+                <BrickAnnotationEditor
+                    allBricks={allBricks}
+                    usedIds={usedBrickIds}
+                    setUsedIds={setUsedBrickIds}
+                />
             )}
         </AbstractAnnotation>
     );
