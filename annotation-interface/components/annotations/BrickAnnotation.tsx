@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState } from 'react';
 
 import {
@@ -39,10 +40,11 @@ function BrickAnnotation({
         setUsedBrickIds(undefined);
     };
 
+    const usageParams = new URLSearchParams({
+        usage: brickCategoryForAnnotationKey[key]!,
+    }).toString();
     const { data: response, error } = useSwrFetcher<GetBricksResponse>(
-        `/api/bricks?${new URLSearchParams({
-            usage: brickCategoryForAnnotationKey[key]!,
-        })}`,
+        `/api/bricks?${usageParams}`,
     );
     const allBricks = response?.data.data.bricks
         ? new Map(
@@ -69,6 +71,18 @@ function BrickAnnotation({
                 <GenericError />
             ) : !allBricks ? (
                 <LoadingSpinner />
+            ) : !allBricks.size ? (
+                <div className="mt-4 space-y-4 text-center">
+                    <p>
+                        Looks like there are no Bricks defined for this type of
+                        Annotation yet!
+                    </p>
+                    <p>
+                        <Link href={`/bricks/new?${usageParams}`}>
+                            <a className="underline">Create a new Brick now</a>
+                        </Link>
+                    </p>
+                </div>
             ) : (
                 <BrickAnnotationEditor
                     allBricks={allBricks}

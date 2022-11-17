@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 import { BrickUsage, brickUsages } from '../../common/definitions';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
@@ -14,6 +16,13 @@ import {
 const NewBrick = () => {
     const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     const categoryString: string = displayCategoryForIndex(categoryIndex);
+
+    const router = useRouter();
+    const { usage } = router.query;
+    if (usage && (brickUsages as readonly string[]).includes(usage as string)) {
+        setCategoryIndex(indexForDisplayCategory(usage as DisplayCategory));
+    }
+
     useMountEffect(() => {
         if (!(brickUsages as readonly string[]).includes(categoryString)) {
             setCategoryIndex(
@@ -21,6 +30,7 @@ const NewBrick = () => {
             );
         }
     });
+
     return (
         <>
             <PageHeading title="Create new Brick">
