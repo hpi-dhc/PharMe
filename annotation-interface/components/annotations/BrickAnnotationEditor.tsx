@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
-import { draggableBricks } from './drag-drop/DraggableBrick';
+import DraggableBricks from './drag-drop/DraggableBrick';
 import GenericDroppable from './drag-drop/GenericDroppable';
 
 type Props = {
@@ -37,10 +37,20 @@ const BrickAnnotationEditor = ({ allBricks, usedIds, setUsedIds }: Props) => {
                 highlightDrag
                 className="border border-opacity-40 border-white py-6 px-2 my-4"
             >
-                {draggableBricks(Array.from(usedIds ?? []), allBricks)}
+                <DraggableBricks
+                    ids={Array.from(usedIds ?? [])}
+                    resolvedBricks={allBricks}
+                    onClick={(index) => removeOrInsert(index)}
+                    action="remove"
+                />
             </GenericDroppable>
             <GenericDroppable droppableId="unused" disableDrop>
-                {draggableBricks(Array.from(unusedIds ?? []), allBricks)}
+                <DraggableBricks
+                    ids={Array.from(unusedIds ?? [])}
+                    resolvedBricks={allBricks}
+                    onClick={(_, id) => removeOrInsert(usedIds?.size ?? 0, id)}
+                    action="add"
+                />
             </GenericDroppable>
         </DragDropContext>
     );
