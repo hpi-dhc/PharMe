@@ -1,4 +1,4 @@
-import { ServerGuideline } from '../../common/server-types';
+import { IGuideline_Any } from '../../database/models/Guideline';
 
 const CpicSection = ({
     title,
@@ -15,26 +15,29 @@ const CpicSection = ({
     </p>
 );
 
-const fields = (guideline: ServerGuideline): [string, string | null][] => [
-    ['Comment', guideline.cpicComment],
-    ['Phenotype consultation text', guideline.phenotype.cpicConsultationText],
-    ['Implication', guideline.cpicImplication],
-    ['Recommendation', guideline.cpicRecommendation],
+type CpicData = IGuideline_Any['cpicData'];
+
+const fields = (guideline: CpicData): [string, string | null][] => [
+    ['Comment', guideline.comments ?? null],
+    ...Object.entries(guideline.implications).map(
+        ([phenotype, implication]) =>
+            [`{Implication for ${phenotype}}`, implication] as [string, string],
+    ),
+    ['Recommendation', guideline.recommendation],
 ];
 
-const CpicGuidelineBox = ({ guideline }: { guideline: ServerGuideline }) => (
+const CpicGuidelineBox = ({ guideline }: { guideline: CpicData }) => (
     <div className="space-y-4 border border-black border-opacity-10 p-4">
         <h2 className="font-bold pb-2">
             CPIC Guideline:{' '}
             <a
                 className="underline"
-                href={guideline.cpicGuidelineUrl}
+                href={guideline.guidelineUrl}
                 target="_blank"
                 rel="noreferrer"
             >
-                {guideline.cpicGuidelineName}
-            </a>{' '}
-            ({guideline.cpicClassification})
+                {guideline.guidelineName}
+            </a>
         </h2>
         {fields(guideline)
             .filter(([, content]) => content)

@@ -1,12 +1,12 @@
 import mongoose, { Types } from 'mongoose';
 
-import { WarningLevel, warningLevelValues } from '../../common/server-types';
+import { WarningLevel, warningLevelValues } from '../../common/definitions';
+import { brickAnnotationValidators } from '../helpers/brick-validators';
 import {
     BrickAnnotationT,
     IAnnotationModel,
     OptionalId,
 } from '../helpers/types';
-import { annotationBrickValidators } from './AbstractAnnotation';
 import { ITextBrick_Str } from './TextBrick';
 
 export interface IGuideline<
@@ -60,12 +60,12 @@ const guidelineSchema = new mongoose.Schema<IGuideline_DB, GuidelineModel>({
             recommendation: {
                 type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
                 default: undefined,
-                validate: annotationBrickValidators('Recommendation'),
+                validate: brickAnnotationValidators('Recommendation'),
             },
             implication: {
                 type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
                 default: undefined,
-                validate: annotationBrickValidators('Implication'),
+                validate: brickAnnotationValidators('Implication'),
             },
             warningLevel: {
                 type: String,

@@ -1,12 +1,12 @@
 import mongoose, { Types } from 'mongoose';
 
+import { brickAnnotationValidators } from '../helpers/brick-validators';
 import {
     BrickAnnotationT,
     IAnnotationModel,
     MongooseId,
     OptionalId,
 } from '../helpers/types';
-import { annotationBrickValidators } from './AbstractAnnotation';
 import Guideline, { IGuideline_Any, IGuideline_Str } from './Guideline';
 import { ITextBrick_Str } from './TextBrick';
 
@@ -55,12 +55,12 @@ const medicationSchema = new mongoose.Schema<IMedication_DB, MedicationModel>({
             drugclass: {
                 type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
                 default: undefined,
-                validate: annotationBrickValidators('Drug class'),
+                validate: brickAnnotationValidators('Drug class'),
             },
             indication: {
                 type: [{ type: Types.ObjectId, ref: 'TextBrick' }],
                 default: undefined,
-                validate: annotationBrickValidators('Drug indication'),
+                validate: brickAnnotationValidators('Drug indication'),
             },
         },
         required: true,

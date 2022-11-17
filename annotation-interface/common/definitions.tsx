@@ -20,6 +20,9 @@ export const brickUsages = [
 ] as const;
 export type BrickUsage = typeof brickUsages[number];
 
+export const warningLevelValues = ['green', 'yellow', 'red'] as const;
+export type WarningLevel = typeof warningLevelValues[number];
+
 export type DrugAnnotationKey = keyof IMedication_Any['annotations'];
 export type GuidelineAnnotationKey = keyof IGuideline_Any['annotations'];
 export type AnnotationKey = DrugAnnotationKey | GuidelineAnnotationKey;

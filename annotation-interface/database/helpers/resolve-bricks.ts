@@ -3,17 +3,11 @@ import {
     pharMeLanguage,
     SupportedLanguage,
 } from '../../common/definitions';
-import {
-    ServerGuidelineOverview,
-    ServerMedication,
-} from '../../common/server-types';
 import { IGuideline_Any } from '../models/Guideline';
-import { IGuidelineAnnotation } from '../models/GuidelineAnnotation';
-import { IMedAnnotation } from '../models/MedAnnotation';
 import { IMedication_Any } from '../models/Medication';
 import { ITextBrick } from '../models/TextBrick';
 import { translationsToMap } from './brick-translations';
-import { MongooseId, OptionalId } from './types';
+import { OptionalId } from './types';
 
 const medicationBrickPlaceholders = ['drug-name'] as const;
 const allBrickPlaceholders = [...medicationBrickPlaceholders] as const;
@@ -38,11 +32,7 @@ export type BrickResolver =
     | {
           from: 'guideline';
           with: { medication: IMedication_Any; guideline: IGuideline_Any };
-      }
-    | { from: 'medAnnotation'; with: IMedAnnotation<MongooseId> }
-    | { from: 'serverMedication'; with: ServerMedication }
-    | { from: 'guidelineAnnotation'; with: IGuidelineAnnotation<MongooseId> }
-    | { from: 'serverGuideline'; with: ServerGuidelineOverview };
+      };
 
 const getPlaceholders = ({
     from: type,
@@ -55,25 +45,10 @@ const getPlaceholders = ({
             return {
                 'drug-name': resolver.medication.name,
             };
-        case 'medAnnotation':
-            return { 'drug-name': resolver.medicationName };
-        case 'serverMedication':
-            return { 'drug-name': resolver.name };
-        case 'guidelineAnnotation':
-            return {
-                'drug-name': resolver.medicationName,
-            };
-        case 'serverGuideline':
-            return {
-                'drug-name': resolver.medication.name,
-            };
     }
 };
 
-export type ResolvedBrick<IdT extends OptionalId> = [
-    _id: IdT,
-    text: string | undefined,
-];
+export type ResolvedBrick<IdT extends OptionalId> = [_id: IdT, text: string];
 
 export function resolveBricks<IdT extends OptionalId>(
     resolver: BrickResolver,
@@ -88,16 +63,8 @@ export function resolveBricks<IdT extends OptionalId>(
                 text = text!.replaceAll(`#${placeholder}`, replace);
             });
         }
-        return [_id, text] as ResolvedBrick<IdT>;
+        return [_id, text ?? '<Missing translation!>'] as ResolvedBrick<IdT>;
     });
 
     return resolved;
-}
-
-export function definedResolvedMap<IdT extends MongooseId>(
-    bricks: ResolvedBrick<IdT>[],
-): Map<string, string> {
-    return new Map(
-        bricks.filter(([, text]) => text !== undefined) as [string, string][],
-    );
 }
