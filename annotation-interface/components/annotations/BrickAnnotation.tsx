@@ -30,29 +30,33 @@ function BrickAnnotation({
     brickResolver,
 }: Props) {
     const { language } = useLanguageContext();
-    const initialBricks = annotation
-        ? resolveBricks(brickResolver, annotation, language)
+    const initialBrickIds = annotation
+        ? new Set(annotation.map((brick) => brick._id!))
         : undefined;
-    const [selectedBricks, setSelectedBricks] = useState(initialBricks);
+    const [usedBrickIds, setUsedBrickIds] = useState(initialBrickIds);
     const onClear = () => {
-        setSelectedBricks(undefined);
+        setUsedBrickIds(undefined);
     };
 
-    const query = new URLSearchParams({
-        usage: brickCategoryForAnnotationKey[key]!,
-    }).toString();
     const { data: response, error } = useSwrFetcher<GetBricksResponse>(
-        `/api/bricks?${query}`,
+        `/api/bricks?${new URLSearchParams({
+            usage: brickCategoryForAnnotationKey[key]!,
+        })}`,
     );
-
     const allBricks = response?.data.data.bricks
-        ? resolveBricks(brickResolver, response.data.data.bricks, language)
+        ? new Map(
+              resolveBricks(brickResolver, response.data.data.bricks, language),
+          )
         : undefined;
 
-    const stringValue = selectedBricks
-        ? selectedBricks
-              .map((brick) => brick[1])
-              .filter((str) => str)
+    const unusedBrickIds = new Set<string>();
+    allBricks?.forEach(
+        (_, id) => usedBrickIds?.has(id) || unusedBrickIds.add(id),
+    );
+
+    const stringValue = usedBrickIds
+        ? Array.from(usedBrickIds)
+              .map((id) => allBricks?.get(id))
               .join(' ')
         : null;
 
@@ -61,8 +65,8 @@ function BrickAnnotation({
             _id={id}
             _key={key}
             stringValue={stringValue}
-            value={selectedBricks?.map(([id]) => id) ?? null}
-            hasChanges={selectedBricks !== initialBricks}
+            value={usedBrickIds ? Array.from(usedBrickIds) : null}
+            hasChanges={usedBrickIds !== initialBrickIds}
             onClear={onClear}
         >
             {error ? (
