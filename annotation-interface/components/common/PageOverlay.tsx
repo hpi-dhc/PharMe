@@ -18,7 +18,7 @@ const PageOverlay = ({
          * assigning margins to fixed overlay */
         <div>
             <div
-                className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 text-white text-opacity-80 backdrop-blur-sm"
+                className="z-10 fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 text-white text-opacity-80 backdrop-blur-sm"
                 onClick={() => hide()}
             >
                 <div
