@@ -1,6 +1,7 @@
 import { FilterIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 
+import { matches } from '../../common/generic-helpers';
 import { useSwrFetcher } from '../../common/react-helpers';
 import GenericError from '../../components/common/GenericError';
 import Label from '../../components/common/Label';
@@ -11,16 +12,6 @@ import SelectionPopover from '../../components/common/SelectionPopover';
 import TableRow from '../../components/common/TableRow';
 import { filterStates, useAnnotationContext } from '../../contexts/annotations';
 import { GetAnnotationsReponse } from '../api/annotations';
-
-const matches = (test: string, query: string) => {
-    test = test.toLowerCase();
-    return (
-        query
-            .toLowerCase()
-            .split(/\s+/)
-            .filter((word) => !test.includes(word)).length === 0
-    );
-};
 
 const Annotations = () => {
     const { curationState, setCurationState, searchQuery, setSearchQuery } =
