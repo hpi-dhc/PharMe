@@ -5,9 +5,10 @@ type Props = {
     setQuery: (newQuery: string) => void;
     placeholder?: string;
     dark?: boolean;
+    onEnter?: () => void;
 };
 
-const SearchBar = ({ query, setQuery, placeholder, dark }: Props) => {
+const SearchBar = ({ query, setQuery, placeholder, dark, onEnter }: Props) => {
     return (
         <div className="relative w-full text-sm">
             <SearchIcon className="pointer-events-none w-4 h-4 absolute top-1/2 transform -translate-y-1/2 left-2 opacity-60" />
@@ -21,6 +22,13 @@ const SearchBar = ({ query, setQuery, placeholder, dark }: Props) => {
                 placeholder={placeholder ?? 'Search'}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && onEnter) {
+                        onEnter();
+                        setQuery('');
+                        e.preventDefault();
+                    }
+                }}
             />
         </div>
     );

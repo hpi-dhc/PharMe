@@ -57,6 +57,10 @@ const BrickAnnotationEditor = ({ allBricks, usedIds, setUsedIds }: Props) => {
                     setQuery={setQuery}
                     placeholder="Search for Bricks"
                     dark
+                    onEnter={() => {
+                        const first = unusedIds.values().next()?.value;
+                        if (first) removeOrInsert(usedIds?.size ?? 0, first);
+                    }}
                 />
                 <GenericDroppable droppableId="unused" disableDrop>
                     <DraggableBricks
