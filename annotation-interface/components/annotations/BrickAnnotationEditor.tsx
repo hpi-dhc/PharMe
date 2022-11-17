@@ -1,6 +1,8 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
+import { matches } from '../../common/generic-helpers';
+import SearchBar from '../common/SearchBar';
 import DraggableBricks from './drag-drop/DraggableBrick';
 import GenericDroppable from './drag-drop/GenericDroppable';
 
@@ -11,8 +13,13 @@ type Props = {
 };
 
 const BrickAnnotationEditor = ({ allBricks, usedIds, setUsedIds }: Props) => {
+    const [query, setQuery] = useState('');
+
     const unusedIds = new Set<string>();
-    allBricks.forEach((_, id) => usedIds?.has(id) || unusedIds.add(id));
+    allBricks.forEach((_, id) => {
+        if (usedIds?.has(id)) return;
+        if (!query || matches(allBricks.get(id)!, query)) unusedIds.add(id);
+    });
 
     const removeOrInsert = (index: number, newValue: string | null = null) => {
         if (newValue) usedIds?.delete(newValue);
@@ -32,26 +39,36 @@ const BrickAnnotationEditor = ({ allBricks, usedIds, setUsedIds }: Props) => {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <GenericDroppable
-                droppableId="used"
-                highlightDrag
-                className="border border-opacity-40 border-white py-6 px-2 my-4"
-            >
-                <DraggableBricks
-                    ids={Array.from(usedIds ?? [])}
-                    resolvedBricks={allBricks}
-                    onClick={(index) => removeOrInsert(index)}
-                    action="remove"
+            <div className="space-y-4">
+                <GenericDroppable
+                    droppableId="used"
+                    highlightDrag
+                    className="border border-opacity-40 border-white py-6 px-2 my-4"
+                >
+                    <DraggableBricks
+                        ids={Array.from(usedIds ?? [])}
+                        resolvedBricks={allBricks}
+                        onClick={(index) => removeOrInsert(index)}
+                        action="remove"
+                    />
+                </GenericDroppable>
+                <SearchBar
+                    query={query}
+                    setQuery={setQuery}
+                    placeholder="Search for Bricks"
+                    dark
                 />
-            </GenericDroppable>
-            <GenericDroppable droppableId="unused" disableDrop>
-                <DraggableBricks
-                    ids={Array.from(unusedIds ?? [])}
-                    resolvedBricks={allBricks}
-                    onClick={(_, id) => removeOrInsert(usedIds?.size ?? 0, id)}
-                    action="add"
-                />
-            </GenericDroppable>
+                <GenericDroppable droppableId="unused" disableDrop>
+                    <DraggableBricks
+                        ids={Array.from(unusedIds ?? [])}
+                        resolvedBricks={allBricks}
+                        onClick={(_, id) =>
+                            removeOrInsert(usedIds?.size ?? 0, id)
+                        }
+                        action="add"
+                    />
+                </GenericDroppable>
+            </div>
         </DragDropContext>
     );
 };
