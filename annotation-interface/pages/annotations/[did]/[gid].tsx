@@ -6,7 +6,7 @@ import {
 import { resetServerContext } from 'react-beautiful-dnd';
 
 import dbConnect from '../../../database/helpers/connect';
-import { guidelineDisplayName } from '../../../database/helpers/guideline-data';
+import { guidelineDescription } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
 import Guideline, {
     IGuideline_Populated,
@@ -17,12 +17,17 @@ const GuidelineDetail = ({
     drugName,
     guideline,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    console.log(drugName);
-    console.log(guideline);
     return (
-        <div>
-            TODO {drugName}, {guidelineDisplayName(guideline)}
-        </div>
+        // TODO
+        <>
+            <div>{drugName}</div>
+            {guidelineDescription(guideline).map((phenotype, index) => (
+                <p key={index}>
+                    <span className="font-bold mr-2">{phenotype.gene}</span>
+                    {phenotype.description}
+                </p>
+            ))}
+        </>
     );
 };
 

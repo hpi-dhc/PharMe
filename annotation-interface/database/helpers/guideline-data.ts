@@ -8,8 +8,13 @@ export function missingGuidelineAnnotations(guideline: IGuideline_Any): number {
     ].filter((annotation) => !annotation).length;
 }
 
-export function guidelineDisplayName(guideline: IGuideline_Any): string {
-    return Object.entries(guideline.lookupkey)
-        .map(([gene, phenotypes]) => `${gene}: ${phenotypes.join('/')}`)
-        .join('\n');
+export function guidelineDescription(
+    guideline: IGuideline_Any,
+): Array<{ gene: string; description: string }> {
+    return Object.entries(guideline.lookupkey).map(([gene, description]) => {
+        return {
+            gene,
+            description: Array.from(new Set(description)).join('/'),
+        };
+    });
 }

@@ -15,7 +15,7 @@ import SearchBar from '../../../components/common/SearchBar';
 import TableRow from '../../../components/common/TableRow';
 import dbConnect from '../../../database/helpers/connect';
 import {
-    guidelineDisplayName,
+    guidelineDescription,
     missingGuidelineAnnotations,
 } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
@@ -29,9 +29,15 @@ const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [guidelineQuery, setGuidelineQuery] = useState('');
-    const guidelines = drug.guidelines.filter((guideline) =>
-        matches(guidelineDisplayName(guideline), guidelineQuery),
-    );
+    const guidelines = drug.guidelines.filter((guideline) => {
+        const description = guidelineDescription(guideline);
+        return matches(
+            description
+                .map((phenotype) => phenotype.gene + phenotype.description)
+                .join(''),
+            guidelineQuery,
+        );
+    });
     return (
         <>
             <PageHeading title={`Drug: ${drug.name}`}>
@@ -57,7 +63,16 @@ const DrugDetail = ({
                         >
                             <div className="flex justify-between">
                                 <span className="mr-2">
-                                    {guidelineDisplayName(guideline)}
+                                    {guidelineDescription(guideline).map(
+                                        (phenotype, index) => (
+                                            <p key={index}>
+                                                <span className="font-bold mr-2">
+                                                    {phenotype.gene}
+                                                </span>
+                                                {phenotype.description}
+                                            </p>
+                                        ),
+                                    )}
                                 </span>
                                 <span>
                                     <Label
