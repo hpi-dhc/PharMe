@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
@@ -14,6 +15,22 @@ type Props = {
 
 const BrickAnnotationEditor = ({ allBricks, usedIds, setUsedIds }: Props) => {
     const [query, setQuery] = useState('');
+
+    if (!allBricks.size) {
+        return (
+            <div className="mt-4 space-y-4 text-center">
+                <p>
+                    Looks like there are no Bricks defined for this type of
+                    Annotation yet!
+                </p>
+                <p>
+                    <Link href="/bricks/new">
+                        <a className="underline">Create a new Brick now</a>
+                    </Link>
+                </p>
+            </div>
+        );
+    }
 
     const unusedIds = new Set<string>();
     allBricks.forEach((_, id) => {
