@@ -41,8 +41,7 @@ const DrugDetail = ({
     return (
         <>
             <PageHeading title={`Drug: ${drug.name}`}>
-                View and edit annotations for this drug, i.e. its
-                patient-friendly drug class and its indication.
+                View and edit annotations for this drug and its guidelines.
             </PageHeading>
             <div className="space-y-4">
                 <BackToAnnotations />
