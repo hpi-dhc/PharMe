@@ -5,6 +5,10 @@ import {
 } from 'next';
 import { resetServerContext } from 'react-beautiful-dnd';
 
+import { annotationComponent } from '../../../common/definitions';
+import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
+import { BackButton } from '../../../components/common/BackButton';
+import PageHeading from '../../../components/common/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import { guidelineDescription } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
@@ -18,15 +22,21 @@ const GuidelineDetail = ({
     guideline,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return (
-        // TODO
         <>
-            <div>{drugName}</div>
-            {guidelineDescription(guideline).map((phenotype, index) => (
-                <p key={index}>
-                    <span className="font-bold mr-2">{phenotype.gene}</span>
-                    {phenotype.description}
-                </p>
-            ))}
+            <PageHeading title={`Guideline for ${drugName}`}>
+                {guidelineDescription(guideline).map((phenotype, index) => (
+                    <p key={index}>
+                        <span className="font-bold mr-2">{phenotype.gene}</span>
+                        {phenotype.description}
+                    </p>
+                ))}
+            </PageHeading>
+            <div className="space-y-4">
+                <BackButton />
+                <CpicGuidelineBox guideline={guideline.cpicData} />
+                {annotationComponent.implication(guideline)}
+                {annotationComponent.recommendation(guideline)}
+            </div>
         </>
     );
 };
