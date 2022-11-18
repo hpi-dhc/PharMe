@@ -31,7 +31,7 @@ export type BrickResolver =
     | { from: 'medication'; with: IMedication_Any }
     | {
           from: 'guideline';
-          with: { medication: IMedication_Any; guideline: IGuideline_Any };
+          with: { drugName: string; guideline: IGuideline_Any };
       };
 
 const getPlaceholders = ({
@@ -42,9 +42,7 @@ const getPlaceholders = ({
         case 'medication':
             return { 'drug-name': resolver.name };
         case 'guideline':
-            return {
-                'drug-name': resolver.medication.name,
-            };
+            return { 'drug-name': resolver.drugName };
     }
 };
 

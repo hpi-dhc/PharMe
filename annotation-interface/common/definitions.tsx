@@ -53,15 +53,16 @@ export const annotationComponent: Record<
 > &
     Record<
         GuidelineAnnotationKey,
-        (guideline: IGuideline_Populated) => JSX.Element
+        (drugName: string, guideline: IGuideline_Populated) => JSX.Element
     > = {
     drugclass: (drug) => _drugAnnotation(drug, 'drugclass'),
     indication: (drug) => _drugAnnotation(drug, 'indication'),
-    implication: (guideline) => _guidelineAnnotation(guideline, 'implication'),
-    recommendation: (guideline) =>
-        _guidelineAnnotation(guideline, 'recommendation'),
-    warningLevel: (guideline) =>
-        _guidelineAnnotation(guideline, 'warningLevel'),
+    implication: (drugName, guideline) =>
+        _guidelineAnnotation(drugName, guideline, 'implication'),
+    recommendation: (drugName, guideline) =>
+        _guidelineAnnotation(drugName, guideline, 'recommendation'),
+    warningLevel: (drugName, guideline) =>
+        _guidelineAnnotation(drugName, guideline, 'warningLevel'),
 };
 
 const _drugAnnotation = (
@@ -77,6 +78,7 @@ const _drugAnnotation = (
 );
 
 const _guidelineAnnotation = (
+    drugName: string,
     guideline: IGuideline_Populated,
     key: GuidelineAnnotationKey,
 ): JSX.Element => {
@@ -90,18 +92,9 @@ const _guidelineAnnotation = (
                     _id={guideline._id!}
                     _key={key}
                     annotation={guideline.annotations[key]}
-                    // TODO: how to get drug name
                     brickResolver={{
                         from: 'guideline',
-                        with: {
-                            medication: {
-                                name: 'drug name',
-                                rxNorm: 'rxcui',
-                                guidelines: [],
-                                annotations: {},
-                            },
-                            guideline,
-                        },
+                        with: { drugName, guideline },
                     }}
                 />
             );

@@ -34,8 +34,8 @@ const GuidelineDetail = ({
             <div className="space-y-4">
                 <BackButton />
                 <CpicGuidelineBox guideline={guideline.cpicData} />
-                {annotationComponent.implication(guideline)}
-                {annotationComponent.recommendation(guideline)}
+                {annotationComponent.implication(drugName, guideline)}
+                {annotationComponent.recommendation(drugName, guideline)}
             </div>
         </>
     );
