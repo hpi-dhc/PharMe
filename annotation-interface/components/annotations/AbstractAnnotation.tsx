@@ -1,5 +1,4 @@
 import {
-    ChevronLeftIcon,
     ExclamationIcon,
     PencilAltIcon,
     TrashIcon,
@@ -7,7 +6,6 @@ import {
     XIcon,
 } from '@heroicons/react/solid';
 import axios from 'axios';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { PropsWithChildren, useState } from 'react';
 
@@ -30,14 +28,6 @@ type Props = PropsWithChildren<{
 
 export const AnnotationMissing = () => (
     <WithIcon icon={ExclamationIcon}>Not set</WithIcon>
-);
-
-export const BackToAnnotations = () => (
-    <Link href="/annotations">
-        <a className="underline">
-            <WithIcon icon={ChevronLeftIcon}>Back</WithIcon>
-        </a>
-    </Link>
 );
 
 const AbstractAnnotation = ({

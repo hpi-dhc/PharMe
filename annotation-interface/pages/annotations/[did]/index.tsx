@@ -9,7 +9,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import { matches } from '../../../common/generic-helpers';
-import { BackToAnnotations } from '../../../components/annotations/AbstractAnnotation';
+import { BackButton } from '../../../components/common/BackButton';
 import Label from '../../../components/common/Label';
 import PageHeading from '../../../components/common/PageHeading';
 import SearchBar from '../../../components/common/SearchBar';
@@ -54,7 +54,7 @@ const DrugDetail = ({
                 View and edit annotations for this drug and its guidelines.
             </PageHeading>
             <div className="space-y-4">
-                <BackToAnnotations />
+                <BackButton />
                 {annotationComponent.drugclass(drug)}
                 {annotationComponent.indication(drug)}
                 <h2 className="font-bold border-t border-black border-opacity-20 pt-4">
