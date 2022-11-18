@@ -122,13 +122,13 @@ export const getServerSideProps = async (
             .populate<{
                 'annotations.drugclass': Array<ITextBrick_Str> | undefined;
                 'annotations.indication': Array<ITextBrick_Str> | undefined;
-                guidelines: IGuideline_DB;
+                guidelines: Array<IGuideline_DB>;
             }>([
-                'annotations',
                 'annotations.drugclass',
                 'annotations.indication',
                 'guidelines',
             ])
+            .lean()
             .orFail()
             .exec();
         return {

@@ -16,6 +16,7 @@ import Guideline, {
     IGuideline_Populated,
 } from '../../../database/models/Guideline';
 import Medication from '../../../database/models/Medication';
+import { ITextBrick_Str } from '../../../database/models/TextBrick';
 
 const GuidelineDetail = ({
     drugName,
@@ -61,6 +62,10 @@ export const getServerSideProps = async (
         const drug = await Medication!.findById(drugId).lean().orFail().exec();
         const guideline = await Guideline!
             .findById(guidelineId)
+            .populate<{
+                'annotations.implication': Array<ITextBrick_Str> | undefined;
+                'annotations.recommendation': Array<ITextBrick_Str> | undefined;
+            }>(['annotations.implication', 'annotations.recommendation'])
             .lean()
             .orFail()
             .exec();
