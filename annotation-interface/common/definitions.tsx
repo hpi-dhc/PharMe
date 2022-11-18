@@ -1,4 +1,5 @@
 import BrickAnnotation from '../components/annotations/BrickAnnotation';
+import WarningLevelAnnotation from '../components/annotations/WarningLevelAnnotation';
 import {
     IGuideline_Any,
     IGuideline_Populated,
@@ -84,8 +85,7 @@ const _guidelineAnnotation = (
 ): JSX.Element => {
     switch (key) {
         case 'warningLevel':
-            // TODO: new warning level annotation
-            return <div>todo</div>;
+            return <WarningLevelAnnotation guideline={guideline} />;
         default:
             return (
                 <BrickAnnotation

@@ -36,6 +36,7 @@ const GuidelineDetail = ({
                 <CpicGuidelineBox guideline={guideline.cpicData} />
                 {annotationComponent.implication(drugName, guideline)}
                 {annotationComponent.recommendation(drugName, guideline)}
+                {annotationComponent.warningLevel(drugName, guideline)}
             </div>
         </>
     );
