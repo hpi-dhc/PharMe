@@ -48,10 +48,11 @@ const Annotations = () => {
                 <SearchBar
                     query={searchQuery}
                     setQuery={setSearchQuery}
-                    onEnter={() => {
+                    onEnter={async () => {
                         if (!filteredDrugs?.length) return false;
-                        router.replace(`/annotations/${filteredDrugs[0].id}`);
-                        return false;
+                        return await router.push(
+                            `/annotations/${filteredDrugs[0].id}`,
+                        );
                     }}
                 />
                 <SelectionPopover

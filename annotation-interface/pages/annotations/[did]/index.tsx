@@ -3,6 +3,7 @@ import {
     GetServerSidePropsResult,
     InferGetServerSidePropsType,
 } from 'next';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { resetServerContext } from 'react-beautiful-dnd';
 
@@ -19,7 +20,10 @@ import {
     missingGuidelineAnnotations,
 } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
-import { IGuideline_DB } from '../../../database/models/Guideline';
+import {
+    IGuideline_DB,
+    IGuideline_Str,
+} from '../../../database/models/Guideline';
 import Medication, {
     IMedication_Populated,
 } from '../../../database/models/Medication';
@@ -29,6 +33,7 @@ const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [guidelineQuery, setGuidelineQuery] = useState('');
+
     const guidelines = drug.guidelines.filter((guideline) => {
         const description = guidelineDescription(guideline);
         return matches(
@@ -38,6 +43,11 @@ const DrugDetail = ({
             guidelineQuery,
         );
     });
+
+    const guidelineLink = (guideline: IGuideline_Str) =>
+        `/annotations/${drug._id}/${guideline._id}`;
+    const router = useRouter();
+
     return (
         <>
             <PageHeading title={`Drug: ${drug.name}`}>
@@ -53,12 +63,16 @@ const DrugDetail = ({
                 <SearchBar
                     query={guidelineQuery}
                     setQuery={setGuidelineQuery}
+                    onEnter={async () =>
+                        !!guidelines.length &&
+                        (await router.push(guidelineLink(guidelines[0])))
+                    }
                 />
                 <div>
-                    {guidelines?.map((guideline) => (
+                    {guidelines.map((guideline) => (
                         <TableRow
                             key={guideline._id}
-                            link={`/annotations/${drug._id}/${guideline._id}`}
+                            link={guidelineLink(guideline)}
                         >
                             <div className="flex justify-between">
                                 <span className="mr-2">

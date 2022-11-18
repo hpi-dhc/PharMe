@@ -5,7 +5,7 @@ type Props = {
     setQuery: (newQuery: string) => void;
     placeholder?: string;
     dark?: boolean;
-    onEnter?: () => boolean;
+    onEnter?: () => Promise<boolean>;
 };
 
 const SearchBar = ({ query, setQuery, placeholder, dark, onEnter }: Props) => {
@@ -22,9 +22,9 @@ const SearchBar = ({ query, setQuery, placeholder, dark, onEnter }: Props) => {
                 placeholder={placeholder ?? 'Search'}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
+                onKeyDown={async (e) => {
                     if (e.key === 'Enter' && onEnter) {
-                        onEnter() && setQuery('');
+                        (await onEnter()) && setQuery('');
                         e.preventDefault();
                     }
                 }}
