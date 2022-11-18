@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import PageHeading from '../components/common/PageHeading';
+import PageHeading from '../components/common/structure/PageHeading';
 
 const Home = () => {
     return (

@@ -14,8 +14,8 @@ import {
     displayNameForAnnotationKey,
 } from '../../common/definitions';
 import { UpdateAnnotationBody } from '../../pages/api/annotations/[id]';
-import PageOverlay from '../common/PageOverlay';
 import WithIcon from '../common/WithIcon';
+import PageOverlay from '../common/structure/PageOverlay';
 
 type Props = PropsWithChildren<{
     _id: string;

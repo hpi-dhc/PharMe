@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { mutate } from 'swr';
 
-import { ContextProvider } from '../components/common/Layout';
+import { ContextProvider } from '../components/common/structure/Layout';
 
 export const filterStates = ['all', 'missing', 'complete'] as const;
 export type FilterState = typeof filterStates[number];

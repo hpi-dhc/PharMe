@@ -7,8 +7,8 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
-import { BackButton } from '../../../components/common/BackButton';
-import PageHeading from '../../../components/common/PageHeading';
+import { BackButton } from '../../../components/common/interaction/BackButton';
+import PageHeading from '../../../components/common/structure/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import { guidelineDescription } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';

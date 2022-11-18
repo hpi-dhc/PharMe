@@ -7,7 +7,7 @@ import {
 } from 'react';
 
 import { SupportedLanguage } from '../common/definitions';
-import { ContextProvider } from '../components/common/Layout';
+import { ContextProvider } from '../components/common/structure/Layout';
 
 interface ILanguageContext {
     language: SupportedLanguage;

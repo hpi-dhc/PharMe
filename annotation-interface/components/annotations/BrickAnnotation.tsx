@@ -13,8 +13,8 @@ import {
 } from '../../database/helpers/resolve-bricks';
 import { ITextBrick_Str } from '../../database/models/TextBrick';
 import { GetBricksResponse } from '../../pages/api/bricks';
-import GenericError from '../common/GenericError';
-import LoadingSpinner from '../common/LoadingSpinner';
+import GenericError from '../common/indicators/GenericError';
+import LoadingSpinner from '../common/indicators/LoadingSpinner';
 import AbstractAnnotation from './AbstractAnnotation';
 import BrickAnnotationEditor from './BrickAnnotationEditor';
 

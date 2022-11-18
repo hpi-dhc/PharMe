@@ -3,11 +3,11 @@ import { ExclamationIcon, PlusCircleIcon } from '@heroicons/react/solid';
 import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
-import FilterTabs from '../../components/common/FilterTabs';
-import Label from '../../components/common/Label';
-import PageHeading from '../../components/common/PageHeading';
-import TableRow from '../../components/common/TableRow';
 import WithIcon from '../../components/common/WithIcon';
+import Label from '../../components/common/indicators/Label';
+import TableRow from '../../components/common/interaction/TableRow';
+import FilterTabs from '../../components/common/structure/FilterTabs';
+import PageHeading from '../../components/common/structure/PageHeading';
 import {
     displayCategories,
     useBrickFilterContext,

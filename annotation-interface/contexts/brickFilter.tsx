@@ -7,7 +7,7 @@ import {
 } from 'react';
 
 import { brickUsages } from '../common/definitions';
-import { ContextProvider } from '../components/common/Layout';
+import { ContextProvider } from '../components/common/structure/Layout';
 
 export const displayCategories = ['All', ...brickUsages] as const;
 export type DisplayCategory = typeof displayCategories[number];

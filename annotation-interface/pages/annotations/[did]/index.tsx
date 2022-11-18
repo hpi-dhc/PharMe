@@ -9,11 +9,11 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import { matches } from '../../../common/generic-helpers';
-import { BackButton } from '../../../components/common/BackButton';
-import Label from '../../../components/common/Label';
-import PageHeading from '../../../components/common/PageHeading';
-import SearchBar from '../../../components/common/SearchBar';
-import TableRow from '../../../components/common/TableRow';
+import Label from '../../../components/common/indicators/Label';
+import { BackButton } from '../../../components/common/interaction/BackButton';
+import SearchBar from '../../../components/common/interaction/SearchBar';
+import TableRow from '../../../components/common/interaction/TableRow';
+import PageHeading from '../../../components/common/structure/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import {
     guidelineDescription,

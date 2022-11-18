@@ -2,7 +2,7 @@ import { ChevronRightIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 
-import WithIcon from './WithIcon';
+import WithIcon from '../WithIcon';
 
 interface Props {
     link: string;

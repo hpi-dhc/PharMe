@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 
 import { matches } from '../../common/generic-helpers';
 import { useSwrFetcher } from '../../common/react-helpers';
-import GenericError from '../../components/common/GenericError';
-import Label from '../../components/common/Label';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import PageHeading from '../../components/common/PageHeading';
-import SearchBar from '../../components/common/SearchBar';
-import SelectionPopover from '../../components/common/SelectionPopover';
-import TableRow from '../../components/common/TableRow';
+import GenericError from '../../components/common/indicators/GenericError';
+import Label from '../../components/common/indicators/Label';
+import LoadingSpinner from '../../components/common/indicators/LoadingSpinner';
+import SearchBar from '../../components/common/interaction/SearchBar';
+import SelectionPopover from '../../components/common/interaction/SelectionPopover';
+import TableRow from '../../components/common/interaction/TableRow';
+import PageHeading from '../../components/common/structure/PageHeading';
 import { filterStates, useAnnotationContext } from '../../contexts/annotations';
 import { GetAnnotationsReponse } from '../api/annotations';
 

@@ -19,8 +19,8 @@ import {
     ITextBrick,
     ITextBrickTranslation,
 } from '../../database/models/TextBrick';
-import SelectionPopover from '../common/SelectionPopover';
 import WithIcon from '../common/WithIcon';
+import SelectionPopover from '../common/interaction/SelectionPopover';
 import AutocompleteArea from './AutocompleteArea';
 
 type Props = {

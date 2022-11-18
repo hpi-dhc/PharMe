@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createElement, PropsWithChildren } from 'react';
 
-import { AnnotationFilterContextProvider } from '../../contexts/annotations';
-import { BrickFilterContextProvider } from '../../contexts/brickFilter';
-import { LanguageContextProvider } from '../../contexts/language';
-import DisplayLanguagePicker from './DisplayLanguagePicker';
+import { AnnotationFilterContextProvider } from '../../../contexts/annotations';
+import { BrickFilterContextProvider } from '../../../contexts/brickFilter';
+import { LanguageContextProvider } from '../../../contexts/language';
+import DisplayLanguagePicker from '../interaction/DisplayLanguagePicker';
 
 export type ContextProvider = ({ children }: PropsWithChildren) => JSX.Element;
 

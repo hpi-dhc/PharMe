@@ -4,8 +4,8 @@ import { BrickUsage, brickUsages } from '../../common/definitions';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
 import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';
-import FilterTabs from '../../components/common/FilterTabs';
-import PageHeading from '../../components/common/PageHeading';
+import FilterTabs from '../../components/common/structure/FilterTabs';
+import PageHeading from '../../components/common/structure/PageHeading';
 import {
     DisplayCategory,
     displayCategoryForIndex,

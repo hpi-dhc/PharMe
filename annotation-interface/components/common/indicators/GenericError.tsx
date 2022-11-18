@@ -1,6 +1,6 @@
 import { EmojiSadIcon } from '@heroicons/react/outline';
 
-import WithIcon from './WithIcon';
+import WithIcon from '../WithIcon';
 
 function GenericError() {
     return (

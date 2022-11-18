@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { ChevronDownIcon, AnnotationIcon } from '@heroicons/react/outline';
 
-import WithIcon from './WithIcon';
+import WithIcon from '../WithIcon';
 
 type SelectionPopoverProps<T extends string> = {
     label?: string;
