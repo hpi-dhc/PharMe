@@ -48,7 +48,11 @@ function BrickAnnotation({
     );
     const allBricks = response?.data.data.bricks
         ? new Map(
-              resolveBricks(brickResolver, response.data.data.bricks, language),
+              resolveBricks(
+                  brickResolver,
+                  response.data.data.bricks,
+                  language,
+              ).map(([id, text]) => [id, text ?? '<Missing translation!>']),
           )
         : undefined;
 

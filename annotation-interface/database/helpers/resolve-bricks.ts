@@ -46,7 +46,10 @@ const getPlaceholders = ({
     }
 };
 
-export type ResolvedBrick<IdT extends OptionalId> = [_id: IdT, text: string];
+export type ResolvedBrick<IdT extends OptionalId> = [
+    _id: IdT,
+    text: string | null,
+];
 
 export function resolveBricks<IdT extends OptionalId>(
     resolver: BrickResolver,
@@ -61,7 +64,7 @@ export function resolveBricks<IdT extends OptionalId>(
                 text = text!.replaceAll(`#${placeholder}`, replace);
             });
         }
-        return [_id, text ?? '<Missing translation!>'] as ResolvedBrick<IdT>;
+        return [_id, text ?? null] as ResolvedBrick<IdT>;
     });
 
     return resolved;
