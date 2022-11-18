@@ -9,7 +9,7 @@ import { mutate } from 'swr';
 
 import { ContextProvider } from '../components/common/Layout';
 
-export const filterStates = ['all', 'missing', 'fully curated'] as const;
+export const filterStates = ['all', 'missing', 'complete'] as const;
 export type FilterState = typeof filterStates[number];
 
 interface IAnnotationContext {

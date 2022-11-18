@@ -27,7 +27,7 @@ const Annotations = () => {
             matches(name, searchQuery) &&
             (curationState === 'all' ||
                 (curationState === 'missing' && badge) ||
-                (curationState === 'fully curated' && !badge)),
+                (curationState === 'complete' && !badge)),
     );
 
     const router = useRouter();

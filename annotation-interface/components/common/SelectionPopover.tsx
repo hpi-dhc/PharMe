@@ -9,6 +9,7 @@ type SelectionPopoverProps<T extends string> = {
     onSelect: (value: T) => void;
     selectedOption?: T;
     icon?: typeof AnnotationIcon;
+    expandUpwards?: boolean;
 };
 
 const SelectionPopover = <T extends string>({
@@ -17,19 +18,24 @@ const SelectionPopover = <T extends string>({
     selectedOption,
     onSelect,
     icon,
+    expandUpwards,
 }: SelectionPopoverProps<T>) => (
-    <Menu as="div" className="inline self-center px-2">
+    <Menu as="div" className="inline self-center px-2 relative">
         <WithIcon as={Menu.Button} icon={icon ?? ChevronDownIcon}>
             {label ?? selectedOption}
         </WithIcon>
-        <Menu.Items className="absolute bg-white p-4 border border-black border-opacity-10">
+        <Menu.Items
+            className={`${
+                expandUpwards ? '-translate-y-full -top-2' : ''
+            } absolute bg-white rounded-lg border border-black border-opacity-10 overflow-clip shadow-sm`}
+        >
             {options.map((option, index) => (
                 <Menu.Item
                     key={index}
                     as="button"
-                    className={`block ${
-                        option === selectedOption && 'underline'
-                    }`}
+                    className={`w-full p-2 hover:bg-neutral-100 ${
+                        index === options.length - 1 || 'border-b'
+                    } ${option === selectedOption && 'underline'}`}
                     onClick={() => onSelect(option)}
                 >
                     {option}

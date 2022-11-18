@@ -11,7 +11,7 @@ interface Props {
 function TableRow({ link, children }: PropsWithChildren<Props>) {
     return (
         <Link href={link}>
-            <a className="border-t border-black border-opacity-10 py-3 pl-3 flex justify-between hover:bg-neutral-50">
+            <a className="border-t border-black border-opacity-10 py-3 pl-3 flex justify-between hover:bg-neutral-100">
                 <div className="grow">{children}</div>
                 <WithIcon icon={ChevronRightIcon} reverse className="px-2" />
             </a>
