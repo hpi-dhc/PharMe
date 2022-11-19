@@ -69,3 +69,18 @@ export function resolveBricks<IdT extends OptionalId>(
 
     return resolved;
 }
+
+export function resolveStringOrFail<IdT extends OptionalId>(
+    resolver: BrickResolver,
+    bricks: ITextBrick<IdT>[] | undefined,
+    language: SupportedLanguage = pharMeLanguage,
+): string {
+    if (!bricks) {
+        throw new Error('Annotation missing.');
+    }
+    const resolved = resolveBricks(resolver, bricks, language);
+    if (resolved.find(([, text]) => text === null)) {
+        throw new Error('Translation missing.');
+    }
+    return resolved.map(([, text]) => text!).join(' ');
+}

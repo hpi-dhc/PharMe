@@ -1,11 +1,17 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 
-import { WarningLevel, warningLevelValues } from '../../common/definitions';
+import {
+    SupportedLanguage,
+    WarningLevel,
+    warningLevelValues,
+} from '../../common/definitions';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { missingGuidelineAnnotations } from '../helpers/guideline-data';
+import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import {
     BrickAnnotationT,
     IAnnotationModel,
+    makeIdsStrings,
     OptionalId,
 } from '../helpers/types';
 import { ITextBrick_Str } from './TextBrick';
@@ -34,6 +40,10 @@ export interface IGuideline<
 }
 export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
     missingAnnotations: number;
+    resolve: (
+        drugName: string,
+        language: SupportedLanguage,
+    ) => Promise<IGuideline_Resolved>;
 };
 export type IGuideline_Str = IGuideline<string, string>;
 export type IGuideline_Populated = IGuideline<ITextBrick_Str[], string>;
@@ -97,6 +107,34 @@ guidelineSchema
     .get(function (this: IGuideline_DB) {
         return missingGuidelineAnnotations(this);
     });
+
+guidelineSchema.methods.resolve = async function (
+    this: Document<unknown, unknown, IGuideline_Populated> &
+        IGuideline_Populated,
+    drugName: string,
+    language: SupportedLanguage,
+): Promise<IGuideline_Resolved> {
+    await this.populate([
+        'annotations.implication',
+        'annotations.recommendation',
+    ]);
+    const resolved = makeIdsStrings(this);
+    const resolver: BrickResolver = {
+        from: 'guideline',
+        with: { drugName, guideline: this },
+    };
+    resolved.annotations.implication = resolveStringOrFail(
+        resolver,
+        this.annotations.implication,
+        language,
+    );
+    resolved.annotations.recommendation = resolveStringOrFail(
+        resolver,
+        this.annotations.recommendation,
+        language,
+    );
+    return resolved;
+};
 
 export default !mongoose.models
     ? undefined
