@@ -24,22 +24,28 @@ export interface IAnnotationModel<IdT extends OptionalId, AT>
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-function _makeIdsStrings(v: any): any {
-    if (v === undefined) return null;
-    if (!(v instanceof Object)) return v;
-    if (v instanceof Array) {
-        return v.map((e) => _makeIdsStrings(e));
-    } else {
-        return makeIdsStrings(v);
+export function makeIdsStrings(
+    obj: any,
+    exceptions: Record<string, (obj: any, parent: any) => any> = {},
+): any {
+    if (obj === undefined) return null;
+    if (!(obj instanceof Object)) return obj;
+    if (obj instanceof Array) {
+        return obj.map((e) => makeIdsStrings(e, exceptions));
     }
-}
-export function makeIdsStrings(doc: any): any {
-    let keys = Object.keys(doc);
-    if ('schema' in doc && 'paths' in doc['schema']) {
-        keys = Object.keys(doc.schema.paths);
+
+    let keys = Object.keys(obj);
+    if ('schema' in obj && 'paths' in obj['schema']) {
+        keys = Object.keys(obj.schema.paths);
     }
-    return keys.reduce((newObj: any, p: string) => {
-        newObj[p] = p === '_id' ? doc[p].toString() : _makeIdsStrings(doc[p]);
+    return keys.reduce((newObj: any, key: string) => {
+        if (key in exceptions) {
+            newObj[key] = exceptions[key](obj[key], obj);
+        } else if (key === '_id') {
+            newObj[key] = obj[key].toString();
+        } else {
+            newObj[key] = makeIdsStrings(obj[key], exceptions);
+        }
         return newObj;
     }, new Object());
 }
