@@ -34,7 +34,7 @@ const api: NextApiHandler = async (req, res) =>
             }
             await (model as any)
                 .findByIdAndUpdate(id, {
-                    annotations: { [key]: newValue },
+                    [`annotations.${key}`]: newValue,
                 })
                 .orFail();
             return { successStatus: 200 };
