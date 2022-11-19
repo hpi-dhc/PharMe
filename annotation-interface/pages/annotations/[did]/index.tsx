@@ -9,7 +9,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import { matches } from '../../../common/generic-helpers';
-import Label from '../../../components/common/indicators/Label';
+import StatusBadge from '../../../components/annotations/StatusBadge';
 import { BackButton } from '../../../components/common/interaction/BackButton';
 import SearchBar from '../../../components/common/interaction/SearchBar';
 import TableRow from '../../../components/common/interaction/TableRow';
@@ -88,10 +88,10 @@ const DrugDetail = ({
                                     )}
                                 </span>
                                 <span>
-                                    <Label
-                                        title={`${missingGuidelineAnnotations(
+                                    <StatusBadge
+                                        badge={missingGuidelineAnnotations(
                                             guideline,
-                                        )} missing`}
+                                        )}
                                     />
                                 </span>
                             </div>

@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 
 import { matches } from '../../common/generic-helpers';
 import { useSwrFetcher } from '../../common/react-helpers';
+import StatusBadge from '../../components/annotations/StatusBadge';
 import GenericError from '../../components/common/indicators/GenericError';
-import Label from '../../components/common/indicators/Label';
 import LoadingSpinner from '../../components/common/indicators/LoadingSpinner';
 import SearchBar from '../../components/common/interaction/SearchBar';
 import SelectionPopover from '../../components/common/interaction/SelectionPopover';
@@ -77,7 +77,7 @@ const Annotations = () => {
                             <div className="flex justify-between">
                                 <span className="mr-2">{drug.name}</span>
                                 <span>
-                                    <Label title={`${drug.badge} missing`} />
+                                    <StatusBadge badge={drug.badge} />
                                 </span>
                             </div>
                         </TableRow>
