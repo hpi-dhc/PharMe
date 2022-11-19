@@ -1,103 +1,36 @@
-import { Tab } from '@headlessui/react';
-import axios from 'axios';
-import { GetServerSidePropsResult, InferGetServerSidePropsType } from 'next';
+import { FilterIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import {
-    serverEndpointGuidelines,
-    serverEndpointMeds,
-    ServerGuidelineOverview,
-    ServerMedication,
-} from '../../common/server-types';
-import FilterTabs from '../../components/common/FilterTabs';
-import Label from '../../components/common/Label';
-import PageHeading from '../../components/common/PageHeading';
-import SearchBar from '../../components/common/SearchBar';
-import SelectionPopover from '../../components/common/SelectionPopover';
-import {
-    FilterState,
-    filterStates,
-    useAnnotationFilterContext,
-} from '../../contexts/annotationFilter';
+import { matches } from '../../common/generic-helpers';
+import { useSwrFetcher } from '../../common/react-helpers';
+import StatusBadge from '../../components/annotations/StatusBadge';
+import GenericError from '../../components/common/indicators/GenericError';
+import LoadingSpinner from '../../components/common/indicators/LoadingSpinner';
+import SearchBar from '../../components/common/interaction/SearchBar';
+import SelectionPopover from '../../components/common/interaction/SelectionPopover';
+import TableRow from '../../components/common/interaction/TableRow';
+import PageHeading from '../../components/common/structure/PageHeading';
+import { filterStates, useAnnotationContext } from '../../contexts/annotations';
+import { GetAnnotationsReponse } from '../api/annotations';
 
-function getMissingLabels<T>(
-    data: T,
-    properties: { name: keyof T; display: string }[],
-) {
-    return properties
-        .filter(({ name }) => !data[name])
-        .map(({ display }, index) => (
-            <Label key={index} title={`${display} missing`} />
-        ));
-}
+const Annotations = () => {
+    const { curationState, setCurationState, searchQuery, setSearchQuery } =
+        useAnnotationContext();
 
-function filteredElements<T extends { labels: JSX.Element[] }>(
-    elements: T[],
-    filter: FilterState,
-) {
-    return elements.filter(
-        ({ labels }) =>
-            filter === 'all' ||
-            (filter === 'missing' && labels.length) ||
-            (filter === 'curated' && !labels.length),
+    const { data: response, error } =
+        useSwrFetcher<GetAnnotationsReponse>('/api/annotations');
+    const drugs = response?.data.data.drugs;
+
+    const filteredDrugs = drugs?.filter(
+        ({ name, badge }) =>
+            matches(name, searchQuery) &&
+            (curationState === 'all' ||
+                (curationState === 'missing' && badge) ||
+                (curationState === 'complete' && !badge)),
     );
-}
 
-const matches = (test: string, query: string) => {
-    test = test.toLowerCase();
-    return (
-        query
-            .toLowerCase()
-            .split(/\s+/)
-            .filter((word) => !test.includes(word)).length === 0
-    );
-};
-
-const Annotations = ({
-    medications,
-    guidelines,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const {
-        curationState,
-        setCurationState,
-        categoryIndex,
-        setCategoryIndex,
-        searchQuery,
-        setSearchQuery,
-    } = useAnnotationFilterContext();
-
-    const medicationsWithLabels = filteredElements(
-        medications
-            .filter(({ name }) => matches(name, searchQuery))
-            .map((medication) => {
-                const labels = getMissingLabels(medication, [
-                    { name: 'indication', display: 'Indication' },
-                    { name: 'drugclass', display: 'Drug class' },
-                ]);
-                return { medication, labels };
-            }),
-        curationState,
-    );
-    const guidelinesWithLabels = filteredElements(
-        guidelines
-            .filter((guideline) =>
-                matches(
-                    guideline.medication.name +
-                        guideline.phenotype.geneSymbol.name +
-                        guideline.phenotype.geneResult.name,
-                    searchQuery,
-                ),
-            )
-            .map((guideline) => {
-                const labels = getMissingLabels(guideline, [
-                    { name: 'implication', display: 'Implication' },
-                    { name: 'recommendation', display: 'Recommendation' },
-                    { name: 'warningLevel', display: 'Warning level' },
-                ]);
-                return { guideline, labels };
-            }),
-        curationState,
-    );
+    const router = useRouter();
 
     return (
         <>
@@ -111,89 +44,48 @@ const Annotations = ({
                 </Link>
                 .
             </PageHeading>
-            <SearchBar query={searchQuery} setQuery={setSearchQuery} />
-            <FilterTabs
-                titles={['Drugs', 'Guidelines']}
-                selected={categoryIndex}
-                setSelected={setCategoryIndex}
-                accessory={
-                    <SelectionPopover
-                        label={`Show ${curationState}`}
-                        options={[...filterStates]}
-                        selectedOption={curationState}
-                        onSelect={setCurationState}
-                    />
-                }
-            >
-                <Tab.Panel>
-                    {medicationsWithLabels.map((item) => (
-                        <p
-                            key={item.medication.id}
-                            className="border-t border-black border-opacity-10 py-3 pl-3"
+            <div className="flex mb-6 space-x-2">
+                <SearchBar
+                    query={searchQuery}
+                    setQuery={setSearchQuery}
+                    onEnter={async () => {
+                        if (!filteredDrugs?.length) return false;
+                        return await router.push(
+                            `/annotations/${filteredDrugs[0].id}`,
+                        );
+                    }}
+                />
+                <SelectionPopover
+                    label={`Filter`}
+                    options={[...filterStates]}
+                    selectedOption={curationState}
+                    onSelect={setCurationState}
+                    icon={FilterIcon}
+                />
+            </div>
+            <div>
+                {error ? (
+                    <GenericError />
+                ) : !filteredDrugs ? (
+                    <LoadingSpinner />
+                ) : (
+                    filteredDrugs?.map((drug) => (
+                        <TableRow
+                            key={drug.id}
+                            link={`/annotations/${drug.id}`}
                         >
-                            <Link
-                                href={`/annotations/medications/${item.medication.id}`}
-                            >
-                                <a className="mr-2">{item.medication.name}</a>
-                            </Link>
-                            {item.labels}
-                        </p>
-                    ))}
-                </Tab.Panel>
-                <Tab.Panel className="space-y-2">
-                    {guidelinesWithLabels.map((item) => (
-                        <div
-                            key={item.guideline.id}
-                            className="border-t border-black border-opacity-10 py-3 pl-3"
-                        >
-                            <p className="mr-2">
-                                <Link
-                                    href={`/annotations/guidelines/${item.guideline.id}`}
-                                >
-                                    <a className="mr-2">
-                                        {
-                                            item.guideline.phenotype.geneSymbol
-                                                .name
-                                        }{' '}
-                                        and {item.guideline.medication.name}:{' '}
-                                        {
-                                            item.guideline.phenotype.geneResult
-                                                .name
-                                        }
-                                    </a>
-                                </Link>
-                            </p>
-                            {item.labels}
-                        </div>
-                    ))}
-                </Tab.Panel>
-            </FilterTabs>
+                            <div className="flex justify-between">
+                                <span className="mr-2">{drug.name}</span>
+                                <span>
+                                    <StatusBadge badge={drug.badge} />
+                                </span>
+                            </div>
+                        </TableRow>
+                    ))
+                )}
+            </div>
         </>
     );
 };
 
 export default Annotations;
-
-export const getServerSideProps = async (): Promise<
-    GetServerSidePropsResult<{
-        medications: ServerMedication[];
-        guidelines: ServerGuidelineOverview[];
-    }>
-> => {
-    try {
-        const [medicationResponse, guidelineResponse] = await Promise.all([
-            axios.get<ServerMedication[]>(serverEndpointMeds(), {
-                params: { withGuidelines: true },
-            }),
-            axios.get<ServerGuidelineOverview[]>(serverEndpointGuidelines()),
-        ]);
-        return {
-            props: {
-                medications: medicationResponse.data,
-                guidelines: guidelineResponse.data,
-            },
-        };
-    } catch (error) {
-        return { notFound: true };
-    }
-};

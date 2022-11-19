@@ -1,82 +1,119 @@
 import {
-    ChevronLeftIcon,
     ExclamationIcon,
     PencilAltIcon,
+    TrashIcon,
+    UploadIcon,
+    XIcon,
 } from '@heroicons/react/solid';
-import Link from 'next/link';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { PropsWithChildren, useState } from 'react';
+
 import {
-    forwardRef,
-    PropsWithChildren,
-    useImperativeHandle,
-    useState,
-} from 'react';
-
-import PageOverlay from '../common/PageOverlay';
+    AnnotationKey,
+    displayNameForAnnotationKey,
+} from '../../common/definitions';
+import { UpdateAnnotationBody } from '../../pages/api/annotations/[id]';
 import WithIcon from '../common/WithIcon';
+import PageOverlay from '../common/structure/PageOverlay';
 
-export type AbstractAnnotationRef = {
-    hideOverlay: () => void;
-};
 type Props = PropsWithChildren<{
-    serverValue: string | null | undefined;
+    _id: string;
+    _key: AnnotationKey;
+    stringValue: string | null;
+    value: unknown;
     hasChanges: boolean;
-    displayContext: string;
-    displayName: string;
+    onClear: () => void;
 }>;
 
 export const AnnotationMissing = () => (
     <WithIcon icon={ExclamationIcon}>Not set</WithIcon>
 );
 
-export const BackToAnnotations = () => (
-    <Link href="/annotations">
-        <a className="underline">
-            <WithIcon icon={ChevronLeftIcon}>Back</WithIcon>
-        </a>
-    </Link>
-);
+const AbstractAnnotation = ({
+    _id: id,
+    _key: key,
+    stringValue,
+    value,
+    hasChanges,
+    onClear,
+    children,
+}: PropsWithChildren<Props>) => {
+    const [editVisible, setEditVisible] = useState(false);
+    const router = useRouter();
 
-const AbstractAnnotation = forwardRef<AbstractAnnotationRef, Props>(
-    (
-        { serverValue, hasChanges, displayContext, displayName, children },
-        ref,
-    ) => {
-        const [editVisible, setEditVisible] = useState(false);
-        useImperativeHandle(ref, () => ({
-            hideOverlay: () => setEditVisible(false),
-        }));
+    const save = async () => {
+        const patch: UpdateAnnotationBody = {
+            key,
+            newValue: value,
+        };
+        await axios.patch(`/api/annotations/${id}`, patch);
+        done();
+    };
+    const done = async () => {
+        if (hasChanges) {
+            await router.replace(router.asPath);
+        }
+        setEditVisible(false);
+    };
 
-        return (
-            <>
-                <div className="space-y-2">
-                    <div className="flex justify-between">
-                        <h2 className="font-bold">
-                            {displayName.charAt(0).toUpperCase() +
-                                displayName.slice(1)}
-                        </h2>
-                        <WithIcon
-                            as="button"
-                            icon={PencilAltIcon}
-                            reverse
-                            onClick={() => setEditVisible(true)}
-                        >
-                            Edit
-                        </WithIcon>
-                    </div>
-                    <p>{serverValue ? serverValue : <AnnotationMissing />}</p>
-                </div>
-                {editVisible && (
-                    <PageOverlay
-                        hide={() => !hasChanges && setEditVisible(false)}
-                        heading={`Edit the ${displayName} for ${displayContext}`}
+    return (
+        <>
+            <div className="space-y-2">
+                <div className="flex justify-between">
+                    <h2 className="font-bold">
+                        {displayNameForAnnotationKey[key]}
+                    </h2>
+                    <WithIcon
+                        as="button"
+                        icon={PencilAltIcon}
+                        reverse
+                        onClick={() => setEditVisible(true)}
                     >
-                        {children}
-                    </PageOverlay>
-                )}
-            </>
-        );
-    },
-);
+                        Edit
+                    </WithIcon>
+                </div>
+                <p>{stringValue ? stringValue : <AnnotationMissing />}</p>
+            </div>
+            {editVisible && (
+                <PageOverlay
+                    hide={() => !hasChanges && setEditVisible(false)}
+                    heading={displayNameForAnnotationKey[key]}
+                >
+                    <h2 className="font-bold">Current value</h2>
+                    <div className="border border-opacity-40 border-white py-6 px-2 my-4 flex justify-evenly">
+                        <p>{stringValue ?? <AnnotationMissing />}</p>
+                    </div>
+                    <div className="flex justify-between py-2">
+                        <WithIcon as="button" icon={XIcon} onClick={done}>
+                            Cancel
+                        </WithIcon>
+                        <div className="flex space-x-4">
+                            <WithIcon
+                                as="button"
+                                icon={TrashIcon}
+                                reverse
+                                onClick={onClear}
+                            >
+                                Clear
+                            </WithIcon>
+                            <WithIcon
+                                as="button"
+                                icon={UploadIcon}
+                                reverse
+                                onClick={save}
+                            >
+                                Save
+                            </WithIcon>
+                        </div>
+                    </div>
+                    <h2 className="font-bold mt-4">Edit</h2>
+                    {children}
+                </PageOverlay>
+            )}
+        </>
+    );
+};
 AbstractAnnotation.displayName = 'AbstractAnnotation';
 
 export default AbstractAnnotation;

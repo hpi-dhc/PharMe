@@ -1,13 +1,15 @@
-import { ServerGuideline } from '../../common/server-types';
+import { IGuideline_Any } from '../../database/models/Guideline';
 
 const CpicSection = ({
     title,
     content,
+    indent,
 }: {
     title: string;
-    content: string;
+    content?: string;
+    indent?: boolean;
 }) => (
-    <p>
+    <p className={indent ? 'ml-4' : ''}>
         <span className="font-bold uppercase tracking-tighter mr-2">
             {title}
         </span>
@@ -15,32 +17,43 @@ const CpicSection = ({
     </p>
 );
 
-const fields = (guideline: ServerGuideline): [string, string | null][] => [
-    ['Comment', guideline.cpicComment],
-    ['Phenotype consultation text', guideline.phenotype.cpicConsultationText],
-    ['Implication', guideline.cpicImplication],
-    ['Recommendation', guideline.cpicRecommendation],
-];
-
-const CpicGuidelineBox = ({ guideline }: { guideline: ServerGuideline }) => (
+const CpicGuidelineBox = ({
+    guideline,
+}: {
+    guideline: IGuideline_Any['cpicData'];
+}) => (
     <div className="space-y-4 border border-black border-opacity-10 p-4">
-        <h2 className="font-bold pb-2">
+        <h2 className="font-bold pb-2 text-xl">
             CPIC Guideline:{' '}
             <a
                 className="underline"
-                href={guideline.cpicGuidelineUrl}
+                href={guideline.guidelineUrl}
                 target="_blank"
                 rel="noreferrer"
             >
-                {guideline.cpicGuidelineName}
-            </a>{' '}
-            ({guideline.cpicClassification})
+                {guideline.guidelineName}
+            </a>
         </h2>
-        {fields(guideline)
-            .filter(([, content]) => content)
-            .map(([title, content], index) => (
-                <CpicSection key={index} title={title} content={content!} />
-            ))}
+        <div className="space-y-2">
+            <CpicSection title="Implications" />
+            {Object.entries(guideline.implications).map(
+                ([phenotype, implication], index) => (
+                    <CpicSection
+                        key={index}
+                        title={phenotype}
+                        content={implication}
+                        indent
+                    />
+                ),
+            )}
+        </div>
+        <CpicSection
+            title="Recommendation"
+            content={guideline.recommendation}
+        />
+        {guideline.comments && (
+            <CpicSection title="Comments" content={guideline.comments} />
+        )}
     </div>
 );
 

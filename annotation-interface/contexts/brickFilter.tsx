@@ -6,8 +6,8 @@ import {
     useState,
 } from 'react';
 
-import { brickUsages } from '../common/constants';
-import { ContextProvider } from '../components/common/Layout';
+import { brickUsages } from '../common/definitions';
+import { ContextProvider } from '../components/common/structure/Layout';
 
 export const displayCategories = ['All', ...brickUsages] as const;
 export type DisplayCategory = typeof displayCategories[number];

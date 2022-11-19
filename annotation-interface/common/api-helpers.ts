@@ -1,10 +1,16 @@
 import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { ApiError } from 'next/dist/server/api-utils';
 
 import dbConnect from '../database/helpers/connect';
 
+export interface ApiResponse<T> {
+    success: true;
+    data: T;
+}
+
 type ApiMethodHandlers = {
-    [key: string]: () => Promise<void>;
+    [key: string]: () => Promise<{ successStatus: number; data?: object }>;
 };
 
 export const handleApiMethods = async (
@@ -14,14 +20,20 @@ export const handleApiMethods = async (
 ): Promise<void> => {
     const { method } = req;
     try {
-        if (!method) throw new Error('Method not defined');
+        if (!method) throw new ApiError(400, 'Method not defined');
         const handler = methodHandlers[method];
-        if (!handler) throw new Error('Method not supported');
-        await handler();
+        if (!handler) throw new ApiError(400, 'Method not supported');
+        const { successStatus, data } = await handler();
+        res.status(successStatus).json({ success: true, data });
     } catch (error) {
         /* eslint-disable no-console */
         console.error(error);
-        res.status(400).json({ success: false });
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const apiError =
+            error && typeof error === 'object' ? (error as any) : undefined;
+        const statusCode = apiError?.statusCode ?? 400;
+        const message = apiError?.message ?? 'Unknown error';
+        res.status(statusCode).json({ success: false, message });
     }
 };
 
@@ -36,7 +48,7 @@ export const createApi = async (
         POST: async () => {
             await dbConnect();
             const doc = await model.create(req.body);
-            res.status(201).json({ doc });
+            return { successStatus: 201, data: doc };
         },
         ...additionalMethodHandlers,
     });
@@ -60,12 +72,12 @@ export const updateDeleteApi = async (
                     runValidators: true,
                 })
                 .orFail();
-            res.status(200).json({ brick: doc });
+            return { successStatus: 200, data: doc };
         },
         DELETE: async () => {
             await dbConnect();
             await model.findByIdAndDelete(id).orFail();
-            res.status(204).end();
+            return { successStatus: 204 };
         },
         ...additionalMethodHandlers,
     });

@@ -1,4 +1,4 @@
-import { SupportedLanguage } from '../../common/constants';
+import { SupportedLanguage } from '../../common/definitions';
 import { ITextBrickTranslation } from '../models/TextBrick';
 import { OptionalId } from './types';
 

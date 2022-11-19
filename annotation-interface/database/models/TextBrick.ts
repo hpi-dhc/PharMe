@@ -1,18 +1,12 @@
-import mongoose, { FilterQuery, Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 import {
     brickUsages,
     SupportedLanguage,
     BrickUsage,
     supportedLanguages,
-    pharMeLanguage,
-} from '../../common/constants';
+} from '../../common/definitions';
 import { translationIsValid } from '../helpers/brick-translations';
-import {
-    BrickResolver,
-    resolveBricks,
-    ResolvedBrick,
-} from '../helpers/resolve-bricks';
 import { IBaseModel, OptionalId } from '../helpers/types';
 
 export interface ITextBrickTranslation<IdT extends OptionalId = undefined>
@@ -26,17 +20,12 @@ export interface ITextBrick<IdT extends OptionalId = undefined>
     usage: BrickUsage;
     translations: ITextBrickTranslation<IdT>[];
 }
+export type ITextBrick_DB = ITextBrick<Types.ObjectId>;
+export type ITextBrick_Str = ITextBrick<string>;
 
-export interface TextBrickModel
-    extends mongoose.Model<ITextBrick<Types.ObjectId>> {
-    findResolved(
-        resolver: BrickResolver,
-        filter: FilterQuery<ITextBrick<Types.ObjectId>>,
-        language?: SupportedLanguage,
-    ): Promise<ResolvedBrick<Types.ObjectId>[]>;
-}
+export type TextBrickModel = mongoose.Model<ITextBrick_DB>;
 
-const textBrickSchema = new mongoose.Schema<ITextBrick<Types.ObjectId>>({
+const textBrickSchema = new mongoose.Schema<ITextBrick_DB>({
     usage: {
         type: String,
         enum: brickUsages,
@@ -83,18 +72,6 @@ const textBrickSchema = new mongoose.Schema<ITextBrick<Types.ObjectId>>({
         ],
     },
 });
-
-textBrickSchema.static(
-    'findResolved',
-    async function (
-        resolver: BrickResolver,
-        filter: FilterQuery<ITextBrick<Types.ObjectId>>,
-        language?: SupportedLanguage,
-    ): Promise<ResolvedBrick<Types.ObjectId>[]> {
-        const bricks = await this.find(filter).lean().exec();
-        return resolveBricks(resolver, bricks, language ?? pharMeLanguage);
-    },
-);
 
 // prevent client side from trying to use node module
 export default !mongoose.models

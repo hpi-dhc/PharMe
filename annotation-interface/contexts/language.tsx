@@ -6,8 +6,8 @@ import {
     useState,
 } from 'react';
 
-import { SupportedLanguage } from '../common/constants';
-import { ContextProvider } from '../components/common/Layout';
+import { SupportedLanguage } from '../common/definitions';
+import { ContextProvider } from '../components/common/structure/Layout';
 
 interface ILanguageContext {
     language: SupportedLanguage;

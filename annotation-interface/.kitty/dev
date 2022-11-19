@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ "$1" = "-h" -o "$1" = "--help" ]; then
+    echo 'Annotation Interface development setup for kitty terminal'
+    echo "  Starts the Annotation Interface and it's databases in split windows."
+    echo "  Run from the Annotation Interface's root."
+    echo ''
+    echo 'optional arguments:'
+    echo '  -h, --help     show this message and exit'
+    exit 0
+fi
+
+if [ "$TERM" != "xterm-kitty" ]; then
+    echo 'Unsupported terminal.'
+    exit 1
+fi
+
+kitty @ launch --cwd=`pwd` --location=vsplit &>/dev/null \
+    && kitty @ send-text "yarn dev\n"
+kitty @ launch --cwd=`pwd` --location=after --type=tab &>/dev/null \
+    && kitty @ send-text "sleep 2 && open http://localhost:3001\n"
+docker compose up

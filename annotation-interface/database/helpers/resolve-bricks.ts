@@ -2,23 +2,15 @@ import {
     BrickUsage,
     pharMeLanguage,
     SupportedLanguage,
-} from '../../common/constants';
-import {
-    ServerGuidelineOverview,
-    ServerMedication,
-} from '../../common/server-types';
-import { IGuidelineAnnotation } from '../models/GuidelineAnnotation';
-import { IMedAnnotation } from '../models/MedAnnotation';
+} from '../../common/definitions';
+import { IGuideline_Any } from '../models/Guideline';
+import { IMedication_Any } from '../models/Medication';
 import { ITextBrick } from '../models/TextBrick';
 import { translationsToMap } from './brick-translations';
-import { MongooseId, OptionalId } from './types';
+import { OptionalId } from './types';
 
 const medicationBrickPlaceholders = ['drug-name'] as const;
-const allBrickPlaceholders = [
-    ...medicationBrickPlaceholders,
-    'gene-symbol',
-    'gene-result',
-] as const;
+const allBrickPlaceholders = [...medicationBrickPlaceholders] as const;
 export const placeHoldersForBrick = (category: BrickUsage): string[] => {
     switch (category) {
         case 'Drug class':
@@ -36,38 +28,27 @@ type BrickPlaceholderValues = {
 };
 
 export type BrickResolver =
-    | { from: 'medAnnotation'; with: IMedAnnotation<MongooseId> }
-    | { from: 'serverMedication'; with: ServerMedication }
-    | { from: 'guidelineAnnotation'; with: IGuidelineAnnotation<MongooseId> }
-    | { from: 'serverGuideline'; with: ServerGuidelineOverview };
+    | { from: 'medication'; with: IMedication_Any }
+    | {
+          from: 'guideline';
+          with: { drugName: string; guideline: IGuideline_Any };
+      };
 
 const getPlaceholders = ({
     from: type,
     with: resolver,
 }: BrickResolver): BrickPlaceholderValues => {
     switch (type) {
-        case 'medAnnotation':
-            return { 'drug-name': resolver.medicationName };
-        case 'serverMedication':
+        case 'medication':
             return { 'drug-name': resolver.name };
-        case 'guidelineAnnotation':
-            return {
-                'drug-name': resolver.medicationName,
-                'gene-symbol': resolver.geneSymbol,
-                'gene-result': resolver.geneResult,
-            };
-        case 'serverGuideline':
-            return {
-                'drug-name': resolver.medication.name,
-                'gene-symbol': resolver.phenotype.geneSymbol.name,
-                'gene-result': resolver.phenotype.geneResult.name,
-            };
+        case 'guideline':
+            return { 'drug-name': resolver.drugName };
     }
 };
 
 export type ResolvedBrick<IdT extends OptionalId> = [
     _id: IdT,
-    text: string | undefined,
+    text: string | null,
 ];
 
 export function resolveBricks<IdT extends OptionalId>(
@@ -83,16 +64,23 @@ export function resolveBricks<IdT extends OptionalId>(
                 text = text!.replaceAll(`#${placeholder}`, replace);
             });
         }
-        return [_id, text] as ResolvedBrick<IdT>;
+        return [_id, text ?? null] as ResolvedBrick<IdT>;
     });
 
     return resolved;
 }
 
-export function definedResolvedMap<IdT extends MongooseId>(
-    bricks: ResolvedBrick<IdT>[],
-): Map<string, string> {
-    return new Map(
-        bricks.filter(([, text]) => text !== undefined) as [string, string][],
-    );
+export function resolveStringOrFail<IdT extends OptionalId>(
+    resolver: BrickResolver,
+    bricks: ITextBrick<IdT>[] | undefined,
+    language: SupportedLanguage = pharMeLanguage,
+): string {
+    if (!bricks) {
+        throw new Error('Annotation missing.');
+    }
+    const resolved = resolveBricks(resolver, bricks, language);
+    if (resolved.find(([, text]) => text === null)) {
+        throw new Error('Translation missing.');
+    }
+    return resolved.map(([, text]) => text!).join(' ');
 }

@@ -3,11 +3,11 @@ import { ExclamationIcon, PlusCircleIcon } from '@heroicons/react/solid';
 import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
-import DisplayLanguagePicker from '../../components/common/DisplayLanguagePicker';
-import FilterTabs from '../../components/common/FilterTabs';
-import Label from '../../components/common/Label';
-import PageHeading from '../../components/common/PageHeading';
 import WithIcon from '../../components/common/WithIcon';
+import Label from '../../components/common/indicators/Label';
+import TableRow from '../../components/common/interaction/TableRow';
+import FilterTabs from '../../components/common/structure/FilterTabs';
+import PageHeading from '../../components/common/structure/PageHeading';
 import {
     displayCategories,
     useBrickFilterContext,
@@ -40,7 +40,6 @@ const AllTextBricks = ({
                 titles={[...displayCategories]}
                 selected={categoryIndex}
                 setSelected={setCategoryIndex}
-                accessory={<DisplayLanguagePicker />}
             >
                 {displayCategories.map((category, categoryIndex) => (
                     <Tab.Panel key={categoryIndex}>
@@ -57,12 +56,9 @@ const AllTextBricks = ({
                             ? bricks.filter((brick) => brick.usage === category)
                             : bricks
                         ).map((brick, index) => (
-                            <p
-                                key={index}
-                                className="border-t border-black border-opacity-10 py-3 pl-3"
-                            >
-                                <Link key={index} href={`/bricks/${brick._id}`}>
-                                    <a className="self-start mr-2">
+                            <TableRow key={index} link={`/bricks/${brick._id}`}>
+                                <>
+                                    <span className="mr-2">
                                         {brick.translations.find(
                                             (translation) =>
                                                 translation.language ===
@@ -76,20 +72,20 @@ const AllTextBricks = ({
                                                 {language}
                                             </WithIcon>
                                         )}
-                                    </a>
-                                </Link>
-                                <Label
-                                    as="button"
-                                    title={brick.usage}
-                                    onClick={() =>
-                                        setCategoryIndex(
-                                            displayCategories.indexOf(
-                                                brick.usage,
-                                            ),
-                                        )
-                                    }
-                                />
-                            </p>
+                                    </span>
+                                    <Label
+                                        as="button"
+                                        title={brick.usage}
+                                        onClick={() =>
+                                            setCategoryIndex(
+                                                displayCategories.indexOf(
+                                                    brick.usage,
+                                                ),
+                                            )
+                                        }
+                                    />
+                                </>
+                            </TableRow>
                         ))}
                     </Tab.Panel>
                 ))}
