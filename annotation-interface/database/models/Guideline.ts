@@ -114,26 +114,39 @@ guidelineSchema.methods.resolve = async function (
     drugName: string,
     language: SupportedLanguage,
 ): Promise<IGuideline_Resolved> {
-    await this.populate([
-        'annotations.implication',
-        'annotations.recommendation',
-    ]);
-    const resolved = makeIdsStrings(this);
-    const resolver: BrickResolver = {
-        from: 'guideline',
-        with: { drugName, guideline: this },
-    };
-    resolved.annotations.implication = resolveStringOrFail(
-        resolver,
-        this.annotations.implication,
-        language,
-    );
-    resolved.annotations.recommendation = resolveStringOrFail(
-        resolver,
-        this.annotations.recommendation,
-        language,
-    );
-    return resolved;
+    try {
+        await this.populate([
+            'annotations.implication',
+            'annotations.recommendation',
+        ]);
+        const resolved = makeIdsStrings(this);
+        const resolver: BrickResolver = {
+            from: 'guideline',
+            with: { drugName, guideline: this },
+        };
+        resolved.annotations.implication = resolveStringOrFail(
+            resolver,
+            this.annotations.implication,
+            language,
+        );
+        resolved.annotations.recommendation = resolveStringOrFail(
+            resolver,
+            this.annotations.recommendation,
+            language,
+        );
+        return resolved;
+    } catch (error) {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const message =
+            error && typeof error === 'object'
+                ? (error as any)['message']
+                : undefined;
+        throw new Error(
+            `Unable to resolve Guideline ${this.cpicData.guidelineName}${
+                message ? `: ${message}` : ''
+            }`,
+        );
+    }
 };
 
 export default !mongoose.models

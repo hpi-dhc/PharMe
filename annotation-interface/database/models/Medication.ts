@@ -116,32 +116,48 @@ medicationSchema.methods.resolve = async function (
         IMedication_FullyPopulated,
     language: SupportedLanguage,
 ): Promise<IMedication_Resolved> {
-    // resolve drug annotations
-    await this.populate(['annotations.drugclass', 'annotations.indication']);
-    const resolved = makeIdsStrings(this);
-    const drugResolver: BrickResolver = {
-        from: 'medication',
-        with: this,
-    };
-    resolved.annotations.drugclass = resolveStringOrFail(
-        drugResolver,
-        this.annotations.drugclass,
-        language,
-    );
-    resolved.annotations.indication = resolveStringOrFail(
-        drugResolver,
-        this.annotations.indication,
-        language,
-    );
-    // resolve guideline annotations
-    await this.populate('guidelines');
-    const guidelines = await Promise.all(
-        this.guidelines.map((guideline) =>
-            guideline.resolve(this.name, language),
-        ),
-    );
-    resolved.guidelines = guidelines;
-    return resolved;
+    try {
+        // resolve drug annotations
+        await this.populate([
+            'annotations.drugclass',
+            'annotations.indication',
+        ]);
+        const resolved = makeIdsStrings(this);
+        const drugResolver: BrickResolver = {
+            from: 'medication',
+            with: this,
+        };
+        resolved.annotations.drugclass = resolveStringOrFail(
+            drugResolver,
+            this.annotations.drugclass,
+            language,
+        );
+        resolved.annotations.indication = resolveStringOrFail(
+            drugResolver,
+            this.annotations.indication,
+            language,
+        );
+        // resolve guideline annotations
+        await this.populate('guidelines');
+        const guidelines = await Promise.all(
+            this.guidelines.map((guideline) =>
+                guideline.resolve(this.name, language),
+            ),
+        );
+        resolved.guidelines = guidelines;
+        return resolved;
+    } catch (error) {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const message =
+            error && typeof error === 'object'
+                ? (error as any)['message']
+                : undefined;
+        throw new Error(
+            `Unable to resolve Medication ${this.name}${
+                message ? `: ${message}` : ''
+            }`,
+        );
+    }
 };
 
 export default !mongoose.models
