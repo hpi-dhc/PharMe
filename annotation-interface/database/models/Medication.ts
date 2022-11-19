@@ -1,14 +1,22 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 
+import { SupportedLanguage } from '../../common/definitions';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
+import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import {
     BrickAnnotationT,
     IAnnotationModel,
+    makeIdsStrings,
     MongooseId,
     OptionalId,
 } from '../helpers/types';
-import Guideline, { IGuideline_Any, IGuideline_Str } from './Guideline';
-import { ITextBrick_Str } from './TextBrick';
+import Guideline, {
+    IGuideline_Any,
+    IGuideline_DB,
+    IGuideline_Resolved,
+    IGuideline_Str,
+} from './Guideline';
+import { ITextBrick_DB, ITextBrick_Str } from './TextBrick';
 
 export interface IMedication<
     AnnotationT extends BrickAnnotationT,
@@ -32,6 +40,7 @@ export type IMedication_DB = IMedication<
     Types.ObjectId
 > & {
     missingAnnotations: () => Promise<number>;
+    resolve: (language: SupportedLanguage) => Promise<IMedication_Resolved>;
 };
 export type IMedication_Str = IMedication<string, IGuideline_Str, string>;
 export type IMedication_Populated = IMedication<
@@ -43,6 +52,11 @@ export type IMedication_Any = IMedication<
     BrickAnnotationT,
     MongooseId | IGuideline_Any,
     OptionalId
+>;
+export type IMedication_Resolved = IMedication<
+    string,
+    IGuideline_Resolved,
+    string
 >;
 
 type MedicationModel = mongoose.Model<IMedication_DB>;
@@ -90,6 +104,44 @@ medicationSchema.methods.missingAnnotations = async function (
         (total, current) => total! + (current ?? 0),
         medCount,
     );
+};
+
+type IMedication_FullyPopulated = IMedication<
+    Array<ITextBrick_DB>,
+    IGuideline_DB,
+    Types.ObjectId
+>;
+medicationSchema.methods.resolve = async function (
+    this: Document<unknown, unknown, IMedication_FullyPopulated> &
+        IMedication_FullyPopulated,
+    language: SupportedLanguage,
+): Promise<IMedication_Resolved> {
+    // resolve drug annotations
+    await this.populate(['annotations.drugclass', 'annotations.indication']);
+    const resolved = makeIdsStrings(this);
+    const drugResolver: BrickResolver = {
+        from: 'medication',
+        with: this,
+    };
+    resolved.annotations.drugclass = resolveStringOrFail(
+        drugResolver,
+        this.annotations.drugclass,
+        language,
+    );
+    resolved.annotations.indication = resolveStringOrFail(
+        drugResolver,
+        this.annotations.indication,
+        language,
+    );
+    // resolve guideline annotations
+    await this.populate('guidelines');
+    const guidelines = await Promise.all(
+        this.guidelines.map((guideline) =>
+            guideline.resolve(this.name, language),
+        ),
+    );
+    resolved.guidelines = guidelines;
+    return resolved;
 };
 
 export default !mongoose.models
