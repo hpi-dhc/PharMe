@@ -20,6 +20,7 @@ const WarningLevelAnnotation = ({ guideline }: Props) => {
             value={warningLevel}
             hasChanges={guideline.annotations.warningLevel !== warningLevel}
             onClear={() => setWarningLevel(null)}
+            isEditable={!guideline.isStaged}
         >
             <div className="border border-opacity-40 border-white py-6 px-2 my-4 flex justify-evenly">
                 {warningLevelValues.map((value, index) => (

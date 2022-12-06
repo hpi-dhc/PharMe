@@ -23,6 +23,7 @@ interface Props {
     _key: AnnotationKey;
     annotation: Array<ITextBrick_Str> | undefined;
     brickResolver: BrickResolver;
+    isEditable: boolean;
 }
 
 function BrickAnnotation({
@@ -30,6 +31,7 @@ function BrickAnnotation({
     _key: key,
     annotation,
     brickResolver,
+    isEditable,
 }: Props) {
     const { language } = useLanguageContext();
     const initialBrickIds = annotation
@@ -70,6 +72,7 @@ function BrickAnnotation({
             value={usedBrickIds ? Array.from(usedBrickIds) : null}
             hasChanges={usedBrickIds !== initialBrickIds}
             onClear={onClear}
+            isEditable={isEditable}
         >
             {error ? (
                 <GenericError />

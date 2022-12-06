@@ -72,6 +72,7 @@ const _drugAnnotation = (
         _key={key}
         annotation={drug.annotations[key]}
         brickResolver={{ from: 'drug', with: drug }}
+        isEditable={!drug.isStaged}
     />
 );
 
@@ -93,6 +94,7 @@ const _guidelineAnnotation = (
                         from: 'guideline',
                         with: { drugName, guideline },
                     }}
+                    isEditable={!guideline.isStaged}
                 />
             );
     }
