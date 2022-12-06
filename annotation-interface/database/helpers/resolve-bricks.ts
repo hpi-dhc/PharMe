@@ -3,19 +3,19 @@ import {
     pharMeLanguage,
     SupportedLanguage,
 } from '../../common/definitions';
+import { IDrug_Any } from '../models/Drug';
 import { IGuideline_Any } from '../models/Guideline';
-import { IMedication_Any } from '../models/Medication';
 import { ITextBrick } from '../models/TextBrick';
 import { translationsToMap } from './brick-translations';
 import { OptionalId } from './types';
 
-const medicationBrickPlaceholders = ['drug-name'] as const;
-const allBrickPlaceholders = [...medicationBrickPlaceholders] as const;
+const drugBrickPlaceholders = ['drug-name'] as const;
+const allBrickPlaceholders = [...drugBrickPlaceholders] as const;
 export const placeHoldersForBrick = (category: BrickUsage): string[] => {
     switch (category) {
         case 'Drug class':
         case 'Drug indication':
-            return [...medicationBrickPlaceholders];
+            return [...drugBrickPlaceholders];
         case 'Implication':
         case 'Recommendation':
             return [...allBrickPlaceholders];
@@ -28,7 +28,7 @@ type BrickPlaceholderValues = {
 };
 
 export type BrickResolver =
-    | { from: 'medication'; with: IMedication_Any }
+    | { from: 'drug'; with: IDrug_Any }
     | {
           from: 'guideline';
           with: { drugName: string; guideline: IGuideline_Any };
@@ -39,7 +39,7 @@ const getPlaceholders = ({
     with: resolver,
 }: BrickResolver): BrickPlaceholderValues => {
     switch (type) {
-        case 'medication':
+        case 'drug':
             return { 'drug-name': resolver.name };
         case 'guideline':
             return { 'drug-name': resolver.drugName };

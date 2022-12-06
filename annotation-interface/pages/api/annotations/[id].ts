@@ -4,8 +4,8 @@ import { ApiError } from 'next/dist/server/api-utils';
 import { handleApiMethods } from '../../../common/api-helpers';
 import { AnnotationKey } from '../../../common/definitions';
 import dbConnect from '../../../database/helpers/connect';
+import Drug from '../../../database/models/Drug';
 import Guideline from '../../../database/models/Guideline';
-import Medication from '../../../database/models/Medication';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -14,7 +14,7 @@ export interface UpdateAnnotationBody {
     newValue: any;
 }
 
-const allAnnotationModels = [Medication!, Guideline!];
+const allAnnotationModels = [Drug!, Guideline!];
 
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {

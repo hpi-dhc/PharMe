@@ -7,7 +7,7 @@ import {
     supportedLanguages,
 } from '../../common/definitions';
 import dbConnect from '../../database/helpers/connect';
-import Medication from '../../database/models/Medication';
+import Drug from '../../database/models/Drug';
 
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
@@ -18,9 +18,9 @@ const api: NextApiHandler = async (req, res) =>
             }
 
             await dbConnect();
-            const medications = await Medication!.find({}).exec();
+            const drugs = await Drug!.find({}).exec();
             const resolved = await Promise.all(
-                medications.map((medication) => medication.resolve(language)),
+                drugs.map((drug) => drug.resolve(language)),
             );
             return {
                 successStatus: 200,

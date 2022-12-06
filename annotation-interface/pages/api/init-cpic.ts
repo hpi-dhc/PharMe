@@ -10,8 +10,8 @@ import {
 } from '../../common/cpic-api';
 import dbConnect from '../../database/helpers/connect';
 import { getDrugsWithContractedGuidelines } from '../../database/helpers/cpic-constructors';
+import Drug from '../../database/models/Drug';
 import Guideline from '../../database/models/Guideline';
-import Medication from '../../database/models/Medication';
 
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
@@ -22,7 +22,7 @@ const api: NextApiHandler = async (req, res) =>
                     params: cpicRecommendationsParams,
                 }),
                 Guideline!.deleteMany({}),
-                Medication!.deleteMany({}),
+                Drug!.deleteMany({}),
             ]);
             const recommendations = cpicResponse.data;
             const drugsWithGuidelines =
@@ -39,7 +39,7 @@ const api: NextApiHandler = async (req, res) =>
                     )
                 ).map((guideline) => guideline._id) as Types.ObjectId[];
                 drug.guidelines = guidelineIds;
-                await Medication!.create(drug);
+                await Drug!.create(drug);
             }
             return { successStatus: 201 };
         },

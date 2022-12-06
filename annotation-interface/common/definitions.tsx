@@ -1,13 +1,10 @@
 import BrickAnnotation from '../components/annotations/BrickAnnotation';
 import WarningLevelAnnotation from '../components/annotations/WarningLevelAnnotation';
+import { IDrug_Any, IDrug_Populated } from '../database/models/Drug';
 import {
     IGuideline_Any,
     IGuideline_Populated,
 } from '../database/models/Guideline';
-import {
-    IMedication_Any,
-    IMedication_Populated,
-} from '../database/models/Medication';
 
 export const supportedLanguages = ['English', 'German'] as const;
 export type SupportedLanguage = typeof supportedLanguages[number];
@@ -24,7 +21,7 @@ export type BrickUsage = typeof brickUsages[number];
 export const warningLevelValues = ['green', 'yellow', 'red'] as const;
 export type WarningLevel = typeof warningLevelValues[number];
 
-export type DrugAnnotationKey = keyof IMedication_Any['annotations'];
+export type DrugAnnotationKey = keyof IDrug_Any['annotations'];
 export type GuidelineAnnotationKey = keyof IGuideline_Any['annotations'];
 export type AnnotationKey = DrugAnnotationKey | GuidelineAnnotationKey;
 
@@ -50,7 +47,7 @@ export const displayNameForAnnotationKey: {
 
 export const annotationComponent: Record<
     DrugAnnotationKey,
-    (drug: IMedication_Populated) => JSX.Element
+    (drug: IDrug_Populated) => JSX.Element
 > &
     Record<
         GuidelineAnnotationKey,
@@ -67,14 +64,14 @@ export const annotationComponent: Record<
 };
 
 const _drugAnnotation = (
-    drug: IMedication_Populated,
+    drug: IDrug_Populated,
     key: DrugAnnotationKey,
 ): JSX.Element => (
     <BrickAnnotation
         _id={drug._id!}
         _key={key}
         annotation={drug.annotations[key]}
-        brickResolver={{ from: 'medication', with: drug }}
+        brickResolver={{ from: 'drug', with: drug }}
     />
 );
 

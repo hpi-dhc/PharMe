@@ -12,10 +12,10 @@ import PageHeading from '../../../components/common/structure/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import { guidelineDescription } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
+import Drug from '../../../database/models/Drug';
 import Guideline, {
     IGuideline_Populated,
 } from '../../../database/models/Guideline';
-import Medication from '../../../database/models/Medication';
 import { ITextBrick_Str } from '../../../database/models/TextBrick';
 
 const GuidelineDetail = ({
@@ -59,7 +59,7 @@ export const getServerSideProps = async (
     resetServerContext();
     try {
         await dbConnect();
-        const drug = await Medication!.findById(drugId).lean().orFail().exec();
+        const drug = await Drug!.findById(drugId).lean().orFail().exec();
         const guideline = await Guideline!
             .findById(guidelineId)
             .populate<{

@@ -18,7 +18,7 @@ import Guideline, {
 } from './Guideline';
 import { ITextBrick_DB, ITextBrick_Str } from './TextBrick';
 
-export interface IMedication<
+export interface IDrug<
     AnnotationT extends BrickAnnotationT,
     GuidelineT extends MongooseId | IGuideline_Any,
     IdT extends OptionalId = undefined,
@@ -34,34 +34,30 @@ export interface IMedication<
     guidelines: GuidelineT[];
 }
 
-export type IMedication_DB = IMedication<
+export type IDrug_DB = IDrug<
     Types.ObjectId[],
     Types.ObjectId,
     Types.ObjectId
 > & {
     missingAnnotations: () => Promise<number>;
-    resolve: (language: SupportedLanguage) => Promise<IMedication_Resolved>;
+    resolve: (language: SupportedLanguage) => Promise<IDrug_Resolved>;
 };
-export type IMedication_Str = IMedication<string, IGuideline_Str, string>;
-export type IMedication_Populated = IMedication<
+export type IDrug_Str = IDrug<string, IGuideline_Str, string>;
+export type IDrug_Populated = IDrug<
     Array<ITextBrick_Str>,
     IGuideline_Str,
     string
 >;
-export type IMedication_Any = IMedication<
+export type IDrug_Any = IDrug<
     BrickAnnotationT,
     MongooseId | IGuideline_Any,
     OptionalId
 >;
-export type IMedication_Resolved = IMedication<
-    string,
-    IGuideline_Resolved,
-    string
->;
+export type IDrug_Resolved = IDrug<string, IGuideline_Resolved, string>;
 
-type MedicationModel = mongoose.Model<IMedication_DB>;
+type DrugModel = mongoose.Model<IDrug_DB>;
 
-const medicationSchema = new mongoose.Schema<IMedication_DB, MedicationModel>({
+const drugSchema = new mongoose.Schema<IDrug_DB, DrugModel>({
     name: { type: String, required: true },
     rxNorm: { type: String, required: true },
     annotations: {
@@ -85,10 +81,8 @@ const medicationSchema = new mongoose.Schema<IMedication_DB, MedicationModel>({
     },
 });
 
-medicationSchema.methods.missingAnnotations = async function (
-    this: IMedication_DB,
-) {
-    const medCount = [
+drugSchema.methods.missingAnnotations = async function (this: IDrug_DB) {
+    const drugCount = [
         this.annotations.drugclass,
         this.annotations.indication,
     ].filter((annotation) => !annotation).length;
@@ -102,20 +96,20 @@ medicationSchema.methods.missingAnnotations = async function (
 
     return guidelineCounts.reduce(
         (total, current) => total! + (current ?? 0),
-        medCount,
+        drugCount,
     );
 };
 
-type IMedication_FullyPopulated = IMedication<
+type IDrug_FullyPopulated = IDrug<
     Array<ITextBrick_DB>,
     IGuideline_DB,
     Types.ObjectId
 >;
-medicationSchema.methods.resolve = async function (
-    this: Document<unknown, unknown, IMedication_FullyPopulated> &
-        IMedication_FullyPopulated,
+drugSchema.methods.resolve = async function (
+    this: Document<unknown, unknown, IDrug_FullyPopulated> &
+        IDrug_FullyPopulated,
     language: SupportedLanguage,
-): Promise<IMedication_Resolved> {
+): Promise<IDrug_Resolved> {
     try {
         // resolve drug annotations
         await this.populate([
@@ -123,10 +117,7 @@ medicationSchema.methods.resolve = async function (
             'annotations.indication',
         ]);
         const resolved = makeIdsStrings(this);
-        const drugResolver: BrickResolver = {
-            from: 'medication',
-            with: this,
-        };
+        const drugResolver: BrickResolver = { from: 'drug', with: this };
         resolved.annotations.drugclass = resolveStringOrFail(
             drugResolver,
             this.annotations.drugclass,
@@ -153,7 +144,7 @@ medicationSchema.methods.resolve = async function (
                 ? (error as any)['message']
                 : undefined;
         throw new Error(
-            `Unable to resolve Medication ${this.name}${
+            `Unable to resolve Drug ${this.name}${
                 message ? `: ${message}` : ''
             }`,
         );
@@ -162,8 +153,5 @@ medicationSchema.methods.resolve = async function (
 
 export default !mongoose.models
     ? undefined
-    : (mongoose.models.Medication as MedicationModel) ||
-      mongoose.model<IMedication_DB, MedicationModel>(
-          'Medication',
-          medicationSchema,
-      );
+    : (mongoose.models.Drug as DrugModel) ||
+      mongoose.model<IDrug_DB, DrugModel>('Drug', drugSchema);
