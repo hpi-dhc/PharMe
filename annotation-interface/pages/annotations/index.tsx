@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 
 import { matches } from '../../common/generic-helpers';
 import { useSwrFetcher } from '../../common/react-helpers';
-import StagedBadge from '../../components/annotations/StagedBadge';
 import StatusBadge from '../../components/annotations/StatusBadge';
 import GenericError from '../../components/common/indicators/GenericError';
 import LoadingSpinner from '../../components/common/indicators/LoadingSpinner';
@@ -77,10 +76,10 @@ const Annotations = () => {
                         >
                             <div className="flex justify-between">
                                 <span className="mr-2">{drug.name}</span>
-                                <span>
-                                    <StatusBadge badge={drug.badge} />
-                                    {drug.isStaged && <StagedBadge />}
-                                </span>
+                                <StatusBadge
+                                    badge={drug.badge}
+                                    staged={drug.isStaged}
+                                />
                             </div>
                         </TableRow>
                     ))

@@ -85,13 +85,12 @@ const DrugDetail = ({
                                         ),
                                     )}
                                 </span>
-                                <span>
-                                    <StatusBadge
-                                        badge={missingGuidelineAnnotations(
-                                            guideline,
-                                        )}
-                                    />
-                                </span>
+                                <StatusBadge
+                                    badge={missingGuidelineAnnotations(
+                                        guideline,
+                                    )}
+                                    staged={guideline.isStaged}
+                                />
                             </div>
                         </TableRow>
                     ))}
