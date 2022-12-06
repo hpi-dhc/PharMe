@@ -7,7 +7,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
-import { BackButton } from '../../../components/common/interaction/BackButton';
+import TopBar from '../../../components/annotations/TopBar';
 import PageHeading from '../../../components/common/structure/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
 import { guidelineDescription } from '../../../database/helpers/guideline-data';
@@ -33,7 +33,7 @@ const GuidelineDetail = ({
                 ))}
             </PageHeading>
             <div className="space-y-4">
-                <BackButton />
+                <TopBar _id={guideline._id!} />
                 <CpicGuidelineBox guideline={guideline.cpicData} />
                 {annotationComponent.implication(drugName, guideline)}
                 {annotationComponent.recommendation(drugName, guideline)}

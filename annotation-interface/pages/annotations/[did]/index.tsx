@@ -10,7 +10,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { annotationComponent } from '../../../common/definitions';
 import { matches } from '../../../common/generic-helpers';
 import StatusBadge from '../../../components/annotations/StatusBadge';
-import { BackButton } from '../../../components/common/interaction/BackButton';
+import TopBar from '../../../components/annotations/TopBar';
 import SearchBar from '../../../components/common/interaction/SearchBar';
 import TableRow from '../../../components/common/interaction/TableRow';
 import PageHeading from '../../../components/common/structure/PageHeading';
@@ -52,7 +52,7 @@ const DrugDetail = ({
                 View and edit annotations for this drug and its guidelines.
             </PageHeading>
             <div className="space-y-4">
-                <BackButton />
+                <TopBar _id={drug._id!} />
                 {annotationComponent.drugclass(drug)}
                 {annotationComponent.indication(drug)}
                 <h2 className="font-bold border-t border-black border-opacity-20 pt-4">
