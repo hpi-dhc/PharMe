@@ -18,7 +18,7 @@ const api: NextApiHandler = async (req, res) =>
             }
 
             await dbConnect();
-            const drugs = await Drug!.find({}).exec();
+            const drugs = await Drug!.find({ isStaged: true }).exec();
             const resolved = await Promise.all(
                 drugs.map((drug) => drug.resolve(language)),
             );

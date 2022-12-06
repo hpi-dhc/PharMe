@@ -27,6 +27,7 @@ function guidelineFromRecommendation(
             implication: undefined,
             warningLevel: undefined,
         },
+        isStaged: false,
     };
 }
 
@@ -50,6 +51,7 @@ function drugFromRecommendation(recommendation: CpicRecommendation): IDrug_Any {
             indication: undefined,
         },
         guidelines: [],
+        isStaged: false,
     };
 }
 

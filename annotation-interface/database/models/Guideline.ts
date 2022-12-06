@@ -5,15 +5,11 @@ import {
     WarningLevel,
     warningLevelValues,
 } from '../../common/definitions';
+import { BrickAnnotationT, IAnnotationModel } from '../helpers/annotations';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { missingGuidelineAnnotations } from '../helpers/guideline-data';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
-import {
-    BrickAnnotationT,
-    IAnnotationModel,
-    makeIdsStrings,
-    OptionalId,
-} from '../helpers/types';
+import { makeIdsStrings, OptionalId } from '../helpers/types';
 import { ITextBrick_Str } from './TextBrick';
 
 export interface IGuideline<
@@ -86,6 +82,7 @@ const guidelineSchema = new mongoose.Schema<IGuideline_DB, GuidelineModel>({
         },
         required: true,
     },
+    isStaged: { type: Boolean, required: true, default: false },
 });
 
 guidelineSchema.pre<IGuideline_DB>('validate', function (next) {
