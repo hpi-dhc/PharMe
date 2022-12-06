@@ -1,6 +1,6 @@
 import { CpicRecommendation } from '../../common/cpic-api';
+import { IDrug_Any } from '../models/Drug';
 import { IGuideline_Any } from '../models/Guideline';
-import { IMedication_Any } from '../models/Medication';
 
 function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
@@ -41,9 +41,7 @@ function guidelineKey(recommendation: CpicRecommendation) {
     ].join('');
 }
 
-function drugFromRecommendation(
-    recommendation: CpicRecommendation,
-): IMedication_Any {
+function drugFromRecommendation(recommendation: CpicRecommendation): IDrug_Any {
     return {
         name: recommendation.drug.name,
         rxNorm: recommendation.drugid,
@@ -56,7 +54,7 @@ function drugFromRecommendation(
 }
 
 interface DrugWithGuidelines {
-    drug: IMedication_Any;
+    drug: IDrug_Any;
     guidelines: Array<IGuideline_Any>;
 }
 export function getDrugsWithContractedGuidelines(

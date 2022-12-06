@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next';
 
 import { ApiResponse, handleApiMethods } from '../../../common/api-helpers';
 import dbConnect from '../../../database/helpers/connect';
-import Medication from '../../../database/models/Medication';
+import Drug from '../../../database/models/Drug';
 
 interface ResponseData {
     drugs: Array<{ id: string; name: string; badge: number }>;
@@ -13,7 +13,7 @@ const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
         GET: async () => {
             await dbConnect();
-            const drugs = await Medication!.find({}).orFail().exec();
+            const drugs = await Drug!.find({}).orFail().exec();
             const badges = await Promise.all(
                 drugs.map((drug) => drug.missingAnnotations()),
             );

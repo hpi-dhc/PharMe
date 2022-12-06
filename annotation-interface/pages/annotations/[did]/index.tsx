@@ -20,13 +20,11 @@ import {
     missingGuidelineAnnotations,
 } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
+import Drug, { IDrug_Populated } from '../../../database/models/Drug';
 import {
     IGuideline_DB,
     IGuideline_Str,
 } from '../../../database/models/Guideline';
-import Medication, {
-    IMedication_Populated,
-} from '../../../database/models/Medication';
 import { ITextBrick_Str } from '../../../database/models/TextBrick';
 
 const DrugDetail = ({
@@ -109,7 +107,7 @@ export const getServerSideProps = async (
     context: GetServerSidePropsContext,
 ): Promise<
     GetServerSidePropsResult<{
-        drug: IMedication_Populated;
+        drug: IDrug_Populated;
     }>
 > => {
     const id = context.params?.did as string;
@@ -117,7 +115,7 @@ export const getServerSideProps = async (
     resetServerContext();
     try {
         await dbConnect();
-        const drug = await Medication!
+        const drug = await Drug!
             .findById(id)
             .populate<{
                 'annotations.drugclass': Array<ITextBrick_Str> | undefined;
@@ -132,7 +130,7 @@ export const getServerSideProps = async (
             .orFail()
             .exec();
         return {
-            props: { drug: makeIdsStrings(drug) as IMedication_Populated },
+            props: { drug: makeIdsStrings(drug) as IDrug_Populated },
         };
     } catch (error) {
         return { notFound: true };
