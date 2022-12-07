@@ -13,8 +13,8 @@ The container fetches a backup from Anni every 15 minutes and commits it to the
     repo. You can create it [here](https://github.com/settings/tokens/new); make
     sure to select the `repo` scope.
 - Run `docker build -t anni-backupper .` in this directory to build the
-  container
+  image
 - Run `docker run anni-backupper` to run the container
   - In case you are trying things out locally on macOS with `--net=host`, note
-    that you have to use `host.docker.internal` for your `.env` instead of
+    that you have to use `host.docker.internal` for your `ANNI_URL` instead of
     `localhost`!
