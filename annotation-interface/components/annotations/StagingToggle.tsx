@@ -4,6 +4,7 @@ import axios from 'axios';
 import { mutate } from 'swr';
 
 import { useSwrFetcher } from '../../common/react-helpers';
+import { useGlobalContext } from '../../contexts/global';
 import {
     GetStagingResponse,
     UpdateStagingBody,
@@ -22,6 +23,7 @@ export const useStagingApi = (id: string) => {
 };
 
 const StagingToggle = ({ api, isStaged }: Props) => {
+    const { reviewMode } = useGlobalContext();
     return (
         <WithIcon
             icon={isStaged ? BadgeSolidIcon : BadgeOutlineIcon}
@@ -29,11 +31,16 @@ const StagingToggle = ({ api, isStaged }: Props) => {
             className={
                 'text-s px-2 py-1 rounded-md whitespace-nowrap' +
                 (isStaged
-                    ? ' overflow-clip bg-black bg-opacity-80 text-white hover:bg-opacity-60 '
-                    : ' border border-black border-opacity-20 hover:bg-neutral-100 ')
+                    ? ` overflow-clip bg-black bg-opacity-80 text-white ${
+                          reviewMode ? 'cursor-default' : 'hover:bg-opacity-60'
+                      } `
+                    : ` border border-black border-opacity-20 ${
+                          reviewMode ? 'cursor-default' : 'hover:bg-neutral-100'
+                      } `)
             }
             reverse
             onClick={async () => {
+                if (reviewMode) return;
                 const patch: UpdateStagingBody = {
                     isStaged: isStaged ? 'false' : 'true',
                 };
