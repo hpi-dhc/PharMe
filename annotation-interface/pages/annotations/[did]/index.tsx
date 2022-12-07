@@ -9,6 +9,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import { matches } from '../../../common/generic-helpers';
+import { useStagingApi } from '../../../components/annotations/StagingToggle';
 import StatusBadge from '../../../components/annotations/StatusBadge';
 import TopBar from '../../../components/annotations/TopBar';
 import SearchBar from '../../../components/common/interaction/SearchBar';
@@ -30,6 +31,8 @@ import { ITextBrick_Str } from '../../../database/models/TextBrick';
 const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const stagingApi = useStagingApi(drug._id!);
+
     const [guidelineQuery, setGuidelineQuery] = useState('');
 
     const guidelines = drug.guidelines.filter((guideline) => {
@@ -52,9 +55,9 @@ const DrugDetail = ({
                 View and edit annotations for this drug and its guidelines.
             </PageHeading>
             <div className="space-y-4">
-                <TopBar _id={drug._id!} />
-                {annotationComponent.drugclass(drug)}
-                {annotationComponent.indication(drug)}
+                <TopBar {...stagingApi} />
+                {annotationComponent.drugclass(drug, stagingApi.isStaged)}
+                {annotationComponent.indication(drug, stagingApi.isStaged)}
                 <h2 className="font-bold border-t border-black border-opacity-20 pt-4">
                     Guidelines
                 </h2>

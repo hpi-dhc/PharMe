@@ -6,9 +6,10 @@ import AbstractAnnotation from './AbstractAnnotation';
 
 type Props = {
     guideline: IGuideline_Populated;
+    isEditable: boolean;
 };
 
-const WarningLevelAnnotation = ({ guideline }: Props) => {
+const WarningLevelAnnotation = ({ guideline, isEditable }: Props) => {
     const [warningLevel, setWarningLevel] = useState(
         guideline.annotations.warningLevel ?? null,
     );
@@ -20,7 +21,7 @@ const WarningLevelAnnotation = ({ guideline }: Props) => {
             value={warningLevel}
             hasChanges={guideline.annotations.warningLevel !== warningLevel}
             onClear={() => setWarningLevel(null)}
-            isEditable={!guideline.isStaged}
+            isEditable={isEditable}
         >
             <div className="border border-opacity-40 border-white py-6 px-2 my-4 flex justify-evenly">
                 {warningLevelValues.map((value, index) => (

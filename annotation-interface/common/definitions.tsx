@@ -47,24 +47,30 @@ export const displayNameForAnnotationKey: {
 
 export const annotationComponent: Record<
     DrugAnnotationKey,
-    (drug: IDrug_Populated) => JSX.Element
+    (drug: IDrug_Populated, isStaged: boolean | undefined) => JSX.Element
 > &
     Record<
         GuidelineAnnotationKey,
-        (drugName: string, guideline: IGuideline_Populated) => JSX.Element
+        (
+            drugName: string,
+            guideline: IGuideline_Populated,
+            isStaged: boolean | undefined,
+        ) => JSX.Element
     > = {
-    drugclass: (drug) => _drugAnnotation(drug, 'drugclass'),
-    indication: (drug) => _drugAnnotation(drug, 'indication'),
-    implication: (drugName, guideline) =>
-        _guidelineAnnotation(drugName, guideline, 'implication'),
-    recommendation: (drugName, guideline) =>
-        _guidelineAnnotation(drugName, guideline, 'recommendation'),
-    warningLevel: (drugName, guideline) =>
-        _guidelineAnnotation(drugName, guideline, 'warningLevel'),
+    drugclass: (drug, isStaged) => _drugAnnotation(drug, isStaged, 'drugclass'),
+    indication: (drug, isStaged) =>
+        _drugAnnotation(drug, isStaged, 'indication'),
+    implication: (drugName, guideline, isStaged) =>
+        _guidelineAnnotation(drugName, guideline, isStaged, 'implication'),
+    recommendation: (drugName, guideline, isStaged) =>
+        _guidelineAnnotation(drugName, guideline, isStaged, 'recommendation'),
+    warningLevel: (drugName, guideline, isStaged) =>
+        _guidelineAnnotation(drugName, guideline, isStaged, 'warningLevel'),
 };
 
 const _drugAnnotation = (
     drug: IDrug_Populated,
+    isStaged: boolean | undefined,
     key: DrugAnnotationKey,
 ): JSX.Element => (
     <BrickAnnotation
@@ -72,18 +78,24 @@ const _drugAnnotation = (
         _key={key}
         annotation={drug.annotations[key]}
         brickResolver={{ from: 'drug', with: drug }}
-        isEditable={!drug.isStaged}
+        isEditable={!isStaged}
     />
 );
 
 const _guidelineAnnotation = (
     drugName: string,
     guideline: IGuideline_Populated,
+    isStaged: boolean | undefined,
     key: GuidelineAnnotationKey,
 ): JSX.Element => {
     switch (key) {
         case 'warningLevel':
-            return <WarningLevelAnnotation guideline={guideline} />;
+            return (
+                <WarningLevelAnnotation
+                    guideline={guideline}
+                    isEditable={!isStaged}
+                />
+            );
         default:
             return (
                 <BrickAnnotation
@@ -94,7 +106,7 @@ const _guidelineAnnotation = (
                         from: 'guideline',
                         with: { drugName, guideline },
                     }}
-                    isEditable={!guideline.isStaged}
+                    isEditable={!isStaged}
                 />
             );
     }

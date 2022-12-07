@@ -7,6 +7,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
+import { useStagingApi } from '../../../components/annotations/StagingToggle';
 import TopBar from '../../../components/annotations/TopBar';
 import PageHeading from '../../../components/common/structure/PageHeading';
 import dbConnect from '../../../database/helpers/connect';
@@ -22,6 +23,7 @@ const GuidelineDetail = ({
     drugName,
     guideline,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const stagingApi = useStagingApi(guideline._id!);
     return (
         <>
             <PageHeading title={`Guideline for ${drugName}`}>
@@ -33,11 +35,23 @@ const GuidelineDetail = ({
                 ))}
             </PageHeading>
             <div className="space-y-4">
-                <TopBar _id={guideline._id!} />
+                <TopBar {...stagingApi} />
                 <CpicGuidelineBox guideline={guideline.cpicData} />
-                {annotationComponent.implication(drugName, guideline)}
-                {annotationComponent.recommendation(drugName, guideline)}
-                {annotationComponent.warningLevel(drugName, guideline)}
+                {annotationComponent.implication(
+                    drugName,
+                    guideline,
+                    stagingApi.isStaged,
+                )}
+                {annotationComponent.recommendation(
+                    drugName,
+                    guideline,
+                    stagingApi.isStaged,
+                )}
+                {annotationComponent.warningLevel(
+                    drugName,
+                    guideline,
+                    stagingApi.isStaged,
+                )}
             </div>
         </>
     );

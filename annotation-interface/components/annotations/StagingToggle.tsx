@@ -11,13 +11,17 @@ import {
 import WithIcon from '../common/WithIcon';
 
 export type Props = {
-    _id: string;
+    api: string;
+    isStaged: boolean | undefined;
 };
 
-const StagingToggle = ({ _id }: Props) => {
-    const api = `/api/annotations/staging/${_id}`;
+export const useStagingApi = (id: string) => {
+    const api = `/api/annotations/staging/${id}`;
     const { data: response } = useSwrFetcher<GetStagingResponse>(api);
-    const isStaged = response?.data.data.isStaged;
+    return { api, isStaged: response?.data.data.isStaged };
+};
+
+const StagingToggle = ({ api, isStaged }: Props) => {
     return (
         <WithIcon
             icon={isStaged ? BadgeSolidIcon : BadgeOutlineIcon}
