@@ -15,6 +15,7 @@ import TopBar from '../../../components/annotations/TopBar';
 import SearchBar from '../../../components/common/interaction/SearchBar';
 import TableRow from '../../../components/common/interaction/TableRow';
 import PageHeading from '../../../components/common/structure/PageHeading';
+import { useGlobalContext } from '../../../contexts/global';
 import dbConnect from '../../../database/helpers/connect';
 import {
     guidelineDescription,
@@ -31,6 +32,8 @@ import { ITextBrick_Str } from '../../../database/models/TextBrick';
 const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { reviewMode } = useGlobalContext();
+
     const stagingApi = useStagingApi(drug._id!);
 
     const [guidelineQuery, setGuidelineQuery] = useState('');
@@ -70,33 +73,37 @@ const DrugDetail = ({
                     }
                 />
                 <div>
-                    {guidelines.map((guideline) => (
-                        <TableRow
-                            key={guideline._id}
-                            link={guidelineLink(guideline)}
-                        >
-                            <div className="flex justify-between">
-                                <span className="mr-2">
-                                    {guidelineDescription(guideline).map(
-                                        (phenotype, index) => (
-                                            <p key={index}>
-                                                <span className="font-bold mr-2">
-                                                    {phenotype.gene}
-                                                </span>
-                                                {phenotype.description}
-                                            </p>
-                                        ),
-                                    )}
-                                </span>
-                                <StatusBadge
-                                    badge={missingGuidelineAnnotations(
-                                        guideline,
-                                    )}
-                                    staged={guideline.isStaged}
-                                />
-                            </div>
-                        </TableRow>
-                    ))}
+                    {guidelines
+                        .filter(
+                            (guideline) => guideline.isStaged || !reviewMode,
+                        )
+                        .map((guideline) => (
+                            <TableRow
+                                key={guideline._id}
+                                link={guidelineLink(guideline)}
+                            >
+                                <div className="flex justify-between">
+                                    <span className="mr-2">
+                                        {guidelineDescription(guideline).map(
+                                            (phenotype, index) => (
+                                                <p key={index}>
+                                                    <span className="font-bold mr-2">
+                                                        {phenotype.gene}
+                                                    </span>
+                                                    {phenotype.description}
+                                                </p>
+                                            ),
+                                        )}
+                                    </span>
+                                    <StatusBadge
+                                        badge={missingGuidelineAnnotations(
+                                            guideline,
+                                        )}
+                                        staged={guideline.isStaged}
+                                    />
+                                </div>
+                            </TableRow>
+                        ))}
                 </div>
             </div>
         </>
