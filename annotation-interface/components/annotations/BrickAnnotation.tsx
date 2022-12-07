@@ -6,7 +6,7 @@ import {
     brickCategoryForAnnotationKey,
 } from '../../common/definitions';
 import { useSwrFetcher } from '../../common/react-helpers';
-import { useLanguageContext } from '../../contexts/language';
+import { useGlobalContext } from '../../contexts/global';
 import {
     BrickResolver,
     resolveBricks,
@@ -33,7 +33,7 @@ function BrickAnnotation({
     brickResolver,
     isEditable,
 }: Props) {
-    const { language } = useLanguageContext();
+    const { language } = useGlobalContext();
     const initialBrickIds = annotation
         ? new Set(annotation.map((brick) => brick._id!))
         : undefined;
