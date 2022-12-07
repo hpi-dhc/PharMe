@@ -10,6 +10,7 @@ type SelectionPopoverProps<T extends string> = {
     selectedOption?: T;
     icon?: typeof AnnotationIcon;
     expandUpwards?: boolean;
+    justifyBetween?: boolean;
 };
 
 const SelectionPopover = <T extends string>({
@@ -19,10 +20,18 @@ const SelectionPopover = <T extends string>({
     onSelect,
     icon,
     expandUpwards,
+    justifyBetween,
 }: SelectionPopoverProps<T>) => (
-    <Menu as="div" className="inline self-center px-2 relative">
-        <WithIcon as={Menu.Button} icon={icon ?? ChevronDownIcon}>
-            {label ?? selectedOption}
+    <Menu as="div" className="inline self-center relative">
+        <WithIcon
+            as={Menu.Button}
+            icon={icon ?? ChevronDownIcon}
+            className={
+                justifyBetween ? 'w-full flex-nowrap justify-between' : ''
+            }
+            reverse
+        >
+            <span>{label ?? selectedOption}</span>
         </WithIcon>
         <Menu.Items
             className={`${

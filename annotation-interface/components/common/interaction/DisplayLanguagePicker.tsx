@@ -11,6 +11,7 @@ const DisplayLanguagePicker = () => {
                 selectedOption={language}
                 onSelect={setLanguage}
                 expandUpwards
+                justifyBetween
             />
         </div>
     );

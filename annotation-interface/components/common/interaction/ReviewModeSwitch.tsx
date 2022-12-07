@@ -7,7 +7,7 @@ const ReviewModeSwitch = () => {
 
     return (
         <div className="flex justify-between">
-            <p className="mr-4">Review mode</p>
+            <p className="mr-6">Review mode</p>
             <div>
                 <Switch
                     checked={reviewMode}
