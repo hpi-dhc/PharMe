@@ -54,6 +54,8 @@ const Layout = ({ children }: PropsWithChildren) => {
     const activeIndex = tabDefinitions.findIndex((definition) =>
         router.pathname.match(definition.activePaths),
     );
+    const showReviewModeSwitch =
+        activeIndex > -1 && !tabDefinitions[activeIndex].hideInReview;
     const { reviewMode } = useGlobalContext();
     return (
         <>
@@ -77,7 +79,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                     </ul>
                 </div>
                 <div className="space-y-4">
-                    <ReviewModeSwitch />
+                    {showReviewModeSwitch && <ReviewModeSwitch />}
                     <DisplayLanguagePicker />
                 </div>
             </div>
