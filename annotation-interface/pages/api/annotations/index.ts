@@ -2,10 +2,12 @@ import { NextApiHandler } from 'next';
 
 import { ApiResponse, handleApiMethods } from '../../../common/api-helpers';
 import dbConnect from '../../../database/helpers/connect';
-import Drug from '../../../database/models/Drug';
+import Drug, { IDrug_Str } from '../../../database/models/Drug';
 
 interface ResponseData {
-    drugs: Array<{ id: string; name: string; badge: number }>;
+    drugs: Array<
+        Pick<IDrug_Str, '_id' | 'name' | 'isStaged'> & { badge: number }
+    >;
 }
 export type GetAnnotationsReponse = ApiResponse<ResponseData>;
 
@@ -20,8 +22,9 @@ const api: NextApiHandler = async (req, res) =>
             const data: ResponseData = {
                 drugs: drugs.map((drug, index) => {
                     return {
-                        id: drug._id!.toString(),
+                        _id: drug._id!.toString(),
                         name: drug.name,
+                        isStaged: drug.isStaged,
                         badge: badges[index],
                     };
                 }),

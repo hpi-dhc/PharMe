@@ -12,9 +12,11 @@ import SelectionPopover from '../../components/common/interaction/SelectionPopov
 import TableRow from '../../components/common/interaction/TableRow';
 import PageHeading from '../../components/common/structure/PageHeading';
 import { filterStates, useAnnotationContext } from '../../contexts/annotations';
+import { useGlobalContext } from '../../contexts/global';
 import { GetAnnotationsReponse } from '../api/annotations';
 
 const Annotations = () => {
+    const { reviewMode } = useGlobalContext();
     const { curationState, setCurationState, searchQuery, setSearchQuery } =
         useAnnotationContext();
 
@@ -23,7 +25,8 @@ const Annotations = () => {
     const drugs = response?.data.data.drugs;
 
     const filteredDrugs = drugs?.filter(
-        ({ name, badge }) =>
+        ({ name, badge, isStaged }) =>
+            (isStaged || !reviewMode) &&
             matches(name, searchQuery) &&
             (curationState === 'all' ||
                 (curationState === 'missing' && badge) ||
@@ -51,7 +54,7 @@ const Annotations = () => {
                     onEnter={async () => {
                         if (!filteredDrugs?.length) return false;
                         return await router.push(
-                            `/annotations/${filteredDrugs[0].id}`,
+                            `/annotations/${filteredDrugs[0]._id}`,
                         );
                     }}
                 />
@@ -71,14 +74,15 @@ const Annotations = () => {
                 ) : (
                     filteredDrugs?.map((drug) => (
                         <TableRow
-                            key={drug.id}
-                            link={`/annotations/${drug.id}`}
+                            key={drug._id}
+                            link={`/annotations/${drug._id}`}
                         >
                             <div className="flex justify-between">
                                 <span className="mr-2">{drug.name}</span>
-                                <span>
-                                    <StatusBadge badge={drug.badge} />
-                                </span>
+                                <StatusBadge
+                                    badge={drug.badge}
+                                    staged={drug.isStaged}
+                                />
                             </div>
                         </TableRow>
                     ))

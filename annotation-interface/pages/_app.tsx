@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import Layout from '../components/common/structure/Layout';
+import { GlobalContextProvider } from '../contexts/global';
 
 function AnnotationInterface({ Component, pageProps }: AppProps) {
     return (
@@ -10,9 +11,11 @@ function AnnotationInterface({ Component, pageProps }: AppProps) {
             <Head>
                 <title>PharMe: Annotation Interface</title>
             </Head>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
+            <GlobalContextProvider>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </GlobalContextProvider>
         </>
     );
 }

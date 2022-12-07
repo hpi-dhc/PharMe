@@ -1,15 +1,10 @@
 import mongoose, { Document, Types } from 'mongoose';
 
 import { SupportedLanguage } from '../../common/definitions';
+import { BrickAnnotationT, IAnnotationModel } from '../helpers/annotations';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
-import {
-    BrickAnnotationT,
-    IAnnotationModel,
-    makeIdsStrings,
-    MongooseId,
-    OptionalId,
-} from '../helpers/types';
+import { makeIdsStrings, MongooseId, OptionalId } from '../helpers/types';
 import Guideline, {
     IGuideline_Any,
     IGuideline_DB,
@@ -79,6 +74,7 @@ const drugSchema = new mongoose.Schema<IDrug_DB, DrugModel>({
         type: [{ type: Types.ObjectId, ref: 'Guideline' }],
         default: [],
     },
+    isStaged: { type: Boolean, required: true, default: false },
 });
 
 drugSchema.methods.missingAnnotations = async function (this: IDrug_DB) {
@@ -131,9 +127,9 @@ drugSchema.methods.resolve = async function (
         // resolve guideline annotations
         await this.populate('guidelines');
         const guidelines = await Promise.all(
-            this.guidelines.map((guideline) =>
-                guideline.resolve(this.name, language),
-            ),
+            this.guidelines
+                .filter((guideline) => guideline.isStaged)
+                .map((guideline) => guideline.resolve(this.name, language)),
         );
         resolved.guidelines = guidelines;
         return resolved;

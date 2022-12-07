@@ -7,8 +7,10 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
-import { BackButton } from '../../../components/common/interaction/BackButton';
+import { useStagingApi } from '../../../components/annotations/StagingToggle';
+import TopBar from '../../../components/annotations/TopBar';
 import PageHeading from '../../../components/common/structure/PageHeading';
+import { useGlobalContext } from '../../../contexts/global';
 import dbConnect from '../../../database/helpers/connect';
 import { guidelineDescription } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
@@ -22,6 +24,9 @@ const GuidelineDetail = ({
     drugName,
     guideline,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { reviewMode } = useGlobalContext();
+    const stagingApi = useStagingApi(guideline._id!);
+    const isEditable = !reviewMode && !stagingApi.isStaged;
     return (
         <>
             <PageHeading title={`Guideline for ${drugName}`}>
@@ -33,11 +38,23 @@ const GuidelineDetail = ({
                 ))}
             </PageHeading>
             <div className="space-y-4">
-                <BackButton />
+                <TopBar {...stagingApi} />
                 <CpicGuidelineBox guideline={guideline.cpicData} />
-                {annotationComponent.implication(drugName, guideline)}
-                {annotationComponent.recommendation(drugName, guideline)}
-                {annotationComponent.warningLevel(drugName, guideline)}
+                {annotationComponent.implication(
+                    drugName,
+                    guideline,
+                    isEditable,
+                )}
+                {annotationComponent.recommendation(
+                    drugName,
+                    guideline,
+                    isEditable,
+                )}
+                {annotationComponent.warningLevel(
+                    drugName,
+                    guideline,
+                    isEditable,
+                )}
             </div>
         </>
     );

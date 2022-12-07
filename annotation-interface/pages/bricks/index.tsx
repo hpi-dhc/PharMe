@@ -12,14 +12,14 @@ import {
     displayCategories,
     useBrickFilterContext,
 } from '../../contexts/brickFilter';
-import { useLanguageContext } from '../../contexts/language';
+import { useGlobalContext } from '../../contexts/global';
 import dbConnect from '../../database/helpers/connect';
 import TextBrick from '../../database/models/TextBrick';
 
 const AllTextBricks = ({
     bricks,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const { language } = useLanguageContext();
+    const { language } = useGlobalContext();
     const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     return (
         <>

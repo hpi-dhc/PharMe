@@ -9,11 +9,13 @@ import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
 import { matches } from '../../../common/generic-helpers';
+import { useStagingApi } from '../../../components/annotations/StagingToggle';
 import StatusBadge from '../../../components/annotations/StatusBadge';
-import { BackButton } from '../../../components/common/interaction/BackButton';
+import TopBar from '../../../components/annotations/TopBar';
 import SearchBar from '../../../components/common/interaction/SearchBar';
 import TableRow from '../../../components/common/interaction/TableRow';
 import PageHeading from '../../../components/common/structure/PageHeading';
+import { useGlobalContext } from '../../../contexts/global';
 import dbConnect from '../../../database/helpers/connect';
 import {
     guidelineDescription,
@@ -30,6 +32,10 @@ import { ITextBrick_Str } from '../../../database/models/TextBrick';
 const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { reviewMode } = useGlobalContext();
+    const stagingApi = useStagingApi(drug._id!);
+    const isEditable = !reviewMode && !stagingApi.isStaged;
+
     const [guidelineQuery, setGuidelineQuery] = useState('');
 
     const guidelines = drug.guidelines.filter((guideline) => {
@@ -52,9 +58,9 @@ const DrugDetail = ({
                 View and edit annotations for this drug and its guidelines.
             </PageHeading>
             <div className="space-y-4">
-                <BackButton />
-                {annotationComponent.drugclass(drug)}
-                {annotationComponent.indication(drug)}
+                <TopBar {...stagingApi} />
+                {annotationComponent.drugclass(drug, isEditable)}
+                {annotationComponent.indication(drug, isEditable)}
                 <h2 className="font-bold border-t border-black border-opacity-20 pt-4">
                     Guidelines
                 </h2>
@@ -67,34 +73,37 @@ const DrugDetail = ({
                     }
                 />
                 <div>
-                    {guidelines.map((guideline) => (
-                        <TableRow
-                            key={guideline._id}
-                            link={guidelineLink(guideline)}
-                        >
-                            <div className="flex justify-between">
-                                <span className="mr-2">
-                                    {guidelineDescription(guideline).map(
-                                        (phenotype, index) => (
-                                            <p key={index}>
-                                                <span className="font-bold mr-2">
-                                                    {phenotype.gene}
-                                                </span>
-                                                {phenotype.description}
-                                            </p>
-                                        ),
-                                    )}
-                                </span>
-                                <span>
+                    {guidelines
+                        .filter(
+                            (guideline) => guideline.isStaged || !reviewMode,
+                        )
+                        .map((guideline) => (
+                            <TableRow
+                                key={guideline._id}
+                                link={guidelineLink(guideline)}
+                            >
+                                <div className="flex justify-between">
+                                    <span className="mr-2">
+                                        {guidelineDescription(guideline).map(
+                                            (phenotype, index) => (
+                                                <p key={index}>
+                                                    <span className="font-bold mr-2">
+                                                        {phenotype.gene}
+                                                    </span>
+                                                    {phenotype.description}
+                                                </p>
+                                            ),
+                                        )}
+                                    </span>
                                     <StatusBadge
                                         badge={missingGuidelineAnnotations(
                                             guideline,
                                         )}
+                                        staged={guideline.isStaged}
                                     />
-                                </span>
-                            </div>
-                        </TableRow>
-                    ))}
+                                </div>
+                            </TableRow>
+                        ))}
                 </div>
             </div>
         </>

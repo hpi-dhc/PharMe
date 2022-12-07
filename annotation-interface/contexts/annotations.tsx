@@ -5,7 +5,6 @@ import {
     useContext,
     useState,
 } from 'react';
-import { mutate } from 'swr';
 
 import { ContextProvider } from '../components/common/structure/Layout';
 
@@ -17,7 +16,6 @@ interface IAnnotationContext {
     setCurationState: Dispatch<SetStateAction<FilterState>>;
     searchQuery: string;
     setSearchQuery: Dispatch<SetStateAction<string>>;
-    mutateAnnotations: () => void;
 }
 
 const AnnotationFilterContext = createContext<IAnnotationContext | undefined>(
@@ -29,9 +27,6 @@ export const AnnotationFilterContextProvider: ContextProvider = ({
 }) => {
     const [curationState, setCurationState] = useState<FilterState>('all');
     const [searchQuery, setSearchQuery] = useState('');
-    const mutateAnnotations = () => {
-        mutate('api/annotations');
-    };
     return (
         <AnnotationFilterContext.Provider
             value={{
@@ -39,7 +34,6 @@ export const AnnotationFilterContextProvider: ContextProvider = ({
                 setCurationState,
                 searchQuery,
                 setSearchQuery,
-                mutateAnnotations,
             }}
         >
             {children}

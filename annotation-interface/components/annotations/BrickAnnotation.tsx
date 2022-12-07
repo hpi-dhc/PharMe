@@ -6,7 +6,7 @@ import {
     brickCategoryForAnnotationKey,
 } from '../../common/definitions';
 import { useSwrFetcher } from '../../common/react-helpers';
-import { useLanguageContext } from '../../contexts/language';
+import { useGlobalContext } from '../../contexts/global';
 import {
     BrickResolver,
     resolveBricks,
@@ -23,6 +23,7 @@ interface Props {
     _key: AnnotationKey;
     annotation: Array<ITextBrick_Str> | undefined;
     brickResolver: BrickResolver;
+    isEditable: boolean;
 }
 
 function BrickAnnotation({
@@ -30,8 +31,9 @@ function BrickAnnotation({
     _key: key,
     annotation,
     brickResolver,
+    isEditable,
 }: Props) {
-    const { language } = useLanguageContext();
+    const { language } = useGlobalContext();
     const initialBrickIds = annotation
         ? new Set(annotation.map((brick) => brick._id!))
         : undefined;
@@ -70,6 +72,7 @@ function BrickAnnotation({
             value={usedBrickIds ? Array.from(usedBrickIds) : null}
             hasChanges={usedBrickIds !== initialBrickIds}
             onClear={onClear}
+            isEditable={isEditable}
         >
             {error ? (
                 <GenericError />

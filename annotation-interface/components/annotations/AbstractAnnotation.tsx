@@ -24,6 +24,7 @@ type Props = PropsWithChildren<{
     value: unknown;
     hasChanges: boolean;
     onClear: () => void;
+    isEditable: boolean;
 }>;
 
 export const AnnotationMissing = () => (
@@ -38,6 +39,7 @@ const AbstractAnnotation = ({
     hasChanges,
     onClear,
     children,
+    isEditable,
 }: PropsWithChildren<Props>) => {
     const [editVisible, setEditVisible] = useState(false);
     const router = useRouter();
@@ -67,8 +69,13 @@ const AbstractAnnotation = ({
                     <WithIcon
                         as="button"
                         icon={PencilAltIcon}
+                        className={
+                            isEditable
+                                ? undefined
+                                : 'opacity-50 line-through cursor-default'
+                        }
                         reverse
-                        onClick={() => setEditVisible(true)}
+                        onClick={() => isEditable && setEditVisible(true)}
                     >
                         Edit
                     </WithIcon>

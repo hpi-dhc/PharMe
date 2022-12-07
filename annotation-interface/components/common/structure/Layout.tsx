@@ -4,8 +4,9 @@ import { createElement, PropsWithChildren } from 'react';
 
 import { AnnotationFilterContextProvider } from '../../../contexts/annotations';
 import { BrickFilterContextProvider } from '../../../contexts/brickFilter';
-import { LanguageContextProvider } from '../../../contexts/language';
+import { useGlobalContext } from '../../../contexts/global';
 import DisplayLanguagePicker from '../interaction/DisplayLanguagePicker';
+import ReviewModeSwitch from '../interaction/ReviewModeSwitch';
 
 export type ContextProvider = ({ children }: PropsWithChildren) => JSX.Element;
 
@@ -14,6 +15,7 @@ interface TabDefinition {
     title: string;
     linkPath: string;
     providers: ContextProvider[];
+    hideInReview?: boolean;
 }
 
 export function ResolvedProviders({
@@ -43,6 +45,7 @@ const tabDefinitions: TabDefinition[] = [
         title: 'Bricks',
         linkPath: '/bricks',
         providers: [BrickFilterContextProvider],
+        hideInReview: true,
     },
 ];
 
@@ -51,13 +54,17 @@ const Layout = ({ children }: PropsWithChildren) => {
     const activeIndex = tabDefinitions.findIndex((definition) =>
         router.pathname.match(definition.activePaths),
     );
+    const showReviewModeSwitch =
+        activeIndex > -1 && !tabDefinitions[activeIndex].hideInReview;
+    const { reviewMode } = useGlobalContext();
     return (
         <>
-            <LanguageContextProvider>
-                <div className="h-screen fixed px-8 py-16 flex flex-col justify-between">
-                    <div>
-                        <ul className="space-y-2">
-                            {tabDefinitions.map((tabDefinition, index) => (
+            <div className="h-screen fixed px-8 py-16 flex flex-col justify-between">
+                <div>
+                    <ul className="space-y-2">
+                        {tabDefinitions
+                            .filter((def) => !reviewMode || !def.hideInReview)
+                            .map((tabDefinition, index) => (
                                 <li
                                     key={index}
                                     className={`font-medium ${
@@ -69,22 +76,24 @@ const Layout = ({ children }: PropsWithChildren) => {
                                     </Link>
                                 </li>
                             ))}
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
+                <div className="space-y-4">
+                    {showReviewModeSwitch && <ReviewModeSwitch />}
                     <DisplayLanguagePicker />
                 </div>
-                <div className="max-w-screen-md mx-auto pt-4 pb-48">
-                    {activeIndex === -1 ? (
-                        children
-                    ) : (
-                        <ResolvedProviders
-                            providers={tabDefinitions[activeIndex].providers}
-                        >
-                            {children}
-                        </ResolvedProviders>
-                    )}
-                </div>
-            </LanguageContextProvider>
+            </div>
+            <div className="max-w-screen-md mx-auto pt-4 pb-48">
+                {activeIndex === -1 ? (
+                    children
+                ) : (
+                    <ResolvedProviders
+                        providers={tabDefinitions[activeIndex].providers}
+                    >
+                        {children}
+                    </ResolvedProviders>
+                )}
+            </div>
         </>
     );
 };
