@@ -10,6 +10,7 @@ import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
 import { useStagingApi } from '../../../components/annotations/StagingToggle';
 import TopBar from '../../../components/annotations/TopBar';
 import PageHeading from '../../../components/common/structure/PageHeading';
+import { useGlobalContext } from '../../../contexts/global';
 import dbConnect from '../../../database/helpers/connect';
 import { guidelineDescription } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
@@ -23,7 +24,9 @@ const GuidelineDetail = ({
     drugName,
     guideline,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+    const { reviewMode } = useGlobalContext();
     const stagingApi = useStagingApi(guideline._id!);
+    const isEditable = !reviewMode && !stagingApi.isStaged;
     return (
         <>
             <PageHeading title={`Guideline for ${drugName}`}>
@@ -40,17 +43,17 @@ const GuidelineDetail = ({
                 {annotationComponent.implication(
                     drugName,
                     guideline,
-                    stagingApi.isStaged,
+                    isEditable,
                 )}
                 {annotationComponent.recommendation(
                     drugName,
                     guideline,
-                    stagingApi.isStaged,
+                    isEditable,
                 )}
                 {annotationComponent.warningLevel(
                     drugName,
                     guideline,
-                    stagingApi.isStaged,
+                    isEditable,
                 )}
             </div>
         </>

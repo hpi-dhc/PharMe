@@ -33,8 +33,8 @@ const DrugDetail = ({
     drug,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const { reviewMode } = useGlobalContext();
-
     const stagingApi = useStagingApi(drug._id!);
+    const isEditable = !reviewMode && !stagingApi.isStaged;
 
     const [guidelineQuery, setGuidelineQuery] = useState('');
 
@@ -59,8 +59,8 @@ const DrugDetail = ({
             </PageHeading>
             <div className="space-y-4">
                 <TopBar {...stagingApi} />
-                {annotationComponent.drugclass(drug, stagingApi.isStaged)}
-                {annotationComponent.indication(drug, stagingApi.isStaged)}
+                {annotationComponent.drugclass(drug, isEditable)}
+                {annotationComponent.indication(drug, isEditable)}
                 <h2 className="font-bold border-t border-black border-opacity-20 pt-4">
                     Guidelines
                 </h2>
