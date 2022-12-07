@@ -5,7 +5,7 @@ ROOT_DIR=$(dirname $(realpath $0))
 source $ROOT_DIR/.env
 
 BACKUP_DIR=$ROOT_DIR/backups
-test -d $BACKUP_DIR || git clone $GIT_REMOTE $BACKUP_DIR
+test -d $BACKUP_DIR || git clone https://oauth2:$GITHUB_OAUTH@github.com/hpi-dhc/PharMe-Data
 
 curl -s $ANNI_URL/api/backup | jq '.data' > $BACKUP_DIR/backup.json
 
