@@ -6,6 +6,7 @@ import { AnnotationFilterContextProvider } from '../../../contexts/annotations';
 import { BrickFilterContextProvider } from '../../../contexts/brickFilter';
 import { useGlobalContext } from '../../../contexts/global';
 import DisplayLanguagePicker from '../interaction/DisplayLanguagePicker';
+import ReviewModeSwitch from '../interaction/ReviewModeSwitch';
 
 export type ContextProvider = ({ children }: PropsWithChildren) => JSX.Element;
 
@@ -75,7 +76,10 @@ const Layout = ({ children }: PropsWithChildren) => {
                             ))}
                     </ul>
                 </div>
-                <DisplayLanguagePicker />
+                <div className="space-y-4">
+                    <ReviewModeSwitch />
+                    <DisplayLanguagePicker />
+                </div>
             </div>
             <div className="max-w-screen-md mx-auto pt-4 pb-48">
                 {activeIndex === -1 ? (

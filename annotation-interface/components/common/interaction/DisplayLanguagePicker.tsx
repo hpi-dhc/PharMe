@@ -5,12 +5,14 @@ import SelectionPopover from './SelectionPopover';
 const DisplayLanguagePicker = () => {
     const { language, setLanguage } = useGlobalContext();
     return (
-        <SelectionPopover
-            options={[...supportedLanguages]}
-            selectedOption={language}
-            onSelect={setLanguage}
-            expandUpwards
-        />
+        <div>
+            <SelectionPopover
+                options={[...supportedLanguages]}
+                selectedOption={language}
+                onSelect={setLanguage}
+                expandUpwards
+            />
+        </div>
     );
 };
 
