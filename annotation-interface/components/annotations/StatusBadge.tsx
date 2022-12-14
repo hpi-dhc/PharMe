@@ -1,13 +1,17 @@
+import { CurationState } from '../../database/helpers/annotations';
 import Label from '../common/indicators/Label';
 
 type Props = {
-    badge: number;
+    curationState: CurationState;
     staged: boolean;
 };
 
-const StatusBadge = ({ badge, staged }: Props) => (
+const StatusBadge = ({ curationState, staged }: Props) => (
     <span>
-        {badge > 0 && <Label title={`${badge} missing`} />}
+        <Label
+            title={`${curationState.curated} of ${curationState.total} curated`}
+            dark={curationState.total === curationState.curated}
+        />
         {staged && <Label title="Staged" dark />}
     </span>
 );

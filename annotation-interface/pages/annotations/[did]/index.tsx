@@ -19,7 +19,7 @@ import { useGlobalContext } from '../../../contexts/global';
 import dbConnect from '../../../database/helpers/connect';
 import {
     guidelineDescription,
-    missingGuidelineAnnotations,
+    guidelineCurationState,
 } from '../../../database/helpers/guideline-data';
 import { makeIdsStrings } from '../../../database/helpers/types';
 import Drug, { IDrug_Populated } from '../../../database/models/Drug';
@@ -96,7 +96,7 @@ const DrugDetail = ({
                                         )}
                                     </span>
                                     <StatusBadge
-                                        badge={missingGuidelineAnnotations(
+                                        curationState={guidelineCurationState(
                                             guideline,
                                         )}
                                         staged={guideline.isStaged}

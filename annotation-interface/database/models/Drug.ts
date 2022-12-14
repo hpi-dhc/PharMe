@@ -1,7 +1,11 @@
 import mongoose, { Document, Types } from 'mongoose';
 
 import { SupportedLanguage } from '../../common/definitions';
-import { BrickAnnotationT, IAnnotationModel } from '../helpers/annotations';
+import {
+    BrickAnnotationT,
+    CurationState,
+    IAnnotationModel,
+} from '../helpers/annotations';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import { makeIdsStrings, MongooseId, OptionalId } from '../helpers/types';
@@ -34,7 +38,7 @@ export type IDrug_DB = IDrug<
     Types.ObjectId,
     Types.ObjectId
 > & {
-    missingAnnotations: () => Promise<number>;
+    curationState: () => Promise<CurationState>;
     resolve: (language: SupportedLanguage) => Promise<IDrug_Resolved>;
 };
 export type IDrug_Str = IDrug<string, IGuideline_Str, string>;
@@ -77,23 +81,31 @@ const drugSchema = new mongoose.Schema<IDrug_DB, DrugModel>({
     isStaged: { type: Boolean, required: true, default: false },
 });
 
-drugSchema.methods.missingAnnotations = async function (this: IDrug_DB) {
-    const drugCount = [
+drugSchema.methods.curationState = async function (
+    this: IDrug_DB,
+): Promise<CurationState> {
+    const annotations = [
         this.annotations.drugclass,
         this.annotations.indication,
-    ].filter((annotation) => !annotation).length;
+    ];
+    const curationState: CurationState = {
+        total: annotations.length,
+        curated: annotations.filter((annotation) => !!annotation).length,
+    };
 
-    const guidelineCounts = await Promise.all(
+    const guidelineStates = await Promise.all(
         this.guidelines.map(async (id) => {
             const guideline = await Guideline!.findById(id);
-            return guideline?.missingAnnotations;
+            return guideline?.curationState;
         }),
     );
 
-    return guidelineCounts.reduce(
-        (total, current) => total! + (current ?? 0),
-        drugCount,
-    );
+    return guidelineStates.reduce((total, current) => {
+        return {
+            total: total!.total + (current?.total ?? 0),
+            curated: total!.curated + (current?.curated ?? 0),
+        };
+    }, curationState)!;
 };
 
 type IDrug_FullyPopulated = IDrug<
