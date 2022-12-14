@@ -12,3 +12,8 @@ export interface IAnnotationModel<IdT extends OptionalId, AT>
     annotations: AT;
     isStaged: boolean;
 }
+
+export type CurationState = {
+    total: number;
+    curated: number;
+};

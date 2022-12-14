@@ -5,9 +5,13 @@ import {
     WarningLevel,
     warningLevelValues,
 } from '../../common/definitions';
-import { BrickAnnotationT, IAnnotationModel } from '../helpers/annotations';
+import {
+    BrickAnnotationT,
+    CurationState,
+    IAnnotationModel,
+} from '../helpers/annotations';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
-import { missingGuidelineAnnotations } from '../helpers/guideline-data';
+import { guidelineCurationState } from '../helpers/guideline-data';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import { makeIdsStrings, OptionalId } from '../helpers/types';
 import { ITextBrick_Str } from './TextBrick';
@@ -35,7 +39,7 @@ export interface IGuideline<
     };
 }
 export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
-    missingAnnotations: number;
+    curationState: CurationState;
     resolve: (
         drugName: string,
         language: SupportedLanguage,
@@ -99,11 +103,9 @@ guidelineSchema.pre<IGuideline_DB>('validate', function (next) {
     next();
 });
 
-guidelineSchema
-    .virtual('missingAnnotations')
-    .get(function (this: IGuideline_DB) {
-        return missingGuidelineAnnotations(this);
-    });
+guidelineSchema.virtual('curationState').get(function (this: IGuideline_DB) {
+    return guidelineCurationState(this);
+});
 
 guidelineSchema.methods.resolve = async function (
     this: Document<unknown, unknown, IGuideline_Populated> &

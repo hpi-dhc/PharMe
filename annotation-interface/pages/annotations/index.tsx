@@ -12,12 +12,10 @@ import SelectionPopover from '../../components/common/interaction/SelectionPopov
 import TableRow from '../../components/common/interaction/TableRow';
 import PageHeading from '../../components/common/structure/PageHeading';
 import { filterStates, useAnnotationContext } from '../../contexts/annotations';
-import { useGlobalContext } from '../../contexts/global';
 import { GetAnnotationsReponse } from '../api/annotations';
 
 const Annotations = () => {
-    const { reviewMode } = useGlobalContext();
-    const { curationState, setCurationState, searchQuery, setSearchQuery } =
+    const { curationFilter, setCurationState, searchQuery, setSearchQuery } =
         useAnnotationContext();
 
     const { data: response, error } =
@@ -25,12 +23,13 @@ const Annotations = () => {
     const drugs = response?.data.data.drugs;
 
     const filteredDrugs = drugs?.filter(
-        ({ name, badge, isStaged }) =>
-            (isStaged || !reviewMode) &&
+        ({ name, curationState }) =>
             matches(name, searchQuery) &&
-            (curationState === 'all' ||
-                (curationState === 'missing' && badge) ||
-                (curationState === 'complete' && !badge)),
+            (curationFilter === 'all' ||
+                (curationFilter === 'missing' &&
+                    curationState.total > curationState.curated) ||
+                (curationFilter === 'complete' &&
+                    curationState.total === curationState.curated)),
     );
 
     const router = useRouter();
@@ -61,7 +60,7 @@ const Annotations = () => {
                 <SelectionPopover
                     label={`Filter`}
                     options={[...filterStates]}
-                    selectedOption={curationState}
+                    selectedOption={curationFilter}
                     onSelect={setCurationState}
                     icon={FilterIcon}
                 />
@@ -80,7 +79,7 @@ const Annotations = () => {
                             <div className="flex justify-between">
                                 <span className="mr-2">{drug.name}</span>
                                 <StatusBadge
-                                    badge={drug.badge}
+                                    curationState={drug.curationState}
                                     staged={drug.isStaged}
                                 />
                             </div>

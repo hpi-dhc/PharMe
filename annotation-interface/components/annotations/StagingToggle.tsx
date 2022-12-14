@@ -32,15 +32,15 @@ const StagingToggle = ({ api, isStaged }: Props) => {
                 'text-s px-2 py-1 rounded-md whitespace-nowrap' +
                 (isStaged
                     ? ` overflow-clip bg-black bg-opacity-80 text-white ${
-                          reviewMode ? 'cursor-default' : 'hover:bg-opacity-60'
+                          reviewMode ? 'hover:bg-opacity-60' : 'cursor-default'
                       } `
                     : ` border border-black border-opacity-20 ${
-                          reviewMode ? 'cursor-default' : 'hover:bg-neutral-100'
+                          reviewMode ? 'hover:bg-neutral-100' : 'cursor-default'
                       } `)
             }
             reverse
             onClick={async () => {
-                if (reviewMode) return;
+                if (!reviewMode) return;
                 const patch: UpdateStagingBody = {
                     isStaged: isStaged ? 'false' : 'true',
                 };

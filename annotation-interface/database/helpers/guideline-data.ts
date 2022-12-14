@@ -1,11 +1,18 @@
 import { IGuideline_Any } from '../models/Guideline';
+import { CurationState } from './annotations';
 
-export function missingGuidelineAnnotations(guideline: IGuideline_Any): number {
-    return [
+export function guidelineCurationState(
+    guideline: IGuideline_Any,
+): CurationState {
+    const annotations = [
         guideline.annotations.implication,
         guideline.annotations.recommendation,
         guideline.annotations.warningLevel,
-    ].filter((annotation) => !annotation).length;
+    ];
+    return {
+        total: annotations.length,
+        curated: annotations.filter((annotation) => !!annotation).length,
+    };
 }
 
 export function guidelineDescription(
