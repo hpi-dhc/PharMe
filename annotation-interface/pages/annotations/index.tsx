@@ -12,11 +12,9 @@ import SelectionPopover from '../../components/common/interaction/SelectionPopov
 import TableRow from '../../components/common/interaction/TableRow';
 import PageHeading from '../../components/common/structure/PageHeading';
 import { filterStates, useAnnotationContext } from '../../contexts/annotations';
-import { useGlobalContext } from '../../contexts/global';
 import { GetAnnotationsReponse } from '../api/annotations';
 
 const Annotations = () => {
-    const { reviewMode } = useGlobalContext();
     const { curationFilter, setCurationState, searchQuery, setSearchQuery } =
         useAnnotationContext();
 
@@ -25,8 +23,7 @@ const Annotations = () => {
     const drugs = response?.data.data.drugs;
 
     const filteredDrugs = drugs?.filter(
-        ({ name, curationState, isStaged }) =>
-            (isStaged || !reviewMode) &&
+        ({ name, curationState }) =>
             matches(name, searchQuery) &&
             (curationFilter === 'all' ||
                 (curationFilter === 'missing' &&

@@ -73,37 +73,33 @@ const DrugDetail = ({
                     }
                 />
                 <div>
-                    {guidelines
-                        .filter(
-                            (guideline) => guideline.isStaged || !reviewMode,
-                        )
-                        .map((guideline) => (
-                            <TableRow
-                                key={guideline._id}
-                                link={guidelineLink(guideline)}
-                            >
-                                <div className="flex justify-between">
-                                    <span className="mr-2">
-                                        {guidelineDescription(guideline).map(
-                                            (phenotype, index) => (
-                                                <p key={index}>
-                                                    <span className="font-bold mr-2">
-                                                        {phenotype.gene}
-                                                    </span>
-                                                    {phenotype.description}
-                                                </p>
-                                            ),
-                                        )}
-                                    </span>
-                                    <StatusBadge
-                                        curationState={guidelineCurationState(
-                                            guideline,
-                                        )}
-                                        staged={guideline.isStaged}
-                                    />
-                                </div>
-                            </TableRow>
-                        ))}
+                    {guidelines.map((guideline) => (
+                        <TableRow
+                            key={guideline._id}
+                            link={guidelineLink(guideline)}
+                        >
+                            <div className="flex justify-between">
+                                <span className="mr-2">
+                                    {guidelineDescription(guideline).map(
+                                        (phenotype, index) => (
+                                            <p key={index}>
+                                                <span className="font-bold mr-2">
+                                                    {phenotype.gene}
+                                                </span>
+                                                {phenotype.description}
+                                            </p>
+                                        ),
+                                    )}
+                                </span>
+                                <StatusBadge
+                                    curationState={guidelineCurationState(
+                                        guideline,
+                                    )}
+                                    staged={guideline.isStaged}
+                                />
+                            </div>
+                        </TableRow>
+                    ))}
                 </div>
             </div>
         </>
