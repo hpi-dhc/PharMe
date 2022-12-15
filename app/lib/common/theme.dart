@@ -56,17 +56,17 @@ class PharMeTheme {
     bodySmall: themeFont(12),
   );
 
-  static final primaryColor = MaterialColorAutoShades.fromPrimary(0xFF267DBA);
-  static const primaryContainer = Color(0xFF225DE6);
+  static final primaryColor = MaterialColorAutoShades.fromPrimary(0xff01aeef);
+  static final primaryContainer = primaryColor.shade200;
 
-  static final secondaryColor = MaterialColorAutoShades.fromPrimary(0xFF87A9FF);
-  static const secondaryContainer = Color(0xFF7759C0);
+  static final secondaryColor = MaterialColorAutoShades.fromPrimary(0xffd80b8c);
+  static final secondaryContainer = secondaryColor.shade200;
 
   static const surfaceColor = Colors.white;
-  static const onSurfaceColor = Color(0xFFE5E5E5);
-  static const onSurfaceText = Color(0xFF444648);
+  static const onSurfaceColor = Color(0xffe5e5e5);
+  static const onSurfaceText = Color(0xff444648);
   static const backgroundColor = Colors.white;
-  static const errorColor = Color(0xCCF52A2A);
+  static const errorColor = Color(0xccf52a2a);
 
   static Icon starIcon({required bool isStarred, double? size}) {
     return Icon(isStarred ? Icons.star_rounded : Icons.star_border_rounded,
@@ -76,9 +76,9 @@ class PharMeTheme {
 
 extension WarningLevelColor on WarningLevel {
   static final _colorMap = {
-    WarningLevel.danger.name: Color(0xFFFFAFAF),
-    WarningLevel.warning.name: Color(0xFFFFEBCC),
-    WarningLevel.ok.name: Color(0xFFCFE8CF),
+    WarningLevel.danger.name: Color(0xffffafaf),
+    WarningLevel.warning.name: Color(0xffffebcc),
+    WarningLevel.ok.name: Color(0xffcfe8cf),
   };
 
   Color get color => WarningLevelColor._colorMap[name]!;
