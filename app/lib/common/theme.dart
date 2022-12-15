@@ -1,5 +1,3 @@
-import 'package:google_fonts/google_fonts.dart';
-
 import 'module.dart';
 
 class PharMeTheme {
@@ -28,13 +26,15 @@ class PharMeTheme {
 
   // small wrapper for removing some of the boilerplate when defining the textTheme below
   static TextStyle themeFont(double size,
-      [FontWeight? weight, double? spacing, Color? color]) {
-    return GoogleFonts.inter(
-      fontSize: size,
-      fontWeight: weight ?? FontWeight.w400,
-      letterSpacing: spacing ?? 0,
-      color: color ?? PharMeTheme.onSurfaceText,
-    );
+      [FontWeight weight = FontWeight.w400,
+      double spacing = 0,
+      Color color = PharMeTheme.onSurfaceText]) {
+    return TextStyle(
+        fontFamily: 'Helvetica',
+        fontSize: size,
+        fontWeight: weight,
+        letterSpacing: spacing,
+        color: color);
   }
 
   static final textTheme = TextTheme(
