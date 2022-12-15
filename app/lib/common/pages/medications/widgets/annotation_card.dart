@@ -1,6 +1,5 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../l10n.dart';
@@ -47,13 +46,8 @@ class ClinicalAnnotationCard extends StatelessWidget {
 
   Widget _buildImplicationInfo(BuildContext context) {
     return Row(children: [
-      Text(
-        context.l10n.medications_page_info_big_i,
-        style: GoogleFonts.robotoSlab(
-          fontSize: 48,
-          fontWeight: FontWeight.w900,
-        ),
-      ),
+      Icon(Icons.info_outline_rounded,
+          size: 48, color: PharMeTheme.onSurfaceText),
       SizedBox(width: 24),
       Flexible(
         child: Text(
