@@ -48,3 +48,13 @@ If a single file gets too complex for routes, the `Cubit`, a widget, a page,
 etc., you can create a folder with the same name and split the original file
 into different files. An example of that is `MyComplexPage` in the file tree
 above.
+
+## Making app icons
+
+Add the icon as `assets/icon/icon.png` (configured in `pubspec.yaml`) and run
+
+```shell
+flutter pub run flutter_launcher_icons:main
+```
+
+This will generate icons for both iOS as well as Android.
