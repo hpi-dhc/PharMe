@@ -56,32 +56,10 @@ class PharMeTheme {
     bodySmall: themeFont(12),
   );
 
-  static const primaryColor = MaterialColor(0xFF267DBA, {
-    50: Color(0xFFF5F9FC),
-    100: Color(0xFFEAF2F9),
-    200: Color(0xFFC9DFEE),
-    300: Color(0xFFA7CAE3),
-    400: Color(0xFF68A4CF),
-    500: Color(0xFF267DBA),
-    600: Color(0xFF2270A6),
-    700: Color(0xFF174B70),
-    800: Color(0xFF123954),
-    900: Color(0xFF0C2536),
-  });
+  static final primaryColor = MaterialColorAutoShades.fromPrimary(0xFF267DBA);
   static const primaryContainer = Color(0xFF225DE6);
 
-  static const secondaryColor = MaterialColor(0xFF87A9FF, {
-    50: Color(0xFFF9FBFF),
-    100: Color(0xFFF3F7FF),
-    200: Color(0xFFE1EAFF),
-    300: Color(0xFFCEDCFF),
-    400: Color(0xFFABC3FF),
-    500: Color(0xFF87A9FF),
-    600: Color(0xFF7997E3),
-    700: Color(0xFF516699),
-    800: Color(0xFF3D4D73),
-    900: Color(0xFF28324A),
-  });
+  static final secondaryColor = MaterialColorAutoShades.fromPrimary(0xFF87A9FF);
   static const secondaryContainer = Color(0xFF7759C0);
 
   static const surfaceColor = Colors.white;
