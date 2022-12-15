@@ -56,12 +56,11 @@ class ClinicalAnnotationCard extends StatelessWidget {
       ),
       SizedBox(width: 24),
       Flexible(
-        child:
-      Text(
-        medication.guidelines[0].implication ??
-            medication.guidelines[0].cpicImplication!,
-        style: PharMeTheme.textTheme.bodySmall,
-      ),
+        child: Text(
+          medication.guidelines[0].implication ??
+              medication.guidelines[0].cpicImplication!,
+          style: PharMeTheme.textTheme.bodySmall,
+        ),
       )
     ]);
   }
@@ -74,17 +73,12 @@ class ClinicalAnnotationCard extends StatelessWidget {
           context.l10n.medications_page_gene_name(
             medication.guidelines[0].phenotype.geneSymbol.name,
           ),
-          style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-            color: Colors.black.withOpacity(0.5),
-          ),
+          style: PharMeTheme.textTheme.bodyLarge!,
         ),
         Row(children: [
           Text(
             medication.guidelines[0].cpicClassification!.toUpperCase(),
-            style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Colors.black.withOpacity(0.7),
-            ),
+            style: PharMeTheme.textTheme.bodyLarge!,
           ),
           SizedBox(width: 6),
           TooltipIcon(context.l10n.medications_page_tooltip_classification),

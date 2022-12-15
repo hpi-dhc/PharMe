@@ -24,11 +24,11 @@ class RoundedCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: PharMeTheme.surfaceColor,
-        border: Border.all(width: 0.5, color: Colors.black.withOpacity(0.2)),
+        border: Border.all(width: 0.5, color: PharMeTheme.borderColor),
         borderRadius: borderRadius,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: PharMeTheme.borderColor,
             blurRadius: 12,
             offset: Offset(0, 4),
           ),
