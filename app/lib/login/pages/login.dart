@@ -28,7 +28,7 @@ class LoginPage extends HookWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: SvgPicture.asset(
-                        'assets/images/logo_sinai.svg',
+                        'assets/images/logo.svg',
                       ),
                     ),
                   ),
