@@ -67,7 +67,7 @@ class SettingsPage extends StatelessWidget {
           },
           child: Text(
             context.l10n.settings_page_continue,
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: PharMeTheme.errorColor),
           ),
         ),
       ],

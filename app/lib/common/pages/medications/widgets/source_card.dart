@@ -33,9 +33,8 @@ class SourceCard extends StatelessWidget {
               flex: 3,
               child: AutoSizeText(
                 name,
-                style: PharMeTheme.textTheme.bodyMedium!.copyWith(
-                  color: Colors.white,
-                ),
+                style: PharMeTheme.textTheme.bodyMedium!
+                    .copyWith(color: PharMeTheme.surfaceColor),
                 maxLines: 1,
               ),
             ),
@@ -44,9 +43,8 @@ class SourceCard extends StatelessWidget {
               flex: 10,
               child: Text(
                 description,
-                style: PharMeTheme.textTheme.bodySmall!.copyWith(
-                  color: Colors.white,
-                ),
+                style: PharMeTheme.textTheme.bodySmall!
+                    .copyWith(color: PharMeTheme.surfaceColor),
               ),
             ),
           ]),

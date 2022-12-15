@@ -96,7 +96,7 @@ class MedicationCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 5,
-        color: warningLevel?.color ?? Colors.grey[200],
+        color: warningLevel?.color ?? PharMeTheme.onSurfaceColor,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(

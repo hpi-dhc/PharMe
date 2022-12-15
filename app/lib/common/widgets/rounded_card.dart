@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import '../module.dart';
 
 class RoundedCard extends StatelessWidget {
   RoundedCard({
@@ -23,13 +23,12 @@ class RoundedCard extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        // TODO(kolioOtSofia): adjust to theme colors when merged)
-        color: Color(0xFFF9F9F9),
-        border: Border.all(width: 0.5, color: Colors.black.withOpacity(0.2)),
+        color: PharMeTheme.surfaceColor,
+        border: Border.all(width: 0.5, color: PharMeTheme.borderColor),
         borderRadius: borderRadius,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: PharMeTheme.borderColor,
             blurRadius: 12,
             offset: Offset(0, 4),
           ),

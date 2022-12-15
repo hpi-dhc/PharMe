@@ -28,7 +28,7 @@ class LoginPage extends HookWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: SvgPicture.asset(
-                        'assets/images/pharme_logo_horizontal.svg',
+                        'assets/images/logo.svg',
                       ),
                     ),
                   ),
@@ -92,7 +92,7 @@ class LoginPage extends HookWidget {
             buttonPadding: const EdgeInsets.only(left: 16, right: 16),
             buttonDecoration: BoxDecoration(
               borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: Colors.black26),
+              border: Border.all(color: PharMeTheme.borderColor),
             ),
             dropdownDecoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
@@ -110,7 +110,7 @@ class LoginPage extends HookWidget {
       children: [
         Icon(
           Icons.check_circle_outline_rounded,
-          color: Colors.green,
+          color: PharMeTheme.primaryColor,
           size: 96,
         ),
         SizedBox(height: 16),
@@ -130,7 +130,7 @@ class LoginPage extends HookWidget {
       children: [
         Icon(
           Icons.error_outline_rounded,
-          color: Colors.red,
+          color: PharMeTheme.errorColor,
           size: 96,
         ),
         SizedBox(height: 16),

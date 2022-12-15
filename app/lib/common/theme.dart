@@ -1,6 +1,4 @@
-import 'package:black_hole_flutter/black_hole_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'module.dart';
 
 class PharMeTheme {
   static ThemeData get light {
@@ -28,13 +26,15 @@ class PharMeTheme {
 
   // small wrapper for removing some of the boilerplate when defining the textTheme below
   static TextStyle themeFont(double size,
-      [FontWeight? weight, double? spacing, Color? color]) {
-    return GoogleFonts.inter(
-      fontSize: size,
-      fontWeight: weight ?? FontWeight.w400,
-      letterSpacing: spacing ?? 0,
-      color: color ?? PharMeTheme.onSurfaceText,
-    );
+      [FontWeight weight = FontWeight.w400,
+      double spacing = 0,
+      Color color = PharMeTheme.onSurfaceText]) {
+    return TextStyle(
+        fontFamily: 'Helvetica',
+        fontSize: size,
+        fontWeight: weight,
+        letterSpacing: spacing,
+        color: color);
   }
 
   static final textTheme = TextTheme(
@@ -56,42 +56,31 @@ class PharMeTheme {
     bodySmall: themeFont(12),
   );
 
-  static const primaryColor = MaterialColor(0xFF267DBA, {
-    50: Color(0xFFF5F9FC),
-    100: Color(0xFFEAF2F9),
-    200: Color(0xFFC9DFEE),
-    300: Color(0xFFA7CAE3),
-    400: Color(0xFF68A4CF),
-    500: Color(0xFF267DBA),
-    600: Color(0xFF2270A6),
-    700: Color(0xFF174B70),
-    800: Color(0xFF123954),
-    900: Color(0xFF0C2536),
-  });
-  static const primaryContainer = Color(0xFF225DE6);
+  static final primaryColor = MaterialColorAutoShades.fromPrimary(0xff01aeef);
+  static final primaryContainer = primaryColor.shade200;
 
-  static const secondaryColor = MaterialColor(0xFF87A9FF, {
-    50: Color(0xFFF9FBFF),
-    100: Color(0xFFF3F7FF),
-    200: Color(0xFFE1EAFF),
-    300: Color(0xFFCEDCFF),
-    400: Color(0xFFABC3FF),
-    500: Color(0xFF87A9FF),
-    600: Color(0xFF7997E3),
-    700: Color(0xFF516699),
-    800: Color(0xFF3D4D73),
-    900: Color(0xFF28324A),
-  });
-  static const secondaryContainer = Color(0xFF7759C0);
+  static final secondaryColor = MaterialColorAutoShades.fromPrimary(0xffd80b8c);
+  static final secondaryContainer = secondaryColor.shade200;
 
   static const surfaceColor = Colors.white;
-  static const onSurfaceColor = Color(0xFFE5E5E5);
-  static const onSurfaceText = Color(0xFF444648);
+  static const onSurfaceColor = Color(0xffe5e5e5);
+  static const onSurfaceText = Color(0xff444648);
   static const backgroundColor = Colors.white;
-  static const errorColor = Color(0xCCF52A2A);
+  static const errorColor = Color(0xccf52a2a);
+  static final borderColor = Colors.black.withOpacity(.2);
 
   static Icon starIcon({required bool isStarred, double? size}) {
     return Icon(isStarred ? Icons.star_rounded : Icons.star_border_rounded,
         size: size, color: primaryColor);
   }
+}
+
+extension WarningLevelColor on WarningLevel {
+  static final _colorMap = {
+    WarningLevel.danger.name: Color(0xffffafaf),
+    WarningLevel.warning.name: Color(0xffffebcc),
+    WarningLevel.ok.name: Color(0xffcfe8cf),
+  };
+
+  Color get color => WarningLevelColor._colorMap[name]!;
 }

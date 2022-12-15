@@ -1,6 +1,5 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../l10n.dart';
@@ -47,21 +46,15 @@ class ClinicalAnnotationCard extends StatelessWidget {
 
   Widget _buildImplicationInfo(BuildContext context) {
     return Row(children: [
-      Text(
-        context.l10n.medications_page_info_big_i,
-        style: GoogleFonts.robotoSlab(
-          fontSize: 48,
-          fontWeight: FontWeight.w900,
-        ),
-      ),
+      Icon(Icons.info_outline_rounded,
+          size: 48, color: PharMeTheme.onSurfaceText),
       SizedBox(width: 24),
       Flexible(
-        child:
-      Text(
-        medication.guidelines[0].implication ??
-            medication.guidelines[0].cpicImplication!,
-        style: PharMeTheme.textTheme.bodySmall,
-      ),
+        child: Text(
+          medication.guidelines[0].implication ??
+              medication.guidelines[0].cpicImplication!,
+          style: PharMeTheme.textTheme.bodySmall,
+        ),
       )
     ]);
   }
@@ -74,17 +67,12 @@ class ClinicalAnnotationCard extends StatelessWidget {
           context.l10n.medications_page_gene_name(
             medication.guidelines[0].phenotype.geneSymbol.name,
           ),
-          style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-            color: Colors.black.withOpacity(0.5),
-          ),
+          style: PharMeTheme.textTheme.bodyLarge!,
         ),
         Row(children: [
           Text(
             medication.guidelines[0].cpicClassification!.toUpperCase(),
-            style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Colors.black.withOpacity(0.7),
-            ),
+            style: PharMeTheme.textTheme.bodyLarge!,
           ),
           SizedBox(width: 6),
           TooltipIcon(context.l10n.medications_page_tooltip_classification),
