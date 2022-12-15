@@ -21,7 +21,8 @@ class RecommendationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color: medication.guidelines[0].warningLevel?.color ?? Color(0xFFFFEBCC),
+      color: medication.guidelines[0].warningLevel?.color ??
+          WarningLevel.warning.color,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(children: [

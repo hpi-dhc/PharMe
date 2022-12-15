@@ -1,6 +1,6 @@
-import 'package:black_hole_flutter/black_hole_flutter.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'module.dart';
 
 class PharMeTheme {
   static ThemeData get light {
@@ -94,4 +94,14 @@ class PharMeTheme {
     return Icon(isStarred ? Icons.star_rounded : Icons.star_border_rounded,
         size: size, color: primaryColor);
   }
+}
+
+extension WarningLevelColor on WarningLevel {
+  static final _colorMap = {
+    WarningLevel.danger.name: Color(0xFFFFAFAF),
+    WarningLevel.warning.name: Color(0xFFFFEBCC),
+    WarningLevel.ok.name: Color(0xFFCFE8CF),
+  };
+
+  Color get color => WarningLevelColor._colorMap[name]!;
 }
