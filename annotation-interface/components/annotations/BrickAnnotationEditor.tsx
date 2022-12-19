@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 import { matches } from '../../common/generic-helpers';
-import SearchBar from '../common/interaction/SearchBar';
+import { SearchBar } from '../common/interaction/TextField';
 import DraggableBricks from './drag-drop/DraggableBrick';
 import GenericDroppable from './drag-drop/GenericDroppable';
 
