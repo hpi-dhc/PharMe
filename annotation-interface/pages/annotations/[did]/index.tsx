@@ -61,6 +61,7 @@ const DrugDetail = ({
                 <TopBar {...stagingApi} />
                 {annotationComponent.drugclass(drug, isEditable)}
                 {annotationComponent.indication(drug, isEditable)}
+                {annotationComponent.brandNames(drug, isEditable)}
                 <h2 className="font-bold border-t border-black border-opacity-20 pt-4">
                     Guidelines
                 </h2>
