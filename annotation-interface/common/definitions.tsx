@@ -1,3 +1,4 @@
+import BrandNamesAnnotation from '../components/annotations/BrandNamesAnnotation';
 import BrickAnnotation from '../components/annotations/BrickAnnotation';
 import WarningLevelAnnotation from '../components/annotations/WarningLevelAnnotation';
 import { IDrug_Any, IDrug_Populated } from '../database/models/Drug';
@@ -30,6 +31,7 @@ export const brickCategoryForAnnotationKey: {
 } = {
     indication: 'Drug indication',
     drugclass: 'Drug class',
+    brandNames: null,
     implication: 'Implication',
     recommendation: 'Recommendation',
     warningLevel: null,
@@ -40,6 +42,7 @@ export const displayNameForAnnotationKey: {
 } = {
     indication: 'Drug indication',
     drugclass: 'Patient-friendly drug class',
+    brandNames: 'Brand names',
     implication: 'Implication',
     recommendation: 'Recommendation',
     warningLevel: 'Warning level',
@@ -61,6 +64,8 @@ export const annotationComponent: Record<
         _drugAnnotation(drug, isEditable, 'drugclass'),
     indication: (drug, isEditable) =>
         _drugAnnotation(drug, isEditable, 'indication'),
+    brandNames: (drug, isEditable) =>
+        _drugAnnotation(drug, isEditable, 'brandNames'),
     implication: (drugName, guideline, isEditable) =>
         _guidelineAnnotation(drugName, guideline, isEditable, 'implication'),
     recommendation: (drugName, guideline, isEditable) =>
@@ -73,15 +78,24 @@ const _drugAnnotation = (
     drug: IDrug_Populated,
     isEditable: boolean | undefined,
     key: DrugAnnotationKey,
-): JSX.Element => (
-    <BrickAnnotation
-        _id={drug._id!}
-        _key={key}
-        annotation={drug.annotations[key]}
-        brickResolver={{ from: 'drug', with: drug }}
-        isEditable={!!isEditable}
-    />
-);
+): JSX.Element => {
+    switch (key) {
+        case 'brandNames':
+            return (
+                <BrandNamesAnnotation drug={drug} isEditable={!!isEditable} />
+            );
+        default:
+            return (
+                <BrickAnnotation
+                    _id={drug._id!}
+                    _key={key}
+                    annotation={drug.annotations[key]}
+                    brickResolver={{ from: 'drug', with: drug }}
+                    isEditable={!!isEditable}
+                />
+            );
+    }
+};
 
 const _guidelineAnnotation = (
     drugName: string,
