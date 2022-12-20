@@ -33,7 +33,13 @@ const BrandNamesAnnotation = ({ drug, isEditable }: Props) => {
         <AbstractAnnotation
             _id={drug._id!}
             _key="brandNames"
-            stringValue={names?.join(', ') ?? null}
+            stringValue={
+                names === null
+                    ? null
+                    : names.length > 0
+                    ? names.join(', ')
+                    : '{No brand names}'
+            }
             value={names}
             hasChanges={
                 JSON.stringify(drug.annotations.brandNames) !==
@@ -42,14 +48,19 @@ const BrandNamesAnnotation = ({ drug, isEditable }: Props) => {
             onClear={() => setNames(null)}
             isEditable={isEditable}
         >
-            <div className="space-y-4">
+            <div className="space-y-4 py-4">
+                <p className="py-1 pl-4 border-l-4 border-white border-opacity-50 opacity-70 font-light">
+                    Add brand names commonly used with patients using the text
+                    field below and pressing return, or check the box to
+                    communicate that this drug has no relevant brand names.
+                </p>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <GenericDroppable
                         droppableId="used"
                         highlightDrag
                         className="border border-opacity-40 border-white py-6 px-2 my-4"
                     >
-                        {names && (
+                        {names && names?.length > 0 ? (
                             <DraggableBricks
                                 ids={[...names.keys()].map((key) =>
                                     key.toString(),
@@ -75,6 +86,20 @@ const BrandNamesAnnotation = ({ drug, isEditable }: Props) => {
                                 }}
                                 action="remove"
                             />
+                        ) : (
+                            <div className="px-4">
+                                <input
+                                    className="opacity-80"
+                                    type="checkbox"
+                                    checked={names?.length === 0}
+                                    onChange={() => {
+                                        setNames(names === null ? [] : null);
+                                    }}
+                                />
+                                <label htmlFor="checkbox" className="pl-2">
+                                    This drug has no relevant brand names.
+                                </label>
+                            </div>
                         )}
                     </GenericDroppable>
                 </DragDropContext>
