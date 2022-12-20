@@ -26,6 +26,7 @@ export interface IDrug<
         {
             drugclass?: AnnotationT;
             indication?: AnnotationT;
+            brandNames?: string[];
         }
     > {
     name: string;
@@ -71,6 +72,7 @@ const drugSchema = new mongoose.Schema<IDrug_DB, DrugModel>({
                 default: undefined,
                 validate: brickAnnotationValidators('Drug indication'),
             },
+            brandNames: { type: [String], default: undefined },
         },
         required: true,
     },
@@ -87,6 +89,7 @@ drugSchema.methods.curationState = async function (
     const annotations = [
         this.annotations.drugclass,
         this.annotations.indication,
+        this.annotations.brandNames,
     ];
     const curationState: CurationState = {
         total: annotations.length,
