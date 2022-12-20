@@ -8,7 +8,7 @@ import {
 import {
     BrickAnnotationT,
     CurationState,
-    IAnnotationModel,
+    IAnnotationDoc,
 } from '../helpers/annotations';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { guidelineCurationState } from '../helpers/guideline-data';
@@ -19,7 +19,7 @@ import { ITextBrick_Str } from './TextBrick';
 export interface IGuideline<
     AnnotationT extends BrickAnnotationT,
     IdT extends OptionalId = undefined,
-> extends IAnnotationModel<
+> extends IAnnotationDoc<
         IdT,
         {
             recommendation?: AnnotationT;

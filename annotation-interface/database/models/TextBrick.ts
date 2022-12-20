@@ -7,16 +7,16 @@ import {
     supportedLanguages,
 } from '../../common/definitions';
 import { translationIsValid } from '../helpers/brick-translations';
-import { IBaseModel, OptionalId } from '../helpers/types';
+import { IBaseDoc, OptionalId } from '../helpers/types';
 
 export interface ITextBrickTranslation<IdT extends OptionalId = undefined>
-    extends IBaseModel<IdT> {
+    extends IBaseDoc<IdT> {
     language: SupportedLanguage;
     text: string;
 }
 
 export interface ITextBrick<IdT extends OptionalId = undefined>
-    extends IBaseModel<IdT> {
+    extends IBaseDoc<IdT> {
     usage: BrickUsage;
     translations: ITextBrickTranslation<IdT>[];
 }

@@ -4,7 +4,7 @@ import { SupportedLanguage } from '../../common/definitions';
 import {
     BrickAnnotationT,
     CurationState,
-    IAnnotationModel,
+    IAnnotationDoc,
 } from '../helpers/annotations';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
@@ -21,7 +21,7 @@ export interface IDrug<
     AnnotationT extends BrickAnnotationT,
     GuidelineT extends MongooseId | IGuideline_Any,
     IdT extends OptionalId = undefined,
-> extends IAnnotationModel<
+> extends IAnnotationDoc<
         IdT,
         {
             drugclass?: AnnotationT;

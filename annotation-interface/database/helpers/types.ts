@@ -5,7 +5,7 @@ export type MongooseId = Types.ObjectId | string;
 // ID not yet there if we're creating a new object
 export type OptionalId = MongooseId | undefined;
 
-export interface IBaseModel<IdT extends OptionalId = undefined> {
+export interface IBaseDoc<IdT extends OptionalId = undefined> {
     _id?: IdT;
 }
 
