@@ -1,39 +1,82 @@
 import mongoose, {
     Model,
+    Query,
     SchemaDefinition,
     SchemaDefinitionType,
-    SchemaOptions,
     Types,
 } from 'mongoose';
 
-type IVDoc<DocT> = DocT & {
-    _ref?: Types.ObjectId;
+import { IBaseDoc, MongooseId } from '../helpers/types';
+
+type IVersionedDoc<DocT extends IBaseDoc<Types.ObjectId>> = DocT & {
     _v?: number;
 };
 
-export function versionedModel<DocT>(
+type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
+    IVersionedDoc<DocT> & {
+        _ref?: Types.ObjectId;
+    };
+
+type VersionedModel<DocT, HDocT> = Model<DocT> & {
+    findVersions(id: MongooseId): Promise<Array<HDocT>>;
+};
+
+export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     modelName: string,
     definition: SchemaDefinition<SchemaDefinitionType<DocT>>,
-    options?: SchemaOptions,
-): { schema: mongoose.Schema<DocT, Model<DocT>>; model: Model<DocT> } {
-    type IVD = IVDoc<DocT>;
-    const schema = new mongoose.Schema<IVD, Model<IVD>>(
-        {
-            ...definition,
-            _v: { type: Number, required: true },
-            _ref: { type: Types.ObjectId, ref: modelName, required: true },
+) {
+    // type definitions ---------------------------------------------------------
+    type VD = IVersionedDoc<DocT>;
+    type VHD = IVersionHistoryDoc<DocT>;
+    type VM = VersionedModel<VD, VHD>;
+    type VHM = Model<VHD> & {
+        saveVersion(document: VD): Promise<void>;
+    };
+
+    // versioned model ----------------------------------------------------------
+    const schemaDefinition = {
+        ...definition,
+        _v: { type: Number, required: true },
+    };
+    const schema = new mongoose.Schema<VD, VM>(schemaDefinition);
+    schema.static('findVersions', async function (id: MongooseId) {
+        return await historyModel.find({ _ref: id });
+    });
+    // versioning middleware
+    schema.pre('validate', async function (this: VD) {
+        this._v = 1;
+    });
+    schema.pre(
+        /updateOne|findOneAndUpdate/,
+        async function (this: Query<void, VD>) {
+            const doc = await this.model.findOne(this.getQuery());
+            this.set('_v', doc._v + 1);
+            await historyModel.saveVersion(doc);
         },
-        options,
     );
-    schema.index({ _ref: 'hashed', _v: 1 }, { unique: true });
-    const model = mongoose.model<IVD, Model<IVD>>(modelName, schema);
+    // once model is compiled, no more middleware, methods, etc can be added
+    const makeModel = () =>
+        (mongoose.models[modelName] as VM) ||
+        mongoose.model<VD, VM>(modelName, schema);
 
-    schema.pre('save', async function (this: IVD) {
-        console.log('save');
+    // version history model ----------------------------------------------------
+    const historySchema = new mongoose.Schema<VHD, VHM>({
+        ...schemaDefinition,
+        _ref: { type: Types.ObjectId, ref: modelName, required: true },
     });
-    schema.pre(/updateOne|findOneAndUpdate/, async function (this: IVD) {
-        console.log('versioning');
+    historySchema.index({ _ref: 'hashed', _v: 1 }, { unique: true });
+    historySchema.static('saveVersion', async function (document: VD) {
+        const historyDoc: VHD = {
+            ...JSON.parse(JSON.stringify(document)),
+            _ref: document._id!,
+            _id: undefined,
+        };
+        await historyModel.create(historyDoc);
     });
+    const hModelName = `${modelName}_History`;
+    const historyModel =
+        (mongoose.models[hModelName] as VHM) ||
+        mongoose.model<VHD, VHM>(hModelName, historySchema);
 
-    return { schema, model };
+    return { schema, makeModel };
 }
