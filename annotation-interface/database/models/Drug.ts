@@ -9,6 +9,7 @@ import {
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import { makeIdsStrings, MongooseId, OptionalId } from '../helpers/types';
+import { versionedModel } from '../versioning/schema';
 import Guideline, {
     IGuideline_Any,
     IGuideline_DB,
@@ -55,9 +56,7 @@ export type IDrug_Any = IDrug<
 >;
 export type IDrug_Resolved = IDrug<string, IGuideline_Resolved, string>;
 
-type DrugModel = mongoose.Model<IDrug_DB>;
-
-const drugSchema = new mongoose.Schema<IDrug_DB, DrugModel>({
+const { schema, makeModel } = versionedModel<IDrug_DB>('Drug', {
     name: { type: String, required: true },
     rxNorm: { type: String, required: true },
     annotations: {
@@ -83,7 +82,7 @@ const drugSchema = new mongoose.Schema<IDrug_DB, DrugModel>({
     isStaged: { type: Boolean, required: true, default: false },
 });
 
-drugSchema.methods.curationState = async function (
+schema.methods.curationState = async function (
     this: IDrug_DB,
 ): Promise<CurationState> {
     const annotations = [
@@ -116,7 +115,7 @@ type IDrug_FullyPopulated = IDrug<
     IGuideline_DB,
     Types.ObjectId
 >;
-drugSchema.methods.resolve = async function (
+schema.methods.resolve = async function (
     this: Document<unknown, unknown, IDrug_FullyPopulated> &
         IDrug_FullyPopulated,
     language: SupportedLanguage,
@@ -162,7 +161,4 @@ drugSchema.methods.resolve = async function (
     }
 };
 
-export default !mongoose.models
-    ? undefined
-    : (mongoose.models.Drug as DrugModel) ||
-      mongoose.model<IDrug_DB, DrugModel>('Drug', drugSchema);
+export default !mongoose.models ? undefined : makeModel();
