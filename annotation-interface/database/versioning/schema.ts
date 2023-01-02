@@ -10,6 +10,7 @@ import { IBaseDoc, MongooseId } from '../helpers/types';
 
 type IVersionedDoc<DocT extends IBaseDoc<Types.ObjectId>> = DocT & {
     _v?: number;
+    findHistoryDoc?: () => Promise<IVersionHistoryDoc<DocT>>;
 };
 
 type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
@@ -40,8 +41,11 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     };
     const schema = new mongoose.Schema<VD, VM>(schemaDefinition);
     schema.static('findVersions', async function (id: MongooseId) {
-        return await historyModel.find({ _ref: id });
+        return historyModel.find({ _ref: id });
     });
+    schema.methods.findHistoryDoc = async function (this: VD) {
+        return historyModel.findOne({ _ref: this._id, _v: this._v });
+    };
     // versioning middleware
     // save first version & init version number
     schema.pre('validate', async function (this: VD) {
