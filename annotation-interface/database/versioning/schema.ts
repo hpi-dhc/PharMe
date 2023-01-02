@@ -43,14 +43,24 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
         return await historyModel.find({ _ref: id });
     });
     // versioning middleware
+    // save first version & init version number
     schema.pre('validate', async function (this: VD) {
         this._v = 1;
+        await historyModel.saveVersion(this);
     });
+    // increment version number on change
     schema.pre(
         /updateOne|findOneAndUpdate/,
         async function (this: Query<void, VD>) {
             const doc = await this.model.findOne(this.getQuery());
             this.set('_v', doc._v + 1);
+        },
+    );
+    // save change to history
+    schema.post(
+        /updateOne|findOneAndUpdate/,
+        async function (this: Query<void, VD>) {
+            const doc = await this.model.findOne(this.getQuery());
             await historyModel.saveVersion(doc);
         },
     );
