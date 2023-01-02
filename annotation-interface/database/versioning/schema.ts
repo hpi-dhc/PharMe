@@ -20,6 +20,7 @@ type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
 
 type VersionedModel<DocT, HDocT> = Model<DocT> & {
     findVersions(id: MongooseId): Promise<Array<HDocT>>;
+    findOneVersion(id: MongooseId, version: number): Promise<HDocT | null>;
 };
 
 export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
@@ -40,9 +41,17 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
         _v: { type: Number, required: true },
     };
     const schema = new mongoose.Schema<VD, VM>(schemaDefinition);
-    schema.static('findVersions', async function (id: MongooseId) {
+    schema.static('findVersions', async function (id: MongooseId): Promise<
+        Array<VHD>
+    > {
         return historyModel.find({ _ref: id });
     });
+    schema.static(
+        'findOneVersion',
+        async function (id: MongooseId, v: number): Promise<VHD | null> {
+            return historyModel.findOne({ _ref: id, _v: v });
+        },
+    );
     schema.methods.findHistoryDoc = async function (this: VD) {
         return historyModel.findOne({ _ref: this._id, _v: this._v });
     };
