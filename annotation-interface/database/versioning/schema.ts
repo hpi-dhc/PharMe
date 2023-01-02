@@ -79,6 +79,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
         _ref: { type: Types.ObjectId, ref: modelName, required: true },
     });
     historySchema.index({ _ref: 'hashed', _v: 1 }, { unique: true });
+    historySchema.index({ _ref: 'hashed' });
     historySchema.static('saveVersion', async function (document: VD) {
         const historyDoc: VHD = {
             ...JSON.parse(JSON.stringify(document)),
