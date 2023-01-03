@@ -15,7 +15,6 @@ project.
 | System component                                          | CI/CD                           | Code Coverage           |
 | --------------------------------------------------------- | ------------------------------- | ----------------------- |
 | 🧑‍💻 [Annotation Interface](./annotation-interface) | ![GitHub Workflow Status][AI_B] | ![Codecov branch][AI_C] |
-| 📝 [Annotation Server](./annotation-server)               | ![GitHub Workflow Status][AS_B] | ![Codecov branch][AS_C] |
 | 📱 [App](./app)                                           | ![GitHub Workflow Status][AP_B] | ![Codecov branch][AP_C] |
 | 🧪 [Lab Server](./lab-server)                             | ![GitHub Workflow Status][LS_B] | ![Codecov branch][LS_C] |
 

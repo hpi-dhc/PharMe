@@ -67,9 +67,9 @@ Work on your code. Repeat:
 
 ## Debugging
 
-If you wish to debug the annotation server, lab server or the app, simply go to
-the 'Run and Debug' section of the vscode activity bar (Ctrl+Shift+D), select
-the project you would like to debug and hit the green play button.
+If you wish to debug, simply go to the 'Run and Debug' section of the vscode
+activity bar (Ctrl+Shift+D), select the project you would like to debug and hit
+the green play button.
 
 ## It's working
 

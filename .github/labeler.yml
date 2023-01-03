@@ -1,6 +1,6 @@
 'P: App':
   - 'app/**/*'
-'P: Annotation Server':
-  - 'annotation-server/**/*'
+'P: Annotation Interface':
+  - 'annotation-interface/**/*'
 'P: Lab Server':
   - 'lab-server/**/*'
