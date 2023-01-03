@@ -1,9 +1,0 @@
-{
-    "compilerOptions": {
-        "plugins": ["@nestjs/swagger"],
-        "assets": ["medications/scripts"],
-        "watchAssets": true
-    },
-    "collection": "@nestjs/schematics",
-    "sourceRoot": "src"
-}
