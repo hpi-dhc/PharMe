@@ -1,6 +1,8 @@
 import mongoose, {
+    ApplyBasicQueryCasting,
     Model,
     Query,
+    QuerySelector,
     SchemaDefinition,
     SchemaDefinitionType,
     Types,
@@ -8,10 +10,13 @@ import mongoose, {
 
 import { IBaseDoc, MongooseId } from '../helpers/types';
 
+type DateRange = [Date, Date | null];
+
 type IVersionedDoc<DocT extends IBaseDoc<Types.ObjectId>> = DocT & {
     _v: number;
     _vDate: Date;
     findHistoryDoc: () => Promise<IVersionHistoryDoc<DocT>>;
+    dateRange: () => Promise<DateRange>;
 };
 
 type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
@@ -22,6 +27,11 @@ type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
 type VersionedModel<DocT, HDocT> = Model<DocT> & {
     findVersions(id: MongooseId): Promise<Array<HDocT>>;
     findOneVersion(id: MongooseId, version: number): Promise<HDocT | null>;
+    findVersionByDate(id: MongooseId, date: Date): Promise<HDocT | null>;
+    findVersionsInRange(
+        id: MongooseId,
+        dateRange: DateRange,
+    ): Promise<Array<HDocT>>;
 };
 
 export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
@@ -50,16 +60,50 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
                     _v: this._v,
                 });
             },
+
+            dateRange: async function (this) {
+                const successor = await historyModel.findOne({
+                    _ref: this._id,
+                    _v: this._v + 1,
+                });
+                return [this._vDate, successor?._vDate];
+            },
         },
         statics: {
             findVersions: async function (id: MongooseId): Promise<Array<VHD>> {
                 return historyModel.find({ _ref: id });
             },
+
             findOneVersion: async function (
                 id: MongooseId,
                 v: number,
             ): Promise<VHD | null> {
                 return historyModel.findOne({ _ref: id, _v: v });
+            },
+
+            findVersionByDate: async function (
+                id: MongooseId,
+                date: Date,
+            ): Promise<VHD | null> {
+                return historyModel
+                    .findOne({
+                        _ref: id,
+                        _vDate: { $lte: date },
+                    })
+                    .sort({ _vDate: 'desc' });
+            },
+
+            findVersionsInRange: async function (
+                id: MongooseId,
+                dateRange: DateRange,
+            ): Promise<Array<VHD>> {
+                const filter: QuerySelector<
+                    ApplyBasicQueryCasting<VHD['_vDate']>
+                > = {
+                    $gte: dateRange[0],
+                };
+                if (dateRange[1]) filter['$lte'] = dateRange[1];
+                return historyModel.find({ _ref: id, _vDate: filter });
             },
         },
     });
