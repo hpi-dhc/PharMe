@@ -10,6 +10,7 @@ import { IBaseDoc, MongooseId } from '../helpers/types';
 
 type IVersionedDoc<DocT extends IBaseDoc<Types.ObjectId>> = DocT & {
     _v?: number;
+    _vDate?: Date;
     findHistoryDoc?: () => Promise<IVersionHistoryDoc<DocT>>;
 };
 
@@ -39,6 +40,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     const schemaDefinition = {
         ...definition,
         _v: { type: Number, required: true },
+        _vDate: { type: Date, required: true },
     };
     const schema = new mongoose.Schema<VD, VM>(schemaDefinition);
     schema.static('findVersions', async function (id: MongooseId): Promise<
@@ -59,6 +61,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     // save first version & init version number
     schema.pre('validate', async function (this: VD) {
         this._v = 1;
+        this._vDate = new Date();
         await historyModel.saveVersion(this);
     });
     // increment version number on change
@@ -67,6 +70,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
         async function (this: Query<void, VD>) {
             const doc = await this.model.findOne(this.getQuery());
             this.set('_v', doc._v + 1);
+            this.set('_vDate', new Date());
         },
     );
     // save change to history
@@ -88,6 +92,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
         _ref: { type: Types.ObjectId, ref: modelName, required: true },
     });
     historySchema.index({ _ref: 'hashed', _v: 1 }, { unique: true });
+    historySchema.index({ _ref: 'hashed', _vDate: 1 });
     historySchema.index({ _ref: 'hashed' });
     historySchema.static('saveVersion', async function (document: VD) {
         const historyDoc: VHD = {
