@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/lab-server.yml'
+      - 'yarn.lock'
       - 'lab-server/**'
 
 defaults:
