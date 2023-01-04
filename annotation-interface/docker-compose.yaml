@@ -25,5 +25,18 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
 
+  annotation-interface-testing-db:
+    image: mongo:5.0
+    volumes:
+      - annotation_interface_testing_db:/var/lib/mongodb/data
+    ports:
+      - ${_TEST_DB_PORT}:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    profiles:
+      - dev
+
 volumes:
   annotation_interface_db:
+  annotation_interface_testing_db:

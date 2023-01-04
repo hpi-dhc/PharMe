@@ -19,4 +19,4 @@ kitty @ launch --cwd=`pwd` --location=vsplit &>/dev/null \
     && kitty @ send-text "yarn dev\n"
 kitty @ launch --cwd=`pwd` --location=after --type=tab &>/dev/null \
     && kitty @ send-text "sleep 2 && open http://localhost:3001\n"
-docker compose up
+docker compose --profile dev up

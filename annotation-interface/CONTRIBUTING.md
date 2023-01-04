@@ -18,13 +18,13 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Setup for local development
 
-- Set up and start our [Annotation Server](../annotation-server/CONTRIBUTING.md)
 - Start the database by running `docker compose up` in this directory
+  - You can use `docker compose --profile dev up` if you want to start the
+    testing database as well
 - Start the development server with `yarn dev`
 - You can now access the annotation interface app on `localhost:3001`
 
-If you have all prerequisites (Annotation Server & Interface) met and use
-[kitty](https://sw.kovidgoyal.net/kitty/), you can conveniently run the
-[annotation-dev](../.kitty/annotation-dev) script from this repository's root to
-start both the Annotation Server and Interface along with both databases in
-split windows.
+If you use [kitty](https://sw.kovidgoyal.net/kitty/), you can conveniently run
+the [dev](/.kitty/dev) script from this directory to start the database (&
+testing database), and the development server in split windows and open Anni in
+your browser.
