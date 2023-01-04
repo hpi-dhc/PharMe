@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --forceExit"
+    "test": "jest --forceExit --config jest/config.ts"
   },
   "dependencies": {
     "@headlessui/react": "^1.6.4",

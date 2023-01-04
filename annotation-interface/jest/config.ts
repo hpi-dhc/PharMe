@@ -3,6 +3,8 @@
  * https://jestjs.io/docs/configuration
  */
 const config = {
+    rootDir: '..',
+
     collectCoverage: true,
     coverageDirectory: 'coverage',
     coveragePathIgnorePatterns: [
@@ -21,7 +23,7 @@ const config = {
         '^.+\\.(t|j)s$': 'ts-jest',
     },
 
-    setupFiles: ['<rootDir>/jest-dotenv.config.ts'],
+    setupFiles: ['<rootDir>/jest/dotenv.ts'],
 };
 
 export default config;
