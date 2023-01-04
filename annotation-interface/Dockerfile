@@ -34,7 +34,6 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/annotation-interface/public ./annotation-interface/annotation-interface/public
 COPY --from=builder /app/annotation-interface/package.json ./annotation-interface/package.json
 
 COPY --from=builder --chown=nextjs:nodejs /app/annotation-interface/.next/standalone ./annotation-interface/
