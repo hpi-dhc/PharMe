@@ -22,8 +22,25 @@ jobs:
 
   test:
     name: Test
-    needs: [lint]
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: localhost
+      DB_PORT: 27017
+      DB_USER: mongo
+      DB_PASSWORD: mongo
+    services:
+      mongodb:
+        image: mongo:5.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: ${{ env.DB_USER }}
+          MONGO_INITDB_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
     steps:
       - uses: actions/checkout@v2
       - run: yarn
