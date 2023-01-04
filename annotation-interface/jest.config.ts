@@ -20,6 +20,8 @@ const config = {
     transform: {
         '^.+\\.(t|j)s$': 'ts-jest',
     },
+
+    setupFiles: ['<rootDir>/jest-dotenv.config.ts'],
 };
 
 export default config;
