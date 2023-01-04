@@ -16,6 +16,10 @@ const config = {
         '**/__tests__/**/*.[jt]s?(x)',
         '**/?(*.)+(spec|test).[tj]s?(x)',
     ],
+
+    transform: {
+        '^.+\\.(t|j)s$': 'ts-jest',
+    },
 };
 
 export default config;
