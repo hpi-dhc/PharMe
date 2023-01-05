@@ -3,13 +3,13 @@ name: Annotation Interface
 on:
   push:
     paths:
-      - '.github/workflows/annotation-interface.yml'
+      - '.github/workflows/anni.yml'
       - 'yarn.lock'
-      - 'annotation-interface/**'
+      - 'anni/**'
 
 defaults:
   run:
-    working-directory: ./annotation-interface
+    working-directory: ./anni
 
 jobs:
   lint:
