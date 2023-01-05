@@ -8,18 +8,19 @@ import {
 import {
     BrickAnnotationT,
     CurationState,
-    IAnnotationModel,
+    IAnnotationDoc,
 } from '../helpers/annotations';
 import { brickAnnotationValidators } from '../helpers/brick-validators';
 import { guidelineCurationState } from '../helpers/guideline-data';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import { makeIdsStrings, OptionalId } from '../helpers/types';
+import { versionedModel } from '../versioning/schema';
 import { ITextBrick_Str } from './TextBrick';
 
 export interface IGuideline<
     AnnotationT extends BrickAnnotationT,
     IdT extends OptionalId = undefined,
-> extends IAnnotationModel<
+> extends IAnnotationDoc<
         IdT,
         {
             recommendation?: AnnotationT;
@@ -50,9 +51,7 @@ export type IGuideline_Populated = IGuideline<ITextBrick_Str[], string>;
 export type IGuideline_Any = IGuideline<BrickAnnotationT, OptionalId>;
 export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 
-type GuidelineModel = mongoose.Model<IGuideline_DB>;
-
-const guidelineSchema = new mongoose.Schema<IGuideline_DB, GuidelineModel>({
+const { schema, makeModel } = versionedModel<IGuideline_DB>('Guideline', {
     lookupkey: { type: {}, required: true },
     cpicData: {
         type: {
@@ -89,7 +88,7 @@ const guidelineSchema = new mongoose.Schema<IGuideline_DB, GuidelineModel>({
     isStaged: { type: Boolean, required: true, default: false },
 });
 
-guidelineSchema.pre<IGuideline_DB>('validate', function (next) {
+schema.pre<IGuideline_DB>('validate', function (next) {
     if (
         JSON.stringify(Object.keys(this.lookupkey)) !==
         JSON.stringify(Object.keys(this.cpicData.implications))
@@ -103,11 +102,11 @@ guidelineSchema.pre<IGuideline_DB>('validate', function (next) {
     next();
 });
 
-guidelineSchema.virtual('curationState').get(function (this: IGuideline_DB) {
+schema.virtual('curationState').get(function (this: IGuideline_DB) {
     return guidelineCurationState(this);
 });
 
-guidelineSchema.methods.resolve = async function (
+schema.methods.resolve = async function (
     this: Document<unknown, unknown, IGuideline_Populated> &
         IGuideline_Populated,
     drugName: string,
@@ -148,10 +147,4 @@ guidelineSchema.methods.resolve = async function (
     }
 };
 
-export default !mongoose.models
-    ? undefined
-    : (mongoose.models.Guideline as GuidelineModel) ||
-      mongoose.model<IGuideline_DB, GuidelineModel>(
-          'Guideline',
-          guidelineSchema,
-      );
+export default !mongoose.models ? undefined : makeModel();

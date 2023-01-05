@@ -1,5 +1,5 @@
 import { ITextBrick } from '../models/TextBrick';
-import { IBaseModel, MongooseId, OptionalId } from './types';
+import { IBaseDoc, MongooseId, OptionalId } from './types';
 
 // may be
 // - not populated -> ID[] of TextBricks
@@ -7,8 +7,8 @@ import { IBaseModel, MongooseId, OptionalId } from './types';
 // - resolved -> string
 export type BrickAnnotationT = MongooseId[] | ITextBrick<OptionalId>[] | string;
 
-export interface IAnnotationModel<IdT extends OptionalId, AT>
-    extends IBaseModel<IdT> {
+export interface IAnnotationDoc<IdT extends OptionalId, AT>
+    extends IBaseDoc<IdT> {
     annotations: AT;
     isStaged: boolean;
 }

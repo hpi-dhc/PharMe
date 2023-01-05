@@ -1,0 +1,75 @@
+name: Annotation Interface
+
+on:
+  push:
+    paths:
+      - '.github/workflows/anni.yml'
+      - 'yarn.lock'
+      - 'anni/**'
+
+defaults:
+  run:
+    working-directory: ./anni
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      DB_HOST: localhost
+      DB_PORT: 27017
+      DB_USER: mongo
+      DB_PASSWORD: mongo
+    services:
+      mongodb:
+        image: mongo:5.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: ${{ env.DB_USER }}
+          MONGO_INITDB_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn test
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: anni/coverage
+
+  codecov:
+    name: Generate Code Coverage Report
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: anni/coverage
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: anni
+          directory: anni/coverage
+
+  build:
+    name: Build
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn
+      - run: yarn build

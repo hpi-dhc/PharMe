@@ -1,11 +1,11 @@
 # To also start the annotation interface app, run compose command from project
 # root with:
-# `--file annotation-interface/docker-compose.yml --profile production`
+# `--file anni/docker-compose.yml --profile production`
 
 services:
   app:
     build:
-      dockerfile: ./annotation-interface/Dockerfile
+      dockerfile: ./anni/Dockerfile
       context: ../
     env_file: .env
     ports:
@@ -25,5 +25,18 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
 
+  annotation-interface-testing-db:
+    image: mongo:5.0
+    volumes:
+      - annotation_interface_testing_db:/var/lib/mongodb/data
+    ports:
+      - ${_TEST_DB_PORT}:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    profiles:
+      - dev
+
 volumes:
   annotation_interface_db:
+  annotation_interface_testing_db:

@@ -7,25 +7,24 @@ import {
     supportedLanguages,
 } from '../../common/definitions';
 import { translationIsValid } from '../helpers/brick-translations';
-import { IBaseModel, OptionalId } from '../helpers/types';
+import { IBaseDoc, OptionalId } from '../helpers/types';
+import { versionedModel } from '../versioning/schema';
 
 export interface ITextBrickTranslation<IdT extends OptionalId = undefined>
-    extends IBaseModel<IdT> {
+    extends IBaseDoc<IdT> {
     language: SupportedLanguage;
     text: string;
 }
 
 export interface ITextBrick<IdT extends OptionalId = undefined>
-    extends IBaseModel<IdT> {
+    extends IBaseDoc<IdT> {
     usage: BrickUsage;
     translations: ITextBrickTranslation<IdT>[];
 }
 export type ITextBrick_DB = ITextBrick<Types.ObjectId>;
 export type ITextBrick_Str = ITextBrick<string>;
 
-export type TextBrickModel = mongoose.Model<ITextBrick_DB>;
-
-const textBrickSchema = new mongoose.Schema<ITextBrick_DB>({
+const { makeModel } = versionedModel<ITextBrick_DB>('TextBrick', {
     usage: {
         type: String,
         enum: brickUsages,
@@ -74,10 +73,4 @@ const textBrickSchema = new mongoose.Schema<ITextBrick_DB>({
 });
 
 // prevent client side from trying to use node module
-export default !mongoose.models
-    ? undefined
-    : (mongoose.models.TextBrick as TextBrickModel) ||
-      mongoose.model<ITextBrick<Types.ObjectId>, TextBrickModel>(
-          'TextBrick',
-          textBrickSchema,
-      );
+export default !mongoose.models ? undefined : makeModel();

@@ -1,7 +1,7 @@
 *
 !lab-server/
 !annotation-server/
-!annotation-interface/
+!anni/
 !common/
 !tsconfig.json
 !package.json

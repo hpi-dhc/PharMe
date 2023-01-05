@@ -4,7 +4,7 @@
   "private": true,
   "workspaces": [
     "lab-server",
-    "annotation-interface",
+    "anni",
     "miscellaneous/jest-badges-generator",
     "miscellaneous/meeting-assistant"
   ],

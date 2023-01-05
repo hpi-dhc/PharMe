@@ -41,7 +41,7 @@ jobs:
     name: Test E2E
     runs-on: ubuntu-latest
     container:
-      image: node:17-buster-slim
+      image: node:18-buster-slim
     services:
       minio:
         # we refrain from using the official minio image as we would need to
