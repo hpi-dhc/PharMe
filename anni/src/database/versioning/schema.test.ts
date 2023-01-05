@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 
 import dbConnect from '../helpers/connect';
 import { IBaseDoc } from '../helpers/types';
-import { IVersionedDoc, versionedModel } from './schema';
+import { DateRange, IVersionedDoc, versionedModel } from './schema';
 
 interface ITestDoc extends IBaseDoc<Types.ObjectId> {
     value: number;
@@ -13,6 +13,8 @@ describe('Abstract version control', () => {
         value: { type: Number, required: true },
     });
     const TestModel = makeModel();
+
+    const preSaveDate = new Date();
     let initialDoc: IVersionedDoc<ITestDoc>;
     let saveDate: Date;
 
@@ -59,6 +61,35 @@ describe('Abstract version control', () => {
             expect(doc!.value).toEqual(2);
             expect(doc!._v).toEqual(2);
             expect(doc!._id).toEqual(initialDoc._id!);
+        });
+    });
+
+    describe('Version history', () => {
+        it('should get all document versions', async () => {
+            const docs = await TestModel.findVersions(initialDoc._id!);
+            expect(docs.length).toEqual(2);
+        });
+
+        it('should find documents in date ranges', async () => {
+            const expectDocsInRange = async (
+                values: Array<number>,
+                range: DateRange,
+            ) => {
+                const docs = await TestModel.findVersionsInRange(
+                    initialDoc._id!,
+                    range,
+                );
+                expect(docs.map((doc) => doc.value)).toEqual(values);
+            };
+
+            const doc = await TestModel.findById(initialDoc._id!);
+            expect(doc).not.toBeNull();
+            const range = await doc!.dateRange();
+
+            await expectDocsInRange([2], range);
+            await expectDocsInRange([1, 2], [saveDate, null]);
+            await expectDocsInRange([1], [preSaveDate, saveDate]);
+            await expectDocsInRange([2], [new Date(), null]);
         });
     });
 });

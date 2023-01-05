@@ -98,13 +98,42 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
                 id: MongooseId,
                 dateRange: DateRange,
             ): Promise<Array<VHD>> {
+                // scenarios:
+                //   - range      |--------------|
+                //     versions |---a---|-b-|---c---|
+                //   - range      |--------------|
+                //     versions |---d---|
+                // find b & c
                 const filter: QuerySelector<
                     ApplyBasicQueryCasting<VHD['_vDate']>
                 > = {
                     $gte: dateRange[0],
                 };
                 if (dateRange[1]) filter['$lte'] = dateRange[1];
-                return historyModel.find({ _ref: id, _vDate: filter });
+                const versions = await historyModel
+                    .find({ _ref: id, _vDate: filter })
+                    .sort('_vDate');
+
+                if (versions.length === 0) {
+                    // find d
+                    const only = await historyModel
+                        .findOne({ _ref: id })
+                        .sort('-_v');
+                    return only ? [only] : [];
+                } else if (
+                    // find a
+                    versions[0]._vDate > dateRange[0] &&
+                    versions[0]._v > 1
+                ) {
+                    const oldest = await historyModel.findOne({
+                        _ref: id,
+                        _v: versions[0]._v - 1,
+                    });
+                    if (oldest) {
+                        versions.unshift(oldest);
+                    }
+                }
+                return versions;
             },
         },
     });
