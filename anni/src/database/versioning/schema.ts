@@ -34,6 +34,7 @@ type VersionedModel<DocT, HDocT> = Model<DocT> & {
     ): Promise<Array<HDocT>>;
 };
 
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     modelName: string,
     definition: SchemaDefinition<SchemaDefinitionType<DocT>>,
