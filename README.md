@@ -30,11 +30,9 @@ Contributions, issues and feature requests are welcome. Please read our
 <!-- This won't be visible, keep it at the bottom of the file. -->
 <!-- Build -->
 [AI_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Annotation%20Interface?color=B079FF&label=Build&logo=github&logoColor=B079FF&style=for-the-badge
-[AS_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Annotation%20Server?color=926CFF&label=Build&logo=github&logoColor=926CFF&style=for-the-badge
 [AP_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/App?color=7277FF&label=Build&logo=github&logoColor=7277FF&style=for-the-badge
 [LS_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Lab%20Server?color=769FFF&label=Build&logo=github&logoColor=769FFF&style=for-the-badge
 <!-- Coverage -->
 [AI_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=B079FF&flag=anni&label=Coverage&logo=codecov&logoColor=B079FF&style=for-the-badge&token=1Q3F9M0SJN
-[AS_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=926CFF&flag=annotation-server&label=Coverage&logo=codecov&logoColor=926CFF&style=for-the-badge&token=1Q3F9M0SJN
 [AP_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=7277FF&flag=app&label=Coverage&logo=codecov&logoColor=7277FF&style=for-the-badge&token=1Q3F9M0SJN
 [LS_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=769FFF&flag=lab-server&label=Coverage&logo=codecov&logoColor=769FFF&style=for-the-badge&token=1Q3F9M0SJN
