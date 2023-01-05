@@ -15,8 +15,8 @@ const config = {
     ],
 
     testMatch: [
-        '**/__tests__/**/*.[jt]s?(x)',
-        '**/?(*.)+(spec|test).[tj]s?(x)',
+        '<rootDir>/src/**/__tests__/**/*.[jt]s?(x)',
+        '<rootDir>/src/**/?(*.)+(spec|test).[tj]s?(x)',
     ],
 
     transform: {
