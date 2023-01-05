@@ -11,7 +11,6 @@ const config = {
         '/coverage/',
         '/node_modules/',
         '/.next/',
-        '__tests__',
     ],
 
     testMatch: [
