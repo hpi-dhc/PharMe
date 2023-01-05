@@ -10,21 +10,21 @@ import mongoose, {
 
 import { IBaseDoc, MongooseId } from '../helpers/types';
 
-type DateRange = [Date, Date | null];
+export type DateRange = [Date, Date | null];
 
-type IVersionedDoc<DocT extends IBaseDoc<Types.ObjectId>> = DocT & {
+export type IVersionedDoc<DocT extends IBaseDoc<Types.ObjectId>> = DocT & {
     _v: number;
     _vDate: Date;
     findHistoryDoc: () => Promise<IVersionHistoryDoc<DocT>>;
     dateRange: () => Promise<DateRange>;
 };
 
-type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
+export type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
     IVersionedDoc<DocT> & {
         _ref: Types.ObjectId;
     };
 
-type VersionedModel<DocT, HDocT> = Model<DocT> & {
+export type VersionedModel<DocT, HDocT> = Model<DocT> & {
     findVersions(id: MongooseId): Promise<Array<HDocT>>;
     findOneVersion(id: MongooseId, version: number): Promise<HDocT | null>;
     findVersionByDate(id: MongooseId, date: Date): Promise<HDocT | null>;
@@ -67,7 +67,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
                     _ref: this._id,
                     _v: this._v + 1,
                 });
-                return [this._vDate, successor?._vDate];
+                return [this._vDate, successor?._vDate ?? null];
             },
         },
         statics: {
