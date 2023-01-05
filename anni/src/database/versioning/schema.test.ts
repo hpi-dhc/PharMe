@@ -85,32 +85,43 @@ describe('Abstract version control', () => {
         });
     });
 
-    describe('Version history', () => {
+    describe('Version history & date ranges', () => {
         it('should get all document versions', async () => {
             const docs = await TestModel.findVersions(initialDoc._id!);
             expect(docs.length).toEqual(2);
         });
 
-        it('should find documents in date ranges', async () => {
-            const expectDocsInRange = async (
-                values: Array<number>,
-                range: DateRange,
-            ) => {
-                const docs = await TestModel.findVersionsInRange(
-                    initialDoc._id!,
-                    range,
-                );
-                expect(docs.map((doc) => doc.value)).toEqual(values);
-            };
+        const expectDocsInRange = async (
+            values: Array<number>,
+            range: DateRange,
+        ) => {
+            const docs = await TestModel.findVersionsInRange(
+                initialDoc._id!,
+                range,
+            );
+            expect(docs.map((doc) => doc.value)).toEqual(values);
+        };
 
+        it('should find only first version in its own range', async () => {
+            await expectDocsInRange([1], await initialDoc.dateRange());
+        });
+
+        it('should find only second version in its own range', async () => {
             const doc = await TestModel.findById(initialDoc._id!);
             expect(doc).not.toBeNull();
             const range = await doc!.dateRange();
-
             await expectDocsInRange([2], range);
+        });
+
+        it('should find both versions between <date after save of first> and <now>', async () => {
             await expectDocsInRange([1, 2], [saveDate, null]);
+        });
+
+        it('should find only first version between <date before save of first> and <date after>', async () => {
             await expectDocsInRange([1], [preSaveDate, saveDate]);
-            await expectDocsInRange([1], await initialDoc.dateRange());
+        });
+
+        it('should find only second version between <now> and <now>', async () => {
             await expectDocsInRange([2], [new Date(), null]);
         });
     });
