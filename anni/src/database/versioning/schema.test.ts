@@ -100,6 +100,7 @@ describe('Abstract version control', () => {
             await expectDocsInRange([2], range);
             await expectDocsInRange([1, 2], [saveDate, null]);
             await expectDocsInRange([1], [preSaveDate, saveDate]);
+            await expectDocsInRange([1], await initialDoc.dateRange());
             await expectDocsInRange([2], [new Date(), null]);
         });
     });

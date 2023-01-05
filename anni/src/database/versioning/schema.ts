@@ -109,7 +109,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
                 > = {
                     $gte: dateRange[0],
                 };
-                if (dateRange[1]) filter['$lte'] = dateRange[1];
+                if (dateRange[1]) filter['$lt'] = dateRange[1];
                 const versions = await historyModel
                     .find({ _ref: id, _vDate: filter })
                     .sort('_vDate');
