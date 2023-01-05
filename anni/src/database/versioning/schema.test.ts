@@ -21,7 +21,7 @@ describe('Abstract version control', () => {
     });
 
     describe('Initialize data', () => {
-        it('should save a data entry', async () => {
+        it('should save a document', async () => {
             const doc = await TestModel.create({ value: 1 });
             initialDoc = doc;
             saveDate = new Date();
@@ -29,13 +29,13 @@ describe('Abstract version control', () => {
     });
 
     describe('Version dates', () => {
-        it('should retrieve version by date', async () => {
+        it('should retrieve a version by date', async () => {
             const doc = await TestModel.findVersionByDate(
                 initialDoc._id!,
                 saveDate,
             );
             expect(doc).not.toBeNull();
-            expect(doc!._v).toEqual(1);
+            expect(doc!._v).toEqual(initialDoc._v);
             expect(doc!._ref).toEqual(initialDoc._id!);
         });
 
@@ -43,6 +43,22 @@ describe('Abstract version control', () => {
             const range = await initialDoc.dateRange();
             expect(range[0].getDate()).toBeLessThanOrEqual(saveDate.getDate());
             expect(range[1]).toBeNull();
+        });
+    });
+
+    describe('Update data', () => {
+        it('should modify the data entry creating a new version', async () => {
+            const doc = await TestModel.findOneAndUpdate(
+                initialDoc._id!,
+                {
+                    value: 2,
+                },
+                { new: true },
+            );
+            expect(doc).not.toBeNull();
+            expect(doc!.value).toEqual(2);
+            expect(doc!._v).toEqual(2);
+            expect(doc!._id).toEqual(initialDoc._id!);
         });
     });
 });
