@@ -22,6 +22,16 @@ describe('Abstract version control', () => {
         await dbConnect();
     });
 
+    describe('Empty history', () => {
+        it('should find no documents in empty history', async () => {
+            const docs = await TestModel.findVersionsInRange(
+                new Types.ObjectId(),
+                [new Date(), null],
+            );
+            expect(docs.length).toEqual(0);
+        });
+    });
+
     describe('Initialize data', () => {
         it('should save a document', async () => {
             const doc = await TestModel.create({ value: 1 });
