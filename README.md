@@ -14,7 +14,7 @@ project.
 
 | System component                                          | CI/CD                           | Code Coverage           |
 | --------------------------------------------------------- | ------------------------------- | ----------------------- |
-| 🧑‍💻 [Annotation Interface](./anni) | ![GitHub Workflow Status][AI_B] | ![Codecov branch][AI_C] |
+| 🧑‍💻 [Annotation Interface](./anni)                 | ![GitHub Workflow Status][AI_B] | ![Codecov branch][AI_C] |
 | 📱 [App](./app)                                           | ![GitHub Workflow Status][AP_B] | ![Codecov branch][AP_C] |
 | 🧪 [Lab Server](./lab-server)                             | ![GitHub Workflow Status][LS_B] | ![Codecov branch][LS_C] |
 
@@ -29,9 +29,9 @@ Contributions, issues and feature requests are welcome. Please read our
 <!-- References to badges -->
 <!-- This won't be visible, keep it at the bottom of the file. -->
 <!-- Build -->
-[AI_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Annotation%20Interface?color=B079FF&label=Build&logo=github&logoColor=B079FF&style=for-the-badge
-[AP_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/App?color=7277FF&label=Build&logo=github&logoColor=7277FF&style=for-the-badge
-[LS_B]: https://img.shields.io/github/workflow/status/hpi-dhc/pharme/Lab%20Server?color=769FFF&label=Build&logo=github&logoColor=769FFF&style=for-the-badge
+[AI_B]: https://img.shields.io/github/actions/workflow/status/hpi-dhc/pharme/anni.yml?branch=issue/513-native-version-control&color=B079FF&label=Build&logo=github&logoColor=B079FF&style=for-the-badge
+[AP_B]: https://img.shields.io/github/actions/workflow/status/hpi-dhc/pharme/app.yml?branch=main&color=7277FF&label=Build&logo=github&logoColor=7277FF&style=for-the-badge
+[LS_B]: https://img.shields.io/github/actions/workflow/status/hpi-dhc/pharme/lab-server.yml?branch=main&color=769FFF&label=Build&logo=github&logoColor=769FFF&style=for-the-badge
 <!-- Coverage -->
 [AI_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=B079FF&flag=anni&label=Coverage&logo=codecov&logoColor=B079FF&style=for-the-badge&token=1Q3F9M0SJN
 [AP_C]: https://img.shields.io/codecov/c/github/hpi-dhc/pharme/main?color=7277FF&flag=app&label=Coverage&logo=codecov&logoColor=7277FF&style=for-the-badge&token=1Q3F9M0SJN
