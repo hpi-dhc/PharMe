@@ -30,6 +30,17 @@ describe('Abstract version control', () => {
         });
     });
 
+    describe('First version', () => {
+        it(`should find the document's first version`, async () => {
+            const version = await initialDoc.findHistoryDoc();
+            expect(version._v).toBe(1);
+
+            const version1 = await TestModel.findOneVersion(initialDoc._id!, 1);
+            expect(version1).not.toBeNull();
+            expect(version1!._id).toEqual(version._id);
+        });
+    });
+
     describe('Version dates', () => {
         it('should retrieve a version by date', async () => {
             const doc = await TestModel.findVersionByDate(
