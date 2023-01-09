@@ -4,6 +4,7 @@ import AppData from './AppData';
 describe('App data', () => {
     beforeAll(async () => {
         await dbConnect();
+        await AppData!.deleteMany({});
     });
 
     describe('no data', () => {
