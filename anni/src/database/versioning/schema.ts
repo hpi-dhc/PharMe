@@ -10,11 +10,11 @@ import mongoose, {
 
 import { IBaseDoc, MongooseId } from '../helpers/types';
 
-export type DateRange = [Date, Date | null];
+export type DateRange = [number, number | null];
 
 export type IVersionedDoc<DocT extends IBaseDoc<Types.ObjectId>> = DocT & {
     _v: number;
-    _vDate: Date;
+    _vDate: number;
     findHistoryDoc: () => Promise<IVersionHistoryDoc<DocT>>;
     dateRange: () => Promise<DateRange>;
 };
@@ -27,7 +27,7 @@ export type IVersionHistoryDoc<DocT extends IBaseDoc<Types.ObjectId>> =
 export type VersionedModel<DocT, HDocT> = Model<DocT> & {
     findVersions(id: MongooseId): Promise<Array<HDocT>>;
     findOneVersion(id: MongooseId, version: number): Promise<HDocT | null>;
-    findVersionByDate(id: MongooseId, date: Date): Promise<HDocT | null>;
+    findVersionByDate(id: MongooseId, date: number): Promise<HDocT | null>;
     findVersionsInRange(
         id: MongooseId,
         dateRange: DateRange,
@@ -51,7 +51,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     const schemaDefinition = {
         ...definition,
         _v: { type: Number, required: true },
-        _vDate: { type: Date, required: true },
+        _vDate: { type: Number, required: true },
     };
     const schema = new mongoose.Schema<VD, VM>(schemaDefinition, {
         methods: {
@@ -84,7 +84,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
 
             findVersionByDate: async function (
                 id: MongooseId,
-                date: Date,
+                date: number,
             ): Promise<VHD | null> {
                 return historyModel
                     .findOne({
@@ -141,21 +141,21 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     // save first version & init version number
     schema.pre('validate', async function (this: VD) {
         this._v = 1;
-        this._vDate = new Date();
+        this._vDate = new Date().getTime();
         await historyModel.saveVersion(this);
     });
     // increment version number on change
     schema.pre(
-        /updateOne|findOneAndUpdate/,
+        /updateOne|findOneAndUpdate|findByIdAndUpdate/,
         async function (this: Query<void, VD>) {
             const doc = await this.model.findOne(this.getQuery());
             this.set('_v', doc._v + 1);
-            this.set('_vDate', new Date());
+            this.set('_vDate', new Date().getTime());
         },
     );
     // save change to history
     schema.post(
-        /updateOne|findOneAndUpdate/,
+        /updateOne|findOneAndUpdate|findByIdAndUpdate/,
         async function (this: Query<void, VD>) {
             const doc = await this.model.findOne(this.getQuery());
             await historyModel.saveVersion(doc);

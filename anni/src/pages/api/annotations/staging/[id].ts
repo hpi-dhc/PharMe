@@ -22,9 +22,12 @@ async function execOrFail<T>(
     await dbConnect();
     const results = await Promise.all(
         allAnnotationModels.map(async (model): Promise<T | undefined> => {
-            const result = await f(model);
-            if (result) return result;
-            return undefined;
+            try {
+                const result = await f(model);
+                if (result) return result;
+            } catch {
+                return undefined;
+            }
         }),
     );
     const ret = results.find((result) => result);
