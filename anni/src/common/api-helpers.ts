@@ -4,6 +4,11 @@ import { ApiError } from 'next/dist/server/api-utils';
 
 import dbConnect from '../database/helpers/connect';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const errorObject = (error: unknown): any | undefined =>
+    error && typeof error === 'object' ? (error as any) : undefined;
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
 export interface ApiResponse<T> {
     success: true;
     data: T;
@@ -28,9 +33,7 @@ export const handleApiMethods = async (
     } catch (error) {
         /* eslint-disable no-console */
         console.error(error);
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        const apiError =
-            error && typeof error === 'object' ? (error as any) : undefined;
+        const apiError = errorObject(error);
         const statusCode = apiError?.statusCode ?? 400;
         const message = apiError?.message ?? 'Unknown error';
         res.status(statusCode).json({ success: false, message });
