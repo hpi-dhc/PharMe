@@ -8,6 +8,7 @@ import Label from '../../components/common/indicators/Label';
 import TableRow from '../../components/common/interaction/TableRow';
 import FilterTabs from '../../components/common/structure/FilterTabs';
 import PageHeading from '../../components/common/structure/PageHeading';
+import Emphasis from '../../components/common/text/Emphasis';
 import {
     displayCategories,
     useBrickFilterContext,
@@ -25,8 +26,8 @@ const AllTextBricks = ({
         <>
             <PageHeading title="Defined Bricks">
                 <>
-                    <span className="italic">Bricks</span> are predefined
-                    components that are used to create texts for{' '}
+                    <Emphasis>Bricks</Emphasis> are predefined components that
+                    are used to create texts for{' '}
                     <Link href="/annotations">
                         <a className="italic underline">annotations</a>
                     </Link>
