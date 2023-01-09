@@ -4,6 +4,7 @@ import {
     UploadIcon,
     XIcon,
 } from '@heroicons/react/solid';
+import axios from 'axios';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -24,8 +25,34 @@ const Home = () => {
         useSwrFetcher<GetPublishStatusReponse>('/api/publish');
     const publishingError = response?.data.data.errorMessage;
 
+    const [loadingState, setLoadingState] = useState<JSX.Element | null>(null);
     const publish = async () => {
-        console.log('publish');
+        setLoadingState(null);
+        try {
+            setLoadingState(
+                <div className="space-y-2">
+                    <LoadingSpinner dark />
+                    <p>Publishing data ...</p>
+                </div>,
+            );
+            await axios.post('/api/publish');
+            setLoadingState(
+                <>
+                    <WithIcon icon={CheckIcon}>Success</WithIcon>
+                    <Button
+                        onClick={() => {
+                            setPublishVisible(false);
+                            setLoadingState(null);
+                        }}
+                        dark
+                    >
+                        Done
+                    </Button>
+                </>,
+            );
+        } catch {
+            setLoadingState(<GenericError />);
+        }
     };
 
     return (
@@ -87,21 +114,31 @@ const Home = () => {
             </div>
             {publishVisible && (
                 <PageOverlay
-                    hide={() => setPublishVisible(false)}
+                    hide={() => !loadingState && setPublishVisible(false)}
                     heading="Publish data"
                     explanation="Are you sure? This action will have an immediate effect on users and cannot be directly undone."
                 >
-                    <div className="flex justify-center space-x-4">
-                        <Button onClick={publish} icon={UploadIcon} dark>
-                            Publish now
-                        </Button>
-                        <Button
-                            onClick={() => setPublishVisible(false)}
-                            icon={XIcon}
-                            dark
-                        >
-                            Cancel
-                        </Button>
+                    <div className="flex justify-center space-x-12">
+                        {!loadingState ? (
+                            <>
+                                <Button
+                                    onClick={publish}
+                                    icon={UploadIcon}
+                                    dark
+                                >
+                                    Publish now
+                                </Button>
+                                <Button
+                                    onClick={() => setPublishVisible(false)}
+                                    icon={XIcon}
+                                    dark
+                                >
+                                    Cancel
+                                </Button>
+                            </>
+                        ) : (
+                            loadingState
+                        )}
                     </div>
                 </PageOverlay>
             )}
