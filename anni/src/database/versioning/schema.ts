@@ -146,7 +146,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     });
     // increment version number on change
     schema.pre(
-        /updateOne|findOneAndUpdate/,
+        /updateOne|findOneAndUpdate|findByIdAndUpdate/,
         async function (this: Query<void, VD>) {
             const doc = await this.model.findOne(this.getQuery());
             this.set('_v', doc._v + 1);
@@ -155,7 +155,7 @@ export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
     );
     // save change to history
     schema.post(
-        /updateOne|findOneAndUpdate/,
+        /updateOne|findOneAndUpdate|findByIdAndUpdate/,
         async function (this: Query<void, VD>) {
             const doc = await this.model.findOne(this.getQuery());
             await historyModel.saveVersion(doc);
