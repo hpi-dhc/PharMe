@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import Explanation from './Explanation';
+import Explanation from '../text/Explanation';
 
 const PageHeading = ({
     title,
