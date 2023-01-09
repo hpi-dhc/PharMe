@@ -14,9 +14,9 @@ describe('Abstract version control', () => {
     });
     const TestModel = makeModel();
 
-    const preSaveDate = new Date();
+    const preSaveDate = new Date().getTime();
     let initialDoc: IVersionedDoc<ITestDoc>;
-    let saveDate: Date;
+    let saveDate: number;
 
     beforeAll(async () => {
         await dbConnect();
@@ -26,7 +26,7 @@ describe('Abstract version control', () => {
         it('should find no documents in empty history', async () => {
             const docs = await TestModel.findVersionsInRange(
                 new Types.ObjectId(),
-                [new Date(), null],
+                [new Date().getTime(), null],
             );
             expect(docs.length).toEqual(0);
         });
@@ -36,7 +36,7 @@ describe('Abstract version control', () => {
         it('should save a document', async () => {
             const doc = await TestModel.create({ value: 1 });
             initialDoc = doc;
-            saveDate = new Date();
+            saveDate = new Date().getTime();
         });
     });
 
@@ -64,7 +64,7 @@ describe('Abstract version control', () => {
 
         it('should have correct version date range', async () => {
             const range = await initialDoc.dateRange();
-            expect(range[0].getDate()).toBeLessThanOrEqual(saveDate.getDate());
+            expect(range[0]).toBeLessThanOrEqual(saveDate);
             expect(range[1]).toBeNull();
         });
     });
@@ -122,7 +122,7 @@ describe('Abstract version control', () => {
         });
 
         it('should find only second version between <now> and <now>', async () => {
-            await expectDocsInRange([2], [new Date(), null]);
+            await expectDocsInRange([2], [new Date().getTime(), null]);
         });
     });
 });
