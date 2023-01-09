@@ -2,10 +2,10 @@ import mongoose, { Types } from 'mongoose';
 
 import { IBaseDoc, MongooseId, OptionalId } from '../helpers/types';
 import { IVersionedDoc, versionedModel } from '../versioning/schema';
-import { IDrug_Any } from './Drug';
+import { IDrug_Resolved } from './Drug';
 
 export interface IAppData<
-    DrugT extends MongooseId | IDrug_Any,
+    DrugT extends MongooseId | IDrug_Resolved,
     IdT extends OptionalId = undefined,
 > extends IBaseDoc<IdT> {
     drugs: DrugT[];
@@ -13,7 +13,7 @@ export interface IAppData<
 
 export type IAppData_DB = IAppData<Types.ObjectId, Types.ObjectId>;
 export type IAppData_Patch = Partial<
-    IAppData<MongooseId | IDrug_Any, undefined>
+    IAppData<MongooseId | IDrug_Resolved, undefined>
 >;
 
 const { schema, makeModel } = versionedModel<
