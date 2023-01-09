@@ -1,20 +1,16 @@
 import mongoose, { Types } from 'mongoose';
 
-import { IBaseDoc, MongooseId, OptionalId } from '../helpers/types';
+import { IBaseDoc, OptionalId } from '../helpers/types';
 import { IVersionedDoc, versionedModel } from '../versioning/schema';
 import { IDrug_Resolved } from './Drug';
 
-export interface IAppData<
-    DrugT extends MongooseId | IDrug_Resolved,
-    IdT extends OptionalId = undefined,
-> extends IBaseDoc<IdT> {
-    drugs: DrugT[];
+export interface IAppData<IdT extends OptionalId = undefined>
+    extends IBaseDoc<IdT> {
+    drugs: IDrug_Resolved[];
 }
 
-export type IAppData_DB = IAppData<Types.ObjectId, Types.ObjectId>;
-export type IAppData_Patch = Partial<
-    IAppData<MongooseId | IDrug_Resolved, undefined>
->;
+export type IAppData_DB = IAppData<Types.ObjectId>;
+export type IAppData_Patch = Partial<IAppData<undefined>>;
 
 const { schema, makeModel } = versionedModel<
     IAppData_DB,
@@ -23,23 +19,18 @@ const { schema, makeModel } = versionedModel<
         getVersion: () => Promise<number | null>;
         publish: (data: IAppData_Patch) => Promise<IVersionedDoc<IAppData_DB>>;
     }
->('AppData', {
-    drugs: {
-        type: [{ type: Types.ObjectId, ref: 'Drug' }],
-        required: true,
-    },
-});
+>('AppData', { drugs: { type: [{ type: Object }], required: true } });
 
 schema.statics.getCurrent = async function (
     this: ReturnType<typeof makeModel>,
 ) {
-    return this.findOne();
+    return this.findOne().populate('drugs').lean();
 };
 
 schema.statics.getVersion = async function (
     this: ReturnType<typeof makeModel>,
 ) {
-    const current = await this.findOne();
+    const current = await this.findOne().lean();
     return current?._v ?? null;
 };
 
