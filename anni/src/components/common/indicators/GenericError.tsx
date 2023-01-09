@@ -7,8 +7,9 @@ function GenericError() {
         <div>
             <div className="flex justify-center">
                 <WithIcon icon={EmojiSadIcon}>
-                    There has been a server error! If the problem persists,
-                    please contact a developer for help.
+                    There has been a server error! Please refresh this page and
+                    try again. Should the problem persists, please contact a
+                    developer for help.
                 </WithIcon>
             </div>
         </div>
