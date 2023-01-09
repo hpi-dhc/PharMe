@@ -30,8 +30,10 @@ const { schema, makeModel } = versionedModel<
     },
 });
 
-schema.statics.getCurrent = function (this: ReturnType<typeof makeModel>) {
-    return this.findOne() ?? null;
+schema.statics.getCurrent = async function (
+    this: ReturnType<typeof makeModel>,
+) {
+    return this.findOne();
 };
 
 schema.statics.getVersion = async function (
@@ -53,4 +55,5 @@ schema.statics.publish = async function (
     }
 };
 
+/* istanbul ignore next */
 export default !mongoose.models ? undefined : makeModel();
