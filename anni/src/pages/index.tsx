@@ -1,59 +1,20 @@
-import {
-    CheckIcon,
-    ExclamationIcon,
-    UploadIcon,
-    XIcon,
-} from '@heroicons/react/solid';
-import axios from 'axios';
+import { CheckIcon, ExclamationIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import { useSwrFetcher } from '../common/react-helpers';
 import WithIcon from '../components/common/WithIcon';
 import GenericError from '../components/common/indicators/GenericError';
 import LoadingSpinner from '../components/common/indicators/LoadingSpinner';
-import Button from '../components/common/interaction/Button';
 import PageHeading from '../components/common/structure/PageHeading';
-import PageOverlay from '../components/common/structure/PageOverlay';
 import Emphasis from '../components/common/text/Emphasis';
 import Explanation from '../components/common/text/Explanation';
+import PublishButton from '../components/home/PublishButton';
 import { GetPublishStatusReponse } from './api/publish';
 
 const Home = () => {
-    const [publishVisible, setPublishVisible] = useState(false);
     const { data: response, error } =
         useSwrFetcher<GetPublishStatusReponse>('/api/publish');
     const publishingError = response?.data.data.errorMessage;
-
-    const [loadingState, setLoadingState] = useState<JSX.Element | null>(null);
-    const publish = async () => {
-        setLoadingState(null);
-        try {
-            setLoadingState(
-                <div className="space-y-2">
-                    <LoadingSpinner dark />
-                    <p>Publishing data ...</p>
-                </div>,
-            );
-            await axios.post('/api/publish');
-            setLoadingState(
-                <>
-                    <WithIcon icon={CheckIcon}>Success</WithIcon>
-                    <Button
-                        onClick={() => {
-                            setPublishVisible(false);
-                            setLoadingState(null);
-                        }}
-                        dark
-                    >
-                        Done
-                    </Button>
-                </>,
-            );
-        } catch {
-            setLoadingState(<GenericError />);
-        }
-    };
 
     return (
         <div className="space-y-4">
@@ -96,13 +57,7 @@ const Home = () => {
                                 <WithIcon icon={CheckIcon} as="p">
                                     Ready to publish.
                                 </WithIcon>
-                                <Button
-                                    icon={UploadIcon}
-                                    onClick={() => setPublishVisible(true)}
-                                    reverse
-                                >
-                                    Publish
-                                </Button>
+                                <PublishButton />
                             </>
                         )
                     ) : error ? (
@@ -112,36 +67,6 @@ const Home = () => {
                     )}
                 </div>
             </div>
-            {publishVisible && (
-                <PageOverlay
-                    hide={() => !loadingState && setPublishVisible(false)}
-                    heading="Publish data"
-                    explanation="Are you sure? This action will have an immediate effect on users and cannot be directly undone."
-                >
-                    <div className="flex justify-center space-x-12">
-                        {!loadingState ? (
-                            <>
-                                <Button
-                                    onClick={publish}
-                                    icon={UploadIcon}
-                                    dark
-                                >
-                                    Publish now
-                                </Button>
-                                <Button
-                                    onClick={() => setPublishVisible(false)}
-                                    icon={XIcon}
-                                    dark
-                                >
-                                    Cancel
-                                </Button>
-                            </>
-                        ) : (
-                            loadingState
-                        )}
-                    </div>
-                </PageOverlay>
-            )}
         </div>
     );
 };
