@@ -9,9 +9,18 @@ interface ITestDoc extends IBaseDoc<Types.ObjectId> {
 }
 
 describe('Abstract version control', () => {
-    const { makeModel } = versionedModel<ITestDoc>('TestModel', {
+    const testModelName = 'TestModel';
+    const { schema, makeModel } = versionedModel<
+        ITestDoc,
+        {
+            shouldBeTrue(): () => boolean;
+        }
+    >(testModelName, {
         value: { type: Number, required: true },
     });
+    schema.statics.shouldBeTrue = function (this: typeof TestModel) {
+        return this.name === testModelName;
+    };
     const TestModel = makeModel();
 
     const preSaveDate = new Date().getTime();
@@ -20,6 +29,12 @@ describe('Abstract version control', () => {
 
     beforeAll(async () => {
         await dbConnect();
+    });
+
+    describe('Model', () => {
+        it('should run static method on model', () => {
+            expect(TestModel.shouldBeTrue).toBeTruthy();
+        });
     });
 
     describe('Empty history', () => {

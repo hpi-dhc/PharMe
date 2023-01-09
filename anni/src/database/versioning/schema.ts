@@ -35,14 +35,14 @@ export type VersionedModel<DocT, HDocT> = Model<DocT> & {
 };
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-export function versionedModel<DocT extends IBaseDoc<Types.ObjectId>>(
-    modelName: string,
-    definition: SchemaDefinition<SchemaDefinitionType<DocT>>,
-) {
+export function versionedModel<
+    DocT extends IBaseDoc<Types.ObjectId>,
+    Statics extends object = Record<string, never>,
+>(modelName: string, definition: SchemaDefinition<SchemaDefinitionType<DocT>>) {
     // type definitions ---------------------------------------------------------
     type VD = IVersionedDoc<DocT>;
     type VHD = IVersionHistoryDoc<DocT>;
-    type VM = VersionedModel<VD, VHD>;
+    type VM = VersionedModel<VD, VHD> & Statics;
     type VHM = Model<VHD> & {
         saveVersion(document: VD): Promise<void>;
     };
