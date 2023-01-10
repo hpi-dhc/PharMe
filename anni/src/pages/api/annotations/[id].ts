@@ -34,9 +34,12 @@ const api: NextApiHandler = async (req, res) =>
                 throw new ApiError(400, 'Unknown Annotation type');
             }
             await (model as any)
-                .findByIdAndUpdate(id, {
-                    [`annotations.${key}`]: newValue,
-                })
+                .findByIdAndUpdate(
+                    id,
+                    newValue === null
+                        ? { $unset: { [`annotations.${key}`]: 1 } }
+                        : { $set: { [`annotations.${key}`]: newValue } },
+                )
                 .orFail();
             return { successStatus: 200 };
         },
