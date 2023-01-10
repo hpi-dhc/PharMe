@@ -46,9 +46,9 @@ const Home = () => {
                     </p>
                 </Explanation>
                 <h3 className="font-bold">Current status</h3>
-                <div className="flex justify-between items-center">
-                    {response ? (
-                        publishingError ? (
+                {response ? (
+                    <div className="flex justify-between items-center">
+                        {publishingError ? (
                             <WithIcon icon={ExclamationIcon} as="p">
                                 {publishingError}
                             </WithIcon>
@@ -59,13 +59,13 @@ const Home = () => {
                                 </WithIcon>
                                 <PublishButton />
                             </>
-                        )
-                    ) : error ? (
-                        <GenericError />
-                    ) : (
-                        <LoadingSpinner />
-                    )}
-                </div>
+                        )}
+                    </div>
+                ) : error ? (
+                    <GenericError />
+                ) : (
+                    <LoadingSpinner />
+                )}
             </div>
         </div>
     );
