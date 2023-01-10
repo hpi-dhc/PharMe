@@ -7,11 +7,11 @@ import 'sub_header.dart';
 
 class RecommendationCard extends StatelessWidget {
   const RecommendationCard(
-    this.medication, {
+    this.drug, {
     required this.context,
   });
 
-  final MedicationWithGuidelines medication;
+  final DrugWithGuidelines drug;
   final BuildContext context;
 
   @override
@@ -21,8 +21,8 @@ class RecommendationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color: medication.guidelines[0].warningLevel?.color ??
-          WarningLevel.warning.color,
+      color:
+          drug.guidelines[0].warningLevel?.color ?? WarningLevel.warning.color,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(children: [
@@ -30,19 +30,18 @@ class RecommendationCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SubHeader(
-                context.l10n.medications_page_header_recommendation,
+                context.l10n.drugs_page_header_recommendation,
               ),
               Icon(
-                medication.guidelines[0].warningLevel?.icon ??
-                    Icons.warning_rounded,
+                drug.guidelines[0].warningLevel?.icon ?? Icons.warning_rounded,
                 size: 32,
               ),
             ],
           ),
           SizedBox(height: 4),
           Text(
-            medication.guidelines[0].recommendation ??
-                medication.guidelines[0].cpicRecommendation!,
+            drug.guidelines[0].recommendation ??
+                drug.guidelines[0].cpicRecommendation!,
             style: PharMeTheme.textTheme.bodyLarge,
           ),
         ]),

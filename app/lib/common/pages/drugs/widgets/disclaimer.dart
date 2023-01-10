@@ -24,7 +24,7 @@ class Disclaimer extends StatelessWidget {
         SizedBox(width: 8),
         Flexible(
           child: Text(
-            context.l10n.medications_page_disclaimer,
+            context.l10n.drugs_page_disclaimer,
             style: PharMeTheme.textTheme.labelMedium!.copyWith(
               fontWeight: FontWeight.w100,
             ),

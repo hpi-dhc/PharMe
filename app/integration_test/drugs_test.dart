@@ -1,7 +1,7 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'package:app/common/module.dart';
-import 'package:app/common/pages/medications/widgets/module.dart';
+import 'package:app/common/pages/drugs/widgets/module.dart';
 import 'package:app/search/module.dart';
 import 'package:bloc_test/bloc_test.dart';
 
@@ -10,16 +10,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockMedicationsCubit extends MockCubit<MedicationsState>
-    implements MedicationsCubit {}
+class MockDrugsCubit extends MockCubit<DrugsState> implements DrugsCubit {}
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  final mockMedicationsCubit = MockMedicationsCubit();
+  final mockDrugsCubit = MockDrugsCubit();
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
 
-  final testMedication = MedicationWithGuidelines(
+  final testDrug = DrugWithGuidelines(
     id: 1,
     name: 'Codeine',
     drugclass: 'Pain killer',
@@ -28,9 +27,9 @@ void main() {
       Guideline(
         id: 1,
         warningLevel: WarningLevel.danger,
-        recommendation: 'Dont take too much from this medication',
+        recommendation: 'Dont take too much from this drug',
         implication:
-            'Because of your gene, you cannot digest this medication so well',
+            'Because of your gene, you cannot digest this drug so well',
         cpicGuidelineUrl: 'some url',
         cpicClassification: 'strong',
         phenotype: Phenotype(
@@ -41,19 +40,17 @@ void main() {
       )
     ],
   );
-  final testMedicationWithoutGuidelines =
-      MedicationWithGuidelines(id: 2, name: 'Acetaminophen', guidelines: []);
+  final testDrugWithoutGuidelines =
+      DrugWithGuidelines(id: 2, name: 'Acetaminophen', guidelines: []);
   UserData.instance.starredMediationIds = [2];
 
-  group('integration test for the medications page', () {
+  group('integration test for the drugs page', () {
     testWidgets('test loading', (tester) async {
-      when(() => mockMedicationsCubit.state)
-          .thenReturn(MedicationsState.loading());
+      when(() => mockDrugsCubit.state).thenReturn(DrugsState.loading());
 
       await tester.pumpWidget(
         MaterialApp(
-          home: MedicationPage(testMedication.id, testMedication.name,
-              cubit: mockMedicationsCubit),
+          home: DrugPage(testDrug.id, testDrug.name, cubit: mockDrugsCubit),
           localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -68,8 +65,8 @@ void main() {
     });
 
     testWidgets('test error state', (tester) async {
-      when(() => mockMedicationsCubit.state).thenReturn(
-        MedicationsState.error(),
+      when(() => mockDrugsCubit.state).thenReturn(
+        DrugsState.error(),
       );
 
       await tester.pumpWidget(
@@ -77,8 +74,8 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return MedicationPage(testMedication.id, testMedication.name,
-                    cubit: mockMedicationsCubit);
+                return DrugPage(testDrug.id, testDrug.name,
+                    cubit: mockDrugsCubit);
               },
             ),
           ),
@@ -98,8 +95,8 @@ void main() {
     });
 
     testWidgets('test loaded page', (tester) async {
-      when(() => mockMedicationsCubit.state).thenReturn(
-          MedicationsState.loaded(testMedication, isStarred: false));
+      when(() => mockDrugsCubit.state)
+          .thenReturn(DrugsState.loaded(testDrug, isStarred: false));
 
       late BuildContext context;
 
@@ -108,8 +105,8 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return MedicationPage(testMedication.id, testMedication.name,
-                    cubit: mockMedicationsCubit);
+                return DrugPage(testDrug.id, testDrug.name,
+                    cubit: mockDrugsCubit);
               },
             ),
           ),
@@ -123,26 +120,26 @@ void main() {
         ),
       );
 
-      expect(find.text(testMedication.name), findsOneWidget);
-      expect(find.text(testMedication.drugclass as String), findsOneWidget);
-      expect(find.text(testMedication.indication as String), findsOneWidget);
+      expect(find.text(testDrug.name), findsOneWidget);
+      expect(find.text(testDrug.drugclass as String), findsOneWidget);
+      expect(find.text(testDrug.indication as String), findsOneWidget);
       expect(
         find.text(
-          testMedication.guidelines.first.cpicClassification!.toUpperCase(),
+          testDrug.guidelines.first.cpicClassification!.toUpperCase(),
         ),
         findsOneWidget,
       );
       expect(
-        find.text(testMedication.guidelines.first.recommendation as String),
+        find.text(testDrug.guidelines.first.recommendation as String),
         findsOneWidget,
       );
       expect(
-        find.text(testMedication.guidelines.first.implication as String),
+        find.text(testDrug.guidelines.first.implication as String),
         findsOneWidget,
       );
       expect(
         find.textContaining(
-          testMedication.guidelines.first.phenotype.geneSymbol.name,
+          testDrug.guidelines.first.phenotype.geneSymbol.name,
         ),
         findsOneWidget,
       );
@@ -157,35 +154,34 @@ void main() {
       );
       expect(
         card.color,
-        testMedication.guidelines.first.warningLevel?.color,
+        testDrug.guidelines.first.warningLevel?.color,
       );
 
       context = tester.element(find.byType(Tooltip).first);
       // test tooltips
       expect(
-        find.byTooltip(context.l10n.medications_page_tooltip_classification),
+        find.byTooltip(context.l10n.drugs_page_tooltip_classification),
         findsOneWidget,
       );
 
       expect(
-        find.byTooltip(context.l10n.medications_page_tooltip_further_info),
+        find.byTooltip(context.l10n.drugs_page_tooltip_further_info),
         findsOneWidget,
       );
     });
 
     testWidgets('test loaded page without guidelines', (tester) async {
-      when(() => mockMedicationsCubit.state).thenReturn(MedicationsState.loaded(
-          testMedicationWithoutGuidelines,
-          isStarred: true));
+      when(() => mockDrugsCubit.state).thenReturn(
+          DrugsState.loaded(testDrugWithoutGuidelines, isStarred: true));
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return MedicationPage(testMedicationWithoutGuidelines.id,
-                    testMedicationWithoutGuidelines.name,
-                    cubit: mockMedicationsCubit);
+                return DrugPage(testDrugWithoutGuidelines.id,
+                    testDrugWithoutGuidelines.name,
+                    cubit: mockDrugsCubit);
               },
             ),
           ),
@@ -199,7 +195,7 @@ void main() {
         ),
       );
 
-      expect(find.text(testMedicationWithoutGuidelines.name), findsOneWidget);
+      expect(find.text(testDrugWithoutGuidelines.name), findsOneWidget);
       expect(find.byType(Disclaimer), findsNothing);
     });
   });

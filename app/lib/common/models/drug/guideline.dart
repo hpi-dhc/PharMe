@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-import '../../../common/module.dart';
+import '../../module.dart';
 part 'guideline.g.dart';
 
 @HiveType(typeId: 9)

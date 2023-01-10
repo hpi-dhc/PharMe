@@ -11,8 +11,8 @@ import '../../widgets/module.dart';
 import 'cubit.dart';
 import 'widgets/module.dart';
 
-class MedicationPage extends StatelessWidget {
-  const MedicationPage(
+class DrugPage extends StatelessWidget {
+  const DrugPage(
     this.id,
     this.name, {
     @visibleForTesting this.cubit,
@@ -20,13 +20,13 @@ class MedicationPage extends StatelessWidget {
 
   final int id;
   final String name;
-  final MedicationsCubit? cubit;
+  final DrugsCubit? cubit;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => cubit ?? MedicationsCubit(id),
-      child: BlocBuilder<MedicationsCubit, MedicationsState>(
+      create: (context) => cubit ?? DrugsCubit(id),
+      child: BlocBuilder<DrugsCubit, DrugsState>(
         builder: (context, state) {
           return state.when(
             initial: () => pageScaffold(title: name, body: []),
@@ -34,23 +34,21 @@ class MedicationPage extends StatelessWidget {
                 title: name, body: [errorIndicator(context.l10n.err_generic)]),
             loading: () =>
                 pageScaffold(title: name, body: [loadingIndicator()]),
-            loaded: (medication, isStarred) =>
-                pageScaffold(title: medication.name, actions: [
+            loaded: (drug, isStarred) =>
+                pageScaffold(title: drug.name, actions: [
               IconButton(
-                onPressed: () =>
-                    context.read<MedicationsCubit>().toggleStarred(),
+                onPressed: () => context.read<DrugsCubit>().toggleStarred(),
                 icon: PharMeTheme.starIcon(isStarred: isStarred),
               ),
               IconButton(
-                onPressed: () => sharePdf(medication),
+                onPressed: () => sharePdf(drug),
                 icon: Icon(
                   Icons.ios_share_rounded,
                   color: PharMeTheme.primaryColor,
                 ),
               )
             ], body: [
-              _buildMedicationsPage(medication,
-                  isStarred: isStarred, context: context)
+              _buildDrugsPage(drug, isStarred: isStarred, context: context)
             ]),
           );
         },
@@ -58,8 +56,8 @@ class MedicationPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMedicationsPage(
-    MedicationWithGuidelines medication, {
+  Widget _buildDrugsPage(
+    DrugWithGuidelines drug, {
     required bool isStarred,
     required BuildContext context,
   }) {
@@ -68,33 +66,30 @@ class MedicationPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(medication, isStarred: isStarred, context: context),
+            _buildHeader(drug, isStarred: isStarred, context: context),
             SizedBox(height: 20),
             SubHeader(
-              context.l10n.medications_page_header_guideline,
-              tooltip: context.l10n.medications_page_tooltip_guideline,
+              context.l10n.drugs_page_header_guideline,
+              tooltip: context.l10n.drugs_page_tooltip_guideline,
             ),
             SizedBox(height: 12),
-            ...(medication.guidelines.isNotEmpty)
+            ...(drug.guidelines.isNotEmpty)
                 ? [
                     Disclaimer(),
                     SizedBox(height: 12),
-                    ClinicalAnnotationCard(medication)
+                    ClinicalAnnotationCard(drug)
                   ]
-                : [
-                    Text(context
-                        .l10n.medications_page_no_guidelines_for_phenotype)
-                  ]
+                : [Text(context.l10n.drugs_page_no_guidelines_for_phenotype)]
           ],
         ));
   }
 
-  Widget _buildHeader(MedicationWithGuidelines medication,
+  Widget _buildHeader(DrugWithGuidelines drug,
       {required bool isStarred, required BuildContext context}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (medication.drugclass != null)
+        if (drug.drugclass != null)
           Container(
             padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
@@ -102,16 +97,16 @@ class MedicationPage extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(6)),
             ),
             child: Text(
-              medication.drugclass!,
+              drug.drugclass!,
               style: PharMeTheme.textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.w100,
               ),
             ),
           ),
-        if (medication.indication != null)
+        if (drug.indication != null)
           Container(
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-            child: Text(medication.indication!),
+            child: Text(drug.indication!),
           )
       ],
     );

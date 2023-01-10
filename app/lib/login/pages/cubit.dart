@@ -46,7 +46,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       // get data
       await fetchAndSaveDiplotypes(token, lab.starAllelesUrl.toString());
       await fetchAndSaveLookups();
-      await starCriticalMedications();
+      await starCriticalDrugs();
 
       // login + fetching of data successful
       MetaData.instance.isLoggedIn = true;

@@ -12,9 +12,9 @@ import 'sub_header.dart';
 import 'tooltip_icon.dart';
 
 class ClinicalAnnotationCard extends StatelessWidget {
-  const ClinicalAnnotationCard(this.medication);
+  const ClinicalAnnotationCard(this.drug);
 
-  final MedicationWithGuidelines medication;
+  final DrugWithGuidelines drug;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +24,15 @@ class ClinicalAnnotationCard extends StatelessWidget {
         child: Column(children: [
           _buildHeader(context),
           SizedBox(height: 16),
-          if (medication.guidelines[0].implication.isNotNullOrBlank ||
-              medication.guidelines[0].cpicImplication.isNotNullOrBlank) ...[
+          if (drug.guidelines[0].implication.isNotNullOrBlank ||
+              drug.guidelines[0].cpicImplication.isNotNullOrBlank) ...[
             _buildImplicationInfo(context),
             SizedBox(height: 16),
           ],
-          if (medication.guidelines[0].recommendation.isNotNullOrBlank ||
-              medication.guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
+          if (drug.guidelines[0].recommendation.isNotNullOrBlank ||
+              drug.guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
             RecommendationCard(
-              medication,
+              drug,
               context: context,
             ),
             SizedBox(height: 16),
@@ -51,8 +51,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
       SizedBox(width: 24),
       Flexible(
         child: Text(
-          medication.guidelines[0].implication ??
-              medication.guidelines[0].cpicImplication!,
+          drug.guidelines[0].implication ?? drug.guidelines[0].cpicImplication!,
           style: PharMeTheme.textTheme.bodySmall,
         ),
       )
@@ -64,18 +63,18 @@ class ClinicalAnnotationCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          context.l10n.medications_page_gene_name(
-            medication.guidelines[0].phenotype.geneSymbol.name,
+          context.l10n.drugs_page_gene_name(
+            drug.guidelines[0].phenotype.geneSymbol.name,
           ),
           style: PharMeTheme.textTheme.bodyLarge!,
         ),
         Row(children: [
           Text(
-            medication.guidelines[0].cpicClassification!.toUpperCase(),
+            drug.guidelines[0].cpicClassification!.toUpperCase(),
             style: PharMeTheme.textTheme.bodyLarge!,
           ),
           SizedBox(width: 6),
-          TooltipIcon(context.l10n.medications_page_tooltip_classification),
+          TooltipIcon(context.l10n.drugs_page_tooltip_classification),
         ]),
       ],
     );
@@ -84,24 +83,23 @@ class ClinicalAnnotationCard extends StatelessWidget {
   Widget _buildSourcesSection(BuildContext context) {
     return Column(children: [
       SubHeader(
-        context.l10n.medications_page_header_further_info,
-        tooltip: context.l10n.medications_page_tooltip_further_info,
+        context.l10n.drugs_page_header_further_info,
+        tooltip: context.l10n.drugs_page_tooltip_further_info,
       ),
-      if (medication.pharmgkbId.isNotNullOrBlank) ...[
+      if (drug.pharmgkbId.isNotNullOrBlank) ...[
         SizedBox(height: 8),
         SourceCard(
-          name: context.l10n.medications_page_sources_pharmGkb_name,
-          description:
-              context.l10n.medications_page_sources_pharmGkb_description,
-          onTap: () => _launchPharmGkbUrl(medication.pharmgkbId),
+          name: context.l10n.drugs_page_sources_pharmGkb_name,
+          description: context.l10n.drugs_page_sources_pharmGkb_description,
+          onTap: () => _launchPharmGkbUrl(drug.pharmgkbId),
         ),
       ],
       SizedBox(height: 8),
       SourceCard(
-        name: context.l10n.medications_page_sources_cpic_name,
-        description: context.l10n.medications_page_sources_cpic_description,
+        name: context.l10n.drugs_page_sources_cpic_name,
+        description: context.l10n.drugs_page_sources_cpic_description,
         onTap: () => _launchUrl(
-          Uri.parse(medication.guidelines[0].cpicGuidelineUrl),
+          Uri.parse(drug.guidelines[0].cpicGuidelineUrl),
         ),
       ),
     ]);
