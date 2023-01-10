@@ -48,7 +48,7 @@ class MainPage extends StatelessWidget {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: Icon(Icons.medication_rounded),
-        label: context.l10n.nav_medications,
+        label: context.l10n.nav_drugs,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.lightbulb_rounded),

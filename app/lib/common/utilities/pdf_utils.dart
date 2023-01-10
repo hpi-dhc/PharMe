@@ -8,33 +8,33 @@ import 'package:pdf/widgets.dart';
 
 import '../module.dart';
 
-Future<String> createPdf(MedicationWithGuidelines medication) async {
+Future<String> createPdf(DrugWithGuidelines drug) async {
   final pdf = pw.Document();
   pdf.addPage(
     pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
-      build: (context) => [buildPdfPage(context, medication)],
+      build: (context) => [buildPdfPage(context, drug)],
     ),
   );
   final dir = Platform.isAndroid
       ? await getExternalStorageDirectory()
       : await getApplicationDocumentsDirectory();
 
-  final file = File('${dir!.path}/${medication.name}.pdf');
+  final file = File('${dir!.path}/${drug.name}.pdf');
   await file.writeAsBytes(await pdf.save());
   return file.path;
 }
 
-Future<void> sharePdf(MedicationWithGuidelines medication) async {
-  final path = await createPdf(medication);
-  await FlutterShare.shareFile(title: medication.name, filePath: path);
+Future<void> sharePdf(DrugWithGuidelines drug) async {
+  final path = await createPdf(drug);
+  await FlutterShare.shareFile(title: drug.name, filePath: path);
 }
 
 pw.Widget buildPdfPage(
   pw.Context context,
-  MedicationWithGuidelines medication,
+  DrugWithGuidelines drug,
 ) {
-  final relevantGuidelines = medication.filterUserGuidelines().guidelines;
+  final relevantGuidelines = drug.filterUserGuidelines().guidelines;
   return pw.Wrap(
     children: [
       _PdfSegment(
@@ -50,24 +50,24 @@ pw.Widget buildPdfPage(
       pw.SizedBox(height: 20, width: double.infinity),
       _PdfSegment(
         child: pw.Text(
-          medication.name,
+          drug.name,
           style: pw.TextStyle(fontSize: 26),
         ),
       ),
-      if (medication.drugclass.isNotNullOrBlank) ...[
+      if (drug.drugclass.isNotNullOrBlank) ...[
         pw.SizedBox(height: 8, width: double.infinity),
         _PdfSegment(
           child: pw.Text(
-            medication.drugclass!,
+            drug.drugclass!,
             style: pw.TextStyle(fontSize: 16),
           ),
         ),
       ],
-      if (medication.description.isNotNullOrBlank) ...[
+      if (drug.description.isNotNullOrBlank) ...[
         pw.SizedBox(height: 8, width: double.infinity),
         _PdfSegment(
           child: pw.Text(
-            medication.description!,
+            drug.description!,
             style: pw.TextStyle(fontSize: 12),
           ),
         )

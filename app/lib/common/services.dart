@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'models/medication/cached_medications.dart';
+import 'models/drug/cached_drugs.dart';
 import 'models/module.dart';
 
 Future<void> initServices() async {
@@ -8,12 +8,12 @@ Future<void> initServices() async {
 
   await initMetaData();
   await initUserData();
-  await initCachedMedications();
+  await initCachedDrugs();
 }
 
 Future<void> cleanupServices() async {
   await MetaData.save();
   await UserData.save();
 
-  await CachedMedications.save();
+  await CachedDrugs.save();
 }

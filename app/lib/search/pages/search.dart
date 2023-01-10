@@ -20,13 +20,13 @@ class SearchPage extends HookWidget {
         create: (context) => cubit ?? SearchCubit(),
         child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
           return pageScaffold(
-              title: context.l10n.tab_medications,
+              title: context.l10n.tab_drugs,
               barBottom: Row(children: [
                 Expanded(
                     child: CupertinoSearchTextField(
                   controller: searchController,
                   onChanged: (value) {
-                    context.read<SearchCubit>().loadMedications(value);
+                    context.read<SearchCubit>().loadDrugs(value);
                   },
                 )),
                 IconButton(
@@ -42,25 +42,24 @@ class SearchPage extends HookWidget {
               body: state.when(
                 initial: (_) => [Container()],
                 error: (_) => [errorIndicator(context.l10n.err_generic)],
-                loaded: (medications, _) =>
-                    _buildMedicationsList(context, medications),
+                loaded: (drugs, _) => _buildDrugsList(context, drugs),
                 loading: (_) => [loadingIndicator()],
               ));
         }));
   }
 
-  List<Widget> _buildMedicationsList(
-      BuildContext context, List<MedicationWithGuidelines> medications) {
+  List<Widget> _buildDrugsList(
+      BuildContext context, List<DrugWithGuidelines> drugs) {
     return [
       SizedBox(height: 8),
-      ...medications.map((medication) => Column(children: [
+      ...drugs.map((drug) => Column(children: [
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
-                child: MedicationCard(
+                child: DrugCard(
                     onTap: () {
                       ComprehensionHelper.instance.attach(
-                        context.router.push(MedicationRoute(
-                            id: medication.id, name: medication.name)),
+                        context.router
+                            .push(DrugRoute(id: drug.id, name: drug.name)),
                         context: context,
                         surveyId: 4,
                         introText: context.l10n.comprehension_intro_text,
@@ -69,25 +68,25 @@ class SearchPage extends HookWidget {
                         supabaseConfig: supabaseConfig,
                       );
                     },
-                    medication: medication)),
+                    drug: drug)),
             SizedBox(height: 8)
           ]))
     ];
   }
 }
 
-class MedicationCard extends StatelessWidget {
-  const MedicationCard({
+class DrugCard extends StatelessWidget {
+  const DrugCard({
     required this.onTap,
-    required this.medication,
+    required this.drug,
   });
 
   final VoidCallback onTap;
-  final MedicationWithGuidelines medication;
+  final DrugWithGuidelines drug;
 
   @override
   Widget build(BuildContext context) {
-    final warningLevel = medication.highestWarningLevel();
+    final warningLevel = drug.highestWarningLevel();
 
     return GestureDetector(
       onTap: onTap,
@@ -112,14 +111,14 @@ class MedicationCard extends StatelessWidget {
                         SizedBox(width: 12)
                       ],
                       Text(
-                        medication.name,
+                        drug.name,
                         style: PharMeTheme.textTheme.titleMedium,
                       ),
                     ]),
-                    if (medication.indication.isNotNullOrBlank) ...[
+                    if (drug.indication.isNotNullOrBlank) ...[
                       SizedBox(height: 12),
                       Text(
-                        medication.indication!,
+                        drug.indication!,
                         style: PharMeTheme.textTheme.titleSmall,
                       ),
                     ]

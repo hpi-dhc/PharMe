@@ -12,28 +12,28 @@ final List<Question> faqList = [
   Question(
     question: 'What is Pharmacogenomics?',
     answer:
-        'Pharmacogenomics (PGx) is the study of how your genetics (DNA) affect your response to medications.',
+        'Pharmacogenomics (PGx) is the study of how your genetics (DNA) affect your response to drugs.',
   ),
   Question(
     question: 'Why is Pharmacogenomics important?',
     answer:
-        'Pharmacogenomics is important, because we can predict those who will respond well to medications and those who may have side effects. With this information we can select the right medication and dose to avoid the unwanted responses.',
+        'Pharmacogenomics is important, because we can predict those who will respond well to drugs and those who may have side effects. With this information we can select the right drug and dose to avoid the unwanted responses.',
   ),
   Question(
-    question: 'Which medications are affected?',
+    question: 'Which drugs are affected?',
     answer:
-        'Examples of affected medication classes include blood thinners, antidepressants, anti-cholesterol medications, acid reducers, pain killers, antifungals, medications that suppress the immune system, anti-cancer medications and medications that are used in ADHD treatment. You can find out whether a certain medication is affected in our Search.',
+        'Examples of affected drug classes include blood thinners, antidepressants, anti-cholesterol drugs, acid reducers, pain killers, antifungals, drugs that suppress the immune system, anti-cancer drugs and drugs that are used in ADHD treatment. You can find out whether a certain drug is affected in our Search.',
   ),
   Question(
     question: 'What does PharMe do?',
     answer:
-        'PharMe provides insights into the way your body reacts to medications based on your genes. This enables you to better avoid medications that are ineffective for you or have potential side effects.',
+        'PharMe provides insights into the way your body reacts to drugs based on your genes. This enables you to better avoid drugs that are ineffective for you or have potential side effects.',
   ),
   Question(
     question:
         'Can I use PharMe\'s results without consulting a medical professional?',
     answer:
-        'No. Whether a medication is a good choice for you relies on a lot of other factors such as age, weight, or pre-existing condition. Please make sure to talk to your doctor before taking, stopping or adjusting any medication.',
+        'No. Whether a drug is a good choice for you relies on a lot of other factors such as age, weight, or pre-existing condition. Please make sure to talk to your doctor before taking, stopping or adjusting any drug.',
   ),
   Question(
     question: 'Will my results affect my family members?',
@@ -48,7 +48,7 @@ final List<Question> faqList = [
   Question(
     question: 'Where does PharMe get its data?',
     answer:
-        'PharMe is showing pharmacogenomic guidelines from the Clinical Pharmacogenetics Implementation Consortium (CPIC) and retrieves medication information from DrugBank. CPIC creates, curates, and posts freely available, peer-reviewed and evidence-based gene/medication clinical practice guidelines. DrugBank is a database containing information on medication and medication targets.',
+        'PharMe is showing pharmacogenomic guidelines from the Clinical Pharmacogenetics Implementation Consortium (CPIC) and retrieves drug information from DrugBank. CPIC creates, curates, and posts freely available, peer-reviewed and evidence-based gene/drug clinical practice guidelines. DrugBank is a database containing information on drug and drug targets.',
   ),
   Question(
     question: 'How is the security of my personal data ensured?',

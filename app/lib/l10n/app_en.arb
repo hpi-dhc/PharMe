@@ -14,9 +14,9 @@
   "general_continue": "Continue",
   "general_retry": "Retry",
   
-  "medications_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
-  "medications_page_gene_name": "Gene: {geneName}",
-  "@medications_page_gene_name": {
+  "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
+  "drugs_page_gene_name": "Gene: {geneName}",
+  "@drugs_page_gene_name": {
     "description": "Name of the Gene.",
     "placeholders": {
       "geneName": {
@@ -25,20 +25,20 @@
       }
     }
   },
-  "medications_page_header_further_info": "Further Information",
-  "medications_page_header_guideline": "Clinical Guideline",
-  "medications_page_header_recommendation": "Recommendation",
-  "medications_page_no_guidelines_for_phenotype": "We couldn't find a guideline matching your genetics.",
-  "medications_page_sources_cpic_name": "CPIC",
-  "medications_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
-  "medications_page_sources_pharmGkb_name": "PharmGKB",
-  "medications_page_sources_pharmGkb_description": "Curated pharmacogenetic studies for this drug-gene reaction",
-  "medications_page_tooltip_classification": "The evidence level of a guideline represents how accepted it is by science. Guidelines with a lot of good studies supporting them have a high evidence level.",
-  "medications_page_tooltip_further_info": "The results shown here are based on data from pharmacogenomic organizations like CPIC or PharmGKB. Check them out yourself by clicking on the buttons below! Also see the PGx-Tab for more information.",
-  "medications_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a medication.",
+  "drugs_page_header_further_info": "Further Information",
+  "drugs_page_header_guideline": "Clinical Guideline",
+  "drugs_page_header_recommendation": "Recommendation",
+  "drugs_page_no_guidelines_for_phenotype": "We couldn't find a guideline matching your genetics.",
+  "drugs_page_sources_cpic_name": "CPIC",
+  "drugs_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
+  "drugs_page_sources_pharmGkb_name": "PharmGKB",
+  "drugs_page_sources_pharmGkb_description": "Curated pharmacogenetic studies for this drug-gene reaction",
+  "drugs_page_tooltip_classification": "The evidence level of a guideline represents how accepted it is by science. Guidelines with a lot of good studies supporting them have a high evidence level.",
+  "drugs_page_tooltip_further_info": "The results shown here are based on data from pharmacogenomic organizations like CPIC or PharmGKB. Check them out yourself by clicking on the buttons below! Also see the PGx-Tab for more information.",
+  "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
 
-  "nav_medications": "Medications",
-  "tab_medications": "Medications",
+  "nav_drugs": "Drugs",
+  "tab_drugs": "Drugs",
   "nav_faq": "FAQ",
   "tab_faq": "PGx Questions",
   "nav_more": "More",
@@ -49,17 +49,17 @@
   "onboarding_1_header": "Welcome to PharMe",
   "onboarding_1_text": "Your genome has more influence on your life than you might think!\nMore than 90% of people are vulnerable to unintended drug reactions.\n\nUse PharMe to find out about yours.",
   "onboarding_2_header": "One size does not fit all",
-  "onboarding_2_text": "Your body reacts to medications uniquely.\n\nMedications that are effective for a majority of people can be toxic to you.",
+  "onboarding_2_text": "Your body reacts to drugs uniquely.\n\nDrugs that are effective for a majority of people can be toxic to you.",
   "onboarding_3_header": "Genome power unlocked to improve human health",
-  "onboarding_3_text": "PharMe warns about unintended drug responses according to your genome.\nThis enables you to avoid medications that are ineffective or have side-effects.",
-  "onboarding_3_disclaimer": "We DO NOT recommend medications for specific symptoms or illnesses!",
+  "onboarding_3_text": "PharMe warns about unintended drug responses according to your genome.\nThis enables you to avoid drugs that are ineffective or have side-effects.",
+  "onboarding_3_disclaimer": "We DO NOT recommend drugs for specific symptoms or illnesses!",
   "onboarding_4_header": "Tailored to your genome",
   "onboarding_4_text": "For PharMe to work, you need to get your genetics tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
   "onboarding_4_button": "Find out more about gene tests here.",
   "onboarding_5_header": "We care about your data protection",
   "onboarding_5_text": "After signing in to the lab, your genetic data is sent straight onto your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
     
-  "search_page_typeInMedication": "Type in a medication",
+  "search_page_typeInDrug": "Type in a drug",
   
   "settings_page_account_settings": "Account Settings",
   "settings_page_cancel": "Cancel",

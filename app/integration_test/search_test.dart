@@ -13,22 +13,22 @@ void main() {
   final mockSearchCubit = MockSearchCubit();
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
-  final loadedMedications = [
-    MedicationWithGuidelines(
+  final loadedDrugs = [
+    DrugWithGuidelines(
         id: 1,
         name: 'Codeine',
         description: 'test description',
         drugclass: 'test class',
         indication: 'test',
         guidelines: []),
-    MedicationWithGuidelines(
+    DrugWithGuidelines(
         id: 2,
         name: 'Clopidogrel',
         description: 'test description',
         drugclass: 'test class',
         indication: 'test',
         guidelines: []),
-    MedicationWithGuidelines(
+    DrugWithGuidelines(
         id: 3,
         name: 'Ibuprofen',
         description: 'test description',
@@ -59,8 +59,8 @@ void main() {
     });
 
     testWidgets('test search page in loaded state', (tester) async {
-      when(() => mockSearchCubit.state).thenReturn(
-          SearchState.loaded(loadedMedications, filterStarred: false));
+      when(() => mockSearchCubit.state)
+          .thenReturn(SearchState.loaded(loadedDrugs, filterStarred: false));
 
       await tester.pumpWidget(BlocProvider.value(
         value: mockSearchCubit,
@@ -79,8 +79,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.byType(MedicationCard),
-        findsNWidgets(loadedMedications.length),
+        find.byType(DrugCard),
+        findsNWidgets(loadedDrugs.length),
       );
     });
   });

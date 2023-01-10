@@ -6,25 +6,25 @@ import 'package:http/http.dart';
 
 import '../../module.dart';
 
-part 'medication.freezed.dart';
-part 'medication.g.dart';
+part 'drug.freezed.dart';
+part 'drug.g.dart';
 
 @freezed
-class Medication with _$Medication {
-  const factory Medication(
+class Drug with _$Drug {
+  const factory Drug(
     int id,
     String name,
     String? description,
     String? drugclass,
     String? indication,
-  ) = _Medication;
-  factory Medication.fromJson(dynamic json) => _$MedicationFromJson(json);
+  ) = _Drug;
+  factory Drug.fromJson(dynamic json) => _$DrugFromJson(json);
 }
 
 @HiveType(typeId: 8)
 @JsonSerializable()
-class MedicationWithGuidelines {
-  MedicationWithGuidelines({
+class DrugWithGuidelines {
+  DrugWithGuidelines({
     required this.id,
     required this.name,
     this.description,
@@ -35,8 +35,8 @@ class MedicationWithGuidelines {
     this.indication,
     required this.guidelines,
   });
-  factory MedicationWithGuidelines.fromJson(dynamic json) =>
-      _$MedicationWithGuidelinesFromJson(json);
+  factory DrugWithGuidelines.fromJson(dynamic json) =>
+      _$DrugWithGuidelinesFromJson(json);
 
   @HiveField(0)
   int id;
@@ -67,7 +67,7 @@ class MedicationWithGuidelines {
 
   @override
   bool operator ==(other) =>
-      other is MedicationWithGuidelines &&
+      other is DrugWithGuidelines &&
       name == other.name &&
       guidelines.contentEquals(other.guidelines);
 
@@ -75,24 +75,22 @@ class MedicationWithGuidelines {
   int get hashCode => Object.hash(name, guidelines);
 }
 
-List<Medication> medicationsFromHTTPResponse(Response resp) {
+List<Drug> drugsFromHTTPResponse(Response resp) {
   final json = jsonDecode(resp.body) as List<dynamic>;
-  return json.map<Medication>(Medication.fromJson).toList();
+  return json.map<Drug>(Drug.fromJson).toList();
 }
 
-List<MedicationWithGuidelines> medicationsWithGuidelinesFromHTTPResponse(
+List<DrugWithGuidelines> drugsWithGuidelinesFromHTTPResponse(
   Response resp,
 ) {
   final json = jsonDecode(resp.body) as List<dynamic>;
-  return json
-      .map<MedicationWithGuidelines>(MedicationWithGuidelines.fromJson)
-      .toList();
+  return json.map<DrugWithGuidelines>(DrugWithGuidelines.fromJson).toList();
 }
 
-MedicationWithGuidelines medicationWithGuidelinesFromHTTPResponse(
+DrugWithGuidelines drugWithGuidelinesFromHTTPResponse(
   Response resp,
 ) {
-  return MedicationWithGuidelines.fromJson(jsonDecode(resp.body));
+  return DrugWithGuidelines.fromJson(jsonDecode(resp.body));
 }
 
 List<int> idsFromHTTPResponse(Response resp) {
@@ -100,19 +98,19 @@ List<int> idsFromHTTPResponse(Response resp) {
   return idsList.map((e) => e['id'] as int).toList();
 }
 
-extension MedicationIsStarred on Medication {
+extension DrugIsStarred on Drug {
   bool isStarred() {
     return UserData.instance.starredMediationIds?.contains(id) ?? false;
   }
 }
 
-extension MedicationWithGuidelinesIsStarred on MedicationWithGuidelines {
+extension DrugWithGuidelinesIsStarred on DrugWithGuidelines {
   bool isStarred() {
     return UserData.instance.starredMediationIds?.contains(id) ?? false;
   }
 }
 
-extension MedicationWithGuidelinesMatchesQuery on MedicationWithGuidelines {
+extension DrugWithGuidelinesMatchesQuery on DrugWithGuidelines {
   bool matches({required String query}) {
     return name.ilike(query) ||
         (description.isNotNullOrBlank && description!.ilike(query)) ||
@@ -122,8 +120,8 @@ extension MedicationWithGuidelinesMatchesQuery on MedicationWithGuidelines {
 }
 
 /// Removes the guidelines that are not relevant to the user
-extension MedicationWithUserGuidelines on MedicationWithGuidelines {
-  MedicationWithGuidelines filterUserGuidelines() {
+extension DrugWithUserGuidelines on DrugWithGuidelines {
+  DrugWithGuidelines filterUserGuidelines() {
     final matchingGuidelines = guidelines.where((guideline) {
       final phenotype = guideline.phenotype;
       final foundEntry =
@@ -132,7 +130,7 @@ extension MedicationWithUserGuidelines on MedicationWithGuidelines {
           foundEntry == phenotype.geneResult.name;
     });
 
-    return MedicationWithGuidelines(
+    return DrugWithGuidelines(
       id: id,
       name: name,
       description: description,
@@ -147,24 +145,24 @@ extension MedicationWithUserGuidelines on MedicationWithGuidelines {
 }
 
 /// Removes the guidelines that are not relevant to the user
-extension MedicationsWithUserGuidelines on List<MedicationWithGuidelines> {
-  List<MedicationWithGuidelines> filterUserGuidelines() {
-    return map((medication) => medication.filterUserGuidelines()).toList();
+extension DrugsWithUserGuidelines on List<DrugWithGuidelines> {
+  List<DrugWithGuidelines> filterUserGuidelines() {
+    return map((drug) => drug.filterUserGuidelines()).toList();
   }
 }
 
-/// Filters for medications with non-OK warning level
-extension CriticalMedications on List<MedicationWithGuidelines> {
-  List<MedicationWithGuidelines> filterCritical() {
-    return filter((medication) {
-      final warningLevel = medication.highestWarningLevel();
+/// Filters for drugs with non-OK warning level
+extension CriticalDrugs on List<DrugWithGuidelines> {
+  List<DrugWithGuidelines> filterCritical() {
+    return filter((drug) {
+      final warningLevel = drug.highestWarningLevel();
       return warningLevel != null && warningLevel != WarningLevel.ok;
     }).toList();
   }
 }
 
 /// Gets most severe warning level
-extension MedicationWarningLevel on MedicationWithGuidelines {
+extension DrugWarningLevel on DrugWithGuidelines {
   WarningLevel? highestWarningLevel() {
     final filtered = filterUserGuidelines();
     return filtered.guidelines
