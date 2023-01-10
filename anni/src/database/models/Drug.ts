@@ -138,6 +138,8 @@ schema.methods.resolve = async function (
             this.annotations.indication,
             language,
         );
+        if (this.annotations.brandNames === undefined)
+            throw new Error('Brand names missing.');
         // resolve guideline annotations
         await this.populate('guidelines');
         const guidelines = await Promise.all(
