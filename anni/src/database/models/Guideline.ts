@@ -132,6 +132,8 @@ schema.methods.resolve = async function (
             this.annotations.recommendation,
             language,
         );
+        if (this.annotations.warningLevel === undefined)
+            throw new Error('Warning level missing.');
         return resolved;
     } catch (error) {
         /* eslint-disable @typescript-eslint/no-explicit-any */
