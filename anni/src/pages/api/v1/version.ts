@@ -1,8 +1,14 @@
 import { NextApiHandler } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 
-import { handleApiMethods } from '../../../common/api-helpers';
+import { ApiResponse, handleApiMethods } from '../../../common/api-helpers';
 import AppData from '../../../database/models/AppData';
+
+interface GetReponseData {
+    version: number;
+}
+
+export type GetCurrentVersionResponse = ApiResponse<GetReponseData>;
 
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
