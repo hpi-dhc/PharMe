@@ -1,6 +1,7 @@
 import { CheckIcon, UploadIcon, XIcon } from '@heroicons/react/solid';
 import axios from 'axios';
 import { useState } from 'react';
+import { useSWRConfig } from 'swr';
 
 import WithIcon from '../common/WithIcon';
 import GenericError from '../common/indicators/GenericError';
@@ -11,6 +12,7 @@ import PageOverlay from '../common/structure/PageOverlay';
 const PublishButton = () => {
     const [panelVisible, setPanelVisible] = useState(false);
     const [loadingState, setLoadingState] = useState<JSX.Element | null>(null);
+    const { mutate } = useSWRConfig();
     const publish = async () => {
         setLoadingState(null);
         try {
@@ -25,7 +27,8 @@ const PublishButton = () => {
                 <>
                     <WithIcon icon={CheckIcon}>Success</WithIcon>
                     <Button
-                        onClick={() => {
+                        onClick={async () => {
+                            await mutate('/api/v1/version');
                             setPanelVisible(false);
                             setLoadingState(null);
                         }}
