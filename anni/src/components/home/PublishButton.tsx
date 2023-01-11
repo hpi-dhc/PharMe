@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 
+import { PublishResponse } from '../../pages/api/publish';
 import WithIcon from '../common/WithIcon';
 import GenericError from '../common/indicators/GenericError';
 import LoadingSpinner from '../common/indicators/LoadingSpinner';
@@ -22,10 +23,15 @@ const PublishButton = () => {
                     <p>Publishing data ...</p>
                 </div>,
             );
-            await axios.post('/api/publish');
+            const response = await axios.post<PublishResponse>('/api/publish');
+            const newVersion = response.data.data.newVersion;
             setLoadingState(
-                <>
-                    <WithIcon icon={CheckIcon}>Success</WithIcon>
+                <div className="flex flex-col align-middle items-center space-y-4">
+                    <p>
+                        <WithIcon icon={CheckIcon} as="p">
+                            Successfully published version {newVersion}!
+                        </WithIcon>
+                    </p>
                     <Button
                         onClick={async () => {
                             await mutate('/api/v1/version');
@@ -36,7 +42,7 @@ const PublishButton = () => {
                     >
                         Done
                     </Button>
-                </>,
+                </div>,
             );
         } catch {
             setLoadingState(<GenericError />);
