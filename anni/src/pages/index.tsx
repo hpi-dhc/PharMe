@@ -10,11 +10,16 @@ import Emphasis from '../components/common/text/Emphasis';
 import Explanation from '../components/common/text/Explanation';
 import PublishButton from '../components/home/PublishButton';
 import { GetPublishStatusReponse } from './api/publish';
+import { GetCurrentVersionResponse } from './api/v1/version';
 
 const Home = () => {
-    const { data: response, error } =
+    const { data: currentVersionResponse, error: currentVersionError } =
+        useSwrFetcher<GetCurrentVersionResponse>('/api/v1/version');
+    const currentVersion = currentVersionResponse?.data.data.version;
+
+    const { data: isPublishableResponse, error: isPublishableError } =
         useSwrFetcher<GetPublishStatusReponse>('/api/publish');
-    const publishingError = response?.data.data.errorMessage;
+    const publishingError = isPublishableResponse?.data.data.errorMessage;
 
     return (
         <div className="space-y-4">
@@ -46,7 +51,20 @@ const Home = () => {
                     </p>
                 </Explanation>
                 <h3 className="font-bold">Current status</h3>
-                {response ? (
+                {currentVersionError ? (
+                    <p>There is currently no version published.</p>
+                ) : currentVersion ? (
+                    <p>
+                        Version {currentVersion} is published and available to
+                        users.
+                    </p>
+                ) : (
+                    <LoadingSpinner />
+                )}
+                <h3 className="font-bold">Publish new version</h3>
+                {isPublishableError ? (
+                    <GenericError />
+                ) : isPublishableResponse ? (
                     <div className="flex justify-between items-center">
                         {publishingError ? (
                             <WithIcon icon={ExclamationIcon} as="p">
@@ -61,8 +79,6 @@ const Home = () => {
                             </>
                         )}
                     </div>
-                ) : error ? (
-                    <GenericError />
                 ) : (
                     <LoadingSpinner />
                 )}

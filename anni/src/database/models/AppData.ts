@@ -39,7 +39,7 @@ schema.statics.publish = async function (
     data: IAppData_Patch,
 ) {
     try {
-        const doc = await this.findOneAndUpdate(undefined, data);
+        const doc = await this.findOneAndUpdate(undefined, data, { new: true });
         return doc;
     } catch {
         return this.create(data);

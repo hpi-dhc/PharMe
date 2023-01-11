@@ -14,7 +14,12 @@ interface GetReponseData {
     errorMessage: string | null;
 }
 
+interface PostReponseData {
+    newVersion: number;
+}
+
 export type GetPublishStatusReponse = ApiResponse<GetReponseData>;
+export type PublishResponse = ApiResponse<PostReponseData>;
 
 const getResolvedDrugs = async () => {
     const drugs = await Drug!.find({ isStaged: true }).exec();
@@ -37,8 +42,11 @@ const api: NextApiHandler = async (req, res) =>
         POST: async () => {
             await dbConnect();
             const drugs = await getResolvedDrugs();
-            await AppData!.publish({ drugs });
-            return { successStatus: 201 };
+            const appData = await AppData!.publish({ drugs });
+            const data: PostReponseData = {
+                newVersion: appData._v,
+            };
+            return { successStatus: 201, data };
         },
     });
 
