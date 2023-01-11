@@ -21,7 +21,8 @@ describe('App data', () => {
 
     describe('save version 1', () => {
         it('should save a document', async () => {
-            await AppData!.publish({ drugs: [] });
+            const doc = await AppData!.publish({ drugs: [] });
+            expect(doc._v).toEqual(1);
         });
     });
 
@@ -50,7 +51,8 @@ describe('App data', () => {
 
     describe('update version 1', () => {
         it('should update the saved document', async () => {
-            await AppData!.publish({ drugs: [] });
+            const newDoc = await AppData!.publish({ drugs: [] });
+            expect(newDoc._v).toEqual(2);
         });
     });
 
