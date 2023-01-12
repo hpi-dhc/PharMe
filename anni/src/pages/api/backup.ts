@@ -1,40 +1,46 @@
+import mongoose from 'mongoose';
 import { NextApiHandler } from 'next';
-import { ApiError } from 'next/dist/server/api-utils';
 
 import { handleApiMethods } from '../../common/api-helpers';
 import dbConnect from '../../database/helpers/connect';
-import Drug from '../../database/models/Drug';
-import Guideline from '../../database/models/Guideline';
-import TextBrick from '../../database/models/TextBrick';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {
         GET: async () => {
             await dbConnect();
-            const [bricks, guidelines, drugs] = await Promise.all([
-                TextBrick!.find({}).lean().exec(),
-                Guideline!.find({}).lean().exec(),
-                Drug!.find({}).lean().exec(),
-            ]);
-            if (guidelines.length + bricks.length + drugs.length === 0) {
-                throw new ApiError(404, 'There is no data to back up');
-            }
-            return {
-                successStatus: 200,
-                data: { bricks, guidelines, drugs },
-            };
+            const models = Object.entries(mongoose.models);
+
+            const backups = await Promise.all(
+                models.map(
+                    async ([name, model]): Promise<
+                        [string, mongoose.LeanDocument<any>[]]
+                    > => [name, await model.find({}).lean().exec()],
+                ),
+            );
+
+            const data = backups.reduce((total, [name, docs]) => {
+                total[name] = docs;
+                return total;
+            }, {} as Record<string, mongoose.LeanDocument<any>[]>);
+
+            return { successStatus: 200, data };
         },
         POST: async () => {
             await dbConnect();
-            await Promise.all([
-                Drug!.deleteMany({}).orFail(),
-                Guideline!.deleteMany({}).orFail(),
-                TextBrick!.deleteMany({}).orFail(),
-            ]);
-            const { bricks, guidelines, drugs } = req.body.data;
-            await TextBrick!.insertMany(bricks);
-            await Guideline!.insertMany(guidelines);
-            await Drug!.insertMany(drugs);
+
+            await Promise.all(
+                Object.values(mongoose.models).map((model) =>
+                    model.deleteMany(),
+                ),
+            );
+
+            const data: Record<string, object> = req.body.data;
+            await Promise.all(
+                Object.entries(data).map(([name, docs]) =>
+                    mongoose.models[name].insertMany(docs),
+                ),
+            );
             return { successStatus: 201 };
         },
     });
