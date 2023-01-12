@@ -1,7 +1,3 @@
-# To also start the annotation interface app, run compose command from project
-# root with:
-# `--file anni/docker-compose.yml --profile production`
-
 services:
   app:
     build:
@@ -36,6 +32,17 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
     profiles:
       - dev
+
+  backupper:
+    build:
+      dockerfile: ./anni/backupper/Dockerfile
+      context: ../
+    env_file:
+      - backupper/.env
+    depends_on:
+      - app
+    profiles:
+      - with-backupper
 
 volumes:
   annotation_interface_db:

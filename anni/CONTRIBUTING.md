@@ -28,3 +28,15 @@ If you use [kitty](https://sw.kovidgoyal.net/kitty/), you can conveniently run
 the [dev](/.kitty/dev) script from this directory to start the database (&
 testing database), and the development server in split windows and open Anni in
 your browser.
+
+## Deploying
+
+To deploy Anni, first ensure you have all environment variables set up. See
+`.env.example` for help. Then, run the following command from the repo's root:
+
+```sh
+docker compose --file anni/docker-compose.yaml --profile production up
+```
+
+This will run Anni without the Backupper. To run the Backupper as well, see the
+*Deploying with Backupper* section in its [README](backupper/README.md).
