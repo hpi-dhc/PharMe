@@ -28,6 +28,19 @@ const api: NextApiHandler = async (req, res) =>
         },
         POST: async () => {
             await dbConnect();
+
+            await Promise.all(
+                Object.values(mongoose.models).map((model) =>
+                    model.deleteMany(),
+                ),
+            );
+
+            const data: Record<string, object> = req.body.data;
+            await Promise.all(
+                Object.entries(data).map(([name, docs]) =>
+                    mongoose.models[name].insertMany(docs),
+                ),
+            );
             return { successStatus: 201 };
         },
     });
