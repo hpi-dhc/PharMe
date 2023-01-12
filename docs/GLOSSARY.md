@@ -14,13 +14,13 @@ understanding of this project's code.
   pharmacology is affected by <em>individual genes</em>. In practice, the two
   terms are often (incorrectly) used as synonyms.</dd>
 
-  <dt>Medication</dt>
-  <dd>Linguistically synonymous to the term <em>drug</em>, but preferred for
-  this project. Ibuprofen is an example of a <em>medication</em>.</dd>
+  <dt>Drug</dt>
+  <dd>Linguistically synonymous to the term <em>medication</em>, but preferred
+  for this project. Ibuprofen is an example of a <em>drug</em>.</dd>
 
   <dt>RxNorm, RxCUI</dt>
-  <dd><em>RxNorm</em> is a US-specific standardized naming system for
-  medications. RxNorm also defines IDs for medications, known as
+  <dd><em>RxNorm</em> is a US-specific standardized naming system for drugs.
+  RxNorm also defines IDs for drugs, known as
   <em>RxCUI</em>s.</dd>
   <dd><a href="https://www.merriam-webster.com/dictionary/Rx">Trivia</a>: Rx
   stems from the latin word <em>recipe</em> meaning "take". The first doctor to
@@ -29,8 +29,7 @@ understanding of this project's code.
   "Rx concept unique identifier".</dd>
 
   <dt>Indication</dt>
-  <dd>Defines the reason a medication is used, e.g. a headache for
-  ibuprofen.</dd>
+  <dd>Defines the reason a drug is used, e.g. fever for ibuprofen.</dd>
 </dl>
 
 ## Biomedical terms
@@ -86,23 +85,23 @@ understanding of this project's code.
 
 <dl>
   <dt>Implication</dt>
-  <dd>For a given medication-phenotype pair, an implication describes what
-  effects the phenotype has on use of the medication. An example for an
+  <dd>For a given drug-phenotype pair, an implication describes what
+  effects the phenotype has on use of the drug. An example for an
   implication is "Increased risk of side effects".</dd>
 
   <dt>Recommendation</dt>
-  <dd>For a given medication-phenotype pair, a recommendation describes what an
+  <dd>For a given drug-phenotype pair, a recommendation describes what an
   individual should do based on the corresponding implication, e.g. "Use a lower
   dose".</dd>
 
   <dt>Guideline</dt>
   <dd>Consists of the implication and recommendation for a given
-  medication-phenotype pair.</dd>
+  drug-phenotype pair.</dd>
 
   <dt>Annotation</dt>
   <dd>Describes data that is manually curated for our project, i.e. implication
-  and recommendation for a medication-phenotype pair and indication and a
-  patient-friendly drug-class for a medication.</dd>
+  and recommendation for a drug-phenotype pair and indication, a
+  patient-friendly drug-class, and common brand names for a drug.</dd>
 
   <dt>(Text) Brick</dt>
   <dd>*Text Bricks* are predefined components that are used to create texts for
@@ -110,5 +109,5 @@ understanding of this project's code.
   combinations of Bricks to ensure consistency and enable easy multi-language
   support without the need of the maintainer having to know more than one
   supported language. Bricks can also include placeholders such as a given
-  medication's name</dd>
+  drug's name</dd>
 </dl>
