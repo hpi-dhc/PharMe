@@ -37,6 +37,17 @@ services:
     profiles:
       - dev
 
+  backupper:
+    build:
+      dockerfile: ./anni/backupper/Dockerfile
+      context: ../
+    env_file:
+      - backupper/.env
+    depends_on:
+      - app
+    profiles:
+      - with-backupper
+
 volumes:
   annotation_interface_db:
   annotation_interface_testing_db:
