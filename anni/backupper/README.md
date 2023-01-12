@@ -27,7 +27,9 @@ that data can be restored even if Anni's database is lost.
 
 ### Deploying with Backupper
 
-From the repository's root, run
+To deploy Anni with the Backupper, first ensure you have all environment
+variables set up. See `.env.example` for help. Then, run the following command
+from the repository's root:
 
 ```sh
 docker compose --file anni/docker-compose.yaml --profile production --profile with-backupper up

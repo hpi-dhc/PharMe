@@ -31,16 +31,12 @@ your browser.
 
 ## Deploying
 
-To deploy Anni, run the following command from the repo's root:
+To deploy Anni, first ensure you have all environment variables set up. See
+`.env.example` for help. Then, run the following command from the repo's root:
 
 ```sh
 docker compose --file anni/docker-compose.yaml --profile production up
 ```
 
-You can add `--profile with-backupper` to also run the Backupper. See [its
-README](backupper/README.md) for additional information. Full command with
-Backupper:
-
-```sh
-docker compose --file anni/docker-compose.yaml --profile production --profile with-backupper up
-```
+This will run Anni without the Backupper. To run the Backupper as well, see the
+*Deploying with Backupper* section in its [README](backupper/README.md).
