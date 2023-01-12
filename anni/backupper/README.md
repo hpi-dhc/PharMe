@@ -1,10 +1,11 @@
 # Anni Backupper
 
-This is a rudimentary solution for version control of Anni until it is
-implemented natively there.
+This is the second degree of backups & version control for Anni to be used
+alongside its own native version control.
 
-The container fetches a backup from Anni every 15 minutes and commits it to the
-[PharMe-Data](https://github.com/hpi-dhc/PharMe-Data) repository.
+The Backupper fetches a backup from Anni every 15 minutes and commits it to the
+[PharMe-Data](https://github.com/hpi-dhc/PharMe-Data) repository. This ensures
+that data can be restored even if Anni's database is lost.
 
 ## Setup
 
