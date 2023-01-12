@@ -14,7 +14,7 @@ that data can be restored even if Anni's database is lost.
     repo. You can create it [here](https://github.com/settings/tokens/new); make
     sure to select the `repo` scope.
   - If you want to deploy Anni in production with the Backupper, you can leave
-    the other variables as given in the `.env.example`.
+    the other variables as given in the [`.env.example`](.env.example).
 
 ### Running only the Backupper container
 
@@ -28,8 +28,9 @@ that data can be restored even if Anni's database is lost.
 ### Deploying with Backupper
 
 To deploy Anni with the Backupper, first ensure you have all environment
-variables set up. See `.env.example` for help. Then, run the following command
-from the repository's root:
+variables set up. See [`.env.example`](.env.example) for help (Note that the
+Backupper has its own environment file!). Then, run the following command from
+the repository's root:
 
 ```sh
 docker compose --file anni/docker-compose.yaml --profile production --profile with-backupper up
