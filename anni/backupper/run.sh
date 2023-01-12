@@ -4,7 +4,8 @@ ROOT_DIR=$(dirname $(realpath $0))
 
 . $ROOT_DIR/.env
 
-test -d $BACKUP_DIR || git clone https://oauth2:$GITHUB_OAUTH@github.com/hpi-dhc/PharMe-Data $BACKUP_DIR
+test -d $BACKUP_DIR \
+    || git clone https://oauth2:$GITHUB_OAUTH@github.com/hpi-dhc/PharMe-Data $BACKUP_DIR
 
 cd $BACKUP_DIR
 
