@@ -11,24 +11,24 @@ services:
     ports:
       - ${PRODUCTION_PORT}:3000
     depends_on:
-      - annotation-interface-db
+      - anni-db
     profiles:
       - production
 
-  annotation-interface-db:
+  anni-db:
     image: mongo:5.0
     volumes:
-      - annotation_interface_db:/var/lib/mongodb/data
+      - anni_db:/var/lib/mongodb/data
     ports:
       - ${DB_PORT}:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
 
-  annotation-interface-testing-db:
+  anni-testing-db:
     image: mongo:5.0
     volumes:
-      - annotation_interface_testing_db:/var/lib/mongodb/data
+      - anni_testing_db:/var/lib/mongodb/data
     ports:
       - ${_TEST_DB_PORT}:27017
     environment:
@@ -38,5 +38,5 @@ services:
       - dev
 
 volumes:
-  annotation_interface_db:
-  annotation_interface_testing_db:
+  anni_db:
+  anni_testing_db:
