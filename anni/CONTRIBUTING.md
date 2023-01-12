@@ -14,7 +14,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
   src="https://user-images.githubusercontent.com/58258541/143050227-b374b1f7-e28e-4b90-b7f0-b9112521d3b1.png"
   width="16" height="16"> Yarn](https://yarnpkg.com/)
 - Within this directory, create a file with the name `.env` according to the
-  `.env.example`
+  [`.env.example`](.env.example)
 
 ## Setup for local development
 
@@ -32,7 +32,8 @@ your browser.
 ## Deploying
 
 To deploy Anni, first ensure you have all environment variables set up. See
-`.env.example` for help. Then, run the following command from the repo's root:
+[`.env.example`](.env.example) for help. Then, run the following command from
+the repo's root:
 
 ```sh
 docker compose --file anni/docker-compose.yaml --profile production up
