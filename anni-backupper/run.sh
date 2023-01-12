@@ -6,8 +6,10 @@ ROOT_DIR=$(dirname $(realpath $0))
 
 test -d $BACKUP_DIR || git clone https://oauth2:$GITHUB_OAUTH@github.com/hpi-dhc/PharMe-Data $BACKUP_DIR
 
-curl -s $ANNI_URL/api/backup | jq '.data' > $BACKUP_DIR/backup.json
+cd $BACKUP_DIR
 
-git -C $BACKUP_DIR add --all
-git -C $BACKUP_DIR commit --message="Backup from $(date +%y-%m-%d) at $(date +%T) ($(date +%Z))"
-git -C $BACKUP_DIR push
+curl -s $ANNI_URL/api/backup | jq '.data' > backup.json
+
+git add --all
+git commit --message="Backup from $(date +%y-%m-%d) at $(date +%T) ($(date +%Z))" \
+    && git push
