@@ -1,7 +1,3 @@
-# To also start the annotation interface app, run compose command from project
-# root with:
-# `--file anni/docker-compose.yml --profile production`
-
 services:
   app:
     build:
