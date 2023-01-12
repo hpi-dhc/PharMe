@@ -15,7 +15,9 @@ function WithIcon<T>({
     ...additionalProps
 }: PropsWithChildren<Props<T>>) {
     const iconElement = createElement(icon, {
-        className: `h-5 w-5 ${children && (reverse ? 'ml-2' : 'mr-2')}`,
+        className: `h-5 w-5 shrink-0 ${
+            children && (reverse ? 'ml-2' : 'mr-2')
+        }`,
     });
     return createElement(
         parent ?? 'span',
