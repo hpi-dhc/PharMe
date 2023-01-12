@@ -13,7 +13,7 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'nestjs', 'prettier', 'import'],
+  plugins: ['@typescript-eslint', 'prettier', 'import'],
   ignorePatterns: ['.eslintrc.js'],
   root: true,
   rules: {
