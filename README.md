@@ -10,10 +10,6 @@ at [HPI](https://hpi.de).
 See our [glossary](./docs/GLOSSARY.md) for terms commonly used within this
 project.
 
-## Architecture
-
-![Architecture diagram](./docs/Architecture.png)
-
 ## System status
 
 | System component                                          | CI/CD                           | Code Coverage           |
@@ -21,6 +17,10 @@ project.
 | 🧑‍💻 [Annotation Interface](./anni)                 | ![GitHub Workflow Status][AI_B] | ![Codecov branch][AI_C] |
 | 📱 [App](./app)                                           | ![GitHub Workflow Status][AP_B] | ![Codecov branch][AP_C] |
 | 🧪 [Lab Server](./lab-server)                             | ![GitHub Workflow Status][LS_B] | ![Codecov branch][LS_C] |
+
+## Architecture
+
+![Architecture diagram](./docs/Architecture.png)
 
 ## 🤝 Contributing
 
