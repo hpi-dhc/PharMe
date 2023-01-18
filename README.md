@@ -18,8 +18,9 @@ project.
 | 📱 [App](./app)                                           | ![GitHub Workflow Status][AP_B] | ![Codecov branch][AP_C] |
 | 🧪 [Lab Server](./lab-server)                             | ![GitHub Workflow Status][LS_B] | ![Codecov branch][LS_C] |
 
-See PharMe's [architecture diagram](./docs/ARCHITECHTURE.md) for an overview of
-the system's components.
+## Architecture
+
+![Architecture diagram](./docs/Architecture.png)
 
 ## 🤝 Contributing
 
