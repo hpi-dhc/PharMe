@@ -53,7 +53,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   Future<List<Drug>?> _findDrugs(String value) async {
-    final requestUri = annotationServerUrl('drugs').replace(
+    final requestUri = anniUrl('drugs').replace(
       queryParameters: {
         'getGuidelines': 'true',
         'withGuidelines': 'true',

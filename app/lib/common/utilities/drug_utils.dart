@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import '../module.dart';
 
 Future<List<Drug>> fetchDrugsWithGuidlines() async {
-  final requestUri = annotationServerUrl('drugs').replace(
+  final requestUri = anniUrl('drugs').replace(
     queryParameters: {
       'withGuidelines': 'true',
       'getGuidelines': 'true',

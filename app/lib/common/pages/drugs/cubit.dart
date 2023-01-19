@@ -17,7 +17,7 @@ class DrugsCubit extends Cubit<DrugsState> {
 
   Future<void> loadDrugs() async {
     emit(DrugsState.loading());
-    final isOnline = await hasConnectionTo(annotationServerUrl().host);
+    final isOnline = await hasConnectionTo(anniUrl().host);
     if (!isOnline) {
       final drug = _findCachedDrug(_id);
       if (drug == null) {
@@ -99,8 +99,8 @@ class DrugsCubit extends Cubit<DrugsState> {
   }
 
   Future<Response?> sendRequest() async {
-    final requestIdsUri = annotationServerUrl('drugs')
-        .replace(queryParameters: {'onlyIds': 'true'});
+    final requestIdsUri =
+        anniUrl('drugs').replace(queryParameters: {'onlyIds': 'true'});
     final idsResponse = await get(requestIdsUri);
     if (idsResponse.statusCode != 200) {
       emit(DrugsState.error());
@@ -111,7 +111,7 @@ class DrugsCubit extends Cubit<DrugsState> {
     randomIds.shuffle();
     Response? response;
     for (final id in randomIds) {
-      final requestDrugUri = annotationServerUrl('drugs/$id')
+      final requestDrugUri = anniUrl('drugs/$id')
           .replace(queryParameters: {'getGuidelines': 'true'});
 
       final tempResponse = await get(requestDrugUri);
@@ -129,7 +129,7 @@ class DrugsCubit extends Cubit<DrugsState> {
 class DrugsState with _$DrugsState {
   const factory DrugsState.initial() = _InitialState;
   const factory DrugsState.loading() = _LoadingState;
-  const factory DrugsState.loaded(Drug drug,
-      {required bool isStarred}) = _LoadedState;
+  const factory DrugsState.loaded(Drug drug, {required bool isStarred}) =
+      _LoadedState;
   const factory DrugsState.error() = _ErrorState;
 }
