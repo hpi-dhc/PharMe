@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart';
 
 import '../../module.dart';
 
@@ -67,11 +64,6 @@ class DrugAnnotations {
 
   @HiveField(2)
   List<String> brandNames;
-}
-
-List<Drug> drugsFromHTTPResponse(Response resp) {
-  final json = jsonDecode(resp.body) as List<dynamic>;
-  return json.map<Drug>(Drug.fromJson).toList();
 }
 
 extension DrugIsStarred on Drug {
