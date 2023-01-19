@@ -98,18 +98,11 @@ extension DrugIsStarred on Drug {
   }
 }
 
-extension DrugWithGuidelinesIsStarred on Drug {
-  bool isStarred() {
-    return UserData.instance.starredMediationIds?.contains(id) ?? false;
-  }
-}
-
 extension DrugWithGuidelinesMatchesQuery on Drug {
   bool matches({required String query}) {
     return name.ilike(query) ||
-        (description.isNotNullOrBlank && description!.ilike(query)) ||
-        (drugclass.isNotNullOrBlank && drugclass!.ilike(query)) ||
-        (synonyms != null && synonyms!.any((synonym) => synonym.ilike(query)));
+        (annotations.drugclass.ilike(query)) ||
+        (annotations.brandNames.any((brand) => brand.ilike(query)));
   }
 }
 
@@ -117,22 +110,19 @@ extension DrugWithGuidelinesMatchesQuery on Drug {
 extension DrugWithUserGuidelines on Drug {
   Drug filterUserGuidelines() {
     final matchingGuidelines = guidelines.where((guideline) {
-      final phenotype = guideline.phenotype;
-      final foundEntry =
-          UserData.instance.lookups![guideline.phenotype.geneSymbol.name];
-      return foundEntry.isNotNullOrBlank &&
-          foundEntry == phenotype.geneResult.name;
+      // Guideline matches if all user has any of the gene results for all gene
+      // symbols
+      return guideline.lookupkey.all((geneSymbol, geneResults) =>
+          (UserData.instance.lookups?.containsKey(geneSymbol) ?? false) &&
+          geneResults.contains(UserData.instance.lookups?[geneSymbol]));
     });
 
     return Drug(
       id: id,
+      version: version,
       name: name,
-      description: description,
-      pharmgkbId: pharmgkbId,
-      rxcui: rxcui,
-      synonyms: synonyms,
-      drugclass: drugclass,
-      indication: indication,
+      rxNorm: rxNorm,
+      annotations: annotations,
       guidelines: matchingGuidelines.toList(),
     );
   }
@@ -160,8 +150,7 @@ extension DrugWarningLevel on Drug {
   WarningLevel? highestWarningLevel() {
     final filtered = filterUserGuidelines();
     return filtered.guidelines
-        .map((guideline) => guideline.warningLevel)
-        .filterNotNull()
+        .map((guideline) => guideline.annotations.warningLevel)
         .maxBy((level) => level.severity);
   }
 }
