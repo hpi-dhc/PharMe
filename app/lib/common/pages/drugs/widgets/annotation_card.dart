@@ -14,7 +14,7 @@ import 'tooltip_icon.dart';
 class ClinicalAnnotationCard extends StatelessWidget {
   const ClinicalAnnotationCard(this.drug);
 
-  final DrugWithGuidelines drug;
+  final Drug drug;
 
   @override
   Widget build(BuildContext context) {

@@ -14,21 +14,21 @@ void main() {
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
   final loadedDrugs = [
-    DrugWithGuidelines(
+    Drug(
         id: 1,
         name: 'Codeine',
         description: 'test description',
         drugclass: 'test class',
         indication: 'test',
         guidelines: []),
-    DrugWithGuidelines(
+    Drug(
         id: 2,
         name: 'Clopidogrel',
         description: 'test description',
         drugclass: 'test class',
         indication: 'test',
         guidelines: []),
-    DrugWithGuidelines(
+    Drug(
         id: 3,
         name: 'Ibuprofen',
         description: 'test description',

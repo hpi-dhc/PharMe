@@ -57,7 +57,7 @@ class DrugPage extends StatelessWidget {
   }
 
   Widget _buildDrugsPage(
-    DrugWithGuidelines drug, {
+    Drug drug, {
     required bool isStarred,
     required BuildContext context,
   }) {
@@ -84,7 +84,7 @@ class DrugPage extends StatelessWidget {
         ));
   }
 
-  Widget _buildHeader(DrugWithGuidelines drug,
+  Widget _buildHeader(Drug drug,
       {required bool isStarred, required BuildContext context}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

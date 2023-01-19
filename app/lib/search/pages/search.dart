@@ -49,7 +49,7 @@ class SearchPage extends HookWidget {
   }
 
   List<Widget> _buildDrugsList(
-      BuildContext context, List<DrugWithGuidelines> drugs) {
+      BuildContext context, List<Drug> drugs) {
     return [
       SizedBox(height: 8),
       ...drugs.map((drug) => Column(children: [
@@ -82,7 +82,7 @@ class DrugCard extends StatelessWidget {
   });
 
   final VoidCallback onTap;
-  final DrugWithGuidelines drug;
+  final Drug drug;
 
   @override
   Widget build(BuildContext context) {

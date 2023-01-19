@@ -6,73 +6,67 @@ import 'package:http/http.dart';
 
 import '../../module.dart';
 
-part 'drug.freezed.dart';
 part 'drug.g.dart';
-
-@freezed
-class Drug with _$Drug {
-  const factory Drug(
-    int id,
-    String name,
-    String? description,
-    String? drugclass,
-    String? indication,
-  ) = _Drug;
-  factory Drug.fromJson(dynamic json) => _$DrugFromJson(json);
-}
 
 @HiveType(typeId: 8)
 @JsonSerializable()
-class DrugWithGuidelines {
-  DrugWithGuidelines({
+class Drug {
+  Drug({
     required this.id,
+    required this.version,
     required this.name,
-    this.description,
-    this.pharmgkbId,
-    this.rxcui,
-    this.synonyms,
-    this.drugclass,
-    this.indication,
+    required this.rxNorm,
+    required this.annotations,
     required this.guidelines,
   });
-  factory DrugWithGuidelines.fromJson(dynamic json) =>
-      _$DrugWithGuidelinesFromJson(json);
+  factory Drug.fromJson(dynamic json) => _$DrugFromJson(json);
 
   @HiveField(0)
-  int id;
+  @JsonKey(name: '_id')
+  String id;
 
   @HiveField(1)
-  String name;
+  @JsonKey(name: '_v')
+  int version;
 
   @HiveField(2)
-  String? description;
+  String name;
 
   @HiveField(3)
-  String? pharmgkbId;
+  String rxNorm;
 
   @HiveField(4)
-  String? rxcui;
+  DrugAnnotations annotations;
 
   @HiveField(5)
-  List<String>? synonyms;
-
-  @HiveField(6)
-  String? drugclass;
-
-  @HiveField(7)
-  String? indication;
-
-  @HiveField(8)
   List<Guideline> guidelines;
 
   @override
-  bool operator ==(other) =>
-      other is DrugWithGuidelines &&
-      name == other.name &&
-      guidelines.contentEquals(other.guidelines);
+  bool operator ==(other) => other is Drug && id == other.id;
 
   @override
-  int get hashCode => Object.hash(name, guidelines);
+  int get hashCode => id.hashCode;
+}
+
+@HiveType(typeId: 9)
+@JsonSerializable()
+class DrugAnnotations {
+  DrugAnnotations({
+    required this.drugclass,
+    required this.indication,
+    required this.brandNames,
+  });
+  factory DrugAnnotations.fromJson(dynamic json) =>
+      _$DrugAnnotationsFromJson(json);
+
+  @HiveField(0)
+  String drugclass;
+
+  @HiveField(1)
+  String indication;
+
+  @HiveField(2)
+  List<String> brandNames;
 }
 
 List<Drug> drugsFromHTTPResponse(Response resp) {
@@ -80,17 +74,17 @@ List<Drug> drugsFromHTTPResponse(Response resp) {
   return json.map<Drug>(Drug.fromJson).toList();
 }
 
-List<DrugWithGuidelines> drugsWithGuidelinesFromHTTPResponse(
+List<Drug> drugsWithGuidelinesFromHTTPResponse(
   Response resp,
 ) {
   final json = jsonDecode(resp.body) as List<dynamic>;
-  return json.map<DrugWithGuidelines>(DrugWithGuidelines.fromJson).toList();
+  return json.map<Drug>(Drug.fromJson).toList();
 }
 
-DrugWithGuidelines drugWithGuidelinesFromHTTPResponse(
+Drug drugWithGuidelinesFromHTTPResponse(
   Response resp,
 ) {
-  return DrugWithGuidelines.fromJson(jsonDecode(resp.body));
+  return Drug.fromJson(jsonDecode(resp.body));
 }
 
 List<int> idsFromHTTPResponse(Response resp) {
@@ -104,13 +98,13 @@ extension DrugIsStarred on Drug {
   }
 }
 
-extension DrugWithGuidelinesIsStarred on DrugWithGuidelines {
+extension DrugWithGuidelinesIsStarred on Drug {
   bool isStarred() {
     return UserData.instance.starredMediationIds?.contains(id) ?? false;
   }
 }
 
-extension DrugWithGuidelinesMatchesQuery on DrugWithGuidelines {
+extension DrugWithGuidelinesMatchesQuery on Drug {
   bool matches({required String query}) {
     return name.ilike(query) ||
         (description.isNotNullOrBlank && description!.ilike(query)) ||
@@ -120,8 +114,8 @@ extension DrugWithGuidelinesMatchesQuery on DrugWithGuidelines {
 }
 
 /// Removes the guidelines that are not relevant to the user
-extension DrugWithUserGuidelines on DrugWithGuidelines {
-  DrugWithGuidelines filterUserGuidelines() {
+extension DrugWithUserGuidelines on Drug {
+  Drug filterUserGuidelines() {
     final matchingGuidelines = guidelines.where((guideline) {
       final phenotype = guideline.phenotype;
       final foundEntry =
@@ -130,7 +124,7 @@ extension DrugWithUserGuidelines on DrugWithGuidelines {
           foundEntry == phenotype.geneResult.name;
     });
 
-    return DrugWithGuidelines(
+    return Drug(
       id: id,
       name: name,
       description: description,
@@ -145,15 +139,15 @@ extension DrugWithUserGuidelines on DrugWithGuidelines {
 }
 
 /// Removes the guidelines that are not relevant to the user
-extension DrugsWithUserGuidelines on List<DrugWithGuidelines> {
-  List<DrugWithGuidelines> filterUserGuidelines() {
+extension DrugsWithUserGuidelines on List<Drug> {
+  List<Drug> filterUserGuidelines() {
     return map((drug) => drug.filterUserGuidelines()).toList();
   }
 }
 
 /// Filters for drugs with non-OK warning level
-extension CriticalDrugs on List<DrugWithGuidelines> {
-  List<DrugWithGuidelines> filterCritical() {
+extension CriticalDrugs on List<Drug> {
+  List<Drug> filterCritical() {
     return filter((drug) {
       final warningLevel = drug.highestWarningLevel();
       return warningLevel != null && warningLevel != WarningLevel.green;
@@ -162,7 +156,7 @@ extension CriticalDrugs on List<DrugWithGuidelines> {
 }
 
 /// Gets most severe warning level
-extension DrugWarningLevel on DrugWithGuidelines {
+extension DrugWarningLevel on Drug {
   WarningLevel? highestWarningLevel() {
     final filtered = filterUserGuidelines();
     return filtered.guidelines

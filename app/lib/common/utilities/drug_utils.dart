@@ -2,7 +2,7 @@ import 'package:http/http.dart';
 
 import '../module.dart';
 
-Future<List<DrugWithGuidelines>> fetchDrugsWithGuidlines() async {
+Future<List<Drug>> fetchDrugsWithGuidlines() async {
   final requestUri = annotationServerUrl('drugs').replace(
     queryParameters: {
       'withGuidelines': 'true',

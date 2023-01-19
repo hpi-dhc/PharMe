@@ -11,7 +11,7 @@ class RecommendationCard extends StatelessWidget {
     required this.context,
   });
 
-  final DrugWithGuidelines drug;
+  final Drug drug;
   final BuildContext context;
 
   @override

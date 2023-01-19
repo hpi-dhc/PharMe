@@ -24,17 +24,17 @@ class CachedDrugs {
   /// Caches a list of drugs along with their guidelines
   ///
   /// Internally calls cache on each drug seperately
-  static Future<void> cacheAll(List<DrugWithGuidelines> meds) async =>
+  static Future<void> cacheAll(List<Drug> meds) async =>
       meds.forEach(cache);
 
   /// Caches a drugs along with its guidelines
-  static Future<void> cache(DrugWithGuidelines med) async => _cacheDrug(med);
+  static Future<void> cache(Drug med) async => _cacheDrug(med);
 
   @HiveField(0)
   DateTime? lastFetch;
 
   @HiveField(1)
-  List<DrugWithGuidelines>? drugs;
+  List<Drug>? drugs;
 }
 
 Future<void> initCachedDrugs() async {
@@ -55,7 +55,7 @@ Future<void> initCachedDrugs() async {
   cachedDrugs.get('data') ?? CachedDrugs();
 }
 
-Future<void> _cacheDrug(DrugWithGuidelines drug) async {
+Future<void> _cacheDrug(Drug drug) async {
   CachedDrugs.instance.drugs ??= [];
   final cachedMedList = CachedDrugs.instance.drugs!;
   // only allow caching up to maxCachedDrugs results
@@ -83,8 +83,8 @@ Future<void> _cacheDrug(DrugWithGuidelines drug) async {
 }
 
 Future<void> _cacheWhenLimitReached(
-  List<DrugWithGuidelines> cachedMedList,
-  DrugWithGuidelines med,
+  List<Drug> cachedMedList,
+  Drug med,
 ) async {
   // find first drug that's not used in the reports
   final index = cachedMedList.indexWhere((drug) =>

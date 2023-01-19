@@ -18,7 +18,7 @@ void main() {
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
 
-  final testDrug = DrugWithGuidelines(
+  final testDrug = Drug(
     id: 1,
     name: 'Codeine',
     drugclass: 'Pain killer',
@@ -41,7 +41,7 @@ void main() {
     ],
   );
   final testDrugWithoutGuidelines =
-      DrugWithGuidelines(id: 2, name: 'Acetaminophen', guidelines: []);
+      Drug(id: 2, name: 'Acetaminophen', guidelines: []);
   UserData.instance.starredMediationIds = [2];
 
   group('integration test for the drugs page', () {

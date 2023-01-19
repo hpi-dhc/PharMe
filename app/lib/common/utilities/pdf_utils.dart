@@ -8,7 +8,7 @@ import 'package:pdf/widgets.dart';
 
 import '../module.dart';
 
-Future<String> createPdf(DrugWithGuidelines drug) async {
+Future<String> createPdf(Drug drug) async {
   final pdf = pw.Document();
   pdf.addPage(
     pw.MultiPage(
@@ -25,14 +25,14 @@ Future<String> createPdf(DrugWithGuidelines drug) async {
   return file.path;
 }
 
-Future<void> sharePdf(DrugWithGuidelines drug) async {
+Future<void> sharePdf(Drug drug) async {
   final path = await createPdf(drug);
   await FlutterShare.shareFile(title: drug.name, filePath: path);
 }
 
 pw.Widget buildPdfPage(
   pw.Context context,
-  DrugWithGuidelines drug,
+  Drug drug,
 ) {
   final relevantGuidelines = drug.filterUserGuidelines().guidelines;
   return pw.Wrap(

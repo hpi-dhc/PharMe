@@ -54,7 +54,7 @@ class DrugsCubit extends Cubit<DrugsState> {
     emit(DrugsState.loaded(drug, isStarred: drug.isStarred()));
   }
 
-  void _initializeComprehensionContext(DrugWithGuidelines drug) {
+  void _initializeComprehensionContext(Drug drug) {
     if (drug.guidelines.isEmpty) return;
 
     final questionContext = ComprehensionHelper.instance.questionContext;
@@ -91,7 +91,7 @@ class DrugsCubit extends Cubit<DrugsState> {
     }
   }
 
-  DrugWithGuidelines? _findCachedDrug(int id) {
+  Drug? _findCachedDrug(int id) {
     final cachedDrugs = CachedDrugs.instance.drugs ?? [];
     final foundDrug =
         cachedDrugs.firstWhereOrNull((element) => element.id == id);
@@ -129,7 +129,7 @@ class DrugsCubit extends Cubit<DrugsState> {
 class DrugsState with _$DrugsState {
   const factory DrugsState.initial() = _InitialState;
   const factory DrugsState.loading() = _LoadingState;
-  const factory DrugsState.loaded(DrugWithGuidelines drug,
+  const factory DrugsState.loaded(Drug drug,
       {required bool isStarred}) = _LoadedState;
   const factory DrugsState.error() = _ErrorState;
 }
