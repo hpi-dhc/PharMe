@@ -26,7 +26,7 @@ void main() {
     guidelines: [
       Guideline(
         id: 1,
-        warningLevel: WarningLevel.danger,
+        warningLevel: WarningLevel.red,
         recommendation: 'Dont take too much from this drug',
         implication:
             'Because of your gene, you cannot digest this drug so well',

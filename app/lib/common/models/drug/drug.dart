@@ -156,7 +156,7 @@ extension CriticalDrugs on List<DrugWithGuidelines> {
   List<DrugWithGuidelines> filterCritical() {
     return filter((drug) {
       final warningLevel = drug.highestWarningLevel();
-      return warningLevel != null && warningLevel != WarningLevel.ok;
+      return warningLevel != null && warningLevel != WarningLevel.green;
     }).toList();
   }
 }

@@ -60,13 +60,13 @@ class DrugsCubit extends Cubit<DrugsState> {
     final questionContext = ComprehensionHelper.instance.questionContext;
 
     switch (drug.guidelines[0].warningLevel) {
-      case WarningLevel.danger:
+      case WarningLevel.red:
         questionContext['danger_level'] = [12];
         break;
       case WarningLevel.warning:
         questionContext['danger_level'] = [11];
         break;
-      case WarningLevel.ok:
+      case WarningLevel.green:
         questionContext['danger_level'] = [10];
         break;
       default:
