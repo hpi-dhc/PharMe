@@ -74,31 +74,13 @@ List<Drug> drugsFromHTTPResponse(Response resp) {
   return json.map<Drug>(Drug.fromJson).toList();
 }
 
-List<Drug> drugsWithGuidelinesFromHTTPResponse(
-  Response resp,
-) {
-  final json = jsonDecode(resp.body) as List<dynamic>;
-  return json.map<Drug>(Drug.fromJson).toList();
-}
-
-Drug drugWithGuidelinesFromHTTPResponse(
-  Response resp,
-) {
-  return Drug.fromJson(jsonDecode(resp.body));
-}
-
-List<int> idsFromHTTPResponse(Response resp) {
-  final idsList = jsonDecode(resp.body) as List<dynamic>;
-  return idsList.map((e) => e['id'] as int).toList();
-}
-
 extension DrugIsStarred on Drug {
   bool isStarred() {
     return UserData.instance.starredMediationIds?.contains(id) ?? false;
   }
 }
 
-extension DrugWithGuidelinesMatchesQuery on Drug {
+extension DrugMatchesQuery on Drug {
   bool matches({required String query}) {
     return name.ilike(query) ||
         (annotations.drugclass.ilike(query)) ||
