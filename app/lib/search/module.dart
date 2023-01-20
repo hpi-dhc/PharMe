@@ -3,8 +3,8 @@ import 'package:auto_route/auto_route.dart';
 import '../common/pages/drug/drug.dart';
 import 'pages/search.dart';
 
+export '../common/models/module.dart';
 export '../common/pages/drug/cubit.dart';
-// We need to expose all pages for AutoRouter
 export '../common/pages/drug/drug.dart';
 export 'pages/cubit.dart';
 export 'pages/search.dart';
