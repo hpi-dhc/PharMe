@@ -1,4 +1,3 @@
-import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -9,7 +8,6 @@ import '../../../widgets/module.dart';
 import 'recommendation_card.dart';
 import 'source_card.dart';
 import 'sub_header.dart';
-import 'tooltip_icon.dart';
 
 class ClinicalAnnotationCard extends StatelessWidget {
   const ClinicalAnnotationCard(this.drug);
@@ -24,19 +22,13 @@ class ClinicalAnnotationCard extends StatelessWidget {
         child: Column(children: [
           _buildHeader(context),
           SizedBox(height: 16),
-          if (drug.guidelines[0].implication.isNotNullOrBlank ||
-              drug.guidelines[0].cpicImplication.isNotNullOrBlank) ...[
-            _buildImplicationInfo(context),
-            SizedBox(height: 16),
-          ],
-          if (drug.guidelines[0].recommendation.isNotNullOrBlank ||
-              drug.guidelines[0].cpicRecommendation.isNotNullOrBlank) ...[
-            RecommendationCard(
-              drug,
-              context: context,
-            ),
-            SizedBox(height: 16),
-          ],
+          _buildImplicationInfo(context),
+          SizedBox(height: 16),
+          RecommendationCard(
+            drug,
+            context: context,
+          ),
+          SizedBox(height: 16),
           _buildSourcesSection(context),
           SizedBox(height: 16),
         ]),
@@ -51,7 +43,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
       SizedBox(width: 24),
       Flexible(
         child: Text(
-          drug.guidelines[0].implication ?? drug.guidelines[0].cpicImplication!,
+          drug.guidelines[0].annotations.implication,
           style: PharMeTheme.textTheme.bodySmall,
         ),
       )
@@ -59,24 +51,10 @@ class ClinicalAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          context.l10n.drugs_page_gene_name(
-            drug.guidelines[0].phenotype.geneSymbol.name,
-          ),
-          style: PharMeTheme.textTheme.bodyLarge!,
-        ),
-        Row(children: [
-          Text(
-            drug.guidelines[0].cpicClassification!.toUpperCase(),
-            style: PharMeTheme.textTheme.bodyLarge!,
-          ),
-          SizedBox(width: 6),
-          TooltipIcon(context.l10n.drugs_page_tooltip_classification),
-        ]),
-      ],
+    return Text(
+      context.l10n
+          .drugs_page_gene_name(drug.guidelines[0].lookupkey.keys.join(', ')),
+      style: PharMeTheme.textTheme.bodyLarge!,
     );
   }
 
@@ -86,35 +64,16 @@ class ClinicalAnnotationCard extends StatelessWidget {
         context.l10n.drugs_page_header_further_info,
         tooltip: context.l10n.drugs_page_tooltip_further_info,
       ),
-      if (drug.pharmgkbId.isNotNullOrBlank) ...[
-        SizedBox(height: 8),
-        SourceCard(
-          name: context.l10n.drugs_page_sources_pharmGkb_name,
-          description: context.l10n.drugs_page_sources_pharmGkb_description,
-          onTap: () => _launchPharmGkbUrl(drug.pharmgkbId),
-        ),
-      ],
       SizedBox(height: 8),
       SourceCard(
         name: context.l10n.drugs_page_sources_cpic_name,
         description: context.l10n.drugs_page_sources_cpic_description,
         onTap: () => _launchUrl(
-          Uri.parse(drug.guidelines[0].cpicGuidelineUrl),
+          Uri.parse(drug.guidelines[0].cpicData.guidelineUrl),
         ),
       ),
     ]);
   }
-}
-
-Future<void> _launchPharmGkbUrl(String? id) async {
-  var url = 'https://pharmgkb.org';
-
-  // redirect to specific pharmgkb page if id is present
-  if (id.isNotNullOrBlank) {
-    url += '/chemical/$id/clinicalAnnotation';
-  }
-
-  await _launchUrl(Uri.parse(url));
 }
 
 Future<void> _launchUrl(Uri url) async {
