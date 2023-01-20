@@ -1,7 +1,7 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'package:app/common/module.dart';
-import 'package:app/common/pages/drugs/widgets/module.dart';
+import 'package:app/common/pages/drug/widgets/module.dart';
 import 'package:app/search/module.dart';
 import 'package:bloc_test/bloc_test.dart';
 
