@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 
-import '../models/anni_response.dart';
 import '../models/drug/cached_drugs.dart';
 import '../module.dart';
 
