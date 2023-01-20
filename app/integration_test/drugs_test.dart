@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockDrugsCubit extends MockCubit<DrugsState> implements DrugsCubit {}
+class MockDrugsCubit extends MockCubit<DrugState> implements DrugCubit {}
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -42,11 +42,11 @@ void main() {
   );
   final testDrugWithoutGuidelines =
       Drug(id: 2, name: 'Acetaminophen', guidelines: []);
-  UserData.instance.starredMediationIds = [2];
+  UserData.instance.starredDrugIds = [2];
 
   group('integration test for the drugs page', () {
     testWidgets('test loading', (tester) async {
-      when(() => mockDrugsCubit.state).thenReturn(DrugsState.loading());
+      when(() => mockDrugsCubit.state).thenReturn(DrugState.loading());
 
       await tester.pumpWidget(
         MaterialApp(
@@ -66,7 +66,7 @@ void main() {
 
     testWidgets('test error state', (tester) async {
       when(() => mockDrugsCubit.state).thenReturn(
-        DrugsState.error(),
+        DrugState.error(),
       );
 
       await tester.pumpWidget(
@@ -96,7 +96,7 @@ void main() {
 
     testWidgets('test loaded page', (tester) async {
       when(() => mockDrugsCubit.state)
-          .thenReturn(DrugsState.loaded(testDrug, isStarred: false));
+          .thenReturn(DrugState.loaded(testDrug, isStarred: false));
 
       late BuildContext context;
 
@@ -172,7 +172,7 @@ void main() {
 
     testWidgets('test loaded page without guidelines', (tester) async {
       when(() => mockDrugsCubit.state).thenReturn(
-          DrugsState.loaded(testDrugWithoutGuidelines, isStarred: true));
+          DrugState.loaded(testDrugWithoutGuidelines, isStarred: true));
 
       await tester.pumpWidget(
         MaterialApp(

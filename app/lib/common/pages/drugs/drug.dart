@@ -20,13 +20,13 @@ class DrugPage extends StatelessWidget {
 
   final int id;
   final String name;
-  final DrugsCubit? cubit;
+  final DrugCubit? cubit;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => cubit ?? DrugsCubit(id),
-      child: BlocBuilder<DrugsCubit, DrugsState>(
+      create: (context) => cubit ?? DrugCubit(id),
+      child: BlocBuilder<DrugCubit, DrugState>(
         builder: (context, state) {
           return state.when(
             initial: () => pageScaffold(title: name, body: []),
@@ -37,7 +37,7 @@ class DrugPage extends StatelessWidget {
             loaded: (drug, isStarred) =>
                 pageScaffold(title: drug.name, actions: [
               IconButton(
-                onPressed: () => context.read<DrugsCubit>().toggleStarred(),
+                onPressed: () => context.read<DrugCubit>().toggleStarred(),
                 icon: PharMeTheme.starIcon(isStarred: isStarred),
               ),
               IconButton(

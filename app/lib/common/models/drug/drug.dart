@@ -68,7 +68,7 @@ class DrugAnnotations {
 
 extension DrugIsStarred on Drug {
   bool isStarred() {
-    return UserData.instance.starredMediationIds?.contains(id) ?? false;
+    return UserData.instance.starredDrugIds?.contains(id) ?? false;
   }
 }
 

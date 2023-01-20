@@ -37,7 +37,7 @@ class UserData {
   Map<String, String>? lookups;
 
   @HiveField(2)
-  List<String>? starredMediationIds;
+  List<String>? starredDrugIds;
 }
 
 /// Initializes the user's data by registering all necessary adapters and
