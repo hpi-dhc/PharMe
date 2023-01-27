@@ -43,6 +43,9 @@ class SearchPage extends HookWidget {
   }
 
   List<Widget> _buildDrugsList(BuildContext context, List<Drug> drugs) {
+    if (drugs.isEmpty && context.read<SearchCubit>().filterStarred) {
+      return [errorIndicator(context.l10n.err_no_starred_drugs)];
+    }
     return [
       SizedBox(height: 8),
       ...drugs.map((drug) => Column(children: [
