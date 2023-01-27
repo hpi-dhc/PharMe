@@ -22,6 +22,7 @@ class AnniData {
   });
   factory AnniData.fromJson(dynamic json) => _$AnniDataFromJson(json);
 
+  @JsonKey(name: '_v')
   int version;
   List<Drug> drugs;
 }
