@@ -27,6 +27,7 @@
     }
   },
   "drugs_page_header_further_info": "Further Information",
+  "drugs_page_header_also_known_as": "Also known as",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
   "drugs_page_no_guidelines_for_phenotype": "We couldn't find a guideline matching your genetics.",

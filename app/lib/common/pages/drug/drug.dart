@@ -101,10 +101,15 @@ class DrugPage extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-          child: Text(drug.annotations.indication),
-        )
+        if (drug.annotations.brandNames.isNotEmpty) ...[
+          SizedBox(height: 8),
+          Text(
+            '${context.l10n.drugs_page_header_also_known_as} ${drug.annotations.brandNames.join(", ")}',
+          ),
+        ],
+        SizedBox(height: 8),
+        Text(drug.annotations.indication),
+        SizedBox(height: 8),
       ],
     );
   }
