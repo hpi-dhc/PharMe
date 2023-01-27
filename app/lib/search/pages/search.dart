@@ -50,17 +50,9 @@ class SearchPage extends HookWidget {
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 child: DrugCard(
-                    onTap: () {
-                      ComprehensionHelper.instance.attach(
-                        context.router.push(DrugRoute(drug: drug)),
-                        context: context,
-                        surveyId: 4,
-                        introText: context.l10n.comprehension_intro_text,
-                        surveyButtonText:
-                            context.l10n.comprehension_survey_button_text,
-                        supabaseConfig: supabaseConfig,
-                      );
-                    },
+                    onTap: () => context.router
+                        .push(DrugRoute(drug: drug))
+                        .then((_) => context.read<SearchCubit>().search()),
                     drug: drug)),
             SizedBox(height: 8)
           ]))
