@@ -11,7 +11,7 @@ const _boxName = 'userdata';
 /// UserData is a singleton data-class which contains various user-specific
 /// data It is intended to be loaded from a Hive box once at app launch, from
 /// where it's contents can be modified by accessing it's properties.
-@HiveType(typeId: 5)
+@HiveType(typeId: 3)
 class UserData {
   factory UserData() => _instance;
 

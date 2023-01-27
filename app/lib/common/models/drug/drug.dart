@@ -5,7 +5,7 @@ import '../../module.dart';
 
 part 'drug.g.dart';
 
-@HiveType(typeId: 8)
+@HiveType(typeId: 6)
 @JsonSerializable()
 class Drug {
   Drug({
@@ -45,7 +45,7 @@ class Drug {
   int get hashCode => id.hashCode;
 }
 
-@HiveType(typeId: 9)
+@HiveType(typeId: 7)
 @JsonSerializable()
 class DrugAnnotations {
   DrugAnnotations({

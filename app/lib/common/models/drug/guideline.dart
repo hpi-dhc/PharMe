@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import '../../module.dart';
 part 'guideline.g.dart';
 
-@HiveType(typeId: 10)
+@HiveType(typeId: 8)
 @JsonSerializable()
 class Guideline {
   Guideline({
@@ -45,7 +45,7 @@ class Guideline {
   }
 }
 
-@HiveType(typeId: 11)
+@HiveType(typeId: 9)
 @JsonSerializable()
 class GuidelineAnnotations {
   GuidelineAnnotations({
@@ -66,7 +66,7 @@ class GuidelineAnnotations {
   WarningLevel warningLevel;
 }
 
-@HiveType(typeId: 13)
+@HiveType(typeId: 10)
 @JsonSerializable()
 class GuidelineCpicData {
   GuidelineCpicData({

@@ -6,7 +6,7 @@ part 'cached_drugs.g.dart';
 
 const _boxName = 'cachedDrugs';
 
-@HiveType(typeId: 13)
+@HiveType(typeId: 5)
 class CachedDrugs {
   factory CachedDrugs() => _instance;
 

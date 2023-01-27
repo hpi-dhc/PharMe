@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 part 'warning_level.g.dart';
 
-@HiveType(typeId: 14)
+@HiveType(typeId: 11)
 enum WarningLevel {
   @HiveField(0)
   red,

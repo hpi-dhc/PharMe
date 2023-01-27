@@ -5,7 +5,7 @@ part 'cpic_lookup_response.g.dart';
 
 typedef Lookup = Map<String, String>;
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 2)
 @JsonSerializable()
 class CpicLookup {
   CpicLookup({
