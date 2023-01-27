@@ -12,14 +12,15 @@ Future<void> updateCachedDrugs() async {
 
   final versionResponse = await get(anniUrl('version'));
   if (versionResponse.statusCode != 200) throw Exception();
-  final version =
-      (jsonDecode(versionResponse.body) as AnniVersionResponse).data.version;
+  final version = AnniVersionResponse.fromJson(jsonDecode(versionResponse.body))
+      .data
+      .version;
   if (version == CachedDrugs.instance.version) return;
 
   final dataResponse = await get(anniUrl('data'));
   if (dataResponse.statusCode != 200) throw Exception();
   final drugs =
-      (jsonDecode(versionResponse.body) as AnniDataResponse).data.drugs;
+      AnniDataResponse.fromJson(jsonDecode(dataResponse.body)).data.drugs;
   CachedDrugs.instance.drugs = drugs.filterUserGuidelines();
   await CachedDrugs.save();
 }
