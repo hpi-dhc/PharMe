@@ -14,7 +14,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   Timer? searchTimeout;
   String searchValue = '';
-  bool filterStarred = true;
+  bool filterStarred = false;
   final duration = Duration(milliseconds: 500);
 
   void search({String? query, bool? filterStarred}) {
