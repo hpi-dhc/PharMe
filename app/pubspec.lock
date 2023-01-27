@@ -309,13 +309,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.5"
-  expandable_page_view:
-    dependency: transitive
-    description:
-      name: expandable_page_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.17"
   fake_async:
     dependency: transitive
     description:
@@ -493,13 +486,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  functions_client:
-    dependency: transitive
-    description:
-      name: functions_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1-dev.5"
   glob:
     dependency: transitive
     description:
@@ -514,13 +500,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  gotrue:
-    dependency: transitive
-    description:
-      name: gotrue
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.3"
   graphs:
     dependency: transitive
     description:
@@ -631,13 +610,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.3.1"
-  jwt_decode:
-    dependency: transitive
-    description:
-      name: jwt_decode
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.1"
   lints:
     dependency: transitive
     description:
@@ -862,13 +834,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.1"
-  postgrest:
-    dependency: transitive
-    description:
-      name: postgrest
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.11"
   process:
     dependency: transitive
     description:
@@ -904,20 +869,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  realtime_client:
-    dependency: transitive
-    description:
-      name: realtime_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.15+1"
-  scio:
-    dependency: "direct main"
-    description:
-      name: scio
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   sensors_plus:
     dependency: transitive
     description:
@@ -1077,13 +1028,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
-  storage_client:
-    dependency: transitive
-    description:
-      name: storage_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6+2"
   stream_channel:
     dependency: transitive
     description:
@@ -1105,13 +1049,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
-  supabase:
-    dependency: transitive
-    description:
-      name: supabase
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.6"
   sync_http:
     dependency: transitive
     description:

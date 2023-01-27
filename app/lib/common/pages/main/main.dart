@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:scio/scio.dart';
 
-import '../../constants.dart';
 import '../../l10n.dart';
 import '../../routing/router.dart';
 
@@ -28,14 +26,6 @@ class MainPage extends StatelessWidget {
             } else {
               tabsRouter.stackRouterOfIndex(index)?.popUntilRoot();
             }
-
-            ComprehensionHelper.instance.measure(
-              context: context,
-              surveyId: 4,
-              introText: context.l10n.comprehension_intro_text,
-              surveyButtonText: context.l10n.comprehension_survey_button_text,
-              supabaseConfig: supabaseConfig,
-            );
           },
           items: _bottomNavigationBarItems(context),
         );

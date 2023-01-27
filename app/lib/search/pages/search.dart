@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:scio/scio.dart';
 
 import '../../../common/module.dart';
 import 'cubit.dart';
