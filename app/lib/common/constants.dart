@@ -1,7 +1,7 @@
 import 'package:scio/scio.dart';
 
 Uri anniUrl([String slug = '']) =>
-    Uri.https('anni-pharme.dhc-lab.hpi.de:3001', 'api/v1/$slug');
+    Uri.http('localhost:3001', 'api/v1/$slug');
 Uri labServerUrl([String slug = '']) =>
     Uri.https('lab-server-pharme.dhc-lab.hpi.de', 'api/v1/$slug');
 Uri keycloakUrl([String slug = '']) =>
