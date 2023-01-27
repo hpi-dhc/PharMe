@@ -61,5 +61,5 @@ Future<void> initUserData() async {
     encryptionCipher: HiveAesCipher(encryptionKey),
   );
   final userData = Hive.box<UserData>(_boxName);
-  userData.get('data') ?? UserData();
+  UserData._instance = userData.get('data') ?? UserData();
 }

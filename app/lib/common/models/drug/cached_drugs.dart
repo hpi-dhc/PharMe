@@ -13,7 +13,7 @@ class CachedDrugs {
   // private constructor
   CachedDrugs._();
 
-  static final CachedDrugs _instance = CachedDrugs._();
+  static CachedDrugs _instance = CachedDrugs._();
   static CachedDrugs get instance => _instance;
 
   /// Writes the current instance to local storage
@@ -42,5 +42,5 @@ Future<void> initCachedDrugs() async {
 
   await Hive.openBox<CachedDrugs>(_boxName);
   final cachedDrugs = Hive.box<CachedDrugs>(_boxName);
-  cachedDrugs.get('data') ?? CachedDrugs();
+  CachedDrugs._instance = cachedDrugs.get('data') ?? CachedDrugs();
 }

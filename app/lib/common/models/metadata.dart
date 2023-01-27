@@ -55,5 +55,5 @@ Future<void> initMetaData() async {
     encryptionCipher: HiveAesCipher(encryptionKey),
   );
   final metaData = Hive.box<MetaData>(_boxName);
-  metaData.get('data') ?? MetaData();
+  MetaData._instance = metaData.get('data') ?? MetaData();
 }
