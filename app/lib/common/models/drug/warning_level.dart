@@ -8,7 +8,7 @@ enum WarningLevel {
   @HiveField(0)
   red,
   @HiveField(1)
-  warning,
+  yellow,
   @HiveField(2)
   green
 }
@@ -16,7 +16,7 @@ enum WarningLevel {
 extension WarningLevelIcon on WarningLevel {
   static final _iconMap = {
     WarningLevel.red.name: Icons.dangerous_rounded,
-    WarningLevel.warning.name: Icons.warning_rounded,
+    WarningLevel.yellow.name: Icons.warning_rounded,
     WarningLevel.green.name: Icons.check_circle_rounded,
   };
 
@@ -26,7 +26,7 @@ extension WarningLevelIcon on WarningLevel {
 extension WarningLevelSeverity on WarningLevel {
   static final _severityMap = {
     WarningLevel.red.name: 2,
-    WarningLevel.warning.name: 1,
+    WarningLevel.yellow.name: 1,
     WarningLevel.green.name: 0
   };
   int get severity => WarningLevelSeverity._severityMap[name]!;

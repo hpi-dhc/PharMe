@@ -78,7 +78,7 @@ class PharMeTheme {
 extension WarningLevelColor on WarningLevel {
   static final _colorMap = {
     WarningLevel.red.name: Color(0xffffafaf),
-    WarningLevel.warning.name: Color(0xffffebcc),
+    WarningLevel.yellow.name: Color(0xffffebcc),
     WarningLevel.green.name: Color(0xffcfe8cf),
   };
 
