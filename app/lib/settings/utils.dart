@@ -1,5 +1,6 @@
 import 'package:path_provider/path_provider.dart';
 
+import '../common/models/drug/cached_drugs.dart';
 import '../common/module.dart';
 
 Future<void> deleteAllAppData() async {
@@ -7,6 +8,7 @@ Future<void> deleteAllAppData() async {
   await _deleteAppDir();
   await UserData.erase();
   await MetaData.erase();
+  await CachedDrugs.erase();
 }
 
 Future<void> _deleteCacheDir() async {

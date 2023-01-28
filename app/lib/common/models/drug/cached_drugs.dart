@@ -20,6 +20,11 @@ class CachedDrugs {
   static Future<void> save() async =>
       Hive.box<CachedDrugs>(_boxName).put('data', _instance);
 
+  static Future<void> erase() async {
+    _instance = CachedDrugs._();
+    await CachedDrugs.save();
+  }
+
   @HiveField(0)
   int? version;
 
