@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 
+import '../../utilities/hive_utils.dart';
 import '../module.dart';
 
 part 'cached_drugs.g.dart';
@@ -45,7 +46,13 @@ Future<void> initCachedDrugs() async {
     return;
   }
 
-  await Hive.openBox<CachedDrugs>(_boxName);
+  // cached drugs have exactly the matching guidelines saved, i.e. they can be
+  // used to figure out the user's gene lookupkeys, i.e. we have to encrypt.
+  final encryptionKey = await retrieveExistingOrGenerateKey();
+  await Hive.openBox<CachedDrugs>(
+    _boxName,
+    encryptionCipher: HiveAesCipher(encryptionKey),
+  );
   final cachedDrugs = Hive.box<CachedDrugs>(_boxName);
   CachedDrugs._instance = cachedDrugs.get('data') ?? CachedDrugs();
 }
