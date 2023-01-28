@@ -92,5 +92,5 @@ class GuidelineCpicData {
   String recommendation;
 
   @HiveField(4)
-  String comments;
+  String? comments;
 }
