@@ -19,18 +19,18 @@ class ClinicalAnnotationCard extends StatelessWidget {
     return RoundedCard(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: SingleChildScrollView(
-        child: Column(children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _buildHeader(context),
-          SizedBox(height: 16),
+          SizedBox(height: 12),
           _buildImplicationInfo(context),
-          SizedBox(height: 16),
+          SizedBox(height: 12),
           RecommendationCard(
             drug,
             context: context,
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 12),
           _buildSourcesSection(context),
-          SizedBox(height: 16),
+          SizedBox(height: 12),
         ]),
       ),
     );
@@ -39,12 +39,12 @@ class ClinicalAnnotationCard extends StatelessWidget {
   Widget _buildImplicationInfo(BuildContext context) {
     return Row(children: [
       Icon(Icons.info_outline_rounded,
-          size: 48, color: PharMeTheme.onSurfaceText),
-      SizedBox(width: 24),
+          size: 32, color: PharMeTheme.onSurfaceText),
+      SizedBox(width: 12),
       Flexible(
         child: Text(
           drug.guidelines[0].annotations.implication,
-          style: PharMeTheme.textTheme.bodySmall,
+          style: PharMeTheme.textTheme.bodyMedium,
         ),
       )
     ]);
