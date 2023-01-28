@@ -11,7 +11,7 @@ class RecommendationCard extends StatelessWidget {
     required this.context,
   });
 
-  final DrugWithGuidelines drug;
+  final Drug drug;
   final BuildContext context;
 
   @override
@@ -21,8 +21,7 @@ class RecommendationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      color:
-          drug.guidelines[0].warningLevel?.color ?? WarningLevel.warning.color,
+      color: drug.guidelines[0].annotations.warningLevel.color,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(children: [
@@ -33,15 +32,14 @@ class RecommendationCard extends StatelessWidget {
                 context.l10n.drugs_page_header_recommendation,
               ),
               Icon(
-                drug.guidelines[0].warningLevel?.icon ?? Icons.warning_rounded,
+                drug.guidelines[0].annotations.warningLevel.icon,
                 size: 32,
               ),
             ],
           ),
           SizedBox(height: 4),
           Text(
-            drug.guidelines[0].recommendation ??
-                drug.guidelines[0].cpicRecommendation!,
+            drug.guidelines[0].annotations.recommendation,
             style: PharMeTheme.textTheme.bodyLarge,
           ),
         ]),

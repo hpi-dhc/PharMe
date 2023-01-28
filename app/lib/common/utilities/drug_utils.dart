@@ -1,28 +1,26 @@
+import 'dart:convert';
 import 'package:http/http.dart';
 
+import '../models/drug/cached_drugs.dart';
 import '../module.dart';
 
-Future<List<DrugWithGuidelines>> fetchDrugsWithGuidlines() async {
-  final requestUri = annotationServerUrl('drugs').replace(
-    queryParameters: {
-      'withGuidelines': 'true',
-      'getGuidelines': 'true',
-    },
-  );
+Future<void> updateCachedDrugs() async {
+  final isOnline = await hasConnectionTo(anniUrl().host);
+  if (!isOnline && CachedDrugs.instance.version == null) {
+    throw Exception();
+  }
 
-  final isOnline = await hasConnectionTo(requestUri.host);
-  if (!isOnline) throw Exception();
+  final versionResponse = await get(anniUrl('version'));
+  if (versionResponse.statusCode != 200) throw Exception();
+  final version = AnniVersionResponse.fromJson(jsonDecode(versionResponse.body))
+      .data
+      .version;
+  if (version == CachedDrugs.instance.version) return;
 
-  final response = await get(requestUri);
-  if (response.statusCode != 200) throw Exception();
-
-  return drugsWithGuidelinesFromHTTPResponse(response);
-}
-
-Future<void> starCriticalDrugs() async {
-  final drugs = await fetchDrugsWithGuidlines();
-  final criticalDrugs = drugs.filterCritical();
-  UserData.instance.starredMediationIds =
-      criticalDrugs.map((drug) => drug.id).toList();
-  await UserData.save();
+  final dataResponse = await get(anniUrl('data'));
+  if (dataResponse.statusCode != 200) throw Exception();
+  final drugs =
+      AnniDataResponse.fromJson(jsonDecode(dataResponse.body)).data.drugs;
+  CachedDrugs.instance.drugs = drugs.filterUserGuidelines();
+  await CachedDrugs.save();
 }

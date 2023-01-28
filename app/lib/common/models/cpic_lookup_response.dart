@@ -5,13 +5,13 @@ part 'cpic_lookup_response.g.dart';
 
 typedef Lookup = Map<String, String>;
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 2)
 @JsonSerializable()
 class CpicLookup {
   CpicLookup({
     required this.genesymbol,
     required this.diplotype,
-    required this.generesult,
+    required this.lookupkey,
   });
 
   factory CpicLookup.fromJson(dynamic json) => _$CpicLookupFromJson(json);
@@ -23,5 +23,5 @@ class CpicLookup {
   String diplotype;
 
   @HiveField(2)
-  String generesult;
+  Lookup lookupkey;
 }

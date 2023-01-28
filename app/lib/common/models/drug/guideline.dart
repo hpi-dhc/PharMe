@@ -4,147 +4,93 @@ import 'package:hive/hive.dart';
 import '../../module.dart';
 part 'guideline.g.dart';
 
-@HiveType(typeId: 9)
+@HiveType(typeId: 8)
 @JsonSerializable()
 class Guideline {
   Guideline({
     required this.id,
-    this.implication,
-    this.recommendation,
-    this.warningLevel,
-    this.cpicRecommendation,
-    this.cpicImplication,
-    this.cpicClassification,
-    this.cpicComment,
-    required this.cpicGuidelineUrl,
-    required this.phenotype,
+    required this.version,
+    required this.lookupkey,
+    required this.cpicData,
+    required this.annotations,
   });
   factory Guideline.fromJson(dynamic json) => _$GuidelineFromJson(json);
 
   @HiveField(0)
-  int id;
+  @JsonKey(name: '_id')
+  String id;
 
   @HiveField(1)
-  String? implication;
+  @JsonKey(name: '_v')
+  int version;
 
   @HiveField(2)
-  String? recommendation;
+  // gene-symbol: gene-results
+  Map<String, List<String>> lookupkey;
 
   @HiveField(3)
-  WarningLevel? warningLevel;
+  GuidelineCpicData cpicData;
 
   @HiveField(4)
-  String? cpicRecommendation;
+  GuidelineAnnotations annotations;
 
-  @HiveField(5)
-  String? cpicImplication;
-
-  @HiveField(6)
-  String? cpicClassification;
-
-  @HiveField(7)
-  String? cpicComment;
-
-  @HiveField(8)
-  String cpicGuidelineUrl;
-
-  @HiveField(9)
-  Phenotype phenotype;
-
-  /// some properties are intentionally omitted, because a difference in them
-  /// does not imply that this a completely new guideline
   @override
   bool operator ==(other) {
-    return other is Guideline &&
-        implication == other.implication &&
-        recommendation == other.recommendation &&
-        warningLevel == other.warningLevel &&
-        cpicRecommendation == other.cpicRecommendation &&
-        cpicImplication == other.cpicImplication &&
-        cpicClassification == other.cpicClassification &&
-        cpicComment == other.cpicComment &&
-        cpicGuidelineUrl == other.cpicGuidelineUrl &&
-        phenotype == other.phenotype;
+    return other is Guideline && other.id == id;
   }
 
   @override
   int get hashCode {
-    return Object.hash(
-      implication,
-      recommendation,
-      warningLevel,
-      cpicRecommendation,
-      cpicImplication,
-      cpicClassification,
-      cpicComment,
-      cpicGuidelineUrl,
-      phenotype,
-    );
+    return id.hashCode;
   }
+}
+
+@HiveType(typeId: 9)
+@JsonSerializable()
+class GuidelineAnnotations {
+  GuidelineAnnotations({
+    required this.recommendation,
+    required this.implication,
+    required this.warningLevel,
+  });
+  factory GuidelineAnnotations.fromJson(dynamic json) =>
+      _$GuidelineAnnotationsFromJson(json);
+
+  @HiveField(0)
+  String recommendation;
+
+  @HiveField(1)
+  String implication;
+
+  @HiveField(2)
+  WarningLevel warningLevel;
 }
 
 @HiveType(typeId: 10)
 @JsonSerializable()
-class Phenotype {
-  Phenotype({
-    required this.id,
-    required this.geneResult,
-    required this.geneSymbol,
-    this.cpicConsulationText,
+class GuidelineCpicData {
+  GuidelineCpicData({
+    required this.guidelineName,
+    required this.guidelineUrl,
+    required this.implications,
+    required this.recommendation,
+    required this.comments,
   });
-  factory Phenotype.fromJson(dynamic json) => _$PhenotypeFromJson(json);
+  factory GuidelineCpicData.fromJson(dynamic json) =>
+      _$GuidelineCpicDataFromJson(json);
 
   @HiveField(0)
-  int id;
+  String guidelineName;
 
   @HiveField(1)
-  GeneResult geneResult;
+  String guidelineUrl;
 
   @HiveField(2)
-  GeneSymbol geneSymbol;
+  Map<String, String> implications;
 
   @HiveField(3)
-  String? cpicConsulationText;
+  String recommendation;
 
-  @override
-  bool operator ==(other) {
-    return other is Phenotype &&
-        geneResult.name == other.geneResult.name &&
-        geneSymbol.name == other.geneSymbol.name;
-  }
-
-  @override
-  int get hashCode => Object.hash(geneResult.name, geneSymbol.name);
-}
-
-@HiveType(typeId: 11)
-@JsonSerializable()
-class GeneSymbol {
-  GeneSymbol({
-    required this.id,
-    required this.name,
-  });
-  factory GeneSymbol.fromJson(dynamic json) => _$GeneSymbolFromJson(json);
-
-  @HiveField(0)
-  int id;
-
-  @HiveField(1)
-  String name;
-}
-
-@HiveType(typeId: 12)
-@JsonSerializable()
-class GeneResult {
-  GeneResult({
-    required this.id,
-    required this.name,
-  });
-  factory GeneResult.fromJson(dynamic json) => _$GeneResultFromJson(json);
-
-  @HiveField(0)
-  int id;
-
-  @HiveField(1)
-  String name;
+  @HiveField(4)
+  String? comments;
 }

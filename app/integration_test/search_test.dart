@@ -6,7 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockSearchCubit extends MockCubit<SearchState> implements SearchCubit {}
+class MockSearchCubit extends MockCubit<SearchState> implements SearchCubit {
+  @override
+  bool get filterStarred => false;
+}
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -14,32 +17,40 @@ void main() {
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
   final loadedDrugs = [
-    DrugWithGuidelines(
-        id: 1,
-        name: 'Codeine',
-        description: 'test description',
-        drugclass: 'test class',
-        indication: 'test',
-        guidelines: []),
-    DrugWithGuidelines(
-        id: 2,
-        name: 'Clopidogrel',
-        description: 'test description',
-        drugclass: 'test class',
-        indication: 'test',
-        guidelines: []),
-    DrugWithGuidelines(
-        id: 3,
+    Drug(
+        id: '1',
+        version: 1,
         name: 'Ibuprofen',
-        description: 'test description',
-        drugclass: 'test class',
-        indication: 'test',
+        rxNorm: 'rxnorm',
+        annotations: DrugAnnotations(
+            drugclass: 'NSAID',
+            indication: 'indication',
+            brandNames: ['brand name', 'another brand name']),
+        guidelines: []),
+    Drug(
+        id: '2',
+        version: 1,
+        name: 'Codeine',
+        rxNorm: 'rxnorm',
+        annotations: DrugAnnotations(
+            drugclass: 'Pain killer',
+            indication: 'indication',
+            brandNames: ['brand name', 'another brand name']),
+        guidelines: []),
+    Drug(
+        id: '3',
+        version: 1,
+        name: 'Amitryptiline',
+        rxNorm: 'rxnorm',
+        annotations: DrugAnnotations(
+            drugclass: 'Antidepressant',
+            indication: 'indication',
+            brandNames: ['brand name', 'another brand name']),
         guidelines: []),
   ];
   group('integration test for the search page', () {
     testWidgets('test search page in loading state', (tester) async {
-      when(() => mockSearchCubit.state)
-          .thenReturn(SearchState.loading(filterStarred: false));
+      when(() => mockSearchCubit.state).thenReturn(SearchState.loading());
       await tester.pumpWidget(BlocProvider.value(
         value: mockSearchCubit,
         child: MaterialApp(
@@ -60,7 +71,7 @@ void main() {
 
     testWidgets('test search page in loaded state', (tester) async {
       when(() => mockSearchCubit.state)
-          .thenReturn(SearchState.loaded(loadedDrugs, filterStarred: false));
+          .thenReturn(SearchState.loaded(loadedDrugs, loadedDrugs));
 
       await tester.pumpWidget(BlocProvider.value(
         value: mockSearchCubit,

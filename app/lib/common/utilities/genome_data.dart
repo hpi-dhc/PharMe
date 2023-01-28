@@ -45,8 +45,8 @@ Future<void> fetchAndSaveLookups() async {
   // use a HashMap for better time complexity
   final lookupsHashMap = HashMap<String, String>.fromIterable(
     lookups,
-    key: (el) => '${el.genesymbol}__${el.diplotype}',
-    value: (el) => el.generesult,
+    key: (lookup) => '${lookup.genesymbol}__${lookup.diplotype}',
+    value: (lookup) => lookup.lookupkey[lookup.genesymbol],
   );
   // ignore: omit_local_variable_types
   final Map<String, String> matchingLookups = {};

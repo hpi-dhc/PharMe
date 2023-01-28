@@ -13,31 +13,30 @@ import 'widgets/module.dart';
 
 class DrugPage extends StatelessWidget {
   const DrugPage(
-    this.id,
-    this.name, {
+    this.drug, {
     @visibleForTesting this.cubit,
   });
 
-  final int id;
-  final String name;
-  final DrugsCubit? cubit;
+  final Drug drug;
+  final DrugCubit? cubit;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => cubit ?? DrugsCubit(id),
-      child: BlocBuilder<DrugsCubit, DrugsState>(
+      create: (context) => cubit ?? DrugCubit(drug),
+      child: BlocBuilder<DrugCubit, DrugState>(
         builder: (context, state) {
           return state.when(
-            initial: () => pageScaffold(title: name, body: []),
+            initial: () => pageScaffold(title: drug.name, body: []),
             error: () => pageScaffold(
-                title: name, body: [errorIndicator(context.l10n.err_generic)]),
+                title: drug.name,
+                body: [errorIndicator(context.l10n.err_generic)]),
             loading: () =>
-                pageScaffold(title: name, body: [loadingIndicator()]),
+                pageScaffold(title: drug.name, body: [loadingIndicator()]),
             loaded: (drug, isStarred) =>
                 pageScaffold(title: drug.name, actions: [
               IconButton(
-                onPressed: () => context.read<DrugsCubit>().toggleStarred(),
+                onPressed: () => context.read<DrugCubit>().toggleStarred(),
                 icon: PharMeTheme.starIcon(isStarred: isStarred),
               ),
               IconButton(
@@ -57,7 +56,7 @@ class DrugPage extends StatelessWidget {
   }
 
   Widget _buildDrugsPage(
-    DrugWithGuidelines drug, {
+    Drug drug, {
     required bool isStarred,
     required BuildContext context,
   }) {
@@ -84,30 +83,33 @@ class DrugPage extends StatelessWidget {
         ));
   }
 
-  Widget _buildHeader(DrugWithGuidelines drug,
+  Widget _buildHeader(Drug drug,
       {required bool isStarred, required BuildContext context}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (drug.drugclass != null)
-          Container(
-            padding: EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: PharMeTheme.onSurfaceColor,
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-            ),
-            child: Text(
-              drug.drugclass!,
-              style: PharMeTheme.textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.w100,
-              ),
+        Container(
+          padding: EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: PharMeTheme.onSurfaceColor,
+            borderRadius: BorderRadius.all(Radius.circular(6)),
+          ),
+          child: Text(
+            drug.annotations.drugclass,
+            style: PharMeTheme.textTheme.titleMedium!.copyWith(
+              fontWeight: FontWeight.w100,
             ),
           ),
-        if (drug.indication != null)
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-            child: Text(drug.indication!),
-          )
+        ),
+        if (drug.annotations.brandNames.isNotEmpty) ...[
+          SizedBox(height: 8),
+          Text(
+            '${context.l10n.drugs_page_header_also_known_as} ${drug.annotations.brandNames.join(", ")}',
+          ),
+        ],
+        SizedBox(height: 8),
+        Text(drug.annotations.indication),
+        SizedBox(height: 8),
       ],
     );
   }

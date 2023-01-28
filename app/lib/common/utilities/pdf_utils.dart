@@ -8,7 +8,7 @@ import 'package:pdf/widgets.dart';
 
 import '../module.dart';
 
-Future<String> createPdf(DrugWithGuidelines drug) async {
+Future<String> createPdf(Drug drug) async {
   final pdf = pw.Document();
   pdf.addPage(
     pw.MultiPage(
@@ -25,16 +25,16 @@ Future<String> createPdf(DrugWithGuidelines drug) async {
   return file.path;
 }
 
-Future<void> sharePdf(DrugWithGuidelines drug) async {
+Future<void> sharePdf(Drug drug) async {
   final path = await createPdf(drug);
   await FlutterShare.shareFile(title: drug.name, filePath: path);
 }
 
 pw.Widget buildPdfPage(
   pw.Context context,
-  DrugWithGuidelines drug,
+  Drug drug,
 ) {
-  final relevantGuidelines = drug.filterUserGuidelines().guidelines;
+  final relevantGuidelines = drug.guidelines;
   return pw.Wrap(
     children: [
       _PdfSegment(
@@ -54,24 +54,13 @@ pw.Widget buildPdfPage(
           style: pw.TextStyle(fontSize: 26),
         ),
       ),
-      if (drug.drugclass.isNotNullOrBlank) ...[
-        pw.SizedBox(height: 8, width: double.infinity),
-        _PdfSegment(
-          child: pw.Text(
-            drug.drugclass!,
-            style: pw.TextStyle(fontSize: 16),
-          ),
+      pw.SizedBox(height: 8, width: double.infinity),
+      _PdfSegment(
+        child: pw.Text(
+          drug.annotations.drugclass,
+          style: pw.TextStyle(fontSize: 16),
         ),
-      ],
-      if (drug.description.isNotNullOrBlank) ...[
-        pw.SizedBox(height: 8, width: double.infinity),
-        _PdfSegment(
-          child: pw.Text(
-            drug.description!,
-            style: pw.TextStyle(fontSize: 12),
-          ),
-        )
-      ],
+      ),
       pw.SizedBox(height: 32, width: double.infinity),
       for (final guideline in relevantGuidelines)
         ..._buildGuidelinePart(guideline),
@@ -83,51 +72,39 @@ List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
   return [
     _PdfSegment(
       child: _PdfText(
-        title: 'CPIC Recommendation: ',
-        text: guideline.cpicRecommendation,
+          title: 'Relevant gene phenotypes: ',
+          text: guideline.lookupkey.keys
+              .map((geneSymbol) =>
+                  '$geneSymbol: ${UserData.instance.lookups![geneSymbol]!}')
+              .join(', ')),
+    ),
+    pw.SizedBox(height: 8, width: double.infinity),
+    _PdfSegment(
+      child: _PdfText(
+        title: 'CPIC guideline link: ',
+        text: guideline.cpicData.guidelineUrl,
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
     _PdfSegment(
       child: _PdfText(
-        title: 'CPIC Implication: ',
-        text: guideline.cpicImplication,
+        title: 'CPIC recommendation: ',
+        text: guideline.cpicData.recommendation,
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
-    _PdfSegment(
-      child: _PdfText(
-        title: 'CPIC Classification: ',
-        text: guideline.cpicClassification,
-      ),
-    ),
+    ...guideline.cpicData.implications.entries
+        .map((implication) => _PdfSegment(
+                child: _PdfText(
+              title: 'CPIC implication for ${implication.key}: ',
+              text: implication.value,
+            )))
+        .toList(),
     pw.SizedBox(height: 8, width: double.infinity),
     _PdfSegment(
       child: _PdfText(
-        title: 'CPIC Comment: ',
-        text: guideline.cpicComment,
-      ),
-    ),
-    pw.SizedBox(height: 8, width: double.infinity),
-    _PdfSegment(
-      child: _PdfText(
-        title: 'Relevant Gene and Phenotype: ',
-        text:
-            '${guideline.phenotype.geneSymbol.name} - ${guideline.phenotype.geneResult.name}',
-      ),
-    ),
-    pw.SizedBox(height: 8, width: double.infinity),
-    _PdfSegment(
-      child: _PdfText(
-        title: 'CPIC Consultation Text: ',
-        text: guideline.phenotype.cpicConsulationText,
-      ),
-    ),
-    pw.SizedBox(height: 8, width: double.infinity),
-    _PdfSegment(
-      child: _PdfText(
-        title: 'CPIC Guideline Link: ',
-        text: guideline.cpicGuidelineUrl,
+        title: 'CPIC comment: ',
+        text: guideline.cpicData.comments,
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
