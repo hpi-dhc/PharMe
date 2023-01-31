@@ -37,9 +37,9 @@
         "@nestjs/swagger": "^5.2.1",
         "@nestjs/typeorm": "^8.0.3",
         "class-transformer": "^0.5.1",
-        "class-validator": "^0.13.2",
+        "class-validator": "^0.14.0",
         "joi": "^17.6.0",
-        "keycloak-connect": "^17.0.1",
+        "keycloak-connect": "^20.0.3",
         "keycloak-mock": "^1.0.10",
         "nest-keycloak-connect": "^1.8.2",
         "nestjs-minio-client": "^1.1.0",
@@ -52,6 +52,8 @@
         "typeorm-seeding": "^1.6.1"
     },
     "devDependencies": {
+        "@commitlint/cli": "^17.3.0",
+        "@commitlint/config-conventional": "^17.3.0",
         "@nestjs/cli": "^8.2.4",
         "@nestjs/schematics": "^8.0.9",
         "@nestjs/testing": "^8.4.3",
