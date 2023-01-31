@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
-import { MinioModuleConfig } from '../configs/minio.config';
 import { S3Service } from './s3.service';
+import { MinioModuleConfig } from '../configs/minio.config';
 
 @Module({
     imports: [MinioModuleConfig],

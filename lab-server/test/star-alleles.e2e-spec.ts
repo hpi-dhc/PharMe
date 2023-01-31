@@ -3,10 +3,10 @@ import { Test } from '@nestjs/testing';
 import { MinioService } from 'nestjs-minio-client';
 import * as request from 'supertest';
 
-import { AppModule } from '../src/app.module';
 import { mockedS3Files } from './helpers/contstants';
 import { KeycloakMock } from './helpers/keycloak-mock';
 import { MockS3Instance } from './helpers/s3-mock';
+import { AppModule } from '../src/app.module';
 
 describe('StarAlleles', () => {
     let app: INestApplication;

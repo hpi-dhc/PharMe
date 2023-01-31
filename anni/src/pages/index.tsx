@@ -1,6 +1,8 @@
 import { CheckIcon, ExclamationIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 
+import { GetPublishStatusReponse } from './api/publish';
+import { GetCurrentVersionResponse } from './api/v1/version';
 import { useSwrFetcher } from '../common/react-helpers';
 import WithIcon from '../components/common/WithIcon';
 import GenericError from '../components/common/indicators/GenericError';
@@ -9,8 +11,6 @@ import PageHeading from '../components/common/structure/PageHeading';
 import Emphasis from '../components/common/text/Emphasis';
 import Explanation from '../components/common/text/Explanation';
 import PublishButton from '../components/home/PublishButton';
-import { GetPublishStatusReponse } from './api/publish';
-import { GetCurrentVersionResponse } from './api/v1/version';
 
 const Home = () => {
     const { data: currentVersionResponse, error: currentVersionError } =

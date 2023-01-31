@@ -15,7 +15,7 @@ export interface UpdateAnnotationBody {
 }
 
 export const allAnnotationModels = [Drug!, Guideline!] as const;
-export type AnyAnnotationModel = typeof allAnnotationModels[number];
+export type AnyAnnotationModel = (typeof allAnnotationModels)[number];
 
 const api: NextApiHandler = async (req, res) =>
     await handleApiMethods(req, res, {

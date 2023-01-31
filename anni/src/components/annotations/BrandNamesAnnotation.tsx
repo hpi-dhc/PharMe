@@ -2,11 +2,11 @@ import { PlusIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
-import { IDrug_Populated } from '../../database/models/Drug';
-import TextField from '../common/interaction/TextField';
 import AbstractAnnotation from './AbstractAnnotation';
 import DraggableBricks from './drag-drop/DraggableBrick';
 import GenericDroppable from './drag-drop/GenericDroppable';
+import { IDrug_Populated } from '../../database/models/Drug';
+import TextField from '../common/interaction/TextField';
 
 type Props = {
     drug: IDrug_Populated;
