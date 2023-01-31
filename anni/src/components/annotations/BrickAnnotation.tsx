@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import AbstractAnnotation from './AbstractAnnotation';
+import BrickAnnotationEditor from './BrickAnnotationEditor';
 import {
     AnnotationKey,
     brickCategoryForAnnotationKey,
@@ -15,8 +17,6 @@ import { ITextBrick_Str } from '../../database/models/TextBrick';
 import { GetBricksResponse } from '../../pages/api/bricks';
 import GenericError from '../common/indicators/GenericError';
 import LoadingSpinner from '../common/indicators/LoadingSpinner';
-import AbstractAnnotation from './AbstractAnnotation';
-import BrickAnnotationEditor from './BrickAnnotationEditor';
 
 interface Props {
     _id: string;

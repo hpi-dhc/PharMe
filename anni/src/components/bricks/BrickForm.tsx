@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
+import AutocompleteArea from './AutocompleteArea';
 import {
     BrickUsage,
     SupportedLanguage,
@@ -21,7 +22,6 @@ import {
 } from '../../database/models/TextBrick';
 import WithIcon from '../common/WithIcon';
 import SelectionPopover from '../common/interaction/SelectionPopover';
-import AutocompleteArea from './AutocompleteArea';
 
 type Props = {
     usage: BrickUsage | null;

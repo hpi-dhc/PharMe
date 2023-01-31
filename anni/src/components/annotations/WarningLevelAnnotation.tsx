@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
+import AbstractAnnotation from './AbstractAnnotation';
 import { warningLevelValues } from '../../common/definitions';
 import { IGuideline_Populated } from '../../database/models/Guideline';
-import AbstractAnnotation from './AbstractAnnotation';
 
 type Props = {
     guideline: IGuideline_Populated;

@@ -7,10 +7,10 @@ import {
 } from '@nestjs/swagger';
 import { AuthenticatedUser } from 'nest-keycloak-connect';
 
-import { OIDCUser } from '../common/oidc/oidc-user';
-import { KeycloakUserPipe } from '../common/pipes/keycloak-user.pipe';
 import { AllelesFile } from './entities/star-alleles.entity';
 import { StarAllelesService } from './star-alleles.service';
+import { OIDCUser } from '../common/oidc/oidc-user';
+import { KeycloakUserPipe } from '../common/pipes/keycloak-user.pipe';
 
 @ApiTags('Alleles')
 @ApiBearerAuth('access-token')
