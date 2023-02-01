@@ -41,8 +41,8 @@ Future<void> fetchAndSaveLookups() async {
 
   // the returned json is a list of lookups which we wish to individually map
   // to a concrete CpicLookup instance, hence the cast to a List
-  final json = jsonDecode(response.body) as List<dynamic>;
-  final lookups = json.map<CpicLookup>(CpicLookup.fromJson);
+  final json = jsonDecode(response.body) as List<Map<String, dynamic>>;
+  final lookups = json.map<CpicPhenotype>(CpicPhenotype.fromJson);
   final usersDiplotypes = UserData.instance.diplotypes;
   if (usersDiplotypes == null) throw Exception();
 
