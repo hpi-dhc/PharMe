@@ -32,6 +32,41 @@
   "drugs_page_tooltip_further_info": "The results shown here are based on data from pharmacogenomic organizations like CPIC or PharmGKB. Check them out yourself by clicking on the buttons below! Also see the PGx-Tab for more information.",
   "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
 
+  "gene_page_headline": "{geneSymbol} report",
+  "@gene_page_headline": {
+    "description": "Name of the gene",
+    "placeholders": {
+      "geneSymbol": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "gene_page_your_variant": "Your {geneSymbol} variant",
+  "@gene_page_your_variant": {
+    "description": "Name of the gene",
+    "placeholders": {
+      "geneSymbol": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "gene_page_name_tooltip": "{geneSymbol} is the name of a gene.",
+  "@gene_page_name_tooltip": {
+    "description": "Name of the gene",
+    "placeholders": {
+      "geneSymbol": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "gene_page_genotype": "Genotype",
+  "gene_page_genotype_tooltip": "The genotype describes your personal variant of this gene.",
+  "gene_page_phenotype": "Phenotype",
+  "gene_page_phenotype_tooltip": "The phenotype describes the effect that your personal variant of this gene has on the enzyme it encodes.",
+
   "nav_report": "Report",
   "tab_report": "Gene report",
   "nav_drugs": "Drugs",
