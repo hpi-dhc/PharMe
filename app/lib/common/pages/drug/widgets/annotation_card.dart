@@ -42,7 +42,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
             child: Column(children: [
               Row(children: [
                 Icon(guideline.annotations.warningLevel.icon,
-                    size: 24, color: PharMeTheme.onSurfaceText),
+                    color: PharMeTheme.onSurfaceText),
                 SizedBox(width: 12),
                 Flexible(
                   child: Text(
