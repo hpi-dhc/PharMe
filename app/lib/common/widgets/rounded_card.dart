@@ -3,12 +3,14 @@ import '../module.dart';
 class RoundedCard extends StatelessWidget {
   RoundedCard({
     this.padding = const EdgeInsets.all(16),
+    this.color = PharMeTheme.surfaceColor,
     this.onTap,
     required this.child,
   });
 
   final EdgeInsets padding;
   final VoidCallback? onTap;
+  final Color color;
   final Widget child;
 
   final borderRadius = BorderRadius.all(
@@ -23,13 +25,13 @@ class RoundedCard extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: PharMeTheme.surfaceColor,
+        color: color,
         border: Border.all(width: 0.5, color: PharMeTheme.borderColor),
         borderRadius: borderRadius,
         boxShadow: [
           BoxShadow(
-            color: PharMeTheme.borderColor,
-            blurRadius: 12,
+            color: PharMeTheme.onSurfaceColor,
+            blurRadius: 16,
             offset: Offset(0, 4),
           ),
         ],
