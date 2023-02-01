@@ -51,11 +51,16 @@ class ClinicalAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Text(
-      context.l10n
-          .drugs_page_gene_name(drug.guidelines[0].lookupkey.keys.join(', ')),
-      style: PharMeTheme.textTheme.bodyLarge!,
-    );
+    final geneDescriptions = drug.guidelines[0].lookupkey.keys.map((geneSymbol) =>
+        '$geneSymbol (${UserData.instance.lookups![geneSymbol]!.phenotype})');
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SubHeader(context.l10n.drugs_page_your_genome),
+      SizedBox(height: 12),
+      Text(
+        geneDescriptions.join(', '),
+        style: PharMeTheme.textTheme.bodyLarge!,
+      )
+    ]);
   }
 
   Widget _buildSourcesSection(BuildContext context) {

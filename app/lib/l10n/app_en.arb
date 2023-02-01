@@ -16,16 +16,7 @@
   "general_retry": "Retry",
   
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
-  "drugs_page_gene_name": "Gene: {geneName}",
-  "@drugs_page_gene_name": {
-    "description": "Name of the Gene.",
-    "placeholders": {
-      "geneName": {
-        "type": "String",
-        "example": "CYP2D6"
-      }
-    }
-  },
+  "drugs_page_your_genome": "Your genome",
   "drugs_page_header_further_info": "Further Information",
   "drugs_page_header_also_known_as": "Also known as",
   "drugs_page_header_guideline": "Clinical Guideline",
