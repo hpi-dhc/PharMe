@@ -50,7 +50,7 @@ class SearchPage extends HookWidget {
       SizedBox(height: 8),
       ...drugs.map((drug) => Column(children: [
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8),
                 child: DrugCard(
                     onTap: () => context.router
                         .push(DrugRoute(drug: drug))
