@@ -76,7 +76,7 @@ class DrugPage extends StatelessWidget {
                 ? [
                     Disclaimer(),
                     SizedBox(height: 12),
-                    ClinicalAnnotationCard(drug.guidelines[0])
+                    GuidelineAnnotationCard(drug.guidelines[0])
                   ]
                 : [Text(context.l10n.drugs_page_no_guidelines_for_phenotype)]
           ],

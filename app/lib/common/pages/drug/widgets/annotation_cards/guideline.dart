@@ -1,14 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../l10n.dart';
-import '../../../models/module.dart';
-import '../../../theme.dart';
-import '../../../widgets/module.dart';
-import 'sub_header.dart';
+import '../../../../module.dart';
+import '../sub_header.dart';
 
-class ClinicalAnnotationCard extends StatelessWidget {
-  const ClinicalAnnotationCard(this.guideline);
+class GuidelineAnnotationCard extends StatelessWidget {
+  const GuidelineAnnotationCard(this.guideline);
 
   final Guideline guideline;
 
