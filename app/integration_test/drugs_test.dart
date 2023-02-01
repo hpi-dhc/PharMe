@@ -155,7 +155,7 @@ void main() {
       // ignore: omit_local_variable_types
       final Card card = tester.firstWidget(
         find.byKey(
-          ValueKey('recommendationCard'),
+          ValueKey('annotationCard'),
         ),
       );
       expect(
