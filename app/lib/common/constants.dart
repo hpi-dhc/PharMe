@@ -7,4 +7,4 @@ Uri keycloakUrl([String slug = '']) =>
 final cpicMaxCacheTime = Duration(days: 90);
 const maxCachedDrugs = 10;
 const cpicLookupUrl =
-    'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,lookupkey';
+    'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,generesult,lookupkey';

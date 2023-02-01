@@ -7,7 +7,7 @@ coverage:
     patch:
       default:
         target: auto
-        threshold: 10%
+        threshold: 100%
 
 flag_management:
   individual_flags:

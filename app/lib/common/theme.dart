@@ -28,12 +28,14 @@ class PharMeTheme {
   static TextStyle themeFont(double size,
       [FontWeight weight = FontWeight.w400,
       double spacing = 0,
+      double lineHeight = 1.2,
       Color color = PharMeTheme.onSurfaceText]) {
     return TextStyle(
         fontFamily: 'Helvetica',
         fontSize: size,
         fontWeight: weight,
         letterSpacing: spacing,
+        height: lineHeight,
         color: color);
   }
 

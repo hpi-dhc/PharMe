@@ -50,13 +50,13 @@ class SearchPage extends HookWidget {
       SizedBox(height: 8),
       ...drugs.map((drug) => Column(children: [
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8),
                 child: DrugCard(
                     onTap: () => context.router
                         .push(DrugRoute(drug: drug))
                         .then((_) => context.read<SearchCubit>().search()),
                     drug: drug)),
-            SizedBox(height: 8)
+            SizedBox(height: 12)
           ]))
     ];
   }
@@ -75,45 +75,38 @@ class DrugCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final warningLevel = drug.highestWarningLevel();
 
-    return GestureDetector(
+    return RoundedCard(
       onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        elevation: 5,
-        color: warningLevel?.color ?? PharMeTheme.onSurfaceColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(children: [
-                      if (warningLevel != null) ...[
-                        Icon(warningLevel.icon),
-                        SizedBox(width: 12)
-                      ],
-                      Text(
-                        drug.name,
-                        style: PharMeTheme.textTheme.titleMedium,
-                      ),
-                    ]),
-                    SizedBox(height: 12),
-                    Text(
-                      drug.annotations.indication,
-                      style: PharMeTheme.textTheme.titleSmall,
-                    ),
+      padding: EdgeInsets.all(8),
+      radius: 16,
+      color: warningLevel?.color ?? PharMeTheme.onSurfaceColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Text(
+                    drug.name,
+                    style: PharMeTheme.textTheme.titleMedium,
+                  ),
+                  if (warningLevel != null) ...[
+                    SizedBox(width: 8),
+                    Icon(warningLevel.icon),
                   ],
+                ]),
+                SizedBox(height: 8),
+                Text(
+                  drug.annotations.indication,
+                  style: PharMeTheme.textTheme.titleSmall,
                 ),
-              ),
-              Icon(Icons.arrow_forward_ios_rounded),
-            ],
+              ],
+            ),
           ),
-        ),
+          Icon(Icons.chevron_right_rounded),
+        ],
       ),
     );
   }

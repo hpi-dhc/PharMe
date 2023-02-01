@@ -65,7 +65,9 @@ class DrugPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(drug, isStarred: isStarred, context: context),
+            SubHeader(context.l10n.drugs_page_header_druginfo),
+            SizedBox(height: 12),
+            DrugAnnotationCard(drug),
             SizedBox(height: 20),
             SubHeader(
               context.l10n.drugs_page_header_guideline,
@@ -76,41 +78,10 @@ class DrugPage extends StatelessWidget {
                 ? [
                     Disclaimer(),
                     SizedBox(height: 12),
-                    ClinicalAnnotationCard(drug)
+                    GuidelineAnnotationCard(drug.guidelines[0])
                   ]
                 : [Text(context.l10n.drugs_page_no_guidelines_for_phenotype)]
           ],
         ));
-  }
-
-  Widget _buildHeader(Drug drug,
-      {required bool isStarred, required BuildContext context}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: PharMeTheme.onSurfaceColor,
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-          ),
-          child: Text(
-            drug.annotations.drugclass,
-            style: PharMeTheme.textTheme.titleMedium!.copyWith(
-              fontWeight: FontWeight.w100,
-            ),
-          ),
-        ),
-        if (drug.annotations.brandNames.isNotEmpty) ...[
-          SizedBox(height: 8),
-          Text(
-            '${context.l10n.drugs_page_header_also_known_as} ${drug.annotations.brandNames.join(", ")}',
-          ),
-        ],
-        SizedBox(height: 8),
-        Text(drug.annotations.indication),
-        SizedBox(height: 8),
-      ],
-    );
   }
 }

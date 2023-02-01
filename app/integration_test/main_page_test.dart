@@ -8,6 +8,8 @@ void main() {
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
 
+  UserData.instance.lookups = {};
+
   group('test the main page', () {
     testWidgets('test that tabs change pages', (tester) async {
       await initServices();
@@ -30,6 +32,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
+      expect(find.byIcon(Icons.summarize_rounded), findsOneWidget);
       expect(find.byIcon(Icons.medication_rounded), findsOneWidget);
       expect(find.byIcon(Icons.lightbulb_rounded), findsOneWidget);
       expect(find.byIcon(Icons.more_horiz_rounded), findsOneWidget);
@@ -43,7 +46,7 @@ void main() {
       await tester.pumpAndSettle();
 
       bar = tester.widget(find.byType(BottomNavigationBar));
-      expect(bar.currentIndex, 1);
+      expect(bar.currentIndex, 2);
     });
   });
 }

@@ -12,6 +12,7 @@ class MainPage extends StatelessWidget {
     return AutoTabsScaffold(
       routes: const [
         // The order maps to BottomNavigationBar
+        ReportRouter(),
         SearchRouter(),
         FaqRouter(),
         SettingsRouter(),
@@ -36,6 +37,10 @@ class MainPage extends StatelessWidget {
   List<BottomNavigationBarItem> _bottomNavigationBarItems(
       BuildContext context) {
     return <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.summarize_rounded),
+        label: context.l10n.nav_report,
+      ),
       BottomNavigationBarItem(
         icon: Icon(Icons.medication_rounded),
         label: context.l10n.nav_drugs,

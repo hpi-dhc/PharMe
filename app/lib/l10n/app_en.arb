@@ -16,29 +16,59 @@
   "general_retry": "Retry",
   
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
-  "drugs_page_gene_name": "Gene: {geneName}",
-  "@drugs_page_gene_name": {
-    "description": "Name of the Gene.",
-    "placeholders": {
-      "geneName": {
-        "type": "String",
-        "example": "CYP2D6"
-      }
-    }
-  },
+  "drugs_page_your_genome": "Your genome",
   "drugs_page_header_further_info": "Further Information",
-  "drugs_page_header_also_known_as": "Also known as",
+  "drugs_page_header_synonyms": "Synonyms",
+  "drugs_page_header_drugclass": "Drug class",
+  "drugs_page_header_druginfo": "Drug Information",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
   "drugs_page_no_guidelines_for_phenotype": "We couldn't find a guideline matching your genetics.",
   "drugs_page_sources_cpic_name": "CPIC",
-  "drugs_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
+  "drugs_page_sources_cpic_description": "Tap here to review the corresponding guideline published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
   "drugs_page_sources_pharmGkb_name": "PharmGKB",
   "drugs_page_sources_pharmGkb_description": "Curated pharmacogenetic studies for this drug-gene reaction",
   "drugs_page_tooltip_classification": "The evidence level of a guideline represents how accepted it is by science. Guidelines with a lot of good studies supporting them have a high evidence level.",
   "drugs_page_tooltip_further_info": "The results shown here are based on data from pharmacogenomic organizations like CPIC or PharmGKB. Check them out yourself by clicking on the buttons below! Also see the PGx-Tab for more information.",
   "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
 
+  "gene_page_headline": "{geneSymbol} report",
+  "@gene_page_headline": {
+    "description": "Name of the gene",
+    "placeholders": {
+      "geneSymbol": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "gene_page_your_variant": "Your {geneSymbol} variant",
+  "@gene_page_your_variant": {
+    "description": "Name of the gene",
+    "placeholders": {
+      "geneSymbol": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "gene_page_name_tooltip": "{geneSymbol} is the name of a gene.",
+  "@gene_page_name_tooltip": {
+    "description": "Name of the gene",
+    "placeholders": {
+      "geneSymbol": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "gene_page_genotype": "Genotype",
+  "gene_page_genotype_tooltip": "The genotype describes your personal variant of this gene.",
+  "gene_page_phenotype": "Phenotype",
+  "gene_page_phenotype_tooltip": "The phenotype describes the effect that your personal variant of this gene has on the enzyme it encodes.",
+
+  "nav_report": "Report",
+  "tab_report": "Gene report",
   "nav_drugs": "Drugs",
   "tab_drugs": "Drugs",
   "nav_faq": "FAQ",

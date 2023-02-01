@@ -88,7 +88,8 @@ extension DrugWithUserGuidelines on Drug {
       // symbols
       return guideline.lookupkey.all((geneSymbol, geneResults) =>
           (UserData.instance.lookups?.containsKey(geneSymbol) ?? false) &&
-          geneResults.contains(UserData.instance.lookups?[geneSymbol]));
+          geneResults
+              .contains(UserData.instance.lookups?[geneSymbol]?.lookupkey));
     });
 
     return Drug(

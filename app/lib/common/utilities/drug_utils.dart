@@ -5,6 +5,7 @@ import '../models/drug/cached_drugs.dart';
 import '../module.dart';
 
 Future<void> updateCachedDrugs() async {
+  if (UserData.instance.lookups == null) throw Exception();
   final isOnline = await hasConnectionTo(anniUrl().host);
   if (!isOnline && CachedDrugs.instance.version == null) {
     throw Exception();

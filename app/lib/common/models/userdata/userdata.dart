@@ -1,8 +1,7 @@
 import 'package:hive/hive.dart';
 
+import '../../../search/module.dart';
 import '../../utilities/hive_utils.dart';
-import '../cpic_lookup_response.dart';
-import 'diplotype.dart';
 
 part 'userdata.g.dart';
 
@@ -34,7 +33,7 @@ class UserData {
   List<Diplotype>? diplotypes;
 
   @HiveField(1)
-  Map<String, String>? lookups;
+  Map<String, CpicPhenotype>? lookups;
 
   @HiveField(2)
   List<String>? starredDrugIds;
@@ -49,7 +48,7 @@ Future<void> initUserData() async {
   try {
     Hive.registerAdapter(UserDataAdapter());
     Hive.registerAdapter(DiplotypeAdapter());
-    Hive.registerAdapter(CpicLookupAdapter());
+    Hive.registerAdapter(CpicPhenotypeAdapter());
   } catch (e) {
     return;
   }
