@@ -33,7 +33,7 @@ class UserData {
   List<Diplotype>? diplotypes;
 
   @HiveField(1)
-  Map<String, String>? lookups;
+  Map<String, CpicPhenotype>? lookups;
 
   @HiveField(2)
   List<String>? starredDrugIds;
