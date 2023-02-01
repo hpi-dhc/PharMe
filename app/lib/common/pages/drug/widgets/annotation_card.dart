@@ -5,7 +5,6 @@ import '../../../l10n.dart';
 import '../../../models/module.dart';
 import '../../../theme.dart';
 import '../../../widgets/module.dart';
-import 'source_card.dart';
 import 'sub_header.dart';
 
 class ClinicalAnnotationCard extends StatelessWidget {
@@ -22,7 +21,7 @@ class ClinicalAnnotationCard extends StatelessWidget {
           _buildHeader(context),
           SizedBox(height: 12),
           _buildCard(context),
-          SizedBox(height: 12),
+          SizedBox(height: 16),
           _buildSourcesSection(context),
           SizedBox(height: 12),
         ]),
@@ -76,14 +75,23 @@ class ClinicalAnnotationCard extends StatelessWidget {
     return Column(children: [
       SubHeader(
         context.l10n.drugs_page_header_further_info,
-        tooltip: context.l10n.drugs_page_tooltip_further_info,
       ),
-      SizedBox(height: 8),
-      SourceCard(
-        name: context.l10n.drugs_page_sources_cpic_name,
-        description: context.l10n.drugs_page_sources_cpic_description,
-        onTap: () => _launchUrl(
-          Uri.parse(guideline.cpicData.guidelineUrl),
+      SizedBox(height: 12),
+      GestureDetector(
+        onTap: () => _launchUrl(Uri.parse(guideline.cpicData.guidelineUrl)),
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          color: PharMeTheme.onSurfaceColor,
+          child: Padding(
+            padding: EdgeInsets.all(12),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Flexible(
+                child: Text(context.l10n.drugs_page_sources_cpic_description),
+              ),
+              Icon(Icons.chevron_right_rounded)
+            ]),
+          ),
         ),
       ),
     ]);

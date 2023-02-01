@@ -23,7 +23,7 @@
   "drugs_page_header_recommendation": "Recommendation",
   "drugs_page_no_guidelines_for_phenotype": "We couldn't find a guideline matching your genetics.",
   "drugs_page_sources_cpic_name": "CPIC",
-  "drugs_page_sources_cpic_description": "Guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
+  "drugs_page_sources_cpic_description": "Tap here to review the corresponding guideline published by the Clinical Pharmacogenetics Implementation Consortium (CPIC)",
   "drugs_page_sources_pharmGkb_name": "PharmGKB",
   "drugs_page_sources_pharmGkb_description": "Curated pharmacogenetic studies for this drug-gene reaction",
   "drugs_page_tooltip_classification": "The evidence level of a guideline represents how accepted it is by science. Guidelines with a lot of good studies supporting them have a high evidence level.",
