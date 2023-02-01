@@ -5,6 +5,7 @@ import 'package:dartx/dartx.dart';
 import 'package:http/http.dart';
 
 import '../constants.dart';
+import '../models/drug/cached_drugs.dart';
 import '../models/module.dart';
 
 Future<void> fetchAndSaveDiplotypes(String token, String url) async {
@@ -27,7 +28,10 @@ Future<void> _saveDiplotypeResponse(Response response) async {
       diplotypesFromHTTPResponse(response).filterValidDiplotypes();
 
   UserData.instance.diplotypes = diplotypes;
-  return UserData.save();
+  await UserData.save();
+  // invalidate cached drugs because lookups may have changed and we need to
+  // refilter the matching guidelines
+  await CachedDrugs.erase();
 }
 
 Future<void> fetchAndSaveLookups() async {
