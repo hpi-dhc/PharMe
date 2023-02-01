@@ -19,8 +19,8 @@ Future<String> createPdf(Drug drug) async {
   final dir = Platform.isAndroid
       ? await getExternalStorageDirectory()
       : await getApplicationDocumentsDirectory();
-
-  final file = File('${dir!.path}/${drug.name}.pdf');
+  await dir!.create();
+  final file = File('${dir.path}/${drug.name}.pdf');
   await file.writeAsBytes(await pdf.save());
   return file.path;
 }
