@@ -45,6 +45,13 @@ void main() {
                 implication: 'nothing',
                 warningLevel: WarningLevel.green))
       ]);
+  UserData.instance.lookups = {
+    'CYP2C9': CpicPhenotype(
+        geneSymbol: 'CYP2C9',
+        phenotype: 'Normal Metabolizer',
+        genotype: '*1/*1',
+        lookupkey: 'Normal Metabolizer')
+  };
   final testDrugWithoutGuidelines = Drug(
     id: '2',
     version: 1,
@@ -166,7 +173,7 @@ void main() {
       context = tester.element(find.byType(Tooltip).first);
       // test tooltips
       expect(
-        find.byTooltip(context.l10n.drugs_page_tooltip_further_info),
+        find.byTooltip(context.l10n.drugs_page_tooltip_guideline),
         findsOneWidget,
       );
     });
