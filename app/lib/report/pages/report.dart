@@ -39,6 +39,6 @@ class GeneCard extends StatelessWidget {
             ],
           ),
         ),
-        Icon(Icons.arrow_forward_ios_rounded),
+        Icon(Icons.chevron_right_rounded),
       ]));
 }
