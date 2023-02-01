@@ -24,6 +24,7 @@ class GeneCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => RoundedCard(
+      onTap: () => context.router.push(GeneRoute(phenotype: phenotype)),
       padding: EdgeInsets.all(8),
       radius: 16,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
