@@ -1,13 +1,7 @@
 // ignore_for_file: avoid_returning_null_for_void
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../l10n.dart';
-import '../../models/module.dart';
-import '../../theme.dart';
+import '../../module.dart';
 import '../../utilities/pdf_utils.dart';
-import '../../widgets/module.dart';
 import 'cubit.dart';
 import 'widgets/module.dart';
 
@@ -22,33 +16,37 @@ class DrugPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final drugName = drug.name.capitalize();
     return BlocProvider(
       create: (context) => cubit ?? DrugCubit(drug),
       child: BlocBuilder<DrugCubit, DrugState>(
         builder: (context, state) {
           return state.when(
-            initial: () => pageScaffold(title: drug.name, body: []),
+            initial: () => pageScaffold(title: drugName, body: []),
             error: () => pageScaffold(
-                title: drug.name,
+                title: drugName,
                 body: [errorIndicator(context.l10n.err_generic)]),
             loading: () =>
-                pageScaffold(title: drug.name, body: [loadingIndicator()]),
-            loaded: (drug, isStarred) =>
-                pageScaffold(title: drug.name, actions: [
-              IconButton(
-                onPressed: () => context.read<DrugCubit>().toggleStarred(),
-                icon: PharMeTheme.starIcon(isStarred: isStarred),
-              ),
-              IconButton(
-                onPressed: () => sharePdf(drug),
-                icon: Icon(
-                  Icons.ios_share_rounded,
-                  color: PharMeTheme.primaryColor,
+                pageScaffold(title: drugName, body: [loadingIndicator()]),
+            loaded: (drug, isStarred) => pageScaffold(
+              title: drugName,
+              actions: [
+                IconButton(
+                  onPressed: () => context.read<DrugCubit>().toggleStarred(),
+                  icon: PharMeTheme.starIcon(isStarred: isStarred),
                 ),
-              )
-            ], body: [
-              _buildDrugsPage(drug, isStarred: isStarred, context: context)
-            ]),
+                IconButton(
+                  onPressed: () => sharePdf(drug),
+                  icon: Icon(
+                    Icons.ios_share_rounded,
+                    color: PharMeTheme.primaryColor,
+                  ),
+                )
+              ],
+              body: [
+                _buildDrugsPage(drug, isStarred: isStarred, context: context)
+              ],
+            ),
           );
         },
       ),

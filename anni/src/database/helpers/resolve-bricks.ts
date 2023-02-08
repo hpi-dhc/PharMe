@@ -1,3 +1,5 @@
+import { translationsToMap } from './brick-translations';
+import { OptionalId } from './types';
 import {
     BrickUsage,
     pharMeLanguage,
@@ -6,8 +8,6 @@ import {
 import { IDrug_Any } from '../models/Drug';
 import { IGuideline_Any } from '../models/Guideline';
 import { ITextBrick } from '../models/TextBrick';
-import { translationsToMap } from './brick-translations';
-import { OptionalId } from './types';
 
 const drugBrickPlaceholders = ['drug-name'] as const;
 const allBrickPlaceholders = [...drugBrickPlaceholders] as const;
@@ -24,7 +24,7 @@ export const placeHoldersForBrick = (category: BrickUsage): string[] => {
     }
 };
 type BrickPlaceholderValues = {
-    [Property in typeof allBrickPlaceholders[number]]?: string;
+    [Property in (typeof allBrickPlaceholders)[number]]?: string;
 };
 
 export type BrickResolver =
@@ -61,6 +61,11 @@ export function resolveBricks<IdT extends OptionalId>(
         let text = translationsToMap(translations).get(language);
         if (text) {
             Object.entries(placeholders).forEach(([placeholder, replace]) => {
+                // capitalize placeholder if in beginning of Brick
+                text = text!.replace(
+                    new RegExp(`^#${placeholder}`),
+                    replace[0].toUpperCase() + replace.slice(1),
+                );
                 text = text!.replaceAll(`#${placeholder}`, replace);
             });
         }

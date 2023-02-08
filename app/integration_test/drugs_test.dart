@@ -139,7 +139,7 @@ void main() {
         ),
       );
 
-      expect(find.text(testDrug.name), findsOneWidget);
+      expect(find.text(testDrug.name.capitalize()), findsOneWidget);
       expect(find.text(testDrug.annotations.drugclass), findsOneWidget);
       expect(find.text(testDrug.annotations.indication), findsOneWidget);
       expect(
