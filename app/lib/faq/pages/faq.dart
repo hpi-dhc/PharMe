@@ -12,59 +12,17 @@ class FaqPage extends StatelessWidget {
         child: Column(
           key: Key('questionsColumn'),
           children: [
-            _buildHeaderCard(context),
             SizedBox(height: 8),
             ...faqList.map((item) => _buildQuestion(context, item)).toList(),
+            Divider(),
+            ListTile(
+                title: Text(context.l10n.faq_contact_us),
+                trailing: Icon(Icons.chevron_right_rounded),
+                onTap: sendEmail)
           ],
         ),
       ),
     ]);
-  }
-
-  Widget _buildHeaderCard(BuildContext context) {
-    return Container(
-      height: 150,
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            PharMeTheme.primaryColor.shade500,
-            PharMeTheme.primaryColor.shade800,
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: SvgPicture.asset(
-              'assets/images/pgx_faq.svg',
-              width: 120,
-            ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.faq_pharmacogenomics,
-                  style: PharMeTheme.textTheme.titleLarge!
-                      .copyWith(color: PharMeTheme.surfaceColor),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  context.l10n.faq_page_description,
-                  style: PharMeTheme.textTheme.bodyMedium!
-                      .copyWith(color: PharMeTheme.surfaceColor),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
   }
 
   Widget _buildQuestion(BuildContext context, Question question) {

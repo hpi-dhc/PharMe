@@ -10,6 +10,7 @@
   
   "faq_page_description": "Here you can find answers to common questions about PGx",
   "faq_pharmacogenomics": "Pharmacogenomics",
+  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us!",
 
   "general_appName": "PharMe",
   "general_continue": "Continue",
@@ -106,6 +107,7 @@
   "settings_page_privacy_policy_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   "settings_page_terms_and_conditions": "Terms and conditions",
   "settings_page_terms_and_conditions_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "settings_page_contact_us": "Contact us",
 
   "comprehension_intro_text": "Would you like to participate in a survey aiming to measure user comprehension of content in the app? This would help us make PharMe more understandable for everyone!",
   "comprehension_survey_button_text": "Continue to survey"
