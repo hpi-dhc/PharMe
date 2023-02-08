@@ -94,7 +94,7 @@ class DrugCard extends StatelessWidget {
                   Icon(warningLevel?.icon ?? Icons.help_outline_rounded),
                   SizedBox(width: 4),
                   Text(
-                    drug.name,
+                    drug.name.capitalize(),
                     style: PharMeTheme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),

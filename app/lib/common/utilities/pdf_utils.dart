@@ -27,7 +27,7 @@ Future<String> createPdf(Drug drug) async {
 
 Future<void> sharePdf(Drug drug) async {
   final path = await createPdf(drug);
-  await FlutterShare.shareFile(title: drug.name, filePath: path);
+  await FlutterShare.shareFile(title: drug.name.capitalize(), filePath: path);
 }
 
 pw.Widget buildPdfPage(
@@ -50,7 +50,7 @@ pw.Widget buildPdfPage(
       pw.SizedBox(height: 20, width: double.infinity),
       _PdfSegment(
         child: pw.Text(
-          drug.name,
+          drug.name.capitalize(),
           style: pw.TextStyle(fontSize: 26),
         ),
       ),
