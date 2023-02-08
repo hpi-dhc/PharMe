@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../common/module.dart';
+import '../../common/pages/drug/widgets/tooltip_icon.dart';
 import 'cubit.dart';
 
 class SearchPage extends HookWidget {
@@ -28,6 +29,8 @@ class SearchPage extends HookWidget {
                     context.read<SearchCubit>().search(query: value);
                   },
                 )),
+                SizedBox(width: 12),
+                TooltipIcon(context.l10n.search_page_tooltip_search),
                 IconButton(
                     onPressed: () => context.read<SearchCubit>().toggleFilter(),
                     icon: PharMeTheme.starIcon(
