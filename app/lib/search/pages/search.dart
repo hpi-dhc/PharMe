@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../common/module.dart';
+import '../../common/pages/drug/widgets/tooltip_icon.dart';
 import 'cubit.dart';
 
 class SearchPage extends HookWidget {
@@ -28,6 +29,8 @@ class SearchPage extends HookWidget {
                     context.read<SearchCubit>().search(query: value);
                   },
                 )),
+                SizedBox(width: 12),
+                TooltipIcon(context.l10n.search_page_tooltip_search),
                 IconButton(
                     onPressed: () => context.read<SearchCubit>().toggleFilter(),
                     icon: PharMeTheme.starIcon(
@@ -88,18 +91,26 @@ class DrugCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(children: [
+                  Icon(warningLevel?.icon ?? Icons.help_outline_rounded),
+                  SizedBox(width: 4),
                   Text(
                     drug.name,
-                    style: PharMeTheme.textTheme.titleMedium,
+                    style: PharMeTheme.textTheme.titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  if (warningLevel != null) ...[
-                    SizedBox(width: 8),
-                    Icon(warningLevel.icon),
+                  if (drug.annotations.brandNames.isNotEmpty) ...[
+                    SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        '(${drug.annotations.brandNames.join(', ')})',
+                        style: PharMeTheme.textTheme.titleMedium,
+                      ),
+                    ),
                   ],
                 ]),
                 SizedBox(height: 8),
                 Text(
-                  drug.annotations.indication,
+                  drug.annotations.drugclass,
                   style: PharMeTheme.textTheme.titleSmall,
                 ),
               ],
