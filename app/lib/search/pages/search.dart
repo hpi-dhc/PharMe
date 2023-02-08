@@ -89,15 +89,25 @@ class DrugCard extends StatelessWidget {
               children: [
                 Row(children: [
                   Icon(warningLevel?.icon ?? Icons.help_outline_rounded),
-                  SizedBox(width: 8),
+                  SizedBox(width: 4),
                   Text(
                     drug.name,
-                    style: PharMeTheme.textTheme.titleMedium,
+                    style: PharMeTheme.textTheme.titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
+                  if (drug.annotations.brandNames.isNotEmpty) ...[
+                    SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        '(${drug.annotations.brandNames.join(', ')})',
+                        style: PharMeTheme.textTheme.titleMedium,
+                      ),
+                    ),
+                  ],
                 ]),
                 SizedBox(height: 8),
                 Text(
-                  drug.annotations.indication,
+                  drug.annotations.drugclass,
                   style: PharMeTheme.textTheme.titleSmall,
                 ),
               ],
