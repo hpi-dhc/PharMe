@@ -48,6 +48,11 @@ class SettingsPage extends StatelessWidget {
         trailing: Icon(Icons.chevron_right_rounded),
         onTap: () => context.router.push(TermsAndConditionsRoute()),
       ),
+      Divider(),
+      ListTile(
+          title: Text(context.l10n.settings_page_contact_us),
+          trailing: Icon(Icons.chevron_right_rounded),
+          onTap: sendEmail)
     ]);
   }
 
