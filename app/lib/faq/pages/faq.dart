@@ -14,6 +14,11 @@ class FaqPage extends StatelessWidget {
           children: [
             SizedBox(height: 8),
             ...faqList.map((item) => _buildQuestion(context, item)).toList(),
+            Divider(),
+            ListTile(
+                title: Text(context.l10n.faq_contact_us),
+                trailing: Icon(Icons.chevron_right_rounded),
+                onTap: sendEmail)
           ],
         ),
       ),
