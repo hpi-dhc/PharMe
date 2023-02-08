@@ -88,14 +88,12 @@ class DrugCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(children: [
+                  Icon(warningLevel?.icon ?? Icons.help_outline_rounded),
+                  SizedBox(width: 8),
                   Text(
                     drug.name,
                     style: PharMeTheme.textTheme.titleMedium,
                   ),
-                  if (warningLevel != null) ...[
-                    SizedBox(width: 8),
-                    Icon(warningLevel.icon),
-                  ],
                 ]),
                 SizedBox(height: 8),
                 Text(
