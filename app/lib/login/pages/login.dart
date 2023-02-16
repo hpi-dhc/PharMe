@@ -74,6 +74,11 @@ class LoginPage extends HookWidget {
       action: action,
       actionText: context.l10n.auth_sign_in,
       children: [
+        Text(
+          context.l10n.auth_choose_lab,
+          style: PharMeTheme.textTheme.titleLarge,
+        ),
+        SizedBox(height: PharMeTheme.mediumSpace),
         DropdownButtonHideUnderline(
           child: DropdownButton2(
             isExpanded: true,
@@ -113,7 +118,7 @@ class LoginPage extends HookWidget {
           color: PharMeTheme.primaryColor,
           size: 96,
         ),
-        SizedBox(height: 16),
+        SizedBox(height: PharMeTheme.mediumSpace),
         Text(
           context.l10n.auth_success,
           style: context.textTheme.headline6,
@@ -133,7 +138,7 @@ class LoginPage extends HookWidget {
           color: PharMeTheme.errorColor,
           size: 96,
         ),
-        SizedBox(height: 16),
+        SizedBox(height: PharMeTheme.mediumSpace),
         Text(
           message,
           style: context.textTheme.headline6,
@@ -152,7 +157,7 @@ class LoginPage extends HookWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ...children,
-        SizedBox(height: 16),
+        SizedBox(height: PharMeTheme.mediumSpace),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(

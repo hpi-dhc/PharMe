@@ -1,5 +1,5 @@
 {
-  "auth_choose_lab": "Please select your lab",
+  "auth_choose_lab": "Please select your data provider",
   "auth_sign_in": "Sign in",
   "auth_success": "Successfully imported data",
   
@@ -81,6 +81,7 @@
   
   "onboarding_get_started": "Get started",
   "onboarding_next": "Next",
+  "onboarding_prev": "Back",
   "onboarding_1_header": "Welcome to PharMe",
   "onboarding_1_text": "Your genome has more influence on your life than you might think!\nMore than 90% of people are vulnerable to unintended drug reactions.\n\nUse PharMe to find out about yours.",
   "onboarding_2_header": "One size does not fit all",

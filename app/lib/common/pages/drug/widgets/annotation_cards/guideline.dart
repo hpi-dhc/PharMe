@@ -17,7 +17,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
           _buildHeader(context),
           SizedBox(height: 12),
           _buildCard(context),
-          SizedBox(height: 16),
+          SizedBox(height: PharMeTheme.mediumSpace),
           _buildSourcesSection(context),
           SizedBox(height: 12),
         ]),

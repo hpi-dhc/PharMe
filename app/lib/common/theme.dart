@@ -75,6 +75,8 @@ class PharMeTheme {
     return Icon(isStarred ? Icons.star_rounded : Icons.star_border_rounded,
         size: size, color: primaryColor);
   }
+
+  static const mediumSpace = 16.0;
 }
 
 extension WarningLevelColor on WarningLevel {
