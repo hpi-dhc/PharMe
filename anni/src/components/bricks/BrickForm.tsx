@@ -66,6 +66,7 @@ const BrickForm = ({ usage, brick }: Props) => {
     ): void => {
         setTranslations((prev) => new Map(prev).set(language, text));
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const deleteTranslation = (language: SupportedLanguage): void => {
         setTranslations((prev) => {
             const n = new Map(prev);
@@ -110,13 +111,15 @@ const BrickForm = ({ usage, brick }: Props) => {
                     <div key={index} className="space-y-1">
                         <div className="flex justify-between">
                             <h2 className="font-bold">{language}</h2>
+                            {/*
+                            Disabled for #378 until proper handling of deletion
                             <WithIcon
                                 as="button"
                                 icon={TrashIcon}
                                 onClick={() => deleteTranslation(language)}
                             >
                                 Delete translation
-                            </WithIcon>
+                            </WithIcon>*/}
                         </div>
                         <AutocompleteArea
                             value={translations.get(language) ?? ''}
