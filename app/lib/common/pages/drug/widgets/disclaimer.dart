@@ -4,7 +4,9 @@ import '../../../l10n.dart';
 import '../../../theme.dart';
 
 class Disclaimer extends StatelessWidget {
-  const Disclaimer();
+  const Disclaimer({this.text});
+
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class Disclaimer extends StatelessWidget {
         SizedBox(width: 8),
         Flexible(
           child: Text(
-            context.l10n.drugs_page_disclaimer,
+            text ?? context.l10n.drugs_page_disclaimer,
             style: PharMeTheme.textTheme.labelMedium!.copyWith(
               fontWeight: FontWeight.w100,
             ),

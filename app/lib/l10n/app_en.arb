@@ -6,7 +6,7 @@
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   "err_generic": "Error!",
-  "err_no_starred_drugs": "You have no starred drugs! Try disabling the filter by tapping the star icon above.",
+  "err_no_active_drugs": "You have no active drugs! Try disabling the filter next to the search bar above.",
   
   "faq_page_description": "Here you can find answers to common questions about PGx",
   "faq_pharmacogenomics": "Pharmacogenomics",
@@ -19,6 +19,16 @@
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
 
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
+  "drugs_page_overwritten_phenotype": "adjusted based on you taking {drugName}",
+  "@drugs_page_overwritten_phenotype": {
+      "description": "Disclaimer for when the phenotype has been adjusted based on an active drug",
+      "placeholders": {
+          "drugName": {
+              "type": "String",
+              "example": "bupropion"
+          }
+      }
+  },
   "drugs_page_your_genome": "Your genome",
   "drugs_page_header_further_info": "Further Information",
   "drugs_page_header_synonyms": "Synonyms",

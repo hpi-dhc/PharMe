@@ -66,9 +66,9 @@ class DrugAnnotations {
   List<String> brandNames;
 }
 
-extension DrugIsStarred on Drug {
-  bool isStarred() {
-    return UserData.instance.starredDrugIds?.contains(id) ?? false;
+extension DrugIsActive on Drug {
+  bool isActive() {
+    return UserData.instance.activeDrugNames?.contains(name) ?? false;
   }
 }
 
@@ -80,52 +80,20 @@ extension DrugMatchesQuery on Drug {
   }
 }
 
-/// Removes the guidelines that are not relevant to the user
-extension DrugWithUserGuidelines on Drug {
-  Drug filterUserGuidelines() {
-    final matchingGuidelines = guidelines.where((guideline) {
-      // Guideline matches if all user has any of the gene results for all gene
-      // symbols
-      return guideline.lookupkey.all((geneSymbol, geneResults) =>
-          (UserData.instance.lookups?.containsKey(geneSymbol) ?? false) &&
-          geneResults
-              .contains(UserData.instance.lookups?[geneSymbol]?.lookupkey));
-    });
-
-    return Drug(
-      id: id,
-      version: version,
-      name: name,
-      rxNorm: rxNorm,
-      annotations: annotations,
-      guidelines: matchingGuidelines.toList(),
-    );
-  }
-}
-
-/// Removes the guidelines that are not relevant to the user
-extension DrugsWithUserGuidelines on List<Drug> {
-  List<Drug> filterUserGuidelines() {
-    return map((drug) => drug.filterUserGuidelines()).toList();
-  }
+/// Gets the User's matching guideline
+extension DrugWithUserGuideline on Drug {
+  Guideline? userGuideline() => guidelines.firstOrNullWhere(
+        (guideline) => guideline.lookupkey.all((geneSymbol, geneResults) =>
+            geneResults.contains(UserData.lookupFor(geneSymbol))),
+      );
 }
 
 /// Filters for drugs with non-OK warning level
 extension CriticalDrugs on List<Drug> {
   List<Drug> filterCritical() {
     return filter((drug) {
-      final warningLevel = drug.highestWarningLevel();
+      final warningLevel = drug.userGuideline()?.annotations.warningLevel;
       return warningLevel != null && warningLevel != WarningLevel.green;
     }).toList();
-  }
-}
-
-/// Gets most severe warning level
-extension DrugWarningLevel on Drug {
-  WarningLevel? highestWarningLevel() {
-    final filtered = filterUserGuidelines();
-    return filtered.guidelines
-        .map((guideline) => guideline.annotations.warningLevel)
-        .maxBy((level) => level.severity);
   }
 }

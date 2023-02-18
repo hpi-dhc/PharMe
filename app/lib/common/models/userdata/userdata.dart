@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 
 import '../../../search/module.dart';
@@ -31,12 +32,31 @@ class UserData {
 
   @HiveField(0)
   Map<String, Diplotype>? diplotypes;
+  static String? phenotypeFor(String gene) =>
+      UserData.instance.diplotypes?[gene]?.phenotype;
 
   @HiveField(1)
   Map<String, CpicPhenotype>? lookups;
 
+  static MapEntry<String, String>? overwrittenLookup(String gene) {
+    final inhibitors = drugInhibitors[gene];
+    if (inhibitors == null) return null;
+    final lookup = inhibitors.entries.firstWhereOrNull((entry) =>
+        UserData.instance.activeDrugNames?.contains(entry.key) ?? false);
+    if (lookup == null) return null;
+    return lookup;
+  }
+
+  static String? lookupFor(String gene) {
+    final overwrittenLookup = UserData.overwrittenLookup(gene);
+    if (overwrittenLookup != null) {
+      return overwrittenLookup.value;
+    }
+    return UserData.instance.lookups?[gene]?.lookupkey;
+  }
+
   @HiveField(2)
-  List<String>? starredDrugIds;
+  List<String>? activeDrugNames;
 }
 
 /// Initializes the user's data by registering all necessary adapters and

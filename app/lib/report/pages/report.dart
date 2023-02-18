@@ -35,7 +35,7 @@ class GeneCard extends StatelessWidget {
               Text(phenotype.geneSymbol,
                   style: PharMeTheme.textTheme.titleMedium),
               SizedBox(height: 8),
-              Text(UserData.instance.lookups![phenotype.geneSymbol]!.phenotype,
+              Text(UserData.phenotypeFor(phenotype.geneSymbol)!,
                   style: PharMeTheme.textTheme.titleSmall),
             ],
           ),

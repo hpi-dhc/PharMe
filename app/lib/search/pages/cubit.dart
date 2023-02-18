@@ -14,11 +14,11 @@ class SearchCubit extends Cubit<SearchState> {
 
   Timer? searchTimeout;
   String searchValue = '';
-  bool filterStarred = false;
+  bool filterActive = false;
   final duration = Duration(milliseconds: 500);
 
-  void search({String? query, bool? filterStarred}) {
-    this.filterStarred = filterStarred ?? this.filterStarred;
+  void search({String? query, bool? filterActive}) {
+    this.filterActive = filterActive ?? this.filterActive;
     searchValue = query ?? searchValue;
 
     state.whenOrNull(
@@ -27,7 +27,7 @@ class SearchCubit extends Cubit<SearchState> {
             allDrugs,
             allDrugs
                 .filter((drug) =>
-                    (!this.filterStarred || drug.isStarred()) &&
+                    (!this.filterActive || drug.isActive()) &&
                     drug.matches(query: searchValue))
                 .toList())),
         error: loadDrugs);
@@ -54,7 +54,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void toggleFilter() {
-    search(filterStarred: !filterStarred);
+    search(filterActive: !filterActive);
   }
 
   void _emitFilteredLoaded(List<Drug> drugs) {
@@ -62,7 +62,7 @@ class SearchCubit extends Cubit<SearchState> {
         drugs,
         drugs
             .filter((drug) =>
-                (!filterStarred || drug.isStarred()) &&
+                (!filterActive || drug.isActive()) &&
                 drug.matches(query: searchValue))
             .toList()));
   }

@@ -75,7 +75,7 @@ List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
           title: 'Relevant gene phenotypes: ',
           text: guideline.lookupkey.keys
               .map((geneSymbol) =>
-                  '$geneSymbol: ${UserData.instance.lookups![geneSymbol]!}')
+                  '$geneSymbol: ${UserData.phenotypeFor(geneSymbol)!}')
               .join(', ')),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
