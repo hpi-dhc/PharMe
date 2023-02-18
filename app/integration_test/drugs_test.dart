@@ -52,6 +52,14 @@ void main() {
         genotype: '*1/*1',
         lookupkey: 'Normal Metabolizer')
   };
+  UserData.instance.diplotypes = {
+    'CYP2C9': Diplotype(
+        gene: 'CYP2C9',
+        resultType: 'Diplotype',
+        phenotype: 'Normal Metabolizer',
+        genotype: '*1/*1',
+        allelesTested: '1')
+  };
   final testDrugWithoutGuidelines = Drug(
     id: '2',
     version: 1,
