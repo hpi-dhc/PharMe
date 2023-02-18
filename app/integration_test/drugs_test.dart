@@ -71,7 +71,7 @@ void main() {
         brandNames: ['brand name', 'another brand name']),
     guidelines: [],
   );
-  UserData.instance.starredDrugIds = ['1'];
+  UserData.instance.starredDrugNames = ['Ibuprofen'];
 
   group('integration test for the drugs page', () {
     testWidgets('test loading', (tester) async {

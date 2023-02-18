@@ -15,12 +15,12 @@ class DrugCubit extends Cubit<DrugState> {
     final drug = state.whenOrNull(loaded: (drug, _) => drug);
     if (drug == null) return;
 
-    final stars = UserData.instance.starredDrugIds ?? [];
+    final stars = UserData.instance.starredDrugNames ?? [];
     if (drug.isStarred()) {
-      UserData.instance.starredDrugIds =
-          stars.filter((element) => element != _drug.id).toList();
+      UserData.instance.starredDrugNames =
+          stars.filter((element) => element != _drug.name).toList();
     } else {
-      UserData.instance.starredDrugIds = stars + [_drug.id];
+      UserData.instance.starredDrugNames = stars + [_drug.name];
     }
     await UserData.save();
     emit(DrugState.loaded(drug, isStarred: drug.isStarred()));
