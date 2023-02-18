@@ -50,7 +50,7 @@ void main() {
         geneSymbol: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         genotype: '*1/*1',
-        lookupkey: 'Normal Metabolizer')
+        lookupkey: '2')
   };
   UserData.instance.diplotypes = {
     'CYP2C9': Diplotype(
