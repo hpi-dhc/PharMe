@@ -37,14 +37,20 @@ class UserData {
 
   @HiveField(1)
   Map<String, CpicPhenotype>? lookups;
-  static String? lookupFor(String gene) {
+
+  static MapEntry<String, String>? overwrittenLookup(String gene) {
     final inhibitors = drugInhibitors[gene];
-    if (inhibitors != null) {
-      final lookup = inhibitors.entries.firstWhereOrNull(
-        (entry) =>
-            UserData.instance.activeDrugNames?.contains(entry.key) ?? false,
-      );
-      if (lookup != null) return lookup.value;
+    if (inhibitors == null) return null;
+    final lookup = inhibitors.entries.firstWhereOrNull((entry) =>
+        UserData.instance.activeDrugNames?.contains(entry.key) ?? false);
+    if (lookup == null) return null;
+    return lookup;
+  }
+
+  static String? lookupFor(String gene) {
+    final overwrittenLookup = UserData.overwrittenLookup(gene);
+    if (overwrittenLookup != null) {
+      return overwrittenLookup.value;
     }
     return UserData.instance.lookups?[gene]?.lookupkey;
   }
