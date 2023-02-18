@@ -34,7 +34,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
         color: guideline.annotations.warningLevel.color,
         child: Padding(
             padding: EdgeInsets.all(12),
-            child: Column(children: [
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Icon(guideline.annotations.warningLevel.icon,
                     color: PharMeTheme.onSurfaceText),
