@@ -66,7 +66,6 @@ const BrickForm = ({ usage, brick }: Props) => {
     ): void => {
         setTranslations((prev) => new Map(prev).set(language, text));
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const deleteTranslation = (language: SupportedLanguage): void => {
         setTranslations((prev) => {
             const n = new Map(prev);
@@ -86,6 +85,7 @@ const BrickForm = ({ usage, brick }: Props) => {
             setMessage(`Failed to ${id ? 'update' : 'add new'} Brick.`);
         }
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const deleteBrick = async () => {
         try {
             await axios.delete(`/api/bricks/${id}`);
@@ -111,15 +111,13 @@ const BrickForm = ({ usage, brick }: Props) => {
                     <div key={index} className="space-y-1">
                         <div className="flex justify-between">
                             <h2 className="font-bold">{language}</h2>
-                            {/*
-                            Disabled for #378 until proper handling of deletion
                             <WithIcon
                                 as="button"
                                 icon={TrashIcon}
                                 onClick={() => deleteTranslation(language)}
                             >
                                 Delete translation
-                            </WithIcon>*/}
+                            </WithIcon>
                         </div>
                         <AutocompleteArea
                             value={translations.get(language) ?? ''}
@@ -147,7 +145,9 @@ const BrickForm = ({ usage, brick }: Props) => {
                     Cancel
                 </WithIcon>
                 <div className="space-x-4">
-                    {id && (
+                    {/*
+                    // Disabled for #378 until proper handling of deletion
+                    id && (
                         <WithIcon
                             as="button"
                             icon={TrashIcon}
@@ -156,7 +156,7 @@ const BrickForm = ({ usage, brick }: Props) => {
                         >
                             Delete Brick
                         </WithIcon>
-                    )}
+                    )*/}
                     <WithIcon
                         as="button"
                         icon={UploadIcon}
