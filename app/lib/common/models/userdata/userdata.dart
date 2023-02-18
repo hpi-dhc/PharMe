@@ -31,9 +31,13 @@ class UserData {
 
   @HiveField(0)
   Map<String, Diplotype>? diplotypes;
+  static String? phenotypeFor(String gene) =>
+      UserData.instance.diplotypes?[gene]?.phenotype;
 
   @HiveField(1)
   Map<String, CpicPhenotype>? lookups;
+  static String? lookupFor(String gene) =>
+      UserData.instance.lookups?[gene]?.lookupkey;
 
   @HiveField(2)
   List<String>? starredDrugIds;

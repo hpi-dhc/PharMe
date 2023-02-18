@@ -83,12 +83,8 @@ extension DrugMatchesQuery on Drug {
 /// Gets the User's matching guideline
 extension DrugWithUserGuideline on Drug {
   Guideline? userGuideline() => guidelines.firstOrNullWhere(
-        (guideline) => guideline.lookupkey.all(
-          (geneSymbol, geneResults) =>
-              (UserData.instance.lookups?.containsKey(geneSymbol) ?? false) &&
-              geneResults
-                  .contains(UserData.instance.lookups?[geneSymbol]?.lookupkey),
-        ),
+        (guideline) => guideline.lookupkey.all((geneSymbol, geneResults) =>
+            geneResults.contains(UserData.lookupFor(geneSymbol))),
       );
 }
 
