@@ -1,5 +1,8 @@
 // Everything has to match literally. The final value is not a phenotype but
-// the CPIC lookupkey value.
+// the CPIC lookupkey value. If a user has multiple of the given drugs active,
+// the topmost one will be used, i.e. the inhibitors should go from most to
+// least severe.
+
 // structure: gene symbol -> drug name -> overwriting lookupkey
 
 const Map<String, Map<String, String>> drugInhibitors = {

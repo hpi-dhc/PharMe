@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 
 import '../../../search/module.dart';
@@ -36,8 +37,17 @@ class UserData {
 
   @HiveField(1)
   Map<String, CpicPhenotype>? lookups;
-  static String? lookupFor(String gene) =>
-      UserData.instance.lookups?[gene]?.lookupkey;
+  static String? lookupFor(String gene) {
+    final inhibitors = drugInhibitors[gene];
+    if (inhibitors != null) {
+      final lookup = inhibitors.entries.firstWhereOrNull(
+        (entry) =>
+            UserData.instance.activeDrugNames?.contains(entry.key) ?? false,
+      );
+      if (lookup != null) return lookup.value;
+    }
+    return UserData.instance.lookups?[gene]?.lookupkey;
+  }
 
   @HiveField(2)
   List<String>? activeDrugNames;
