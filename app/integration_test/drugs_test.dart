@@ -71,7 +71,7 @@ void main() {
         brandNames: ['brand name', 'another brand name']),
     guidelines: [],
   );
-  UserData.instance.starredDrugNames = ['Ibuprofen'];
+  UserData.instance.activeDrugNames = ['Ibuprofen'];
 
   group('integration test for the drugs page', () {
     testWidgets('test loading', (tester) async {
@@ -124,7 +124,7 @@ void main() {
 
     testWidgets('test loaded page', (tester) async {
       when(() => mockDrugsCubit.state)
-          .thenReturn(DrugState.loaded(testDrug, isStarred: false));
+          .thenReturn(DrugState.loaded(testDrug, isActive: false));
 
       late BuildContext context;
 
@@ -188,7 +188,7 @@ void main() {
 
     testWidgets('test loaded page without guidelines', (tester) async {
       when(() => mockDrugsCubit.state).thenReturn(
-          DrugState.loaded(testDrugWithoutGuidelines, isStarred: true));
+          DrugState.loaded(testDrugWithoutGuidelines, isActive: true));
 
       await tester.pumpWidget(
         MaterialApp(

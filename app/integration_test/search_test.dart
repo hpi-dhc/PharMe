@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 
 class MockSearchCubit extends MockCubit<SearchState> implements SearchCubit {
   @override
-  bool get filterStarred => false;
+  bool get filterActive => false;
 }
 
 void main() {

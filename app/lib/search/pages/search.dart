@@ -33,8 +33,8 @@ class SearchPage extends HookWidget {
                 TooltipIcon(context.l10n.search_page_tooltip_search),
                 IconButton(
                     onPressed: () => context.read<SearchCubit>().toggleFilter(),
-                    icon: PharMeTheme.starIcon(
-                        isStarred: context.read<SearchCubit>().filterStarred)),
+                    icon: PharMeTheme.activeDrugIcon(
+                        isActive: context.read<SearchCubit>().filterActive)),
               ]),
               body: state.when(
                 initial: () => [Container()],
@@ -46,8 +46,8 @@ class SearchPage extends HookWidget {
   }
 
   List<Widget> _buildDrugsList(BuildContext context, List<Drug> drugs) {
-    if (drugs.isEmpty && context.read<SearchCubit>().filterStarred) {
-      return [errorIndicator(context.l10n.err_no_starred_drugs)];
+    if (drugs.isEmpty && context.read<SearchCubit>().filterActive) {
+      return [errorIndicator(context.l10n.err_no_active_drugs)];
     }
     return [
       SizedBox(height: 8),

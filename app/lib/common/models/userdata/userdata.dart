@@ -40,7 +40,7 @@ class UserData {
       UserData.instance.lookups?[gene]?.lookupkey;
 
   @HiveField(2)
-  List<String>? starredDrugNames;
+  List<String>? activeDrugNames;
 }
 
 /// Initializes the user's data by registering all necessary adapters and

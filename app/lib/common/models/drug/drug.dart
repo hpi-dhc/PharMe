@@ -66,9 +66,9 @@ class DrugAnnotations {
   List<String> brandNames;
 }
 
-extension DrugIsStarred on Drug {
-  bool isStarred() {
-    return UserData.instance.starredDrugNames?.contains(name) ?? false;
+extension DrugIsActive on Drug {
+  bool isActive() {
+    return UserData.instance.activeDrugNames?.contains(name) ?? false;
   }
 }
 

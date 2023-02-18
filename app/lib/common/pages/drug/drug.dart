@@ -28,12 +28,12 @@ class DrugPage extends StatelessWidget {
                 body: [errorIndicator(context.l10n.err_generic)]),
             loading: () =>
                 pageScaffold(title: drugName, body: [loadingIndicator()]),
-            loaded: (drug, isStarred) => pageScaffold(
+            loaded: (drug, isActive) => pageScaffold(
               title: drugName,
               actions: [
                 IconButton(
-                  onPressed: () => context.read<DrugCubit>().toggleStarred(),
-                  icon: PharMeTheme.starIcon(isStarred: isStarred),
+                  onPressed: () => context.read<DrugCubit>().toggleActive(),
+                  icon: PharMeTheme.activeDrugIcon(isActive: isActive),
                 ),
                 IconButton(
                   onPressed: () => sharePdf(drug),
@@ -44,7 +44,7 @@ class DrugPage extends StatelessWidget {
                 )
               ],
               body: [
-                _buildDrugsPage(drug, isStarred: isStarred, context: context)
+                _buildDrugsPage(drug, isActive: isActive, context: context)
               ],
             ),
           );
@@ -55,7 +55,7 @@ class DrugPage extends StatelessWidget {
 
   Widget _buildDrugsPage(
     Drug drug, {
-    required bool isStarred,
+    required bool isActive,
     required BuildContext context,
   }) {
     final userGuideline = drug.userGuideline();
