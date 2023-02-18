@@ -26,7 +26,7 @@ Future<void> _saveDiplotypeResponse(Response response) async {
   final diplotypes =
       diplotypesFromHTTPResponse(response).filterValidDiplotypes();
 
-  UserData.instance.diplotypes = diplotypes;
+  UserData.instance.diplotypes = {for (var d in diplotypes) d.gene: d};
   await UserData.save();
   // invalidate cached drugs because lookups may have changed and we need to
   // refilter the matching guidelines
@@ -55,14 +55,17 @@ Future<void> fetchAndSaveLookups() async {
   // ignore: omit_local_variable_types
   final Map<String, CpicPhenotype> matchingLookups = {};
   // extract the matching lookups
-  for (final diplotype in usersDiplotypes) {
-    if (diplotype.genotype.contains('-')) {
-      // TODO(kolioOtSofia): what to do with genotypes that contain -
-    }
+  for (final diplotype in usersDiplotypes.values) {
     // the gene and the genotype build the key for the hashmap
     final key = '${diplotype.gene}__${diplotype.genotype}';
-    final temp = lookupsHashMap[key];
-    if (temp != null) matchingLookups[diplotype.gene] = temp;
+    final lookup = lookupsHashMap[key];
+    if (lookup == null) continue;
+    // uncomment to print literal mismatches between lab/CPIC phenotypes
+    // if (diplotype.phenotype != lookup.phenotype) {
+    //   print(
+    //       'Lab phenotype ${diplotype.phenotype} for ${diplotype.gene} (${diplotype.genotype}) is "${lookup.phenotype}" for CPIC');
+    // }
+    matchingLookups[diplotype.gene] = lookup;
   }
 
   UserData.instance.lookups = matchingLookups;

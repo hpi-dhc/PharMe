@@ -30,7 +30,7 @@ class UserData {
   }
 
   @HiveField(0)
-  List<Diplotype>? diplotypes;
+  Map<String, Diplotype>? diplotypes;
 
   @HiveField(1)
   Map<String, CpicPhenotype>? lookups;
