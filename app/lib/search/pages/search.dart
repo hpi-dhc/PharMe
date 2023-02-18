@@ -76,7 +76,7 @@ class DrugCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final warningLevel = drug.highestWarningLevel();
+    final warningLevel = drug.userGuideline()?.annotations.warningLevel;
 
     return RoundedCard(
       onTap: onTap,

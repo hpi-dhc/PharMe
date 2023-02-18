@@ -20,8 +20,6 @@ Future<void> updateCachedDrugs() async {
 
   final dataResponse = await get(anniUrl('data'));
   if (dataResponse.statusCode != 200) throw Exception();
-  final drugs =
-      AnniDataResponse.fromJson(jsonDecode(dataResponse.body)).data.drugs;
-  CachedDrugs.instance.drugs = drugs.filterUserGuidelines();
+  CachedDrugs.instance.drugs = AnniDataResponse.fromJson(jsonDecode(dataResponse.body)).data.drugs;
   await CachedDrugs.save();
 }

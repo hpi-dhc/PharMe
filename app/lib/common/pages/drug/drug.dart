@@ -58,6 +58,7 @@ class DrugPage extends StatelessWidget {
     required bool isStarred,
     required BuildContext context,
   }) {
+    final userGuideline = drug.userGuideline();
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
@@ -72,11 +73,11 @@ class DrugPage extends StatelessWidget {
               tooltip: context.l10n.drugs_page_tooltip_guideline,
             ),
             SizedBox(height: 12),
-            ...(drug.guidelines.isNotEmpty)
+            ...(userGuideline != null)
                 ? [
                     Disclaimer(),
                     SizedBox(height: 12),
-                    GuidelineAnnotationCard(drug.guidelines[0])
+                    GuidelineAnnotationCard(userGuideline)
                   ]
                 : [Text(context.l10n.drugs_page_no_guidelines_for_phenotype)]
           ],
