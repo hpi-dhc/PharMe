@@ -56,7 +56,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     final geneDescriptions = guideline.lookupkey.keys.map((geneSymbol) =>
-        '$geneSymbol (${UserData.instance.lookups![geneSymbol]!.phenotype})');
+        '$geneSymbol (${UserData.instance.diplotypes![geneSymbol]!.phenotype})');
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SubHeader(context.l10n.drugs_page_your_genome),
       SizedBox(height: 12),
