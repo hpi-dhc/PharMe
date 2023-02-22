@@ -60,18 +60,19 @@ class ContextMenu extends StatelessWidget {
 }
 
 class ContextMenuCheckmark extends StatelessWidget {
-  ContextMenuCheckmark(
+  const ContextMenuCheckmark(
       {super.key,
       required this.label,
       required this.setState,
-      this.state = false});
+      this.initialState = false});
 
   final String label;
   final void Function(bool) setState;
-  bool state;
+  final bool initialState;
 
   @override
   Widget build(BuildContext context) {
+    var state = initialState;
     return StatefulBuilder(
       builder: (context, rebuild) => GestureDetector(
         onTap: () {

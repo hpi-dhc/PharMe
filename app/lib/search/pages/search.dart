@@ -51,7 +51,7 @@ class SearchPage extends HookWidget {
         ContextMenuCheckmark(
             label: context.l10n.search_page_filter_inactive,
             setState: (state) => cubit.search(showInactive: state),
-            state: filter?.showInactive ?? false),
+            initialState: filter?.showInactive ?? false),
         ...WarningLevel.values.map((level) => ContextMenuCheckmark(
             label: {
               WarningLevel.green: context.l10n.search_page_filter_green,
@@ -60,7 +60,7 @@ class SearchPage extends HookWidget {
               WarningLevel.none: context.l10n.search_page_filter_gray,
             }[level]!,
             setState: (state) => cubit.search(showWarningLevel: {level: state}),
-            state: filter?.showWarningLevel[level] ?? false))
+            initialState: filter?.showWarningLevel[level] ?? false))
       ],
       child: Padding(
           padding: EdgeInsets.all(8), child: Icon(Icons.filter_list_rounded)),
