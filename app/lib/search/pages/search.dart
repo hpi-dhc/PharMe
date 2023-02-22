@@ -45,25 +45,21 @@ class SearchPage extends HookWidget {
 
   Widget buildFilter(SearchCubit cubit) {
     final filter = cubit.filter;
-    print('build filter');
     return ContextMenu(
       items: [
         ContextMenuCheckmark(
             label: 'show inactive',
-            setState: () => cubit.search(toggleInactive: true),
-            icon: _checkmark(isEnabled: filter?.showInactive)),
+            setState: (state) => cubit.search(showInactive: state),
+            state: filter?.showInactive ?? false),
         ...WarningLevel.values.map((level) => ContextMenuCheckmark(
             label: 'placeholder',
-            setState: () => cubit.search(toggleWarningLevel: level),
-            icon: _checkmark(isEnabled: filter?.showWarningLevel[level])))
+            setState: (state) => cubit.search(showWarningLevel: {level: state}),
+            state: filter?.showWarningLevel[level] ?? false))
       ],
       child: Padding(
           padding: EdgeInsets.all(8), child: Icon(Icons.filter_list_rounded)),
     );
   }
-
-  IconData? _checkmark({required bool? isEnabled}) =>
-      isEnabled ?? false ? Icons.check_rounded : null;
 
   List<Widget> _buildDrugsList(
       BuildContext context, List<Drug> drugs, FilterState filter) {

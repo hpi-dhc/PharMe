@@ -9,7 +9,7 @@ class ContextMenu extends StatelessWidget {
     required this.child,
   });
 
-  final List<ContextMenuAction> items;
+  final List<ContextMenuCheckmark> items;
   final Widget child;
 
   @override
@@ -55,31 +55,40 @@ class ContextMenu extends StatelessWidget {
   }
 }
 
-class ContextMenuAction extends StatelessWidget {
-  const ContextMenuAction({
-    super.key,
-    required this.label,
-    required this.action,
-    this.icon,
-  });
+class ContextMenuCheckmark extends StatelessWidget {
+  ContextMenuCheckmark(
+      {super.key,
+      required this.label,
+      required this.setState,
+      this.state = false});
 
   final String label;
-  final void Function() action;
-  final IconData? icon;
+  final void Function(bool) setState;
+  bool state;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: action,
-      child: Padding(
-        padding: EdgeInsets.all(12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) Icon(icon!, size: 24) else SizedBox(width: 24),
-            SizedBox(width: 8),
-            Text(label),
-          ],
+    return StatefulBuilder(
+      builder: (context, rebuild) => GestureDetector(
+        onTap: () {
+          rebuild(() {
+            state = !state;
+            setState(state);
+          });
+        },
+        child: Padding(
+          padding: EdgeInsets.all(12),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (state)
+                Icon(Icons.check_rounded, size: 24)
+              else
+                SizedBox(width: 24),
+              SizedBox(width: 8),
+              Text(label),
+            ],
+          ),
         ),
       ),
     );

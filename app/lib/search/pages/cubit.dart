@@ -18,8 +18,8 @@ class SearchCubit extends Cubit<SearchState> {
 
   void search({
     String? query,
-    bool? toggleInactive,
-    WarningLevel? toggleWarningLevel,
+    bool? showInactive,
+    Map<WarningLevel, bool>? showWarningLevel,
   }) {
     state.whenOrNull(
       initial: loadDrugs,
@@ -29,8 +29,8 @@ class SearchCubit extends Cubit<SearchState> {
           FilterState.from(
             filter,
             query: query,
-            toggleInactive: toggleInactive,
-            toggleWarningLevel: toggleWarningLevel,
+            showInactive: showInactive,
+            showWarningLevel: showWarningLevel,
           ),
         ),
       ),
@@ -76,23 +76,20 @@ class FilterState {
   FilterState.from(
     FilterState other, {
     String? query,
-    bool? toggleInactive,
-    WarningLevel? toggleWarningLevel,
+    bool? showInactive,
+    Map<WarningLevel, bool>? showWarningLevel,
   }) : this(
           query: query ?? other.query,
-          showInactive: (toggleInactive == true)
-              ? !other.showInactive
-              : other.showInactive,
+          showInactive: showInactive ?? other.showInactive,
           showWarningLevel: {
-            for (var entry in other.showWarningLevel.entries)
-              entry.key:
-                  (entry.key == toggleWarningLevel) ? !entry.value : entry.value
+            for (var level in WarningLevel.values)
+              level: showWarningLevel?[level] ?? other.showWarningLevel[level]!
           },
         );
 
   final String query;
   final bool showInactive;
-  Map<WarningLevel, bool> showWarningLevel;
+  final Map<WarningLevel, bool> showWarningLevel;
 
   bool isAccepted(Drug drug) {
     final warningLevel = drug.userGuideline()?.annotations.warningLevel;
