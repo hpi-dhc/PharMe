@@ -31,26 +31,49 @@ class SearchPage extends HookWidget {
                 )),
                 SizedBox(width: 12),
                 TooltipIcon(context.l10n.search_page_tooltip_search),
-                IconButton(
-                    onPressed: () => context.read<SearchCubit>().toggleFilter(),
-                    icon: Icon(Icons.filter_list_rounded)),
+                buildFilter(context.read<SearchCubit>()),
               ]),
               body: state.when(
                 initial: () => [Container()],
                 error: () => [errorIndicator(context.l10n.err_generic)],
-                loaded: (_, drugs) => _buildDrugsList(context, drugs),
+                loaded: (drugs, filter) =>
+                    _buildDrugsList(context, drugs, filter),
                 loading: () => [loadingIndicator()],
               ));
         }));
   }
 
-  List<Widget> _buildDrugsList(BuildContext context, List<Drug> drugs) {
-    if (drugs.isEmpty && context.read<SearchCubit>().filterActive) {
-      return [errorIndicator(context.l10n.err_no_active_drugs)];
+  Widget buildFilter(SearchCubit cubit) {
+    final filter = cubit.filter;
+    print('build filter');
+    return ContextMenu(
+      items: [
+        ContextMenuCheckmark(
+            label: 'show inactive',
+            setState: () => cubit.search(toggleInactive: true),
+            icon: _checkmark(isEnabled: filter?.showInactive)),
+        ...WarningLevel.values.map((level) => ContextMenuCheckmark(
+            label: 'placeholder',
+            setState: () => cubit.search(toggleWarningLevel: level),
+            icon: _checkmark(isEnabled: filter?.showWarningLevel[level])))
+      ],
+      child: Padding(
+          padding: EdgeInsets.all(8), child: Icon(Icons.filter_list_rounded)),
+    );
+  }
+
+  IconData? _checkmark({required bool? isEnabled}) =>
+      isEnabled ?? false ? Icons.check_rounded : null;
+
+  List<Widget> _buildDrugsList(
+      BuildContext context, List<Drug> drugs, FilterState filter) {
+    final filteredDrugs = filter.filter(drugs);
+    if (filteredDrugs.isEmpty) {
+      return [errorIndicator(context.l10n.err_no_drugs)];
     }
     return [
       SizedBox(height: 8),
-      ...drugs.map((drug) => Column(children: [
+      ...filteredDrugs.map((drug) => Column(children: [
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: DrugCard(

@@ -14,29 +14,34 @@ class SearchCubit extends Cubit<SearchState> {
 
   Timer? searchTimeout;
   String searchValue = '';
-  bool filterActive = false;
   final duration = Duration(milliseconds: 500);
 
-  void search({String? query, bool? filterActive}) {
-    this.filterActive = filterActive ?? this.filterActive;
-    searchValue = query ?? searchValue;
-
+  void search({
+    String? query,
+    bool? toggleInactive,
+    WarningLevel? toggleWarningLevel,
+  }) {
     state.whenOrNull(
-        initial: loadDrugs,
-        loaded: (allDrugs, _) => emit(SearchState.loaded(
-            allDrugs,
-            allDrugs
-                .filter((drug) =>
-                    (!this.filterActive || drug.isActive()) &&
-                    drug.matches(query: searchValue))
-                .toList())),
-        error: loadDrugs);
+      initial: loadDrugs,
+      loaded: (allDrugs, filter) => emit(
+        SearchState.loaded(
+          allDrugs,
+          FilterState.from(
+            filter,
+            query: query,
+            toggleInactive: toggleInactive,
+            toggleWarningLevel: toggleWarningLevel,
+          ),
+        ),
+      ),
+      error: loadDrugs,
+    );
   }
 
   Future<void> loadDrugs({bool updateIfNull = true}) async {
     final drugs = CachedDrugs.instance.drugs;
     if (drugs != null) {
-      _emitFilteredLoaded(drugs);
+      emit(SearchState.loaded(drugs, FilterState.initial()));
       return;
     }
     if (!updateIfNull) {
@@ -53,19 +58,50 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
-  void toggleFilter() {
-    search(filterActive: !filterActive);
+  FilterState? get filter => state.whenOrNull(loaded: (_, filter) => filter);
+}
+
+class FilterState {
+  FilterState({
+    required this.query,
+    required this.showInactive,
+    required this.showWarningLevel,
+  });
+
+  FilterState.initial()
+      : this(query: '', showInactive: true, showWarningLevel: {
+          for (var level in WarningLevel.values) level: true
+        });
+
+  FilterState.from(
+    FilterState other, {
+    String? query,
+    bool? toggleInactive,
+    WarningLevel? toggleWarningLevel,
+  }) : this(
+          query: query ?? other.query,
+          showInactive: (toggleInactive == true)
+              ? !other.showInactive
+              : other.showInactive,
+          showWarningLevel: {
+            for (var entry in other.showWarningLevel.entries)
+              entry.key:
+                  (entry.key == toggleWarningLevel) ? !entry.value : entry.value
+          },
+        );
+
+  final String query;
+  final bool showInactive;
+  Map<WarningLevel, bool> showWarningLevel;
+
+  bool isAccepted(Drug drug) {
+    final warningLevel = drug.userGuideline()?.annotations.warningLevel;
+    return drug.matches(query: query) &&
+        (drug.isActive() || showInactive) &&
+        showWarningLevel[warningLevel]!;
   }
 
-  void _emitFilteredLoaded(List<Drug> drugs) {
-    emit(SearchState.loaded(
-        drugs,
-        drugs
-            .filter((drug) =>
-                (!filterActive || drug.isActive()) &&
-                drug.matches(query: searchValue))
-            .toList()));
-  }
+  List<Drug> filter(List<Drug> drugs) => drugs.filter(isAccepted).toList();
 }
 
 @freezed
@@ -73,6 +109,8 @@ class SearchState with _$SearchState {
   const factory SearchState.initial() = _InitialState;
   const factory SearchState.loading() = _LoadingState;
   const factory SearchState.loaded(
-      List<Drug> allDrugs, List<Drug> filteredDrugs) = _LoadedState;
+    List<Drug> allDrugs,
+    FilterState filter,
+  ) = _LoadedState;
   const factory SearchState.error() = _ErrorState;
 }
