@@ -1,4 +1,7 @@
 {
+  "action_cancel": "Cancel",
+  "action_continue": "Continue",
+
   "auth_choose_lab": "Please select your lab",
   "auth_sign_in": "Sign in",
   "auth_success": "Successfully imported data",
@@ -37,6 +40,8 @@
   "drugs_page_header_druginfo": "Information",
   "drugs_page_header_active": "Activity",
   "drugs_page_active": "I am actively taking this drug.",
+  "drugs_page_active_warn_header": "Are you sure you want to change the activity status?",
+  "drugs_page_active_warn": "This may adjust the guidelines you receive for other drugs.",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
   "drugs_page_no_guidelines_for_phenotype": "We couldn't find a guideline matching your genetics.",
@@ -108,8 +113,6 @@
   "onboarding_5_text": "After signing in to the lab, your genetic data is sent straight onto your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
     
   "settings_page_account_settings": "Account Settings",
-  "settings_page_cancel": "Cancel",
-  "settings_page_continue": "Continue",
   "settings_page_delete_data": "Delete App Data",
   "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data.",
   "settings_page_more": "More",

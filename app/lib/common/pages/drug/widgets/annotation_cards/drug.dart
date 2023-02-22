@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../../../module.dart';
 import '../sub_header.dart';
 
@@ -36,9 +38,31 @@ class DrugAnnotationCard extends StatelessWidget {
             SizedBox(height: 4),
             SubHeader(context.l10n.drugs_page_header_active),
             CheckboxListTile(
+              activeColor: PharMeTheme.primaryColor,
               title: Text(context.l10n.drugs_page_active),
               value: isActive,
-              onChanged: setActivity,
+              onChanged: (newValue) => showCupertinoModalPopup(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: Text(context.l10n.drugs_page_active_warn_header),
+                  content: Text(context.l10n.drugs_page_active_warn),
+                  actions: <CupertinoDialogAction>[
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: Text(context.l10n.action_cancel),
+                    ),
+                    CupertinoDialogAction(
+                      isDestructiveAction: true,
+                      onPressed: () {
+                        Navigator.pop(context, 'OK');
+                        setActivity(newValue);
+                      },
+                      child: Text(context.l10n.action_continue),
+                    ),
+                  ],
+                ),
+              ),
               controlAffinity: ListTileControlAffinity.leading,
             ),
           ],
