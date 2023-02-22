@@ -31,7 +31,7 @@ class SearchPage extends HookWidget {
                 )),
                 SizedBox(width: 12),
                 TooltipIcon(context.l10n.search_page_tooltip_search),
-                buildFilter(context.read<SearchCubit>()),
+                buildFilter(context),
               ]),
               body: state.when(
                 initial: () => [Container()],
@@ -43,16 +43,22 @@ class SearchPage extends HookWidget {
         }));
   }
 
-  Widget buildFilter(SearchCubit cubit) {
+  Widget buildFilter(BuildContext context) {
+    final cubit = context.read<SearchCubit>();
     final filter = cubit.filter;
     return ContextMenu(
       items: [
         ContextMenuCheckmark(
-            label: 'show inactive',
+            label: context.l10n.search_page_filter_inactive,
             setState: (state) => cubit.search(showInactive: state),
             state: filter?.showInactive ?? false),
         ...WarningLevel.values.map((level) => ContextMenuCheckmark(
-            label: 'placeholder',
+            label: {
+              WarningLevel.green: context.l10n.search_page_filter_green,
+              WarningLevel.yellow: context.l10n.search_page_filter_yellow,
+              WarningLevel.red: context.l10n.search_page_filter_red,
+              WarningLevel.none: context.l10n.search_page_filter_gray,
+            }[level]!,
             setState: (state) => cubit.search(showWarningLevel: {level: state}),
             state: filter?.showWarningLevel[level] ?? false))
       ],

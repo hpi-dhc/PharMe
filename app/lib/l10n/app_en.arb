@@ -20,6 +20,11 @@
   "general_retry": "Retry",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
+  "search_page_filter_inactive": "Inactive drugs",
+  "search_page_filter_green": "Green warning level",
+  "search_page_filter_yellow": "Yellow warning level",
+  "search_page_filter_red": "Red warning level",
+  "search_page_filter_gray": "No warning level",
 
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
   "drugs_page_overwritten_phenotype": "adjusted based on you taking {drugName}",
