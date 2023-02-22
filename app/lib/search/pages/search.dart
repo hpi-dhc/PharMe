@@ -33,8 +33,7 @@ class SearchPage extends HookWidget {
                 TooltipIcon(context.l10n.search_page_tooltip_search),
                 IconButton(
                     onPressed: () => context.read<SearchCubit>().toggleFilter(),
-                    icon: PharMeTheme.activeDrugIcon(
-                        isActive: context.read<SearchCubit>().filterActive)),
+                    icon: Icon(Icons.filter_list_rounded)),
               ]),
               body: state.when(
                 initial: () => [Container()],
