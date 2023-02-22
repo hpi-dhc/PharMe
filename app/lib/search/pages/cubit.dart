@@ -95,7 +95,7 @@ class FilterState {
     final warningLevel = drug.userGuideline()?.annotations.warningLevel;
     return drug.matches(query: query) &&
         (drug.isActive() || showInactive) &&
-        showWarningLevel[warningLevel]!;
+        (showWarningLevel[warningLevel] ?? true);
   }
 
   List<Drug> filter(List<Drug> drugs) => drugs.filter(isAccepted).toList();
