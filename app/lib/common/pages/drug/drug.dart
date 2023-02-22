@@ -32,10 +32,6 @@ class DrugPage extends StatelessWidget {
               title: drugName,
               actions: [
                 IconButton(
-                  onPressed: () => context.read<DrugCubit>().toggleActive(),
-                  icon: PharMeTheme.activeDrugIcon(isActive: isActive),
-                ),
-                IconButton(
                   onPressed: () => sharePdf(drug),
                   icon: Icon(
                     Icons.ios_share_rounded,
@@ -64,9 +60,13 @@ class DrugPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SubHeader(context.l10n.drugs_page_header_druginfo),
+            SubHeader(context.l10n.drugs_page_header_drug),
             SizedBox(height: 12),
-            DrugAnnotationCard(drug),
+            DrugAnnotationCard(
+              drug,
+              isActive: isActive,
+              setActivity: context.read<DrugCubit>().setActivity,
+            ),
             SizedBox(height: 20),
             SubHeader(
               context.l10n.drugs_page_header_guideline,

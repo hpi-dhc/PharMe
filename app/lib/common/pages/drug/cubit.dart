@@ -11,19 +11,21 @@ class DrugCubit extends Cubit<DrugState> {
 
   final Drug _drug;
 
-  Future<void> toggleActive() async {
+  // ignore: avoid_positional_boolean_parameters
+  Future<void> setActivity(bool? value) async {
+    if (value == null) return;
     final drug = state.whenOrNull(loaded: (drug, _) => drug);
     if (drug == null) return;
 
     final active = UserData.instance.activeDrugNames ?? [];
-    if (drug.isActive()) {
+    if (value) {
+      UserData.instance.activeDrugNames = active + [_drug.name];
+    } else {
       UserData.instance.activeDrugNames =
           active.filter((element) => element != _drug.name).toList();
-    } else {
-      UserData.instance.activeDrugNames = active + [_drug.name];
     }
     await UserData.save();
-    emit(DrugState.loaded(drug, isActive: drug.isActive()));
+    emit(DrugState.loaded(drug, isActive: value));
   }
 }
 
