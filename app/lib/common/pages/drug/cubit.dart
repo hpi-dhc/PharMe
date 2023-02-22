@@ -17,13 +17,13 @@ class DrugCubit extends Cubit<DrugState> {
     final drug = state.whenOrNull(loaded: (drug, _) => drug);
     if (drug == null) return;
 
-    final active = UserData.instance.activeDrugNames ?? [];
+    final active = (UserData.instance.activeDrugNames ?? [])
+        .filter((name) => name != _drug.name)
+        .toList();
     if (value) {
-      UserData.instance.activeDrugNames = active + [_drug.name];
-    } else {
-      UserData.instance.activeDrugNames =
-          active.filter((element) => element != _drug.name).toList();
+      active.add(_drug.name);
     }
+    UserData.instance.activeDrugNames = active;
     await UserData.save();
     emit(DrugState.loaded(drug, isActive: value));
   }
