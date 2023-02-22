@@ -82,9 +82,9 @@ class ContextMenuCheckmark extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (state)
-                Icon(Icons.check_rounded, size: 24)
+                Icon(Icons.check_rounded, size: 16)
               else
-                SizedBox(width: 24),
+                SizedBox(width: 16, height: 16),
               SizedBox(width: 8),
               Text(label),
             ],
