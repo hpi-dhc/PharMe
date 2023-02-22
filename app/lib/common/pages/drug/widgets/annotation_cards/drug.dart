@@ -31,7 +31,9 @@ class DrugAnnotationCard extends StatelessWidget {
                     drug.annotations.brandNames.join(', ')),
               ]
             ]),
-            SizedBox(height: 12),
+            SizedBox(height: 4),
+            Divider(color: PharMeTheme.borderColor),
+            SizedBox(height: 4),
             SubHeader(context.l10n.drugs_page_header_active),
             CheckboxListTile(
               title: Text(context.l10n.drugs_page_active),
