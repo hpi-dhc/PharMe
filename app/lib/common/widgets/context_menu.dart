@@ -25,20 +25,24 @@ class ContextMenu extends StatelessWidget {
                   color: PharMeTheme.onSurfaceColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: items
-                      .mapIndexed((index, item) => (index == items.count() - 1)
-                          ? item
-                          : Container(
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                bottom: BorderSide(
-                                    width: 0.5, color: PharMeTheme.borderColor),
-                              )),
-                              child: item))
-                      .toList(),
+                child: IntrinsicWidth(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: items
+                        .mapIndexed(
+                            (index, item) => (index == items.count() - 1)
+                                ? item
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                      bottom: BorderSide(
+                                          width: 0.5,
+                                          color: PharMeTheme.borderColor),
+                                    )),
+                                    child: item))
+                        .toList(),
+                  ),
                 ),
               ),
             ),
@@ -79,14 +83,13 @@ class ContextMenuCheckmark extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(12),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
             children: [
               if (state)
                 Icon(Icons.check_rounded, size: 16)
               else
                 SizedBox(width: 16, height: 16),
               SizedBox(width: 8),
-              Text(label),
+              Expanded(child: Text(label)),
             ],
           ),
         ),
