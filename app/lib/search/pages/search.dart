@@ -31,27 +31,51 @@ class SearchPage extends HookWidget {
                 )),
                 SizedBox(width: 12),
                 TooltipIcon(context.l10n.search_page_tooltip_search),
-                IconButton(
-                    onPressed: () => context.read<SearchCubit>().toggleFilter(),
-                    icon: PharMeTheme.activeDrugIcon(
-                        isActive: context.read<SearchCubit>().filterActive)),
+                buildFilter(context),
               ]),
               body: state.when(
                 initial: () => [Container()],
                 error: () => [errorIndicator(context.l10n.err_generic)],
-                loaded: (_, drugs) => _buildDrugsList(context, drugs),
+                loaded: (drugs, filter) =>
+                    _buildDrugsList(context, drugs, filter),
                 loading: () => [loadingIndicator()],
               ));
         }));
   }
 
-  List<Widget> _buildDrugsList(BuildContext context, List<Drug> drugs) {
-    if (drugs.isEmpty && context.read<SearchCubit>().filterActive) {
-      return [errorIndicator(context.l10n.err_no_active_drugs)];
+  Widget buildFilter(BuildContext context) {
+    final cubit = context.read<SearchCubit>();
+    final filter = cubit.filter;
+    return ContextMenu(
+      items: [
+        ContextMenuCheckmark(
+            label: context.l10n.search_page_filter_inactive,
+            setState: (state) => cubit.search(showInactive: state),
+            initialState: filter?.showInactive ?? false),
+        ...WarningLevel.values.map((level) => ContextMenuCheckmark(
+            label: {
+              WarningLevel.green: context.l10n.search_page_filter_green,
+              WarningLevel.yellow: context.l10n.search_page_filter_yellow,
+              WarningLevel.red: context.l10n.search_page_filter_red,
+              WarningLevel.none: context.l10n.search_page_filter_gray,
+            }[level]!,
+            setState: (state) => cubit.search(showWarningLevel: {level: state}),
+            initialState: filter?.showWarningLevel[level] ?? false))
+      ],
+      child: Padding(
+          padding: EdgeInsets.all(8), child: Icon(Icons.filter_list_rounded)),
+    );
+  }
+
+  List<Widget> _buildDrugsList(
+      BuildContext context, List<Drug> drugs, FilterState filter) {
+    final filteredDrugs = filter.filter(drugs);
+    if (filteredDrugs.isEmpty) {
+      return [errorIndicator(context.l10n.err_no_drugs)];
     }
     return [
       SizedBox(height: 8),
-      ...drugs.map((drug) => Column(children: [
+      ...filteredDrugs.map((drug) => Column(children: [
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: DrugCard(

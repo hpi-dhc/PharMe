@@ -10,7 +10,9 @@ enum WarningLevel {
   @HiveField(1)
   yellow,
   @HiveField(2)
-  green
+  green,
+  @HiveField(3)
+  none,
 }
 
 extension WarningLevelIcon on WarningLevel {

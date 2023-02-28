@@ -70,11 +70,6 @@ class PharMeTheme {
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xccf52a2a);
   static final borderColor = Colors.black.withOpacity(.2);
-
-  static Icon activeDrugIcon({required bool isActive, double? size}) {
-    return Icon(isActive ? Icons.star_rounded : Icons.star_border_rounded,
-        size: size, color: primaryColor);
-  }
 }
 
 extension WarningLevelColor on WarningLevel {

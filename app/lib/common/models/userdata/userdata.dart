@@ -55,6 +55,7 @@ class UserData {
     return UserData.instance.lookups?[gene]?.lookupkey;
   }
 
+  // hive can't deal with sets so we have to use a list :(
   @HiveField(2)
   List<String>? activeDrugNames;
 }

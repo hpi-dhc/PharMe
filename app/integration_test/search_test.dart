@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 
 class MockSearchCubit extends MockCubit<SearchState> implements SearchCubit {
   @override
-  bool get filterActive => false;
+  FilterState get filter => FilterState.initial();
 }
 
 void main() {
@@ -71,7 +71,7 @@ void main() {
 
     testWidgets('test search page in loaded state', (tester) async {
       when(() => mockSearchCubit.state)
-          .thenReturn(SearchState.loaded(loadedDrugs, loadedDrugs));
+          .thenReturn(SearchState.loaded(loadedDrugs, FilterState.initial()));
 
       await tester.pumpWidget(BlocProvider.value(
         value: mockSearchCubit,
