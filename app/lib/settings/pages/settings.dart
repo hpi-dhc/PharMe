@@ -63,7 +63,7 @@ class SettingsPage extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: context.router.root.pop,
-          child: Text(context.l10n.settings_page_cancel),
+          child: Text(context.l10n.action_cancel),
         ),
         TextButton(
           onPressed: () async {
@@ -71,7 +71,7 @@ class SettingsPage extends StatelessWidget {
             await context.router.replaceAll([LoginRouter()]);
           },
           child: Text(
-            context.l10n.settings_page_continue,
+            context.l10n.action_continue,
             style: TextStyle(color: PharMeTheme.errorColor),
           ),
         ),

@@ -44,7 +44,7 @@ void main() {
       );
 
       // close dialog
-      await tester.tap(find.text(context.l10n.settings_page_cancel));
+      await tester.tap(find.text(context.l10n.action_cancel));
       await tester.pumpAndSettle();
 
       // test onboarding button

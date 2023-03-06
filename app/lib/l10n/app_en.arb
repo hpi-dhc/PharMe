@@ -1,4 +1,7 @@
 {
+  "action_cancel": "Cancel",
+  "action_continue": "Continue",
+
   "auth_choose_lab": "Please select your data provider",
   "auth_sign_in": "Sign in",
   "auth_success": "Successfully imported data",
@@ -6,7 +9,7 @@
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   "err_generic": "Error!",
-  "err_no_starred_drugs": "You have no starred drugs! Try disabling the filter by tapping the star icon above.",
+  "err_no_drugs": "Try adjusting the filters next to the search bar above.",
   
   "faq_page_description": "Here you can find answers to common questions about PGx",
   "faq_pharmacogenomics": "Pharmacogenomics",
@@ -17,13 +20,33 @@
   "general_retry": "Retry",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
+  "search_page_filter_inactive": "Inactive drugs",
+  "search_page_filter_green": "Green warning level",
+  "search_page_filter_yellow": "Yellow warning level",
+  "search_page_filter_red": "Red warning level",
+  "search_page_filter_gray": "No warning level",
 
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
+  "drugs_page_overwritten_phenotype": "adjusted based on you taking {drugName}",
+  "@drugs_page_overwritten_phenotype": {
+      "description": "Disclaimer for when the phenotype has been adjusted based on an active drug",
+      "placeholders": {
+          "drugName": {
+              "type": "String",
+              "example": "bupropion"
+          }
+      }
+  },
   "drugs_page_your_genome": "Your genome",
   "drugs_page_header_further_info": "Further Information",
   "drugs_page_header_synonyms": "Synonyms",
   "drugs_page_header_drugclass": "Drug class",
-  "drugs_page_header_druginfo": "Drug Information",
+  "drugs_page_header_drug": "Drug",
+  "drugs_page_header_druginfo": "Information",
+  "drugs_page_header_active": "Activity",
+  "drugs_page_active": "I am actively taking this drug.",
+  "drugs_page_active_warn_header": "Are you sure you want to change the activity status?",
+  "drugs_page_active_warn": "This may adjust the guidelines you receive for other drugs.",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
   "drugs_page_no_guidelines_for_phenotype": "We couldn't find a guideline matching your genetics.",
@@ -96,8 +119,6 @@
   "onboarding_5_text": "After signing in to the lab, your genetic data is sent straight onto your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
     
   "settings_page_account_settings": "Account Settings",
-  "settings_page_cancel": "Cancel",
-  "settings_page_continue": "Continue",
   "settings_page_delete_data": "Delete App Data",
   "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data.",
   "settings_page_more": "More",

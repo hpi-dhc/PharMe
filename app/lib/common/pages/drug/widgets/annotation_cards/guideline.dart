@@ -17,7 +17,9 @@ class GuidelineAnnotationCard extends StatelessWidget {
           _buildHeader(context),
           SizedBox(height: 12),
           _buildCard(context),
-          SizedBox(height: PharMeTheme.mediumSpace),
+          SizedBox(height: 8),
+          Divider(color: PharMeTheme.borderColor),
+          SizedBox(height: 8),
           _buildSourcesSection(context),
           SizedBox(height: 12),
         ]),
@@ -34,7 +36,8 @@ class GuidelineAnnotationCard extends StatelessWidget {
         color: guideline.annotations.warningLevel.color,
         child: Padding(
             padding: EdgeInsets.all(12),
-            child: Column(children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Icon(guideline.annotations.warningLevel.icon,
                     color: PharMeTheme.onSurfaceText),
@@ -55,15 +58,22 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    final geneDescriptions = guideline.lookupkey.keys.map((geneSymbol) =>
-        '$geneSymbol (${UserData.instance.lookups![geneSymbol]!.phenotype})');
+    final geneDescriptions = guideline.lookupkey.keys.map((geneSymbol) {
+      final overwritingDrug = UserData.overwrittenLookup(geneSymbol)?.key;
+      final hint = overwritingDrug.isNotNullOrEmpty
+          ? '(${context.l10n.drugs_page_overwritten_phenotype(overwritingDrug!)})'
+          : '';
+      final genePhenotype =
+          '$geneSymbol: ${UserData.phenotypeFor(geneSymbol)!}';
+      return [genePhenotype, hint].join(' ');
+    });
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SubHeader(context.l10n.drugs_page_your_genome),
       SizedBox(height: 12),
       Text(
         geneDescriptions.join(', '),
         style: PharMeTheme.textTheme.bodyLarge!,
-      )
+      ),
     ]);
   }
 

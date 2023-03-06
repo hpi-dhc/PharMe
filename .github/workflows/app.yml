@@ -13,7 +13,7 @@ defaults:
 env:
   JAVA_VERSION: 12.x
   FLUTTER_CHANNEL: stable
-  FLUTTER_VERSION: 3.0.3
+  FLUTTER_VERSION: 3.3.4
 
 jobs:
   lint:
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: ${{ env.JAVA_VERSION }}
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           channel: ${{ env.FLUTTER_CHANNEL }}
           flutter-version: ${{ env.FLUTTER_VERSION }}

@@ -31,8 +31,8 @@ class GenePage extends StatelessWidget {
                       _buildRow(
                           context.l10n.gene_page_genotype, phenotype.genotype,
                           tooltip: context.l10n.gene_page_genotype_tooltip),
-                      _buildRow(
-                          context.l10n.gene_page_phenotype, phenotype.phenotype,
+                      _buildRow(context.l10n.gene_page_phenotype,
+                          UserData.phenotypeFor(phenotype.geneSymbol)!,
                           tooltip: context.l10n.gene_page_phenotype_tooltip),
                     ]),
               ),

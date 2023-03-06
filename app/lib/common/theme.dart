@@ -71,11 +71,6 @@ class PharMeTheme {
   static const errorColor = Color(0xccf52a2a);
   static final borderColor = Colors.black.withOpacity(.2);
 
-  static Icon starIcon({required bool isStarred, double? size}) {
-    return Icon(isStarred ? Icons.star_rounded : Icons.star_border_rounded,
-        size: size, color: primaryColor);
-  }
-
   static const mediumSpace = 16.0;
 }
 

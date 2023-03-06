@@ -85,6 +85,7 @@ const BrickForm = ({ usage, brick }: Props) => {
             setMessage(`Failed to ${id ? 'update' : 'add new'} Brick.`);
         }
     };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const deleteBrick = async () => {
         try {
             await axios.delete(`/api/bricks/${id}`);
@@ -144,7 +145,9 @@ const BrickForm = ({ usage, brick }: Props) => {
                     Cancel
                 </WithIcon>
                 <div className="space-x-4">
-                    {id && (
+                    {/*
+                    // Disabled for #378 until proper handling of deletion
+                    id && (
                         <WithIcon
                             as="button"
                             icon={TrashIcon}
@@ -153,7 +156,7 @@ const BrickForm = ({ usage, brick }: Props) => {
                         >
                             Delete Brick
                         </WithIcon>
-                    )}
+                    )*/}
                     <WithIcon
                         as="button"
                         icon={UploadIcon}

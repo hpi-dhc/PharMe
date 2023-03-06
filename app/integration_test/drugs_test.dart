@@ -50,7 +50,15 @@ void main() {
         geneSymbol: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         genotype: '*1/*1',
-        lookupkey: 'Normal Metabolizer')
+        lookupkey: '2')
+  };
+  UserData.instance.diplotypes = {
+    'CYP2C9': Diplotype(
+        gene: 'CYP2C9',
+        resultType: 'Diplotype',
+        phenotype: 'Normal Metabolizer',
+        genotype: '*1/*1',
+        allelesTested: '1')
   };
   final testDrugWithoutGuidelines = Drug(
     id: '2',
@@ -63,7 +71,7 @@ void main() {
         brandNames: ['brand name', 'another brand name']),
     guidelines: [],
   );
-  UserData.instance.starredDrugIds = ['1'];
+  UserData.instance.activeDrugNames = ['Ibuprofen'];
 
   group('integration test for the drugs page', () {
     testWidgets('test loading', (tester) async {
@@ -116,7 +124,7 @@ void main() {
 
     testWidgets('test loaded page', (tester) async {
       when(() => mockDrugsCubit.state)
-          .thenReturn(DrugState.loaded(testDrug, isStarred: false));
+          .thenReturn(DrugState.loaded(testDrug, isActive: false));
 
       late BuildContext context;
 
@@ -180,7 +188,7 @@ void main() {
 
     testWidgets('test loaded page without guidelines', (tester) async {
       when(() => mockDrugsCubit.state).thenReturn(
-          DrugState.loaded(testDrugWithoutGuidelines, isStarred: true));
+          DrugState.loaded(testDrugWithoutGuidelines, isActive: true));
 
       await tester.pumpWidget(
         MaterialApp(
