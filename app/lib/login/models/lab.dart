@@ -16,13 +16,7 @@ class Lab {
 
 final labs = [
   Lab(
-    name: 'Illumina Solutions Center Berlin',
-    authUrl: keycloakUrl('/realms/pharme/protocol/openid-connect/auth'),
-    tokenUrl: keycloakUrl('/realms/pharme/protocol/openid-connect/token'),
-    starAllelesUrl: labServerUrl('/star-alleles'),
-  ),
-  Lab(
-    name: 'Mount Sinai Hospital (NYC)',
+    name: 'Mount Sinai Health System',
     authUrl: keycloakUrl('/realms/pharme/protocol/openid-connect/auth'),
     tokenUrl: keycloakUrl('/realms/pharme/protocol/openid-connect/token'),
     starAllelesUrl: labServerUrl('/star-alleles'),

@@ -70,6 +70,8 @@ class PharMeTheme {
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xccf52a2a);
   static final borderColor = Colors.black.withOpacity(.2);
+
+  static const mediumSpace = 16.0;
 }
 
 extension WarningLevelColor on WarningLevel {

@@ -6,19 +6,19 @@ import '../../../common/module.dart' hide MetaData;
 class OnboardingPage extends HookWidget {
   final _pages = [
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/1.gif',
+      illustrationPath: 'assets/images/onboarding/1.png',
       getHeader: (context) => context.l10n.onboarding_1_header,
       getText: (context) => context.l10n.onboarding_1_text,
       color: Color(0xFFFF7E41),
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/2.gif',
+      illustrationPath: 'assets/images/onboarding/2.png',
       getHeader: (context) => context.l10n.onboarding_2_header,
       getText: (context) => context.l10n.onboarding_2_text,
       color: Color(0xCCCC0700),
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/3.gif',
+      illustrationPath: 'assets/images/onboarding/3.png',
       getHeader: (context) => context.l10n.onboarding_3_header,
       getText: (context) => context.l10n.onboarding_3_text,
       color: Color(0xCC359600),
@@ -28,7 +28,7 @@ class OnboardingPage extends HookWidget {
       ),
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/4.gif',
+      illustrationPath: 'assets/images/onboarding/4.png',
       getHeader: (context) => context.l10n.onboarding_4_header,
       getText: (context) => context.l10n.onboarding_4_text,
       color: Color(0xFF00B9FA),
@@ -42,7 +42,7 @@ class OnboardingPage extends HookWidget {
       ),
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/5.gif',
+      illustrationPath: 'assets/images/onboarding/5.png',
       getHeader: (context) => context.l10n.onboarding_5_header,
       getText: (context) => context.l10n.onboarding_5_text,
       color: Color(0xFF0A64BC),
@@ -113,6 +113,15 @@ class OnboardingPage extends HookWidget {
                 currentPage.value == _pages.length - 1,
               ),
             ),
+            Positioned(
+              bottom: 16,
+              left: 16,
+              child: _buildPrevButton(
+                context,
+                pageController,
+                currentPage.value == 0,
+              ),
+            )
           ],
         ),
       ),
@@ -180,6 +189,43 @@ class OnboardingPage extends HookWidget {
       ),
     );
   }
+
+  Widget _buildPrevButton(
+    BuildContext context,
+    PageController pageController,
+    bool isFirstPage,
+  ) {
+    if (!isFirstPage) {
+      return TextButton(
+        key: Key('prevButton'),
+        onPressed: () {
+          pageController.previousPage(
+              duration: Duration(milliseconds: 500),
+              curve: Curves.ease,
+            );
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.white,
+              size: 32,
+            ),
+            SizedBox(width: 8),
+            Text(
+              context.l10n.onboarding_prev,
+              style: PharMeTheme.textTheme.headlineSmall!
+                  .copyWith(color: Colors.white),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+  }
 }
 
 class OnboardingSubPage extends StatelessWidget {
@@ -205,9 +251,9 @@ class OnboardingSubPage extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(32, 16, 32, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 16),
+          SizedBox(height: PharMeTheme.mediumSpace),
           Center(
             child: FractionallySizedBox(
               alignment: Alignment.topCenter,
@@ -218,6 +264,7 @@ class OnboardingSubPage extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: PharMeTheme.mediumSpace),
           Column(children: [
             AutoSizeText(
               getHeader(context),
@@ -226,14 +273,14 @@ class OnboardingSubPage extends StatelessWidget {
               ),
               maxLines: 2,
             ),
-            SizedBox(height: 8),
+            SizedBox(height: PharMeTheme.mediumSpace),
             Text(
               getText(context),
-              style: PharMeTheme.textTheme.bodyMedium!.copyWith(
+              style: PharMeTheme.textTheme.bodyLarge!.copyWith(
                 color: Colors.white,
               ),
             ),
-            if (child != null) ...[SizedBox(height: 8), child!],
+            if (child != null) ...[SizedBox(height: PharMeTheme.mediumSpace), child!],
           ]),
           // Empty widget for spaceBetween in this column to work properly
           Container(),
