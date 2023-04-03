@@ -46,6 +46,33 @@ an interesting problem you want to solve.
 Once you have selected an issue to work on, assign yourself to that issue so we
 don't end up with two people doing the same thing.
 
+## Sinai setup
+
+This repository exists in two versions, the public general version on [GitHub]
+(https://github.com/hpi-dhc/PharMe) and a private version specifically adapted
+for a study involving PharMe on a [self-hosted GitHub](https://github.mountsinai.org/
+HPIMS/pharme_project) at Icahn School of Medicine at Mount Sinai (only accessible
+from VPN).
+
+To keep changes made to the study version that relevant to the general version
+in sync, we use [`git-worktree`](https://git-scm.com/docs/git-worktree).
+To use the `git-worktree` setup run the following commands:
+
+- In your PharMe repository, add the Sinai remote:
+  `git remote add sinai https://github.mountsinai.org/HPIMS/pharme_project`
+- Fetch from the new remote: `git fetch sinai`
+- Checkout the Sinai main branch as a working tree:
+  `git worktree add --track -b Sinai-PharMe ../Sinai-PharMe sinai/main` (**TODO: Still need to adapt and push new version**)
+- Change directories to the newly created working tree: `cd ../Sinai-PharMe`
+- Configure the Git user to match the Sinai GitHub credentials
+  - `git config user.name "YOUR-USERNAME"`
+  - `git config user.email "YOUR.MAIL@mssm.edu"`
+
+**TODO: To be implemented:** If making changes to the study version that should also
+be present in the general version, add a `/label #TO-BE-DEFINED` to it. The change
+will automatically be cherry picked to the public repository and a pull request will
+be created (**not sure how to implement yet; maybe commit hook, maybe )
+
 ## Working on stuff
 
 > **Note:** This project enforces a [conventional commit
