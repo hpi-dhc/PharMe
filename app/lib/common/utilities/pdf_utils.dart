@@ -69,6 +69,7 @@ pw.Widget buildPdfPage(
 }
 
 List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
+  final source = guideline.externalData.source;
   return [
     _PdfSegment(
       child: _PdfText(
@@ -81,30 +82,30 @@ List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
     pw.SizedBox(height: 8, width: double.infinity),
     _PdfSegment(
       child: _PdfText(
-        title: 'CPIC guideline link: ',
-        text: guideline.cpicData.guidelineUrl,
+        title: '$source guideline link: ',
+        text: guideline.externalData.guidelineUrl,
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
     _PdfSegment(
       child: _PdfText(
-        title: 'CPIC recommendation: ',
-        text: guideline.cpicData.recommendation,
+        title: '$source recommendation: ',
+        text: guideline.externalData.recommendation,
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
-    ...guideline.cpicData.implications.entries
+    ...guideline.externalData.implications.entries
         .map((implication) => _PdfSegment(
                 child: _PdfText(
-              title: 'CPIC implication for ${implication.key}: ',
+              title: '$source implication for ${implication.key}: ',
               text: implication.value,
             )))
         .toList(),
     pw.SizedBox(height: 8, width: double.infinity),
     _PdfSegment(
       child: _PdfText(
-        title: 'CPIC comment: ',
-        text: guideline.cpicData.comments,
+        title: '$source comment: ',
+        text: guideline.externalData.comments,
       ),
     ),
     pw.SizedBox(height: 8, width: double.infinity),

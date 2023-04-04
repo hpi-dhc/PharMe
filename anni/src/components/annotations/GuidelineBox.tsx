@@ -1,6 +1,6 @@
 import { IGuideline_Any } from '../../database/models/Guideline';
 
-const CpicSection = ({
+const Section = ({
     title,
     content,
     indent,
@@ -17,14 +17,14 @@ const CpicSection = ({
     </p>
 );
 
-const CpicGuidelineBox = ({
+const GuidelineBox = ({
     guideline,
 }: {
-    guideline: IGuideline_Any['cpicData'];
+    guideline: IGuideline_Any['externalData'];
 }) => (
     <div className="space-y-4 border border-black border-opacity-10 p-4">
         <h2 className="font-bold pb-2 text-xl">
-            CPIC Guideline:{' '}
+            {guideline.source} Guideline:{' '}
             <a
                 className="underline"
                 href={guideline.guidelineUrl}
@@ -35,10 +35,10 @@ const CpicGuidelineBox = ({
             </a>
         </h2>
         <div className="space-y-2">
-            <CpicSection title="Implications" />
+            <Section title="Implications" />
             {Object.entries(guideline.implications).map(
                 ([phenotype, implication], index) => (
-                    <CpicSection
+                    <Section
                         key={index}
                         title={phenotype}
                         content={implication}
@@ -47,14 +47,11 @@ const CpicGuidelineBox = ({
                 ),
             )}
         </div>
-        <CpicSection
-            title="Recommendation"
-            content={guideline.recommendation}
-        />
+        <Section title="Recommendation" content={guideline.recommendation} />
         {guideline.comments && (
-            <CpicSection title="Comments" content={guideline.comments} />
+            <Section title="Comments" content={guideline.comments} />
         )}
     </div>
 );
 
-export default CpicGuidelineBox;
+export default GuidelineBox;

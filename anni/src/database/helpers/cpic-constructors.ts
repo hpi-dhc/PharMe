@@ -4,6 +4,7 @@ import { IGuideline_Any } from '../models/Guideline';
 
 function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
+    source: string,
 ): IGuideline_Any {
     return {
         lookupkey: Object.entries(recommendation.lookupkey).reduce(
@@ -13,7 +14,8 @@ function guidelineFromRecommendation(
             },
             new Object() as { [key: string]: [string] },
         ),
-        cpicData: {
+        externalData: {
+            source,
             recommendationId: recommendation.id,
             recommendationVersion: recommendation.version,
             guidelineName: recommendation.guideline.name,
@@ -55,12 +57,13 @@ function drugFromRecommendation(recommendation: CpicRecommendation): IDrug_Any {
     };
 }
 
-interface DrugWithGuidelines {
+export interface DrugWithGuidelines {
     drug: IDrug_Any;
     guidelines: Array<IGuideline_Any>;
 }
 export function getDrugsWithContractedGuidelines(
     recommendations: Array<CpicRecommendation>,
+    source: string,
 ): Array<DrugWithGuidelines> {
     const guidelineKeyMap = new Map<string, IGuideline_Any>();
     const drugIdMap = new Map<string, DrugWithGuidelines>();
@@ -76,7 +79,7 @@ export function getDrugsWithContractedGuidelines(
             });
             return null;
         }
-        const guideline = guidelineFromRecommendation(rec);
+        const guideline = guidelineFromRecommendation(rec, source);
         guidelineKeyMap.set(key, guideline);
         return guideline;
     }

@@ -41,7 +41,7 @@ Future<void> initCachedDrugs() async {
     Hive.registerAdapter(GuidelineAdapter());
     Hive.registerAdapter(WarningLevelAdapter());
     Hive.registerAdapter(GuidelineAnnotationsAdapter());
-    Hive.registerAdapter(GuidelineCpicDataAdapter());
+    Hive.registerAdapter(GuidelineExtDataAdapter());
   } catch (e) {
     return;
   }
