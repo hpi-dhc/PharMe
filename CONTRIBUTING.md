@@ -62,11 +62,15 @@ To use the `git-worktree` setup run the following commands:
   `git remote add sinai https://github.mountsinai.org/HPIMS/pharme_project`
 - Fetch from the new remote: `git fetch sinai`
 - Checkout the Sinai main branch as a working tree:
-  `git worktree add --track -b Sinai-PharMe ../Sinai-PharMe sinai/main` (**TODO: Still need to adapt and push new version**)
+  `git worktree add --track -b Sinai-PharMe ../Sinai-PharMe sinai/main`
 - Change directories to the newly created working tree: `cd ../Sinai-PharMe`
+- Enable different Git configurations per worktree:
+  `git config extensions.worktreeConfig true`
 - Configure the Git user to match the Sinai GitHub credentials
-  - `git config user.name "YOUR-USERNAME"`
-  - `git config user.email "YOUR.MAIL@mssm.edu"`
+  - `git config --worktree user.name "YOUR-USERNAME"`
+  - `git config --worktree user.email "YOUR.MAIL@mssm.edu"`
+- Configure push behavior to be able to push directly to a differently named
+  upstream branch: `git config --worktree push.default upstream`
 
 **TODO: To be implemented:** If making changes to the study version that should also
 be present in the general version, add a `/label #TO-BE-DEFINED` to it. The change
