@@ -35,6 +35,7 @@ void main() {
               'CYP2C9': ['2']
             },
             externalData: GuidelineExtData(
+                source: 'CPIC',
                 guidelineName: 'cpic name',
                 guidelineUrl: 'cpic url',
                 implications: {'CYP2C9': 'normal metabolization'},
