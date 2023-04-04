@@ -11,7 +11,7 @@ class Guideline {
     required this.id,
     required this.version,
     required this.lookupkey,
-    required this.cpicData,
+    required this.externalData,
     required this.annotations,
   });
   factory Guideline.fromJson(dynamic json) => _$GuidelineFromJson(json);
@@ -29,7 +29,7 @@ class Guideline {
   Map<String, List<String>> lookupkey;
 
   @HiveField(3)
-  GuidelineCpicData cpicData;
+  GuidelineExtData externalData;
 
   @HiveField(4)
   GuidelineAnnotations annotations;
@@ -68,29 +68,33 @@ class GuidelineAnnotations {
 
 @HiveType(typeId: 10)
 @JsonSerializable()
-class GuidelineCpicData {
-  GuidelineCpicData({
+class GuidelineExtData {
+  GuidelineExtData({
+    required this.source,
     required this.guidelineName,
     required this.guidelineUrl,
     required this.implications,
     required this.recommendation,
     required this.comments,
   });
-  factory GuidelineCpicData.fromJson(dynamic json) =>
-      _$GuidelineCpicDataFromJson(json);
+  factory GuidelineExtData.fromJson(dynamic json) =>
+      _$GuidelineExtDataFromJson(json);
 
   @HiveField(0)
-  String guidelineName;
+  String source;
 
   @HiveField(1)
-  String guidelineUrl;
+  String guidelineName;
 
   @HiveField(2)
-  Map<String, String> implications;
+  String guidelineUrl;
 
   @HiveField(3)
-  String recommendation;
+  Map<String, String> implications;
 
   @HiveField(4)
+  String recommendation;
+
+  @HiveField(5)
   String? comments;
 }

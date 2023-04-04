@@ -84,7 +84,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
       ),
       SizedBox(height: 12),
       GestureDetector(
-        onTap: () => _launchUrl(Uri.parse(guideline.cpicData.guidelineUrl)),
+        onTap: () => _launchUrl(Uri.parse(guideline.externalData.guidelineUrl)),
         child: Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -93,7 +93,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
             padding: EdgeInsets.all(12),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               Flexible(
-                child: Text(context.l10n.drugs_page_sources_cpic_description),
+                child: Text(context.l10n.drugs_page_sources_description(guideline.externalData.source)),
               ),
               Icon(Icons.chevron_right_rounded)
             ]),
