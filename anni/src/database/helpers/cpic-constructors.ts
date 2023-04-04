@@ -57,7 +57,7 @@ function drugFromRecommendation(recommendation: CpicRecommendation): IDrug_Any {
     };
 }
 
-interface DrugWithGuidelines {
+export interface DrugWithGuidelines {
     drug: IDrug_Any;
     guidelines: Array<IGuideline_Any>;
 }
