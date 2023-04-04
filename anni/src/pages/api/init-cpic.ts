@@ -25,8 +25,10 @@ const api: NextApiHandler = async (req, res) =>
                 Drug!.deleteMany({}),
             ]);
             const recommendations = cpicResponse.data;
-            const drugsWithGuidelines =
-                getDrugsWithContractedGuidelines(recommendations);
+            const drugsWithGuidelines = getDrugsWithContractedGuidelines(
+                recommendations,
+                'CPIC',
+            );
 
             // could parallelize more here but not worth the added complexity
             // since we don't have too many drugs

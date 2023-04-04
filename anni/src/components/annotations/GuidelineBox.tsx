@@ -20,11 +20,11 @@ const Section = ({
 const GuidelineBox = ({
     guideline,
 }: {
-    guideline: IGuideline_Any['cpicData'];
+    guideline: IGuideline_Any['externalData'];
 }) => (
     <div className="space-y-4 border border-black border-opacity-10 p-4">
         <h2 className="font-bold pb-2 text-xl">
-            CPIC Guideline:{' '}
+            {guideline.source} Guideline:{' '}
             <a
                 className="underline"
                 href={guideline.guidelineUrl}

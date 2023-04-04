@@ -1,5 +1,6 @@
 import mongoose, { Document, Types } from 'mongoose';
 
+import { ITextBrick_Str } from './TextBrick';
 import {
     SupportedLanguage,
     WarningLevel,
@@ -15,7 +16,6 @@ import { guidelineCurationState } from '../helpers/guideline-data';
 import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import { makeIdsStrings, OptionalId } from '../helpers/types';
 import { versionedModel } from '../versioning/schema';
-import { ITextBrick_Str } from './TextBrick';
 
 export interface IGuideline<
     AnnotationT extends BrickAnnotationT,
@@ -29,9 +29,10 @@ export interface IGuideline<
         }
     > {
     lookupkey: { [key: string]: [string] }; // gene-symbol: phenotype-description
-    cpicData: {
-        recommendationId: number;
-        recommendationVersion: number;
+    externalData: {
+        source: string;
+        recommendationId?: number;
+        recommendationVersion?: number;
         guidelineName: string;
         guidelineUrl: string;
         implications: { [key: string]: string }; // gene-symbol: implication
@@ -53,8 +54,9 @@ export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 
 const { schema, makeModel } = versionedModel<IGuideline_DB>('Guideline', {
     lookupkey: { type: {}, required: true },
-    cpicData: {
+    externalData: {
         type: {
+            source: { type: String, required: true },
             recommendationId: { type: Number, required: true, index: true },
             recommendationVersion: { type: Number, required: true },
             guidelineName: { type: String, required: true },
@@ -91,11 +93,11 @@ const { schema, makeModel } = versionedModel<IGuideline_DB>('Guideline', {
 schema.pre<IGuideline_DB>('validate', function (next) {
     if (
         JSON.stringify(Object.keys(this.lookupkey)) !==
-        JSON.stringify(Object.keys(this.cpicData.implications))
+        JSON.stringify(Object.keys(this.externalData.implications))
     ) {
         next(
             new Error(
-                `Lookup-Key inconsistent with CPIC implications (recommendationid: ${this.cpicData.recommendationId})`,
+                `Lookup-Key inconsistent with CPIC implications (recommendationid: ${this.externalData.recommendationId})`,
             ),
         );
     }
@@ -142,7 +144,7 @@ schema.methods.resolve = async function (
                 ? (error as any)['message']
                 : undefined;
         throw new Error(
-            `Unable to resolve Guideline ${this.cpicData.guidelineName}${
+            `Unable to resolve Guideline ${this.externalData.guidelineName}${
                 message ? `: ${message}` : ''
             }`,
         );
