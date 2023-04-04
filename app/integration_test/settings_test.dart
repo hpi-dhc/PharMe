@@ -47,15 +47,6 @@ void main() {
       await tester.tap(find.text(context.l10n.action_cancel));
       await tester.pumpAndSettle();
 
-      // test onboarding button
-      await tester.tap(find.text(context.l10n.settings_page_onboarding));
-      await tester.pumpAndSettle();
-
-      expect(find.text(context.l10n.onboarding_1_header), findsOneWidget);
-
-      await context.router.root.pop();
-      await tester.pumpAndSettle();
-
       // test about us
       await tester.tap(find.text(context.l10n.settings_page_about_us));
       await tester.pumpAndSettle();
