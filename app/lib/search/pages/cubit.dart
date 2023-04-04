@@ -38,15 +38,20 @@ class SearchCubit extends Cubit<SearchState> {
     );
   }
 
-  Future<void> loadDrugs({bool updateIfNull = true}) async {
-    final drugs = CachedDrugs.instance.drugs;
-    if (drugs != null) {
-      emit(SearchState.loaded(drugs, FilterState.initial()));
-      return;
-    }
-    if (!updateIfNull) {
-      emit(SearchState.error());
-      return;
+  Future<void> loadDrugs({
+    bool updateIfNull = true,
+    bool useCache = true,
+  }) async {
+    if (useCache) {
+      final drugs = CachedDrugs.instance.drugs;
+      if (drugs != null) {
+        emit(SearchState.loaded(drugs, FilterState.initial()));
+        return;
+      }
+      if (!updateIfNull) {
+        emit(SearchState.error());
+        return;
+      }
     }
 
     emit(SearchState.loading());
