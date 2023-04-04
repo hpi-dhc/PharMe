@@ -27,6 +27,8 @@ const api: NextApiHandler = async (req, res) =>
             return { successStatus: 200, data };
         },
         POST: async () => {
+            const data: Record<string, object> = req.body.data;
+
             await dbConnect();
 
             await Promise.all(
@@ -35,10 +37,11 @@ const api: NextApiHandler = async (req, res) =>
                 ),
             );
 
-            const data: Record<string, object> = req.body.data;
             await Promise.all(
                 Object.entries(data).map(([name, docs]) =>
-                    mongoose.models[name].insertMany(docs),
+                    mongoose.models[name].create(docs, {
+                        validateBeforeSave: false,
+                    }),
                 ),
             );
             return { successStatus: 201 };
