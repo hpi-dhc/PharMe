@@ -5,19 +5,25 @@ import '../../common/pages/drug/widgets/tooltip_icon.dart';
 import 'cubit.dart';
 
 class SearchPage extends HookWidget {
-  const SearchPage({
+  SearchPage({
     Key? key,
-    @visibleForTesting this.cubit,
-  }) : super(key: key);
+    @visibleForTesting SearchCubit? cubit,
+  })  : cubit = cubit ?? SearchCubit(),
+        super(key: key);
 
-  final SearchCubit? cubit;
+  final SearchCubit cubit;
 
   @override
   Widget build(BuildContext context) {
+    useOnAppLifecycleStateChange((previous, current) async {
+      if (current == AppLifecycleState.resumed) {
+        await cubit.loadDrugs(useCache: false);
+      }
+    });
     final searchController = useTextEditingController();
 
     return BlocProvider(
-        create: (context) => cubit ?? SearchCubit(),
+        create: (context) => cubit,
         child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
           return pageScaffold(
               title: context.l10n.tab_drugs,
