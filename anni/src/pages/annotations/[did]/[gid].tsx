@@ -6,7 +6,7 @@ import {
 import { resetServerContext } from 'react-beautiful-dnd';
 
 import { annotationComponent } from '../../../common/definitions';
-import CpicGuidelineBox from '../../../components/annotations/CpicGuidelineBox';
+import GuidelineBox from '../../../components/annotations/GuidelineBox';
 import { useStagingApi } from '../../../components/annotations/StagingToggle';
 import TopBar from '../../../components/annotations/TopBar';
 import PageHeading from '../../../components/common/structure/PageHeading';
@@ -39,7 +39,7 @@ const GuidelineDetail = ({
             </PageHeading>
             <div className="space-y-4">
                 <TopBar {...stagingApi} />
-                <CpicGuidelineBox guideline={guideline.cpicData} />
+                <GuidelineBox guideline={guideline.cpicData} />
                 {annotationComponent.implication(
                     drugName,
                     guideline,
