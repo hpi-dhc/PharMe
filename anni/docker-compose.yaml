@@ -35,8 +35,7 @@ services:
 
   backupper:
     build:
-      dockerfile: ./anni/backupper/Dockerfile
-      context: ../
+      context: ./anni/backupper
     env_file:
       - backupper/.env
     depends_on:
