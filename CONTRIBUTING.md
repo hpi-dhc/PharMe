@@ -46,37 +46,6 @@ an interesting problem you want to solve.
 Once you have selected an issue to work on, assign yourself to that issue so we
 don't end up with two people doing the same thing.
 
-## Sinai setup
-
-This repository exists in two versions, the public general version on [GitHub]
-(https://github.com/hpi-dhc/PharMe) and a private version specifically adapted
-for a study involving PharMe on a [self-hosted GitHub](https://github.mountsinai.org/
-HPIMS/pharme_project) at Icahn School of Medicine at Mount Sinai (only accessible
-from VPN).
-
-To keep changes made to the study version that relevant to the general version
-in sync, we use [`git-worktree`](https://git-scm.com/docs/git-worktree).
-To use the `git-worktree` setup run the following commands:
-
-- In your PharMe repository, add the Sinai remote:
-  `git remote add sinai https://github.mountsinai.org/HPIMS/pharme_project`
-- Fetch from the new remote: `git fetch sinai`
-- Checkout the Sinai main branch as a working tree:
-  `git worktree add --track -b Sinai-PharMe ../Sinai-PharMe sinai/main`
-- Change directories to the newly created working tree: `cd ../Sinai-PharMe`
-- Enable different Git configurations per worktree:
-  `git config extensions.worktreeConfig true`
-- Configure the Git user to match the Sinai GitHub credentials
-  - `git config --worktree user.name "YOUR-USERNAME"`
-  - `git config --worktree user.email "YOUR.MAIL@mssm.edu"`
-- Configure push behavior to be able to push directly to a differently named
-  upstream branch: `git config --worktree push.default upstream`
-
-**TODO: To be implemented:** If making changes to the study version that should also
-be present in the general version, add a `/label #TO-BE-DEFINED` to it. The change
-will automatically be cherry picked to the public repository and a pull request will
-be created (**not sure how to implement yet; maybe commit hook, maybe )
-
 ## Working on stuff
 
 > **Note:** This project enforces a [conventional commit
@@ -106,3 +75,37 @@ the green play button.
 
 When you're done, file a pull request. We will take a look at your code and once
 all checks pass, your code can get merged 🥳
+
+## Dual remote repository setup
+
+This repository exists in two versions: (1) the public version on
+[GitHub](https://github.com/hpi-dhc/PharMe), and (2) a private ("study")
+version that is being specifically adapted for a study involving PharMe on a
+[privately hosted GitHub](https://github.mountsinai.org/HPIMS/pharme_project)
+at Icahn School of Medicine at Mount Sinai.
+
+The study version should always extend the public version (i.e., changes affecting
+both versions should be made in the public repository and merged to the Sinai
+repository). This process currrently needs to be done manually.
+**TO BE IMPLEMENTED:** When pull requests are merged to `main` in the public
+repository, a GitHub action is triggered that creates the pull request in the Sinai
+repository (add instructions on auth token once implemented).
+
+To be able to manage changes accross versions, we keep both remotes in one
+local repository. To support multipe users for the different remote repositories,
+we use [`git-worktree`](https://git-scm.com/docs/git-worktree).
+To setup the two remotes with `git-worktree` run the following commands:
+
+- In your PharMe repository, add the Sinai remote:
+  `git remote add sinai https://github.mountsinai.org/HPIMS/pharme_project`
+- Fetch from the new remote: `git fetch sinai`
+- Checkout the Sinai main branch as a working tree:
+  `git worktree add --track -b Sinai-PharMe ../Sinai-PharMe sinai/main`
+- Change directories to the newly created working tree: `cd ../Sinai-PharMe`
+- Enable different Git configurations per worktree:
+  `git config extensions.worktreeConfig true`
+- Configure the Git user to match the Sinai GitHub credentials
+  - `git config --worktree user.name "YOUR-USERNAME"`
+  - `git config --worktree user.email "YOUR.MAIL@mssm.edu"`
+- Configure the push behavior to be able to push directly to a differently named
+  upstream branch: `git config --worktree push.default upstream`
