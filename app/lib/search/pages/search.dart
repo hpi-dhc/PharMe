@@ -128,16 +128,15 @@ class DrugCard extends StatelessWidget {
                     style: PharMeTheme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  if (drug.annotations.brandNames.isNotEmpty) ...[
-                    SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
-                        '(${drug.annotations.brandNames.join(', ')})',
-                        style: PharMeTheme.textTheme.titleMedium,
-                      ),
-                    ),
-                  ],
                 ]),
+                SizedBox(height: 4),
+                if (drug.annotations.brandNames.isNotEmpty) ...[
+                  SizedBox(width: 4),
+                  Text(
+                      '(${drug.annotations.brandNames.join(', ')})',
+                      style: PharMeTheme.textTheme.titleMedium,
+                    ),
+                ],
                 SizedBox(height: 8),
                 Text(
                   drug.annotations.drugclass,
