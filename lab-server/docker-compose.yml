@@ -9,6 +9,7 @@ services:
             - lab-server-db
         profiles:
             - production
+        restart: unless-stopped
 
     lab-server-db:
         image: postgres:13
@@ -20,6 +21,7 @@ services:
             - POSTGRES_USER=admin
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=lab_server_db
+        restart: unless-stopped
 
     keycloak:
         image: jboss/keycloak:16.1.0
@@ -35,6 +37,7 @@ services:
             - 28080:8080
         depends_on:
             - keycloak-db
+        restart: unless-stopped
 
     keycloak-db:
         image: postgres:13
@@ -46,6 +49,7 @@ services:
             - POSTGRES_USER=admin
             - POSTGRES_PASSWORD=admin
             - POSTGRES_DB=keycloak_db
+        restart: unless-stopped
 
     minio:
         image: minio/minio
@@ -58,6 +62,7 @@ services:
             - 9000:9000
             - 9001:9001
         command: server /data --console-address ":9001"
+        restart: unless-stopped
 
 volumes:
     lab_server_db:
