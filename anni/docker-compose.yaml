@@ -10,6 +10,7 @@ services:
       - anni-db
     profiles:
       - production
+    restart: unless-stopped
 
   anni-db:
     image: mongo:5.0
@@ -20,6 +21,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    restart: unless-stopped
 
   anni-testing-db:
     image: mongo:5.0
@@ -42,6 +44,7 @@ services:
       - app
     profiles:
       - with-backupper
+    restart: unless-stopped
 
 volumes:
   anni_db:
