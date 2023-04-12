@@ -75,3 +75,34 @@ the green play button.
 
 When you're done, file a pull request. We will take a look at your code and once
 all checks pass, your code can get merged 🥳
+
+## Dual remote repository setup
+
+This repository exists in two versions: (1) the public version on
+[GitHub](https://github.com/hpi-dhc/PharMe), and (2) a private ("study")
+version that is being specifically adapted for a study involving PharMe on a
+[privately hosted GitHub](https://github.mountsinai.org/HPIMS/pharme_project)
+at Icahn School of Medicine at Mount Sinai.
+
+The study version should always extend the public version (i.e., changes affecting
+both versions should be made in the public repository and merged to the Sinai
+repository). This process currently needs to be done manually.
+
+To be able to manage changes accross versions, we keep both remotes in one
+local repository. To support multipe users for the different remote repositories,
+we use [`git-worktree`](https://git-scm.com/docs/git-worktree).
+To setup the two remotes with `git-worktree` run the following commands:
+
+- In your PharMe repository, add the Sinai remote:
+  `git remote add sinai https://github.mountsinai.org/HPIMS/pharme_project`
+- Fetch from the new remote: `git fetch sinai`
+- Checkout the Sinai main branch as a working tree:
+  `git worktree add --track -b Sinai-PharMe ../Sinai-PharMe sinai/main`
+- Change directories to the newly created working tree: `cd ../Sinai-PharMe`
+- Enable different Git configurations per worktree:
+  `git config extensions.worktreeConfig true`
+- Configure the Git user to match the Sinai GitHub credentials
+  - `git config --worktree user.name "YOUR-USERNAME"`
+  - `git config --worktree user.email "YOUR.MAIL@mssm.edu"`
+- Configure the push behavior to be able to push directly to a differently named
+  upstream branch: `git config --worktree push.default upstream`
