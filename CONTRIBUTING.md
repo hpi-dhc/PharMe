@@ -86,10 +86,7 @@ at Icahn School of Medicine at Mount Sinai.
 
 The study version should always extend the public version (i.e., changes affecting
 both versions should be made in the public repository and merged to the Sinai
-repository). This process currrently needs to be done manually.
-**TO BE IMPLEMENTED:** When pull requests are merged to `main` in the public
-repository, a GitHub action is triggered that creates the pull request in the Sinai
-repository (add instructions on auth token once implemented).
+repository). This process currently needs to be done manually.
 
 To be able to manage changes accross versions, we keep both remotes in one
 local repository. To support multipe users for the different remote repositories,
