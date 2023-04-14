@@ -107,6 +107,17 @@ class FilterState {
           gene: gene ?? other.gene,
         );
 
+  FilterState.forGene(String gene)
+      : this(
+          query: '',
+          showInactive: true,
+          showWarningLevel: {
+            for (var level in WarningLevel.values)
+              level: level != WarningLevel.none
+          },
+          gene: gene,
+        );
+
   final String query;
   final bool showInactive;
   final Map<WarningLevel, bool> showWarningLevel;
