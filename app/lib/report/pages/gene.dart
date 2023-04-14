@@ -49,7 +49,8 @@ class GenePage extends HookWidget {
                   SizedBox(height: 12),
                   SubHeader(context.l10n.gene_page_affected_drugs,
                       tooltip: context.l10n.gene_page_affected_drugs_tooltip),
-                  ...buildDrugList(context, state)
+                  ...buildDrugList(context, state,
+                      noDrugsMessage: context.l10n.gene_page_no_affected_drugs)
                 ],
               ),
             ),

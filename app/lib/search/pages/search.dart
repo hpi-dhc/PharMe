@@ -39,7 +39,8 @@ class SearchPage extends HookWidget {
               TooltipIcon(context.l10n.search_page_tooltip_search),
               buildFilter(context),
             ]),
-            body: buildDrugList(context, state),
+            body: buildDrugList(context, state,
+                noDrugsMessage: context.l10n.err_no_drugs),
           );
         }));
   }

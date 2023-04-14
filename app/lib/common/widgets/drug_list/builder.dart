@@ -1,18 +1,31 @@
 import '../../module.dart';
 
-List<Widget> buildDrugList(BuildContext context, DrugListState state) =>
+List<Widget> buildDrugList(
+  BuildContext context,
+  DrugListState state, {
+  String? noDrugsMessage,
+}) =>
     state.when(
       initial: () => [Container()],
       error: () => [errorIndicator(context.l10n.err_generic)],
-      loaded: (drugs, filter) => _buildDrugCards(context, drugs, filter),
+      loaded: (drugs, filter) => _buildDrugCards(
+        context,
+        drugs,
+        filter,
+        noDrugsMessage: noDrugsMessage,
+      ),
       loading: () => [loadingIndicator()],
     );
 
 List<Widget> _buildDrugCards(
-    BuildContext context, List<Drug> drugs, FilterState filter) {
+  BuildContext context,
+  List<Drug> drugs,
+  FilterState filter, {
+  String? noDrugsMessage,
+}) {
   final filteredDrugs = filter.filter(drugs);
-  if (filteredDrugs.isEmpty) {
-    return [errorIndicator(context.l10n.err_no_drugs)];
+  if (filteredDrugs.isEmpty && noDrugsMessage != null) {
+    return [errorIndicator(noDrugsMessage)];
   }
   return [
     SizedBox(height: 8),
