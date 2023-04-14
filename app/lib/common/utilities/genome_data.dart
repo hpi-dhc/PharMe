@@ -68,6 +68,9 @@ Future<void> fetchAndSaveLookups() async {
     matchingLookups[diplotype.gene] = lookup;
   }
 
+  // uncomment to make user have CYP2D6 lookupkey 0.0
+  // matchingLookups['CYP2D6'] = lookupsHashMap['CYP2D6__*100/*100']!;
+
   UserData.instance.lookups = matchingLookups;
   await UserData.save();
 
