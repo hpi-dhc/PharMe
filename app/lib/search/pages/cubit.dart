@@ -107,7 +107,8 @@ class FilterState {
 
   bool isAccepted(Drug drug) {
     final guideline = drug.userGuideline();
-    final warningLevel = guideline?.annotations.warningLevel;
+    final warningLevel =
+        guideline?.annotations.warningLevel ?? WarningLevel.none;
     return drug.matches(query: query) &&
         (drug.isActive() || showInactive) &&
         (showWarningLevel[warningLevel] ?? true) &&
