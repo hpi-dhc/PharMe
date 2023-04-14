@@ -1,6 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-
+import '../../common/module.dart';
 import '../../faq/module.dart';
 import '../../login/module.dart';
 import '../../report/module.dart';

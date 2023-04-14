@@ -1,4 +1,5 @@
 import '../common/module.dart';
+import '../search/module.dart';
 import 'pages/gene.dart';
 import 'pages/report.dart';
 
@@ -12,5 +13,6 @@ const reportRoutes = AutoRoute(
   children: [
     AutoRoute(path: '', page: ReportPage),
     AutoRoute(page: GenePage),
+    AutoRoute(page: DrugPage)
   ],
 );
