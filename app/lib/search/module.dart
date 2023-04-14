@@ -6,7 +6,6 @@ import 'pages/search.dart';
 export '../common/models/module.dart';
 export '../common/pages/drug/cubit.dart';
 export '../common/pages/drug/drug.dart';
-export 'pages/cubit.dart';
 export 'pages/search.dart';
 
 const searchRoutes = AutoRoute(

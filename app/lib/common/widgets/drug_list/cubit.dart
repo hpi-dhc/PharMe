@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../common/models/drug/cached_drugs.dart';
-import '../../common/module.dart';
+import '../../models/drug/cached_drugs.dart';
+import '../../module.dart';
 
 part 'cubit.freezed.dart';
 
