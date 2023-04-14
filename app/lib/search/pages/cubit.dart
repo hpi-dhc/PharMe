@@ -7,10 +7,10 @@ import '../../common/module.dart';
 
 part 'cubit.freezed.dart';
 
-class SearchCubit extends Cubit<SearchState> {
-  SearchCubit({
+class DrugListCubit extends Cubit<DrugListState> {
+  DrugListCubit({
     FilterState? initialFilter,
-  }) : super(SearchState.initial()) {
+  }) : super(DrugListState.initial()) {
     loadDrugs(filter: initialFilter);
   }
 
@@ -26,7 +26,7 @@ class SearchCubit extends Cubit<SearchState> {
     state.whenOrNull(
       initial: loadDrugs,
       loaded: (allDrugs, filter) => emit(
-        SearchState.loaded(
+        DrugListState.loaded(
           allDrugs,
           FilterState.from(
             filter,
@@ -52,21 +52,21 @@ class SearchCubit extends Cubit<SearchState> {
     if (useCache) {
       final drugs = CachedDrugs.instance.drugs;
       if (drugs != null) {
-        emit(SearchState.loaded(drugs, filter));
+        emit(DrugListState.loaded(drugs, filter));
         return;
       }
       if (!updateIfNull) {
-        emit(SearchState.error());
+        emit(DrugListState.error());
         return;
       }
     }
 
-    emit(SearchState.loading());
+    emit(DrugListState.loading());
     try {
       await updateCachedDrugs();
       await loadDrugs(updateIfNull: false, filter: filter);
     } catch (error) {
-      emit(SearchState.error());
+      emit(DrugListState.error());
     }
   }
 
@@ -126,12 +126,12 @@ class FilterState {
 }
 
 @freezed
-class SearchState with _$SearchState {
-  const factory SearchState.initial() = _InitialState;
-  const factory SearchState.loading() = _LoadingState;
-  const factory SearchState.loaded(
+class DrugListState with _$DrugListState {
+  const factory DrugListState.initial() = _InitialState;
+  const factory DrugListState.loading() = _LoadingState;
+  const factory DrugListState.loaded(
     List<Drug> allDrugs,
     FilterState filter,
   ) = _LoadedState;
-  const factory SearchState.error() = _ErrorState;
+  const factory DrugListState.error() = _ErrorState;
 }

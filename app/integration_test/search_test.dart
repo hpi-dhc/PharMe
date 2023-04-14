@@ -6,14 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockSearchCubit extends MockCubit<SearchState> implements SearchCubit {
+class MockDrugListCubit extends MockCubit<DrugListState> implements DrugListCubit {
   @override
   FilterState get filter => FilterState.initial();
 }
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  final mockSearchCubit = MockSearchCubit();
+  final mockDrugListCubit = MockDrugListCubit();
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
   final loadedDrugs = [
@@ -50,12 +50,12 @@ void main() {
   ];
   group('integration test for the search page', () {
     testWidgets('test search page in loading state', (tester) async {
-      when(() => mockSearchCubit.state).thenReturn(SearchState.loading());
+      when(() => mockDrugListCubit.state).thenReturn(DrugListState.loading());
       await tester.pumpWidget(BlocProvider.value(
-        value: mockSearchCubit,
+        value: mockDrugListCubit,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: SearchPage(cubit: mockSearchCubit),
+          home: SearchPage(cubit: mockDrugListCubit),
           localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -70,14 +70,14 @@ void main() {
     });
 
     testWidgets('test search page in loaded state', (tester) async {
-      when(() => mockSearchCubit.state)
-          .thenReturn(SearchState.loaded(loadedDrugs, FilterState.initial()));
+      when(() => mockDrugListCubit.state)
+          .thenReturn(DrugListState.loaded(loadedDrugs, FilterState.initial()));
 
       await tester.pumpWidget(BlocProvider.value(
-        value: mockSearchCubit,
+        value: mockDrugListCubit,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: SearchPage(cubit: mockSearchCubit),
+          home: SearchPage(cubit: mockDrugListCubit),
           localizationsDelegates: [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

@@ -7,11 +7,11 @@ import 'cubit.dart';
 class SearchPage extends HookWidget {
   SearchPage({
     Key? key,
-    @visibleForTesting SearchCubit? cubit,
-  })  : cubit = cubit ?? SearchCubit(),
+    @visibleForTesting DrugListCubit? cubit,
+  })  : cubit = cubit ?? DrugListCubit(),
         super(key: key);
 
-  final SearchCubit cubit;
+  final DrugListCubit cubit;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,8 @@ class SearchPage extends HookWidget {
 
     return BlocProvider(
         create: (context) => cubit,
-        child: BlocBuilder<SearchCubit, SearchState>(builder: (context, state) {
+        child: BlocBuilder<DrugListCubit, DrugListState>(
+            builder: (context, state) {
           return pageScaffold(
               title: context.l10n.tab_drugs,
               barBottom: Row(children: [
@@ -32,7 +33,7 @@ class SearchPage extends HookWidget {
                     child: CupertinoSearchTextField(
                   controller: searchController,
                   onChanged: (value) {
-                    context.read<SearchCubit>().search(query: value);
+                    context.read<DrugListCubit>().search(query: value);
                   },
                 )),
                 SizedBox(width: 12),
@@ -50,7 +51,7 @@ class SearchPage extends HookWidget {
   }
 
   Widget buildFilter(BuildContext context) {
-    final cubit = context.read<SearchCubit>();
+    final cubit = context.read<DrugListCubit>();
     final filter = cubit.filter;
     return ContextMenu(
       items: [
@@ -87,7 +88,7 @@ class SearchPage extends HookWidget {
                 child: DrugCard(
                     onTap: () => context.router
                         .push(DrugRoute(drug: drug))
-                        .then((_) => context.read<SearchCubit>().search()),
+                        .then((_) => context.read<DrugListCubit>().search()),
                     drug: drug)),
             SizedBox(height: 12)
           ]))
@@ -133,9 +134,9 @@ class DrugCard extends StatelessWidget {
                 if (drug.annotations.brandNames.isNotEmpty) ...[
                   SizedBox(width: 4),
                   Text(
-                      '(${drug.annotations.brandNames.join(', ')})',
-                      style: PharMeTheme.textTheme.titleMedium,
-                    ),
+                    '(${drug.annotations.brandNames.join(', ')})',
+                    style: PharMeTheme.textTheme.titleMedium,
+                  ),
                 ],
                 SizedBox(height: 8),
                 Text(
