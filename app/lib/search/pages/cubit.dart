@@ -8,8 +8,10 @@ import '../../common/module.dart';
 part 'cubit.freezed.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(SearchState.initial()) {
-    loadDrugs();
+  SearchCubit({
+    FilterState? initialFilter,
+  }) : super(SearchState.initial()) {
+    loadDrugs(filter: initialFilter);
   }
 
   Timer? searchTimeout;
@@ -39,13 +41,18 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   Future<void> loadDrugs({
+    FilterState? filter,
     bool updateIfNull = true,
     bool useCache = true,
   }) async {
+    filter = filter ??
+        state.whenOrNull(loaded: (_, filter) => filter) ??
+        FilterState.initial();
+
     if (useCache) {
       final drugs = CachedDrugs.instance.drugs;
       if (drugs != null) {
-        emit(SearchState.loaded(drugs, FilterState.initial()));
+        emit(SearchState.loaded(drugs, filter));
         return;
       }
       if (!updateIfNull) {
@@ -57,7 +64,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(SearchState.loading());
     try {
       await updateCachedDrugs();
-      await loadDrugs(updateIfNull: false);
+      await loadDrugs(updateIfNull: false, filter: filter);
     } catch (error) {
       emit(SearchState.error());
     }
