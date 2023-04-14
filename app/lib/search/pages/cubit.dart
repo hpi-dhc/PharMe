@@ -71,18 +71,25 @@ class FilterState {
     required this.query,
     required this.showInactive,
     required this.showWarningLevel,
+    required this.gene,
   });
 
   FilterState.initial()
-      : this(query: '', showInactive: true, showWarningLevel: {
-          for (var level in WarningLevel.values) level: true
-        });
+      : this(
+          query: '',
+          showInactive: true,
+          showWarningLevel: {
+            for (var level in WarningLevel.values) level: true
+          },
+          gene: '',
+        );
 
   FilterState.from(
     FilterState other, {
     String? query,
     bool? showInactive,
     Map<WarningLevel, bool>? showWarningLevel,
+    String? gene,
   }) : this(
           query: query ?? other.query,
           showInactive: showInactive ?? other.showInactive,
@@ -90,17 +97,21 @@ class FilterState {
             for (var level in WarningLevel.values)
               level: showWarningLevel?[level] ?? other.showWarningLevel[level]!
           },
+          gene: gene ?? other.gene,
         );
 
   final String query;
   final bool showInactive;
   final Map<WarningLevel, bool> showWarningLevel;
+  final String gene;
 
   bool isAccepted(Drug drug) {
-    final warningLevel = drug.userGuideline()?.annotations.warningLevel;
+    final guideline = drug.userGuideline();
+    final warningLevel = guideline?.annotations.warningLevel;
     return drug.matches(query: query) &&
         (drug.isActive() || showInactive) &&
-        (showWarningLevel[warningLevel] ?? true);
+        (showWarningLevel[warningLevel] ?? true) &&
+        (gene.isBlank || (guideline?.lookupkey.keys.contains(gene) ?? false));
   }
 
   List<Drug> filter(List<Drug> drugs) => drugs.filter(isAccepted).toList();
