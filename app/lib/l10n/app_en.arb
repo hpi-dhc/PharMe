@@ -10,6 +10,9 @@
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   "err_generic": "Error!",
   "err_no_drugs": "Try adjusting the filters next to the search bar above.",
+
+  "update_warning_title": "Updated guidelines",
+  "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for medications you are currently taking.",
   
   "faq_page_description": "Here you can find answers to common questions about PGx",
   "faq_pharmacogenomics": "Pharmacogenomics",

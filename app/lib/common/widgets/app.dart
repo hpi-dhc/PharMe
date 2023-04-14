@@ -4,7 +4,13 @@ import '../models/metadata.dart';
 import '../module.dart' hide MetaData;
 
 class PharMeApp extends StatelessWidget {
-  PharMeApp({Key? key}) : super(key: key);
+  factory PharMeApp() => _instance;
+
+  PharMeApp._({Key? key}) : super(key: key);
+
+  static final _instance = PharMeApp._();
+  static GlobalKey<NavigatorState> get navigatorKey =>
+      _instance._appRouter.navigatorKey;
 
   final _appRouter = AppRouter();
   final _isLoggedIn = MetaData.instance.isLoggedIn ?? false;

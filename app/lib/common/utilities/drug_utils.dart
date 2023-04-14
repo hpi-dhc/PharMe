@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
 import '../models/drug/cached_drugs.dart';
@@ -24,4 +25,22 @@ Future<void> updateCachedDrugs() async {
   CachedDrugs.instance.drugs = data.drugs;
   CachedDrugs.instance.version = data.version;
   await CachedDrugs.save();
+
+  final context = PharMeApp.navigatorKey.currentContext;
+  if (context != null) {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(context.l10n.update_warning_title),
+        content: Text(context.l10n.update_warning_body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () => Navigator.pop(context),
+            child: Text(context.l10n.action_continue),
+          ),
+        ],
+      ),
+    );
+  }
 }
