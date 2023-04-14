@@ -98,6 +98,8 @@
   "gene_page_genotype_tooltip": "The genotype describes your personal variant of this gene.",
   "gene_page_phenotype": "Phenotype",
   "gene_page_phenotype_tooltip": "The phenotype describes the effect that your personal variant of this gene has on the enzyme it encodes.",
+  "gene_page_affected_drugs": "Affected drugs",
+  "gene_page_affected_drugs_tooltip": "The drugs listed here are affected by your variant of this gene.",
 
   "nav_report": "Report",
   "tab_report": "Gene report",
