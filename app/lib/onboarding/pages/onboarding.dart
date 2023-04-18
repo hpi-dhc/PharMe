@@ -1,6 +1,5 @@
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../common/models/metadata.dart';
 import '../../../common/module.dart' hide MetaData;
 
 class OnboardingPage extends HookWidget {
@@ -48,8 +47,6 @@ class OnboardingPage extends HookWidget {
       color: Color(0xFF0A64BC),
     ),
   ];
-
-  final _isLoggedIn = MetaData.instance.isLoggedIn ?? false;
 
   @override
   Widget build(BuildContext context) {
