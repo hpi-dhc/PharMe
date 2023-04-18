@@ -121,7 +121,7 @@ class LoginPage extends HookWidget {
         SizedBox(height: PharMeTheme.mediumSpace),
         Text(
           context.l10n.auth_success,
-          style: context.textTheme.headline6,
+          style: context.textTheme.titleLarge,
           textAlign: TextAlign.center,
         ),
       ],
@@ -141,7 +141,7 @@ class LoginPage extends HookWidget {
         SizedBox(height: PharMeTheme.mediumSpace),
         Text(
           message,
-          style: context.textTheme.headline6,
+          style: context.textTheme.titleLarge,
           textAlign: TextAlign.center,
         ),
       ],
