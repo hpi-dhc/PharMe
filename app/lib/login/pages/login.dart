@@ -75,8 +75,13 @@ class LoginPage extends HookWidget {
       actionText: context.l10n.auth_sign_in,
       children: [
         Text(
-          context.l10n.auth_choose_lab,
+          context.l10n.auth_welcome,
           style: PharMeTheme.textTheme.titleLarge,
+        ),
+        SizedBox(height: PharMeTheme.smallSpace),
+        Text(
+          context.l10n.auth_choose_lab,
+          style: PharMeTheme.textTheme.titleMedium,
         ),
         SizedBox(height: PharMeTheme.mediumSpace),
         DropdownButtonHideUnderline(

@@ -2,8 +2,9 @@
   "action_cancel": "Cancel",
   "action_continue": "Continue",
 
+  "auth_welcome": "Welcome to PharMe",
   "auth_choose_lab": "Please select your data provider",
-  "auth_sign_in": "Sign in",
+  "auth_sign_in": "Get data",
   "auth_success": "Successfully imported data",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
@@ -14,8 +15,6 @@
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for medications you are currently taking.",
   
-  "faq_page_description": "Here you can find answers to common questions about PGx",
-  "faq_pharmacogenomics": "Pharmacogenomics",
   "faq_contact_us": "Do you have unanswered questions or feedback? Contact us!",
 
   "general_appName": "PharMe",
@@ -110,7 +109,7 @@
   "nav_drugs": "Drugs",
   "tab_drugs": "Drugs",
   "nav_faq": "FAQ",
-  "tab_faq": "PGx Questions",
+  "tab_faq": "PGx questions",
   "nav_more": "More",
   "tab_more": "More",
   
@@ -118,11 +117,11 @@
   "onboarding_next": "Next",
   "onboarding_prev": "Back",
   "onboarding_1_header": "Welcome to PharMe",
-  "onboarding_1_text": "Your genome has more influence on your life than you might think!\nMore than 90% of people are vulnerable to unintended drug reactions.\n\nUse PharMe to find out about yours.",
+  "onboarding_1_text": "Your genome has more influence on your life than you might think.\n\nMore than 90 percent of people are vulnerable to unintended drug reactions.\n\nUse PharMe to find out about yours.",
   "onboarding_2_header": "One size does not fit all",
-  "onboarding_2_text": "Your body reacts to drugs uniquely.\n\nDrugs that are effective for a majority of people can be toxic to you.",
+  "onboarding_2_text": "Each person’s body reacts to drugs differently.\n\nDrugs that are effective for a majority of people can be toxic to you.",
   "onboarding_3_header": "Genome power unlocked to improve human health",
-  "onboarding_3_text": "PharMe warns about unintended drug responses according to your genome.\nThis enables you to avoid drugs that are ineffective or have side-effects.",
+  "onboarding_3_text": "PharMe warns you if your genome makes you more likely to experience an unintended drug response. This enables you to avoid drugs that are ineffective or have side effects.",
   "onboarding_3_disclaimer": "We DO NOT recommend drugs for specific symptoms or illnesses!",
   "onboarding_4_header": "Tailored to your genome",
   "onboarding_4_text": "For PharMe to work, you need to get your genetics tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
@@ -130,8 +129,8 @@
   "onboarding_5_header": "We care about your data protection",
   "onboarding_5_text": "After signing in to the lab, your genetic data is sent straight onto your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
     
-  "settings_page_account_settings": "Account Settings",
-  "settings_page_delete_data": "Delete App Data",
+  "settings_page_account_settings": "Account settings",
+  "settings_page_delete_data": "Delete app data",
   "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data.",
   "settings_page_more": "More",
   "settings_page_onboarding": "Onboarding",
