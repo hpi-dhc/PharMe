@@ -158,9 +158,7 @@ class OnboardingPage extends HookWidget {
       key: Key('nextButton'),
       onPressed: () {
         if (isLastPage) {
-          _isLoggedIn
-              ? context.router.pop()
-              : context.router.replace(LoginRouter());
+              context.router.replace(MainRoute());
         } else {
           pageController.nextPage(
             duration: Duration(milliseconds: 500),
