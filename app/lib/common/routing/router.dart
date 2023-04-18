@@ -1,6 +1,7 @@
 import '../../common/module.dart';
 import '../../faq/module.dart';
 import '../../login/module.dart';
+import '../../onboarding/module.dart';
 import '../../report/module.dart';
 import '../../search/module.dart';
 import '../../settings/module.dart';
@@ -12,6 +13,7 @@ part 'router.gr.dart';
   replaceInRouteName: 'Page,Route',
   routes: [
     loginRoutes,
+    onboardingRoutes,
     AutoRoute(
       path: 'main',
       page: MainPage,
