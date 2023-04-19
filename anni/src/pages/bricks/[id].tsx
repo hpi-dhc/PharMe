@@ -7,6 +7,7 @@ import {
 import { BrickUsage, brickUsages } from '../../common/definitions';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
+import BrickUsageList from '../../components/bricks/BrickUsage';
 import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';
 import FilterTabs from '../../components/common/structure/FilterTabs';
 import PageHeading from '../../components/common/structure/PageHeading';
@@ -68,15 +69,7 @@ const EditBrick = ({
                         brick={brick}
                     />
                 </div>
-                <div className="space-y-2 pt-4">
-                    <h2 className="font-bold text-2xl border-t border-black border-opacity-10 pt-3">
-                        Usage
-                    </h2>
-                    <Explanation>
-                        Check which Annotations are currently set up to use this
-                        Brick.
-                    </Explanation>
-                </div>
+                <BrickUsageList id={brick._id!} />
             </div>
         </>
     );
