@@ -73,6 +73,10 @@ const EditBrick = ({
                     <BrickForm
                         category={categoryString as BrickCategory}
                         brick={brick}
+                        mayDelete={
+                            usageData?.drugs.length == 0 &&
+                            usageData?.guidelines.length == 0
+                        }
                     />
                 </div>
                 <BrickUsageList data={usageData} error={usageError} />

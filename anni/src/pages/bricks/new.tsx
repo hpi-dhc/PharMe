@@ -49,7 +49,10 @@ const NewBrick = () => {
                 selected={categoryIndex - 1}
                 setSelected={(newIndex) => setCategoryIndex(newIndex + 1)}
             ></FilterTabs>
-            <BrickForm category={categoryString as BrickCategory} />
+            <BrickForm
+                category={categoryString as BrickCategory}
+                mayDelete={false}
+            />
         </>
     );
 };

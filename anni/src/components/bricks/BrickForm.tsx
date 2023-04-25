@@ -26,9 +26,10 @@ import SelectionPopover from '../common/interaction/SelectionPopover';
 type Props = {
     category: BrickCategory | null;
     brick?: ITextBrick<string> | null;
+    mayDelete: boolean;
 };
 
-const BrickForm = ({ category, brick }: Props) => {
+const BrickForm = ({ category, brick, mayDelete }: Props) => {
     const router = useRouter();
     const id = brick?._id;
 
@@ -145,9 +146,7 @@ const BrickForm = ({ category, brick }: Props) => {
                     Cancel
                 </WithIcon>
                 <div className="space-x-4">
-                    {/*
-                    // Disabled for #378 until proper handling of deletion
-                    id && (
+                    {mayDelete && id && (
                         <WithIcon
                             as="button"
                             icon={TrashIcon}
@@ -156,7 +155,7 @@ const BrickForm = ({ category, brick }: Props) => {
                         >
                             Delete Brick
                         </WithIcon>
-                    )*/}
+                    )}
                     <WithIcon
                         as="button"
                         icon={UploadIcon}
