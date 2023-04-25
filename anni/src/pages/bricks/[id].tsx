@@ -5,7 +5,7 @@ import {
 } from 'next';
 
 import { BrickCategory, brickCategories } from '../../common/definitions';
-import { useMountEffect } from '../../common/react-helpers';
+import { useMountEffect, useSwrFetcher } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
 import BrickUsageList from '../../components/bricks/BrickUsage';
 import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';
@@ -20,6 +20,7 @@ import {
 } from '../../contexts/brickFilter';
 import dbConnect from '../../database/helpers/connect';
 import TextBrick, { ITextBrick } from '../../database/models/TextBrick';
+import { GetBrickUsageReponse } from '../api/bricks/[id]';
 
 const EditBrick = ({
     brick,
@@ -33,6 +34,11 @@ const EditBrick = ({
             );
         }
     });
+
+    const { data: usageResponse, error: usageError } =
+        useSwrFetcher<GetBrickUsageReponse>(`/api/bricks/${brick._id}`);
+    const usageData = usageResponse?.data.data;
+
     return (
         <>
             <PageHeading title="Brick details">
@@ -69,7 +75,7 @@ const EditBrick = ({
                         brick={brick}
                     />
                 </div>
-                <BrickUsageList id={brick._id!} />
+                <BrickUsageList data={usageData} error={usageError} />
             </div>
         </>
     );
