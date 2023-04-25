@@ -85,6 +85,14 @@ const BrickUsageList = ({ data, error }: Props) => (
                             ))}
                         </>
                     )}
+                    {data?.guidelines.length == 0 &&
+                        data?.drugs.length == 0 && (
+                            <p>
+                                This Brick is not currently used for any
+                                Annotations. You can safely delete it if it is
+                                no longer needed.
+                            </p>
+                        )}
                 </>
             )}
         </div>
