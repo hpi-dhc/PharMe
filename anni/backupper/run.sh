@@ -12,7 +12,9 @@ test -d $BACKUP_DIR \
 
 cd $BACKUP_DIR
 
-curl -s $ANNI_URL/api/backup | jq '.data' > backup.json
+curl -s $ANNI_URL/api/backup | jq -r '.data.base64' | base64 -D > backup.zip
+unzip backup.zip
+rm backup.zip
 
 git add --all
 git commit --message="Backup from $(date +%y-%m-%d) at $(date +%T) ($(date +%Z))" \
