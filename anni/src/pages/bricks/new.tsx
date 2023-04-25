@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { BrickUsage, brickUsages } from '../../common/definitions';
+import { BrickCategory, brickCategories } from '../../common/definitions';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
 import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';
@@ -19,14 +19,17 @@ const NewBrick = () => {
 
     const router = useRouter();
     const { usage } = router.query;
-    if (usage && (brickUsages as readonly string[]).includes(usage as string)) {
+    if (
+        usage &&
+        (brickCategories as readonly string[]).includes(usage as string)
+    ) {
         setCategoryIndex(indexForDisplayCategory(usage as DisplayCategory));
     }
 
     useMountEffect(() => {
-        if (!(brickUsages as readonly string[]).includes(categoryString)) {
+        if (!(brickCategories as readonly string[]).includes(categoryString)) {
             setCategoryIndex(
-                indexForDisplayCategory(brickUsages[0] as DisplayCategory),
+                indexForDisplayCategory(brickCategories[0] as DisplayCategory),
             );
         }
     });
@@ -42,11 +45,14 @@ const NewBrick = () => {
                 <PlaceholderInfo />
             </PageHeading>
             <FilterTabs
-                titles={[...brickUsages]}
+                titles={[...brickCategories]}
                 selected={categoryIndex - 1}
                 setSelected={(newIndex) => setCategoryIndex(newIndex + 1)}
             ></FilterTabs>
-            <BrickForm usage={categoryString as BrickUsage} />
+            <BrickForm
+                category={categoryString as BrickCategory}
+                mayDelete={false}
+            />
         </>
     );
 };

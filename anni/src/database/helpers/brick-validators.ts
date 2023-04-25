@@ -1,10 +1,10 @@
 import { SchemaValidator, Types } from 'mongoose';
 
-import { BrickUsage } from '../../common/definitions';
+import { BrickCategory } from '../../common/definitions';
 import TextBrick from '../models/TextBrick';
 
 export const brickAnnotationValidators = (
-    category: BrickUsage,
+    category: BrickCategory,
 ): SchemaValidator<Types.ObjectId[]>[] => {
     return [
         {

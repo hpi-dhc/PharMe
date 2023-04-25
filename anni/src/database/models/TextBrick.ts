@@ -1,9 +1,9 @@
 import mongoose, { Types } from 'mongoose';
 
 import {
-    brickUsages,
+    brickCategories,
     SupportedLanguage,
-    BrickUsage,
+    BrickCategory,
     supportedLanguages,
 } from '../../common/definitions';
 import { translationIsValid } from '../helpers/brick-translations';
@@ -18,7 +18,7 @@ export interface ITextBrickTranslation<IdT extends OptionalId = undefined>
 
 export interface ITextBrick<IdT extends OptionalId = undefined>
     extends IBaseDoc<IdT> {
-    usage: BrickUsage;
+    usage: BrickCategory;
     translations: ITextBrickTranslation<IdT>[];
 }
 export type ITextBrick_DB = ITextBrick<Types.ObjectId>;
@@ -27,7 +27,7 @@ export type ITextBrick_Str = ITextBrick<string>;
 const { makeModel } = versionedModel<ITextBrick_DB>('TextBrick', {
     usage: {
         type: String,
-        enum: brickUsages,
+        enum: brickCategories,
         required: true,
     },
     translations: {

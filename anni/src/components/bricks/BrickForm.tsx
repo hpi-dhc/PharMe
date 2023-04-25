@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import AutocompleteArea from './AutocompleteArea';
 import {
-    BrickUsage,
+    BrickCategory,
     SupportedLanguage,
     supportedLanguages,
 } from '../../common/definitions';
@@ -24,11 +24,12 @@ import WithIcon from '../common/WithIcon';
 import SelectionPopover from '../common/interaction/SelectionPopover';
 
 type Props = {
-    usage: BrickUsage | null;
+    category: BrickCategory | null;
     brick?: ITextBrick<string> | null;
+    mayDelete: boolean;
 };
 
-const BrickForm = ({ usage, brick }: Props) => {
+const BrickForm = ({ category, brick, mayDelete }: Props) => {
     const router = useRouter();
     const id = brick?._id;
 
@@ -77,7 +78,7 @@ const BrickForm = ({ usage, brick }: Props) => {
         try {
             const method = id ? axios.put : axios.post;
             await method(`/api/bricks${id ? '/' + id : ''}`, {
-                usage,
+                usage: category,
                 translations: validTranslations.current,
             });
             done();
@@ -99,7 +100,7 @@ const BrickForm = ({ usage, brick }: Props) => {
         router.push('/bricks/');
     };
 
-    if (!usage) {
+    if (!category) {
         return <p className="py-4">Please select a usage category above.</p>;
     }
 
@@ -124,7 +125,7 @@ const BrickForm = ({ usage, brick }: Props) => {
                             onChange={(text) =>
                                 updateTranslation(language, text)
                             }
-                            validPlaceholders={placeHoldersForBrick(usage)}
+                            validPlaceholders={placeHoldersForBrick(category)}
                         />
                     </div>
                 ))}
@@ -145,9 +146,7 @@ const BrickForm = ({ usage, brick }: Props) => {
                     Cancel
                 </WithIcon>
                 <div className="space-x-4">
-                    {/*
-                    // Disabled for #378 until proper handling of deletion
-                    id && (
+                    {mayDelete && id && (
                         <WithIcon
                             as="button"
                             icon={TrashIcon}
@@ -156,7 +155,7 @@ const BrickForm = ({ usage, brick }: Props) => {
                         >
                             Delete Brick
                         </WithIcon>
-                    )*/}
+                    )}
                     <WithIcon
                         as="button"
                         icon={UploadIcon}

@@ -6,11 +6,11 @@ import {
     useState,
 } from 'react';
 
-import { brickUsages } from '../common/definitions';
+import { brickCategories } from '../common/definitions';
 import { ContextProvider } from '../components/common/structure/Layout';
 
-export const displayCategories = ['All', ...brickUsages] as const;
-export type DisplayCategory = typeof displayCategories[number];
+export const displayCategories = ['All', ...brickCategories] as const;
+export type DisplayCategory = (typeof displayCategories)[number];
 export const displayCategoryForIndex = (index: number): DisplayCategory =>
     displayCategories[index];
 export const indexForDisplayCategory = (category: DisplayCategory): number =>

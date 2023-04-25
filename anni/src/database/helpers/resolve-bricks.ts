@@ -1,7 +1,7 @@
 import { translationsToMap } from './brick-translations';
 import { OptionalId } from './types';
 import {
-    BrickUsage,
+    BrickCategory,
     pharMeLanguage,
     SupportedLanguage,
 } from '../../common/definitions';
@@ -11,7 +11,7 @@ import { ITextBrick } from '../models/TextBrick';
 
 const drugBrickPlaceholders = ['drug-name'] as const;
 const allBrickPlaceholders = [...drugBrickPlaceholders] as const;
-export const placeHoldersForBrick = (category: BrickUsage): string[] => {
+export const placeHoldersForBrick = (category: BrickCategory): string[] => {
     switch (category) {
         case 'Drug class':
         case 'Drug indication':

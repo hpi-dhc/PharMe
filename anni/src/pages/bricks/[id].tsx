@@ -4,8 +4,8 @@ import {
     InferGetServerSidePropsType,
 } from 'next';
 
-import { BrickUsage, brickUsages } from '../../common/definitions';
-import { useMountEffect } from '../../common/react-helpers';
+import { BrickCategory, brickCategories } from '../../common/definitions';
+import { useMountEffect, useSwrFetcher } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
 import BrickUsageList from '../../components/bricks/BrickUsage';
 import PlaceholderInfo from '../../components/bricks/PlaceholderInfo';
@@ -20,6 +20,7 @@ import {
 } from '../../contexts/brickFilter';
 import dbConnect from '../../database/helpers/connect';
 import TextBrick, { ITextBrick } from '../../database/models/TextBrick';
+import { GetBrickUsageReponse } from '../api/bricks/[id]';
 
 const EditBrick = ({
     brick,
@@ -27,12 +28,17 @@ const EditBrick = ({
     const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     const categoryString: string = displayCategoryForIndex(categoryIndex);
     useMountEffect(() => {
-        if (!(brickUsages as readonly string[]).includes(categoryString)) {
+        if (!(brickCategories as readonly string[]).includes(categoryString)) {
             setCategoryIndex(
                 indexForDisplayCategory(brick.usage as DisplayCategory),
             );
         }
     });
+
+    const { data: usageResponse, error: usageError } =
+        useSwrFetcher<GetBrickUsageReponse>(`/api/bricks/${brick._id}`);
+    const usageData = usageResponse?.data.data;
+
     return (
         <>
             <PageHeading title="Brick details">
@@ -52,7 +58,7 @@ const EditBrick = ({
                 <div className="space-y-2">
                     <h3 className="font-bold text-xl">Category</h3>
                     <FilterTabs
-                        titles={[...brickUsages]}
+                        titles={[...brickCategories]}
                         selected={categoryIndex - 1}
                         setSelected={(newIndex) =>
                             setCategoryIndex(newIndex + 1)
@@ -65,11 +71,15 @@ const EditBrick = ({
                         <PlaceholderInfo />
                     </Explanation>
                     <BrickForm
-                        usage={categoryString as BrickUsage}
+                        category={categoryString as BrickCategory}
                         brick={brick}
+                        mayDelete={
+                            usageData?.drugs.length == 0 &&
+                            usageData?.guidelines.length == 0
+                        }
                     />
                 </div>
-                <BrickUsageList id={brick._id!} />
+                <BrickUsageList data={usageData} error={usageError} />
             </div>
         </>
     );

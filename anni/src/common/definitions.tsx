@@ -8,26 +8,26 @@ import {
 } from '../database/models/Guideline';
 
 export const supportedLanguages = ['English', 'German'] as const;
-export type SupportedLanguage = typeof supportedLanguages[number];
+export type SupportedLanguage = (typeof supportedLanguages)[number];
 export const pharMeLanguage: SupportedLanguage = 'English';
 
-export const brickUsages = [
+export const brickCategories = [
     'Drug class',
     'Drug indication',
     'Implication',
     'Recommendation',
 ] as const;
-export type BrickUsage = typeof brickUsages[number];
+export type BrickCategory = (typeof brickCategories)[number];
 
 export const warningLevelValues = ['green', 'yellow', 'red'] as const;
-export type WarningLevel = typeof warningLevelValues[number];
+export type WarningLevel = (typeof warningLevelValues)[number];
 
 export type DrugAnnotationKey = keyof IDrug_Any['annotations'];
 export type GuidelineAnnotationKey = keyof IGuideline_Any['annotations'];
 export type AnnotationKey = DrugAnnotationKey | GuidelineAnnotationKey;
 
 export const brickCategoryForAnnotationKey: {
-    [k in AnnotationKey]: typeof brickUsages[number] | null;
+    [k in AnnotationKey]: (typeof brickCategories)[number] | null;
 } = {
     indication: 'Drug indication',
     drugclass: 'Drug class',
