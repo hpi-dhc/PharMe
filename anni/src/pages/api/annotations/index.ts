@@ -16,20 +16,18 @@ export type GetAnnotationsReponse = ApiResponse<ResponseData>;
 
 export const drugAnnotationsResponseData = async (
     drugs: IDrug_DB[],
-): Promise<ResponseData> => {
+): Promise<ResponseData['drugs']> => {
     const curationStates = await Promise.all(
         drugs.map((drug) => drug.curationState()),
     );
-    return {
-        drugs: drugs.map((drug, index) => {
-            return {
-                _id: drug._id!.toString(),
-                name: drug.name,
-                isStaged: drug.isStaged,
-                curationState: curationStates[index],
-            };
-        }),
-    };
+    return drugs.map((drug, index) => {
+        return {
+            _id: drug._id!.toString(),
+            name: drug.name,
+            isStaged: drug.isStaged,
+            curationState: curationStates[index],
+        };
+    });
 };
 
 const api: NextApiHandler = async (req, res) =>
@@ -37,7 +35,9 @@ const api: NextApiHandler = async (req, res) =>
         GET: async () => {
             await dbConnect();
             const drugs = await Drug!.find({}).orFail().exec();
-            const data = await drugAnnotationsResponseData(drugs);
+            const data: ResponseData = {
+                drugs: await drugAnnotationsResponseData(drugs),
+            };
             return { successStatus: 200, data };
         },
     });
