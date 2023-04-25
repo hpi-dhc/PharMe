@@ -35,6 +35,8 @@ function guidelineFromRecommendation(
     };
 }
 
+// used to merge guidelines with equal information (e.g. when the same
+// guideline is used for multiple phenotypes)
 function guidelineKey(recommendation: CpicRecommendation) {
     return [
         recommendation.drugid,
@@ -44,6 +46,15 @@ function guidelineKey(recommendation: CpicRecommendation) {
             ([gene, implication]) => `${gene}${implication}`,
         ),
     ].join('');
+}
+
+// used to merge guidelines with same lookupkeys/phenotypes (e.g. when a
+// drug-phenotype-pair has multiple different guideline because the drug is
+// used for different applications such as clopidogrel)
+function phenotypeKey(guideline: IGuideline_Any): string {
+    return Object.entries(guideline.lookupkey)
+        .map(([gene, implication]) => `${gene}${implication}`)
+        .join('');
 }
 
 function drugFromRecommendation(recommendation: CpicRecommendation): IDrug_Any {
@@ -70,6 +81,7 @@ export function getDrugsWithContractedGuidelines(
     const guidelineKeyMap = new Map<string, IGuideline_Any>();
     const drugIdMap = new Map<string, DrugWithGuidelines>();
 
+    // merge same-information guidelines
     function processContractedGuideline(
         rec: CpicRecommendation,
     ): IGuideline_Any | null {
@@ -100,5 +112,19 @@ export function getDrugsWithContractedGuidelines(
         }
     });
 
-    return Array.from(drugIdMap.values());
+    // merge same-phenotype guidelines
+    return Array.from(drugIdMap.values()).map(({ drug, guidelines }) => {
+        const phenotypeMap = new Map<string, IGuideline_Any>();
+        guidelines.forEach((guideline) => {
+            const key = phenotypeKey(guideline);
+            if (phenotypeMap.has(key)) {
+                phenotypeMap
+                    .get(key)!
+                    .externalData.push(guideline.externalData[0]);
+            } else {
+                phenotypeMap.set(key, guideline);
+            }
+        });
+        return { drug, guidelines: Array.from(phenotypeMap.values()) };
+    });
 }
