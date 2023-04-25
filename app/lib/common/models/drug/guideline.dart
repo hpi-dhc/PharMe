@@ -29,7 +29,7 @@ class Guideline {
   Map<String, List<String>> lookupkey;
 
   @HiveField(3)
-  GuidelineExtData externalData;
+  List<GuidelineExtData> externalData;
 
   @HiveField(4)
   GuidelineAnnotations annotations;

@@ -78,25 +78,34 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildSourcesSection(BuildContext context) {
+    // pipes are illegal characters in URLs so please
+    // - forgive the cheap hack or
+    // - refactor by making a custom object and defining equality for it :)
+    final sources = guideline.externalData
+        .map((data) => '${data.source}|${data.guidelineUrl}')
+        .toSet();
     return Column(children: [
       SubHeader(
         context.l10n.drugs_page_header_further_info,
       ),
       SizedBox(height: 12),
-      GestureDetector(
-        onTap: () => _launchUrl(Uri.parse(guideline.externalData.guidelineUrl)),
-        child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          color: PharMeTheme.onSurfaceColor,
-          child: Padding(
-            padding: EdgeInsets.all(12),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Flexible(
-                child: Text(context.l10n.drugs_page_sources_description(guideline.externalData.source)),
-              ),
-              Icon(Icons.chevron_right_rounded)
-            ]),
+      ...sources.map(
+        (source) => GestureDetector(
+          onTap: () => _launchUrl(Uri.parse(source.split('|')[1])),
+          child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            color: PharMeTheme.onSurfaceColor,
+            child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Flexible(
+                  child: Text(context.l10n
+                      .drugs_page_sources_description(source.split('|')[0])),
+                ),
+                Icon(Icons.chevron_right_rounded)
+              ]),
+            ),
           ),
         ),
       ),
