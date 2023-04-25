@@ -29,7 +29,7 @@ export interface IGuideline<
         }
     > {
     lookupkey: { [key: string]: [string] }; // gene-symbol: phenotype-description
-    externalData: {
+    externalData: Array<{
         source: string;
         recommendationId?: number;
         recommendationVersion?: number;
@@ -38,7 +38,7 @@ export interface IGuideline<
         implications: { [key: string]: string }; // gene-symbol: implication
         recommendation: string;
         comments?: string;
-    };
+    }>;
 }
 export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
     curationState: CurationState;
@@ -55,16 +55,18 @@ export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 const { schema, makeModel } = versionedModel<IGuideline_DB>('Guideline', {
     lookupkey: { type: {}, required: true },
     externalData: {
-        type: {
-            source: { type: String, required: true },
-            recommendationId: { type: Number, required: true, index: true },
-            recommendationVersion: { type: Number, required: true },
-            guidelineName: { type: String, required: true },
-            guidelineUrl: { type: String, required: true },
-            implications: { type: {}, required: true },
-            recommendation: { type: String, required: true },
-            comments: String,
-        },
+        type: [
+            {
+                source: { type: String, required: true },
+                recommendationId: { type: Number, required: true, index: true },
+                recommendationVersion: { type: Number, required: true },
+                guidelineName: { type: String, required: true },
+                guidelineUrl: { type: String, required: true },
+                implications: { type: {}, required: true },
+                recommendation: { type: String, required: true },
+                comments: String,
+            },
+        ],
         required: true,
     },
     annotations: {
@@ -88,20 +90,6 @@ const { schema, makeModel } = versionedModel<IGuideline_DB>('Guideline', {
         required: true,
     },
     isStaged: { type: Boolean, required: true, default: false },
-});
-
-schema.pre<IGuideline_DB>('validate', function (next) {
-    if (
-        JSON.stringify(Object.keys(this.lookupkey)) !==
-        JSON.stringify(Object.keys(this.externalData.implications))
-    ) {
-        next(
-            new Error(
-                `Lookup-Key inconsistent with CPIC implications (recommendationid: ${this.externalData.recommendationId})`,
-            ),
-        );
-    }
-    next();
 });
 
 schema.virtual('curationState').get(function (this: IGuideline_DB) {
@@ -144,7 +132,7 @@ schema.methods.resolve = async function (
                 ? (error as any)['message']
                 : undefined;
         throw new Error(
-            `Unable to resolve Guideline ${this.externalData.guidelineName}${
+            `Unable to resolve Guideline ${this.externalData[0].guidelineName}${
                 message ? `: ${message}` : ''
             }`,
         );

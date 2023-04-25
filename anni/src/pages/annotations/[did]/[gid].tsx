@@ -39,7 +39,7 @@ const GuidelineDetail = ({
             </PageHeading>
             <div className="space-y-4">
                 <TopBar {...stagingApi} />
-                <GuidelineBox guideline={guideline.externalData} />
+                <GuidelineBox sources={guideline.externalData} />
                 {annotationComponent.implication(
                     drugName,
                     guideline,

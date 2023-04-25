@@ -69,7 +69,7 @@ pw.Widget buildPdfPage(
 }
 
 List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
-  final source = guideline.externalData.source;
+  final sources = guideline.externalData;
   return [
     _PdfSegment(
       child: _PdfText(
@@ -80,35 +80,37 @@ List<pw.Widget> _buildGuidelinePart(Guideline guideline) {
               .join(', ')),
     ),
     pw.SizedBox(height: 8, width: double.infinity),
-    _PdfSegment(
-      child: _PdfText(
-        title: '$source guideline link: ',
-        text: guideline.externalData.guidelineUrl,
-      ),
-    ),
-    pw.SizedBox(height: 8, width: double.infinity),
-    _PdfSegment(
-      child: _PdfText(
-        title: '$source recommendation: ',
-        text: guideline.externalData.recommendation,
-      ),
-    ),
-    pw.SizedBox(height: 8, width: double.infinity),
-    ...guideline.externalData.implications.entries
-        .map((implication) => _PdfSegment(
-                child: _PdfText(
-              title: '$source implication for ${implication.key}: ',
-              text: implication.value,
-            )))
-        .toList(),
-    pw.SizedBox(height: 8, width: double.infinity),
-    _PdfSegment(
-      child: _PdfText(
-        title: '$source comment: ',
-        text: guideline.externalData.comments,
-      ),
-    ),
-    pw.SizedBox(height: 8, width: double.infinity),
+    ...sources.flatMap((source) => [
+          _PdfSegment(
+            child: _PdfText(
+              title: '${source.source} guideline link: ',
+              text: source.guidelineUrl,
+            ),
+          ),
+          pw.SizedBox(height: 8, width: double.infinity),
+          _PdfSegment(
+            child: _PdfText(
+                title: '${source.source} recommendation: ',
+                text: source.recommendation),
+          ),
+          pw.SizedBox(height: 8, width: double.infinity),
+          ...source.implications.entries
+              .map((implication) => _PdfSegment(
+                      child: _PdfText(
+                    title:
+                        '${source.source} implication for ${implication.key}: ',
+                    text: implication.value,
+                  )))
+              .toList(),
+          pw.SizedBox(height: 8, width: double.infinity),
+          _PdfSegment(
+            child: _PdfText(
+              title: '${source.source} comment: ',
+              text: source.comments,
+            ),
+          ),
+          pw.SizedBox(height: 8, width: double.infinity),
+        ]),
     pw.Divider(color: PdfColors.grey500),
   ];
 }
