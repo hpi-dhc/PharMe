@@ -1,3 +1,4 @@
+import JSZip from 'jszip';
 import mongoose from 'mongoose';
 import { NextApiHandler } from 'next';
 
@@ -24,7 +25,15 @@ const api: NextApiHandler = async (req, res) =>
                 return total;
             }, {} as Record<string, mongoose.LeanDocument<any>[]>);
 
-            return { successStatus: 200, data };
+            const zip = new JSZip();
+            zip.file('backup.json', JSON.stringify(data));
+            const base64 = await zip.generateAsync({
+                type: 'base64',
+                compression: 'DEFLATE',
+                compressionOptions: { level: 9 },
+            });
+
+            return { successStatus: 200, data: { base64 } };
         },
         POST: async () => {
             const data: Record<string, object> = req.body.data;
