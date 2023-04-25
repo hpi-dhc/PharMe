@@ -18,40 +18,50 @@ const Section = ({
 );
 
 const GuidelineBox = ({
-    guideline,
+    sources: sources,
 }: {
-    guideline: IGuideline_Any['externalData'];
-}) => (
-    <div className="space-y-4 border border-black border-opacity-10 p-4">
-        <h2 className="font-bold pb-2 text-xl">
-            {guideline.source} Guideline:{' '}
-            <a
-                className="underline"
-                href={guideline.guidelineUrl}
-                target="_blank"
-                rel="noreferrer"
-            >
-                {guideline.guidelineName}
-            </a>
-        </h2>
-        <div className="space-y-2">
-            <Section title="Implications" />
-            {Object.entries(guideline.implications).map(
-                ([phenotype, implication], index) => (
+    sources: IGuideline_Any['externalData'];
+}) => {
+    if (sources.length == 0) return <></>;
+    return (
+        <div className="space-y-4 border border-black border-opacity-10 p-4">
+            {sources.map((source) => (
+                <>
+                    <h2 className="font-bold pb-2 text-xl">
+                        {source.source} Guideline:{' '}
+                        <a
+                            className="underline"
+                            href={source.guidelineUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            {source.guidelineName}
+                        </a>
+                    </h2>
+                    <div className="space-y-2">
+                        <Section title="Implications" />
+                        {Object.entries(source.implications).map(
+                            ([phenotype, implication], index) => (
+                                <Section
+                                    key={index}
+                                    title={phenotype}
+                                    content={implication}
+                                    indent
+                                />
+                            ),
+                        )}
+                    </div>
                     <Section
-                        key={index}
-                        title={phenotype}
-                        content={implication}
-                        indent
+                        title="Recommendation"
+                        content={source.recommendation}
                     />
-                ),
-            )}
+                    {source.comments && (
+                        <Section title="Comments" content={source.comments} />
+                    )}
+                </>
+            ))}
         </div>
-        <Section title="Recommendation" content={guideline.recommendation} />
-        {guideline.comments && (
-            <Section title="Comments" content={guideline.comments} />
-        )}
-    </div>
-);
+    );
+};
 
 export default GuidelineBox;

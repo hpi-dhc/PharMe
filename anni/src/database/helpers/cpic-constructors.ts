@@ -14,16 +14,18 @@ function guidelineFromRecommendation(
             },
             new Object() as { [key: string]: [string] },
         ),
-        externalData: {
-            source,
-            recommendationId: recommendation.id,
-            recommendationVersion: recommendation.version,
-            guidelineName: recommendation.guideline.name,
-            guidelineUrl: recommendation.guideline.url,
-            implications: recommendation.implications,
-            recommendation: recommendation.drugrecommendation,
-            comments: recommendation.comments,
-        },
+        externalData: [
+            {
+                source,
+                recommendationId: recommendation.id,
+                recommendationVersion: recommendation.version,
+                guidelineName: recommendation.guideline.name,
+                guidelineUrl: recommendation.guideline.url,
+                implications: recommendation.implications,
+                recommendation: recommendation.drugrecommendation,
+                comments: recommendation.comments,
+            },
+        ],
         annotations: {
             recommendation: undefined,
             implication: undefined,
