@@ -4,7 +4,7 @@ import {
     InferGetServerSidePropsType,
 } from 'next';
 
-import { BrickUsage, brickUsages } from '../../common/definitions';
+import { BrickCategory, brickCategories } from '../../common/definitions';
 import { useMountEffect } from '../../common/react-helpers';
 import BrickForm from '../../components/bricks/BrickForm';
 import BrickUsageList from '../../components/bricks/BrickUsage';
@@ -27,7 +27,7 @@ const EditBrick = ({
     const { categoryIndex, setCategoryIndex } = useBrickFilterContext();
     const categoryString: string = displayCategoryForIndex(categoryIndex);
     useMountEffect(() => {
-        if (!(brickUsages as readonly string[]).includes(categoryString)) {
+        if (!(brickCategories as readonly string[]).includes(categoryString)) {
             setCategoryIndex(
                 indexForDisplayCategory(brick.usage as DisplayCategory),
             );
@@ -52,7 +52,7 @@ const EditBrick = ({
                 <div className="space-y-2">
                     <h3 className="font-bold text-xl">Category</h3>
                     <FilterTabs
-                        titles={[...brickUsages]}
+                        titles={[...brickCategories]}
                         selected={categoryIndex - 1}
                         setSelected={(newIndex) =>
                             setCategoryIndex(newIndex + 1)
@@ -65,7 +65,7 @@ const EditBrick = ({
                         <PlaceholderInfo />
                     </Explanation>
                     <BrickForm
-                        usage={categoryString as BrickUsage}
+                        category={categoryString as BrickCategory}
                         brick={brick}
                     />
                 </div>
