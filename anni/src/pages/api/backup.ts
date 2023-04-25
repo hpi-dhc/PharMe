@@ -36,7 +36,14 @@ const api: NextApiHandler = async (req, res) =>
             return { successStatus: 200, data: { base64 } };
         },
         POST: async () => {
-            const data: Record<string, object> = req.body.data;
+            const base64: string = req.body.data.base64;
+            const zip = new JSZip();
+            await zip.loadAsync(base64, {
+                base64: true,
+            });
+            const data: Record<string, object> = JSON.parse(
+                await zip.files['backup.json'].async('string'),
+            );
 
             await dbConnect();
 
