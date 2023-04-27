@@ -70,6 +70,7 @@ class SettingsPage extends StatelessWidget {
         TextButton(
           onPressed: () async {
             await deleteAllAppData();
+            // ignore: use_build_context_synchronously
             await context.router.replaceAll([LoginRouter()]);
           },
           child: Text(

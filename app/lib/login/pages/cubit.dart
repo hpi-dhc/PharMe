@@ -37,6 +37,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
     if (token == null) {
       emit(LoginPageState.error(
+        // ignore: use_build_context_synchronously
         context.l10n.err_could_not_retrieve_access_token,
       ));
       return;
@@ -52,6 +53,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
       await MetaData.save();
       emit(LoginPageState.loadedUserData());
     } catch (e) {
+      // ignore: use_build_context_synchronously
       emit(LoginPageState.error(context.l10n.err_fetch_user_data_failed));
     }
   }
