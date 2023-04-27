@@ -15,5 +15,5 @@ export type CpicRecommendation = {
 export const cpicRecommendationsURL =
     'https://api.cpicpgx.org/v1/recommendation';
 export const cpicRecommendationsParams = {
-    select: 'id,drugid,version,drug(name),lookupkey,guideline(name,url),implications,drugrecommendation,comments',
+    select: 'id,drugid,version,drug(name),lookupkey,phenotypes,guideline(name,url),implications,drugrecommendation,comments',
 };
