@@ -56,10 +56,18 @@ function guidelineKey(recommendation: CpicRecommendation) {
 
 // used to merge guidelines with same lookupkeys/phenotypes (e.g. when a
 // drug-phenotype-pair has multiple different guideline because the drug is
-// used for different applications such as clopidogrel)
+// used for different applications such as clopidogrel or when multiple
+// lookupkeys match to the same phenotye, as it often is the case for
+// activity scores)
 function phenotypeKey(guideline: IGuideline_Any): string {
-    return Object.entries(guideline.lookupkey)
-        .map(([gene, implication]) => `${gene}${implication}`)
+    return Object.keys(guideline.lookupkey)
+        .map((gene) => {
+            let phenotype = guideline.lookupkey[gene];
+            if (gene in guideline.phenotypes) {
+                phenotype = guideline.phenotypes[gene];
+            }
+            return `${gene}${phenotype}`;
+        })
         .join('');
 }
 
@@ -93,9 +101,12 @@ export function getDrugsWithContractedGuidelines(
     ): IGuideline_Any | null {
         const key = guidelineKey(rec);
         if (guidelineKeyMap.has(key)) {
-            const existing = guidelineKeyMap.get(key)!.lookupkey;
-            Object.keys(existing).forEach((gene) => {
-                existing[gene].push(rec.lookupkey[gene]);
+            const existingGuideline = guidelineKeyMap.get(key);
+            Object.keys(existingGuideline!.lookupkey).forEach((gene) => {
+                existingGuideline!.lookupkey[gene].push(rec.lookupkey[gene]);
+            });
+            Object.keys(existingGuideline!.phenotypes).forEach((gene) => {
+                existingGuideline!.phenotypes[gene].push(rec.phenotypes[gene]);
             });
             return null;
         }

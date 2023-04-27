@@ -1,5 +1,5 @@
-import { IGuideline_Any } from '../models/Guideline';
 import { CurationState } from './annotations';
+import { IGuideline_Any } from '../models/Guideline';
 
 export function guidelineCurationState(
     guideline: IGuideline_Any,
@@ -18,10 +18,21 @@ export function guidelineCurationState(
 export function guidelineDescription(
     guideline: IGuideline_Any,
 ): Array<{ gene: string; description: string }> {
-    return Object.entries(guideline.lookupkey).map(([gene, description]) => {
+    return Object.keys(guideline.lookupkey).map((gene) => {
+        const lookupkeys = guideline.lookupkey[gene];
+        let description = Array.from(new Set(lookupkeys)).join('/');
+        if ('phenotypes' in guideline && gene in guideline.phenotypes) {
+            const phenotypes = Array.from(
+                new Set(guideline.phenotypes[gene]),
+            ).join('/');
+            if (phenotypes != description) {
+                description = `${phenotypes} (${description})`;
+            }
+        }
+
         return {
             gene,
-            description: Array.from(new Set(description)).join('/'),
+            description,
         };
     });
 }
