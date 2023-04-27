@@ -22,7 +22,7 @@
   "general_retry": "Retry",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
-  "search_page_filter_inactive": "Inactive drugs",
+  "search_page_filter_inactive": "Drugs not currently taken",
   "search_page_filter_green": "Green warning level",
   "search_page_filter_yellow": "Yellow warning level",
   "search_page_filter_red": "Red warning level",
@@ -31,7 +31,7 @@
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
   "drugs_page_overwritten_phenotype": "adjusted based on you taking {drugName}",
   "@drugs_page_overwritten_phenotype": {
-      "description": "Disclaimer for when the phenotype has been adjusted based on an active drug",
+      "description": "Disclaimer for when the phenotype has been adjusted based on a current drug",
       "placeholders": {
           "drugName": {
               "type": "String",
@@ -45,9 +45,9 @@
   "drugs_page_header_drugclass": "Drug class",
   "drugs_page_header_drug": "Drug",
   "drugs_page_header_druginfo": "Information",
-  "drugs_page_header_active": "Activity",
-  "drugs_page_active": "I am actively taking this drug.",
-  "drugs_page_active_warn_header": "Are you sure you want to change the activity status?",
+  "drugs_page_header_active": "Usage status",
+  "drugs_page_active": "I am currently taking this drug.",
+  "drugs_page_active_warn_header": "Are you sure you want to change the drug usage status?",
   "drugs_page_active_warn": "This may adjust the guidelines you receive for other drugs.",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
