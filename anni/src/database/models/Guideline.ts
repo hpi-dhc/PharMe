@@ -29,6 +29,7 @@ export interface IGuideline<
         }
     > {
     lookupkey: { [key: string]: [string] }; // gene-symbol: phenotype-description
+    phenotypes: { [key: string]: [string] }; // gene-symbol: phenotype
     externalData: Array<{
         source: string;
         recommendationId?: number;
@@ -54,6 +55,7 @@ export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 
 const { schema, makeModel } = versionedModel<IGuideline_DB>('Guideline', {
     lookupkey: { type: {}, required: true },
+    phenotypes: { type: {}, required: false },
     externalData: {
         type: [
             {

@@ -6,14 +6,20 @@ function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
     source: string,
 ): IGuideline_Any {
+    function makeStringValuesLists(object: { [key: string]: string }): {
+        [key: string]: [string];
+    } {
+        const emptyNewList = new Object() as { [key: string]: [string] };
+        return object != undefined
+            ? Object.entries(object).reduce((reducedObject, [key, value]) => {
+                  reducedObject[key] = [value];
+                  return reducedObject;
+              }, emptyNewList)
+            : emptyNewList;
+    }
     return {
-        lookupkey: Object.entries(recommendation.lookupkey).reduce(
-            (lookupkey, [gene, phenotype]) => {
-                lookupkey[gene] = [phenotype];
-                return lookupkey;
-            },
-            new Object() as { [key: string]: [string] },
-        ),
+        lookupkey: makeStringValuesLists(recommendation.lookupkey),
+        phenotypes: makeStringValuesLists(recommendation.phenotypes),
         externalData: [
             {
                 source,

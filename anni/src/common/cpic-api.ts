@@ -4,7 +4,8 @@ export type CpicRecommendation = {
     version: number;
 
     drug: { name: string };
-    lookupkey: { [key: string]: string }; // gene-symbol: phenotype
+    lookupkey: { [key: string]: string }; // gene-symbol: phenotype-description (can be activity score)
+    phenotypes: { [key: string]: string }; // gene-symbol: phenotype (can be empty)
 
     guideline: { name: string; url: string };
     implications: { [key: string]: string }; // gene-symbol: implication
