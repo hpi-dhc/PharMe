@@ -28,6 +28,7 @@ Future<void> updateCachedDrugs() async {
 
   final context = PharMeApp.navigatorKey.currentContext;
   if (context != null) {
+    // ignore: use_build_context_synchronously
     await showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoAlertDialog(

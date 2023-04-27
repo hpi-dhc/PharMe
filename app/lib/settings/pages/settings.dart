@@ -10,8 +10,9 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(
           context.l10n.settings_page_account_settings,
-          style: PharMeTheme.textTheme.bodyLarge,
+          style: PharMeTheme.textTheme.bodyMedium,
         ),
+        dense: true,
       ),
       ListTile(
         title: Text(context.l10n.settings_page_delete_data),
@@ -25,8 +26,14 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(
           context.l10n.settings_page_more,
-          style: PharMeTheme.textTheme.bodyLarge,
+          style: PharMeTheme.textTheme.bodyMedium,
         ),
+        dense: true,
+      ),
+      ListTile(
+        title: Text(context.l10n.settings_page_onboarding),
+        trailing: Icon(Icons.chevron_right_rounded),
+        onTap: () => context.router.push(OnboardingRouter()),
       ),
       ListTile(
         title: Text(context.l10n.settings_page_about_us),
@@ -63,6 +70,7 @@ class SettingsPage extends StatelessWidget {
         TextButton(
           onPressed: () async {
             await deleteAllAppData();
+            // ignore: use_build_context_synchronously
             await context.router.replaceAll([LoginRouter()]);
           },
           child: Text(

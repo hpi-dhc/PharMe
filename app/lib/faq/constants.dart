@@ -10,14 +10,14 @@ class Question {
 
 final List<Question> faqList = [
   Question(
-    question: 'What is Pharmacogenomics?',
+    question: 'What is pharmacogenetics?',
     answer:
-        'Pharmacogenomics (PGx) is the study of how your genetics (DNA) affect your response to drugs.',
+        'Pharmacogenetics (PGx) is the study of how your genetics (DNA) affect your response to drugs.',
   ),
   Question(
-    question: 'Why is Pharmacogenomics important?',
+    question: 'Why is pharmacogenetics important?',
     answer:
-        'Pharmacogenomics is important, because we can predict those who will respond well to drugs and those who may have side effects. With this information we can select the right drug and dose to avoid the unwanted responses.',
+        'Pharmacogenetics is important, because we can predict those who will respond well to drugs and those who may have side effects. With this information we can select the right drug and dose to avoid the unwanted responses.',
   ),
   Question(
     question: 'Which drugs are affected?',

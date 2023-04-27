@@ -7,12 +7,9 @@ understanding of this project's code.
 ## General terms and abbreviations
 
 <dl>
-  <dt>PGx, PGt</dt>
-  <dd>PGx is an abbreviation of <em>pharmacogenomics</em>, the study of how
-  pharmacology is affected by <em>the genome as a whole</em>. PGt on the other
-  hand is an abbreviation of <em>pharmacogenetics</em>, the study of how
-  pharmacology is affected by <em>individual genes</em>. In practice, the two
-  terms are often (incorrectly) used as synonyms.</dd>
+  <dt>PGx</dt>
+  <dd>PGx is an abbreviation of <em>pharmacogenetics</em>, the study of how
+  pharmacology is affected by <em>individual genes</em>.</dd>
 
   <dt>Drug</dt>
   <dd>Linguistically synonymous to the term <em>medication</em>, but preferred

@@ -75,8 +75,13 @@ class LoginPage extends HookWidget {
       actionText: context.l10n.auth_sign_in,
       children: [
         Text(
-          context.l10n.auth_choose_lab,
+          context.l10n.auth_welcome,
           style: PharMeTheme.textTheme.titleLarge,
+        ),
+        SizedBox(height: PharMeTheme.smallSpace),
+        Text(
+          context.l10n.auth_choose_lab,
+          style: PharMeTheme.textTheme.titleMedium,
         ),
         SizedBox(height: PharMeTheme.mediumSpace),
         DropdownButtonHideUnderline(
@@ -110,7 +115,7 @@ class LoginPage extends HookWidget {
 
   Widget _buildLoadedScreen(BuildContext context) {
     return _buildColumnWrapper(
-      action: () => context.router.replace(MainRoute()),
+      action: () => context.router.replace(OnboardingRouter()),
       actionText: context.l10n.general_continue,
       children: [
         Icon(
@@ -121,7 +126,7 @@ class LoginPage extends HookWidget {
         SizedBox(height: PharMeTheme.mediumSpace),
         Text(
           context.l10n.auth_success,
-          style: context.textTheme.headline6,
+          style: context.textTheme.titleLarge,
           textAlign: TextAlign.center,
         ),
       ],
@@ -141,7 +146,7 @@ class LoginPage extends HookWidget {
         SizedBox(height: PharMeTheme.mediumSpace),
         Text(
           message,
-          style: context.textTheme.headline6,
+          style: context.textTheme.titleLarge,
           textAlign: TextAlign.center,
         ),
       ],

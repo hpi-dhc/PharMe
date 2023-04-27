@@ -72,6 +72,7 @@ class PharMeTheme {
   static final borderColor = Colors.black.withOpacity(.2);
 
   static const mediumSpace = 16.0;
+  static const smallSpace = 8.0;
 }
 
 extension WarningLevelColor on WarningLevel {
