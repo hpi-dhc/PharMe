@@ -19,17 +19,19 @@ export function guidelineDescription(
     guideline: IGuideline_Any,
 ): Array<{ gene: string; description: string }> {
     return Object.keys(guideline.lookupkey).map((gene) => {
-        const lookupkeys = guideline.lookupkey[gene];
-        let description = Array.from(new Set(lookupkeys)).join('/');
-        if ('phenotypes' in guideline && gene in guideline.phenotypes) {
-            const phenotypes = Array.from(
-                new Set(guideline.phenotypes[gene]),
-            ).join('/');
-            if (phenotypes != description) {
-                description = `${phenotypes} (${description})`;
-            }
+        function descriptionString(descriptionParts: [string]): string {
+            return Array.from(new Set(descriptionParts)).join('/');
         }
-
+        const phenotypeDescriptionString = descriptionString(
+            guideline.phenotypes[gene],
+        );
+        const lookupkeyDescriptionString = descriptionString(
+            guideline.lookupkey[gene],
+        );
+        const description =
+            phenotypeDescriptionString != lookupkeyDescriptionString
+                ? `${phenotypeDescriptionString} (${lookupkeyDescriptionString})`
+                : phenotypeDescriptionString;
         return {
             gene,
             description,

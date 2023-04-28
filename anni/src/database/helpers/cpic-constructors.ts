@@ -6,20 +6,20 @@ function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
     source: string,
 ): IGuideline_Any {
-    function makeStringValuesLists(object: { [key: string]: string }): {
-        [key: string]: [string];
-    } {
-        const emptyNewList = new Object() as { [key: string]: [string] };
-        return object != undefined
-            ? Object.entries(object).reduce((reducedObject, [key, value]) => {
-                  reducedObject[key] = [value];
-                  return reducedObject;
-              }, emptyNewList)
-            : emptyNewList;
-    }
+    // make lookupkey and phenotype lists for merging later and add
+    // lookupkeys as phenotypes if phenotypes are missing
+    const lookupkey = new Object() as { [key: string]: [string] };
+    const phenotypes = new Object() as { [key: string]: [string] };
+    Object.keys(recommendation.lookupkey).forEach((gene) => {
+        lookupkey[gene] = [recommendation.lookupkey[gene]];
+        phenotypes[gene] =
+            gene in recommendation.phenotypes
+                ? [recommendation.phenotypes[gene]]
+                : [recommendation.lookupkey[gene]];
+    });
     return {
-        lookupkey: makeStringValuesLists(recommendation.lookupkey),
-        phenotypes: makeStringValuesLists(recommendation.phenotypes),
+        lookupkey,
+        phenotypes,
         externalData: [
             {
                 source,
@@ -61,13 +61,7 @@ function guidelineKey(recommendation: CpicRecommendation) {
 // activity scores)
 function phenotypeKey(guideline: IGuideline_Any): string {
     return Object.keys(guideline.lookupkey)
-        .map((gene) => {
-            let phenotype = guideline.lookupkey[gene];
-            if (gene in guideline.phenotypes) {
-                phenotype = guideline.phenotypes[gene];
-            }
-            return `${gene}${phenotype}`;
-        })
+        .map((gene) => `${gene}${guideline.phenotypes[gene]}`)
         .join('');
 }
 

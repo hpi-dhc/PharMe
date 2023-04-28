@@ -55,7 +55,7 @@ export type IGuideline_Resolved = IGuideline<string, OptionalId>;
 
 const { schema, makeModel } = versionedModel<IGuideline_DB>('Guideline', {
     lookupkey: { type: {}, required: true },
-    phenotypes: { type: {}, required: false },
+    phenotypes: { type: {}, required: true },
     externalData: {
         type: [
             {
