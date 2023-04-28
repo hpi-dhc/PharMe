@@ -6,14 +6,20 @@ function guidelineFromRecommendation(
     recommendation: CpicRecommendation,
     source: string,
 ): IGuideline_Any {
+    // make lookupkey and phenotype lists for merging later and add
+    // lookupkeys as phenotypes if phenotypes are missing
+    const lookupkey = new Object() as { [key: string]: [string] };
+    const phenotypes = new Object() as { [key: string]: [string] };
+    Object.keys(recommendation.lookupkey).forEach((gene) => {
+        lookupkey[gene] = [recommendation.lookupkey[gene]];
+        phenotypes[gene] =
+            gene in recommendation.phenotypes
+                ? [recommendation.phenotypes[gene]]
+                : [recommendation.lookupkey[gene]];
+    });
     return {
-        lookupkey: Object.entries(recommendation.lookupkey).reduce(
-            (lookupkey, [gene, phenotype]) => {
-                lookupkey[gene] = [phenotype];
-                return lookupkey;
-            },
-            new Object() as { [key: string]: [string] },
-        ),
+        lookupkey,
+        phenotypes,
         externalData: [
             {
                 source,
@@ -50,10 +56,12 @@ function guidelineKey(recommendation: CpicRecommendation) {
 
 // used to merge guidelines with same lookupkeys/phenotypes (e.g. when a
 // drug-phenotype-pair has multiple different guideline because the drug is
-// used for different applications such as clopidogrel)
+// used for different applications such as clopidogrel or when multiple
+// lookupkeys match to the same phenotye, as it often is the case for
+// activity scores)
 function phenotypeKey(guideline: IGuideline_Any): string {
-    return Object.entries(guideline.lookupkey)
-        .map(([gene, implication]) => `${gene}${implication}`)
+    return Object.keys(guideline.lookupkey)
+        .map((gene) => `${gene}${guideline.phenotypes[gene]}`)
         .join('');
 }
 
@@ -87,9 +95,12 @@ export function getDrugsWithContractedGuidelines(
     ): IGuideline_Any | null {
         const key = guidelineKey(rec);
         if (guidelineKeyMap.has(key)) {
-            const existing = guidelineKeyMap.get(key)!.lookupkey;
-            Object.keys(existing).forEach((gene) => {
-                existing[gene].push(rec.lookupkey[gene]);
+            const existingGuideline = guidelineKeyMap.get(key);
+            Object.keys(existingGuideline!.lookupkey).forEach((gene) => {
+                existingGuideline!.lookupkey[gene].push(rec.lookupkey[gene]);
+            });
+            Object.keys(existingGuideline!.phenotypes).forEach((gene) => {
+                existingGuideline!.phenotypes[gene].push(rec.phenotypes[gene]);
             });
             return null;
         }
