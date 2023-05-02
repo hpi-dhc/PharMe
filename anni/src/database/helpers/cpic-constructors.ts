@@ -97,15 +97,15 @@ function contractByPhenotype(
         const phenotypeMap = new Map<string, IGuideline_Any>();
         guidelines.forEach((guideline) => {
             const key = phenotypeKey(guideline);
-            if (phenotypeMap.has(key)) {
-                const existingGuideline = phenotypeMap.get(key);
+            const existingGuideline = phenotypeMap.get(key);
+            if (existingGuideline) {
                 // ensure that we don't miss information when
                 // getting only first index from externalData
                 // and lookupkey[gene]
                 ensureInitialGuidelineStructure(guideline);
-                existingGuideline!.externalData.push(guideline.externalData[0]);
-                Object.keys(existingGuideline!.lookupkey).forEach((gene) => {
-                    existingGuideline!.lookupkey[gene].push(
+                existingGuideline.externalData.push(guideline.externalData[0]);
+                Object.keys(existingGuideline.lookupkey).forEach((gene) => {
+                    existingGuideline.lookupkey[gene].push(
                         guideline.lookupkey[gene][0],
                     );
                 });
