@@ -17,6 +17,16 @@ import { BrickResolver, resolveStringOrFail } from '../helpers/resolve-bricks';
 import { makeIdsStrings, OptionalId } from '../helpers/types';
 import { versionedModel } from '../versioning/schema';
 
+export type IExternalData = {
+    source: string;
+    recommendationId?: number;
+    recommendationVersion?: number;
+    guidelineName: string;
+    guidelineUrl: string;
+    implications: { [key: string]: string }; // gene-symbol: implication
+    recommendation: string;
+    comments?: string;
+};
 export interface IGuideline<
     AnnotationT extends BrickAnnotationT,
     IdT extends OptionalId = undefined,
@@ -30,16 +40,7 @@ export interface IGuideline<
     > {
     lookupkey: { [key: string]: [string] }; // gene-symbol: phenotype-description
     phenotypes: { [key: string]: [string] }; // gene-symbol: phenotype
-    externalData: Array<{
-        source: string;
-        recommendationId?: number;
-        recommendationVersion?: number;
-        guidelineName: string;
-        guidelineUrl: string;
-        implications: { [key: string]: string }; // gene-symbol: implication
-        recommendation: string;
-        comments?: string;
-    }>;
+    externalData: Array<IExternalData>;
 }
 export type IGuideline_DB = IGuideline<Types.ObjectId[], Types.ObjectId> & {
     curationState: CurationState;
