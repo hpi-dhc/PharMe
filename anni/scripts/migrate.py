@@ -1,20 +1,6 @@
-import json
-import os
-import sys
-
-def get_input_file_path():
-    argument_error_text = 'Please provide an existing file path as argument.'
-    if len(sys.argv) != 2:
-        raise Exception(argument_error_text)
-    input_file_path = sys.argv[1]
-    if not os.path.isfile(input_file_path):
-        raise Exception(argument_error_text)
-    return input_file_path
-
-with open(get_input_file_path(), 'r') as input_file:
-    # Data is a Base64-encoded ZIP (#599)
-    # TODO: if base64, decode and unzip; test that the result is json
-    data = json.load(input_file)
+from common.get_data import get_data
+from common.write_data import write_data
+from common.constants import SCRIPT_POSTFIXES
 
 # Rename `cpicData` in guidelines to `externalData` (#582)
 # Add `source` field to `externalData` with value 'CPIC' (#582)
@@ -37,11 +23,15 @@ def add_phenotypes(guideline):
     # TODO: get phenotypes from CPIC API based on lookupkey
     return guideline
 
+# Chain guideline migrations together
 def migrate_guideline(guideline):
     return add_phenotypes(
         enlist_external_data(
             rename_external_data(guideline)))
 
+data = get_data()
+
+# Iterate data for migration of content
 for table_name in data.keys():
     table_content = data[table_name]
     if table_name.startswith('AppData'):
@@ -55,4 +45,4 @@ for table_name in data.keys():
         for guideline in table_content:
             guideline = migrate_guideline(guideline)
 
-# TODO: save as json in zip in base64
+write_data(data, postfix=SCRIPT_POSTFIXES['migrate'])
