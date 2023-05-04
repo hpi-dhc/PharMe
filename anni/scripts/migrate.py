@@ -2,6 +2,8 @@ from common.get_data import get_data
 from common.write_data import write_data
 from common.constants import SCRIPT_POSTFIXES
 from common.cpic_data import get_phenotype_map
+from common.remove_history import remove_history
+from common.get_data import get_guideline_by_id
 
 # Rename `cpicData` in guidelines to `externalData` (#582)
 # Add `source` field to `externalData` with value 'CPIC' (#582)
@@ -31,38 +33,54 @@ def add_phenotypes(guideline, phenotype_map):
         guideline['phenotypes'] = phenotypes
     return guideline
 
-# Do not contract different phenotypes (#604)
-def split_phenotypes(guidelines):
-    # TODO: split up and copy guidelines per phenotype (combination)
-    return guidelines
-
 # Chain guideline migrations together
 def migrate_guideline(guideline, phenotype_map):
-    return split_phenotypes(
-        add_phenotypes(
-            enlist_external_data(rename_external_data(guideline)),
-            phenotype_map))
+    return add_phenotypes(
+        enlist_external_data(rename_external_data(guideline)),
+        phenotype_map)
+
+# Contract external data by phenotypes (#597)
+# Split up previously contracted phenotypes (#604)
+def contract_phenotypes_per_drug(guidelines, phenotype_map):
+    for guideline in guidelines:
+        # Test if all phenotype and lookupkey values have the same length
+        phenotype_values = list(guideline['lookupkey'].values()) + \
+            list(guideline['phenotypes'].values())
+        phenotype_values_lengths = set(map(len, phenotype_values))
+        if len(phenotype_values_lengths) != 1:
+            raise Exception('[ERROR] Expecting lookupkey and phenotypes per ' \
+                            'gene to have same lenghts but lengths differ ' \
+                            'for guideline {}'.format(guideline['_id']))
+        # TODO: Split up by phenotypes
+        # TODO: Contract by phenotypes
+    return list(guidelines)
 
 # Migrate data
 def migrate_data():
-    data = get_data()
+    data = remove_history(get_data())
     phenotype_map = get_phenotype_map()
 
-    # Iterate data for migration of content
-    for table_name in data.keys():
-        table_content = data[table_name]
-        if table_name.startswith('AppData'):
-            for row in table_content:
-                drugs = row['drugs']
-                for drug in drugs:
-                    guidelines = drug['guidelines']
-                    for guideline in guidelines:
-                        guideline = migrate_guideline(guideline, phenotype_map)
-                    guidelines = split_phenotypes(guidelines)
-        if table_name.startswith('Guideline'):
-            for guideline in table_content:
-                guideline = migrate_guideline(guideline, phenotype_map)
-            table_content = split_phenotypes(table_content)
+    # Iterate data for migration of single guidelines and contract guidelines
+    # per drug afterwards (needs phenotypes)
+    for guideline in data['Guideline']:
+        guideline = migrate_guideline(guideline, phenotype_map)
+    migrated_guidelines = []
+    for drug in data['Drug']:
+        migrated_guidelines.append(contract_phenotypes_per_drug(
+            map(
+                lambda id: get_guideline_by_id(data, id),
+                drug['guidelines']),
+            phenotype_map))
+    data['Guideline'] = migrated_guidelines
+
+    if 'AppData' in data:
+        for row in data['AppData']:
+            for drug in row['drugs']:
+                guidelines = drug['guidelines']
+                for guideline in guidelines:
+                    guideline = migrate_guideline(guideline, phenotype_map)
+                guidelines = contract_phenotypes_per_drug(
+                    guidelines, phenotype_map)
 
     write_data(data, postfix=SCRIPT_POSTFIXES['migrate'])
 

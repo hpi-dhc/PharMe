@@ -11,6 +11,8 @@ containing a zipped JSON.
 Run `pyhthon3 migrate.py <PATH_TO_BACKUP>[.json|.base64]` to receive
 `<PATH_TO_BACKUP>_migrated_<TIMESTAMP>.base64`.
 
+**⚠️ Migrating data will remove the data history!**
+
 (Breaking) changes covered:
 
 * [Add new medications (FDA)](https://github.com/hpi-dhc/PharMe/pull/582)

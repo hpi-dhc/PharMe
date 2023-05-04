@@ -54,3 +54,7 @@ def get_data():
         input_file_path = decode_and_unzip(input_file_path)
     with open(input_file_path, 'r') as input_file:
         return json.load(input_file)
+
+def get_guideline_by_id(data, id):
+    guidelines = data['Guideline']
+    return next(guideline for guideline in guidelines if guideline['_id'] == id)
