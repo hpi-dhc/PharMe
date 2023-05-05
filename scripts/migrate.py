@@ -40,23 +40,23 @@ def migrate_guideline(guideline, phenotype_map):
         enlist_external_data(rename_external_data(guideline)),
         phenotype_map)
 
-# Contract external data by phenotypes (#597)
-# Split up previously contracted phenotypes (#604)
-# Contraction is implemented here analogous to
-# anni/src/common/database/helpers/cpic-constructors.py
-def contract_phenotypes_per_drug(guidelines):
-    # Split up by lookupkeys and group by phenotype and external information
+# Migrate single guidelines; then split up by lookupkeys and re-contract by
+# phenotype and external information (according to #597 and #604)
+def migrate_drug_guidelines(guidelines, phenotype_map):
     phenotype_guideline_map = {}
     for guideline in guidelines:
+        guideline = migrate_guideline(guideline, phenotype_map)
         contracted_guideline_number = get_phenotype_value_lengths(
             guideline, expect_same_length=True)
         for phenotype_index in range(0, contracted_guideline_number):
             decontracted_guideline = guideline.copy()
-            decontracted_guideline['_id'] = get_object_id()
+            del decontracted_guideline['_id']
             decontracted_guideline['lookupkey'] = get_phenotype_value(
                 guideline['lookupkey'], phenotype_index)
             decontracted_guideline['phenotypes'] = get_phenotype_value(
                 guideline['phenotypes'], phenotype_index)
+            # Contraction is implemented analogous to Anni
+            # (see cpic-constructors.ts)
             phenotype_key = get_phenotype_key(decontracted_guideline)
             information_key = get_information_key(decontracted_guideline)
             if not phenotype_key in phenotype_guideline_map:
@@ -64,10 +64,16 @@ def contract_phenotypes_per_drug(guidelines):
             phenotype_guidelines = phenotype_guideline_map[phenotype_key]
             if not information_key in phenotype_guidelines:
                 phenotype_guidelines[information_key] = []
-            phenotype_guidelines[information_key].append(
-                decontracted_guideline)
-    # TODO: Contract grouped guidelines
-    return list(guidelines)
+            phenotype_guidelines[information_key].append(decontracted_guideline)
+    # Re-contracted guidelines and assign new IDs
+    recontracted_guidelines = []
+    for phenotype_guidelines in phenotype_guideline_map.values():
+        # TODO: Contract lookupkeys per phenotype
+        # TODO: Contract unique external data per phenotype
+        print(phenotype_guidelines.values())
+        print('')
+
+    return recontracted_guidelines
 
 # Migrate data
 def migrate_data():
@@ -81,27 +87,20 @@ def migrate_data():
     # Iterate data for migration of single guidelines and contract guidelines
     # per drug afterwards (needs phenotypes)
 
-    for guideline in data['Guideline']:
-        guideline = migrate_guideline(guideline, phenotype_map)
-
     if contract_by_phenotypes:
         migrated_guidelines = []
         for drug in data['Drug']:
-            migrated_guidelines.append(contract_phenotypes_per_drug(
-                list(map(
-                    lambda id: get_guideline_by_id(data, id),
-                    drug['guidelines']))))
+            drug_guidelines = list(map(
+                lambda id: get_guideline_by_id(data, id),
+                drug['guidelines']))
+            migrated_drug_guidelines = migrate_drug_guidelines(
+                drug_guidelines, phenotype_map)
+            migrated_guidelines += migrated_drug_guidelines
+            drug['guidelines'] = list(map(
+                lambda guideline: guideline['_id'],
+                migrated_drug_guidelines
+            ))
         data['Guideline'] = migrated_guidelines
-
-    if 'AppData' in data:
-        for row in data['AppData']:
-            for drug in row['drugs']:
-                guidelines = drug['guidelines']
-                for guideline in guidelines:
-                    guideline = migrate_guideline(guideline, phenotype_map)
-                if contract_by_phenotypes:
-                    guidelines = contract_phenotypes_per_drug(
-                        guidelines, phenotype_map)
 
     write_data(data, postfix=SCRIPT_POSTFIXES['migrate'])
 

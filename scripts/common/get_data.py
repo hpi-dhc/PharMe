@@ -74,16 +74,18 @@ def get_phenotype_value_lengths(guideline, expect_same_length = False):
 def get_phenotype_value(phenotype_values, index):
     phenotype_value = {}
     for gene in phenotype_values:
-        phenotype_value[gene] = phenotype_values[gene][index]
+        phenotype_value[gene] = [phenotype_values[gene][index]]
     return phenotype_value
 
-def dict_to_key(dictionary):
+def dict_to_key(dictionary, format_value=lambda value: value):
     return ' '.join(map(
-        lambda key: f'{key} {dictionary[key]}',
+        lambda key: f'{key} {format_value(dictionary[key])}',
         dict(sorted(dictionary.items())).keys()))
 
 def get_phenotype_key(guideline):
-    return dict_to_key(guideline['phenotypes'])
+    return dict_to_key(
+        guideline['phenotypes'],
+        lambda phenotype_value: ''.join(phenotype_value))
 
 def get_information_key(guideline):
     # Lenth of guideline['externalData']) should always be 1 as we just migrated
