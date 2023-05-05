@@ -1,3 +1,5 @@
 *.json
 *.base64
 temp/
+
+.venv/

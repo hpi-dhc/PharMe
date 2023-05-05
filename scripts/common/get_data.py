@@ -58,3 +58,44 @@ def get_data():
 def get_guideline_by_id(data, id):
     guidelines = data['Guideline']
     return next(guideline for guideline in guidelines if guideline['_id'] == id)
+
+def get_phenotype_value_lengths(guideline, expect_same_length = False):
+    phenotype_values = list(guideline['lookupkey'].values()) + \
+        list(guideline['phenotypes'].values())
+    phenotype_values_lengths = list(set(map(len, phenotype_values)))
+    if expect_same_length:
+        if len(phenotype_values_lengths) != 1:
+            raise Exception('[ERROR] Expecting lookupkey and phenotypes per ' \
+                            'gene to have same lenghts but lengths differ ' \
+                            'for guideline {}'.format(guideline['_id']))
+        return phenotype_values_lengths[0]
+    return phenotype_values_lengths
+
+def get_phenotype_value(phenotype_values, index):
+    phenotype_value = {}
+    for gene in phenotype_values:
+        phenotype_value[gene] = phenotype_values[gene][index]
+    return phenotype_value
+
+def dict_to_key(dictionary):
+    return ' '.join(map(
+        lambda key: f'{key} {dictionary[key]}',
+        dict(sorted(dictionary.items())).keys()))
+
+def get_phenotype_key(guideline):
+    return dict_to_key(guideline['phenotypes'])
+
+def get_information_key(guideline):
+    # Lenth of guideline['externalData']) should always be 1 as we just migrated
+    # it but just to be sure
+    if len(guideline['externalData']) != 1:
+        raise Exception('[ERROR] Expecting externalData to be list with one ' \
+                        'element')
+    external_data = guideline['externalData'][0]
+    information_key = external_data['comments'] \
+        if external_data['comments'] != None \
+        else ''
+    information_key += external_data['recommendation']
+    information_key += dict_to_key(external_data['implications'])
+    return information_key
+    
