@@ -87,13 +87,7 @@ def get_phenotype_key(guideline):
         guideline['phenotypes'],
         lambda phenotype_value: ''.join(phenotype_value))
 
-def get_information_key(guideline):
-    # Lenth of guideline['externalData']) should always be 1 as we just migrated
-    # it but just to be sure
-    if len(guideline['externalData']) != 1:
-        raise Exception('[ERROR] Expecting externalData to be list with one ' \
-                        'element')
-    external_data = guideline['externalData'][0]
+def get_information_key(external_data):
     information_key = external_data['comments'] \
         if external_data['comments'] != None \
         else ''

@@ -1,5 +1,8 @@
-from common.get_data import get_data, get_information_key, get_guideline_by_id, \
-    get_phenotype_value_lengths, get_phenotype_value, get_phenotype_key
+import copy
+
+from common.get_data import get_data, get_information_key, \
+    get_guideline_by_id, get_phenotype_value_lengths, get_phenotype_value, \
+    get_phenotype_key
 from common.write_data import write_data
 from common.constants import SCRIPT_POSTFIXES
 from common.cpic_data import get_phenotype_map
@@ -41,7 +44,8 @@ def migrate_guideline(guideline, phenotype_map):
         phenotype_map)
 
 # Migrate single guidelines; then split up by lookupkeys and re-contract by
-# phenotype and external information (according to #597 and #604)
+# phenotype and external information (according to #597 and #604). The
+# contraction is implemented analogous to Anni (see cpic-constructors.ts)
 def migrate_drug_guidelines(guidelines, phenotype_map):
     phenotype_guideline_map = {}
     for guideline in guidelines:
@@ -49,30 +53,46 @@ def migrate_drug_guidelines(guidelines, phenotype_map):
         contracted_guideline_number = get_phenotype_value_lengths(
             guideline, expect_same_length=True)
         for phenotype_index in range(0, contracted_guideline_number):
-            decontracted_guideline = guideline.copy()
+            # Split guideline by lookupkeys (with regarding phenotypes)
+            decontracted_guideline = copy.deepcopy(guideline)
             del decontracted_guideline['_id']
             decontracted_guideline['lookupkey'] = get_phenotype_value(
                 guideline['lookupkey'], phenotype_index)
             decontracted_guideline['phenotypes'] = get_phenotype_value(
                 guideline['phenotypes'], phenotype_index)
-            # Contraction is implemented analogous to Anni
-            # (see cpic-constructors.ts)
+            # Contract guidelines by phenotype
             phenotype_key = get_phenotype_key(decontracted_guideline)
-            information_key = get_information_key(decontracted_guideline)
             if not phenotype_key in phenotype_guideline_map:
-                phenotype_guideline_map[phenotype_key] = {}
-            phenotype_guidelines = phenotype_guideline_map[phenotype_key]
-            if not information_key in phenotype_guidelines:
-                phenotype_guidelines[information_key] = []
-            phenotype_guidelines[information_key].append(decontracted_guideline)
-    # Re-contracted guidelines and assign new IDs
+                phenotype_guideline_map[phenotype_key] = decontracted_guideline
+            else:
+                existing_guideline = phenotype_guideline_map[phenotype_key]
+                # Lenth of exteral data and each gene field in lookupkey should
+                # always be 1 as we just migrated it but just to be sure
+                if len(decontracted_guideline['externalData']) != 1:
+                    print(decontracted_guideline['externalData'])
+                    raise Exception('[ERROR] Expecting externalData to be ' \
+                                    'list with one element')
+                for gene in decontracted_guideline['lookupkey']:
+                    phenotype_value = decontracted_guideline['lookupkey'][gene]
+                    if len(phenotype_value) != 1:
+                        raise Exception('[ERROR] Expecting lookupkey values ' \
+                                        'to be list with one element')
+                existing_guideline['externalData'].append(
+                    decontracted_guideline['externalData'][0])
+                for gene in existing_guideline['lookupkey']:
+                    existing_guideline['lookupkey'][gene].append(
+                        decontracted_guideline['lookupkey'][gene][0])
+    # Contract phenotype guidelines by information
     recontracted_guidelines = []
-    for phenotype_guidelines in phenotype_guideline_map.values():
-        # TODO: Contract lookupkeys per phenotype
-        # TODO: Contract unique external data per phenotype
-        print(phenotype_guidelines.values())
-        print('')
-
+    for phenotype_guideline in phenotype_guideline_map.values():
+        phenotype_guideline['_id'] = get_object_id()
+        information_map = {}
+        for external_data in phenotype_guideline['externalData']:
+            information_key = get_information_key(external_data)
+            if not information_key in information_map:
+                information_map[information_key] = external_data
+        phenotype_guideline['externalData'] = list(information_map.values())
+        recontracted_guidelines.append(phenotype_guideline)
     return recontracted_guidelines
 
 # Migrate data
