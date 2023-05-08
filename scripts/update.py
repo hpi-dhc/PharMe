@@ -20,6 +20,8 @@ def update_data():
     data = remove_history(get_data())
     updated_external_data = get_data(argv_index = 2)
     log_content = ['# Update Log\n\n']
+
+    # Add new drugs and update present drugs
     present_drugs = {}
     for drug in data[DRUG_COLLECTION_NAME]:
         present_drugs[drug['name']] = drug
@@ -57,6 +59,19 @@ def update_data():
                 log_string += 'updated:'
             log_content.append(f'{log_string}\n')
             log_content += update_log
+
+    # Check for deleted drugs
+    updated_drug_name_list = list(map(
+        lambda drug: drug['name'],
+        updated_external_data[DRUG_COLLECTION_NAME]
+    ))
+    for index, drug in enumerate(data[DRUG_COLLECTION_NAME]):
+        drug_name = drug['name']
+        if not drug_name in updated_drug_name_list:
+            del data[DRUG_COLLECTION_NAME][index]
+            log_content.append(f'* {drug_name}: removing drug, as not ' \
+                           'present in updated data\n')
+
     write_data(data, postfix=SCRIPT_POSTFIXES['update'])
     write_log(log_content)
 
