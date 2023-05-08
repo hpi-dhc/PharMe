@@ -7,7 +7,8 @@ TEMP_DIR_NAME = "temp"
 
 SCRIPT_POSTFIXES = {
     'migrate': '_migrated',
-    'decode': '_decoded'
+    'decode': '_decoded',
+    'update': '_updated',
 }
 
 DRUG_COLLECTION_NAME = 'Drug'

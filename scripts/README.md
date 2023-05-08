@@ -16,14 +16,25 @@ pip install -r requirements.txt
 📜 _Scripts to the created `.venv`._
 
 As input, Anni backup data is assumed, either in JSON format, or Base64 format
-containing a zipped JSON.
+containing a zipped JSON (depending on the script).
+
+**⚠️ Migrating and updating data will remove the data history, including
+published versions!**
+
+## Update external data
+
+Run `pyhthon update.py <PATH_TO_OLD_BACKUP>.base64
+<PATH_TO_RECENTLY_INITIALIZED_BACKUP>.base64` to receive
+`<PATH_TO_OLD_BACKUP>_updated_<TIMESTAMP>.base64` and
+`<PATH_TO_OLD_BACKUP>_updated_<TIMESTAMP>_log.md`.
+
+The script will update external data of the old backup based on the recently
+initialized external data and describe updates in the log.
 
 ## Migrate data
 
 Run `pyhthon migrate.py <PATH_TO_BACKUP>[.json|.base64]` to receive
 `<PATH_TO_BACKUP>_migrated_<TIMESTAMP>.base64`.
-
-**⚠️ Migrating data will remove the data history, including published versions!**
 
 (Breaking) changes covered:
 

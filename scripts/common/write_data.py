@@ -28,9 +28,7 @@ def get_output_file_path(postfix='', file_ending=BASE64_ENDING, temp=False):
     return os.path.join(output_path, output_file_name)
 
 def get_archive_name():
-    input_file_path = get_input_file_path()
-    input_file_name = get_file_name(input_file_path)
-    return input_file_name + JSON_ENDING
+    return 'backup.json'
 
 def write_json_file(data, file_path):
     with open(file_path, 'w') as json_file:

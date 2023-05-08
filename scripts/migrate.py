@@ -2,7 +2,7 @@ import copy
 
 from common.get_data import get_data
 from common.get_data import get_information_key
-from common.get_data import get_guideline_by_id
+from common.get_data import get_guidelines_by_ids
 from common.get_data import get_phenotype_value_lengths
 from common.get_data import get_phenotype_value
 from common.get_data import get_phenotype_key
@@ -116,9 +116,7 @@ def migrate_data():
     if contract_by_phenotypes:
         migrated_guidelines = []
         for drug in data[DRUG_COLLECTION_NAME]:
-            drug_guidelines = list(map(
-                lambda id: get_guideline_by_id(data, id),
-                drug['guidelines']))
+            drug_guidelines = get_guidelines_by_ids(data, drug['guidelines'])
             migrated_drug_guidelines = migrate_drug_guidelines(
                 drug_guidelines, phenotype_map)
             migrated_guidelines += migrated_drug_guidelines

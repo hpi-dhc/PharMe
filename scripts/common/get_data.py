@@ -16,16 +16,16 @@ def is_valid_file_type(path):
         lambda valid_file_ending: path.endswith(valid_file_ending),
         VALID_INPUT_ENDINGS))
 
-def get_input_file_path():
+def get_input_file_path(argv_index=1):
     argument_missing_text = '[ERROR] Please provide an existing file path ' \
-        'as argument.'
-    if len(sys.argv) != 2:
+        f'as argument {argv_index}.'
+    if len(sys.argv) < 2:
         raise Exception(argument_missing_text)
-    input_file_path = sys.argv[1]
+    input_file_path = sys.argv[argv_index]
     if not os.path.isfile(input_file_path):
         raise Exception(argument_missing_text)
     argument_wrong_format_text = '[ERROR] Please provide a file in one of ' \
-        'the following formats: {}'.format(', '.join(VALID_INPUT_ENDINGS))
+        f'the following formats: {", ".join(VALID_INPUT_ENDINGS)}'
     if not is_valid_file_type(input_file_path):
         raise Exception(argument_wrong_format_text)
     return input_file_path
@@ -49,12 +49,15 @@ def decode_and_unzip(base64_zip_path):
         json_path = os.path.join(TEMP_DIR_NAME, zipped_files[0])
         return json_path
 
-def get_data():
-    input_file_path = get_input_file_path()
+def get_data(argv_index=1):
+    input_file_path = get_input_file_path(argv_index)
     if input_file_path.endswith(BASE64_ENDING):
         input_file_path = decode_and_unzip(input_file_path)
     with open(input_file_path, 'r') as input_file:
         return json.load(input_file)
+
+def get_guidelines_by_ids(data, ids):
+    return list(map(lambda id: get_guideline_by_id(data, id), ids))
 
 def get_guideline_by_id(data, id):
     guidelines = data[GUIDELINE_COLLECTION_NAME]
