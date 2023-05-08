@@ -9,6 +9,7 @@ SCRIPT_POSTFIXES = {
     'migrate': '_migrated',
     'decode': '_decoded',
     'update': '_updated',
+    'encode': '_encoded',
 }
 
 DRUG_COLLECTION_NAME = 'Drug'

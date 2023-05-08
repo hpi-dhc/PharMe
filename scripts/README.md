@@ -53,6 +53,11 @@ Run `pyhthon migrate.py <PATH_TO_BACKUP>[.json|.base64]` to receive
 Run `python decode.py <PATH_TO_BACKUP>.base64` to receive
 `<PATH_TO_BACKUP>_decoded_<TIMESTAMP>.json`.
 
+## Encode Base64
+
+Run `python encode.py <PATH_TO_BACKUP>.json` to receive
+`<PATH_TO_BACKUP>_encoded_<TIMESTAMP>.base64`.
+
 ## Clean script outputs
 
 Run `python clean.py` to remove the `scripts/temp` directory and all files in
