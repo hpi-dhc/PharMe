@@ -8,6 +8,7 @@ from .constants import JSON_ENDING
 from .constants import BASE64_ENDING
 from .constants import TEMP_DIR_NAME
 from .constants import VALID_INPUT_ENDINGS
+from .constants import GUIDELINE_COLLECTION_NAME
 from .make_temp_dir import make_temp_dir
 
 def is_valid_file_type(path):
@@ -56,7 +57,7 @@ def get_data():
         return json.load(input_file)
 
 def get_guideline_by_id(data, id):
-    guidelines = data['Guideline']
+    guidelines = data[GUIDELINE_COLLECTION_NAME]
     return next(guideline for guideline in guidelines if guideline['_id'] == id)
 
 def get_phenotype_value_lengths(guideline, expect_same_length = False):
