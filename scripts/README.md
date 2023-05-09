@@ -18,8 +18,7 @@ pip install -r requirements.txt
 As input, Anni backup data is assumed, either in JSON format, or Base64 format
 containing a zipped JSON (depending on the script).
 
-**⚠️ Migrating and updating data will remove the data history, including
-published versions!**
+Tests can be executed by running `pytest`.
 
 ## Update external data
 
@@ -35,6 +34,9 @@ initialized external data and describe updates in the log.
 
 Run `pyhthon migrate.py <PATH_TO_BACKUP>[.json|.base64]` to receive
 `<PATH_TO_BACKUP>_migrated_<TIMESTAMP>.base64`.
+
+**⚠️ Migrating data will remove the data history, including
+published versions!**
 
 (Breaking) changes covered:
 

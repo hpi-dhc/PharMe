@@ -1,8 +1,13 @@
+import copy
+
 from common.get_data import get_data
 from common.get_data import get_guidelines_by_ids
 from common.get_data import get_phenotype_key
+from common.mongo import get_timestamp
 from common.constants import DRUG_COLLECTION_NAME
+from common.constants import DRUG_HISTORY_COLLECTION_NAME
 from common.constants import GUIDELINE_COLLECTION_NAME
+from common.constants import get_history_collection_name
 from common.constants import SCRIPT_POSTFIXES
 from common.remove_history import remove_history
 from common.write_data import write_data
@@ -19,6 +24,11 @@ def log_item(text, level = 0):
     return f'{prefix}* {text}\n'
 
 def remove_by_id(data, collection_name, item_ids):
+    history_collection_name = get_history_collection_name(collection_name)
+    data[history_collection_name] += list(filter(
+        lambda item: item['_id'] in item_ids,
+        data[collection_name]
+    ))
     data[collection_name] = list(filter(
         lambda item: item['_id'] not in item_ids,
         data[collection_name]
@@ -58,26 +68,26 @@ def add_missing_drugs(data, updated_external_data):
             add_log.append(log_item(drug_name))
     return data, add_log
 
-def remove_outdated_guidelines(guidelines, updated_guidelines):
+def remove_outdated_guidelines(data, guidelines, updated_guidelines):
     remove_log = []
-    # updated_guideline_map = {}
-    # for updated_guideline in updated_guidelines:
-    #     phenotype_key = get_phenotype_key(updated_guideline)
-    #     if not phenotype_key in updated_guideline_map:
-    #         updated_guideline_map[phenotype_key] = []
-    #     for externalData in updated_guideline['externalData']:
-    #         recommendation_id = externalData['recommendationId']
-    #         updated_guideline_map[phenotype_key].append(recommendation_id)
-    print('TODO: remove guidelines')
+    updated_guideline_map = {}
+    for updated_guideline in updated_guidelines:
+        phenotype_key = get_phenotype_key(updated_guideline)
+        if phenotype_key in updated_guideline_map:
+            raise Exception('Phenotypes should be unique per drug guideline!')
+        updated_guideline_map[phenotype_key] = []
+        for externalData in updated_guideline['externalData']:
+            recommendation_id = externalData['recommendationId']
+            updated_guideline_map[phenotype_key].append(recommendation_id)
     # TODO: remove phenotype or exteral data
-    return guidelines, remove_log
+    return remove_log
 
-def update_guidelines(guidelines, updated_guidelines):
+def update_guidelines(data, guidelines, updated_guidelines):
     update_log = []
     print('TODO: update guidelines')
     return guidelines, update_log
 
-def add_missing_guidelines(guidelines, updated_guidelines):
+def add_missing_guidelines(data, guidelines, updated_guidelines):
     add_log = []
     print('TODO: add guidelines')
     return guidelines, add_log
@@ -100,23 +110,28 @@ def update_drugs(data, updated_external_data):
         current_rxNorm = current_drug['rxNorm']
         updated_rxNorm = updated_drug['rxNorm']
         if current_rxNorm != updated_rxNorm:
+            data[DRUG_HISTORY_COLLECTION_NAME].append(
+                copy.deepcopy(current_drug))
             current_drug['rxNorm'] = updated_drug['rxNorm']
+            current_drug['_v'] += 1
+            current_drug['_vDate'] = get_timestamp()
             drug_updates.append(log_item(
                 f'Change RxNorm from {current_rxNorm} to {updated_rxNorm}',
                 level=1
             ))
 
-        # Test if guidelines changed
+        # Update guidelines; changes are done in place
         current_guidelines = get_guidelines_by_ids(
             data, current_drug['guidelines'])
         updated_guidelines = get_guidelines_by_ids(
-            data, current_drug['guidelines'])
+            updated_external_data, current_drug['guidelines'])
         drug_updates += \
-            remove_outdated_guidelines(current_guidelines, updated_guidelines)
+            remove_outdated_guidelines(
+                data, current_guidelines, updated_guidelines)
         drug_updates += \
-            update_guidelines(current_guidelines, updated_guidelines)
+            update_guidelines(data, current_guidelines, updated_guidelines)
         drug_updates += \
-            add_missing_guidelines(current_guidelines, updated_guidelines)
+            add_missing_guidelines(data, current_guidelines, updated_guidelines)
 
         if len(drug_updates) != 0:
             update_log.append(log_item(drug_name))
@@ -141,7 +156,7 @@ def write_log(log_content):
         log_file.writelines(log_content)
 
 def update_data():
-    data = remove_history(get_data())
+    data = get_data()
     updated_external_data = get_data(argv_index = 2)
     log_content = ['# Update Log\n']
 
