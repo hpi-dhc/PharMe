@@ -3,14 +3,13 @@ import copy
 from common.get_data import get_data
 from common.get_data import get_guidelines_by_ids
 from common.get_data import get_phenotype_key
+from common.get_data import get_lookupkey_key
+from common.get_data import get_information_key
 from common.mongo import get_timestamp
 from common.constants import DRUG_COLLECTION_NAME
-from common.constants import DRUG_HISTORY_COLLECTION_NAME
 from common.constants import GUIDELINE_COLLECTION_NAME
-from common.constants import GUIDELINE_HISTORY_COLLECTION_NAME
 from common.constants import get_history_collection_name
 from common.constants import SCRIPT_POSTFIXES
-from common.remove_history import remove_history
 from common.write_data import write_data
 from common.write_data import get_output_file_path
 
@@ -119,6 +118,25 @@ def remove_outdated_guidelines(data, drug, guidelines, updated_guidelines):
         ))
     return remove_log
 
+def get_external_data_key(guideline):
+    return ''.join(sorted(list(map(
+        lambda external_data_item: get_information_key(external_data_item),
+        guideline['externalData']
+    ))))
+
+def update_guideline_information(
+        data, guideline, updated_guideline, information_name, get_key):
+    guideline_updates = []
+    information_key = get_key(guideline)
+    updated_information_key = get_key(updated_guideline)
+    if information_key != updated_information_key:
+        update_version(data, GUIDELINE_COLLECTION_NAME, guideline)
+        guideline[information_name] = copy.deepcopy(
+            updated_guideline[information_name])
+        guideline_updates.append(
+            log_item(f'Updated {information_name}', level=2))
+    return guideline_updates
+
 def update_guidelines(data, guidelines, updated_guidelines):
     update_log = []
     for guideline in guidelines:
@@ -137,18 +155,14 @@ def update_guidelines(data, guidelines, updated_guidelines):
         # Test if lookupkey changed; only the list for each key can change,
         # everything else will be covered by removing or adding phenotype
         # guidelines
-        lookupkey_key = get_phenotype_key(guideline, lookupkey=True)
-        updated_lookupkey_key = get_phenotype_key(
-            updated_guideline, lookupkey=True)
-        if lookupkey_key != updated_lookupkey_key:
-            update_version(data, GUIDELINE_COLLECTION_NAME, guideline)
-            guideline['lookupkey'] = copy.deepcopy(
-                updated_guideline['lookupkey'])
-            update_log.append(log_item('Updated lookupkey', level=2))
+        guideline_updates += update_guideline_information(data, guideline, \
+            updated_guideline, 'lookupkey', get_lookupkey_key)
+        # Test if external data changed
+        guideline_updates += update_guideline_information(data, guideline, \
+            updated_guideline, 'externalData', get_external_data_key)
         if len(guideline_updates) > 0:
             update_log.append(guideline_log_item)
             update_log += guideline_updates
-        update_log.append(log_item('TODO: update exteral data', level=2))
     return update_log
 
 def add_missing_guidelines(data, drug, guidelines, updated_guidelines):
