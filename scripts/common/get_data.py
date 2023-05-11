@@ -89,7 +89,7 @@ def dict_to_key(dictionary, format_value=lambda value: value):
 def get_phenotype_description_key(guideline, property):
     return dict_to_key(
         guideline[property],
-        lambda phenotype_value: ''.join(phenotype_value))
+        lambda phenotype_value: ', '.join(sorted(phenotype_value)))
 
 def get_lookupkey_key(guideline):
     return get_phenotype_description_key(guideline, 'lookupkey')

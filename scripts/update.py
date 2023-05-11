@@ -119,7 +119,7 @@ def remove_outdated_guidelines(data, drug, guidelines, updated_guidelines):
     return remove_log
 
 def get_external_data_key(guideline):
-    return ''.join(sorted(list(map(
+    return ' '.join(sorted(list(map(
         lambda external_data_item: get_information_key(external_data_item),
         guideline['externalData']
     ))))
@@ -133,8 +133,12 @@ def update_guideline_information(
         update_version(data, GUIDELINE_COLLECTION_NAME, guideline)
         guideline[information_name] = copy.deepcopy(
             updated_guideline[information_name])
-        guideline_updates.append(
-            log_item(f'Updated {information_name}', level=2))
+        guideline_updates += [
+            log_item(f'Updated {information_name}', level=2),
+            log_item(f'_Before:_ {information_key}', level=3),
+            log_item(f'_Now:_ {updated_information_key}', level=3),
+        ]
+        
     return guideline_updates
 
 def update_guidelines(data, guidelines, updated_guidelines):
