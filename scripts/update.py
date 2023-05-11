@@ -14,6 +14,8 @@ from common.remove_history import remove_history
 from common.write_data import write_data
 from common.write_data import get_output_file_path
 
+VERBOSE = False
+
 def get_drug_names(data):
     return list(map(
         lambda drug: drug['name'],
@@ -23,7 +25,8 @@ def get_drug_names(data):
 def log_item(text, level = 0):
     prefix = '  ' * level
     text = f'{prefix}* {text}'
-    print(text)
+    if VERBOSE:
+        print(text)
     return f'{text}\n'
 
 def remove_from_collection(data, collection_name, item_ids):
@@ -118,7 +121,34 @@ def remove_outdated_guidelines(data, drug, guidelines, updated_guidelines):
 
 def update_guidelines(data, guidelines, updated_guidelines):
     update_log = []
-    update_log.append(log_item('TODO: update guidelines', level=1))
+    for guideline in guidelines:
+        guideline_updates = []
+        phenotype_key = get_phenotype_key(guideline)
+        # To not be dependend on removal and addotion of guidelines
+        updated_phenotypes = list(map(
+            lambda guideline: get_phenotype_key(guideline),
+            updated_guidelines))
+        if not phenotype_key in updated_phenotypes:
+            continue
+        guideline_log_item = log_item(phenotype_key, level=1)
+        updated_guideline = next(
+            updated_guideline for updated_guideline in updated_guidelines \
+                if get_phenotype_key(updated_guideline) == phenotype_key)
+        # Test if lookupkey changed; only the list for each key can change,
+        # everything else will be covered by removing or adding phenotype
+        # guidelines
+        lookupkey_key = get_phenotype_key(guideline, lookupkey=True)
+        updated_lookupkey_key = get_phenotype_key(
+            updated_guideline, lookupkey=True)
+        if lookupkey_key != updated_lookupkey_key:
+            update_version(data, GUIDELINE_COLLECTION_NAME, guideline)
+            guideline['lookupkey'] = copy.deepcopy(
+                updated_guideline['lookupkey'])
+            update_log.append(log_item('Updated lookupkey', level=2))
+        if len(guideline_updates) > 0:
+            update_log.append(guideline_log_item)
+            update_log += guideline_updates
+        update_log.append(log_item('TODO: update exteral data', level=2))
     return update_log
 
 def add_missing_guidelines(data, drug, guidelines, updated_guidelines):

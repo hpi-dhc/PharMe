@@ -86,9 +86,10 @@ def dict_to_key(dictionary, format_value=lambda value: value):
         lambda key: f'{key} {format_value(dictionary[key])}',
         dict(sorted(dictionary.items())).keys()))
 
-def get_phenotype_key(guideline):
+def get_phenotype_key(guideline, lookupkey=False):
+    property = 'phenotypes' if not lookupkey else 'lookupkey'
     return dict_to_key(
-        guideline['phenotypes'],
+        guideline[property],
         lambda phenotype_value: ''.join(phenotype_value))
 
 def get_information_key(external_data):
