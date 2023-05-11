@@ -1,9 +1,14 @@
 import copy
 
-from common.get_data import get_data, get_information_key, \
-    get_guideline_by_id, get_phenotype_value_lengths, get_phenotype_value, \
-    get_phenotype_key
+from common.get_data import get_data
+from common.get_data import get_information_key
+from common.get_data import get_guidelines_by_ids
+from common.get_data import get_phenotype_value_lengths
+from common.get_data import get_phenotype_value
+from common.get_data import get_phenotype_key
 from common.write_data import write_data
+from common.constants import DRUG_COLLECTION_NAME
+from common.constants import GUIDELINE_COLLECTION_NAME
 from common.constants import SCRIPT_POSTFIXES
 from common.cpic_data import get_phenotype_map
 from common.remove_history import remove_history
@@ -102,17 +107,16 @@ def migrate_data():
 
     # If phenotypes are not present initially (data was created before #602),
     # assume that guidelines also need to be contracted by phenotypes (#604)
-    contract_by_phenotypes = not 'phenotypes' in data['Guideline'][0]
+    contract_by_phenotypes = not 'phenotypes' in \
+        data[GUIDELINE_COLLECTION_NAME][0]
 
     # Iterate data for migration of single guidelines and contract guidelines
     # per drug afterwards (needs phenotypes)
 
     if contract_by_phenotypes:
         migrated_guidelines = []
-        for drug in data['Drug']:
-            drug_guidelines = list(map(
-                lambda id: get_guideline_by_id(data, id),
-                drug['guidelines']))
+        for drug in data[DRUG_COLLECTION_NAME]:
+            drug_guidelines = get_guidelines_by_ids(data, drug['guidelines'])
             migrated_drug_guidelines = migrate_drug_guidelines(
                 drug_guidelines, phenotype_map)
             migrated_guidelines += migrated_drug_guidelines
@@ -120,7 +124,7 @@ def migrate_data():
                 lambda guideline: guideline['_id'],
                 migrated_drug_guidelines
             ))
-        data['Guideline'] = migrated_guidelines
+        data[GUIDELINE_COLLECTION_NAME] = migrated_guidelines
 
     write_data(data, postfix=SCRIPT_POSTFIXES['migrate'])
 
