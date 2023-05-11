@@ -63,6 +63,8 @@ UNCHANGED_DRUG = 'drug and guidelines should be kept unchanged'
 ADDED_DRUG = 'drug and guidelines should be added'
 RX_NORM_CHANGED_DRUG = 'drug rxNorm changed'
 GUIDELINE_REMOVED_DRUG = 'drug with guideline for phenotype removed'
+GUIDELINE_ADDED_DRUG = 'drug with guideline for new phenotype'
+ADDED_GUIDELINE_ID = 'new.add-guideline'
 STANDARD_PHENOTYPES = [{
         'CYP2C19': [ 'Poor Metabolizer' ],
         'CYP2D6': [ 'Poor Metabolizer' ]
@@ -82,6 +84,7 @@ def data():
         UNCHANGED_DRUG: ['old.unchanged.1', 'old.unchanged.2'],
         RX_NORM_CHANGED_DRUG: ['old.rx-change.1', 'old.rx-change.2'],
         GUIDELINE_REMOVED_DRUG: ['old.rm-guideline', 'old.keep-guideline'],
+        GUIDELINE_ADDED_DRUG: ['old.present-guideline']
     }
     rx_norms = { RX_NORM_CHANGED_DRUG: 'rx.old' }
     phenotypes = {
@@ -100,6 +103,8 @@ def updated_data():
         ADDED_DRUG: ['new.add-drug.1', 'new.add-drug.2'],
         RX_NORM_CHANGED_DRUG: ['new.rx-change.1', 'new.rx-change.2'],
         GUIDELINE_REMOVED_DRUG: ['new.keep-guideline'],
+        GUIDELINE_ADDED_DRUG: ['new.present-guideline', ADDED_GUIDELINE_ID]
+
     }
     rx_norms = { RX_NORM_CHANGED_DRUG: 'rx.new' }
     phenotypes = {
@@ -150,12 +155,15 @@ def test_update_drugs(data, updated_data):
         copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][7]))
     del expected_data[GUIDELINE_COLLECTION_NAME][7]
 
-    # from pprint import pprint
-    # pprint(data)
-    # pprint(expected_data)
-
-    # New (phenotype) guideline is added to drug and guidelines; drug and
-    # guideline histories added
+    # New (phenotype) guideline is added to drug and guidelines; drug
+    # history added
+    expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
+         copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][4]))
+    expected_data[DRUG_COLLECTION_NAME][4]['guidelines'].append(
+        ADDED_GUIDELINE_ID)
+    expected_data[DRUG_COLLECTION_NAME][4]['_v'] += 1
+    expected_data[GUIDELINE_COLLECTION_NAME].append(
+        copy.deepcopy(updated_data[GUIDELINE_COLLECTION_NAME][8]))
     # TODO
 
     # Guideline lookupkey is updated; guideline history added
@@ -177,6 +185,8 @@ def test_update_drugs(data, updated_data):
         data[DRUG_COLLECTION_NAME][2]['_vDate']
     expected_data[DRUG_COLLECTION_NAME][3]['_vDate'] = \
         data[DRUG_COLLECTION_NAME][3]['_vDate']
+    expected_data[DRUG_COLLECTION_NAME][4]['_vDate'] = \
+        data[DRUG_COLLECTION_NAME][4]['_vDate']
     # import pprint
     # print('Expected:')
     # pprint.pprint(expected_data)

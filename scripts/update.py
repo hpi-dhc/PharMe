@@ -79,14 +79,18 @@ def add_missing_drugs(data, updated_external_data):
             add_log.append(log_item(drug_name))
     return data, add_log
 
+def get_guideline_phenotypes(guidelines):
+    guideline_phenotypes = []
+    for guideline in guidelines:
+        phenotype_key = get_phenotype_key(guideline)
+        if phenotype_key in guideline_phenotypes:
+            raise Exception('Phenotypes should be unique per drug guideline!')
+        guideline_phenotypes.append(phenotype_key)
+    return guideline_phenotypes
+
 def remove_outdated_guidelines(data, drug, guidelines, updated_guidelines):
     remove_log = []
-    updated_guideline_phenotypes = []
-    for updated_guideline in updated_guidelines:
-        phenotype_key = get_phenotype_key(updated_guideline)
-        if phenotype_key in updated_guideline_phenotypes:
-            raise Exception('Phenotypes should be unique per drug guideline!')
-        updated_guideline_phenotypes.append(phenotype_key)
+    updated_guideline_phenotypes = get_guideline_phenotypes(updated_guidelines)
     stale_guidelines = list(filter(
         lambda guideline: get_phenotype_key(guideline) not in \
             updated_guideline_phenotypes,
@@ -115,12 +119,31 @@ def remove_outdated_guidelines(data, drug, guidelines, updated_guidelines):
 def update_guidelines(data, guidelines, updated_guidelines):
     update_log = []
     update_log.append(log_item('TODO: update guidelines', level=1))
-    return guidelines, update_log
+    return update_log
 
-def add_missing_guidelines(data, guidelines, updated_guidelines):
+def add_missing_guidelines(data, drug, guidelines, updated_guidelines):
     add_log = []
-    add_log.append(log_item('TODO: add guidelines', level=1))
-    return guidelines, add_log
+    present_guideline_phenotypes = get_guideline_phenotypes(guidelines)
+    new_guidelines = list(filter(
+        lambda guideline: get_phenotype_key(guideline) not in \
+            present_guideline_phenotypes,
+        updated_guidelines
+    ))
+    new_guideline_ids = list(map(
+        lambda guideline: guideline['_id'],
+        new_guidelines
+    ))
+    if len(new_guidelines) > 0:
+        update_version(data, DRUG_COLLECTION_NAME, drug)
+        drug['guidelines'] += new_guideline_ids
+        data[GUIDELINE_COLLECTION_NAME] += new_guidelines
+        add_log += list(map(
+            lambda guideline: log_item(
+                f'Added guideline for {get_phenotype_key(guideline)}',
+                level=1),
+            new_guidelines
+        ))
+    return add_log
 
 def update_drugs(data, updated_external_data):
     update_log = []
@@ -158,8 +181,8 @@ def update_drugs(data, updated_external_data):
             data, current_drug, current_guidelines, updated_guidelines)
         drug_updates += \
             update_guidelines(data, current_guidelines, updated_guidelines)
-        drug_updates += \
-            add_missing_guidelines(data, current_guidelines, updated_guidelines)
+        drug_updates += add_missing_guidelines(
+            data, current_drug, current_guidelines, updated_guidelines)
 
         if len(drug_updates) != 0:
             update_log.append(drug_log_item)
