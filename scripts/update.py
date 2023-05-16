@@ -15,6 +15,23 @@ from common.write_data import get_output_file_path
 
 VERBOSE = False
 
+def get_source(drug, data):
+    collected_external_data = []
+    guidelines = get_guidelines_by_ids(data, drug['guidelines'])
+    for guideline in guidelines:
+        collected_external_data += guideline['externalData']
+    sources = set(list(map(
+        lambda external_data: external_data['source'],
+        collected_external_data
+    )))
+    if len(sources) > 1:
+        raise Exception(f'Guideline for {get_phenotype_key(guideline)} has ' \
+                        'multiple sources but should have max. 1')
+    if len(sources) == 0:
+        return '_missing source_'
+    source = sources.pop()
+    return source
+
 def get_drug_names(data):
     return list(map(
         lambda drug: drug['name'],
@@ -62,7 +79,8 @@ def remove_outdated_drugs(data, updated_external_data):
             drug_guidelines = drug['guidelines']
             stale_guideline_ids += drug_guidelines
             remove_log.append(log_item(
-                f'{drug_name} ({len(drug_guidelines)} guidelines)'))
+                f'{drug_name} (with {len(drug_guidelines)} guideline(s) ' \
+                    f'from {get_source(drug, data)})'))
     data = remove_from_collection(data, DRUG_COLLECTION_NAME, stale_drug_ids)
     data = remove_from_collection(
         data, GUIDELINE_COLLECTION_NAME, stale_guideline_ids)
@@ -78,7 +96,7 @@ def add_missing_drugs(data, updated_external_data):
                 updated_external_data, drug['guidelines'])
             data[DRUG_COLLECTION_NAME].append(drug)
             data[GUIDELINE_COLLECTION_NAME] += drug_guidelines
-            add_log.append(log_item(drug_name))
+            add_log.append(log_item(f'{drug_name} ({get_source(drug, data)})'))
     return data, add_log
 
 def get_guideline_phenotypes(guidelines):
@@ -205,7 +223,8 @@ def update_drugs(data, updated_external_data):
         if not drug_name in updated_drugs_map:
             continue
 
-        drug_log_item = log_item(drug_name)
+        drug_log_item = log_item(f'{drug_name} ' \
+                                 f'({get_source(current_drug, data)})')
         updated_drug = updated_drugs_map[drug_name]
         drug_updates = []
 
