@@ -8,6 +8,7 @@ from common.get_data import get_information_key
 from common.mongo import get_timestamp
 from common.constants import DRUG_COLLECTION_NAME
 from common.constants import GUIDELINE_COLLECTION_NAME
+from common.constants import NON_RESULT_PHENOTYPES
 from common.constants import get_history_collection_name
 from common.constants import SCRIPT_POSTFIXES
 from common.write_data import write_data
@@ -108,14 +109,18 @@ def get_guideline_phenotypes(guidelines):
         guideline_phenotypes.append(phenotype_key)
     return guideline_phenotypes
 
-def remove_outdated_guidelines(data, drug, guidelines, updated_guidelines):
-    remove_log = []
+def get_stale_guidelines(guidelines, updated_guidelines):
     updated_guideline_phenotypes = get_guideline_phenotypes(updated_guidelines)
     stale_guidelines = list(filter(
         lambda guideline: get_phenotype_key(guideline) not in \
             updated_guideline_phenotypes,
         guidelines
     ))
+    return stale_guidelines
+
+def remove_outdated_guidelines(data, drug, guidelines, updated_guidelines):
+    remove_log = []
+    stale_guidelines = get_stale_guidelines(guidelines, updated_guidelines)
     stale_guideline_ids = list(map(
         lambda guideline: guideline['_id'],
         stale_guidelines
@@ -211,6 +216,62 @@ def add_missing_guidelines(data, drug, guidelines, updated_guidelines):
         ))
     return add_log
 
+def get_new_genes(stale_guideline, updated_guideline):
+    return list(filter(
+        lambda gene: gene not in stale_guideline['phenotypes'],
+        updated_guideline['phenotypes']))
+
+def should_transfer_guideline(stale_guideline, updated_guideline):
+    stale_phenotype = get_phenotype_key(stale_guideline)
+    updated_phenotype = get_phenotype_key(updated_guideline)
+    if stale_phenotype in updated_phenotype:
+        new_genes = get_new_genes(stale_guideline, updated_guideline)
+        non_results = list(filter(
+            lambda gene: any(map(
+                lambda non_result_value: non_result_value in \
+                    updated_guideline['phenotypes'][gene],
+                NON_RESULT_PHENOTYPES)),
+            new_genes
+        ))
+        return len(new_genes) == len(non_results)
+
+def get_annotation_transfer_text(stale_guideline, updated_guideline):
+    stale_phenotype = get_phenotype_key(stale_guideline)
+    updated_phenotype = get_phenotype_key(updated_guideline)
+    update_text = f'Transferred annotations from {stale_phenotype} to ' \
+        f'{updated_phenotype}'
+    external_data_changed = len(stale_guideline['externalData']) != \
+        len(updated_guideline['externalData'])
+    if not external_data_changed:
+        for index, external_data in enumerate(stale_guideline['externalData']):
+            stale_key = get_information_key(external_data)
+            new_genes = get_new_genes(stale_guideline, updated_guideline)
+            updated_data_without_new_genes = copy.deepcopy(
+                updated_guideline['externalData'][index])
+            for gene in new_genes:
+                del updated_data_without_new_genes['implications'][gene]
+            updated_key = get_information_key(updated_data_without_new_genes)
+            external_data_changed = stale_key != updated_key
+    if external_data_changed:
+        update_text += '; external data was updated, PLEASE REVIEW ANNOTATIONS'
+    else:
+        update_text += ' (no external data change)'
+    return log_item(update_text, level=1)
+
+# Changes updated_guidelines in-place
+def transfer_annotations_for_added_phenotypes(guidelines, updated_guidelines):
+    update_log = []
+    stale_guidelines = get_stale_guidelines(guidelines, updated_guidelines)
+    for stale_guideline in stale_guidelines:
+        for updated_guideline in updated_guidelines:
+            if should_transfer_guideline(stale_guideline, updated_guideline):
+                updated_guideline['annotations'] = \
+                    stale_guideline['annotations']
+                update_text = get_annotation_transfer_text(
+                    stale_guideline, updated_guideline)
+                update_log.append(update_text)
+    return update_log
+
 def update_drugs(data, updated_external_data):
     update_log = []
     updated_drugs_map = {}
@@ -244,6 +305,9 @@ def update_drugs(data, updated_external_data):
             data, current_drug['guidelines'])
         updated_guidelines = get_guidelines_by_ids(
             updated_external_data, updated_drug['guidelines'])
+        drug_updates += transfer_annotations_for_added_phenotypes(
+            current_guidelines, updated_guidelines
+        )
         drug_updates += remove_outdated_guidelines(
             data, current_drug, current_guidelines, updated_guidelines)
         drug_updates += \
