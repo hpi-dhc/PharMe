@@ -17,6 +17,8 @@ GUIDELINE_COLLECTION_NAME = 'Guideline'
 APP_DATA_COLLECTION_NAME = 'AppData'
 HISTORY_COLLECTION_POSTFIX = '_History'
 
+NON_RESULT_PHENOTYPES = [ 'No Result', 'Indeterminate' ]
+
 def get_history_collection_name(collection_name):
     return f'{collection_name}{HISTORY_COLLECTION_POSTFIX}'
 

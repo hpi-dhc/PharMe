@@ -11,7 +11,7 @@ from common.constants import GUIDELINE_HISTORY_COLLECTION_NAME
 from common.constants import DRUG_HISTORY_COLLECTION_NAME
 from common.mongo import get_timestamp, get_object_id
 
-def build_guideline(id, phenotypes, lookupkey, external_data):
+def build_guideline(id, phenotypes, lookupkey, external_data, annotations):
     return {
         '_id': id,
         '_v': 1,
@@ -19,6 +19,7 @@ def build_guideline(id, phenotypes, lookupkey, external_data):
         'phenotypes': phenotypes,
         'lookupkey': lookupkey,
         'externalData': external_data,
+        'annotations': annotations,
     }
 
 def build_drug(name, guideline_ids, rx_norm=None):
@@ -32,23 +33,31 @@ def build_drug(name, guideline_ids, rx_norm=None):
         '_vDate': get_timestamp(),
     }
 
-def build_guidelines(drug_guideline_map, phenotypes, lookupkeys, external_data):
+def get_standard_value(index, standard_values):
+    return standard_values[index % len(standard_values)]
+
+def build_guidelines(drug_guideline_map, phenotypes, lookupkeys, external_data,
+                     annotations, default_empty_annotations):
     guidelines = []
     for _, guideline_ids in drug_guideline_map.items():
         for index, guideline_id in enumerate(guideline_ids):
             guideline_phenotypes = phenotypes[guideline_id] \
                 if guideline_id in phenotypes \
-                    else STANDARD_PHENOTYPES[index % len(STANDARD_PHENOTYPES)]
+                    else get_standard_value(index, STANDARD_PHENOTYPES)
             guideline_lookupkey = lookupkeys[guideline_id] \
                 if guideline_id in lookupkeys \
-                    else STANDARD_PHENOTYPES[index % len(STANDARD_PHENOTYPES)]
+                    else get_standard_value(index, STANDARD_PHENOTYPES)
             guideline_external_data = external_data[guideline_id] \
                 if guideline_id in external_data \
-                    else STANDARD_EXTERNAL_DATA[index % \
-                                                len(STANDARD_EXTERNAL_DATA)]
+                    else get_standard_value(index, STANDARD_EXTERNAL_DATA)
+            guideline_annotations = annotations[guideline_id] \
+                if guideline_id in annotations \
+                    else {} if default_empty_annotations \
+                        else get_standard_value(index, STANDARD_ANNOTATIONS)
             guidelines.append(
                 build_guideline(guideline_id, guideline_phenotypes, \
-                                guideline_lookupkey, guideline_external_data))
+                                guideline_lookupkey, guideline_external_data, \
+                                    guideline_annotations))
     return guidelines
 
 def build_drugs(drug_guideline_map, rx_norms):
@@ -58,11 +67,13 @@ def build_drugs(drug_guideline_map, rx_norms):
         drug_guideline_map
     ))
 
-def build_data(drug_guideline_map, rx_norms={}, phenotypes={}, lookupkeys={}, \
-               external_data={}):
+def build_data(drug_guideline_map, rx_norms={}, phenotypes={}, lookupkeys={},
+               external_data={}, annotations={},
+               default_empty_annotations=False):
     drugs = build_drugs(drug_guideline_map, rx_norms)
     guidelines = build_guidelines(
-        drug_guideline_map, phenotypes, lookupkeys, external_data)
+        drug_guideline_map, phenotypes, lookupkeys, external_data, annotations,
+        default_empty_annotations)
     return {
         DRUG_HISTORY_COLLECTION_NAME: [],
         DRUG_COLLECTION_NAME: drugs,
@@ -76,12 +87,16 @@ ADDED_DRUG = 'drug and guidelines should be added'
 RX_NORM_CHANGED_DRUG = 'drug rxNorm changed'
 GUIDELINE_REMOVED_DRUG = 'drug with guideline for phenotype removed'
 GUIDELINE_ADDED_DRUG = 'drug with guideline for new phenotype'
+ADDED_GUIDELINE_ID = 'new.add-guideline'
 GUIDELINE_LOOKUPKEY_CHANGED = 'drug with guidelines with updated lookupkey'
 GUIDELINE_EXTERNAL_DATA_CHANGED = \
     'drug with guidelines with external data change'
-ADDED_GUIDELINE_ID = 'new.add-guideline'
+GUIDLINE_ADDITIONAL_PHENOTYPE = 'drug with phenotype added and merged'
+ADDED_GUIDELINE_NEW_MISSING_ID = 'new.additional-missing-phenotype'
+ADDED_GUIDELINE_NEW_COMBINATION_ID = 'new.totally-new-combination'
+
 STANDARD_PHENOTYPES = [{
-        'CYP2C19': [ 'Poor Metabolizer' ],
+        'CYP2C19': [ 'Intermediate Metabolizer' ],
         'CYP2D6': [ 'Poor Metabolizer' ]
     },
     {
@@ -104,7 +119,10 @@ CHANGED_LOOKUPKEYS = {
     },
     'new.keychanged': {
         'HLA-B': [ '*58:01 negative' ]
-    }}
+    },
+    ADDED_GUIDELINE_NEW_MISSING_ID: STANDARD_PHENOTYPES[1],
+    ADDED_GUIDELINE_NEW_COMBINATION_ID: STANDARD_PHENOTYPES[0],
+}
 STANDARD_EXTERNAL_DATA = [
     [
         {
@@ -113,7 +131,8 @@ STANDARD_EXTERNAL_DATA = [
                 'CYP2D6': 'Lower plasma concentrations'
             },
             'recommendation': 'Avoid use',
-            'comments': 'No comments'
+            'comments': 'No comments',
+            'source': 'Test',
         },
         {
             'implications': {
@@ -121,7 +140,8 @@ STANDARD_EXTERNAL_DATA = [
                 'CYP2D6': 'Lower plasma concentrations'
             },
             'recommendation': 'Avoid use or adjust dosage',
-            'comments': 'More data needed'
+            'comments': 'More data needed',
+            'source': 'Test',
         }
     ],
     [
@@ -130,8 +150,9 @@ STANDARD_EXTERNAL_DATA = [
                 'CYP2C19': 'Slightly higher plasma concentrations',
                 'CYP2D6': 'More data needed'
             },
-            'recommendation': 'No recommendation can be given',
-            'comments': 'More research needed'
+            'recommendation': 'Use at standard dose or lower the dose',
+            'comments': 'More research needed',
+            'source': 'Test',
         }
     ],
     [
@@ -141,6 +162,7 @@ STANDARD_EXTERNAL_DATA = [
             },
             'recommendation': 'Use abacavir per standard dosing guidelines',
             'comments': 'n/a',
+            'source': 'Test',
         }
     ],
 ]
@@ -152,7 +174,8 @@ CHANGED_EXTERNAL_DATA = {
                 'CYP2D6': 'Lower plasma concentrations'
             },
             'recommendation': 'Avoid use',
-            'comments': 'No comments'
+            'comments': 'No comments',
+            'source': 'Test',
         }
     ],
     'new.data-change': [
@@ -162,7 +185,8 @@ CHANGED_EXTERNAL_DATA = {
                 'CYP2D6': 'Some data found'
             },
             'recommendation': 'Use per standard dose',
-            'comments': 'None'
+            'comments': 'None',
+            'source': 'Test',
         }
     ],
     'new.data-add': [
@@ -172,6 +196,7 @@ CHANGED_EXTERNAL_DATA = {
             },
             'recommendation': 'Use abacavir per standard dosing guidelines',
             'comments': 'n/a',
+            'source': 'Test',
         },
         {
             'implications': {
@@ -179,9 +204,51 @@ CHANGED_EXTERNAL_DATA = {
             },
             'recommendation': 'Use abacavir per standard dosing guidelines',
             'comments': 'n/a',
+            'source': 'Test',
         }
     ],
+    ADDED_GUIDELINE_NEW_MISSING_ID: copy.deepcopy(STANDARD_EXTERNAL_DATA[1]),
+    ADDED_GUIDELINE_NEW_COMBINATION_ID: STANDARD_EXTERNAL_DATA[0],
 }
+# For manually testing log enty (uncomment to text log addition)
+CHANGED_EXTERNAL_DATA[ADDED_GUIDELINE_NEW_MISSING_ID][0]['recommendation'] = \
+    'Lower the dose'
+
+STANDARD_ANNOTATIONS = [
+    {
+        '_id': 'poor-metabolizer-two-genes',
+        'implication': [
+          'poor-metabolization-brick-id'
+        ],
+        'recommendation': [
+          'avoid-use-or-adjust-dosage-brick-id',
+          'consult-doctor-brick-id'
+        ],
+        'warningLevel': 'red'
+    },
+    {
+        '_id': 'poor-metabolizer-no-result',
+        'implication': [
+          'poor-metabolization-brick-id'
+        ],
+        'recommendation': [
+          'avoid-use-or-lower-dosage-brick-id',
+          'consult-doctor-brick-id'
+        ],
+        'warningLevel': 'red'
+    },
+    {
+        '_id': 'hla-positive',
+        'implication': [
+          'normal-sensitivity-brick-id'
+        ],
+        'recommendation': [
+          'standard-dosage-brick-id',
+          'consult-doctor-brick-id'
+        ],
+        'warningLevel': 'green'
+    },
+]
 
 @pytest.fixture
 def data():
@@ -195,28 +262,44 @@ def data():
             ['old.keyadded', 'old.keyremoved', 'old.keychanged'],
         GUIDELINE_EXTERNAL_DATA_CHANGED: \
             ['old.data-rm', 'old.data-change', 'old.data-add'],
+        GUIDLINE_ADDITIONAL_PHENOTYPE: \
+            [ 'old.will-get-additional-missing-phenotype' ],
     }
     rx_norms = { RX_NORM_CHANGED_DRUG: 'rx.old' }
+
+    phenotype_one_gene = copy.deepcopy(STANDARD_PHENOTYPES[1])
+    del phenotype_one_gene['CYP2D6']
     phenotypes = {
         'old.rm-guideline': { 'CYP2D6': [ 'Poor metabolizer' ]},
         'old.keep-guideline': STANDARD_PHENOTYPES[0],
         'old.unchanged.2': {
             'CYP2D6': [ 'Indeterminate' ],
             'CYP2C19': [ 'Intermediate Metabolizer' ]},
+        'old.will-get-additional-missing-phenotype': phenotype_one_gene,
     }
+
     lookupkeys = {
         'old.keep-guideline': STANDARD_PHENOTYPES[0],
         'old.keyadded': STANDARD_PHENOTYPES[0],
         'old.keyremoved': copy.deepcopy(STANDARD_PHENOTYPES[1]), # to be changed
         'old.keychanged': STANDARD_PHENOTYPES[2],
+        'old.will-get-additional-missing-phenotype': phenotype_one_gene,
     }
     lookupkeys['old.keyremoved']['CYP2C19'].append(
         'Likely Intermediate Metabolizer')
+
+    external_data_one_gene = copy.deepcopy(STANDARD_EXTERNAL_DATA[1])
+    del external_data_one_gene[0]['implications']['CYP2D6']
     external_data = {
-        'old.keep-guideline': STANDARD_EXTERNAL_DATA[0]
+        'old.keep-guideline': STANDARD_EXTERNAL_DATA[0],
+        'old.will-get-additional-missing-phenotype': external_data_one_gene,
+        'old.will-get-additional-phenotype-with-update': external_data_one_gene,
     }
-    return build_data(
-        drug_guideline_map, rx_norms, phenotypes, lookupkeys, external_data)
+    annotations = {
+        'old.will-get-additional-missing-phenotype': STANDARD_ANNOTATIONS[1],
+    }
+    return build_data(drug_guideline_map, rx_norms, phenotypes, lookupkeys,
+                      external_data, annotations)
 
 @pytest.fixture
 def updated_data():
@@ -230,16 +313,24 @@ def updated_data():
             ['new.keyadded', 'new.keyremoved', 'new.keychanged'],
         GUIDELINE_EXTERNAL_DATA_CHANGED: \
             ['new.data-rm', 'new.data-change', 'new.data-add'],
+        GUIDLINE_ADDITIONAL_PHENOTYPE: [
+            ADDED_GUIDELINE_NEW_MISSING_ID,
+            ADDED_GUIDELINE_NEW_COMBINATION_ID,
+        ],
     }
     rx_norms = { RX_NORM_CHANGED_DRUG: 'rx.new' }
     phenotypes = {
         'new.unchanged.2': {
             'CYP2D6': [ 'Indeterminate' ],
             'CYP2C19': [ 'Intermediate Metabolizer' ]},
-        'new.keep-guideline': STANDARD_PHENOTYPES[0]
+        'new.keep-guideline': STANDARD_PHENOTYPES[0],
+        ADDED_GUIDELINE_NEW_MISSING_ID: STANDARD_PHENOTYPES[1],
+        ADDED_GUIDELINE_NEW_COMBINATION_ID: STANDARD_PHENOTYPES[0]
     }
-    return build_data(drug_guideline_map, rx_norms, phenotypes, \
-        lookupkeys=CHANGED_LOOKUPKEYS, external_data=CHANGED_EXTERNAL_DATA)
+    return build_data(drug_guideline_map, rx_norms, phenotypes,
+                      lookupkeys=CHANGED_LOOKUPKEYS,
+                      external_data=CHANGED_EXTERNAL_DATA,
+                      default_empty_annotations=True)
 
 def test_remove_outdated_drugs(data, updated_data):
     expected_data = copy.deepcopy(data)
@@ -325,6 +416,33 @@ def test_update_drugs(data, updated_data):
     expected_data[GUIDELINE_COLLECTION_NAME][14]['_v'] += 1
     expected_data[GUIDELINE_COLLECTION_NAME][14]['externalData'] = \
         CHANGED_EXTERNAL_DATA['new.data-add']
+    
+    # If a new phenotype is added, merge and maybe update old guidelines for
+    # 'Inderterminate' or 'No result' or 'n/a' in new phenotype
+    # Old guideline is removed
+    expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
+        copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][7]))
+    del expected_data[DRUG_COLLECTION_NAME][7]['guidelines'][0]
+    expected_data[DRUG_COLLECTION_NAME][7]['_v'] += 1
+    expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
+        copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][15]))
+    del expected_data[GUIDELINE_COLLECTION_NAME][15]
+    # New guidelines are added, with previous annotations
+    expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
+         copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][7]))
+    expected_data[DRUG_COLLECTION_NAME][7]['guidelines'].append(
+        ADDED_GUIDELINE_NEW_MISSING_ID)
+    expected_data[DRUG_COLLECTION_NAME][7]['guidelines'].append(
+        ADDED_GUIDELINE_NEW_COMBINATION_ID)
+    expected_data[DRUG_COLLECTION_NAME][7]['_v'] += 1
+    expected_data[GUIDELINE_COLLECTION_NAME].append(
+        copy.deepcopy(updated_data[GUIDELINE_COLLECTION_NAME][15]))
+    expected_data[GUIDELINE_COLLECTION_NAME].append(
+        copy.deepcopy(updated_data[GUIDELINE_COLLECTION_NAME][16]))
+    # Annotations are transferred
+    expected_data[GUIDELINE_COLLECTION_NAME][16]['annotations'] = \
+        copy.deepcopy(
+            expected_data[GUIDELINE_HISTORY_COLLECTION_NAME][7]['annotations'])
 
     data, _ = update_drugs(data, updated_data)
 
@@ -347,6 +465,10 @@ def test_update_drugs(data, updated_data):
         data[GUIDELINE_COLLECTION_NAME][13]['_vDate']
     expected_data[GUIDELINE_COLLECTION_NAME][14]['_vDate'] = \
         data[GUIDELINE_COLLECTION_NAME][14]['_vDate']
+    expected_data[DRUG_COLLECTION_NAME][7]['_vDate'] = \
+        data[DRUG_COLLECTION_NAME][7]['_vDate']
+    expected_data[DRUG_HISTORY_COLLECTION_NAME][4]['_vDate'] = \
+        data[DRUG_HISTORY_COLLECTION_NAME][4]['_vDate']
 
     # Makes it easier to interpret diff if test fails
     assert data[DRUG_COLLECTION_NAME] == expected_data[DRUG_COLLECTION_NAME]
