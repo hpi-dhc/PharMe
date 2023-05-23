@@ -16,11 +16,11 @@ services:
         volumes:
             - lab_server_db:/var/lib/postgresql/data
         ports:
-            - 6543:5432
+            - ${DB_PORT}:5432
         environment:
-            - POSTGRES_USER=admin
-            - POSTGRES_PASSWORD=admin
-            - POSTGRES_DB=lab_server_db
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASS}
+            - POSTGRES_DB=${DB_NAME}
         restart: unless-stopped
 
     keycloak:
@@ -28,11 +28,11 @@ services:
         environment:
             DB_VENDOR: postgres
             DB_ADDR: keycloak-db
-            DB_DATABASE: keycloak_db
-            DB_USER: admin
-            DB_PASSWORD: admin
-            KEYCLOAK_USER: admin
-            KEYCLOAK_PASSWORD: admin
+            DB_DATABASE: ${KEYCLOAK_DB_NAME}
+            DB_USER: ${KEYCLOAK_DB_USER}
+            DB_PASSWORD: ${KEYCLOAK_DB_PASS}
+            KEYCLOAK_USER: ${KEYCLOAK_USER}
+            KEYCLOAK_PASSWORD: ${KEYCLOAK_PASS}
         ports:
             - 28080:8080
         depends_on:
@@ -46,20 +46,20 @@ services:
         ports:
             - 25433:5432
         environment:
-            - POSTGRES_USER=admin
-            - POSTGRES_PASSWORD=admin
-            - POSTGRES_DB=keycloak_db
+            - POSTGRES_USER=${KEYCLOAK_DB_USER}
+            - POSTGRES_PASSWORD=${KEYCLOAK_DB_PASS}
+            - POSTGRES_DB=${KEYCLOAK_DB_NAME}
         restart: unless-stopped
 
     minio:
         image: minio/minio
         environment:
-            MINIO_ROOT_USER: minio_admin
-            MINIO_ROOT_PASSWORD: minio_admin
+            MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+            MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
         volumes:
             - minio_db:/data
         ports:
-            - 9000:9000
+            - ${MINIO_PORT}:9000
             - 9001:9001
         command: server /data --console-address ":9001"
         restart: unless-stopped
