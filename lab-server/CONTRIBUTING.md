@@ -27,13 +27,6 @@ To test the application, send a GET request to
 `http://localhost:3001/api/v1/health` in order to verify that the lab server is
 up and running.
 
-_Optional_: if you would like to add custom styling to the lab-server's
-Swagger API documentation (`/api/v1`) you can create a MinIO bucket with the
-name supplied after the last '/' in the `.env` variable `ASSETS_URL`
-(`pharme-assets` in `.env.example`). Simply place an image named `favicon.png`
-and a CSS file named `styles.css` into the bucket and the styling should be
-picked up by the lab server.
-
 ### Keycloak setup (local)
 
 - Open `http://localhost:28080` (or different port, if changed in `.env`) in
