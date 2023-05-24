@@ -13,37 +13,48 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 - Install [<img
   src="https://user-images.githubusercontent.com/58258541/143050227-b374b1f7-e28e-4b90-b7f0-b9112521d3b1.png"
   width="16" height="16"> Yarn](https://yarnpkg.com/)
+- Create an `.env` file with required variables (see `.env.example`)
 
 ## Setup for local development
 
 - Open a terminal in the `lab-server` directory
-  - Run `yarn` to install the project dependencies
-  - You can now start the server using `yarn start:dev`
+- Run `yarn` to install the project dependencies
+- You can now start the server using `yarn start:dev`
+- Complete the [Keycloak setup (local)](#keycloak-setup-local) and
+  [MinIO setup (local)](#minio-setup-local)
 
-Afterwards, complete the [Keycloak setup (local)](#keycloak-setup-local)
-and [MinIO setup (local)](#minio-setup-local).
+To test the application, send a GET request to
+`http://localhost:3001/api/v1/health` in order to verify that the lab server is
+up and running.
+
+_Optional_: if you would like to add custom styling to the lab-server's
+Swagger API documentation (`/api/v1`) you can create a MinIO bucket with the
+name supplied after the last '/' in the `.env` variable `ASSETS_URL`
+(`pharme-assets` in `.env.example`). Simply place an image named `favicon.png`
+and a CSS file named `styles.css` into the bucket and the styling should be
+picked up by the lab server.
 
 ### Keycloak setup (local)
 
-- Open `http://localhost:28080` in your browser to access the keycloak admin
-  console. Login using the credentials `admin` and `admin`.
-- Follow
-  [this](https://medium.com/devops-dudes/secure-nestjs-rest-api-with-keycloak-745ef32a2370)
-  guide to set up your local Keycloak. A lot of the steps including the
-  application configuration in NestJS are irrelevant.
-  - The important steps are
-    - Create a REALM called `pharme`
-    - Create clients (one for the backend and one for the frontend)
-      - For the backend the name should be "pharme-lab-server" and the
-        "access-type" should be "bearer only". In the credentials tab you need
-        to create a secret and update the env value `KEYCLOAK_SECRET` accordingly
-      - For the frontend the name should be "pharme-app". The "access-type"
-        should be set to "public" and the redirect URI should be `*`. Note that
-        this is bad practice security-wise and should only be done in a local
-        testing environment!
-    - Create a user for testing (you can choose username and password freely, no
-      roles are required)
-      - When setting the password (User > Credentials), set "Temporary" to "OFF"
+- Open `http://localhost:28080` (or different port, if changed in `.env`) in
+  your browser to access the keycloak admin console
+- Login using the credentials `KEYCLOAK_USER` and `KEYCLOAK_PASS`
+  configured in the `.env` file
+- Create a realm called `pharme`
+- Create clients (one for the backend and one for the frontend)
+  - For the backend with name `pharme-lab-server` and `access-type`
+    "bearer only"; in the credentials tab create a secret and update the `.env`
+    value `KEYCLOAK_CLIENT_SECRET` accordingly
+  - For the frontend with the name `pharme-app` and `access-type` "public";
+    set the redirect URI to `*` (note that this is bad practice security-wise
+    and should only be done in a local testing environment!)
+- Create a user for testing (you can choose username and password freely, no
+  roles are required); when setting the password, set "Temporary" to "OFF"
+- For more information see
+  [this guide](https://medium.com/devops-dudes/secure-nestjs-rest-api-with-keycloak-745ef32a2370)
+  (the important steps are described above; most of the steps described in
+  the guide, including the application configuration in NestJS, are
+      irrelevant for this setup)
 
 To check all endpoints of your local Keycloak instance, send a GET request to
 (for example with Postman):
@@ -63,30 +74,30 @@ the following body (x-www-form-urlencoded):
 | password   | \<password-of-your-user\> |
 | client_id  | pharme-app                |
 
-To test the application, send a GET request to
-`http://localhost:3000/api/v1/health` in order to verify that the lab server is
-up and running. You should now be able to make an authentication request to
-Keycloak and use the returned access token to make requests to the lab server.
-
 ### MinIO setup (local)
 
-- Open `http://localhost:9001` in your browser
-- Open the administration console. Login with the credentials you have set in
-  the `.env` file.
+- Open `http://localhost:9001` (or different port, if changed in `.env`) in
+  your browser
+- Open the administration console. Login with the credentials `MINIO_ROOT_USER`
+  and `MINIO_ROOT_PASSWORD` set in the `.env` file.
 - Create a bucket called `alleles`
-- Adapt the seeder to insert a `user` entry with the test user's UUID (look for
-  the file `user.seeder.ts` in the lab server). This UUID can be found in the
-  keycloak admin console under the "users" menu on the left.
+- Adapt the test user data in `seeder/users.json` (if not present, create based
+  on `seeder/users.example.json`) to include a user with the `sub` of the
+  Keycloak user created earlier; adapt the `allelesFile` name to the file name
+  you intend to upload
+- Run the seeder with `yarn seed:run`
 - Add the corresponding alleles file to the `alleles` bucket using the minio
-  admin console. Make sure that it is named the same as in the seeder config.
+  admin console
 
 If everything was setup correctly you can now get an access token from Keycloak
 and then use this token to make a request to the lab server under the route
-`/api/v1/star-alleles`.
+`http://localhost:3001/api/v1/star-alleles`.
 
-**OPTIONAL**: if you would like to add custom styling to the lab-server's
-swagger api documentation (`/api/v1`) you can create a bucket with the name
-supplied after the last '/' in the environment variable `ASSETS_URL` (for
-example, in the example env-file this would be `pharme-assets`). Simply place
-an image and css filed named `favicon.png` and `styles.css` respectively into
-the bucket and the styling should be picked up by the lab-server.
+## Deployment
+
+From the project root, run
+`docker compose --file lab-server/docker-compose.yml --profile production up`
+to start all components.
+
+The API and other components will be available under the ports specified in
+the `.env` file.
