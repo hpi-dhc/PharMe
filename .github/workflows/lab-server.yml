@@ -64,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
-      - run: cp lab-server/test/helpers/e2e-users.json lab-server/seeder
+      - run: cp test/helpers/e2e-users.json seeder/users.json
       - run: yarn seed:run
       - run: yarn test:e2e:cov
       - uses: actions/upload-artifact@v3
