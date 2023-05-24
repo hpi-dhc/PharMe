@@ -1,0 +1,7 @@
+[
+    {
+        "id": 1,
+        "sub": "user-id-id-key-cloak (seed will fail; replace with valid UUID)",
+        "allelesFile": "star-allele-file-name.json"
+    }
+]
