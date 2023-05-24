@@ -23,7 +23,7 @@ export class KeycloakMock {
                 authServerURL: process.env.KEYCLOAK_AUTH_SERVER_URL,
                 realm: process.env.KEYCLOAK_REALM,
                 clientID: process.env.KEYCLOAK_CLIENT_ID,
-                clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
+                clientSecret: process.env.KEYCLOAK_SECRET,
             },
         );
         this.keycloakMock = KeycloakMockServer.activateMock(

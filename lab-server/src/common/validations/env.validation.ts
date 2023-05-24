@@ -15,7 +15,7 @@ export const envSchema = Joi.object({
     KEYCLOAK_AUTH_SERVER_URL: Joi.string().uri().required(),
     KEYCLOAK_REALM: Joi.string().required(),
     KEYCLOAK_CLIENT_ID: Joi.string().required(),
-    KEYCLOAK_CLIENT_SECRET: Joi.string().required(),
+    KEYCLOAK_SECRET: Joi.string().required(),
     MINIO_PORT: Joi.number().port().required(),
     MINIO_ENDPOINT: Joi.string().required(),
     MINIO_ROOT_USER: Joi.string().required(),

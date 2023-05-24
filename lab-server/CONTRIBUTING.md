@@ -44,7 +44,7 @@ picked up by the lab server.
 - Create clients (one for the backend and one for the frontend)
   - For the backend with name `pharme-lab-server` and `access-type`
     "bearer only"; in the credentials tab create a secret and update the `.env`
-    value `KEYCLOAK_CLIENT_SECRET` accordingly
+    value `KEYCLOAK_SECRET` accordingly
   - For the frontend with the name `pharme-app` and `access-type` "public";
     set the redirect URI to `*` (note that this is bad practice security-wise
     and should only be done in a local testing environment!)
