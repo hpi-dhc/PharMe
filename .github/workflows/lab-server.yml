@@ -64,6 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn
+      - run: cp test/helpers/e2e-users.json seeder/users.json
       - run: yarn seed:run
       - run: yarn test:e2e:cov
       - uses: actions/upload-artifact@v3
@@ -130,53 +131,3 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  # TODO: this job should be re-enabled as part of #438
-  # deploy:
-  #       name: Deploy
-  #       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-  #       needs: [build-and-push-image]
-  #       runs-on: ubuntu-latest
-  #       env:
-  #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-  #
-  #       steps:
-  #         - name: Checkout
-  #           uses: actions/checkout@v3
-  #
-  #         - name: Create namespace
-  #           uses: actions-hub/kubectl@master
-  #           with:
-  #             # creates ns only if it does not exist
-  #             args: apply -f ./lab-server/deployment/namespace.yml
-  #
-  #         # Apply, deploy, and observe status of lab server
-  #         - name: Apply deployment (lab Server)
-  #           uses: actions-hub/kubectl@master
-  #           with:
-  #             args: -n lab-server apply -f ./lab-server/deployment/app/deployment.yml
-  #
-  #         - name: Deploy lab server
-  #           uses: actions-hub/kubectl@master
-  #           with:
-  #             args: -n lab-server rollout restart deploy lab-server
-  #
-  #         - name: Watch deployment (lab server)
-  #           uses: actions-hub/kubectl@master
-  #           with:
-  #             args: -n lab-server rollout status -w deployment/lab-server
-  #
-  #         # Apply, deploy, and observe status of database
-  #         - name: Apply deployment (database)
-  #           uses: actions-hub/kubectl@master
-  #           with:
-  #             args: -n lab-server apply -f ./lab-server/deployment/app/db.yml
-  #
-  #         - name: Deploy database
-  #           uses: actions-hub/kubectl@master
-  #           with:
-  #             args: -n lab-server rollout restart deploy lab-server-db
-  #
-  #         - name: Watch deployment (database)
-  #           uses: actions-hub/kubectl@master
-  #           with:
-  #             args: -n lab-server rollout status -w deployment/lab-server-db
