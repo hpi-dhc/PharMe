@@ -19,26 +19,30 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 - Open a terminal in the `lab-server` directory
 - Run `yarn` to install the project dependencies
-- You can now start the server using `yarn start:dev`
+- Start the server using `yarn start:dev`
+- To test the application, send a GET request to
+  `http://localhost:3001/api/v1/health` in order to verify that the lab server
+  is up and running
 - Complete the [Keycloak setup (local)](#keycloak-setup-local) and
-  [MinIO setup (local)](#minio-setup-local)
-
-To test the application, send a GET request to
-`http://localhost:3001/api/v1/health` in order to verify that the lab server is
-up and running.
+  [MinIO and test user setup (local)](#minio-and-test-user-setup-local)
+- If everything was setup correctly you can (1) get an access token from
+  Keycloak and (2) use this token to make a request to the lab server under the
+  route `http://localhost:3001/api/v1/star-alleles`
 
 ### Keycloak setup (local)
 
-- Open `http://localhost:28080` (or different port, if changed in `.env`) in
-  your browser to access the keycloak admin console
+- Open `http://localhost:28080` in your browser to access the keycloak admin
+  console (or different port, if changed in `.env`; make sure to also adapt the
+  port in `KEYCLOAK_AUTH_SERVER_URL` accordingly)
 - Login using the credentials `KEYCLOAK_USER` and `KEYCLOAK_PASS`
   configured in the `.env` file
-- Create a realm called `pharme`
+- Create a realm called `KEYCLOAK_REALM` (see `.env`)
 - Create clients (one for the backend and one for the frontend)
-  - For the backend with name `pharme-lab-server` and `access-type`
-    "bearer only"; in the credentials tab create a secret and update the `.env`
-    value `KEYCLOAK_SECRET` accordingly
-  - For the frontend with the name `pharme-app` and `access-type` "public";
+  - For the backend with name `KEYCLOAK_CLIENT_ID` (see `.env`) and
+    `access-type` "bearer only"; in the credentials tab create a secret and
+    update the `.env` value `KEYCLOAK_SECRET` accordingly
+  - For the frontend with the name `pharme-app` (as `clientId` in
+    `app/lib/login/pages/cubit.dart`) and `access-type` "public";
     set the redirect URI to `*` (note that this is bad practice security-wise
     and should only be done in a local testing environment!)
 - Create a user for testing (you can choose username and password freely, no
@@ -67,24 +71,23 @@ the following body (x-www-form-urlencoded):
 | password   | \<password-of-your-user\> |
 | client_id  | pharme-app                |
 
-### MinIO setup (local)
+Please make sure that if using `localhost` to get the token, the host configured
+in `.env` also needs to be `localhost`, not `127.0.0.1`. Otherwise, requesting
+data with the will result in an `wrong ISS` error.
+
+### MinIO and test user setup (local)
 
 - Open `http://localhost:9001` (or different port, if changed in `.env`) in
   your browser
 - Open the administration console. Login with the credentials `MINIO_ROOT_USER`
   and `MINIO_ROOT_PASSWORD` set in the `.env` file.
 - Create a bucket called `alleles`
+- Add an alleles file to the `alleles` bucket using the MinIO admin console
 - Adapt the test user data in `seeder/users.json` (if not present, create based
   on `seeder/users.example.json`) to include a user with the `sub` of the
   Keycloak user created earlier; adapt the `allelesFile` name to the file name
-  you intend to upload
+  you uploaded
 - Run the seeder with `yarn seed:run`
-- Add the corresponding alleles file to the `alleles` bucket using the minio
-  admin console
-
-If everything was setup correctly you can now get an access token from Keycloak
-and then use this token to make a request to the lab server under the route
-`http://localhost:3001/api/v1/star-alleles`.
 
 ## Deployment
 
