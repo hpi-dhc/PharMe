@@ -11,6 +11,7 @@
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
   "err_generic": "Error!",
   "err_no_drugs": "Try adjusting the filters next to the search bar above.",
+  "err_app_not_installed": "App to get data from {appName} not installed.",
 
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for medications you are currently taking.",
