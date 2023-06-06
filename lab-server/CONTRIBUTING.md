@@ -19,7 +19,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 - Open a terminal in the `lab-server` directory
 - Run `yarn` to install the project dependencies
-- Start the server using `yarn start:dev`
+- Start the server using `yarn start:dev` (uses `docker compose up -d`)
 - To test the application, send a GET request to
   `http://localhost:3001/api/v1/health` in order to verify that the lab server
   is up and running
@@ -91,9 +91,25 @@ data with the will result in an `wrong ISS` error.
 
 ## Deployment
 
-From the project root, run
-`docker compose --file lab-server/docker-compose.yml --profile production up`
-to start all components.
+_Whole Docker compose setup is currently not working; unable to connect to the_
+_database. Instead, run the following commands:_
 
-The API and other components will be available under the ports specified in
-the `.env` file.
+- `docker compose up -d`
+- `yarn install --frozen-lockfile`
+- `yarn run build`
+- `yarn run start:prod`
+
+~From the project root, run~
+~`docker compose --file lab-server/docker-compose.yml --profile production up`~
+~to start all components.~
+
+~The API and other components will be available under the ports specified in~
+~the `.env` file.~
+
+~Make sure that all mentions of `localhost` (including `0.0.0.0` or~
+~`127.0.0.1`) point to the respective service name in the~
+~`docker-compose.yml`:~
+
+- ~`localhost` in `KEYCLOAK_AUTH_SERVER_URL` to `keycloak`~
+- ~`DB_HOST` to `lab-server-db`~
+- ~`MINIO_ENDPOINT` to `minio`~

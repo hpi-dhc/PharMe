@@ -4,7 +4,7 @@ module.exports = {
     password: process.env.DB_PASS,
     port: process.env.DB_PORT,
     database: process.env.DB_NAME,
-    seeds: ['seeder/*.seeder.ts'],
+    seeds: ['src/seeder/*.seeder.ts'],
     type: 'postgres',
     entities: ['src/**/entities/*.entity{.ts,.js}'],
     synchronize: true,

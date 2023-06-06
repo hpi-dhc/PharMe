@@ -3,11 +3,11 @@ import * as fs from 'fs';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
 
-import { User } from '../src/user/entities/user.entity';
+import { User } from '../user/entities/user.entity';
 
 export default class CreateUsers implements Seeder {
     public async run(_: Factory, connection: Connection): Promise<void> {
-        const USER_FILE = 'seeder/users.json';
+        const USER_FILE = 'src/seeder/users.json';
         if (!fs.existsSync(USER_FILE)) {
             fs.copyFileSync('seeder/users.example.json', USER_FILE);
         }

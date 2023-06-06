@@ -4,11 +4,11 @@ import { MinioModule } from 'nestjs-minio-client';
 export const MinioModuleConfig = MinioModule.registerAsync({
     imports: [ConfigModule],
     useFactory: async (config: ConfigService) => ({
-        endPoint: config.get<string>('MINIO_ENDPOINT', '127.0.0.1'),
-        port: parseInt(config.get<string>('MINIO_PORT', '9000')),
+        endPoint: config.get<string>('MINIO_ENDPOINT'),
+        port: parseInt(config.get<string>('MINIO_PORT')),
         useSSL: false,
-        accessKey: config.get<string>('MINIO_ROOT_USER', 'admin'),
-        secretKey: config.get<string>('MINIO_ROOT_PASSWORD', 'admin'),
+        accessKey: config.get<string>('MINIO_ROOT_USER'),
+        secretKey: config.get<string>('MINIO_ROOT_PASSWORD'),
     }),
     inject: [ConfigService],
 });
