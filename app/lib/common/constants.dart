@@ -1,10 +1,10 @@
 import 'package:url_launcher/url_launcher.dart';
 
-Uri anniUrl([String slug = '']) => Uri.http('localhost:3001', 'api/v1/$slug');
+Uri anniUrl([String slug = '']) => Uri.http('localhost:8000', 'api/v1/$slug');
 Uri labServerUrl([String slug = '']) =>
-    Uri.https('lab-server-pharme.dhc-lab.hpi.de', 'api/v1/$slug');
+    Uri.http('localhost:3001', 'api/v1/$slug');
 Uri keycloakUrl([String slug = '']) =>
-    Uri.https('keycloak-pharme.dhc-lab.hpi.de', slug);
+    Uri.http('localhost:28080', 'auth/$slug');
 
 // Note that sending emails will not work on the iPhone Simulator since it does
 // not have any email application installed.
