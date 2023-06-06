@@ -62,13 +62,16 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     } else if (lab is AppShareLab) {
       var success = true;
       try {
-        success = await launchUrl(Uri.parse(lab.appLink), mode: LaunchMode.externalApplication );
+        // Could use external_app_launcher, if not compatible across platfroms
+        success = await launchUrl(
+          Uri.parse(lab.appLink), mode: LaunchMode.externalApplication);
       } catch (e) {
         success = false;
       }
       if (!success) {
+        emit(LoginPageState.error(
         // ignore: use_build_context_synchronously
-        emit(LoginPageState.error(context.l10n.err_app_not_installed(lab.name)));
+          context.l10n.err_app_not_installed(lab.name)));
       }
       
     } else {

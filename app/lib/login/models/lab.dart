@@ -33,7 +33,7 @@ class AppShareLab extends Lab {
 }
 
 final labs = [
-  AppShareLab(name: 'Health-X dataLOFT', appLink: 'com.healthx.dwa'),
+  AppShareLab(name: 'Health-X dataLOFT', appLink: 'shareddocuments://'),
   KeycloakLab(
     name: 'Mount Sinai Health System',
     authUrl: keycloakUrl('realms/pharme/protocol/openid-connect/auth'),
