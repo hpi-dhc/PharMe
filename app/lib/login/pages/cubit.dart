@@ -16,11 +16,37 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
   void revertToInitialState() => emit(LoginPageState.initial());
 
-  // signInAndLoadUserData authenticates a user with a Lab and fetches their
-  // genomic data from it's endpoint.
-  Future<void> signInAndLoadUserData(
+  Future<void> loginSuccessful() async {
+    MetaData.instance.isLoggedIn = true;
+    await MetaData.save();
+    emit(LoginPageState.loadedUserData());
+  }
+
+  // wait for externally opened app to share data
+  Future<void> waitForShareReceive(BuildContext context) async {
+    // to be implemented; probably with stream;
+    // might be initialized on class level (to close later);
+    // calls receivedShare on receive
+    await receivedShare(context);
+  }
+
+  // write data as in fetchAndSaveDiplotypes
+  Future<void> receivedShare(BuildContext context) async {
+    // to be implemented
+    // saveDiplotypes(data);
+    // await loginSuccessful();
+    // probably close stream (if using stream)
+    throw Exception();
+  }
+
+  Future<void> loadUserData(
     BuildContext context, dynamic lab) async {
     emit(LoginPageState.loadingUserData());
+
+    if (!shouldFetchDiplotypes()) {
+      await loginSuccessful();
+      return;
+    }
 
     if (lab is KeycloakLab) {
       // authenticate
@@ -48,34 +74,42 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
       try {
         // get data
-        await fetchAndSaveDiplotypes(token, lab.starAllelesUrl.toString());
-        await fetchAndSaveLookups();
-
-        // login + fetching of data successful
-        MetaData.instance.isLoggedIn = true;
-        await MetaData.save();
-        emit(LoginPageState.loadedUserData());
+        final url = lab.starAllelesUrl.toString();
+        final response = await getDiplotypes(token, url);
+        if (response.statusCode == 200) {
+          await saveDiplotypes(response.body);
+        } else {
+          throw Exception();
+        }
+        await loginSuccessful();
       } catch (e) {
         // ignore: use_build_context_synchronously
         emit(LoginPageState.error(context.l10n.err_fetch_user_data_failed));
+        return;
       } 
     } else if (lab is AppShareLab) {
-      var success = true;
+      bool success;
       try {
         // Could use external_app_launcher, if not compatible across platfroms
         success = await launchUrl(
           Uri.parse(lab.appLink), mode: LaunchMode.externalApplication);
+        // ignore: use_build_context_synchronously
+        if (success) {
+          // ignore: use_build_context_synchronously
+          await waitForShareReceive(context);
+        }
       } catch (e) {
         success = false;
       }
       if (!success) {
         emit(LoginPageState.error(
         // ignore: use_build_context_synchronously
-          context.l10n.err_app_not_installed(lab.name)));
+          context.l10n.err_no_data_from_app(lab.name)));
+        return;
       }
-      
     } else {
       emit(LoginPageState.error(context.l10n.err_generic));
+      return;
     }
   }
 

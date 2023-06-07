@@ -7,30 +7,21 @@ import '../constants.dart';
 import '../models/drug/cached_drugs.dart';
 import '../models/module.dart';
 
-Future<void> fetchAndSaveDiplotypes(String token, String url) async {
-  if (!shouldFetchDiplotypes()) return;
-  final response = await getDiplotypes(token, url);
-  if (response.statusCode == 200) {
-    await _saveDiplotypeResponse(response);
-  } else {
-    throw Exception();
-  }
-}
-
 Future<Response> getDiplotypes(String? token, String url) async {
   return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 }
 
-Future<void> _saveDiplotypeResponse(Response response) async {
+Future<void> saveDiplotypes(dynamic jsonData) async {
   // parse response to list of user's diplotypes
   final diplotypes =
-      diplotypesFromHTTPResponse(response).filterValidDiplotypes();
+      diplotypesFromReceivedData(jsonData).filterValidDiplotypes();
 
   UserData.instance.diplotypes = {for (var d in diplotypes) d.gene: d};
   await UserData.save();
   // invalidate cached drugs because lookups may have changed and we need to
   // refilter the matching guidelines
   await CachedDrugs.erase();
+  await fetchAndSaveLookups();
 }
 
 Future<void> fetchAndSaveLookups() async {

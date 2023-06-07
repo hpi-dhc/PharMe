@@ -67,7 +67,7 @@ class LoginPage extends HookWidget {
       );
       await context
           .read<LoginPageCubit>()
-          .signInAndLoadUserData(context, selectedLab);
+          .loadUserData(context, selectedLab);
     }
 
     return _buildColumnWrapper(

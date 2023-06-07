@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart';
 
 part 'diplotype.g.dart';
 
@@ -44,8 +43,8 @@ extension ValidDiplotypes on List<Diplotype> {
   }
 }
 
-// assumes http reponse from lab server
-List<Diplotype> diplotypesFromHTTPResponse(Response resp) {
-  final json = jsonDecode(resp.body)['diplotypes'] as List<dynamic>;
+// assumes http reponse body from lab server or comparable data
+List<Diplotype> diplotypesFromReceivedData(dynamic jsonData) {
+  final json = jsonDecode(jsonData)['diplotypes'] as List<dynamic>;
   return json.map<Diplotype>(Diplotype.fromJson).toList();
 }

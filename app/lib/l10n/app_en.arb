@@ -9,14 +9,14 @@
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
-  "err_generic": "Error!",
-  "err_no_drugs": "Try adjusting the filters next to the search bar above.",
-  "err_app_not_installed": "App to get data from {appName} not installed.",
+  "err_generic": "Error",
+  "err_no_drugs": "Try adjusting the filters next to the search bar above",
+  "err_no_data_from_app": "Could not get data from {appName}",
 
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for medications you are currently taking.",
   
-  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us!",
+  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
 
   "general_appName": "PharMe",
   "general_continue": "Continue",
