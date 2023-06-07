@@ -103,6 +103,9 @@ _database. Instead, run the following commands:_
 ~`docker compose --file lab-server/docker-compose.yml --profile production up`~
 ~to start all components.~
 
+~_Note: removed the .env file from the Dockerfile to fix workflow; should set_~
+~_variables in `docker-compose.yml` when attemting to fix this whole setup._~
+
 ~The API and other components will be available under the ports specified in~
 ~the `.env` file.~
 
