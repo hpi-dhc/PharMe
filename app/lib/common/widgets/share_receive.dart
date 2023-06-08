@@ -12,7 +12,6 @@ class ShareReceive extends StatefulWidget {
 
 class _ShareReceiveState extends State<ShareReceive> {
   late StreamSubscription _intentDataStreamSubscription;
-  List<SharedFile>? list;
   @override
   void initState() {
     super.initState();
@@ -20,9 +19,6 @@ class _ShareReceiveState extends State<ShareReceive> {
     // the memory
     _intentDataStreamSubscription = FlutterSharingIntent.instance.getMediaStream()
         .listen((sharedFiles) {
-      setState(() {
-        list = sharedFiles;
-      });
       // ignore: avoid_print
       print(
         "Shared: getMediaStream ${sharedFiles.map((f) => f.value).join(",")}");
@@ -36,26 +32,12 @@ class _ShareReceiveState extends State<ShareReceive> {
       // ignore: avoid_print
       print(
         "Shared: getInitialMedia ${sharedFiles.map((f) => f.value).join(",")}");
-      setState(() {
-        list = sharedFiles;
-      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 24),
-              child: Text('Sharing data: \n${list?.join("\n\n")}\n')),
-        ),
-      ),
-    );
+    return SizedBox.shrink();
   }
   @override
   void dispose() {

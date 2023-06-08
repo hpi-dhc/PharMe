@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 import '../../../common/module.dart';
+import '../../../common/widgets/share_receive.dart';
 import '../models/lab.dart';
 import 'cubit.dart';
 
@@ -16,44 +17,49 @@ class LoginPage extends HookWidget {
   Widget build(BuildContext context) {
     final dropdownValue = useState(labs.first.name);
 
-    return BlocProvider(
-      create: (context) => cubit ?? LoginPageCubit(),
-      child: BlocBuilder<LoginPageCubit, LoginPageState>(
-        builder: (context, state) {
-          return Scaffold(
-            body: SafeArea(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset(
-                        'assets/images/logo.svg',
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: state.when(
-                          initial: () =>
-                              _buildInitialScreen(context, dropdownValue),
-                          loadingUserData: CircularProgressIndicator.new,
-                          loadedUserData: () => _buildLoadedScreen(context),
-                          error: (message) =>
-                              _buildErrorScreen(context, message),
+    return Stack(
+      children: [
+        ShareReceive(),
+        BlocProvider(
+          create: (context) => cubit ?? LoginPageCubit(),
+          child: BlocBuilder<LoginPageCubit, LoginPageState>(
+            builder: (context, state) {
+              return Scaffold(
+                body: SafeArea(
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                            'assets/images/logo.svg',
+                          ),
                         ),
                       ),
-                    ),
+                      Positioned(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: state.when(
+                              initial: () =>
+                                  _buildInitialScreen(context, dropdownValue),
+                              loadingUserData: CircularProgressIndicator.new,
+                              loadedUserData: () => _buildLoadedScreen(context),
+                              error: (message) =>
+                                  _buildErrorScreen(context, message),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
