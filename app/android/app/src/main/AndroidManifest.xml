@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.hpi.pharme">
+    package="de.tamslo.pharme">
    <uses-permission android:name="android.permission.INTERNET" />
    <!-- If you wish to run the app on a local setup (i.e local lab server, annotation server,
         etc.) set the parameter 'android:usesCleartextTraffic' to 'true' -->

@@ -8,7 +8,7 @@ import ImageIO
 
 @objc(ShareViewController)
 class ShareViewController: UIViewController {
-        var hostAppBundleIdentifier = "de.hpi.pharme"
+        var hostAppBundleIdentifier = "de.tamslo.pharme"
         let sharedKey = "SharingKey"
         var appGroupId = ""
         var sharedMedia: [SharingFile] = []
