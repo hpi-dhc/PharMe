@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 import '../../../common/module.dart';
+import '../../common/widgets/share_receive.dart';
 import '../models/lab.dart';
 import 'cubit.dart';
 
@@ -24,6 +25,7 @@ class LoginPage extends HookWidget {
             body: SafeArea(
               child: Stack(
                 children: [
+                  ShareReceive(),
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
