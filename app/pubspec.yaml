@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   flutter_secure_storage: ^5.0.2
   flutter_share: ^2.0.0
+  flutter_sharing_intent: ^1.0.6
   flutter_sliding_up_panel: ^2.0.1
   flutter_svg: ^1.1.1
   flutter_web_auth: ^0.4.1
