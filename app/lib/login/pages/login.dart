@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 import '../../../common/module.dart';
+import '../../common/widgets/full_width_button.dart';
 import '../models/lab.dart';
 import 'cubit.dart';
 
@@ -163,21 +164,7 @@ class LoginPage extends HookWidget {
       children: [
         ...children,
         SizedBox(height: PharMeTheme.mediumSpace),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: action,
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
-              ),
-            ),
-            child: Text(actionText),
-          ),
-        ),
-      ],
+        FullWidthButton(actionText, action ?? () {}),      ],
     );
   }
 }

@@ -1,4 +1,5 @@
 import '../../common/module.dart';
+import '../../drugselection/module.dart';
 import '../../faq/module.dart';
 import '../../login/module.dart';
 import '../../onboarding/module.dart';
@@ -12,6 +13,7 @@ part 'router.gr.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
+    drugSelectionRoutes,
     loginRoutes,
     onboardingRoutes,
     AutoRoute(
