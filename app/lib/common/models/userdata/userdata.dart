@@ -89,6 +89,10 @@ Future<void> initUserData() async {
 
 // assumes http reponse from lab server
 List<String> activeDrugsFromHTTPResponse(Response resp) {
-  final activeDrugs = jsonDecode(resp.body)['medications'] as List<dynamic>;
-  return List<String>.from(activeDrugs);
+  var activeDrugs = <String>[];
+  final json = jsonDecode(resp.body) as Map<String, dynamic>;
+  if (json.containsKey('medications')) {
+    activeDrugs = List<String>.from(json['medications']);
+  }
+  return activeDrugs;
 }
