@@ -17,8 +17,8 @@ class Lab {
 final labs = [
   Lab(
     name: 'Mount Sinai Health System',
-    authUrl: keycloakUrl('/realms/pharme/protocol/openid-connect/auth'),
-    tokenUrl: keycloakUrl('/realms/pharme/protocol/openid-connect/token'),
-    starAllelesUrl: labServerUrl('/star-alleles'),
+    authUrl: keycloakUrl('realms/pharme/protocol/openid-connect/auth'),
+    tokenUrl: keycloakUrl('realms/pharme/protocol/openid-connect/token'),
+    starAllelesUrl: labServerUrl('star-alleles'),
   )
 ];
