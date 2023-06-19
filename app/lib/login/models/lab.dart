@@ -33,11 +33,11 @@ class AppShareLab extends Lab {
 }
 
 final labs = [
-  AppShareLab(
+   KeycloakLab(
     name: 'Health-X dataLOFT',
-    // Will be somehting like healthxdw://dwa.health-x.org/request?provider=
-    // Charité&fileName=Laborbefund.pdf
-    appLink: 'shareddocuments://',
+    authUrl: keycloakUrl('realms/pharme/protocol/openid-connect/auth'),
+    tokenUrl: keycloakUrl('realms/pharme/protocol/openid-connect/token'),
+    starAllelesUrl: labServerUrl('star-alleles'),
   ),
   KeycloakLab(
     name: 'Mount Sinai Health System',
