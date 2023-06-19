@@ -5,8 +5,10 @@ class FullWidthButton extends StatelessWidget {
     this.text,
     this.action, {
     Key? key,
+    this.enabled = true,
   }) : super(key: key);
 
+  final bool enabled;
   final String text;
   final void Function() action;
 
@@ -15,7 +17,7 @@ class FullWidthButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: action,
+        onPressed: enabled ? action : null,
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(

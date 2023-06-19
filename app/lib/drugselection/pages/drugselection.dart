@@ -21,52 +21,18 @@ class DrugSelectionPage extends HookWidget {
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          Text(
-                            context.l10n.drug_selection_header,
-                            style: PharMeTheme.textTheme.titleLarge),
-                          SizedBox(height: PharMeTheme.mediumSpace),
-                          Text(context.l10n.drug_selection_description),
-                          SizedBox(height: PharMeTheme.mediumSpace),
-                          Text(context.l10n.drug_selection_later),
-                          SizedBox(height: PharMeTheme.mediumSpace),
-                        ]),
-                    ),
-                    state.when(
-                      stable: () =>
-                        Column(
-                          children: [
-                            ListView(shrinkWrap: true,
-                            children: CachedDrugs.instance.drugs!.map(
-                              (drug) => CheckboxListTile(
-                                value: UserData.instance.activeDrugNames!
-                                  .contains(drug.name),
-                                onChanged: (value) {
-                                  context
-                                    .read<DrugSelectionPageCubit>()
-                                    .updateDrugActivity(drug, value);  
-                                },
-                                title: Text(drug.name.capitalize()),
-                                subtitle: Text(
-                                  '(${drug.annotations.brandNames.join(", ")})'
-                                ),
-                              )).toList(),
-                            ),
-                            SizedBox(height: PharMeTheme.mediumSpace),
-                            FullWidthButton(
-                              context.l10n.general_continue,
-                              () { context.router.replace(MainRoute()); }
-                            ),
-                          ]
-                        ),
-                      updating: CircularProgressIndicator.new,
-                    ),
-                  ],
+                child: ListView(
+                  shrinkWrap: true,
+                  children: state.when(
+                    stable: () => [
+                      _buildHeader(context),
+                      ..._buildDrugList(context),
+                    ],
+                    updating: () => [
+                      _buildHeader(context),
+                      ..._buildDrugList(context, enabled: false),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -74,5 +40,54 @@ class DrugSelectionPage extends HookWidget {
         }
       )
     );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          Text(
+            context.l10n.drug_selection_header,
+            style: PharMeTheme.textTheme.headlineLarge),
+          SizedBox(height: PharMeTheme.mediumSpace),
+          Text(
+            context.l10n.drug_selection_description,
+            style: PharMeTheme.textTheme.bodyLarge),
+          SizedBox(height: PharMeTheme.mediumSpace),
+          Text(
+            context.l10n.drug_selection_later,
+            style: PharMeTheme.textTheme.bodyLarge),
+          SizedBox(height: PharMeTheme.mediumSpace),
+        ]
+      ),
+    );
+  }
+
+  List<Widget> _buildDrugList(BuildContext context, {bool enabled = true}) {
+    return [
+      ...CachedDrugs.instance.drugs!.map(
+        (drug) => CheckboxListTile(
+          enabled: enabled,
+          value: UserData.instance.activeDrugNames!
+            .contains(drug.name),
+          onChanged: (value) {
+            context
+              .read<DrugSelectionPageCubit>()
+              .updateDrugActivity(drug, value);  
+          },
+          title: Text(drug.name.capitalize()),
+          subtitle: Text(
+            '(${drug.annotations.brandNames.join(", ")})'
+          ),
+        )
+      ).toList(),
+      SizedBox(height: PharMeTheme.mediumSpace),
+      FullWidthButton(
+        context.l10n.general_continue,
+        () { context.router.replace(MainRoute()); },
+        enabled: enabled,
+      ),
+    ];
   }
 }
