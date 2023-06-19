@@ -49,6 +49,8 @@ class LoginPageCubit extends Cubit<LoginPageState> {
         token, lab.starAllelesUrl.toString());
       await fetchAndSaveLookups();
 
+      await updateCachedDrugs();
+
       // login + fetching of data successful
       MetaData.instance.isLoggedIn = true;
       await MetaData.save();

@@ -22,26 +22,29 @@ Future<void> updateCachedDrugs() async {
   final dataResponse = await get(anniUrl('data'));
   if (dataResponse.statusCode != 200) throw Exception();
   final data = AnniDataResponse.fromJson(jsonDecode(dataResponse.body)).data;
+  final previousVersion = CachedDrugs.instance.version;
   CachedDrugs.instance.drugs = data.drugs;
   CachedDrugs.instance.version = data.version;
   await CachedDrugs.save();
 
-  final context = PharMeApp.navigatorKey.currentContext;
-  if (context != null) {
-    // ignore: use_build_context_synchronously
-    await showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoAlertDialog(
-        title: Text(context.l10n.update_warning_title),
-        content: Text(context.l10n.update_warning_body),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: () => Navigator.pop(context),
-            child: Text(context.l10n.action_continue),
-          ),
-        ],
-      ),
-    );
+  if (previousVersion != null) {
+    final context = PharMeApp.navigatorKey.currentContext;
+    if (context != null) {
+      // ignore: use_build_context_synchronously
+      await showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text(context.l10n.update_warning_title),
+          content: Text(context.l10n.update_warning_body),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () => Navigator.pop(context),
+              child: Text(context.l10n.action_continue),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
