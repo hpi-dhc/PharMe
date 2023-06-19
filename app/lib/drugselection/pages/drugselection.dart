@@ -22,17 +22,10 @@ class DrugSelectionPage extends HookWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: ListView(
-                  shrinkWrap: true,
-                  children: state.when(
-                    stable: () => [
-                      _buildHeader(context),
-                      ..._buildDrugList(context),
-                    ],
-                    updating: () => [
-                      _buildHeader(context),
-                      ..._buildDrugList(context, enabled: false),
-                    ],
-                  ),
+                  children: [
+                    _buildHeader(context),
+                    ..._buildDrugList(context, state),
+                  ],
                 ),
               ),
             ),
@@ -64,8 +57,17 @@ class DrugSelectionPage extends HookWidget {
     );
   }
 
-  List<Widget> _buildDrugList(BuildContext context, {bool enabled = true}) {
+  List<Widget> _buildDrugList(
+    BuildContext context,
+    DrugSelectionPageState state
+  ) {
+    var enabled = true;
+    state.when(
+      stable: () => enabled = true,
+      updating: () => enabled = false
+    );
     return [
+      // ...[...CachedDrugs.instance.drugs!, ...CachedDrugs.instance.drugs!, ...CachedDrugs.instance.drugs!].map(
       ...CachedDrugs.instance.drugs!.map(
         (drug) => CheckboxListTile(
           enabled: enabled,
