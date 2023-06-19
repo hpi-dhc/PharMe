@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
 
 import '../../../search/module.dart';
 import '../../utilities/hive_utils.dart';
@@ -82,4 +85,10 @@ Future<void> initUserData() async {
   );
   final userData = Hive.box<UserData>(_boxName);
   UserData._instance = userData.get('data') ?? UserData();
+}
+
+// assumes http reponse from lab server
+List<String> activeDrugsFromHTTPResponse(Response resp) {
+  final activeDrugs = jsonDecode(resp.body)['medications'] as List<dynamic>;
+  return List<String>.from(activeDrugs);
 }
