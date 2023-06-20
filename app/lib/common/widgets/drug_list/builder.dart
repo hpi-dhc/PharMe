@@ -27,17 +27,14 @@ List<Widget> _buildDrugCards(
   if (filteredDrugs.isEmpty && noDrugsMessage != null) {
     return [errorIndicator(noDrugsMessage)];
   }
-  final sortedWarningLevels = [
-    'WarningLevel.red',
-    'WarningLevel.yellow',
-    'WarningLevel.green',
-    null,
-  ];
+  int warningLevelSeverity(Drug drug) {
+      final warningLevel = drug.userGuideline()?.annotations.warningLevel
+        ?? WarningLevel.none;
+      return warningLevel.severity;
+    }
   filteredDrugs.sort((drugA, drugB) {
-    final warningLevelComparison = sortedWarningLevels.indexOf(
-      drugA.userGuideline()?.annotations.warningLevel.toString())
-        .compareTo(sortedWarningLevels.indexOf(
-          drugB.userGuideline()?.annotations.warningLevel.toString()));
+    final warningLevelComparison = -warningLevelSeverity(drugA)
+      .compareTo(warningLevelSeverity(drugB));
     if (warningLevelComparison == 0) {
       return drugA.name.compareTo(drugB.name);
     }

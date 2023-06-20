@@ -29,7 +29,8 @@ extension WarningLevelSeverity on WarningLevel {
   static final _severityMap = {
     WarningLevel.red.name: 2,
     WarningLevel.yellow.name: 1,
-    WarningLevel.green.name: 0
+    WarningLevel.green.name: 0,
+    WarningLevel.none.name: -1,
   };
   int get severity => WarningLevelSeverity._severityMap[name]!;
 }
