@@ -27,6 +27,22 @@ List<Widget> _buildDrugCards(
   if (filteredDrugs.isEmpty && noDrugsMessage != null) {
     return [errorIndicator(noDrugsMessage)];
   }
+  final sortedWarningLevels = [
+    'WarningLevel.red',
+    'WarningLevel.yellow',
+    'WarningLevel.green',
+    null,
+  ];
+  filteredDrugs.sort((drugA, drugB) {
+    final warningLevelComparison = sortedWarningLevels.indexOf(
+      drugA.userGuideline()?.annotations.warningLevel.toString())
+        .compareTo(sortedWarningLevels.indexOf(
+          drugB.userGuideline()?.annotations.warningLevel.toString()));
+    if (warningLevelComparison == 0) {
+      return drugA.name.compareTo(drugB.name);
+    }
+    return warningLevelComparison;
+  });
   return [
     SizedBox(height: 8),
     ...filteredDrugs.map((drug) => Column(children: [
