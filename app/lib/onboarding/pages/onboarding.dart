@@ -26,19 +26,25 @@ class OnboardingPage extends HookWidget {
         getText: (context) => context.l10n.onboarding_3_disclaimer,
       ),
     ),
+    // OnboardingSubPage(
+    //   illustrationPath: 'assets/images/onboarding/4.png',
+    //   getHeader: (context) => context.l10n.onboarding_4_header,
+    //   getText: (context) => context.l10n.onboarding_4_text,
+    //   color: Color(0xFF00B9FA),
+    //   child: BottomCard(
+    //     getText: (context) => context.l10n.onboarding_4_button,
+    //     onClick: () => launchUrl(
+    //       Uri.parse(
+    //         'https://www.cdc.gov/genomics/gtesting/genetic_testing.htm',
+    //       ),
+    //     ),
+    //   ),
+    // ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/4.png',
       getHeader: (context) => context.l10n.onboarding_4_header,
-      getText: (context) => context.l10n.onboarding_4_text,
+      getText: (context) => context.l10n.onboarding_4_already_tested_text,
       color: Color(0xFF00B9FA),
-      child: BottomCard(
-        getText: (context) => context.l10n.onboarding_4_button,
-        onClick: () => launchUrl(
-          Uri.parse(
-            'https://www.cdc.gov/genomics/gtesting/genetic_testing.htm',
-          ),
-        ),
-      ),
     ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/5.png',

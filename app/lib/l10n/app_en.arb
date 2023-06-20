@@ -9,7 +9,7 @@
 
   "drug_selection_header": "Select active drugs",
   "drug_selection_description": "Please select the drugs you are currently taking below. If you are not taking checked drugs anymore, you can uncheck them.",
-  "drug_selection_later": "You can always change the status for each drug later on a drug's detail page.",
+  "drug_selection_later": "Active drugs can influence your results for other drugs. You can always change the status for each drug later on a drug's detail page.",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
@@ -125,13 +125,14 @@
   "onboarding_2_header": "One size does not fit all",
   "onboarding_2_text": "Each person’s body reacts to drugs differently.\n\nDrugs that are effective for a majority of people can be toxic to you.",
   "onboarding_3_header": "Genome power unlocked to improve human health",
-  "onboarding_3_text": "PharMe warns you if your genome makes you more likely to experience an unintended drug response. This enables you to avoid drugs that are ineffective or have side effects.",
-  "onboarding_3_disclaimer": "We DO NOT recommend drugs for specific symptoms or illnesses!",
+  "onboarding_3_text": "PharMe warns you if your genome makes you more likely to experience an unintended drug response.\n\nThis enables you to avoid drugs that are ineffective or have side effects.",
+  "onboarding_3_disclaimer": "We DO NOT recommend drugs for specific symptoms or illnesses",
   "onboarding_4_header": "Tailored to your genome",
   "onboarding_4_text": "For PharMe to work, you need to get your genetics tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
   "onboarding_4_button": "Find out more about gene tests here.",
+  "onboarding_4_already_tested_text": "PharMe works by matching your genetic data with known information about interactions between genes and drugs.\n\nThe information presented in PharMe is based on scientifically proven guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
   "onboarding_5_header": "We care about your data protection",
-  "onboarding_5_text": "After signing in to the lab, your genetic data is sent straight onto your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
+  "onboarding_5_text": "After downloading your genetic data from your data provider, it is solely kept on your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
     
   "settings_page_account_settings": "Account settings",
   "settings_page_delete_data": "Delete app data",
