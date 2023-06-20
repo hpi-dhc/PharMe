@@ -66,9 +66,10 @@ class DrugSelectionPage extends HookWidget {
       stable: () => enabled = true,
       updating: () => enabled = false
     );
+    final sortedDrugs = List<Drug>.from(CachedDrugs.instance.drugs!);
+    sortedDrugs.sort((drugA, drugB) => drugA.name.compareTo(drugB.name));
     return [
-      // ...[...CachedDrugs.instance.drugs!, ...CachedDrugs.instance.drugs!, ...CachedDrugs.instance.drugs!].map(
-      ...CachedDrugs.instance.drugs!.map(
+      ...sortedDrugs.map(
         (drug) => CheckboxListTile(
           enabled: enabled,
           value: UserData.instance.activeDrugNames!
@@ -79,9 +80,9 @@ class DrugSelectionPage extends HookWidget {
               .updateDrugActivity(drug, value);  
           },
           title: Text(drug.name.capitalize()),
-          subtitle: Text(
-            '(${drug.annotations.brandNames.join(", ")})'
-          ),
+          subtitle: (drug.annotations.brandNames.isNotEmpty) ?
+            Text('(${drug.annotations.brandNames.join(", ")})') :
+            null,
         )
       ).toList(),
       SizedBox(height: PharMeTheme.mediumSpace),
