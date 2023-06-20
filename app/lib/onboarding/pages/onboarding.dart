@@ -155,7 +155,7 @@ class OnboardingPage extends HookWidget {
       key: Key('nextButton'),
       onPressed: () {
         if (isLastPage) {
-              context.router.replace(MainRoute());
+              context.router.replace(DrugSelectionRouter());
         } else {
           pageController.nextPage(
             duration: Duration(milliseconds: 500),
