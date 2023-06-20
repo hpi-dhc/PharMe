@@ -22,7 +22,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
   - You can use `docker compose --profile dev up` if you want to start the
     testing database as well
 - Start the development server with `yarn dev`
-- You can now access the annotation interface app on `localhost:3001`
+- You can now access the annotation interface app on `localhost:3002`
 
 If you use [kitty](https://sw.kovidgoyal.net/kitty/), you can conveniently run
 the [dev](/.kitty/dev) script from this directory to start the database (&

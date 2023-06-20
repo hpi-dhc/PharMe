@@ -1,6 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
-Uri anniUrl([String slug = '']) => Uri.http('localhost:8000', 'api/v1/$slug');
+Uri anniUrl([String slug = '']) => Uri.http('localhost:3002', 'api/v1/$slug');
 Uri labServerUrl([String slug = '']) =>
     Uri.http('localhost:3001', 'api/v1/$slug');
 Uri keycloakUrl([String slug = '']) =>
