@@ -11,6 +11,7 @@ const StatusBadge = ({ curationState, staged }: Props) => (
         <Label
             title={`${curationState.curated} of ${curationState.total} curated`}
             dark={curationState.total === curationState.curated}
+            gray={curationState.curated > 0}
         />
         {staged && <Label title="Staged" dark />}
     </span>
