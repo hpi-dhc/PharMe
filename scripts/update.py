@@ -5,7 +5,7 @@ from common.get_data import get_guidelines_by_ids
 from common.get_data import get_phenotype_key
 from common.get_data import get_lookupkey_key
 from common.get_data import get_information_key
-from common.mongo import get_timestamp
+from common.mongo import get_timestamp, get_object_id
 from common.constants import DRUG_COLLECTION_NAME
 from common.constants import GUIDELINE_COLLECTION_NAME
 from common.constants import NON_RESULT_PHENOTYPES
@@ -59,9 +59,10 @@ def remove_from_collection(data, collection_name, item_ids):
     return data
 
 def update_version(data, collection_name, item):
-    data[get_history_collection_name(collection_name)].append(
-        copy.deepcopy(item)
-    )
+    history_item = copy.deepcopy(item)
+    history_item['_ref'] = history_item['_id']
+    history_item['_id'] = get_object_id()
+    data[get_history_collection_name(collection_name)].append(history_item)
     item['_v'] += 1
     item['_vDate'] = get_timestamp()
 

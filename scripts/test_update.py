@@ -33,6 +33,12 @@ def build_drug(name, guideline_ids, rx_norm=None):
         '_vDate': get_timestamp(),
     }
 
+def get_history_item(item):
+    item = copy.deepcopy(item)
+    item['_ref'] = item['_id']
+    item['_id'] = get_object_id()
+    return item
+
 def get_standard_value(index, standard_values):
     return standard_values[index % len(standard_values)]
 
@@ -357,7 +363,7 @@ def test_update_drugs(data, updated_data):
 
     # RxNorm is updated; drug history added
     expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
-        copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][2]))
+        get_history_item(expected_data[DRUG_COLLECTION_NAME][2]))
     expected_data[DRUG_COLLECTION_NAME][2]['rxNorm'] = \
         updated_data[DRUG_COLLECTION_NAME][2]['rxNorm']
     expected_data[DRUG_COLLECTION_NAME][2]['_v'] += 1
@@ -365,7 +371,7 @@ def test_update_drugs(data, updated_data):
     # Outdated (phenotype) guideline is removed from drug and guidelines;
     # drug and guideline histories added
     expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
-        copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][3]))
+        get_history_item(expected_data[DRUG_COLLECTION_NAME][3]))
     del expected_data[DRUG_COLLECTION_NAME][3]['guidelines'][0]
     expected_data[DRUG_COLLECTION_NAME][3]['_v'] += 1
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
@@ -375,7 +381,7 @@ def test_update_drugs(data, updated_data):
     # New (phenotype) guideline is added to drug and guidelines; drug
     # history added
     expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][4]))
+         get_history_item(expected_data[DRUG_COLLECTION_NAME][4]))
     expected_data[DRUG_COLLECTION_NAME][4]['guidelines'].append(
         ADDED_GUIDELINE_ID)
     expected_data[DRUG_COLLECTION_NAME][4]['_v'] += 1
@@ -385,34 +391,34 @@ def test_update_drugs(data, updated_data):
     # Guideline lookupkey is updated; guideline history added (per guideline
     # change)
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][9]))
+         get_history_item(expected_data[GUIDELINE_COLLECTION_NAME][9]))
     expected_data[GUIDELINE_COLLECTION_NAME][9]['_v'] += 1
     expected_data[GUIDELINE_COLLECTION_NAME][9]['lookupkey'] = \
         CHANGED_LOOKUPKEYS['new.keyadded']
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][10]))
+         get_history_item(expected_data[GUIDELINE_COLLECTION_NAME][10]))
     expected_data[GUIDELINE_COLLECTION_NAME][10]['_v'] += 1
     expected_data[GUIDELINE_COLLECTION_NAME][10]['lookupkey'] = \
         CHANGED_LOOKUPKEYS['new.keyremoved']
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][11]))
+         get_history_item(expected_data[GUIDELINE_COLLECTION_NAME][11]))
     expected_data[GUIDELINE_COLLECTION_NAME][11]['_v'] += 1
     expected_data[GUIDELINE_COLLECTION_NAME][11]['lookupkey'] = \
         CHANGED_LOOKUPKEYS['new.keychanged']
 
     # External data is updated; guideline history added
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][12]))
+         get_history_item(expected_data[GUIDELINE_COLLECTION_NAME][12]))
     expected_data[GUIDELINE_COLLECTION_NAME][12]['_v'] += 1
     expected_data[GUIDELINE_COLLECTION_NAME][12]['externalData'] = \
         CHANGED_EXTERNAL_DATA['new.data-rm']
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][13]))
+         get_history_item(expected_data[GUIDELINE_COLLECTION_NAME][13]))
     expected_data[GUIDELINE_COLLECTION_NAME][13]['_v'] += 1
     expected_data[GUIDELINE_COLLECTION_NAME][13]['externalData'] = \
         CHANGED_EXTERNAL_DATA['new.data-change']
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[GUIDELINE_COLLECTION_NAME][14]))
+         get_history_item(expected_data[GUIDELINE_COLLECTION_NAME][14]))
     expected_data[GUIDELINE_COLLECTION_NAME][14]['_v'] += 1
     expected_data[GUIDELINE_COLLECTION_NAME][14]['externalData'] = \
         CHANGED_EXTERNAL_DATA['new.data-add']
@@ -421,7 +427,7 @@ def test_update_drugs(data, updated_data):
     # 'Inderterminate' or 'No result' or 'n/a' in new phenotype
     # Old guideline is removed
     expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
-        copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][7]))
+        get_history_item(expected_data[DRUG_COLLECTION_NAME][7]))
     del expected_data[DRUG_COLLECTION_NAME][7]['guidelines'][0]
     expected_data[DRUG_COLLECTION_NAME][7]['_v'] += 1
     expected_data[GUIDELINE_HISTORY_COLLECTION_NAME].append(
@@ -429,7 +435,7 @@ def test_update_drugs(data, updated_data):
     del expected_data[GUIDELINE_COLLECTION_NAME][15]
     # New guidelines are added, with previous annotations
     expected_data[DRUG_HISTORY_COLLECTION_NAME].append(
-         copy.deepcopy(expected_data[DRUG_COLLECTION_NAME][7]))
+         get_history_item(expected_data[DRUG_COLLECTION_NAME][7]))
     expected_data[DRUG_COLLECTION_NAME][7]['guidelines'].append(
         ADDED_GUIDELINE_NEW_MISSING_ID)
     expected_data[DRUG_COLLECTION_NAME][7]['guidelines'].append(
@@ -469,6 +475,13 @@ def test_update_drugs(data, updated_data):
         data[DRUG_COLLECTION_NAME][7]['_vDate']
     expected_data[DRUG_HISTORY_COLLECTION_NAME][4]['_vDate'] = \
         data[DRUG_HISTORY_COLLECTION_NAME][4]['_vDate']
+
+    # Adapt generated IDs of history items
+    for collection_name in \
+        [DRUG_HISTORY_COLLECTION_NAME, GUIDELINE_HISTORY_COLLECTION_NAME]:
+        for index, _ in enumerate(expected_data[collection_name]):
+            expected_data[collection_name][index]['_id'] = \
+                data[collection_name][index]['_id']
 
     # Makes it easier to interpret diff if test fails
     assert data[DRUG_COLLECTION_NAME] == expected_data[DRUG_COLLECTION_NAME]
