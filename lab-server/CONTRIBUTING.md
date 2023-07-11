@@ -83,8 +83,8 @@ data with the will result in an `wrong ISS` error.
   and `MINIO_ROOT_PASSWORD` set in the `.env` file.
 - Create a bucket called `alleles`
 - Add an alleles file to the `alleles` bucket using the MinIO admin console
-- Adapt the test user data in `seeder/users.json` (if not present, create based
-  on `seeder/users.example.json`) to include a user with the `sub` of the
+- Adapt the test user data in `src/seeder/users.json` (if not present, create based
+  on `src/seeder/users.example.json`) to include a user with the `sub` of the
   Keycloak user created earlier; adapt the `allelesFile` name to the file name
   you uploaded
 - Run the seeder with `yarn seed:run`
