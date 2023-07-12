@@ -83,27 +83,19 @@ data with the will result in an `wrong ISS` error.
   and `MINIO_ROOT_PASSWORD` set in the `.env` file.
 - Create a bucket called `alleles`
 - Add an alleles file to the `alleles` bucket using the MinIO admin console
-- Adapt the test user data in `src/seeder/users.json` (if not present, create based
-  on `src/seeder/users.example.json`) to include a user with the `sub` of the
-  Keycloak user created earlier; adapt the `allelesFile` name to the file name
-  you uploaded
+- Adapt the test user data in `src/seeder/users.json` (if not present, create
+  based on `src/seeder/users.example.json`) to include a user with the `sub` of
+  the Keycloak user created earlier; adapt the `allelesFile` name to the file
+  name you uploaded
 - Run the seeder with `yarn seed:run`
 
 ## Deployment
 
-_Whole Docker compose setup is currently not working; unable to connect to the_
-_database. Instead, run the following commands:_
+_Only works on Linux due to `network_mode: host` setting._
 
-- `docker compose up -d`
-- `yarn install --frozen-lockfile`
-- `yarn run build`
-- `yarn run start:prod`
+From the project root, run
+`docker compose --file lab-server/docker-compose.yml --profile production up -d`
+to start all components.
 
-~_Only works on Linux due to `network_mode: host` setting._~
-
-~From the project root, run~
-~`docker compose --file lab-server/docker-compose.yml --profile production up`~
-~to start all components.~
-
-~The API and other components will be available under the ports specified in~
-~the `.env` file.~
+The API and other components will be available under the ports specified in
+the `.env` file.
