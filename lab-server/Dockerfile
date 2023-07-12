@@ -20,6 +20,7 @@ WORKDIR /app
 COPY ./package.json ./yarn.lock ./
 
 COPY ./lab-server/package.json ./lab-server/package.json
+COPY ./lab-server/.env ./lab-server/.env
 RUN yarn workspace lab-server --production=true --frozen-lockfile install && yarn cache clean
 COPY --from=builder /app/lab-server/dist ./lab-server/dist
 

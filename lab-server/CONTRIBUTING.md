@@ -21,13 +21,13 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 - Run `yarn` to install the project dependencies
 - Start the server using `yarn start:dev` (uses `docker compose up -d`)
 - To test the application, send a GET request to
-  `http://localhost:3001/api/v1/health` in order to verify that the lab server
-  is up and running
+  `http://localhost:8081/api/v1/health` in order to verify that the lab server
+  is up and running (or different port, if changed in `.env`)
 - Complete the [Keycloak setup (local)](#keycloak-setup-local) and
   [MinIO and test user setup (local)](#minio-and-test-user-setup-local)
 - If everything was setup correctly you can (1) get an access token from
   Keycloak and (2) use this token to make a request to the lab server under the
-  route `http://localhost:3001/api/v1/star-alleles`
+  route `http://localhost:8081/api/v1/star-alleles`
 
 ### Keycloak setup (local)
 
@@ -99,20 +99,11 @@ _database. Instead, run the following commands:_
 - `yarn run build`
 - `yarn run start:prod`
 
+~_Only works on Linux due to `network_mode: host` setting._~
+
 ~From the project root, run~
 ~`docker compose --file lab-server/docker-compose.yml --profile production up`~
 ~to start all components.~
 
-~_Note: removed the .env file from the Dockerfile to fix workflow; should set_~
-~_variables in `docker-compose.yml` when attemting to fix this whole setup._~
-
 ~The API and other components will be available under the ports specified in~
 ~the `.env` file.~
-
-~Make sure that all mentions of `localhost` (including `0.0.0.0` or~
-~`127.0.0.1`) point to the respective service name in the~
-~`docker-compose.yml`:~
-
-- ~`localhost` in `KEYCLOAK_AUTH_SERVER_URL` to `keycloak`~
-- ~`DB_HOST` to `lab-server-db`~
-- ~`MINIO_ENDPOINT` to `minio`~

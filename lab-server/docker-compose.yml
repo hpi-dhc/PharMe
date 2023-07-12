@@ -3,8 +3,22 @@ services:
         build:
             dockerfile: ./lab-server/Dockerfile
             context: ../
-        ports:
-            - ${PRODUCTION_API_PORT}:3001
+        network_mode: host
+        environment:
+            - PORT=${PORT}
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=${DB_PORT}
+            - DB_USER=${DB_USER}
+            - DB_PASS=${DB_PASS}
+            - DB_NAME=${DB_NAME}
+            - KEYCLOAK_AUTH_SERVER_URL=${KEYCLOAK_AUTH_SERVER_URL}
+            - KEYCLOAK_REALM=${KEYCLOAK_REALM}
+            - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
+            - KEYCLOAK_SECRET=${KEYCLOAK_SECRET}
+            - MINIO_PORT=${MINIO_PORT}
+            - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+            - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+            - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
         depends_on:
             - lab-server-db
         profiles:
