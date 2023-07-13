@@ -9,7 +9,7 @@ export default class CreateUsers implements Seeder {
     public async run(_: Factory, connection: Connection): Promise<void> {
         const USER_FILE = 'src/seeder/users.json';
         if (!fs.existsSync(USER_FILE)) {
-            fs.copyFileSync('seeder/users.example.json', USER_FILE);
+            fs.copyFileSync('src/seeder/users.example.json', USER_FILE);
         }
         const seedUserData = JSON.parse(fs.readFileSync(USER_FILE, 'utf-8'));
         const seedUsers: User[] = seedUserData.map((userData: object) => ({
