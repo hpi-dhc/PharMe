@@ -99,7 +99,7 @@ def get_phenotype_key(guideline):
 
 def get_information_key(external_data):
     information_key = external_data['comments'] \
-        if external_data['comments'] != None \
+        if 'comments' in external_data and external_data['comments'] != None \
         else ''
     information_key += external_data['recommendation']
     information_key += dict_to_key(external_data['implications'])
