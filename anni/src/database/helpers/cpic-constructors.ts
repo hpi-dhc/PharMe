@@ -140,6 +140,7 @@ export interface DrugWithGuidelines {
     drug: IDrug_Any;
     guidelines: Array<IGuideline_Any>;
 }
+
 export function getDrugsWithContractedGuidelines(
     recommendations: Array<CpicRecommendation>,
     source: string,
@@ -161,4 +162,15 @@ export function getDrugsWithContractedGuidelines(
     return contractByInformation(
         contractByPhenotype(Array.from(drugIdMap.values())),
     );
+}
+
+export function getAdditionalDrugs(
+    drugs: Array<CpicRecommendation>,
+): Array<DrugWithGuidelines> {
+    return drugs.map((drug) => {
+        return {
+            drug: drugFromRecommendation(drug),
+            guidelines: [],
+        };
+    });
 }

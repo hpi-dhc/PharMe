@@ -11,6 +11,7 @@ import {
 import dbConnect from '../../database/helpers/connect';
 import {
     DrugWithGuidelines,
+    getAdditionalDrugs,
     getDrugsWithContractedGuidelines,
 } from '../../database/helpers/cpic-constructors';
 import Drug from '../../database/models/Drug';
@@ -52,10 +53,11 @@ const getAdditionalData = async (): Promise<DrugWithGuidelines[][]> => {
                 const response = await gh.get<CpicRecommendation[]>(
                     item.download_url,
                 );
-                return getDrugsWithContractedGuidelines(
-                    response.data,
-                    item.name.replace(/\.json$/, ''),
-                );
+                const source = item.name.replace(/\.json$/, '');
+                if (source == 'additional_drugs') {
+                    return getAdditionalDrugs(response.data);
+                }
+                return getDrugsWithContractedGuidelines(response.data, source);
             }),
     );
 };
