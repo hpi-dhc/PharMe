@@ -1,20 +1,31 @@
 import sys
-from common.constants import DRUG_COLLECTION_NAME
+from common.constants import DRUG_COLLECTION_NAME, SCRIPT_POSTFIXES, \
+    BRICK_COLLECTION_NAME
 from common.get_data import get_data, get_guideline_by_id, get_phenotype_key
+from common.write_data import write_data
 
-def get_unique_item(items, field_name, value):
-    item = list(filter(lambda item: item[field_name] == value, items))
+CONSULT_TEXT = 'consult your pharmacist or doctor'
+
+def ensure_unique_item(item_filter, field_name, value):
+    item = list(item_filter)
     if len(item) != 1:
         message = f'[ERROR] Items are not unique for {field_name} == ' \
             f'{value}: {item}'
         raise Exception(message)
     return item[0]
 
+def get_unique_item(items, field_name, value):
+    item_filter = filter(lambda item: item[field_name] == value, items)
+    return ensure_unique_item(item_filter, field_name, value)
+
+def get_english_text(brick):
+    translation = get_unique_item(brick['translations'], 'language', 'English')
+    return translation['text'].lower()
+
 def get_brick_meaning(data, brick_id):
-    bricks = data['TextBrick']
+    bricks = data[BRICK_COLLECTION_NAME]
     brick = get_unique_item(bricks, '_id', brick_id)
-    meaning = get_unique_item(brick['translations'], 'language', 'English')
-    return meaning['text']
+    return get_english_text(brick)
 
 def get_bricks_meaning(data, brick_ids):
     return ' '.join(map(
@@ -25,7 +36,7 @@ def get_annotation(data, guideline, key, resolve=True):
     if not key in guideline['annotations']: return None
     annotation = guideline['annotations'][key]
     if resolve: annotation = get_bricks_meaning(data, annotation)
-    return annotation.lower()
+    return annotation
 
 def get_annotations(data, guideline):
     return {
@@ -36,7 +47,7 @@ def get_annotations(data, guideline):
     }
 
 def has_consult(annotations):
-    return 'consult your pharmacist or doctor' in annotations['recommendation']
+    return CONSULT_TEXT in annotations['recommendation']
 
 def analyze_guideline_annotations(annotations):
     checks = {
@@ -46,6 +57,22 @@ def analyze_guideline_annotations(annotations):
     for check_name, check_function in checks.items():
         results[check_name] = check_function(annotations)
     return results
+
+def get_consult_brick(data):
+    brick_filter = filter(
+        lambda brick: get_english_text(brick).startswith(CONSULT_TEXT),
+        data[BRICK_COLLECTION_NAME])
+    return ensure_unique_item(brick_filter, 'brick meaning', CONSULT_TEXT)
+
+def add_consult(data, guideline):
+    guideline['annotations']['recommendation'].append(
+        get_consult_brick(data)['_id'])
+
+def correct_inconsistency(data, guideline, check_name):
+    corrections = {
+        'has_consult': add_consult,
+    }
+    corrections[check_name](data, guideline)
 
 def main():
     correct_inconsistencies = '--correct' in sys.argv
@@ -66,11 +93,16 @@ def main():
             phenotype = get_phenotype_key(guideline)
             if not all(result.values()):
                 for check_name, check_result in result.items():
-                    message = f'[FAILED CHECK] for {drug_name} – {phenotype}' \
-                        f': {check_name}'
-                    print(message)      
+                    if check_result == False:
+                        message = f'[FAILED CHECK] for {drug_name} – ' \
+                            f'{phenotype}: {check_name}'
+                        print(message)
+                        if correct_inconsistencies:
+                            correct_inconsistency(data, guideline, check_name)
             results[drug_name][phenotype] = result
-    # TODO: correct and write data if correct_inconsistencies
+
+    if correct_inconsistencies:
+        write_data(data, postfix=SCRIPT_POSTFIXES['correct'])
 
 if __name__ == '__main__':
     main()
