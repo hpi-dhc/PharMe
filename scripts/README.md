@@ -72,5 +72,6 @@ Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations and
 optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64`.
 
-To see which inconsistencies are analyzed or corrected, see
-`analyze_guideline_annotations` and `correct_inconsistency`.
+| Check | Description | `--correct` |
+| ----- | ----------- | ----------- |
+| `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ |
