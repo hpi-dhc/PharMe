@@ -65,3 +65,9 @@ Run `python encode.py <PATH_TO_BACKUP>.json` to receive
 Run `python clean.py` to remove the `scripts/temp` directory and all files in
 `scripts/` containing a postfix defined in `SCRIPT_POSTFIXES` (see
 `common.constants`).
+
+## Analyze (and correct) annotations
+
+Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations and
+optionally correct what can be corrected easily in
+`<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64`.

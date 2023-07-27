@@ -10,6 +10,7 @@ SCRIPT_POSTFIXES = {
     'decode': '_decoded',
     'update': '_updated',
     'encode': '_encoded',
+    'correct': '_corrected',
 }
 
 DRUG_COLLECTION_NAME = 'Drug'
