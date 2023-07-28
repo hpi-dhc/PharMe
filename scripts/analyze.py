@@ -36,19 +36,31 @@ def get_bricks_meaning(data, brick_ids):
         lambda brick_id: get_brick_meaning(data, brick_id),
         brick_ids))
 
-def get_annotation(data, guideline, key, resolve=True):
-    if not key in guideline['annotations']: return None
-    annotation = guideline['annotations'][key]
+def get_annotation(data, item, key, resolve=True):
+    if not key in item['annotations']: return None
+    annotation = item['annotations'][key]
     if resolve: annotation = get_bricks_meaning(data, annotation)
     return annotation
 
-def get_annotations(data, guideline):
+def get_guideline_annotations(data, guideline):
     return {
         'implication': get_annotation(data, guideline, 'implication'),
         'recommendation': get_annotation(data, guideline, 'recommendation'),
         'warning_level': get_annotation(data, guideline, 'warningLevel',
             resolve=False)
     }
+
+def get_drug_annotations(data, drug):
+    return {
+        'drugclass': get_annotation(data, drug, 'drugclass'),
+        'indication': get_annotation(data, drug, 'indication'),
+        'brand_names': get_annotation(data, drug, 'brandNames', resolve=False)
+    }
+
+def has_annotations(annotations):
+    return all(list(map(
+        lambda value: value != None,
+        annotations.values())))
 
 def has_consult(_, annotations):
     return CONSULT_TEXT in annotations['recommendation']
@@ -96,10 +108,10 @@ def check_green_warning_level(_, annotations):
         and not ADJUST_TEXT in annotations['recommendation']
     return has_warning_level == should_have_warning_level
 
-def analyze_guideline_annotations(guideline, annotations):
+def analyze_annotations(item, annotations, checks):
     results = {}
-    for check_name, check_function in GUIDELINE_CHECKS.items():
-        results[check_name] = check_function(guideline, annotations)
+    for check_name, check_function in checks.items():
+        results[check_name] = check_function(item, annotations)
     return results
 
 def get_consult_brick(data):
@@ -111,11 +123,59 @@ def get_consult_brick(data):
 def add_consult(data, guideline):
     guideline['annotations']['recommendation'].append(
         get_consult_brick(data)['_id'])
+    
+def check_brand_name_whitespace(_, annotations):
+    check_applies = True
+    for brand_name in annotations['brand_names']:
+        trimmed_name = brand_name.strip()
+        if trimmed_name != brand_name:
+            check_applies = False
+            break
+    return check_applies
 
-def correct_inconsistency(data, guideline, check_name):
-    if check_name in GUIDELINE_CORRECTIONS:
-        GUIDELINE_CORRECTIONS[check_name](data, guideline)
+def correct_brand_name_whitespace(_, drug):
+    drug['annotations']['brandNames'] = list(map(
+        lambda brand_name: brand_name.strip(),
+        drug['annotations']['brandNames']))
 
+def correct_inconsistency(data, item, check_name, corrections):
+    if check_name in corrections:
+        corrections[check_name](data, item)
+    return check_name in corrections
+
+def log_not_annotated(log_content):
+    log_content.append(' – _not annotated_\n')
+
+def log_all_passed(log_content):
+    log_content.append(' – _all checks passed_\n')
+
+def log_annotations(log_content, annotations):
+    for key, value in annotations.items():
+        pretty_key = key.capitalize().replace('_', ' ')
+        log_content.append(f'   {pretty_key}: {value}\n')
+
+def handle_failed_checks(
+    data, item, result, corrections, should_correct, annotations, log_content):
+    failed_checks = []
+    for check_name, check_result in result.items():
+        if check_result == False:
+            corrected = should_correct and \
+                correct_inconsistency(data, item,
+                    check_name, corrections)
+            check_name = f'{check_name} (corrected)' if corrected \
+                else check_name
+            failed_checks.append(check_name)
+    log_content.append(' - _some checks failed_: ' \
+        f'{", ".join(failed_checks)}\n')
+    log_annotations(log_content, annotations)
+
+DRUG_CHECKS = {
+    'brand_whitespace': check_brand_name_whitespace,
+}
+
+DRUG_CORRECTIONS = {
+    'brand_whitespace': correct_brand_name_whitespace,
+}
 
 GUIDELINE_CHECKS = {
     'has_consult': has_consult,
@@ -132,43 +192,41 @@ GUIDELINE_CORRECTIONS = {
 def main():
     correct_inconsistencies = '--correct' in sys.argv
     data = get_data()
-    results = {}
     log_content = [
         '# Analyze annotation data\n\n',
         f'_Correct if possible: {correct_inconsistencies}_\n\n'
     ]
     for drug in data[DRUG_COLLECTION_NAME]:
         drug_name = drug['name']
-        log_content.append(f'* {drug_name}\n')
+        log_content.append(f'* {drug_name}')
+        drug_annotations = get_drug_annotations(data, drug)
+        if not has_annotations(drug_annotations): log_not_annotated(log_content)
+        else:
+            drug_result = analyze_annotations(
+                drug, drug_annotations, DRUG_CHECKS)
+            if not all(drug_result.values()):
+                handle_failed_checks(data, drug, drug_result,
+                    DRUG_CORRECTIONS, correct_inconsistencies,
+                    drug_annotations, log_content)
+            else:
+                log_all_passed(log_content)
         for guideline_id in drug['guidelines']:
             guideline = get_guideline_by_id(data, guideline_id)
             phenotype = get_phenotype_key(guideline)
             log_content.append(f'  * {phenotype}')
-            annotations = get_annotations(data, guideline)
-            no_annotations = all(list(map(
-                lambda value: value == None,
-                annotations.values())))
-            if no_annotations:
-                log_content.append(' – _not annotated_\n')
+            guideline_annotations = get_guideline_annotations(data, guideline)
+            if not has_annotations(guideline_annotations):
+                log_not_annotated(log_content)
                 continue
-            result = analyze_guideline_annotations(guideline, annotations)
-            if result == None: continue
-            if not all(result.values()):
-                failed_checks = []
-                for check_name, check_result in result.items():
-                    if check_result == False:
-                        if correct_inconsistencies and \
-                            check_name in GUIDELINE_CORRECTIONS:
-                            correct_inconsistency(data, guideline, check_name)
-                            check_name = f'{check_name} (corrected)'
-                        failed_checks.append(check_name)
-                log_content.append(' - _some checks failed_: ' \
-                    f'{", ".join(failed_checks)}\n')
-                log_content.append(f'    Warning level: {annotations["warning_level"]}\n')
-                log_content.append(f'    Implication: {annotations["implication"]}\n')
-                log_content.append(f'    Recommendation: {annotations["recommendation"]}\n')
+            guideline_result = analyze_annotations(
+                guideline, guideline_annotations, GUIDELINE_CHECKS)
+            if guideline_result == None: continue
+            if not all(guideline_result.values()):
+                handle_failed_checks(data, guideline, guideline_result,
+                    GUIDELINE_CORRECTIONS, correct_inconsistencies,
+                    guideline_annotations, log_content)
             else:
-                log_content.append(' – _all checks passed_\n')
+                log_all_passed(log_content)
 
     write_log(log_content, postfix=SCRIPT_POSTFIXES['correct'])
     if correct_inconsistencies:
