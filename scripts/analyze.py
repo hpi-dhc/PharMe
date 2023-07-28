@@ -46,16 +46,40 @@ def get_annotations(data, guideline):
             resolve=False)
     }
 
-def has_consult(annotations):
+def has_consult(_, annotations):
     return CONSULT_TEXT in annotations['recommendation']
 
-def analyze_guideline_annotations(annotations):
+def check_implication_severity(guideline, annotations):
+    phenotype = get_phenotype_key(guideline).lower()
+    check_applies = True
+    gene_number = len(guideline['phenotypes'].keys())
+    missing_genes = phenotype.count('no result') + \
+        phenotype.count('indeterminate')
+    if gene_number - missing_genes != 1:
+        return check_applies
+    severity_rules = [
+        { 'much': True, 'phenotype': 'ultrarapid', 'implication': 'faster' },
+        { 'much': True, 'phenotype': 'poor', 'implication': 'slower' },
+        { 'much': False, 'phenotype': 'rapid', 'implication': 'faster' },
+        { 'much': False, 'phenotype': 'intermediate', 'implication': 'slower' },
+    ]
+    for severity_rule in severity_rules:
+        rule_broken = severity_rule['phenotype'] in phenotype and \
+            severity_rule['implication'] in annotations['implication'] and \
+                severity_rule['much'] != 'much' in annotations['implication']
+        if rule_broken:
+            check_applies = False
+            break
+    return check_applies
+
+def analyze_guideline_annotations(guideline, annotations):
     checks = {
         'has_consult': has_consult,
+        'implication_severity': check_implication_severity,
     }
     results = {}
     for check_name, check_function in checks.items():
-        results[check_name] = check_function(annotations)
+        results[check_name] = check_function(guideline, annotations)
     return results
 
 def get_consult_brick(data):
@@ -72,7 +96,8 @@ def correct_inconsistency(data, guideline, check_name):
     corrections = {
         'has_consult': add_consult,
     }
-    corrections[check_name](data, guideline)
+    if check_name in corrections:
+        corrections[check_name](data, guideline)
 
 def main():
     correct_inconsistencies = '--correct' in sys.argv
@@ -88,7 +113,7 @@ def main():
             if all(list(map(
                 lambda value: value == None,
                 annotations.values()))): continue
-            result = analyze_guideline_annotations(annotations)
+            result = analyze_guideline_annotations(guideline, annotations)
             if result == None: continue
             phenotype = get_phenotype_key(guideline)
             if not all(result.values()):

@@ -72,6 +72,7 @@ Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations and
 optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64`.
 
-| Check | Description | `--correct` |
-| ----- | ----------- | ----------- |
+| Check | Description | `--correct`ed |
+| ----- | ----------- | ------------- |
 | `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ |
+| `implication_severity` | Poor/ultrarapid phenotypes with "faster" or "slower" implication should have "much" keyword, intermediate/rapid not. Skips guidelines with multiple genes unless all results but one are missing or indeterminate. | ❌ |
