@@ -2,9 +2,13 @@ import sys
 from common.constants import DRUG_COLLECTION_NAME, SCRIPT_POSTFIXES, \
     BRICK_COLLECTION_NAME
 from common.get_data import get_data, get_guideline_by_id, get_phenotype_key
-from common.write_data import write_data
+from common.write_data import write_data, write_log
 
 CONSULT_TEXT = 'consult your pharmacist or doctor'
+RED_TEXT = 'may not be the right medication'
+ADJUST_TEXT = 'adjusted'
+YELLOW_TEXTS = [ADJUST_TEXT, 'higher', 'lower']
+GREEN_TEXT = 'at standard dose'
 
 def ensure_unique_item(item_filter, field_name, value):
     item = list(item_filter)
@@ -58,27 +62,43 @@ def check_implication_severity(guideline, annotations):
     if gene_number - missing_genes != 1:
         return check_applies
     severity_rules = [
-        { 'much': True, 'phenotype': 'ultrarapid', 'implication': 'faster' },
-        { 'much': True, 'phenotype': 'poor', 'implication': 'slower' },
-        { 'much': False, 'phenotype': 'rapid', 'implication': 'faster' },
-        { 'much': False, 'phenotype': 'intermediate', 'implication': 'slower' },
+        { 'has_much': True, 'phenotype': 'ultrarapid', 'implication': 'faster' },
+        { 'has_much': True, 'phenotype': 'poor', 'implication': 'slower' },
+        { 'has_much': False, 'phenotype': 'rapid', 'implication': 'faster' },
+        { 'has_much': False, 'phenotype': 'intermediate', 'implication': 'slower' },
     ]
     for severity_rule in severity_rules:
+        if severity_rule['phenotype'] == 'rapid' and 'ultrarapid' in phenotype:
+            continue
         rule_broken = severity_rule['phenotype'] in phenotype and \
             severity_rule['implication'] in annotations['implication'] and \
-                severity_rule['much'] != 'much' in annotations['implication']
+                severity_rule['has_much'] != ('much' in annotations['implication'])
         if rule_broken:
             check_applies = False
             break
     return check_applies
 
+def check_red_warning_level(_, annotations):
+    has_warning_level = annotations['warning_level'] == 'red'
+    should_have_warning_level = RED_TEXT in annotations['recommendation']
+    return has_warning_level == should_have_warning_level
+
+def check_yellow_warning_level(_, annotations):
+    has_warning_level = annotations['warning_level'] == 'yellow'
+    should_have_warning_level = any(map(
+        lambda yellow_text: yellow_text in annotations['recommendation'],
+        YELLOW_TEXTS)) and not RED_TEXT in annotations['recommendation']
+    return has_warning_level if should_have_warning_level else True
+
+def check_green_warning_level(_, annotations):
+    has_warning_level = annotations['warning_level'] == 'green'
+    should_have_warning_level = GREEN_TEXT in annotations['recommendation'] \
+        and not ADJUST_TEXT in annotations['recommendation']
+    return has_warning_level == should_have_warning_level
+
 def analyze_guideline_annotations(guideline, annotations):
-    checks = {
-        'has_consult': has_consult,
-        'implication_severity': check_implication_severity,
-    }
     results = {}
-    for check_name, check_function in checks.items():
+    for check_name, check_function in GUIDELINE_CHECKS.items():
         results[check_name] = check_function(guideline, annotations)
     return results
 
@@ -93,39 +113,64 @@ def add_consult(data, guideline):
         get_consult_brick(data)['_id'])
 
 def correct_inconsistency(data, guideline, check_name):
-    corrections = {
-        'has_consult': add_consult,
-    }
-    if check_name in corrections:
-        corrections[check_name](data, guideline)
+    if check_name in GUIDELINE_CORRECTIONS:
+        GUIDELINE_CORRECTIONS[check_name](data, guideline)
+
+
+GUIDELINE_CHECKS = {
+    'has_consult': has_consult,
+    'implication_severity': check_implication_severity,
+    'red_warning_level': check_red_warning_level,
+    'yellow_warning_level': check_yellow_warning_level,
+    'green_warning_level': check_green_warning_level,
+}
+
+GUIDELINE_CORRECTIONS = {
+    'has_consult': add_consult,
+}
 
 def main():
     correct_inconsistencies = '--correct' in sys.argv
     data = get_data()
     results = {}
+    log_content = [
+        '# Analyze annotation data\n\n',
+        f'_Correct if possible: {correct_inconsistencies}_\n\n'
+    ]
     for drug in data[DRUG_COLLECTION_NAME]:
         drug_name = drug['name']
-        results[drug_name] = {}
+        log_content.append(f'* {drug_name}\n')
         for guideline_id in drug['guidelines']:
             guideline = get_guideline_by_id(data, guideline_id)
-            if not 'annotations' in guideline: continue
+            phenotype = get_phenotype_key(guideline)
+            log_content.append(f'  * {phenotype}')
             annotations = get_annotations(data, guideline)
-            if all(list(map(
+            no_annotations = all(list(map(
                 lambda value: value == None,
-                annotations.values()))): continue
+                annotations.values())))
+            if no_annotations:
+                log_content.append(' – _not annotated_\n')
+                continue
             result = analyze_guideline_annotations(guideline, annotations)
             if result == None: continue
-            phenotype = get_phenotype_key(guideline)
             if not all(result.values()):
+                failed_checks = []
                 for check_name, check_result in result.items():
                     if check_result == False:
-                        message = f'[FAILED CHECK] for {drug_name} – ' \
-                            f'{phenotype}: {check_name}'
-                        print(message)
-                        if correct_inconsistencies:
+                        if correct_inconsistencies and \
+                            check_name in GUIDELINE_CORRECTIONS:
                             correct_inconsistency(data, guideline, check_name)
-            results[drug_name][phenotype] = result
+                            check_name = f'{check_name} (corrected)'
+                        failed_checks.append(check_name)
+                log_content.append(' - _some checks failed_: ' \
+                    f'{", ".join(failed_checks)}\n')
+                log_content.append(f'    Warning level: {annotations["warning_level"]}\n')
+                log_content.append(f'    Implication: {annotations["implication"]}\n')
+                log_content.append(f'    Recommendation: {annotations["recommendation"]}\n')
+            else:
+                log_content.append(' – _all checks passed_\n')
 
+    write_log(log_content, postfix=SCRIPT_POSTFIXES['correct'])
     if correct_inconsistencies:
         write_data(data, postfix=SCRIPT_POSTFIXES['correct'])
 

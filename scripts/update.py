@@ -11,7 +11,7 @@ from common.constants import GUIDELINE_COLLECTION_NAME
 from common.constants import NON_RESULT_PHENOTYPES
 from common.constants import get_history_collection_name
 from common.constants import SCRIPT_POSTFIXES
-from common.write_data import write_data
+from common.write_data import write_data, write_log
 from common.write_data import get_output_file_path
 
 VERBOSE = False
@@ -329,15 +329,6 @@ def add_log_content(log_content, new_content):
         log_content += new_content
     return log_content
 
-def write_log(log_content):
-    log_file_postfix = SCRIPT_POSTFIXES['update']+ '_log'
-    log_file_ending = '.md'
-    log_file_path = get_output_file_path(
-        postfix=log_file_postfix,
-        file_ending=log_file_ending)
-    with open(log_file_path, 'w') as log_file:
-        log_file.writelines(log_content)
-
 def update_data():
     data = get_data()
     updated_external_data = get_data(argv_index = 2)
@@ -355,7 +346,7 @@ def update_data():
     log_content = add_log_content(log_content, remove_log)
 
     write_data(data, postfix=SCRIPT_POSTFIXES['update'])
-    write_log(log_content)
+    write_log(log_content, postfix=SCRIPT_POSTFIXES['update'])
 
 if __name__ == '__main__':
     update_data()

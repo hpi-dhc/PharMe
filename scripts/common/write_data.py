@@ -46,3 +46,12 @@ def write_data(data, postfix=''):
     with open(zip_temp_path, 'rb') as zip_file:
         with open(output_path, 'wb') as base64_file:
             base64.encode(zip_file, base64_file)
+
+def write_log(log_content, postfix):
+    log_file_postfix = postfix + '_log'
+    log_file_ending = '.md'
+    log_file_path = get_output_file_path(
+        postfix=log_file_postfix,
+        file_ending=log_file_ending)
+    with open(log_file_path, 'w') as log_file:
+        log_file.writelines(log_content)
