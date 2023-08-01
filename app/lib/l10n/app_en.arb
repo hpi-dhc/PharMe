@@ -55,7 +55,7 @@
   "drugs_page_active_warn": "This may adjust the guidelines you receive for other drugs.",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
-  "drugs_page_no_guidelines_for_phenotype": "More information is needed to comment on your DNA's influence on {drugName}. No recommendation can be made at this time.",
+  "drugs_page_no_guidelines_for_phenotype": "More information is needed to comment on your DNA's influence on {drugName}. No recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
   "@drugs_page_sources_description": {
       "description": "Instructions to open external source",
