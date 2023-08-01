@@ -13,7 +13,10 @@ class FaqPage extends StatelessWidget {
           key: Key('questionsColumn'),
           children: [
             SizedBox(height: 8),
-            ...faqList.map((item) => _buildQuestion(context, item)).toList(),
+            ...faqList.keys.fold<List<Widget>>(
+              [], (widgets, topic) =>
+                [...widgets, ..._buildTopic(context, topic, faqList[topic]!)]
+            ),
             Divider(),
             ListTile(
                 title: Text(context.l10n.faq_contact_us),
@@ -23,6 +26,23 @@ class FaqPage extends StatelessWidget {
         ),
       ),
     ]);
+  }
+
+  List<Widget> _buildTopic(
+    BuildContext context,
+    String topicName,
+    List<Question> questions
+  ) {
+    return [
+      ListTile(
+        title: Text(
+          topicName,
+          style: PharMeTheme.textTheme.bodyMedium,
+        ),
+        dense: true,
+      ),
+      ...questions.map((question) => _buildQuestion(context, question)).toList()
+    ];
   }
 
   Widget _buildQuestion(BuildContext context, Question question) {

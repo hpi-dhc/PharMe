@@ -30,6 +30,10 @@ void main() {
       await tester.pumpWidget(faqWidget);
       await tester.pumpAndSettle();
 
+      final expectedNumberOfQuestions = faqList.keys.fold<int>(
+        0, (number, topic) => number + faqList[topic]!.length
+      );
+
       expect(
         find
             .descendant(
@@ -38,16 +42,17 @@ void main() {
             )
             .evaluate()
             .length,
-        faqList.length,
+        expectedNumberOfQuestions,
       );
 
-      expect(find.text(faqList[0].question), findsOneWidget);
-      expect(find.text(faqList[0].answer), findsNothing);
+      final firstQuestion = faqList[faqList.keys.first]![0];
+      expect(find.text(firstQuestion.question), findsOneWidget);
+      expect(find.text(firstQuestion.answer), findsNothing);
 
       await tester.tap(find.byType(ExpansionTile).first);
       await tester.pumpAndSettle();
 
-      expect(find.text(faqList[0].answer), findsOneWidget);
+      expect(find.text(firstQuestion.answer), findsOneWidget);
     });
   });
 }
