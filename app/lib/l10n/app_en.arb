@@ -45,7 +45,17 @@
       }
   },
   "drugs_page_your_genome": "Your genome",
-  "drugs_page_header_further_info": "Further Information",
+  "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
+  "@drugs_page_guidelines_empty": {
+    "description": "Disclaimer for when the phenotype has been adjusted based on a current drug",
+    "placeholders": {
+        "drugName": {
+            "type": "String",
+            "example": "bupropion"
+        }
+    }
+},
+  "drugs_page_header_further_info": "Further information",
   "drugs_page_header_synonyms": "Synonyms",
   "drugs_page_header_drugclass": "Drug class",
   "drugs_page_header_drug": "Drug",
@@ -56,8 +66,8 @@
   "drugs_page_active_warn": "This may adjust the guidelines you receive for other drugs.",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
-  "drugs_page_no_guidelines_for_phenotype": "More information is needed to comment on your DNA's influence on {drugName}. No recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
-  "@drugs_page_no_guidelines_for_phenotype": {
+  "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
+  "@drugs_page_no_guidelines_for_phenotype_implication": {
     "description": "Disclaimer for when no guidelines was found for the current drug based on the user's phenotype",
     "placeholders": {
         "drugName": {
@@ -65,7 +75,8 @@
             "example": "bupropion"
         }
     }
-},
+  },
+  "drugs_page_no_guidelines_for_phenotype_recommendation": "No recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
   "@drugs_page_sources_description": {
       "description": "Instructions to open external source",
@@ -79,6 +90,7 @@
   "drugs_page_tooltip_classification": "The evidence level of a guideline represents how accepted it is by science. Guidelines with a lot of good studies supporting them have a high evidence level.",
   "drugs_page_tooltip_further_info": "The results shown here are based on data from pharmacogenomic organizations like CPIC or PharmGKB. Check them out yourself by clicking on the buttons below! Also see the PGx-Tab for more information.",
   "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
+  "drugs_page_cast_indeterminate": "Indeterminate",
 
   "gene_page_headline": "{geneSymbol} report",
   "@gene_page_headline": {

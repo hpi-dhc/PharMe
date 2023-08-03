@@ -171,6 +171,12 @@ List<pw.Widget> _buildUserPart(
     'green': '✅',
     null: '❔',
   };
+  final implication = userGuideline?.annotations.implication ??
+    buildContext.l10n.drugs_page_no_guidelines_for_phenotype_implication(
+      drug.name
+    );
+  final recommendation = userGuideline?.annotations.recommendation ??
+    buildContext.l10n.drugs_page_no_guidelines_for_phenotype_recommendation;
   return [
     _buildSubheading(buildContext.l10n.pdf_heading_user_data),
     _buildTextBlockSpacer(),
@@ -198,10 +204,7 @@ List<pw.Widget> _buildUserPart(
     _PdfSegment(
       child: _PdfDescription(
         title: buildContext.l10n.pdf_user_guideline,
-        text:  userGuideline != null ?
-          '${userGuideline.annotations.implication} '
-            ' ${userGuideline.annotations.recommendation}' :
-          buildContext.l10n.drugs_page_no_guidelines_for_phenotype(drug.name),
+        text: '$implication $recommendation',
         icon: warningLevelIcons[userGuideline?.annotations.warningLevel.name],
         emojiFont: emoji,
       ),

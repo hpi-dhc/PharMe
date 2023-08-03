@@ -4,9 +4,10 @@ import '../../../../module.dart';
 import '../sub_header.dart';
 
 class GuidelineAnnotationCard extends StatelessWidget {
-  const GuidelineAnnotationCard(this.guideline);
+  const GuidelineAnnotationCard(this.guideline, { this.drug });
 
-  final Guideline guideline;
+  final Guideline? guideline;
+  final Drug? drug;
 
   @override
   Widget build(BuildContext context) {
@@ -16,63 +17,91 @@ class GuidelineAnnotationCard extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _buildHeader(context),
           SizedBox(height: 12),
-          _buildCard(context),
-          SizedBox(height: 8),
-          Divider(color: PharMeTheme.borderColor),
-          SizedBox(height: 8),
-          _buildSourcesSection(context),
-          SizedBox(height: 12),
+          if (guideline != null) ...[
+            _buildCard(context),
+            SizedBox(height: 8),
+            Divider(color: PharMeTheme.borderColor),
+            SizedBox(height: 8),
+            _buildSourcesSection(context),
+            SizedBox(height: 12),
+          ]
+          else ...[
+            _buildCard(context),
+            SizedBox(height: 16),
+          ],
         ]),
       ),
     );
   }
 
   Widget _buildCard(BuildContext context) {
+    final warningLevel = guideline?.annotations.warningLevel;
+    final upperCardText = guideline?.annotations.implication ??
+      context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
+        drug!.name
+      );
+    final lowerCardText = guideline?.annotations.recommendation ??
+      context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation;
     return Card(
         key: Key('annotationCard'),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        color: guideline.annotations.warningLevel.color,
+        color: warningLevel?.color ?? PharMeTheme.indeterminateColor,
         child: Padding(
             padding: EdgeInsets.all(12),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
-                Icon(guideline.annotations.warningLevel.icon,
+                Icon(warningLevel?.icon ?? indeterminateIcon,
                     color: PharMeTheme.onSurfaceText),
                 SizedBox(width: 12),
                 Flexible(
                   child: Text(
-                    guideline.annotations.implication,
+                    upperCardText,
                     style: PharMeTheme.textTheme.bodyMedium,
                   ),
                 )
               ]),
               SizedBox(height: 12),
               Text(
-                guideline.annotations.recommendation,
+                lowerCardText,
                 style: PharMeTheme.textTheme.bodyMedium,
               ),
             ])));
   }
 
   Widget _buildHeader(BuildContext context) {
-    final geneDescriptions = guideline.lookupkey.keys.map((geneSymbol) {
-      final overwritingDrug = UserData.overwrittenLookup(geneSymbol)?.key;
-      final hint = overwritingDrug.isNotNullOrEmpty
-          ? '(${context.l10n.drugs_page_overwritten_phenotype(overwritingDrug!)})'
-          : '';
-      final genePhenotype =
-          '$geneSymbol: ${UserData.phenotypeFor(geneSymbol)!}';
-      return [genePhenotype, hint].join(' ');
-    });
+    var headerContent = '';
+    var headerStyle = PharMeTheme.textTheme.bodyLarge!;
+    if (guideline == null && drug!.guidelines.isEmpty) {
+      headerContent = context.l10n.drugs_page_guidelines_empty(drug!.name);
+      headerStyle = headerStyle.copyWith(fontStyle: FontStyle.italic);
+    } else {
+      final genes = guideline?.lookupkey.keys ??
+        drug!.guidelines.first.lookupkey.keys;
+      final geneDescriptions = genes.map((geneSymbol) {
+        final overwritingDrug = UserData.overwrittenLookup(geneSymbol)?.key;
+        final hint = overwritingDrug.isNotNullOrEmpty
+            ? ' (${
+                context.l10n.drugs_page_overwritten_phenotype(overwritingDrug!)
+              })'
+            : '';
+        final genePhenotype =
+            '$geneSymbol: ${
+              UserData.phenotypeFor(geneSymbol) ??
+                context.l10n.drugs_page_cast_indeterminate
+            }';
+        return [genePhenotype, hint].join('');
+      });
+      headerContent = geneDescriptions.join('\n');
+    }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SubHeader(context.l10n.drugs_page_your_genome),
       SizedBox(height: 12),
       Text(
-        geneDescriptions.join(', '),
-        style: PharMeTheme.textTheme.bodyLarge!,
+        headerContent,
+        style: headerStyle,
       ),
     ]);
   }
@@ -81,7 +110,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
     // pipes are illegal characters in URLs so please
     // - forgive the cheap hack or
     // - refactor by making a custom object and defining equality for it :)
-    final sources = guideline.externalData
+    final sources = guideline!.externalData
         .map((data) => '${data.source}|${data.guidelineUrl}')
         .toSet();
     return Column(children: [

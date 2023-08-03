@@ -66,6 +66,7 @@ class PharMeTheme {
 
   static const surfaceColor = Colors.white;
   static const onSurfaceColor = Color(0xffe5e5e5);
+  static const indeterminateColor = onSurfaceColor;
   static const onSurfaceText = Color(0xff444648);
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xccf52a2a);

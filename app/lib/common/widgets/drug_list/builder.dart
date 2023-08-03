@@ -72,7 +72,7 @@ class DrugCard extends StatelessWidget {
       onTap: onTap,
       padding: EdgeInsets.all(8),
       radius: 16,
-      color: warningLevel?.color ?? PharMeTheme.onSurfaceColor,
+      color: warningLevel?.color ?? PharMeTheme.indeterminateColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -81,7 +81,7 @@ class DrugCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(children: [
-                  Icon(warningLevel?.icon ?? Icons.help_outline_rounded),
+                  Icon(warningLevel?.icon ?? indeterminateIcon),
                   SizedBox(width: 4),
                   Text(
                     drug.name.capitalize(),
