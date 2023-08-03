@@ -31,21 +31,38 @@ class GenePage extends HookWidget {
                   ),
                   SizedBox(height: 12),
                   RoundedCard(
-                    child: Table(
-                      columnWidths: Map.from({
-                        0: IntrinsicColumnWidth(),
-                        1: IntrinsicColumnWidth(flex: 1),
-                      }),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildRow(
-                            context.l10n.gene_page_genotype, phenotype.genotype,
-                            tooltip: context.l10n.gene_page_genotype_tooltip),
-                        _buildRow(context.l10n.gene_page_phenotype,
-                            UserData.phenotypeFor(phenotype.geneSymbol)!,
-                            tooltip: context.l10n.gene_page_phenotype_tooltip),
-                      ],
-                    ),
-                  ),
+                        Table(
+                          columnWidths: Map.from({
+                            0: IntrinsicColumnWidth(),
+                            1: IntrinsicColumnWidth(flex: 1),
+                          }),
+                          children: [
+                            _buildRow(
+                                context.l10n.gene_page_genotype,
+                                phenotype.genotype,
+                                tooltip: context.l10n.gene_page_genotype_tooltip
+                            ),
+                            _buildRow(context.l10n.gene_page_phenotype,
+                                UserData.phenotypeFor(phenotype.geneSymbol)!,
+                                tooltip:
+                                  context.l10n.gene_page_phenotype_tooltip
+                            ),
+                          ],
+                        ),
+                        if (drugInhibitors.containsKey(phenotype.geneSymbol))
+                          ...[
+                            SizedBox(height: PharMeTheme.smallSpace),
+                            Text(context.l10n.gene_page_inhibitor_drugs),
+                            SizedBox(height: PharMeTheme.smallSpace),
+                            Text(drugInhibitors[phenotype.geneSymbol]!.keys
+                              .join(', ')
+                            ),
+                          ],
+                    ],
+                  )),
                   SizedBox(height: 12),
                   SubHeader(context.l10n.gene_page_affected_drugs,
                       tooltip: context.l10n.gene_page_affected_drugs_tooltip),

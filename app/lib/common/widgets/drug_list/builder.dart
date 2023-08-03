@@ -4,6 +4,7 @@ List<Widget> buildDrugList(
   BuildContext context,
   DrugListState state, {
   String? noDrugsMessage,
+  bool? showInfluenceOnOtherDrugs,
 }) =>
     state.when(
       initial: () => [Container()],
@@ -13,6 +14,7 @@ List<Widget> buildDrugList(
         drugs,
         filter,
         noDrugsMessage: noDrugsMessage,
+        showInfluenceOnOtherDrugs: showInfluenceOnOtherDrugs,
       ),
       loading: () => [loadingIndicator()],
     );
@@ -22,6 +24,7 @@ List<Widget> _buildDrugCards(
   List<Drug> drugs,
   FilterState filter, {
   String? noDrugsMessage,
+  bool? showInfluenceOnOtherDrugs,
 }) {
   final filteredDrugs = filter.filter(drugs);
   if (filteredDrugs.isEmpty && noDrugsMessage != null) {
@@ -49,7 +52,10 @@ List<Widget> _buildDrugCards(
                   onTap: () => context.router
                       .push(DrugRoute(drug: drug))
                       .then((_) => context.read<DrugListCubit>().search()),
-                  drug: drug)),
+                  drug: drug,
+                  showInfluenceOnOtherDrugs: showInfluenceOnOtherDrugs ?? false,
+              )
+          ),
           SizedBox(height: 12)
         ]))
   ];
@@ -59,14 +65,20 @@ class DrugCard extends StatelessWidget {
   const DrugCard({
     required this.onTap,
     required this.drug,
+    required this.showInfluenceOnOtherDrugs
   });
 
   final VoidCallback onTap;
   final Drug drug;
+  final bool showInfluenceOnOtherDrugs;
 
   @override
   Widget build(BuildContext context) {
     final warningLevel = drug.userGuideline()?.annotations.warningLevel;
+    var drugName = drug.name.capitalize();
+    if (showInfluenceOnOtherDrugs) {
+      if (isInhibitor(drug)) drugName = '$drugName *';
+    }
 
     return RoundedCard(
       onTap: onTap,
@@ -84,7 +96,7 @@ class DrugCard extends StatelessWidget {
                   Icon(warningLevel?.icon ?? indeterminateIcon),
                   SizedBox(width: 4),
                   Text(
-                    drug.name.capitalize(),
+                    drugName,
                     style: PharMeTheme.textTheme.titleMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),

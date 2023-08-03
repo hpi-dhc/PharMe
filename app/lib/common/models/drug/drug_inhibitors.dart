@@ -5,6 +5,10 @@
 
 // structure: gene symbol -> drug name -> overwriting lookupkey
 
+import 'package:dartx/dartx.dart';
+
+import 'drug.dart';
+
 const Map<String, Map<String, String>> drugInhibitors = {
   'CYP2D6': {
     // 0.0 is a lookupkey for a type of poor metabolizer
@@ -22,3 +26,15 @@ const Map<String, Map<String, String>> drugInhibitors = {
     'mirabegron': '1.0',
   }
 };
+
+
+bool isInhibitor(Drug drug) {
+  final influencingDrugs = drugInhibitors.keys.flatMap(
+    (gene) => drugInhibitors[gene]!.keys);
+  return influencingDrugs.contains(drug.name);
+}
+
+List<String> inhibitorFor(Drug drug) {
+  return drugInhibitors.keys.filter(
+    (gene) => drugInhibitors[gene]!.containsKey(drug.name)).toList();
+}

@@ -39,8 +39,19 @@ class SearchPage extends HookWidget {
               TooltipIcon(context.l10n.search_page_tooltip_search),
               buildFilter(context),
             ]),
-            body: buildDrugList(context, state,
-                noDrugsMessage: context.l10n.err_no_drugs),
+            body: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: PharMeTheme.smallSpace,
+                  horizontal: PharMeTheme.mediumSpace
+                ),
+                child: Text(context.l10n.search_page_asterisk_explanation),
+              ),
+              ...buildDrugList(context, state,
+                noDrugsMessage: context.l10n.err_no_drugs,
+                showInfluenceOnOtherDrugs: true
+              ),
+            ],
           );
         }));
   }

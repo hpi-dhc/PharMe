@@ -32,8 +32,23 @@
   "search_page_filter_yellow": "Yellow warning level",
   "search_page_filter_red": "Red warning level",
   "search_page_filter_gray": "No warning level",
+  "search_page_asterisk_explanation": "Drugs with an asterisk (*) influence results for other drugs",
 
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
+  "drugs_page_is_inhibitor": "Taking {drugName} influences your results for guidelines based on the following gene(s): {geneSymbols}",
+  "@drugs_page_is_inhibitor": {
+    "description": "Disclaimer for when the phenotype has been adjusted based on a current drug",
+    "placeholders": {
+        "drugName": {
+            "type": "String",
+            "example": "bupropion"
+        },
+        "geneSymbols": {
+          "type": "String",
+          "example": "CYP2D6, CYP2C19"
+        }
+    }
+  },
   "drugs_page_overwritten_phenotype": "adjusted based on you taking {drugName}",
   "@drugs_page_overwritten_phenotype": {
       "description": "Disclaimer for when the phenotype has been adjusted based on a current drug",
@@ -63,7 +78,7 @@
   "drugs_page_header_active": "Usage status",
   "drugs_page_active": "I am currently taking this drug.",
   "drugs_page_active_warn_header": "Are you sure you want to change the drug usage status?",
-  "drugs_page_active_warn": "This may adjust the guidelines you receive for other drugs.",
+  "drugs_page_active_warn": "This may influence the guidelines you receive for other drugs.",
   "drugs_page_header_guideline": "Clinical Guideline",
   "drugs_page_header_recommendation": "Recommendation",
   "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
@@ -129,6 +144,7 @@
   "gene_page_affected_drugs": "Affected drugs",
   "gene_page_affected_drugs_tooltip": "The drugs listed here are affected by your variant of this gene.",
   "gene_page_no_affected_drugs": "Your variant of this gene has no known effect on any drug.",
+  "gene_page_inhibitor_drugs": "Guidelines based on this gene are influenced by taking the following drugs:",
 
   "pdf_pgx_report": "PGx Report",
   "pdf_heading_user_data": "User data",
