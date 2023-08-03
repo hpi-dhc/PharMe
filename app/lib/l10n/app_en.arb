@@ -118,6 +118,10 @@
   "gene_page_affected_drugs_tooltip": "The drugs listed here are affected by your variant of this gene.",
   "gene_page_no_affected_drugs": "Your variant of this gene has no known effect on any drug.",
 
+  "pdf_heading_user_data": "User data",
+  "pdf_heading_clinical_guidelines": "Clinical guideline(s)",
+  "pdf_info_clinical_guidelines": "Clinical guideline(s) relevant for the phenotype. For more fine-grained information (e.g., in case of multiple guidelines) please refer to the original guideline (see URLs below).",
+
   "nav_report": "Report",
   "tab_report": "Gene report",
   "nav_drugs": "Drugs",

@@ -38,6 +38,7 @@ dependencies:
   path_provider: ^2.0.11
   pdf: ^3.8.1
   popover: ^0.2.8+1
+  printing: ^5.9.3
   shared_preferences: ^2.0.15
   url_launcher: ^6.1.4
 

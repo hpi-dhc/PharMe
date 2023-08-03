@@ -32,7 +32,7 @@ class DrugPage extends StatelessWidget {
               title: drugName,
               actions: [
                 IconButton(
-                  onPressed: () => sharePdf(drug),
+                  onPressed: () => sharePdf(drug, context),
                   icon: Icon(
                     Icons.ios_share_rounded,
                     color: PharMeTheme.primaryColor,
