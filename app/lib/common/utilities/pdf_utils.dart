@@ -9,8 +9,6 @@ import 'package:printing/printing.dart';
 
 import '../module.dart';
 
-const noValueString = 'n/a';
-
 Future<String> createPdf(
   Drug drug,
   BuildContext buildContext,
@@ -47,10 +45,10 @@ pw.Widget buildPdfPage(
 ) {
   return pw.Wrap(
     children: [
-      ..._buildHeader(drug),
+      ..._buildHeader(drug, buildContext),
       _buildTextBlockSpacer(),
       _buildTextSpacer(),
-      ..._buildDrugPart(drug),
+      ..._buildDrugPart(drug, buildContext),
       _buildTextBlockSpacer(),
       ..._buildUserPart(context, buildContext, drug, emoji),
       _buildTextBlockSpacer(),
@@ -76,7 +74,7 @@ pw.Text _buildSubheading(String text) => pw.Text(
   ),
 );
 
-List<pw.Widget> _buildHeader(Drug drug) {
+List<pw.Widget> _buildHeader(Drug drug, BuildContext buildContext) {
   return [
     _PdfSegment(
       child: pw.Text(
@@ -91,7 +89,7 @@ List<pw.Widget> _buildHeader(Drug drug) {
     _buildTextSpacer(),
     _PdfSegment(
       child: pw.Text(
-        'PGx report',
+        buildContext.l10n.pdf_pgx_report,
         style: pw.TextStyle(
           fontSize: PharMeTheme.mediumSpace,
         ),
@@ -101,42 +99,47 @@ List<pw.Widget> _buildHeader(Drug drug) {
   ];
 }
 
-List<pw.Widget> _buildDrugPart(Drug drug) {
+List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
   return [
     _PdfSegment(
       child: _PdfDescription(
-        title: 'Drug class',
+        title: buildContext.l10n.drugs_page_header_drugclass,
         text:  drug.annotations.drugclass,
       ),
     ),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: 'Indication',
+        title: buildContext.l10n.pdf_indication,
         text:  drug.annotations.indication,
       ),
     ),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: 'Brand names',
+        title: buildContext.l10n.pdf_brand_names,
         text: drug.annotations.brandNames.join(', '),
       ),
     ),
   ];
 }
 
-String _getPhenotypeInfo(String gene) {
-  final phenotype = UserData.phenotypeFor(gene) ?? noValueString;
-  final lookup = UserData.lookupFor(gene) ?? noValueString;
+String? _getPhenotypeInfo(String gene) {
+  final phenotype = UserData.phenotypeFor(gene);
+  final lookup = UserData.lookupFor(gene);
+  if (phenotype == null) return null;
   return lookup == phenotype ? phenotype : '$phenotype ($lookup)';
 }
 
-String _userInfoPerGene(Drug drug, String? Function(String gene) getInfo) {
-  if (drug.guidelines.isEmpty) return noValueString;
+String _userInfoPerGene(
+  Drug drug,
+  String? Function(String) getInfo,
+  BuildContext buildContext,  
+) {
+  if (drug.guidelines.isEmpty) return buildContext.l10n.pdf_no_value;
   final guidelineGenes = drug.guidelines.first.lookupkey.keys.toList();
   return guidelineGenes.map((gene) =>
-    '$gene: ${getInfo(gene) ?? noValueString}'
+    '$gene: ${getInfo(gene) ?? buildContext.l10n.pdf_no_value}'
   ).join(', ');
 }
 
@@ -147,9 +150,21 @@ List<pw.Widget> _buildUserPart(
   Font emoji,
 ) {
   final userGuideline = drug.userGuideline();
-  final patientGenotype = _userInfoPerGene(drug, UserData.genotypeFor);
-  final patientPhenotype = _userInfoPerGene(drug, _getPhenotypeInfo);
-  final allelesTested = _userInfoPerGene(drug, UserData.allelesTestedFor);
+  final patientGenotype = _userInfoPerGene(
+    drug,
+    UserData.genotypeFor,
+    buildContext,
+  );
+  final patientPhenotype = _userInfoPerGene(
+    drug,
+    _getPhenotypeInfo,
+    buildContext,
+  );
+  final allelesTested = _userInfoPerGene(
+    drug,
+    UserData.allelesTestedFor,
+    buildContext,
+  );
   final warningLevelIcons = {
     'red': '❌',
     'yellow': '⚠',
@@ -161,28 +176,28 @@ List<pw.Widget> _buildUserPart(
     _buildTextBlockSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: 'Genotype',
+        title: buildContext.l10n.gene_page_genotype,
         text: patientGenotype,
       ),
     ),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: 'Phenotype',
+        title: buildContext.l10n.gene_page_phenotype,
         text: patientPhenotype
       ),
     ),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: 'Tested alleles',
+        title: buildContext.l10n.pdf_tested_alleles,
         text:  allelesTested,
       ),
     ),
     _buildTextBlockSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: 'User guideline',
+        title: buildContext.l10n.pdf_user_guideline,
         text:  userGuideline != null ?
           '${userGuideline.annotations.implication} '
             ' ${userGuideline.annotations.recommendation}' :
@@ -203,7 +218,7 @@ List<pw.Widget> _buildExternalGuidelinePart(
     buildContext.l10n.pdf_heading_clinical_guidelines
   );
   return externalData == null ?
-    [ heading, _buildTextBlockSpacer(), pw.Text(noValueString) ] :
+    [ heading, _buildTextBlockSpacer(), pw.Text(buildContext.l10n.pdf_no_value) ] :
     [
       heading,
       _buildTextBlockSpacer(),
@@ -216,14 +231,17 @@ List<pw.Widget> _buildExternalGuidelinePart(
           ...externalGuidelines,
           _buildTextBlockSpacer(),
           _buildTextDivider(),
-          ..._buildGuidelinePart(guideline)
+          ..._buildGuidelinePart(guideline, buildContext)
         ]
       ),
       _buildTextDivider()
     ];
 }
 
-List<pw.Widget> _buildGuidelinePart(GuidelineExtData guideline) {
+List<pw.Widget> _buildGuidelinePart(
+  GuidelineExtData guideline,
+  BuildContext buildContext
+) {
   return [
     _PdfSegment(
       child: pw.Text(
@@ -234,7 +252,7 @@ List<pw.Widget> _buildGuidelinePart(GuidelineExtData guideline) {
     _buildTextBlockSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: '${guideline.source} guideline link'
+        title: buildContext.l10n.pdf_guideline_link(guideline.source)
       ),
     ),
     _PdfSegment(child:
@@ -252,7 +270,9 @@ List<pw.Widget> _buildGuidelinePart(GuidelineExtData guideline) {
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-          title: '${guideline.source} recommendation',
+          title: buildContext.l10n.pdf_guideline_recommmendation(
+            guideline.source,
+          ),
           text: guideline.recommendation),
     ),
     _buildTextSpacer(),
@@ -260,15 +280,20 @@ List<pw.Widget> _buildGuidelinePart(GuidelineExtData guideline) {
         .map((implication) => _PdfSegment(
                 child: _PdfDescription(
               title:
-                  '${guideline.source} implication for ${implication.key}',
+                  buildContext.l10n.pdf_guideline_gene_implication(
+                    guideline.source,
+                    implication.key
+                  ),
               text: implication.value,
             )))
         .toList(),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: '${guideline.source} comment',
-        text: guideline.comments,
+        title: buildContext.l10n.pdf_guideline_comment(guideline.source),
+        text: guideline.comments.isNullOrBlank ?
+          buildContext.l10n.pdf_no_value :
+          guideline.comments
       ),
     ),
   ];
