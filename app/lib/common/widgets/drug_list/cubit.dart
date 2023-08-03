@@ -112,8 +112,7 @@ class FilterState {
           query: '',
           showInactive: true,
           showWarningLevel: {
-            for (var level in WarningLevel.values)
-              level: level != WarningLevel.none
+            for (var level in WarningLevel.values) level: true
           },
           gene: gene,
         );
@@ -124,13 +123,17 @@ class FilterState {
   final String gene;
 
   bool isAccepted(Drug drug) {
-    final guideline = drug.userGuideline();
+    final userGuideline = drug.userGuideline();
+    final guidelineGenes = drug.guidelines.isNotEmpty ?
+      drug.guidelines.first.lookupkey.keys.toList() :
+      [];
     final warningLevel =
-        guideline?.annotations.warningLevel ?? WarningLevel.none;
-    return drug.matches(query: query) &&
+        userGuideline?.annotations.warningLevel ?? WarningLevel.none;
+    final isDrugAccepted = drug.matches(query: query) &&
         (drug.isActive() || showInactive) &&
         (showWarningLevel[warningLevel] ?? true) &&
-        (gene.isBlank || (guideline?.lookupkey.keys.contains(gene) ?? false));
+        (gene.isBlank || (guidelineGenes.contains(gene)));
+    return isDrugAccepted;
   }
 
   List<Drug> filter(List<Drug> drugs) => drugs.filter(isAccepted).toList();
