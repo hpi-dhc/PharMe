@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Uri anniUrl([String slug = '']) => Uri.http('localhost:3002', 'api/v1/$slug');
+Uri anniUrl([String slug = '']) =>
+    Uri.http('vm-slosarek01.dhclab.i.hpi.de:8000', 'api/v1/$slug');
 Uri labServerUrl([String slug = '']) =>
-    Uri.http('localhost:3001', 'api/v1/$slug');
+    Uri.http('vm-slosarek01.dhclab.i.hpi.de:8081', 'api/v1/$slug');
 Uri keycloakUrl([String slug = '']) =>
-    Uri.http('localhost:28080', 'auth/$slug');
+    Uri.http('vm-slosarek01.dhclab.i.hpi.de:28080', 'auth/$slug');
 
 // Note that sending emails will not work on the iPhone Simulator since it does
 // not have any email application installed.
