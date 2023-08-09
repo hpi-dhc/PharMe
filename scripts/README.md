@@ -72,11 +72,13 @@ Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations and
 optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64`.
 
-| Check | Description | `--correct`ed |
-| ----- | ----------- | ------------- |
-| `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ |
-| `implication_severity` | Poor/ultrarapid phenotypes with "faster" or "slower" implication should have "much" keyword, intermediate/rapid not. Skips guidelines with multiple genes unless all results but one are missing or indeterminate. | ❌ |
-| `red_warning` | Red warning level should always have recommendation "may not be the right medication" and vice versa. | ❌ |
-| `yellow_warning` | Recommendation containing "adjusted" or "higher" or "lower" but not "may not be the right" should have yellow warning level. | ❌ |
-| `green_warning` | Green warning level should have recommendation "at standard dose" but not "adjusted" and vise versa. | ❌ |
-| `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ |
+| Check | Description | `--correct`ed | Only for single-gene results* |
+| ----- | ----------- | ------------- | ----------------------------- |
+| `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ | ❌ |
+| `implication_severity` | Poor/ultrarapid phenotypes with "faster" or "slower" implication should have "much" keyword, intermediate/rapid not. | ❌ | ✅ |
+| `red_warning` | Red warning level should always have recommendation "may not be the right medication" and vice versa. | ❌ | ❌ |
+| `yellow_warning` | Recommendation containing "adjusted" or "higher" or "lower" but not "may not be the right" should have yellow warning level. | ❌ | ❌ |
+| `green_warning` | Green warning level should have recommendation "at standard dose" but not "adjusted" and vise versa. | ❌ | ❌ |
+| `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
+
+\* Skips guidelines with multiple genes unless all results but one are missing or indeterminate.

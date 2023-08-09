@@ -67,18 +67,18 @@ def has_consult(_, annotations):
 
 def check_implication_severity(guideline, annotations):
     phenotype = get_phenotype_key(guideline).lower()
-    check_applies = True
     gene_number = len(guideline['phenotypes'].keys())
     missing_genes = phenotype.count('no result') + \
         phenotype.count('indeterminate')
     if gene_number - missing_genes != 1:
-        return check_applies
+        return None
     severity_rules = [
         { 'has_much': True, 'phenotype': 'ultrarapid', 'implication': 'faster' },
         { 'has_much': True, 'phenotype': 'poor', 'implication': 'slower' },
         { 'has_much': False, 'phenotype': 'rapid', 'implication': 'faster' },
         { 'has_much': False, 'phenotype': 'intermediate', 'implication': 'slower' },
     ]
+    check_applies = True
     for severity_rule in severity_rules:
         if severity_rule['phenotype'] == 'rapid' and 'ultrarapid' in phenotype:
             continue
@@ -146,8 +146,8 @@ def correct_inconsistency(data, item, check_name, corrections):
 def log_not_annotated(log_content):
     log_content.append(' – _not annotated_\n')
 
-def log_all_passed(log_content):
-    log_content.append(' – _all checks passed_\n')
+def log_all_passed(log_content, postfix=''):
+    log_content.append(f' – _all checks passed_{postfix}\n')
 
 def log_annotations(log_content, annotations):
     for key, value in annotations.items():
@@ -157,6 +157,7 @@ def log_annotations(log_content, annotations):
 def handle_failed_checks(
     data, item, result, corrections, should_correct, annotations, log_content):
     failed_checks = []
+    skipped_checks = []
     for check_name, check_result in result.items():
         if check_result == False:
             corrected = should_correct and \
@@ -165,9 +166,18 @@ def handle_failed_checks(
             check_name = f'{check_name} (corrected)' if corrected \
                 else check_name
             failed_checks.append(check_name)
-    log_content.append(' - _some checks failed_: ' \
-        f'{", ".join(failed_checks)}\n')
-    log_annotations(log_content, annotations)
+        if check_result == None:
+            skipped_checks.append(check_name)
+    skipped_checks_string = ''
+    if len(skipped_checks) > 0:
+        skipped_checks_string = (' (skipped checks: ' \
+        f'{", ".join(skipped_checks)})')
+    if len(failed_checks) > 0:
+        log_content.append(' - _some checks failed_: ' \
+            f'{", ".join(failed_checks)}{skipped_checks_string}\n')
+        log_annotations(log_content, annotations)
+    else:
+        log_all_passed(log_content, postfix=skipped_checks_string)
 
 DRUG_CHECKS = {
     'brand_whitespace': check_brand_name_whitespace,
