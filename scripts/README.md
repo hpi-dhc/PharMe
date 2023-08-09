@@ -81,4 +81,5 @@ optionally correct what can be corrected easily in
 | `green_warning` | Green warning level should have recommendation "at standard dose" but not "adjusted" and vise versa. | ❌ | ❌ |
 | `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
 
-\* Skips guidelines with multiple genes unless all results but one are missing or indeterminate.
+\* Skips guidelines with multiple genes unless all results but one are missing
+or indeterminate.
