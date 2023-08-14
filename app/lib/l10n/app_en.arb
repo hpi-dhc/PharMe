@@ -10,34 +10,33 @@
 
   "drug_selection_header": "Select active drugs",
   "drug_selection_description": "Please select the drugs you are currently taking below. If you are not taking checked drugs anymore, you can uncheck them.",
-  "drug_selection_later": "Active drugs can influence your results for other drugs. You can always change the status for each drug later on a drug's detail page.",
+  "drug_selection_later": "Active drugs can influence how you react to other drugs. You can always change the status for each drug later.",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
-  "err_fetch_user_data_failed": "An unexpected error occurred while fetching your genomic data",
-  "err_generic": "Error!",
+  "err_fetch_user_data_failed": "An error occurred while getting data, please try again later",
+  "err_generic": "Error",
   "err_no_drugs": "Try adjusting the filters next to the search bar above.",
 
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for medications you are currently taking.",
   
-  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us!",
+  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
 
-  "general_appName": "PharMe",
   "general_continue": "Continue",
   "general_retry": "Retry",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
-  "search_page_filter_inactive": "Drugs not currently taken",
-  "search_page_filter_green": "Green warning level",
-  "search_page_filter_yellow": "Yellow warning level",
-  "search_page_filter_red": "Red warning level",
-  "search_page_filter_gray": "No warning level",
+  "search_page_filter_inactive": "Show currently not taken drugs",
+  "search_page_filter_green": "Show green warning level",
+  "search_page_filter_yellow": "Show yellow warning level",
+  "search_page_filter_red": "Show red warning level",
+  "search_page_filter_gray": "Show gray warning level",
   "search_page_asterisk_explanation": "Drugs with an asterisk (*) influence results for other drugs",
 
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} influences your results for guidelines based on the following gene(s): {geneSymbols}",
   "@drugs_page_is_inhibitor": {
-    "description": "Disclaimer for when the phenotype has been adjusted based on a current drug",
+    "description": "Disclaimer for when the current drug influences other guidelines",
     "placeholders": {
         "drugName": {
             "type": "String",
@@ -62,7 +61,7 @@
   "drugs_page_your_genome": "Your genome",
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
   "@drugs_page_guidelines_empty": {
-    "description": "Disclaimer for when the phenotype has been adjusted based on a current drug",
+    "description": "Disclaimer when a drug does not have guidelines",
     "placeholders": {
         "drugName": {
             "type": "String",
@@ -71,16 +70,15 @@
     }
 },
   "drugs_page_header_further_info": "Further information",
-  "drugs_page_header_synonyms": "Synonyms",
+  "drugs_page_header_synonyms": "Other names",
   "drugs_page_header_drugclass": "Drug class",
   "drugs_page_header_drug": "Drug",
   "drugs_page_header_druginfo": "Information",
   "drugs_page_header_active": "Usage status",
   "drugs_page_active": "I am currently taking this drug.",
   "drugs_page_active_warn_header": "Are you sure you want to change the drug usage status?",
-  "drugs_page_active_warn": "This may influence the guidelines you receive for other drugs.",
+  "drugs_page_active_warn": "This can influence the guidelines you receive for other drugs.",
   "drugs_page_header_guideline": "Clinical Guideline",
-  "drugs_page_header_recommendation": "Recommendation",
   "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
   "@drugs_page_no_guidelines_for_phenotype_implication": {
     "description": "Disclaimer for when no guidelines was found for the current drug based on the user's phenotype",
@@ -102,8 +100,6 @@
           }
       }
   },
-  "drugs_page_tooltip_classification": "The evidence level of a guideline represents how accepted it is by science. Guidelines with a lot of good studies supporting them have a high evidence level.",
-  "drugs_page_tooltip_further_info": "The results shown here are based on data from pharmacogenomic organizations like CPIC or PharmGKB. Check them out yourself by clicking on the buttons below! Also see the PGx-Tab for more information.",
   "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
   "drugs_page_cast_indeterminate": "Indeterminate",
 
@@ -119,7 +115,7 @@
   },
   "gene_page_your_variant": "Your {geneSymbol} variant",
   "@gene_page_your_variant": {
-    "description": "Name of the gene",
+    "description": "Name of the variant",
     "placeholders": {
       "geneSymbol": {
         "type": "String",
@@ -129,7 +125,7 @@
   },
   "gene_page_name_tooltip": "{geneSymbol} is the name of a gene.",
   "@gene_page_name_tooltip": {
-    "description": "Name of the gene",
+    "description": "Name of the gene (help text)",
     "placeholders": {
       "geneSymbol": {
         "type": "String",
@@ -149,7 +145,7 @@
   "pdf_pgx_report": "PGx Report",
   "pdf_heading_user_data": "User data",
   "pdf_heading_clinical_guidelines": "Clinical guideline(s)",
-  "pdf_info_clinical_guidelines": "Clinical guideline(s) relevant for the phenotype. For more fine-grained information (e.g., in case of multiple guidelines) please refer to the original guideline (see URLs below).",
+  "pdf_info_clinical_guidelines": "Clinical guideline(s) relevant for the phenotype. For more fine-grained information (e.g., in case of different guidelines for the user's phenotype) please refer to the original guideline (see URLs below).",
   "pdf_no_value": "n/a",
   "pdf_indication": "Indication",
   "pdf_brand_names": "Brand names",
@@ -157,7 +153,7 @@
   "pdf_user_guideline": "User guideline",
   "pdf_guideline_link": "{guidelineSource} guideline link",
   "@pdf_guideline_link": {
-    "description": "Sourcec of the guideline",
+    "description": "Source of the guideline",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -167,7 +163,7 @@
   },
   "pdf_guideline_recommmendation": "{guidelineSource} recommendation",
   "@pdf_guideline_recommmendation": {
-    "description": "Sourcec of the guideline",
+    "description": "Guideline recommendation of source",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -177,7 +173,7 @@
   },
   "pdf_guideline_gene_implication": "{guidelineSource} implication for {geneSymbol}",
   "@pdf_guideline_gene_implication": {
-    "description": "Sourcec of the guideline",
+    "description": "Guideline implication of source",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -191,7 +187,7 @@
   },
   "pdf_guideline_comment": "{guidelineSource} comment",
   "@pdf_guideline_comment": {
-    "description": "Sourcec of the guideline",
+    "description": "Guideline comment of source",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -228,14 +224,14 @@
     
   "settings_page_account_settings": "Account settings",
   "settings_page_delete_data": "Delete app data",
-  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genomic data.",
+  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genetic data.",
   "settings_page_more": "More",
   "settings_page_onboarding": "Onboarding",
   "settings_page_about_us": "About us",
-  "settings_page_about_us_text": "PharMe was created as a bachelors project at Hasso-Plattner-Institut (HPI) Potsdam. The aim of the project is to provide a proof of concept for digital health apps that use pharmacogenomic information for health improvements. We collaborate with the Digital Health chair at HPI and health professionals from Mount Sinai hospital in New York.",
+  "settings_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboraion with health professionals from the Mount Sinai Health System in New York City, NY, USA.",
   "settings_page_privacy_policy": "Privacy policy",
   "settings_page_privacy_policy_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  "settings_page_terms_and_conditions": "Terms and conditions",
+  "settings_page_terms_and_conditions": "Terms of use",
   "settings_page_terms_and_conditions_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   "settings_page_contact_us": "Contact us",
 
