@@ -1,5 +1,7 @@
 import '../../common/models/drug/cached_drugs.dart';
 import '../../common/module.dart' hide MetaData;
+import '../../common/widgets/drug_list/drug_items/drug_checkbox_list.dart';
+import '../../common/widgets/drug_search.dart';
 import '../../common/widgets/full_width_button.dart';
 import 'cubit.dart';
 
@@ -24,7 +26,13 @@ class DrugSelectionPage extends HookWidget {
                 child: ListView(
                   children: [
                     _buildHeader(context),
-                    ..._buildDrugList(context, state),
+                    _buildDrugList(context, state),
+                    SizedBox(height: PharMeTheme.mediumSpace),
+                    FullWidthButton(
+                      context.l10n.general_continue,
+                      () { context.router.replace(MainRoute()); },
+                      enabled: _isEditable(state),
+                    ),
                   ],
                 ),
               ),
@@ -32,6 +40,13 @@ class DrugSelectionPage extends HookWidget {
           );
         }
       )
+    );
+  }
+
+  bool _isEditable(DrugSelectionPageState state) {
+    return state.when(
+      stable: () => true,
+      updating: () => false
     );
   }
 
@@ -57,40 +72,28 @@ class DrugSelectionPage extends HookWidget {
     );
   }
 
-  List<Widget> _buildDrugList(
-    BuildContext context,
-    DrugSelectionPageState state
-  ) {
-    var enabled = true;
-    state.when(
-      stable: () => enabled = true,
-      updating: () => enabled = false
+  Widget _buildDrugList(BuildContext context, DrugSelectionPageState state) {
+    if (CachedDrugs.instance.drugs!.isEmpty) {
+      return Column(
+        children: [
+          Text(
+            context.l10n.drug_selection_no_drugs_loaded,
+            style: PharMeTheme.textTheme.bodyLarge!.copyWith(
+              fontStyle: FontStyle.italic
+            ),
+          ),
+        ],
+      );
+    }
+    return DrugSearch(
+      showFilter: false,
+      buildDrugItems: buildDrugCheckboxList,
+      drugItemsBuildParams: {
+        'checkboxesEnabled': _isEditable(state),
+        'onCheckboxChange': (drug, value) => context
+          .read<DrugSelectionPageCubit>()
+          .updateDrugActivity(drug, value),
+      },
     );
-    final sortedDrugs = List<Drug>.from(CachedDrugs.instance.drugs!);
-    sortedDrugs.sort((drugA, drugB) => drugA.name.compareTo(drugB.name));
-    return [
-      ...sortedDrugs.map(
-        (drug) => CheckboxListTile(
-          enabled: enabled,
-          value: UserData.instance.activeDrugNames!
-            .contains(drug.name),
-          onChanged: (value) {
-            context
-              .read<DrugSelectionPageCubit>()
-              .updateDrugActivity(drug, value);  
-          },
-          title: Text(drug.name.capitalize()),
-          subtitle: (drug.annotations.brandNames.isNotEmpty) ?
-            Text('(${drug.annotations.brandNames.join(", ")})') :
-            null,
-        )
-      ).toList(),
-      SizedBox(height: PharMeTheme.mediumSpace),
-      FullWidthButton(
-        context.l10n.general_continue,
-        () { context.router.replace(MainRoute()); },
-        enabled: enabled,
-      ),
-    ];
   }
 }

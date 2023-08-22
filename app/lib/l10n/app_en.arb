@@ -11,11 +11,11 @@
   "drug_selection_header": "Select active drugs",
   "drug_selection_description": "Please select the drugs you are currently taking below. If you are not taking checked drugs anymore, you can uncheck them.",
   "drug_selection_later": "Active drugs can influence how you react to other drugs. You can always change the status for each drug later.",
+  "drug_selection_no_drugs_loaded": "No drugs loaded",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An error occurred while getting data, please try again later",
   "err_generic": "Error",
-  "err_no_drugs": "Try adjusting the filters next to the search bar above.",
 
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for medications you are currently taking.",
@@ -32,7 +32,16 @@
   "search_page_filter_red": "Show red warning level",
   "search_page_filter_gray": "Show gray warning level",
   "search_page_asterisk_explanation": "Drugs with an asterisk (*) influence results for other drugs",
-
+  "search_no_drugs": "No drugs found. Try adjusting the search term{amendment}.",
+  "@search_no_drugs": {
+    "description": "Disclaimer for when no drug was found in the search",
+    "placeholders": {
+        "amendment": {
+            "type": "String",
+            "example": " or filters right to the search bar"
+        }
+    }
+  },
   "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} influences your results for guidelines based on the following gene(s): {geneSymbols}",
   "@drugs_page_is_inhibitor": {

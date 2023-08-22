@@ -1,5 +1,5 @@
 import '../../common/module.dart';
-import '../../drugselection/module.dart';
+import '../../drug_selection/module.dart';
 import '../../faq/module.dart';
 import '../../login/module.dart';
 import '../../onboarding/module.dart';
