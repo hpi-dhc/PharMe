@@ -18,21 +18,13 @@ List<Widget> buildDrugCards(
     }
     return warningLevelComparison;
   });
-  return [
-    SizedBox(height: 8),
-    ...drugs.map((drug) => Column(children: [
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
-              child: DrugCard(
-                  onTap: () => context.router
-                      .push(DrugRoute(drug: drug))
-                      .then((_) => context.read<DrugListCubit>().search()),
-                  drug: drug,
-              )
-          ),
-          SizedBox(height: 12)
-        ]))
-  ];
+  return drugs.map((drug) => DrugCard(
+      onTap: () => context.router
+          .push(DrugRoute(drug: drug))
+          .then((_) => context.read<DrugListCubit>().search()),
+      drug: drug,
+    )
+  ).toList();
 }
 
 class DrugCard extends StatelessWidget {
@@ -50,45 +42,48 @@ class DrugCard extends StatelessWidget {
     var drugName = drug.name.capitalize();
     if (isInhibitor(drug)) drugName = '$drugName *';
 
-    return RoundedCard(
-      onTap: onTap,
-      padding: EdgeInsets.all(8),
-      radius: 16,
-      color: warningLevel?.color ?? PharMeTheme.indeterminateColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: [
-                  Icon(warningLevel?.icon ?? indeterminateIcon),
-                  SizedBox(width: 4),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace / 2),
+      child: RoundedCard(
+        onTap: onTap,
+        padding: EdgeInsets.all(8),
+        radius: 16,
+        color: warningLevel?.color ?? PharMeTheme.indeterminateColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
+                    Icon(warningLevel?.icon ?? indeterminateIcon),
+                    SizedBox(width: 4),
+                    Text(
+                      drugName,
+                      style: PharMeTheme.textTheme.titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ]),
+                  SizedBox(height: 4),
+                  if (drug.annotations.brandNames.isNotEmpty) ...[
+                    SizedBox(width: 4),
+                    Text(
+                      '(${drug.annotations.brandNames.join(', ')})',
+                      style: PharMeTheme.textTheme.titleMedium,
+                    ),
+                  ],
+                  SizedBox(height: 8),
                   Text(
-                    drugName,
-                    style: PharMeTheme.textTheme.titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ]),
-                SizedBox(height: 4),
-                if (drug.annotations.brandNames.isNotEmpty) ...[
-                  SizedBox(width: 4),
-                  Text(
-                    '(${drug.annotations.brandNames.join(', ')})',
-                    style: PharMeTheme.textTheme.titleMedium,
+                    drug.annotations.drugclass,
+                    style: PharMeTheme.textTheme.titleSmall,
                   ),
                 ],
-                SizedBox(height: 8),
-                Text(
-                  drug.annotations.drugclass,
-                  style: PharMeTheme.textTheme.titleSmall,
-                ),
-              ],
+              ),
             ),
-          ),
-          Icon(Icons.chevron_right_rounded),
-        ],
+            Icon(Icons.chevron_right_rounded),
+          ],
+        ),
       ),
     );
   }

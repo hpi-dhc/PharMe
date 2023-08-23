@@ -1,24 +1,29 @@
 import '../module.dart';
 
-Scaffold pageScaffold(
-    {required String title,
-    Widget? barBottom,
-    List<Widget>? actions,
-    required List<Widget> body,
-    Key? key}) {
+Text buildTitle(String text) {
+  return Text(text, style: PharMeTheme.textTheme.headlineLarge);
+}
+
+Scaffold pageScaffold({
+  required String title,
+  required List<Widget> body,
+  Widget? barBottom,
+  List<Widget>? actions,
+  Key? key,
+}) {
   return Scaffold(
     key: key,
     body: CustomScrollView(slivers: [
       SliverAppBar(
-        backgroundColor: PharMeTheme.surfaceColor,
-        foregroundColor: PharMeTheme.onSurfaceText,
-        elevation: 0,
-        leadingWidth: 24,
+        backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
+        foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
+        elevation: PharMeTheme.appBarTheme.elevation,
+        leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
         floating: true,
         pinned: true,
         snap: false,
-        centerTitle: false,
-        title: Text(title, style: PharMeTheme.textTheme.headlineLarge),
+        centerTitle: PharMeTheme.appBarTheme.centerTitle,
+        title: buildTitle(title),
         actions: actions,
         bottom: barBottom == null
             ? null
@@ -30,5 +35,35 @@ Scaffold pageScaffold(
       ),
       SliverList(delegate: SliverChildListDelegate(body))
     ]),
+  );
+}
+
+Scaffold unscrollablePageScaffold({
+  required Widget body,
+  String? title,
+  PreferredSizeWidget? barBottom,
+  List<Widget>? actions,
+  Key? key,
+}) {
+  return Scaffold(
+    key: key,
+    appBar: AppBar(
+      backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
+      foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
+      elevation: PharMeTheme.appBarTheme.elevation,
+      leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
+      centerTitle: PharMeTheme.appBarTheme.centerTitle,
+      title: title == null
+        ? null
+        : buildTitle(title),
+      actions: actions,
+      bottom: barBottom,
+    ),
+    body: SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(PharMeTheme.smallSpace),
+        child: body,
+      ),
+    ),
   );
 }
