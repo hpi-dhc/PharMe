@@ -21,6 +21,7 @@ class DrugSelectionPage extends HookWidget {
         builder: (context, state) {
           return unscrollablePageScaffold(
             title: context.l10n.drug_selection_header,
+            padding: PharMeTheme.mediumSpace,
             body: Column(
               children: [
                 _buildDescription(context),
@@ -32,7 +33,7 @@ class DrugSelectionPage extends HookWidget {
             ),
           );
         }
-      )
+      ),
     );
   }
 
@@ -44,19 +45,16 @@ class DrugSelectionPage extends HookWidget {
   }
 
   Widget _buildDescription(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          Text(
-            context.l10n.drug_selection_description,
-            style: PharMeTheme.textTheme.bodyLarge),
-          SizedBox(height: PharMeTheme.mediumSpace),
-          Text(
-            context.l10n.drug_selection_later,
-            style: PharMeTheme.textTheme.bodyLarge),
-        ]
-      ),
+    return Column(
+      children: [
+        Text(
+          context.l10n.drug_selection_description,
+          style: PharMeTheme.textTheme.bodyLarge),
+        SizedBox(height: PharMeTheme.mediumSpace),
+        Text(
+          context.l10n.drug_selection_later,
+          style: PharMeTheme.textTheme.bodyLarge),
+      ]
     );
   }
 

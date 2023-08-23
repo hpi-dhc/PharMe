@@ -38,25 +38,28 @@ class DrugSearch extends HookWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.all(PharMeTheme.smallSpace),
-                        child: CupertinoSearchTextField(
-                          controller: searchController,
-                          onChanged: (value) {
-                            context.read<DrugListCubit>().search(query: value);
-                          },
-                        ),
+                      child: CupertinoSearchTextField(
+                        controller: searchController,
+                        onChanged: (value) {
+                          context.read<DrugListCubit>().search(query: value);
+                        },
                       ),
                     ),
-                    SizedBox(width: 12),
+                    SizedBox(width: PharMeTheme.smallToMediumSpace),
                     TooltipIcon(context.l10n.search_page_tooltip_search),
                     if (showFilter) buildFilter(context),
                   ]
                 ),
+                SizedBox(height: PharMeTheme.smallSpace),
                 Expanded(
                   child: Scrollbar(
                     thumbVisibility: true,
+                    thickness: PharMeTheme.smallSpace / 2,
                     child: ListView(
+                      padding: EdgeInsets.only(
+                      right: PharMeTheme.smallSpace * 1.5
+                      // right: 0
+                    ),
                       children: buildDrugList(
                         context,
                         state,

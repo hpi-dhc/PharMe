@@ -22,6 +22,7 @@ class LoginPage extends HookWidget {
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state) {
           return unscrollablePageScaffold(
+            padding: PharMeTheme.mediumSpace,
             body: Stack(
               children: [
                 Positioned.fill(
@@ -35,16 +36,13 @@ class LoginPage extends HookWidget {
                 Positioned(
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(PharMeTheme.smallSpace),
-                      child: state.when(
-                        initial: () =>
-                            _buildInitialScreen(context, dropdownValue),
-                        loadingUserData: CircularProgressIndicator.new,
-                        loadedUserData: () => _buildLoadedScreen(context),
-                        error: (message) =>
-                            _buildErrorScreen(context, message),
-                      ),
+                    child: state.when(
+                      initial: () =>
+                          _buildInitialScreen(context, dropdownValue),
+                      loadingUserData: CircularProgressIndicator.new,
+                      loadedUserData: () => _buildLoadedScreen(context),
+                      error: (message) =>
+                          _buildErrorScreen(context, message),
                     ),
                   ),
                 ),
@@ -162,7 +160,8 @@ class LoginPage extends HookWidget {
       children: [
         ...children,
         SizedBox(height: PharMeTheme.mediumSpace),
-        FullWidthButton(actionText, action ?? () {}),      ],
+        FullWidthButton(actionText, action ?? () {}),
+      ],
     );
   }
 }

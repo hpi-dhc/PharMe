@@ -20,7 +20,10 @@ class GenePage extends HookWidget {
           title: context.l10n.gene_page_headline(phenotype.geneSymbol),
           body: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              padding: EdgeInsets.symmetric(
+                horizontal: PharMeTheme.smallToMediumSpace,
+                vertical: PharMeTheme.mediumSpace
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -29,7 +32,7 @@ class GenePage extends HookWidget {
                     tooltip: context.l10n
                         .gene_page_name_tooltip(phenotype.geneSymbol),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: PharMeTheme.smallToMediumSpace),
                   RoundedCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,9 +66,10 @@ class GenePage extends HookWidget {
                           ],
                     ],
                   )),
-                  SizedBox(height: 12),
+                  SizedBox(height: PharMeTheme.smallToMediumSpace),
                   SubHeader(context.l10n.gene_page_affected_drugs,
                       tooltip: context.l10n.gene_page_affected_drugs_tooltip),
+                  SizedBox(height: PharMeTheme.smallSpace),
                   ...buildDrugList(context, state,
                       noDrugsMessage: context.l10n.gene_page_no_affected_drugs)
                 ],

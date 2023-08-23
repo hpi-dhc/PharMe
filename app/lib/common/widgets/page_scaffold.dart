@@ -44,6 +44,7 @@ Scaffold pageScaffold({
 
 Scaffold unscrollablePageScaffold({
   required Widget body,
+  double? padding,
   String? title,
   Widget? barBottom,
   List<Widget>? actions,
@@ -66,7 +67,7 @@ Scaffold unscrollablePageScaffold({
     appBar: appBar,
     body: SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(PharMeTheme.smallSpace),
+        padding: EdgeInsets.all(padding ?? PharMeTheme.smallSpace),
         child: body,
       ),
     ),
