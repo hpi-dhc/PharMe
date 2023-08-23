@@ -19,20 +19,16 @@ class DrugSelectionPage extends HookWidget {
       create: (context) => cubit ?? DrugSelectionPageCubit(),
       child: BlocBuilder<DrugSelectionPageCubit, DrugSelectionPageState>(
         builder: (context, state) {
-          return Scaffold(
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildHeader(context),
-                    SizedBox(height: PharMeTheme.mediumSpace),
-                    Expanded(child:_buildDrugList(context, state)),
-                    SizedBox(height: PharMeTheme.mediumSpace),
-                    _buildButton(context, state),
-                  ],
-                ),
-              ),
+          return unscrollablePageScaffold(
+            title: context.l10n.drug_selection_header,
+            body: Column(
+              children: [
+                _buildDescription(context),
+                SizedBox(height: PharMeTheme.mediumSpace),
+                Expanded(child:_buildDrugList(context, state)),
+                SizedBox(height: PharMeTheme.mediumSpace),
+                _buildButton(context, state),
+              ],
             ),
           );
         }
@@ -47,15 +43,11 @@ class DrugSelectionPage extends HookWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildDescription(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
-          Text(
-            context.l10n.drug_selection_header,
-            style: PharMeTheme.textTheme.headlineLarge),
-          SizedBox(height: PharMeTheme.mediumSpace),
           Text(
             context.l10n.drug_selection_description,
             style: PharMeTheme.textTheme.bodyLarge),

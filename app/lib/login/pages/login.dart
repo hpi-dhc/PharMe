@@ -21,36 +21,34 @@ class LoginPage extends HookWidget {
       create: (context) => cubit ?? LoginPageCubit(),
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state) {
-          return Scaffold(
-            body: SafeArea(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset(
-                        'assets/images/logo.svg',
+          return unscrollablePageScaffold(
+            body: Stack(
+              children: [
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      'assets/images/logo.svg',
+                    ),
+                  ),
+                ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(PharMeTheme.smallSpace),
+                      child: state.when(
+                        initial: () =>
+                            _buildInitialScreen(context, dropdownValue),
+                        loadingUserData: CircularProgressIndicator.new,
+                        loadedUserData: () => _buildLoadedScreen(context),
+                        error: (message) =>
+                            _buildErrorScreen(context, message),
                       ),
                     ),
                   ),
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: state.when(
-                          initial: () =>
-                              _buildInitialScreen(context, dropdownValue),
-                          loadingUserData: CircularProgressIndicator.new,
-                          loadedUserData: () => _buildLoadedScreen(context),
-                          error: (message) =>
-                              _buildErrorScreen(context, message),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
