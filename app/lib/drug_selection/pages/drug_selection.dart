@@ -23,16 +23,13 @@ class DrugSelectionPage extends HookWidget {
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: ListView(
+                child: Column(
                   children: [
                     _buildHeader(context),
-                    _buildDrugList(context, state),
                     SizedBox(height: PharMeTheme.mediumSpace),
-                    FullWidthButton(
-                      context.l10n.general_continue,
-                      () { context.router.replace(MainRoute()); },
-                      enabled: _isEditable(state),
-                    ),
+                    Expanded(child:_buildDrugList(context, state)),
+                    SizedBox(height: PharMeTheme.mediumSpace),
+                    _buildButton(context, state),
                   ],
                 ),
               ),
@@ -66,9 +63,16 @@ class DrugSelectionPage extends HookWidget {
           Text(
             context.l10n.drug_selection_later,
             style: PharMeTheme.textTheme.bodyLarge),
-          SizedBox(height: PharMeTheme.mediumSpace),
         ]
       ),
+    );
+  }
+
+  Widget _buildButton(BuildContext context, DrugSelectionPageState state) {
+    return FullWidthButton(
+      context.l10n.action_continue,
+      () => context.router.replace(MainRoute()),
+      enabled: _isEditable(state),
     );
   }
 

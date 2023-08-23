@@ -9,8 +9,8 @@
   "auth_success": "Successfully imported data",
 
   "drug_selection_header": "Select active drugs",
-  "drug_selection_description": "Please select the drugs you are currently taking below. If you are not taking checked drugs anymore, you can uncheck them.",
-  "drug_selection_later": "Active drugs can influence how you react to other drugs. You can always change the status for each drug later.",
+  "drug_selection_description": "Please select the drugs you are currently taking below. If you are not taking pre-selected drugs anymore, please de-select them.",
+  "drug_selection_later": "You can always change the status for each drug later.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
