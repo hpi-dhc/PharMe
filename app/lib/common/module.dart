@@ -15,6 +15,6 @@ export 'l10n.dart';
 export 'models/module.dart';
 export 'routing/router.dart';
 export 'services.dart';
-export 'theme.dart';
+export 'theme.dart' hide AppBarTheme;
 export 'utilities/module.dart';
 export 'widgets/module.dart';

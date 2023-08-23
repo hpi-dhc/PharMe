@@ -24,7 +24,8 @@ class PharMeTheme {
     );
   }
 
-  // small wrapper for removing some of the boilerplate when defining the textTheme below
+  // small wrapper for removing some of the boilerplate when defining the
+  // textTheme below
   static TextStyle themeFont(double size,
       [FontWeight weight = FontWeight.w400,
       double spacing = 0,
@@ -73,8 +74,29 @@ class PharMeTheme {
   static final borderColor = Colors.black.withOpacity(.2);
 
   static const smallSpace = 8.0;
+  static const smallToMediumSpace = 12.0;
   static const mediumSpace = 16.0;
   static const largeSpace = 32.0;
+
+  static final appBarTheme = AppBarTheme(
+    backgroundColor: surfaceColor,
+    foregroundColor: onSurfaceText,
+    leadingWidth: smallSpace + mediumSpace
+  );
+}
+
+class AppBarTheme {
+  AppBarTheme({
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.leadingWidth
+  });
+
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final double leadingWidth;
+  final elevation = 0.0;
+  final centerTitle = false;
 }
 
 extension WarningLevelColor on WarningLevel {

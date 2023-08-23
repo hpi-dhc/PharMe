@@ -1,34 +1,75 @@
 import '../module.dart';
 
-Scaffold pageScaffold(
-    {required String title,
-    Widget? barBottom,
-    List<Widget>? actions,
-    required List<Widget> body,
-    Key? key}) {
+Text buildTitle(String text) {
+  return Text(text, style: PharMeTheme.textTheme.headlineLarge);
+}
+
+AppBar? buildBarBottom(Widget? barBottom) {
+  return barBottom == null
+    ? null
+    : AppBar(
+        backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
+        elevation: PharMeTheme.appBarTheme.elevation,
+        title: barBottom,
+      );
+}
+
+Scaffold pageScaffold({
+  required String title,
+  required List<Widget> body,
+  Widget? barBottom,
+  List<Widget>? actions,
+  Key? key,
+}) {
   return Scaffold(
     key: key,
     body: CustomScrollView(slivers: [
       SliverAppBar(
-        backgroundColor: PharMeTheme.surfaceColor,
-        foregroundColor: PharMeTheme.onSurfaceText,
-        elevation: 0,
-        leadingWidth: 24,
+        backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
+        foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
+        elevation: PharMeTheme.appBarTheme.elevation,
+        leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
         floating: true,
         pinned: true,
         snap: false,
-        centerTitle: false,
-        title: Text(title, style: PharMeTheme.textTheme.headlineLarge),
+        centerTitle: PharMeTheme.appBarTheme.centerTitle,
+        title: buildTitle(title),
         actions: actions,
-        bottom: barBottom == null
-            ? null
-            : AppBar(
-                backgroundColor: PharMeTheme.backgroundColor,
-                elevation: 0,
-                title: barBottom,
-              ),
+        bottom: buildBarBottom(barBottom),
       ),
       SliverList(delegate: SliverChildListDelegate(body))
     ]),
+  );
+}
+
+Scaffold unscrollablePageScaffold({
+  required Widget body,
+  double? padding,
+  String? title,
+  Widget? barBottom,
+  List<Widget>? actions,
+  Key? key,
+}) {
+  final appBar = title == null
+    ? null
+    : AppBar(
+      backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
+      foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
+      elevation: PharMeTheme.appBarTheme.elevation,
+      leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
+      centerTitle: PharMeTheme.appBarTheme.centerTitle,
+      title: buildTitle(title),
+      actions: actions,
+      bottom: buildBarBottom(barBottom),
+    );
+  return Scaffold(
+    key: key,
+    appBar: appBar,
+    body: SafeArea(
+      child: Padding(
+        padding: EdgeInsets.all(padding ?? PharMeTheme.smallSpace),
+        child: body,
+      ),
+    ),
   );
 }

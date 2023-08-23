@@ -1,125 +1,32 @@
 import '../../module.dart';
+import 'drug_items/drug_cards.dart';
 
 List<Widget> buildDrugList(
   BuildContext context,
   DrugListState state, {
   String? noDrugsMessage,
-  bool? showInfluenceOnOtherDrugs,
-}) =>
-    state.when(
-      initial: () => [Container()],
-      error: () => [errorIndicator(context.l10n.err_generic)],
-      loaded: (drugs, filter) => _buildDrugCards(
-        context,
-        drugs,
-        filter,
-        noDrugsMessage: noDrugsMessage,
-        showInfluenceOnOtherDrugs: showInfluenceOnOtherDrugs,
-      ),
-      loading: () => [loadingIndicator()],
-    );
-
-List<Widget> _buildDrugCards(
-  BuildContext context,
-  List<Drug> drugs,
-  FilterState filter, {
-  String? noDrugsMessage,
-  bool? showInfluenceOnOtherDrugs,
+  List<Widget> Function(
+    BuildContext context,
+    List<Drug> drugs,
+    { Map? buildParams }
+  ) buildDrugItems = buildDrugCards,
+  Map? drugItemsBuildParams,
 }) {
-  final filteredDrugs = filter.filter(drugs);
-  if (filteredDrugs.isEmpty && noDrugsMessage != null) {
-    return [errorIndicator(noDrugsMessage)];
-  }
-  int warningLevelSeverity(Drug drug) {
-      final warningLevel = drug.userGuideline()?.annotations.warningLevel
-        ?? WarningLevel.none;
-      return warningLevel.severity;
+  List<Widget> buildDrugList(List<Drug> drugs, FilterState filter) {
+    final filteredDrugs = filter.filter(drugs);
+    if (filteredDrugs.isEmpty && noDrugsMessage != null) {
+      return [errorIndicator(noDrugsMessage)];
     }
-  filteredDrugs.sort((drugA, drugB) {
-    final warningLevelComparison = -warningLevelSeverity(drugA)
-      .compareTo(warningLevelSeverity(drugB));
-    if (warningLevelComparison == 0) {
-      return drugA.name.compareTo(drugB.name);
-    }
-    return warningLevelComparison;
-  });
-  return [
-    SizedBox(height: 8),
-    ...filteredDrugs.map((drug) => Column(children: [
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: DrugCard(
-                  onTap: () => context.router
-                      .push(DrugRoute(drug: drug))
-                      .then((_) => context.read<DrugListCubit>().search()),
-                  drug: drug,
-                  showInfluenceOnOtherDrugs: showInfluenceOnOtherDrugs ?? false,
-              )
-          ),
-          SizedBox(height: 12)
-        ]))
-  ];
-}
-
-class DrugCard extends StatelessWidget {
-  const DrugCard({
-    required this.onTap,
-    required this.drug,
-    required this.showInfluenceOnOtherDrugs
-  });
-
-  final VoidCallback onTap;
-  final Drug drug;
-  final bool showInfluenceOnOtherDrugs;
-
-  @override
-  Widget build(BuildContext context) {
-    final warningLevel = drug.userGuideline()?.annotations.warningLevel;
-    var drugName = drug.name.capitalize();
-    if (showInfluenceOnOtherDrugs) {
-      if (isInhibitor(drug)) drugName = '$drugName *';
-    }
-
-    return RoundedCard(
-      onTap: onTap,
-      padding: EdgeInsets.all(8),
-      radius: 16,
-      color: warningLevel?.color ?? PharMeTheme.indeterminateColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: [
-                  Icon(warningLevel?.icon ?? indeterminateIcon),
-                  SizedBox(width: 4),
-                  Text(
-                    drugName,
-                    style: PharMeTheme.textTheme.titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ]),
-                SizedBox(height: 4),
-                if (drug.annotations.brandNames.isNotEmpty) ...[
-                  SizedBox(width: 4),
-                  Text(
-                    '(${drug.annotations.brandNames.join(', ')})',
-                    style: PharMeTheme.textTheme.titleMedium,
-                  ),
-                ],
-                SizedBox(height: 8),
-                Text(
-                  drug.annotations.drugclass,
-                  style: PharMeTheme.textTheme.titleSmall,
-                ),
-              ],
-            ),
-          ),
-          Icon(Icons.chevron_right_rounded),
-        ],
-      ),
+    return buildDrugItems(
+      context,
+      filteredDrugs,
+      buildParams: drugItemsBuildParams,
     );
   }
+  return state.when(
+    initial: () => [Container()],
+    error: () => [errorIndicator(context.l10n.err_generic)],
+    loaded: buildDrugList,
+    loading: () => [loadingIndicator()],
+  );
 }
