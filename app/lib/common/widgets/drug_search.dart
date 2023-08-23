@@ -54,13 +54,16 @@ class DrugSearch extends HookWidget {
                   ]
                 ),
                 Expanded(
-                  child: ListView(
-                    children: buildDrugList(
-                      context,
-                      state,
-                      buildDrugItems: buildDrugItems,
-                      noDrugsMessage: noDrugsMessage,
-                      drugItemsBuildParams: drugItemsBuildParams,
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    child: ListView(
+                      children: buildDrugList(
+                        context,
+                        state,
+                        buildDrugItems: buildDrugItems,
+                        noDrugsMessage: noDrugsMessage,
+                        drugItemsBuildParams: drugItemsBuildParams,
+                      ),
                     ),
                   ),
                 ),
