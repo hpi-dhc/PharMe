@@ -31,7 +31,20 @@
   "search_page_filter_yellow": "Show yellow warning level",
   "search_page_filter_red": "Show red warning level",
   "search_page_filter_gray": "Show gray warning level",
-  "search_page_asterisk_explanation": "Taking drugs with an asterisk (*) can influence your results for other drugs",
+  "search_page_indicator_explanation": "Taking drugs with an {indicatorName} ({indicator}) can influence your results for other drugs",
+  "@search_page_indicator_explanation": {
+    "description": "Explanation of drug-drug interaction indicators",
+    "placeholders": {
+        "indicatorName": {
+          "type": "String",
+          "example": "asterisk"
+        },
+        "indicator": {
+          "type": "String",
+          "example": "*"
+      }
+    }
+  },
   "search_no_drugs": "No drugs found. Try adjusting the search term{amendment}.",
   "@search_no_drugs": {
     "description": "Disclaimer for when no drug was found in the search",

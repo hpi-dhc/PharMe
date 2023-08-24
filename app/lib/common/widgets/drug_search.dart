@@ -90,7 +90,10 @@ class DrugSearch extends HookWidget {
     return [
       SizedBox(height: PharMeTheme.smallSpace),
       Text(
-        context.l10n.search_page_asterisk_explanation
+        context.l10n.search_page_indicator_explanation(
+          drugInteractionIndicatorName,
+          drugInteractionIndicator
+        )
       ),
     ];
   }

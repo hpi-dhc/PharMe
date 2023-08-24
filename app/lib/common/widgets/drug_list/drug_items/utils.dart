@@ -7,7 +7,7 @@ String formatDrugName(
 ) {
   var drugName = drug.name.capitalize();
   if (showDrugInteractionIndicator && isInhibitor(drug)) {
-    drugName = '$drugName *';
+    drugName = '$drugName$drugInteractionIndicator';
   }
   return drugName;
 }

@@ -23,3 +23,6 @@ const maxCachedDrugs = 10;
 const cpicLookupUrl =
     'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,generesult,lookupkey';
 const indeterminateIcon = Icons.help_outline_rounded;
+
+const drugInteractionIndicator = '*';
+const drugInteractionIndicatorName = 'asterisk';
