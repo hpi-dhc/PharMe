@@ -1,9 +1,13 @@
 import '../../../module.dart';
+import 'utils.dart';
 
 List<Widget> buildDrugCards(
   BuildContext context,
   List<Drug> drugs,
-  { Map? buildParams }
+  {
+    Map? buildParams,
+    bool showDrugInteractionIndicator = false,
+  }
 ) {
   int warningLevelSeverity(Drug drug) {
       final warningLevel = drug.userGuideline()?.annotations.warningLevel
@@ -23,6 +27,7 @@ List<Widget> buildDrugCards(
           .push(DrugRoute(drug: drug))
           .then((_) => context.read<DrugListCubit>().search()),
       drug: drug,
+      showDrugInteractionIndicator: showDrugInteractionIndicator,
     )
   ).toList();
 }
@@ -31,17 +36,17 @@ class DrugCard extends StatelessWidget {
   const DrugCard({
     required this.onTap,
     required this.drug,
+    required this.showDrugInteractionIndicator,
   });
 
   final VoidCallback onTap;
   final Drug drug;
+  final bool showDrugInteractionIndicator;
 
   @override
   Widget build(BuildContext context) {
     final warningLevel = drug.userGuideline()?.annotations.warningLevel;
-    var drugName = drug.name.capitalize();
-    if (isInhibitor(drug)) drugName = '$drugName *';
-
+    final drugName = formatDrugName(drug, showDrugInteractionIndicator);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace / 2),
       child: RoundedCard(

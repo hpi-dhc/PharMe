@@ -9,6 +9,7 @@ class DrugSearch extends HookWidget {
     Key? key,
     required this.showFilter,
     required this.buildDrugItems,
+    required this.showDrugInteractionIndicator,
     this.drugItemsBuildParams,
     DrugListCubit? cubit,
   })  : cubit = cubit ?? DrugListCubit(),
@@ -18,8 +19,12 @@ class DrugSearch extends HookWidget {
   final List<Widget> Function(
     BuildContext context,
     List<Drug> drugs,
-    { Map? buildParams }
+    {
+      Map? buildParams,
+      bool showDrugInteractionIndicator,
+    }
   ) buildDrugItems;
+  final bool showDrugInteractionIndicator;
   final DrugListCubit cubit;
   final Map? drugItemsBuildParams;
 
@@ -66,15 +71,28 @@ class DrugSearch extends HookWidget {
                         buildDrugItems: buildDrugItems,
                         noDrugsMessage: noDrugsMessage,
                         drugItemsBuildParams: drugItemsBuildParams,
+                        showDrugInteractionIndicator:
+                          showDrugInteractionIndicator,
                       ),
                     ),
                   ),
                 ),
+                ..._maybeShowDrugInteractionExplanation(context),
               ],
             );
         }
       )
     );
+  }
+
+  List<Widget> _maybeShowDrugInteractionExplanation(BuildContext context) {
+    if (!showDrugInteractionIndicator) return [];
+    return [
+      SizedBox(height: PharMeTheme.smallSpace),
+      Text(
+        context.l10n.search_page_asterisk_explanation
+      ),
+    ];
   }
 
   Widget buildFilter(BuildContext context) {

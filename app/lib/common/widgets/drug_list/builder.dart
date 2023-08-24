@@ -3,15 +3,21 @@ import 'drug_items/drug_cards.dart';
 
 List<Widget> buildDrugList(
   BuildContext context,
-  DrugListState state, {
-  String? noDrugsMessage,
-  List<Widget> Function(
-    BuildContext context,
-    List<Drug> drugs,
-    { Map? buildParams }
-  ) buildDrugItems = buildDrugCards,
-  Map? drugItemsBuildParams,
-}) {
+  DrugListState state,
+  {
+    String? noDrugsMessage,
+    List<Widget> Function(
+      BuildContext context,
+      List<Drug> drugs,
+      {
+        Map? buildParams,
+        bool showDrugInteractionIndicator,
+      }
+    ) buildDrugItems = buildDrugCards,
+    bool showDrugInteractionIndicator = false,
+    Map? drugItemsBuildParams,
+  }
+) {
   List<Widget> buildDrugList(List<Drug> drugs, FilterState filter) {
     final filteredDrugs = filter.filter(drugs);
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
@@ -21,6 +27,7 @@ List<Widget> buildDrugList(
       context,
       filteredDrugs,
       buildParams: drugItemsBuildParams,
+      showDrugInteractionIndicator: showDrugInteractionIndicator,
     );
   }
   return state.when(

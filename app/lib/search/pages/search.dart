@@ -24,6 +24,7 @@ class SearchPage extends HookWidget {
         showFilter: true,
         buildDrugItems: buildDrugCards,
         cubit: cubit,
+        showDrugInteractionIndicator: true,
       ),
     );
   }
