@@ -246,7 +246,8 @@
     
   "settings_page_account_settings": "Account settings",
   "settings_page_delete_data": "Delete app data",
-  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genetic data.",
+  "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genetic data and will reset the app.",
+  "settings_page_delete_data_confirmation": "I understand that my genetic data will be deleted and it might not be possible to import it again.",
   "settings_page_more": "More",
   "settings_page_onboarding": "Onboarding",
   "settings_page_about_us": "About us",
