@@ -88,6 +88,7 @@ class DrugSelectionPage extends HookWidget {
           .read<DrugSelectionPageCubit>()
           .updateDrugActivity(drug, value),
       },
+      showDrugInteractionIndicator: false,
     );
   }
 }
