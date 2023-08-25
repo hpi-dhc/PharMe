@@ -1,7 +1,4 @@
-// ignore_for_file: avoid_returning_null_for_void
-
 import '../../module.dart';
-import '../../utilities/pdf_utils.dart';
 import 'cubit.dart';
 import 'widgets/module.dart';
 
@@ -16,71 +13,66 @@ class DrugPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final drugName = drug.name.capitalize();
     return BlocProvider(
-      create: (context) => cubit ?? DrugCubit(drug),
+      create: (context) => cubit ?? DrugCubit(),
       child: BlocBuilder<DrugCubit, DrugState>(
         builder: (context, state) {
           return state.when(
-            initial: () => pageScaffold(title: drugName, body: []),
-            error: () => pageScaffold(
-                title: drugName,
-                body: [errorIndicator(context.l10n.err_generic)]),
-            loading: () =>
-                pageScaffold(title: drugName, body: [loadingIndicator()]),
-            loaded: (drug, isActive) => pageScaffold(
-              title: drugName,
-              actions: [
-                IconButton(
-                  onPressed: () => sharePdf(drug, context),
-                  icon: Icon(
-                    Icons.ios_share_rounded,
-                    color: PharMeTheme.primaryColor,
-                  ),
-                )
-              ],
-              body: [
-                _buildDrugsPage(drug, isActive: isActive, context: context)
-              ],
-            ),
+            loaded: () => _buildDrugsPage(context, loading: false),
+            loading: () => _buildDrugsPage(context, loading: true),
           );
         },
       ),
     );
   }
 
-  Widget _buildDrugsPage(
-    Drug drug, {
-    required bool isActive,
-    required BuildContext context,
-  }) {
+  Widget _buildDrugsPage(BuildContext context, { required bool loading }) {
     final userGuideline = drug.userGuideline();
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SubHeader(context.l10n.drugs_page_header_drug),
-            SizedBox(height: 12),
-            DrugAnnotationCard(
-              drug,
-              isActive: isActive,
-              setActivity: context.read<DrugCubit>().setActivity,
-            ),
-            SizedBox(height: 20),
-            SubHeader(
-              context.l10n.drugs_page_header_guideline,
-              tooltip: context.l10n.drugs_page_tooltip_guideline,
-            ),
-            SizedBox(height: 12),
-            ...(userGuideline != null)
-                ? [
-                    Disclaimer(),
-                    SizedBox(height: 12),
-                    GuidelineAnnotationCard(userGuideline)
-                  ]
-                : [GuidelineAnnotationCard(userGuideline, drug: drug)]
-          ],
-        ));
+    final isActive = drug.isActive();
+    return pageScaffold(
+      title: drug.name.capitalize(),
+      actions: [
+        IconButton(
+          onPressed: loading ? null : () =>
+            context.read<DrugCubit>().createAndSharePdf(drug, context),
+          icon: Icon(
+            Icons.ios_share_rounded,
+            color: PharMeTheme.primaryColor,
+          ),
+        )
+      ],
+      body: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SubHeader(context.l10n.drugs_page_header_drug),
+              SizedBox(height: 12),
+              DrugAnnotationCard(
+                drug,
+                isActive: isActive,
+                setActivity: (value) =>
+                  context.read<DrugCubit>().setActivity(drug, value),
+                disabled: loading,
+              ),
+              SizedBox(height: 20),
+              SubHeader(
+                context.l10n.drugs_page_header_guideline,
+                tooltip: context.l10n.drugs_page_tooltip_guideline,
+              ),
+              SizedBox(height: 12),
+              ...(userGuideline != null)
+                  ? [
+                      Disclaimer(),
+                      SizedBox(height: 12),
+                      GuidelineAnnotationCard(userGuideline)
+                    ]
+                  : [GuidelineAnnotationCard(userGuideline, drug: drug)],
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

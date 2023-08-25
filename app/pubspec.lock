@@ -772,6 +772,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  overlay_dialog:
+    dependency: "direct main"
+    description:
+      name: overlay_dialog
+      sha256: eda742cb93a7c8f34bc45b6b73fc586018a8b3f970b421a1df6656b5f311858f
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
   package_config:
     dependency: transitive
     description:

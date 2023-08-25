@@ -8,11 +8,13 @@ class DrugAnnotationCard extends StatelessWidget {
     this.drug, {
     required this.isActive,
     required this.setActivity,
+    this.disabled = false,
   });
 
   final Drug drug;
   final bool isActive;
   final void Function(bool?) setActivity;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class DrugAnnotationCard extends StatelessWidget {
               activeColor: PharMeTheme.primaryColor,
               title: Text(context.l10n.drugs_page_active),
               value: isActive,
-              onChanged: (newValue) => {
+              onChanged: disabled ? null : (newValue) => {
                 if (isInhibitor(drug)) {
                   showCupertinoModalPopup(
                     context: context,

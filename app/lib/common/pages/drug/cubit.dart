@@ -1,23 +1,34 @@
+import 'dart:async';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:overlay_dialog/overlay_dialog.dart';
 
 import '../../module.dart';
+import '../../utilities/pdf_utils.dart';
 
 part 'cubit.freezed.dart';
 
 class DrugCubit extends Cubit<DrugState> {
-  DrugCubit(this._drug) : super(DrugState.initial()) {
-    emit(DrugState.loaded(_drug, isActive: _drug.isActive()));
-  }
-
-  final Drug _drug;
+  DrugCubit() : super(DrugState.loaded());
 
   // ignore: avoid_positional_boolean_parameters
-  Future<void> setActivity(bool? value) async {
+  Future<void> setActivity(Drug drug, bool? value) async {
     if (value == null) return;
-    final drug = state.whenOrNull(loaded: (drug, _) => drug);
-    if (drug == null) return;
+    emit(DrugState.loading());
     await setDrugActivity(drug, value);
-    emit(DrugState.loaded(drug, isActive: value));
+    emit(DrugState.loaded());
+  }
+
+  Future<void> createAndSharePdf(Drug drug, BuildContext context) async {
+    DialogHelper().show(
+      context,
+      DialogWidget.progress(style: DialogStyle.adaptive)
+    );
+    emit(DrugState.loading());
+    await sharePdf(drug, context);
+    emit(DrugState.loaded());
+    // ignore: use_build_context_synchronously
+    DialogHelper().hide(context);
   }
 }
 
@@ -35,9 +46,6 @@ Future<void> setDrugActivity(Drug drug, bool value) async {
 
 @freezed
 class DrugState with _$DrugState {
-  const factory DrugState.initial() = _InitialState;
   const factory DrugState.loading() = _LoadingState;
-  const factory DrugState.loaded(Drug drug, {required bool isActive}) =
-      _LoadedState;
-  const factory DrugState.error() = _ErrorState;
+  const factory DrugState.loaded() = _LoadedState;
 }
