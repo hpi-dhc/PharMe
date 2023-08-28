@@ -22,7 +22,7 @@ class LoginPage extends HookWidget {
       child: BlocBuilder<LoginPageCubit, LoginPageState>(
         builder: (context, state) {
           return unscrollablePageScaffold(
-            padding: PharMeTheme.mediumSpace,
+            padding: PharMeTheme.largeSpace,
             body: Stack(
               children: [
                 Positioned.fill(

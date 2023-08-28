@@ -21,7 +21,7 @@ class DrugSelectionPage extends HookWidget {
         builder: (context, state) {
           return unscrollablePageScaffold(
             title: context.l10n.drug_selection_header,
-            padding: PharMeTheme.mediumSpace,
+            padding: PharMeTheme.largeSpace,
             body: Column(
               children: [
                 _buildDescription(context),
