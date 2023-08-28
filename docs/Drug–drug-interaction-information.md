@@ -41,6 +41,8 @@ _Open questions:_
 * Also show indicator in affected drugs in gene list? (Though not feeling like
   this would be useful information here)
 
+![gene_detail](https://github.com/hpi-dhc/PharMe/assets/7488660/d1e4f929-aba1-417e-892e-8cdfb1223ee4)
+
 ## Drug selection (after onboarding)
 
 Currently **not** shown here; it feels like too much information when first
@@ -49,5 +51,3 @@ opening the app.
 _Open questions:_
 
 * Should also show here, as in drug search?
-
-![gene_detail](https://github.com/hpi-dhc/PharMe/assets/7488660/d1e4f929-aba1-417e-892e-8cdfb1223ee4)
