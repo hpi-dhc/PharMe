@@ -6,20 +6,27 @@ Sometimes, genes or diplotypes might be unknown.
 This page collects the app's current and desired behavoir in such cases for
 further discussion, as of August 28, 2023.
 
+**Baseline: this should not happen, we will test the lab results before, but**
+**need to define what happens especially if missing genotype.**
+
 ## App Behavior
 
-| Page | Case | Desired behavior | Current behavior |
-| ----- | ----- | ----------------- | ----------------- |
-| Gene report | Unknown gene | Not shown in gene results |  |
-| Gene report | Unknown diplotype | | |
-| Gene detail | Unknown diplotype | | |
-| Drug search | _TODO_ | | |
-| Drug detail | _TODO_ | | |
+**Biggest question: should we overwrite (known) lab phenotypes with**
+**Indeterminate? We will not be able to map to CPIC guidelines currently**
 
-_TODO for drug pages: how are guidelines matched? What happens for multiple
-genes, especially if one is missing?_
+| Page | Case | Desired behavior | Current behavior | TODO |
+| ---- | --- | ----------------- | ---------------- | ---- |
+| Gene report | Unknown gene | Not shown in gene results | ✅ | – |
+| Gene report | Unknown diplotype | Shown in results with "Indeterminate" phenotype | Not shown in gene results | (1) Show known genes with unknown diplotype as Indeterminate; (2) Overwrite lab phenotype as "Indeterminate" if CPIC lookup not present |
+| Gene detail | Unknown diplotype | As in report, diplotype shown; drugs with guidelines only for this gene should map to "Indeterminate" status | Not shown in gene results, so not getting here | Fix (1) in report and come back here; will probably need to overwrite lab phenotype with "Indeterminate", might be directly fixed by (2) |
+| Drug search | Unknown gene (only guideline gene) | Not sure if it makes sense to publish such guidelines we cannot show; if there, should show "Indeterminate" status | Warning shown in script that maps FDA guidenlines to CPIC lookups; "Amifampridrine" currently staged and shown, showing as "Indeterminate" (but will probably be removed, as NAT2 not inclued in new test) | – |
+| Drug search | Unknown diplotype | Should show "Indeterminate" status | ✅ | – |
+| Drug search | Unknown gene or diplotype (multiple guideline genes) | Should show status based on guideline for present gene (or as in missing gene, if all are not known) | **Cannot test currently, as no such guidelines** | ? |
+| Drug detail | Unknown gene (only guideline gene) | Guideline should be shown as "Indeterminate"; maybe instead of gene, "no guidelines present" should be shown | Guideline is "Indeterminate", phenotype is not | See (2); maybe shown "no guidelines present" |
+| Drug detail | Unknown diplotype | Guideline and phenotype should be shown as "Indeterminate" | Guideline is "Indeterminate", phenotype is not | See (2) |
+| Drug detail | Unknown gene or diplotype (multiple guideline genes) | See drug search; if unknown gene, hide in "your genome" | **Cannot test currently, as no such guidelines** | ?; probably will need to hide unknown gene and overwrite unknown diplotype phenotype |
 
-## Data examples
+## Data Examples
 
 | Description | Screenshot |
 | ----------- | ------------ |
@@ -27,3 +34,48 @@ genes, especially if one is missing?_
 | Lookups list (matched) | <img width="564" alt="matched_lookups" src="https://github.com/hpi-dhc/PharMe/assets/7488660/5f9a2beb-7642-4d17-930c-c47d6fc45266"> |
 | Single diplotype | <img width="458" alt="diplotype" src="https://github.com/hpi-dhc/PharMe/assets/7488660/27ae08c9-f9ee-405d-b838-7a4e3a9461dc"> |
 | Single lookup | <img width="307" alt="lookup" src="https://github.com/hpi-dhc/PharMe/assets/7488660/ee8586c4-9c7c-4b1d-bada-17b721b374b6"> |
+
+## Test Data for Cases Above
+
+See the example below.
+
+* `CYP2D6`: all good, gene known, diplotype known
+* `CYP2C19`: gene known, diplotype unknown (second star allele made up)
+* `APOE`: gene not known (also, no guideline in Anni)
+* `NAT2`: gene not known (but guideline in Anni; should be no difference to
+  no guideline in Anni, but for testing)
+
+```json
+{
+    "diplotypes": [
+        {
+            "gene": "CYP2D6",
+            "resultType": "Diplotype",
+            "genotype": "*1/*17",
+            "phenotype": "Normal Metabolizer",
+            "allelesTested": "*xN.*3.*4.*5.*6.*8.*9.*10.*14A.*14B.*17.*41"
+        },
+        {
+            "gene": "CYP2C19",
+            "resultType": "Diplotype",
+            "genotype": "*1/*101",
+            "phenotype": "Intermediate Metabolizer",
+            "allelesTested": "*2.*3.*4A.*4B.*5.*6.*8.*9.*10.*17.*101"
+        },
+        {
+            "gene": "APOE",
+            "resultType": "Diplotype",
+            "genotype": "ε3/ε3",
+            "phenotype": "Normal APOE function",
+            "allelesTested": "ε4"
+        },
+        {
+            "gene": "NAT2",
+            "resultType": "Diplotype",
+            "genotype": "*6/*6",
+            "phenotype": "Poor Metabolizer",
+            "allelesTested": "*6"
+        },
+    ]
+}
+```
