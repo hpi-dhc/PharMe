@@ -1,4 +1,5 @@
 import '../../../module.dart';
+import '../../../utilities/guideline_utils.dart';
 import 'utils.dart';
 
 List<Widget> buildDrugCards(
@@ -9,11 +10,8 @@ List<Widget> buildDrugCards(
     bool showDrugInteractionIndicator = false,
   }
 ) {
-  int warningLevelSeverity(Drug drug) {
-      final warningLevel = drug.userGuideline()?.annotations.warningLevel
-        ?? WarningLevel.none;
-      return warningLevel.severity;
-    }
+  int warningLevelSeverity(Drug drug) =>
+    getWarningLevel(drug.userGuideline()).severity;
   drugs.sort((drugA, drugB) {
     final warningLevelComparison = -warningLevelSeverity(drugA)
       .compareTo(warningLevelSeverity(drugB));
@@ -45,7 +43,7 @@ class DrugCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final warningLevel = drug.userGuideline()?.annotations.warningLevel;
+    final warningLevel = getWarningLevel(drug.userGuideline());
     final drugName = formatDrugName(drug, showDrugInteractionIndicator);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace / 2),
@@ -53,7 +51,7 @@ class DrugCard extends StatelessWidget {
         onTap: onTap,
         padding: EdgeInsets.all(8),
         radius: 16,
-        color: warningLevel?.color ?? PharMeTheme.indeterminateColor,
+        color: warningLevel.color,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -62,7 +60,7 @@ class DrugCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
-                    Icon(warningLevel?.icon ?? indeterminateIcon),
+                    Icon(warningLevel.icon),
                     SizedBox(width: 4),
                     Text(
                       drugName,

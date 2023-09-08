@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Uri anniUrl([String slug = '']) =>
@@ -22,7 +21,6 @@ final cpicMaxCacheTime = Duration(days: 90);
 const maxCachedDrugs = 10;
 const cpicLookupUrl =
     'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,generesult,lookupkey';
-const indeterminateIcon = Icons.help_outline_rounded;
 
 const drugInteractionIndicator = '*';
 const drugInteractionIndicatorName = 'asterisk';

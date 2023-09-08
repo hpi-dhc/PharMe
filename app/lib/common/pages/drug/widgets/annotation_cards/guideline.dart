@@ -1,6 +1,7 @@
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../module.dart';
+import '../../../../utilities/guideline_utils.dart';
 import '../sub_header.dart';
 
 class GuidelineAnnotationCard extends StatelessWidget {
@@ -35,7 +36,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildCard(BuildContext context) {
-    final warningLevel = guideline?.annotations.warningLevel;
+    final warningLevel = getWarningLevel(guideline);
     final upperCardText = guideline?.annotations.implication ??
       context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
         drug!.name
@@ -47,14 +48,13 @@ class GuidelineAnnotationCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        color: warningLevel?.color ?? PharMeTheme.indeterminateColor,
+        color: warningLevel.color,
         child: Padding(
             padding: EdgeInsets.all(12),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
-                Icon(warningLevel?.icon ?? indeterminateIcon,
-                    color: PharMeTheme.onSurfaceText),
+                Icon(warningLevel.icon, color: PharMeTheme.onSurfaceText),
                 SizedBox(width: 12),
                 Flexible(
                   child: Text(

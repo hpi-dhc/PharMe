@@ -20,6 +20,7 @@ extension WarningLevelIcon on WarningLevel {
     WarningLevel.red.name: Icons.dangerous_rounded,
     WarningLevel.yellow.name: Icons.warning_rounded,
     WarningLevel.green.name: Icons.check_circle_rounded,
+    WarningLevel.none.name: Icons.help_outline_rounded,
   };
 
   IconData get icon => WarningLevelIcon._iconMap[name]!;
@@ -30,7 +31,7 @@ extension WarningLevelSeverity on WarningLevel {
     WarningLevel.red.name: 2,
     WarningLevel.yellow.name: 1,
     WarningLevel.green.name: 0,
-    WarningLevel.none.name: -1,
+    WarningLevel.none.name: 0,
   };
   int get severity => WarningLevelSeverity._severityMap[name]!;
 }
