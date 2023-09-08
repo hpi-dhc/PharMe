@@ -14,17 +14,22 @@ further discussion, as of August 28, 2023.
 **Biggest question: should we overwrite (known) lab phenotypes with**
 **Indeterminate? We will not be able to map to CPIC guidelines currently**
 
+
+**Also test: can we get different annotations for "Indeterminate" vs.**
+**"No Result" in app?**
+
 | Page | Case | Desired behavior | Current behavior | TODO |
 | ---- | --- | ----------------- | ---------------- | ---- |
-| Gene report | Unknown gene | Not shown in gene results | ✅ | – |
+| Gene report | Unknown or missing gene | Not shown in gene results | ✅ | – |
 | Gene report | Unknown diplotype | Shown in results with "Indeterminate" phenotype | Not shown in gene results | (1) Show known genes with unknown diplotype as Indeterminate; (2) Overwrite lab phenotype as "Indeterminate" if CPIC lookup not present |
 | Gene detail | Unknown diplotype | As in report, diplotype shown; drugs with guidelines only for this gene should map to "Indeterminate" status | Not shown in gene results, so not getting here | Fix (1) in report and come back here; will probably need to overwrite lab phenotype with "Indeterminate", might be directly fixed by (2) |
 | Drug search | Unknown gene (only guideline gene) | Not sure if it makes sense to publish such guidelines we cannot show; if there, should show "Indeterminate" status | Warning shown in script that maps FDA guidenlines to CPIC lookups; "Amifampridrine" currently staged and shown, showing as "Indeterminate" (but will probably be removed, as NAT2 not inclued in new test) | – |
-| Drug search | Unknown diplotype | Should show "Indeterminate" status | ✅ | – |
-| Drug search | Unknown gene or diplotype (multiple guideline genes) | Should show status based on guideline for present gene (or as in missing gene, if all are not known) | **Cannot test currently, as no such guidelines** | ? |
-| Drug detail | Unknown gene (only guideline gene) | Guideline should be shown as "Indeterminate"; maybe instead of gene, "no guidelines present" should be shown | Guideline is "Indeterminate", phenotype is not | See (2); maybe shown "no guidelines present" |
+| Drug search | Unknown or missing diplotype | Should show "Unknown" status | ✅ | – |
+| Drug search | Unknown or missing diplotype (multiple guideline genes) | Should show status based on guideline for present gene (or "Unknown", if all are not known) | **Cannot test currently, as no such guidelines; test indeterminate and missing** | ? |
+| Drug detail | Unknown or missing gene (only guideline gene) | Guideline should be shown as "Unknown"; if unknown, maybe instead of gene, "no guidelines present" should be shown; if missing, this should be shown | Guideline is "Indeterminate", phenotype is not; need to test for missing | See (2); maybe shown "no guidelines present" |
 | Drug detail | Unknown diplotype | Guideline and phenotype should be shown as "Indeterminate" | Guideline is "Indeterminate", phenotype is not | See (2) |
-| Drug detail | Unknown gene or diplotype (multiple guideline genes) | See drug search; if unknown gene, hide in "your genome" | **Cannot test currently, as no such guidelines** | ?; probably will need to hide unknown gene and overwrite unknown diplotype phenotype |
+| Drug detail | Unknown or missing gene or diplotype (multiple guideline genes) | See drug search; if unknown gene, hide in "your genome"; if missing, this should be shown | **Cannot test currently, as no such guidelines; test indeterminate and missing** | ?; probably will need to hide unknown gene and overwrite unknown diplotype phenotype |
+
 
 ## Data Examples
 
