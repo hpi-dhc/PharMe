@@ -14,7 +14,6 @@ further discussion, as of August 28, 2023.
 **Biggest question: should we overwrite (known) lab phenotypes with**
 **Indeterminate? We will not be able to map to CPIC guidelines currently**
 
-
 **Also test: can we get different annotations for "Indeterminate" vs.**
 **"No Result" in app?**
 
@@ -29,7 +28,6 @@ further discussion, as of August 28, 2023.
 | Drug detail | Unknown or missing gene (only guideline gene) | Guideline should be shown as "Unknown"; if unknown, maybe instead of gene, "no guidelines present" should be shown; if missing, this should be shown | Guideline is "Indeterminate", phenotype is not; need to test for missing | See (2); maybe shown "no guidelines present" |
 | Drug detail | Unknown diplotype | Guideline and phenotype should be shown as "Indeterminate" | Guideline is "Indeterminate", phenotype is not | See (2) |
 | Drug detail | Unknown or missing gene or diplotype (multiple guideline genes) | See drug search; if unknown gene, hide in "your genome"; if missing, this should be shown | **Cannot test currently, as no such guidelines; test indeterminate and missing** | ?; probably will need to hide unknown gene and overwrite unknown diplotype phenotype |
-
 
 ## Data Examples
 
