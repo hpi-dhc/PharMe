@@ -17,9 +17,12 @@ application offers to export a detailed description.
 PGx report | Gene details | Drug search | Drug details |
 :-: | :-: | :-: | :-: |
 (a) | (b) | (c) | (d) |
-![report_screen](../docs/screenshots/report.png) | ![gene_screen](../docs/screenshots/gene.png) | ![search_screen](../docs/screenshots/search.png) | ![drug_screen](../docs/screenshots/drug.png) |
+![report_screen](../docs/screenshots/gene-report.png) | ![gene_screen](../docs/screenshots/gene.png) | ![search_screen](../docs/screenshots/drug-search.png) | ![drug_screen](../docs/screenshots/clopidogrel.png) |
 
 _Please note that these screenshots might not represent the latest app version._
+
+_For more app screens, please refer to the_
+_[documentation](../docs/App-screens.md)_
 
 ## Getting Started
 
