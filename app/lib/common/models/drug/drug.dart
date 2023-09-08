@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 import '../../module.dart';
+import '../../utilities/guideline_utils.dart';
 
 part 'drug.g.dart';
 
@@ -92,8 +93,9 @@ extension DrugWithUserGuideline on Drug {
 extension CriticalDrugs on List<Drug> {
   List<Drug> filterCritical() {
     return filter((drug) {
-      final warningLevel = drug.userGuideline()?.annotations.warningLevel;
-      return warningLevel != null && warningLevel != WarningLevel.green;
+      final warningLevel = getWarningLevel(drug.userGuideline());
+      return warningLevel != WarningLevel.none &&
+        warningLevel != WarningLevel.green;
     }).toList();
   }
 }

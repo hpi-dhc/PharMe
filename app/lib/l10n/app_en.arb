@@ -30,7 +30,7 @@
   "search_page_filter_green": "Show green warning level",
   "search_page_filter_yellow": "Show yellow warning level",
   "search_page_filter_red": "Show red warning level",
-  "search_page_filter_gray": "Show gray warning level",
+  "search_page_filter_gray": "Show drugs without guidelines",
   "search_page_indicator_explanation": "Taking drugs with an {indicatorName} ({indicator}) can influence your results for other drugs",
   "@search_page_indicator_explanation": {
     "description": "Explanation of drug-drug interaction indicators",
@@ -111,7 +111,7 @@
         }
     }
   },
-  "drugs_page_no_guidelines_for_phenotype_recommendation": "No recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
+  "drugs_page_no_guidelines_for_phenotype_recommendation": "Clinical dosing applies; no pharmacogenetic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
   "@drugs_page_sources_description": {
       "description": "Instructions to open external source",

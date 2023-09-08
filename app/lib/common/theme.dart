@@ -67,7 +67,6 @@ class PharMeTheme {
 
   static const surfaceColor = Colors.white;
   static const onSurfaceColor = Color(0xffe5e5e5);
-  static const indeterminateColor = onSurfaceColor;
   static const onSurfaceText = Color(0xff444648);
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xccf52a2a);
@@ -104,6 +103,7 @@ extension WarningLevelColor on WarningLevel {
     WarningLevel.red.name: Color(0xffffafaf),
     WarningLevel.yellow.name: Color(0xffffebcc),
     WarningLevel.green.name: Color(0xffcfe8cf),
+    WarningLevel.none.name: Color(0xffcfe8cf),
   };
 
   Color get color => WarningLevelColor._colorMap[name]!;
