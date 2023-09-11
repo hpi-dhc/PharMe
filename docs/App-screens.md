@@ -24,7 +24,7 @@ table row.
 | 9 | _Next_ 👆 | <img src="./screenshots/onboarding-5.png" width="60%"> | Onboarding (screen 5 of 5) |
 | 10 | _Get started_ 👆 | <img src="./screenshots/drug-selection.png" width="60%"> | Initial active drug selection |
 | 11 | _Continue_ 👆 | <img src="./screenshots/gene-report.png" width="60%"> | Gene report, showing all genes that can be mapped to PGx guidelines |
-| 12 | _CYP2D6_ tile 👆 | <img src="./screenshots/gene.png" width="60%"> | Gene details; the notice about influence of other drugs is only shown for genes where drug-gene interactions are implemented |
+| 12 | _CYP2D6_ tile 👆 | <img src="./screenshots/cyp2d6.png" width="60%"> | Gene details; the notice about influence of other drugs is only shown for genes where drug-gene interactions are implemented |
 | 13 | _Amitriptyline_ tile 👆 | <img src="./screenshots/amitriptyline.png" width="60%"> | Drug with unknown guideline detail; shown in green since standard dosing is applied without guidelines (_note for this example: the guideline for this genotype was not published in the backend at time of screenshot creation, which is why the guideline in missing in this case_) |
 | 14 | _Drugs_ navigation tab 👆 | <img src="./screenshots/drug-search.png" width="60%"> | Drug search page |
 | 15 | _?_ icon 👆 | <img src="./screenshots/drug-search-tooltip.png" width="60%"> | Tooltip explaining search feature; tooltips look the same on all pages  |

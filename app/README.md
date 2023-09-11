@@ -17,7 +17,7 @@ application offers to export a detailed description.
 PGx report | Gene details | Drug search | Drug details |
 :-: | :-: | :-: | :-: |
 (a) | (b) | (c) | (d) |
-![report_screen](../docs/screenshots/gene-report.png) | ![gene_screen](../docs/screenshots/gene.png) | ![search_screen](../docs/screenshots/drug-search.png) | ![drug_screen](../docs/screenshots/clopidogrel.png) |
+![report_screen](../docs/screenshots/gene-report.png) | ![gene_screen](../docs/screenshots/cyp2d6.png) | ![search_screen](../docs/screenshots/drug-search.png) | ![drug_screen](../docs/screenshots/clopidogrel.png) |
 
 _Please note that these screenshots might not represent the latest app version._
 
