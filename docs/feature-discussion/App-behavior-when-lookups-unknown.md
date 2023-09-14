@@ -17,7 +17,7 @@ further discussion, as of August 28, 2023.
 **Also test: can we get different annotations for "Indeterminate" vs.**
 **"No Result" in app?**
 
-_TODO: split up cases by examples_
+☑️ TODO: split up cases by examples
 
 | Page | Case | Desired behavior | Current behavior | TODO |
 | ---- | --- | ----------------- | ---------------- | ---- |
