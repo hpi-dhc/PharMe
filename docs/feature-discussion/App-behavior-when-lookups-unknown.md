@@ -17,9 +17,12 @@ further discussion, as of August 28, 2023.
 **Also test: can we get different annotations for "Indeterminate" vs.**
 **"No Result" in app?**
 
+**TODO: split up cases by examples**
+
 | Page | Case | Desired behavior | Current behavior | TODO |
 | ---- | --- | ----------------- | ---------------- | ---- |
-| Gene report | Unknown or missing gene | Not shown in gene results | ✅ | – |
+| Gene report | Gene in lab results not in lookups (e.g., APOE) | Not shown in gene results | ✅ | – |
+| Gene report | Gene in lookups not in lab results | Not shown in gene results | ✅ | – |
 | Gene report | Unknown diplotype | Shown in results with "Indeterminate" phenotype | Not shown in gene results | (1) Show known genes with unknown diplotype as Indeterminate; (2) Overwrite lab phenotype as "Indeterminate" if CPIC lookup not present |
 | Gene detail | Unknown diplotype | As in report, diplotype shown; drugs with guidelines only for this gene should map to "Indeterminate" status | Not shown in gene results, so not getting here | Fix (1) in report and come back here; will probably need to overwrite lab phenotype with "Indeterminate", might be directly fixed by (2) |
 | Drug search | Unknown gene (only guideline gene) | Not sure if it makes sense to publish such guidelines we cannot show; if there, should show "Indeterminate" status | Warning shown in script that maps FDA guidenlines to CPIC lookups; "Amifampridrine" currently staged and shown, showing as "Indeterminate" (but will probably be removed, as NAT2 not inclued in new test) | – |
@@ -40,7 +43,7 @@ further discussion, as of August 28, 2023.
 
 ## Test Data for Cases Above
 
-See the example below.
+See the example below. User is `???`, password `1234`.
 
 * `CYP2D6`: all good, gene known, diplotype known
 * `CYP2C19`: gene known, diplotype unknown (second star allele made up)
