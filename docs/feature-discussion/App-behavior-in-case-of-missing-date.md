@@ -1,4 +1,8 @@
-# App Behavior When Lookups Are Unknown to CPIC
+# App Behavior in Case of Missing Data
+
+Missing data with regards to PharMe can occur when there is a mismatch
+between genes or diplotypes in the lab report, in the annotations,
+and in CPIC lookups.
 
 Lookups are fetched from CPIC and matched with users' diplotypes from the lab.
 Sometimes, genes or diplotypes might be unknown.
