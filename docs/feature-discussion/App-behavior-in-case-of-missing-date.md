@@ -26,7 +26,7 @@ further discussion, as of August 28, 2023.
 | Page | Case | Desired behavior | Current behavior | TODO |
 | ---- | --- | ----------------- | ---------------- | ---- |
 | Gene report | Gene in lab results not in lookups (e.g., APOE) | Not shown in gene results | ✅ | – |
-| Gene report | Gene in lookups not in lab results | Not shown in gene results | ✅ | – |
+| Gene report | Gene in lookups not in lab results | Not shown in gene results | Should show in list but with "not tested" | – |
 | Gene report | Unknown diplotype | Shown in results with "Indeterminate" phenotype | Not shown in gene results | (1) Show known genes with unknown diplotype as Indeterminate; (2) Overwrite lab phenotype as "Indeterminate" if CPIC lookup not present |
 | Gene detail | Unknown diplotype | As in report, diplotype shown; drugs with guidelines only for this gene should map to "Indeterminate" status | Not shown in gene results, so not getting here | Fix (1) in report and come back here; will probably need to overwrite lab phenotype with "Indeterminate", might be directly fixed by (2) |
 | Drug search | Unknown gene (only guideline gene) | Not sure if it makes sense to publish such guidelines we cannot show; if there, should show "Indeterminate" status | Warning shown in script that maps FDA guidenlines to CPIC lookups; "Amifampridrine" currently staged and shown, showing as "Indeterminate" (but will probably be removed, as NAT2 not inclued in new test) | – |
