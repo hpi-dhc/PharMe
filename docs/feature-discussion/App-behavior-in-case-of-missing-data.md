@@ -18,7 +18,6 @@ further discussion, as of August 28, 2023.
 **genotypes should not happen, will handle manually for now (pre-processing**
 **script)**
 
-
 ## App Behavior
 
 **Biggest question: should we overwrite (known) lab phenotypes with**
