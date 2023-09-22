@@ -1,45 +1,48 @@
 # App Behavior in Case of Missing Data
 
-Missing data with regards to PharMe can occur when there is a mismatch
-between genes or diplotypes in the lab report, in the annotations,
-and in CPIC lookups.
+Missing in PharMe can occur when there is a mismatch between genes or
+diplotypes in the lab report, in the annotations, or in CPIC lookups.
 
 Lookups are fetched from CPIC and matched with users' diplotypes from the lab.
-Sometimes, genes or diplotypes might be unknown.
+They are used to map from lab report to annotations (see [data examples](#data-examples).
 
-This page collects the app's current and desired behavoir in such cases for
-further discussion, as of August 28, 2023.
+## Cases
 
-**Baseline: this should not happen, we will test the lab results before, but**
-**need to define what happens especially if missing genotype.**
+Specific cases that can occur are:
 
-**TODO (from meeting w/ Aniwaa): gene report should also show genes in**
-**annotations but not in report (“not tested”); case that CPIC does not know**
-**genotypes should not happen, will handle manually for now (pre-processing**
-**script)**
+| # | Case | Example (see [test data](#test-data-for-cases-above)) | Handling |
+| - | ---- | ----------------------------------------------------- | -------- |
+| 1 | A gene in the lab report is not included in CPIC lookups | APOE | Gene is ignored |
+| 2 | A gene in the lab report is included in CPIC lookups, but the diplotype is not | CYP2C19 \*1/\*101 | This will be handled manually when pre-processing the data |
+| 3 | A gene in the annotations is not included in CPIC lookups | NAT2 | This should also not happen, should adapt FDA crawler to skip such occurrences for now and remove from Anni; such cases will not be included in the lab report (as far as we know) |
+| 4 | A gene in the annotations is included in CPIC lookups, but lookup value (phenotype or activity score) is not | Not really present | See case 3 |
+| 5 | A gene in annotations (with known lookups) is not included in lab report | CYP2C9 | Currently, the gene is not shown; however, it should be shown with "not tested" |
 
-## App Behavior
+The following table collects which screens are affected by which cases (that
+can actually happen).
 
-**Biggest question: should we overwrite (known) lab phenotypes with**
-**Indeterminate? We will not be able to map to CPIC guidelines currently**
+| Case | Gene report | Gene detail | Drug search | Drug detail |
+| ---- | ----------- | ----------- | ----------- | ----------- |
+| 1 | ✅ (not shown) | – | – | – |
+| 5 | ⚠️ (need to implement showing as "not tested") | ❓ (need to test whether gene detail shows not tested and drug list correctly) | ❓ (need to test whether warning level is set correctly ["no recommendation", if only gene]) | ❓ (see drug search and need to test whether phenotype shows "no result" or "not tested") |
 
-**Also test: can we get different annotations for "Indeterminate" vs.**
-**"No Result" in app?**
+What happens if cases 2 to 4 are not caught in beforehand: the user will see
+the phenotype assigned by the lab and the "no recommendation can be made"
+message because internally the phenotype is "indeterminate"; this can be a bit
+unfortunate if guidelines exists for the phenotype but the lookup is missing.
 
-☑️ TODO: split up cases by examples
+## TODOs
 
-| Page | Case | Desired behavior | Current behavior | TODO |
-| ---- | --- | ----------------- | ---------------- | ---- |
-| Gene report | Gene in lab results not in lookups (e.g., APOE) | Not shown in gene results | ✅ | – |
-| Gene report | Gene in lookups not in lab results | Not shown in gene results | ✅ | – |
-| Gene report | Unknown diplotype | Shown in results with "Indeterminate" phenotype | Not shown in gene results | (1) Show known genes with unknown diplotype as Indeterminate; (2) Overwrite lab phenotype as "Indeterminate" if CPIC lookup not present |
-| Gene detail | Unknown diplotype | As in report, diplotype shown; drugs with guidelines only for this gene should map to "Indeterminate" status | Not shown in gene results, so not getting here | Fix (1) in report and come back here; will probably need to overwrite lab phenotype with "Indeterminate", might be directly fixed by (2) |
-| Drug search | Unknown gene (only guideline gene) | Not sure if it makes sense to publish such guidelines we cannot show; if there, should show "Indeterminate" status | Warning shown in script that maps FDA guidenlines to CPIC lookups; "Amifampridrine" currently staged and shown, showing as "Indeterminate" (but will probably be removed, as NAT2 not inclued in new test) | – |
-| Drug search | Unknown or missing diplotype | Should show "Unknown" status | ✅ | – |
-| Drug search | Unknown or missing diplotype (multiple guideline genes) | Should show status based on guideline for present gene (or "Unknown", if all are not known) | **Cannot test currently, as no such guidelines; test indeterminate and missing** | ? |
-| Drug detail | Unknown or missing gene (only guideline gene) | Guideline should be shown as "Unknown"; if unknown, maybe instead of gene, "no guidelines present" should be shown; if missing, this should be shown | Guideline is "Indeterminate", phenotype is not; need to test for missing | See (2); maybe shown "no guidelines present" |
-| Drug detail | Unknown diplotype | Guideline and phenotype should be shown as "Indeterminate" | Guideline is "Indeterminate", phenotype is not | See (2) |
-| Drug detail | Unknown or missing gene or diplotype (multiple guideline genes) | See drug search; if unknown gene, hide in "your genome"; if missing, this should be shown | **Cannot test currently, as no such guidelines; test indeterminate and missing** | ?; probably will need to hide unknown gene and overwrite unknown diplotype phenotype |
+* Show all genes present in annotations in gene report and test cases with ❓
+  (*TODO: issue link*)
+* Handle lookup mismatches in lab data in pre-processing (*TODO: issue link*)
+* Handle lookup mismatches in annotation data in crawler script (*TODO: issue*
+  *link*)
+* Make tag in annotations repository for version with unknown lookups; then
+  update with version from adapted script (*TODO: create task in Monday/GitLab*)
+* Catch in app if lookup could not be found and send error log to backend
+  (*TODO: issue link*)
+
 
 ## Data Examples
 
