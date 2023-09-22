@@ -33,8 +33,10 @@ unfortunate if guidelines exists for the phenotype but the lookup is missing.
 
 ## TODOs
 
-* Show all genes present in annotations in gene report and test cases with ❓
-  (*TODO: issue link*)
+* Show all genes present in annotations in gene report and potentially adapt
+  gene detail page acccordingly (*TODO: issue link*)
+* Test whether "no result" shows correctly on drug search and drug detail pages
+  ➡️ *should do this directly*
 * Handle lookup mismatches in lab data in pre-processing (*TODO: issue link*)
 * Handle lookup mismatches in annotation data in crawler script (*TODO: issue*
   *link*)
@@ -42,7 +44,6 @@ unfortunate if guidelines exists for the phenotype but the lookup is missing.
   update with version from adapted script (*TODO: create task in Monday/GitLab*)
 * Catch in app if lookup could not be found and send error log to backend
   (*TODO: issue link*)
-
 
 ## Data Examples
 
