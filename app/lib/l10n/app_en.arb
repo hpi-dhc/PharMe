@@ -162,7 +162,7 @@
   "gene_page_affected_drugs": "Affected drugs",
   "gene_page_affected_drugs_tooltip": "The drugs listed here are affected by your variant of this gene.",
   "gene_page_no_affected_drugs": "Your variant of this gene has no known effect on any drug.",
-  "gene_page_inhibitor_drugs": "Your results for this gene can be influenced by taking any of the following drugs:",
+  "gene_page_inhibitor_drugs": "Your results for this gene can be influenced if you are currently taking any of the following drugs:",
 
   "pdf_pgx_report": "PGx Report",
   "pdf_heading_user_data": "User data",
