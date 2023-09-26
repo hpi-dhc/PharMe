@@ -34,16 +34,19 @@ unfortunate if guidelines exists for the phenotype but the lookup is missing.
 ## TODOs
 
 * Show all genes present in annotations in gene report and potentially adapt
-  gene detail page acccordingly (*TODO: issue link*)
+  gene detail page accordingly
+  ([#665](https://github.com/hpi-dhc/PharMe/issues/665))
 * Test whether "no result" shows correctly on drug search and drug detail pages
   ➡️ *should do this directly*
-* Handle lookup mismatches in lab data in pre-processing (*TODO: issue link*)
-* Handle lookup mismatches in annotation data in crawler script (*TODO: issue*
-  *link*)
+* Handle lookup mismatches in lab data in pre-processing
+  ([#657](https://github.com/hpi-dhc/PharMe/issues/657))
+* Handle lookup mismatches in annotation data in crawler script
+  ([#8](https://github.com/hpi-dhc/PharMe-Annotations/issues/8))
 * Make tag in annotations repository for version with unknown lookups; then
-  update with version from adapted script (*TODO: create task in Monday/GitLab*)
+  update with version from adapted script
+  ([Monday](https://hpims-ddp.monday.com/boards/3758456899/pulses/5224289413))
 * Catch in app if lookup could not be found and send error log to backend
-  (*TODO: issue link*)
+  ([Monday](https://hpims-ddp.monday.com/boards/3758456899/pulses/5224304039))
 
 ## Data Examples
 
