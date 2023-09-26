@@ -37,7 +37,7 @@ unfortunate if guidelines exists for the phenotype but the lookup is missing.
   gene detail page accordingly
   ([#665](https://github.com/hpi-dhc/PharMe/issues/665))
 * Test whether "no result" shows correctly on drug search and drug detail pages
-  ➡️ *should do this directly*
+  ➡️ *TODO: test and describe, maybe create ticket, if not working as expected*
 * Handle lookup mismatches in lab data in pre-processing
   ([#657](https://github.com/hpi-dhc/PharMe/issues/657))
 * Handle lookup mismatches in annotation data in crawler script
@@ -59,7 +59,7 @@ unfortunate if guidelines exists for the phenotype but the lookup is missing.
 
 ## Test Data for Cases Above
 
-See the example below. User is `???`, password `1234`.
+See the example below. User is `test-missing` (Sinai backend) or `unknown-genes` (HPI backend), password `1234`.
 
 * `CYP2D6`: all good, gene known, diplotype known
 * `CYP2C19`: gene known, diplotype unknown (second star allele made up)
