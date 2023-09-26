@@ -24,7 +24,7 @@ can actually happen).
 | Case | Gene report | Gene detail | Drug search | Drug detail |
 | ---- | ----------- | ----------- | ----------- | ----------- |
 | 1 | ✅ (not shown) | – | – | – |
-| 5 | ⚠️ (need to implement showing as "not tested") | ❓ (need to test whether gene detail shows not tested and drug list correctly) | ❓ (need to test whether warning level is set correctly ["no recommendation", if only gene]) | ❓ (see drug search and need to test whether phenotype shows "no result" or "not tested") |
+| 5 | ⚠️ (need to implement showing as "not tested") | ❓ (need to test whether gene detail shows not tested and drug list correctly 🚧 after implementation of gene report) | ❓ (need to test whether warning level is set correctly ["no recommendation", if only gene]) | ❓ (see drug search and need to test whether phenotype shows "no result" or "not tested") |
 
 What happens if cases 2 to 4 are not caught in beforehand: the user will see
 the phenotype assigned by the lab and the "no recommendation can be made"
@@ -59,7 +59,8 @@ unfortunate if guidelines exists for the phenotype but the lookup is missing.
 
 ## Test Data for Cases Above
 
-See the example below. User is `test-missing` (Sinai backend) or `unknown-genes` (HPI backend), password `1234`.
+See the example below. User is `test-missing` (Sinai backend) or `unknown-genes`
+(HPI backend), password `1234`.
 
 * `CYP2D6`: all good, gene known, diplotype known
 * `CYP2C19`: gene known, diplotype unknown (second star allele made up)
