@@ -37,7 +37,9 @@ unfortunate if guidelines exists for the phenotype but the lookup is missing.
   gene detail page accordingly
   ([#665](https://github.com/hpi-dhc/PharMe/issues/665))
 * Test whether "no result" shows correctly on drug search and drug detail pages
-  ➡️ *TODO: test and describe, maybe create ticket, if not working as expected*
+  * Drug search: maps to indeterminate, should show desired behavior
+  * Drug detail: shows "indeterminate", should distinguish here
+    ([#666](https://github.com/hpi-dhc/PharMe/issues/666))
 * Handle lookup mismatches in lab data in pre-processing
   ([#657](https://github.com/hpi-dhc/PharMe/issues/657))
 * Handle lookup mismatches in annotation data in crawler script
