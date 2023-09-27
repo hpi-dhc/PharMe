@@ -13,10 +13,10 @@ Specific cases that can occur are:
 | # | Case | Example (see [test data](#test-data-for-cases-above)) | Handling |
 | - | ---- | ----------------------------------------------------- | -------- |
 | 1 | A gene in the lab report is not included in CPIC lookups | APOE | Gene is ignored |
-| 2 | A gene in the lab report is included in CPIC lookups, but the diplotype is not | CYP2C19 \*1/\*101 | This will be handled manually when pre-processing the data |
+| 2 | A gene in the lab report is included in CPIC lookups, but the diplotype is not | CYP2C9 \*1/\*101 | This will be handled manually when pre-processing the data |
 | 3 | A gene in the annotations is not included in CPIC lookups | NAT2 | This should also not happen, should adapt FDA crawler to skip such occurrences for now and remove from Anni; such cases will not be included in the lab report (as far as we know) |
 | 4 | A gene in the annotations is included in CPIC lookups, but lookup value (phenotype or activity score) is not | Not really present | See case 3 |
-| 5 | A gene in annotations (with known lookups) is not included in lab report | CYP2C9 | Currently, the gene is not shown; however, it should be shown with "not tested" |
+| 5 | A gene in annotations (with known lookups) is not included in lab report | CYP2C19 | Currently, the gene is not shown; however, it should be shown with "not tested" |
 
 The following table collects which screens are affected by which cases (that
 can actually happen).
@@ -63,7 +63,7 @@ See the example below. User is `test-missing` (Sinai backend) or `unknown-genes`
 (HPI backend), password `1234`.
 
 * `CYP2D6`: all good, gene known, diplotype known
-* `CYP2C19`: gene known, diplotype unknown (second star allele made up)
+* `CYP2C9`: gene known, diplotype unknown (second star allele made up)
 * `APOE`: gene not known (also, no guideline in Anni)
 * `NAT2`: gene not known (but guideline in Anni; should be no difference to
   no guideline in Anni, but for testing)
@@ -79,7 +79,7 @@ See the example below. User is `test-missing` (Sinai backend) or `unknown-genes`
             "allelesTested": "*xN.*3.*4.*5.*6.*8.*9.*10.*14A.*14B.*17.*41"
         },
         {
-            "gene": "CYP2C19",
+            "gene": "CYP2C9",
             "resultType": "Diplotype",
             "genotype": "*1/*101",
             "phenotype": "Intermediate Metabolizer",
