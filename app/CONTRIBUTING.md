@@ -58,17 +58,3 @@ flutter pub run flutter_launcher_icons:main
 ```
 
 This will generate icons for both iOS as well as Android.
-
-## Building with Docker for Android
-
-Using `instrumentisto/flutter` to build (of course also possible locally, but
-might not work due to conflicting Java/Gradle/... versions).
-
-Add keys according to
-[Flutter docs](https://docs.flutter.dev/deployment/android) and set the path in
-`key.properties` to `/keystore/upload-keystore.jks` (this is where the
-to-be-mounted volume points to; would recommend to keep the original path as a
-comment for reference).
-
-Execute the `build_android.sh` script:
-`bash build_helpers/build_android.sh <path-to-keystore> <path-to-repository>`.
