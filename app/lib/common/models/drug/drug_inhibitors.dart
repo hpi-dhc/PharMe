@@ -9,32 +9,72 @@ import 'package:dartx/dartx.dart';
 
 import 'drug.dart';
 
-const Map<String, Map<String, String>> drugInhibitors = {
+// Inhibit phenotype for gene by overwriting with poor metabolizer
+const Map<String, Map<String, String>> strongDrugInhibitors = {
   'CYP2D6': {
-    // 0.0 is a lookupkey for a type of poor metabolizer
     'bupropion': '0.0',
     'fluoxetine': '0.0',
     'paroxetine': '0.0',
     'quinidine': '0.0',
     'terbinafine': '0.0',
-    // 1.0 is a lookupkey for a type of poor (but less poor than 0.0)
-    // metabolizer
-    'abiraterone': '1.0',
-    'cinacalcet': '1.0',
-    'duloxetine': '1.0',
-    'lorcaserin': '1.0',
-    'mirabegron': '1.0',
-  }
+  },
 };
 
+// Inhibit phenotype for gene by adapting the activity score by a defined
+// factor
+// TODO(tamslo): implement inhibition (currently only showing the warning)
+// https://github.com/hpi-dhc/PharMe/issues/667
+const Map<String, Map<String, double>> moderateDrugInhibitors = {
+  'CYP2D6': {
+    'abiraterone': 0.5,
+    'cinacalcet': 0.5,
+    'duloxetine': 0.5,
+    'lorcaserin': 0.5,
+    'mirabegron': 0.5,
+  },
+};
+
+final inhibitableGenes = List<String>.from(<String>{
+  ...strongDrugInhibitors.keys,
+  ...moderateDrugInhibitors.keys,
+});
+
+final _drugInhibitorsPerGene = {
+  for (final geneSymbol in inhibitableGenes) geneSymbol: [
+    ...?strongDrugInhibitors[geneSymbol]?.keys,
+    ...?moderateDrugInhibitors[geneSymbol]?.keys,
+  ]
+};
+
+bool _isInhibitorOfType(
+  String drugName,
+  Map<String, Map<String, dynamic>> inhibitorDefinition
+) {
+  final influencingDrugs = inhibitorDefinition.keys.flatMap(
+    (gene) => inhibitorDefinition[gene]!.keys);
+  return influencingDrugs.contains(drugName);
+}
+
+bool isStrongInhibitor(String drugName) {
+  return _isInhibitorOfType(drugName, strongDrugInhibitors);
+}
+
+bool isModerateInhibitor(String drugName) {
+  return _isInhibitorOfType(drugName, moderateDrugInhibitors);
+}
 
 bool isInhibitor(Drug drug) {
-  final influencingDrugs = drugInhibitors.keys.flatMap(
-    (gene) => drugInhibitors[gene]!.keys);
+  final influencingDrugs = _drugInhibitorsPerGene.keys.flatMap(
+    (gene) => _drugInhibitorsPerGene[gene]!);
   return influencingDrugs.contains(drug.name);
 }
 
-List<String> inhibitorFor(Drug drug) {
-  return drugInhibitors.keys.filter(
-    (gene) => drugInhibitors[gene]!.containsKey(drug.name)).toList();
+List<String> inhibitedGenes(Drug drug) {
+  return _drugInhibitorsPerGene.keys.filter(
+    (gene) => _drugInhibitorsPerGene[gene]!.contains(drug.name)
+  ).toList();
+}
+
+List<String> inhibitorsFor(String geneSymbol) {
+  return _drugInhibitorsPerGene[geneSymbol] ?? [];
 }

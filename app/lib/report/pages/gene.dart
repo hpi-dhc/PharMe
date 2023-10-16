@@ -49,21 +49,20 @@ class GenePage extends HookWidget {
                                 tooltip: context.l10n.gene_page_genotype_tooltip
                             ),
                             _buildRow(context.l10n.gene_page_phenotype,
-                                UserData.phenotypeFor(phenotype.geneSymbol)!,
+                                UserData.phenotypeFor(
+                                  phenotype.geneSymbol,
+                                  context,
+                                ).phenotype!,
                                 tooltip:
                                   context.l10n.gene_page_phenotype_tooltip
                             ),
                           ],
                         ),
-                        if (drugInhibitors.containsKey(phenotype.geneSymbol))
-                          ...[
-                            SizedBox(height: PharMeTheme.smallSpace),
-                            Text(context.l10n.gene_page_inhibitor_drugs),
-                            SizedBox(height: PharMeTheme.smallSpace),
-                            Text(drugInhibitors[phenotype.geneSymbol]!.keys
-                              .join(', ')
-                            ),
-                          ],
+                        if (inhibitableGenes.contains(phenotype.geneSymbol))
+                          ...buildDrugInteractionInfo(
+                            context,
+                            phenotype.geneSymbol,
+                          ),
                     ],
                   )),
                   SizedBox(height: PharMeTheme.smallToMediumSpace),
@@ -101,4 +100,31 @@ class GenePage extends HookWidget {
         ),
         Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4), child: Text(value)),
       ]);
+
+  List<Widget> buildDrugInteractionInfo(BuildContext context, String gene) {
+    final phenotypeInformation = UserData.phenotypeFor(gene, context);
+    if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
+      final furtherInhibitors = inhibitorsFor(gene).filter((drugName) =>
+        !UserData.activeInhibitorsFor(gene).contains(drugName)
+      );
+      return [
+        SizedBox(height: PharMeTheme.smallSpace),
+        Text('${phenotypeInformation.adaptionText!.capitalize()}.'),
+        SizedBox(height: PharMeTheme.smallSpace),
+        Text(context.l10n.gene_page_further_inhibitor_drugs),
+        SizedBox(height: PharMeTheme.smallSpace),
+        Text(
+          furtherInhibitors.join(', ')
+        ),
+      ];
+    }
+    return [
+      SizedBox(height: PharMeTheme.smallSpace),
+      Text(context.l10n.gene_page_inhibitor_drugs),
+      SizedBox(height: PharMeTheme.smallSpace),
+      Text(
+        inhibitorsFor(gene).join(', ')
+      ),
+    ];
+  }
 }

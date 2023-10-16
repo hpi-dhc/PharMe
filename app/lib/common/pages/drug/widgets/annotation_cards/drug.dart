@@ -40,7 +40,7 @@ class DrugAnnotationCard extends StatelessWidget {
               SizedBox(height: 8),
               Text(context.l10n.drugs_page_is_inhibitor(
                 drug.name,
-                inhibitorFor(drug).join(', '),
+                inhibitedGenes(drug).join(', '),
               )),
             ],
             Divider(color: PharMeTheme.borderColor),

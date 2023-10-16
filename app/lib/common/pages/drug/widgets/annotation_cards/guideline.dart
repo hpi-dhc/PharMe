@@ -81,18 +81,16 @@ class GuidelineAnnotationCard extends StatelessWidget {
       final genes = guideline?.lookupkey.keys ??
         drug!.guidelines.first.lookupkey.keys;
       final geneDescriptions = genes.map((geneSymbol) {
-        final overwritingDrug = UserData.overwrittenLookup(geneSymbol)?.key;
-        final hint = overwritingDrug.isNotNullOrEmpty
-            ? ' (${
-                context.l10n.drugs_page_overwritten_phenotype(overwritingDrug!)
-              })'
-            : '';
-        final genePhenotype =
+        final phenotypeInformation = UserData.phenotypeFor(geneSymbol, context);
+        var description =
             '$geneSymbol: ${
-              UserData.phenotypeFor(geneSymbol) ??
+              phenotypeInformation.phenotype ??
                 context.l10n.drugs_page_cast_indeterminate
             }';
-        return [genePhenotype, hint].join('');
+        if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
+          description = '$description (${phenotypeInformation.adaptionText})';
+        }
+        return description;
       });
       headerContent = geneDescriptions.join('\n');
     }

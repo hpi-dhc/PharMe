@@ -56,26 +56,16 @@ class DrugSearch extends HookWidget {
                   ]
                 ),
                 SizedBox(height: PharMeTheme.smallSpace),
-                Expanded(
-                  child: Scrollbar(
-                    thumbVisibility: true,
-                    thickness: PharMeTheme.smallSpace / 2,
-                    child: ListView(
-                      padding: EdgeInsets.only(
-                      right: PharMeTheme.smallSpace * 1.5
-                      // right: 0
-                    ),
-                      children: buildDrugList(
-                        context,
-                        state,
-                        buildDrugItems: buildDrugItems,
-                        noDrugsMessage: noDrugsMessage,
-                        drugItemsBuildParams: drugItemsBuildParams,
-                        showDrugInteractionIndicator:
-                          showDrugInteractionIndicator,
-                      ),
-                    ),
-                  ),
+                scrollList(
+                  buildDrugList(
+                    context,
+                    state,
+                    buildDrugItems: buildDrugItems,
+                    noDrugsMessage: noDrugsMessage,
+                    drugItemsBuildParams: drugItemsBuildParams,
+                    showDrugInteractionIndicator:
+                      showDrugInteractionIndicator,
+                  )
                 ),
                 ..._maybeShowDrugInteractionExplanation(context),
               ],

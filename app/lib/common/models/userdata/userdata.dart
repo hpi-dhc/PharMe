@@ -4,12 +4,24 @@ import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
-import '../../../search/module.dart';
+import '../../module.dart';
 import '../../utilities/hive_utils.dart';
 
 part 'userdata.g.dart';
 
 const _boxName = 'userdata';
+
+class PhenotypeInformation {
+  PhenotypeInformation({
+    this.phenotype,
+    this.adaptionText,
+    this.originalPhenotype,
+  });
+
+  String? phenotype;
+  String? adaptionText;
+  String? originalPhenotype;
+}
 
 /// UserData is a singleton data-class which contains various user-specific
 /// data It is intended to be loaded from a Hive box once at app launch, from
@@ -36,8 +48,55 @@ class UserData {
   @HiveField(0)
   Map<String, Diplotype>? diplotypes;
 
-  static String? phenotypeFor(String gene) =>
-      UserData.instance.diplotypes?[gene]?.phenotype;
+  static PhenotypeInformation phenotypeFor(
+    String gene,
+    BuildContext context,
+    { String userSalutation = 'you' }
+  ) {
+    final originalPhenotype = UserData.instance.diplotypes?[gene]?.phenotype;
+    if (originalPhenotype == null) {
+      return PhenotypeInformation();
+    }
+    final overwrittenLookup = UserData.overwrittenLookup(gene);
+    final activeInhibitors = UserData.activeInhibitorsFor(gene);
+    if (activeInhibitors.isEmpty) {
+      return PhenotypeInformation(phenotype: originalPhenotype);
+    }
+    if (overwrittenLookup == null) {
+      final activeInhibitorsText = enumerationWithAnd(
+        activeInhibitors,
+        context
+      );
+      return PhenotypeInformation(
+        phenotype: originalPhenotype,
+        adaptionText: context.l10n.drugs_page_moderate_inhibitors(
+          userSalutation,
+          activeInhibitorsText,
+        ),
+      );
+    }
+    final activeStrongInhibitors = activeInhibitors.filter(
+      isStrongInhibitor
+    ).toList();
+    final activeModerateInhibitors = activeInhibitors.filter(
+      isModerateInhibitor
+    ).toList();
+    final adaptionText = activeModerateInhibitors.isEmpty
+      ? context.l10n.drugs_page_strong_inhibitors(
+          userSalutation,
+          enumerationWithAnd(activeStrongInhibitors, context),
+        )
+      : context.l10n.drugs_page_moderate_and_strong_inhibitors(
+          userSalutation,
+          enumerationWithAnd(activeStrongInhibitors, context),
+          enumerationWithAnd(activeModerateInhibitors, context),
+        );
+    return PhenotypeInformation(
+      phenotype: context.l10n.general_poor_metabolizer,
+      adaptionText: adaptionText,
+      originalPhenotype: originalPhenotype,
+    );
+  }
 
   static String? genotypeFor(String gene) =>
       UserData.instance.diplotypes?[gene]?.genotype;
@@ -49,7 +108,7 @@ class UserData {
   Map<String, CpicPhenotype>? lookups;
 
   static MapEntry<String, String>? overwrittenLookup(String gene) {
-    final inhibitors = drugInhibitors[gene];
+    final inhibitors = strongDrugInhibitors[gene];
     if (inhibitors == null) return null;
     final lookup = inhibitors.entries.firstWhereOrNull((entry) =>
         UserData.instance.activeDrugNames?.contains(entry.key) ?? false);
@@ -57,9 +116,9 @@ class UserData {
     return lookup;
   }
 
-  static String? lookupFor(String gene) {
+  static String? lookupFor(String gene, {bool useOverwrite = true}) {
     final overwrittenLookup = UserData.overwrittenLookup(gene);
-    if (overwrittenLookup != null) {
+    if (useOverwrite && overwrittenLookup != null) {
       return overwrittenLookup.value;
     }
     return UserData.instance.lookups?[gene]?.lookupkey;
@@ -68,6 +127,14 @@ class UserData {
   // hive can't deal with sets so we have to use a list :(
   @HiveField(2)
   List<String>? activeDrugNames;
+
+  static List<String> activeInhibitorsFor(String gene) {
+    return UserData.instance.activeDrugNames == null
+      ? <String>[]
+      : UserData.instance.activeDrugNames!.filter(
+          (drug) => inhibitorsFor(gene).contains(drug)
+        ).toList();
+  }
 }
 
 /// Initializes the user's data by registering all necessary adapters and

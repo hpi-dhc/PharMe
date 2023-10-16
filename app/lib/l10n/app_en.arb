@@ -24,6 +24,9 @@
 
   "general_continue": "Continue",
   "general_retry": "Retry",
+  "general_and": "and",
+  "general_poor_metabolizer": "Poor Metabolizer",
+  "general_the_user": "the user",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
   "search_page_filter_inactive": "Show currently not taken drugs",
@@ -70,15 +73,52 @@
         }
     }
   },
-  "drugs_page_overwritten_phenotype": "adjusted based on you taking {drugName}",
-  "@drugs_page_overwritten_phenotype": {
-      "description": "Disclaimer for when the phenotype has been adjusted based on a current drug",
-      "placeholders": {
-          "drugName": {
-              "type": "String",
-              "example": "bupropion"
-          }
+
+  "drugs_page_moderate_inhibitors": "however, the phenotype can be influenced based on {salutation} taking {inhibitors}",
+  "@drugs_page_moderate_inhibitors": {
+    "description": "Disclaimer for when the phenotype might be adjusted based on current drug(s)",
+    "placeholders": {
+      "salutation": {
+        "type": "String",
+        "example": "you"
+      },
+      "inhibitors": {
+          "type": "String",
+          "example": "abiraterone, cinacalcet, and duloxetine"
       }
+    }
+  },
+  "drugs_page_strong_inhibitors": "phenotype adjusted based on {salutation} taking {inhibitors}",
+  "@drugs_page_strong_inhibitors": {
+    "description": "Disclaimer for when the phenotype has been adjusted based on current drug(s)",
+    "placeholders": {
+      "salutation": {
+        "type": "String",
+        "example": "you"
+      },
+      "inhibitors": {
+          "type": "String",
+          "example": "bupropion and fluoxetine"
+      }
+    }
+  },
+  "drugs_page_moderate_and_strong_inhibitors": "phenotype adjusted based on {salutation} taking {strongInhibitors}; this can be further influenced by {moderateInhibitors}",
+  "@drugs_page_moderate_and_strong_inhibitors": {
+    "description": "Disclaimer for when the phenotype has been and might be adjusted based on current drug(s)",
+    "placeholders": {
+      "salutation": {
+        "type": "String",
+        "example": "you"
+      },
+      "strongInhibitors": {
+          "type": "String",
+          "example": "bupropion"
+      },
+      "moderateInhibitors": {
+        "type": "String",
+        "example": "abiraterone, cinacalcet, and duloxetine"
+      }
+    }
   },
   "drugs_page_your_genome": "Your genome",
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
@@ -125,6 +165,21 @@
   "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
   "drugs_page_cast_indeterminate": "Indeterminate",
 
+  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by drugs you are currently taking",
+  "@report_page_indicator_explanation": {
+    "description": "Explanation of drug-drug interaction indicators",
+    "placeholders": {
+        "indicatorName": {
+          "type": "String",
+          "example": "asterisk"
+        },
+        "indicator": {
+          "type": "String",
+          "example": "*"
+      }
+    }
+  },
+
   "gene_page_headline": "{geneSymbol} report",
   "@gene_page_headline": {
     "description": "Name of the gene",
@@ -163,6 +218,8 @@
   "gene_page_affected_drugs_tooltip": "The drugs listed here are affected by your variant of this gene.",
   "gene_page_no_affected_drugs": "Your variant of this gene has no known effect on any drug.",
   "gene_page_inhibitor_drugs": "Your results for this gene can be influenced if you are currently taking any of the following drugs:",
+  "gene_page_further_inhibitor_drugs": "Your results for this gene can also be influenced if you are currently taking any of the following drugs:",
+  "gene_page_activity_score": "Activity score",
 
   "pdf_pgx_report": "PGx Report",
   "pdf_heading_user_data": "User data",
@@ -214,6 +271,16 @@
       "guidelineSource": {
         "type": "String",
         "example": "CPIC"
+      }
+    }
+  },
+  "pdf_activity_score_overwrite": "{originalScore} adjusted based on active medications, see phenotype",
+  "@pdf_activity_score_overwrite": {
+    "description": "Disclaimer for when the lookup has been or might be adjusted based on current drug(s)",
+    "placeholders": {
+      "originalScore": {
+        "type": "String",
+        "example": "2.0"
       }
     }
   },
