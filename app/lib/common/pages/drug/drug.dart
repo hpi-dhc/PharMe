@@ -62,13 +62,11 @@ class DrugPage extends StatelessWidget {
                 tooltip: context.l10n.drugs_page_tooltip_guideline,
               ),
               SizedBox(height: 12),
-              ...(userGuideline != null)
-                  ? [
-                      Disclaimer(),
-                      SizedBox(height: 12),
-                      GuidelineAnnotationCard(userGuideline)
-                    ]
-                  : [GuidelineAnnotationCard(userGuideline, drug: drug)],
+              if (userGuideline != null) ...[
+                Disclaimer(),
+                SizedBox(height: 12),
+              ],
+              GuidelineAnnotationCard(userGuideline, drug),
             ],
           ),
         ),

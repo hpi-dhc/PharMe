@@ -124,10 +124,11 @@ List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
   ];
 }
 
-String? _getPhenotypeInfo(String gene, BuildContext context) {
+String? _getPhenotypeInfo(String gene, Drug drug, BuildContext context) {
   final phenotypeInformation = UserData.phenotypeFor(
     gene,
     context,
+    drug: drug.name,
     userSalutation: context.l10n.general_the_user,  
   );
   if (phenotypeInformation.adaptionText.isNullOrBlank) {
@@ -138,9 +139,17 @@ String? _getPhenotypeInfo(String gene, BuildContext context) {
     '${phenotypeInformation.adaptionText})';
 }
 
-String? _getActivityScoreInfo(String gene, BuildContext context) {
-  final originalLookup = UserData.lookupFor(gene, useOverwrite: false);
-  final overwrittenLookup = UserData.lookupFor(gene, useOverwrite: true);
+String? _getActivityScoreInfo(String gene, Drug drug, BuildContext context) {
+  final originalLookup = UserData.lookupFor(
+    gene,
+    drug: drug.name,
+    useOverwrite: false,
+  );
+  final overwrittenLookup = UserData.lookupFor(
+    gene,
+    drug: drug.name,
+    useOverwrite: true,
+  );
   if (originalLookup == overwrittenLookup) return originalLookup;
   return '$overwrittenLookup '
     '(${context.l10n.pdf_activity_score_overwrite(
@@ -150,13 +159,13 @@ String? _getActivityScoreInfo(String gene, BuildContext context) {
 
 String _userInfoPerGene(
   Drug drug,
-  String? Function(String, BuildContext) getInfo,
+  String? Function(String, Drug, BuildContext) getInfo,
   BuildContext buildContext,  
 ) {
   if (drug.guidelines.isEmpty) return buildContext.l10n.pdf_no_value;
   final guidelineGenes = drug.guidelines.first.lookupkey.keys.toList();
   return guidelineGenes.map((gene) =>
-    '$gene: ${getInfo(gene, buildContext) ?? buildContext.l10n.pdf_no_value}'
+    '$gene: ${getInfo(gene, drug, buildContext) ?? buildContext.l10n.pdf_no_value}'
   ).join(', ');
 }
 
@@ -169,7 +178,7 @@ List<pw.Widget> _buildUserPart(
   final userGuideline = drug.userGuideline();
   final patientGenotype = _userInfoPerGene(
     drug,
-    (gene, context) => UserData.genotypeFor(gene),
+    (gene, drug, context) => UserData.genotypeFor(gene),
     buildContext,
   );
   final patientPhenotype = _userInfoPerGene(
@@ -184,7 +193,7 @@ List<pw.Widget> _buildUserPart(
   );
   final allelesTested = _userInfoPerGene(
     drug,
-    (gene, context) => UserData.allelesTestedFor(gene),
+    (gene, drug, context) => UserData.allelesTestedFor(gene),
     buildContext,
   );
   final warningLevelIcons = {

@@ -5,7 +5,7 @@ import '../../../../utilities/guideline_utils.dart';
 import '../sub_header.dart';
 
 class GuidelineAnnotationCard extends StatelessWidget {
-  const GuidelineAnnotationCard(this.guideline, { this.drug });
+  const GuidelineAnnotationCard(this.guideline, this.drug);
 
   final Guideline? guideline;
   final Drug? drug;
@@ -81,7 +81,11 @@ class GuidelineAnnotationCard extends StatelessWidget {
       final genes = guideline?.lookupkey.keys ??
         drug!.guidelines.first.lookupkey.keys;
       final geneDescriptions = genes.map((geneSymbol) {
-        final phenotypeInformation = UserData.phenotypeFor(geneSymbol, context);
+        final phenotypeInformation = UserData.phenotypeFor(
+          geneSymbol,
+          context,
+          drug: drug?.name,
+        );
         var description =
             '$geneSymbol: ${
               phenotypeInformation.phenotype ??

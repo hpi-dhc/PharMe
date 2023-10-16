@@ -51,14 +51,17 @@ class UserData {
   static PhenotypeInformation phenotypeFor(
     String gene,
     BuildContext context,
-    { String userSalutation = 'you' }
+    {
+      String? drug,
+      String userSalutation = 'you',
+    }
   ) {
     final originalPhenotype = UserData.instance.diplotypes?[gene]?.phenotype;
     if (originalPhenotype == null) {
       return PhenotypeInformation();
     }
-    final overwrittenLookup = UserData.overwrittenLookup(gene);
-    final activeInhibitors = UserData.activeInhibitorsFor(gene);
+    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
+    final activeInhibitors = UserData.activeInhibitorsFor(gene, drug: drug);
     if (activeInhibitors.isEmpty) {
       return PhenotypeInformation(phenotype: originalPhenotype);
     }
@@ -107,17 +110,30 @@ class UserData {
   @HiveField(1)
   Map<String, CpicPhenotype>? lookups;
 
-  static MapEntry<String, String>? overwrittenLookup(String gene) {
+  static MapEntry<String, String>? overwrittenLookup(
+    String gene,
+    { String? drug }
+  ) {
     final inhibitors = strongDrugInhibitors[gene];
     if (inhibitors == null) return null;
-    final lookup = inhibitors.entries.firstWhereOrNull((entry) =>
-        UserData.instance.activeDrugNames?.contains(entry.key) ?? false);
+    final lookup = inhibitors.entries.firstWhereOrNull((entry) {
+      final isActiveInhitor =
+        UserData.instance.activeDrugNames?.contains(entry.key) ?? false;
+      final wouldInhibitItself = drug == entry.key;
+      return isActiveInhitor && !wouldInhibitItself;
+    });
     if (lookup == null) return null;
     return lookup;
   }
 
-  static String? lookupFor(String gene, {bool useOverwrite = true}) {
-    final overwrittenLookup = UserData.overwrittenLookup(gene);
+  static String? lookupFor(
+    String gene,
+    {
+      String? drug,
+      bool useOverwrite = true,
+    }
+  ) {
+    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
     if (useOverwrite && overwrittenLookup != null) {
       return overwrittenLookup.value;
     }
@@ -128,11 +144,13 @@ class UserData {
   @HiveField(2)
   List<String>? activeDrugNames;
 
-  static List<String> activeInhibitorsFor(String gene) {
+  static List<String> activeInhibitorsFor(String gene, { String? drug }) {
     return UserData.instance.activeDrugNames == null
       ? <String>[]
       : UserData.instance.activeDrugNames!.filter(
-          (drug) => inhibitorsFor(gene).contains(drug)
+          (activeDrug) =>
+            inhibitorsFor(gene).contains(activeDrug) &&
+            activeDrug != drug
         ).toList();
   }
 }
