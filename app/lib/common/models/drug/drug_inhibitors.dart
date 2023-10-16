@@ -63,10 +63,10 @@ bool isModerateInhibitor(String drugName) {
   return _isInhibitorOfType(drugName, moderateDrugInhibitors);
 }
 
-bool isInhibitor(Drug drug) {
+bool isInhibitor(String drugName) {
   final influencingDrugs = _drugInhibitorsPerGene.keys.flatMap(
     (gene) => _drugInhibitorsPerGene[gene]!);
-  return influencingDrugs.contains(drug.name);
+  return influencingDrugs.contains(drugName);
 }
 
 List<String> inhibitedGenes(Drug drug) {

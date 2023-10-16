@@ -36,7 +36,7 @@ class DrugAnnotationCard extends StatelessWidget {
               ]
             ]),
             SizedBox(height: 4),
-            if (isInhibitor(drug)) ...[
+            if (isInhibitor(drug.name)) ...[
               SizedBox(height: 8),
               Text(context.l10n.drugs_page_is_inhibitor(
                 drug.name,
@@ -51,7 +51,7 @@ class DrugAnnotationCard extends StatelessWidget {
               title: Text(context.l10n.drugs_page_active),
               value: isActive,
               onChanged: disabled ? null : (newValue) => {
-                if (isInhibitor(drug)) {
+                if (isInhibitor(drug.name)) {
                   showCupertinoModalPopup(
                     context: context,
                     builder: (context) => CupertinoAlertDialog(

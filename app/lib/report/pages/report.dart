@@ -3,6 +3,8 @@ import '../../common/module.dart';
 class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final hasActiveInhibitors = UserData.instance.activeDrugNames != null &&
+      UserData.instance.activeDrugNames!.any(isInhibitor);
     return unscrollablePageScaffold(
       title: context.l10n.tab_report,
       body: Column(
@@ -14,7 +16,7 @@ class ReportPage extends StatelessWidget {
                 SizedBox(height: 8)
               ])
             ).toList()),
-          drugInteractionExplanation(context),
+          if (hasActiveInhibitors) drugInteractionExplanation(context),
         ]
       )
     );
