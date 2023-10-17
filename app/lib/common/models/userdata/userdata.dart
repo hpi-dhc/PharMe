@@ -13,12 +13,12 @@ const _boxName = 'userdata';
 
 class PhenotypeInformation {
   PhenotypeInformation({
-    this.phenotype,
+    required this.phenotype,
     this.adaptionText,
     this.overwrittenPhenotype,
   });
 
-  String? phenotype;
+  String phenotype;
   String? adaptionText;
   String? overwrittenPhenotype;
 }
@@ -58,7 +58,9 @@ class UserData {
   ) {
     final originalPhenotype = UserData.instance.diplotypes?[gene]?.phenotype;
     if (originalPhenotype == null) {
-      return PhenotypeInformation();
+      return PhenotypeInformation(
+        phenotype: context.l10n.general_not_tested,
+      );
     }
     final activeInhibitors = UserData.activeInhibitorsFor(gene, drug: drug);
     if (activeInhibitors.isEmpty) {

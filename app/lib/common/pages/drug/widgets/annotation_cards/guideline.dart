@@ -86,11 +86,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
           context,
           drug: drug?.name,
         );
-        var description =
-            '$geneSymbol: ${
-              phenotypeInformation.phenotype ??
-                context.l10n.drugs_page_cast_indeterminate
-            }';
+        var description = '$geneSymbol: ${phenotypeInformation.phenotype}';
         if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
           description = '$description (${phenotypeInformation.adaptionText})';
         }

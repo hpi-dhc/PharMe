@@ -27,6 +27,7 @@
   "general_and": "and",
   "general_poor_metabolizer": "Poor Metabolizer",
   "general_the_user": "the user",
+  "general_not_tested": "Not tested",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
   "search_page_filter_inactive": "Show currently not taken drugs",
@@ -187,7 +188,6 @@
       }
   },
   "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
-  "drugs_page_cast_indeterminate": "Indeterminate",
 
   "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by drugs you are currently taking",
   "@report_page_indicator_explanation": {

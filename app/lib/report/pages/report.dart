@@ -47,7 +47,7 @@ class GeneCard extends StatelessWidget {
       context,
     );
     final phenotypeText = phenotypeInformation.adaptionText.isNullOrBlank
-      ? phenotypeInformation.phenotype!
+      ? phenotypeInformation.phenotype
       : '${phenotypeInformation.phenotype}$drugInteractionIndicator';
     return RoundedCard(
       onTap: () => context.router.push(GeneRoute(phenotype: phenotype)),

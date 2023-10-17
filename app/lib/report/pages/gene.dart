@@ -52,7 +52,7 @@ class GenePage extends HookWidget {
                                 UserData.phenotypeFor(
                                   phenotype.geneSymbol,
                                   context,
-                                ).phenotype!,
+                                ).phenotype,
                                 tooltip:
                                   context.l10n.gene_page_phenotype_tooltip
                             ),
