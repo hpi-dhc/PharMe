@@ -15,3 +15,11 @@ String enumerationWithAnd(List<String> items, BuildContext context) {
   final lastItem = itemsCopy.removeLast();
   return '${itemsCopy.join(', ')} ${context.l10n.general_and} $lastItem';
 }
+
+String formatAsSentence(String text, {String ending = '.'}) {
+  var sentenceFormattedString = text.capitalize();
+  if (!sentenceFormattedString.endsWith(ending)) {
+    sentenceFormattedString = '$sentenceFormattedString$ending';
+  }
+  return sentenceFormattedString;
+}

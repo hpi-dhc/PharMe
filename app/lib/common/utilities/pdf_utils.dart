@@ -134,9 +134,15 @@ String? _getPhenotypeInfo(String gene, Drug drug, BuildContext context) {
   if (phenotypeInformation.adaptionText.isNullOrBlank) {
     return phenotypeInformation.phenotype;
   }
-  return '${phenotypeInformation.phenotype} '
-    '(${phenotypeInformation.originalPhenotype} '
-    '${phenotypeInformation.adaptionText})';
+  var phenotypeInformationText = '${phenotypeInformation.phenotype} ('
+    '${phenotypeInformation.adaptionText}';
+  if (phenotypeInformation.overwrittenPhenotype.isNotNullOrBlank) {
+    phenotypeInformationText = '$phenotypeInformationText; '
+      '${context.l10n.drugs_page_original_phenotype(
+        phenotypeInformation.overwrittenPhenotype!
+      )}';
+  }
+  return '$phenotypeInformationText)';
 }
 
 String? _getActivityScoreInfo(String gene, Drug drug, BuildContext context) {
@@ -165,7 +171,9 @@ String _userInfoPerGene(
   if (drug.guidelines.isEmpty) return buildContext.l10n.pdf_no_value;
   final guidelineGenes = drug.guidelines.first.lookupkey.keys.toList();
   return guidelineGenes.map((gene) =>
-    '$gene: ${getInfo(gene, drug, buildContext) ?? buildContext.l10n.pdf_no_value}'
+    '$gene: ${
+      getInfo(gene, drug, buildContext) ?? buildContext.l10n.pdf_no_value
+    }'
   ).join(', ');
 }
 

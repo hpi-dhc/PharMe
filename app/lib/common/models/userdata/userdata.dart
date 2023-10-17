@@ -15,12 +15,12 @@ class PhenotypeInformation {
   PhenotypeInformation({
     this.phenotype,
     this.adaptionText,
-    this.originalPhenotype,
+    this.overwrittenPhenotype,
   });
 
   String? phenotype;
   String? adaptionText;
-  String? originalPhenotype;
+  String? overwrittenPhenotype;
 }
 
 /// UserData is a singleton data-class which contains various user-specific
@@ -60,21 +60,20 @@ class UserData {
     if (originalPhenotype == null) {
       return PhenotypeInformation();
     }
-    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
     final activeInhibitors = UserData.activeInhibitorsFor(gene, drug: drug);
     if (activeInhibitors.isEmpty) {
       return PhenotypeInformation(phenotype: originalPhenotype);
     }
+    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
     if (overwrittenLookup == null) {
-      final activeInhibitorsText = enumerationWithAnd(
-        activeInhibitors,
-        context
-      );
       return PhenotypeInformation(
         phenotype: originalPhenotype,
         adaptionText: context.l10n.drugs_page_moderate_inhibitors(
           userSalutation,
-          activeInhibitorsText,
+          enumerationWithAnd(
+            activeInhibitors,
+            context
+          ),
         ),
       );
     }
@@ -84,6 +83,21 @@ class UserData {
     final activeModerateInhibitors = activeInhibitors.filter(
       isModerateInhibitor
     ).toList();
+    final overwritePhenotype = context.l10n.general_poor_metabolizer;
+    final currentPhenotypeEqualsOverwritePhenotype =
+      originalPhenotype.toLowerCase() == overwritePhenotype.toLowerCase();
+    if (currentPhenotypeEqualsOverwritePhenotype) {
+      return PhenotypeInformation(
+        phenotype: originalPhenotype,
+        adaptionText: context.l10n.drugs_page_inhibitors_poor_metabolizer(
+          userSalutation,
+          enumerationWithAnd(
+            activeInhibitors,
+            context
+          ),
+        ),
+      );
+    }
     final adaptionText = activeModerateInhibitors.isEmpty
       ? context.l10n.drugs_page_strong_inhibitors(
           userSalutation,
@@ -95,9 +109,9 @@ class UserData {
           enumerationWithAnd(activeModerateInhibitors, context),
         );
     return PhenotypeInformation(
-      phenotype: context.l10n.general_poor_metabolizer,
+      phenotype: overwritePhenotype,
       adaptionText: adaptionText,
-      originalPhenotype: originalPhenotype,
+      overwrittenPhenotype: originalPhenotype,
     );
   }
 

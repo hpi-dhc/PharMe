@@ -107,9 +107,18 @@ class GenePage extends HookWidget {
       final furtherInhibitors = inhibitorsFor(gene).filter((drugName) =>
         !UserData.activeInhibitorsFor(gene).contains(drugName)
       );
+      var phenotypeInformationText = formatAsSentence(
+        phenotypeInformation.adaptionText!
+      );
+      if (phenotypeInformation.overwrittenPhenotype.isNotNullOrBlank) {
+        phenotypeInformationText = '$phenotypeInformationText ${
+          formatAsSentence(context.l10n.drugs_page_original_phenotype(
+            phenotypeInformation.overwrittenPhenotype!
+          ))}';
+      }
       return [
         SizedBox(height: PharMeTheme.smallSpace),
-        Text('${phenotypeInformation.adaptionText!.capitalize()}.'),
+        Text(phenotypeInformationText),
         SizedBox(height: PharMeTheme.smallSpace),
         Text(context.l10n.gene_page_further_inhibitor_drugs),
         SizedBox(height: PharMeTheme.smallSpace),

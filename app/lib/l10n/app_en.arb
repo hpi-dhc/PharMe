@@ -102,6 +102,20 @@
       }
     }
   },
+  "drugs_page_inhibitors_poor_metabolizer": "this can be further influenced based on {salutation} taking {inhibitors}",
+  "@drugs_page_inhibitors_poor_metabolizer": {
+    "description": "Disclaimer for when the phenotype would be adjusted based on current drug(s) but is already poor metabolizer",
+    "placeholders": {
+      "salutation": {
+        "type": "String",
+        "example": "you"
+      },
+      "inhibitors": {
+          "type": "String",
+          "example": "bupropion and fluoxetine"
+      }
+    }
+  },
   "drugs_page_moderate_and_strong_inhibitors": "phenotype adjusted based on {salutation} taking {strongInhibitors}; this can be further influenced by {moderateInhibitors}",
   "@drugs_page_moderate_and_strong_inhibitors": {
     "description": "Disclaimer for when the phenotype has been and might be adjusted based on current drug(s)",
@@ -117,6 +131,16 @@
       "moderateInhibitors": {
         "type": "String",
         "example": "abiraterone, cinacalcet, and duloxetine"
+      }
+    }
+  },
+  "drugs_page_original_phenotype": "the genetics-based phenotype is {originalPhenotype}",
+  "@drugs_page_original_phenotype": {
+    "description": "Information on genetics-based phenotype if it was/might be adjusted based on current drug(s)",
+    "placeholders": {
+      "originalPhenotype": {
+        "type": "String",
+        "example": "Normal Metabolizer"
       }
     }
   },
