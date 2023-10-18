@@ -30,11 +30,11 @@
   "general_not_tested": "Not tested",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
-  "search_page_filter_inactive": "Show currently not taken drugs",
-  "search_page_filter_green": "Show green warning level",
-  "search_page_filter_yellow": "Show yellow warning level",
-  "search_page_filter_red": "Show red warning level",
-  "search_page_filter_gray": "Show drugs without guidelines",
+  "search_page_filter_only_active": "Only active drugs",
+  "search_page_filter_green": "Green warning level",
+  "search_page_filter_yellow": "Yellow warning level",
+  "search_page_filter_red": "Red warning level",
+  "search_page_filter_only_with_guidelines": "Only drugs with guidelines",
   "search_page_indicator_explanation": "Taking drugs with an {indicatorName} ({indicator}) can influence your results for other drugs",
   "@search_page_indicator_explanation": {
     "description": "Explanation of drug-drug interaction indicators",

@@ -5,10 +5,12 @@ import '../module.dart';
 class ContextMenu extends StatelessWidget {
   const ContextMenu({
     super.key,
+    this.headerItem,
     required this.items,
     required this.child,
   });
 
+  final Widget? headerItem;
   final List<ContextMenuCheckmark> items;
   final Widget child;
 
@@ -19,7 +21,9 @@ class ContextMenu extends StatelessWidget {
           showPopover(
             context: context,
             bodyBuilder: (context) => Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(
+                horizontal: PharMeTheme.smallToMediumSpace
+              ),
               child: Container(
                 decoration: BoxDecoration(
                   color: PharMeTheme.onSurfaceColor,
@@ -29,19 +33,7 @@ class ContextMenu extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: items
-                        .mapIndexed(
-                            (index, item) => (index == items.count() - 1)
-                                ? item
-                                : Container(
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                      bottom: BorderSide(
-                                          width: 0.5,
-                                          color: PharMeTheme.borderColor),
-                                    )),
-                                    child: item))
-                        .toList(),
+                    children: _buildContent(context),
                   ),
                 ),
               ),
@@ -56,6 +48,49 @@ class ContextMenu extends StatelessWidget {
           );
         },
         child: child);
+  }
+
+  Widget _itemContainer(
+    Widget item,
+    {
+      bool showBorder = true,
+      double padding = PharMeTheme.smallToMediumSpace,
+    }
+  ) {
+    return Container(
+      decoration: showBorder ? BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: PharMeTheme.borderColor
+          ),
+        ),
+      ) : null,
+      child: Padding(
+          padding: EdgeInsets.all(padding),
+          child: item,
+      )
+    );
+  }
+
+  List<Widget> _buildContent(BuildContext context) {
+    final body = items.mapIndexed(
+      (index, item) => (index == items.count() - 1)
+          ? _itemContainer(item, showBorder: false)
+          : _itemContainer(item)
+    ).toList();
+    return headerItem != null
+      ? [
+          _itemContainer(
+            Row(
+              children: [headerItem!]
+            ),
+            padding: PharMeTheme.mediumSpace,
+            showBorder: false,
+          ),
+          ...body,
+        ]
+      : body;
   }
 }
 
@@ -81,18 +116,15 @@ class ContextMenuCheckmark extends StatelessWidget {
             setState(state);
           });
         },
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Row(
-            children: [
-              if (state)
-                Icon(Icons.check_rounded, size: 16)
-              else
-                SizedBox(width: 16, height: 16),
-              SizedBox(width: 8),
-              Expanded(child: Text(label)),
-            ],
-          ),
+        child: Row(
+          children: [
+            if (state)
+              Icon(Icons.check_box, size: PharMeTheme.mediumSpace)
+            else
+              Icon(Icons.check_box_outline_blank, size: PharMeTheme.mediumSpace),
+            SizedBox(width: PharMeTheme.smallSpace),
+            Expanded(child: Text(label)),
+          ],
         ),
       ),
     );

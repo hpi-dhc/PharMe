@@ -94,18 +94,31 @@ class DrugSearch extends HookWidget {
     return ContextMenu(
       items: [
         ContextMenuCheckmark(
-            label: context.l10n.search_page_filter_inactive,
-            setState: (state) => cubit.search(showInactive: state),
-            initialState: filter?.showInactive ?? false),
-        ...WarningLevel.values.map((level) => ContextMenuCheckmark(
+          label: context.l10n.search_page_filter_only_active,
+          // Invert state as filter has opposite meaning ('only show active' vs.
+          // 'show inactive')
+          setState: (state) => cubit.search(showInactive: !state),
+          initialState: filter != null && !filter.showInactive),
+        ...WarningLevel.values.filter((level) => level != WarningLevel.none)
+          .map((level) => ContextMenuCheckmark(
             label: {
               WarningLevel.green: context.l10n.search_page_filter_green,
               WarningLevel.yellow: context.l10n.search_page_filter_yellow,
               WarningLevel.red: context.l10n.search_page_filter_red,
-              WarningLevel.none: context.l10n.search_page_filter_gray,
             }[level]!,
             setState: (state) => cubit.search(showWarningLevel: {level: state}),
-            initialState: filter?.showWarningLevel[level] ?? false))
+            initialState: filter?.showWarningLevel[level] ?? false
+            )
+          ),
+        ContextMenuCheckmark(
+          label: context.l10n.search_page_filter_only_with_guidelines,
+          // Invert state as filter has opposite meaning ('show only with
+          // guidelines' vs. 'show with unknown warning level')
+          setState: (state) => cubit.search(
+            showWarningLevel: {WarningLevel.none: !state}
+          ),
+          initialState: filter != null &&
+            !filter.showWarningLevel[WarningLevel.none]!,)
       ],
       child: Padding(
           padding: EdgeInsets.all(8), child: Icon(Icons.filter_list_rounded)),

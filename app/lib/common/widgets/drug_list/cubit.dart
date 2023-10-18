@@ -129,9 +129,16 @@ class FilterState {
       [];
     final warningLevel =
         userGuideline?.annotations.warningLevel ?? WarningLevel.none;
+    var warningLevelMatches = showWarningLevel[warningLevel] ?? true;
+    // WarningLevel.none is also shown in green in app; therefore, it should
+    // also be filtered with green option
+    if (warningLevel == WarningLevel.none) {
+      warningLevelMatches = warningLevelMatches &&
+        showWarningLevel[WarningLevel.green]!;
+    }
     final isDrugAccepted = drug.matches(query: query) &&
         (drug.isActive() || showInactive) &&
-        (showWarningLevel[warningLevel] ?? true) &&
+        warningLevelMatches &&
         (gene.isBlank || (guidelineGenes.contains(gene)));
     return isDrugAccepted;
   }
