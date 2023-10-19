@@ -1,16 +1,29 @@
 import '../../common/module.dart';
+import '../../common/utilities/guideline_utils.dart';
 
 class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasActiveInhibitors = UserData.instance.activeDrugNames != null &&
       UserData.instance.activeDrugNames!.any(isInhibitor);
+    final guidelineGenes = getGuidelineGenes();
+
+    final notTestedString = context.l10n.general_not_tested;
+    final userPhenotypes = guidelineGenes.map(
+      (geneSymbol) => UserData.instance.lookups![geneSymbol] ??
+      CpicPhenotype(
+        geneSymbol: geneSymbol,
+        phenotype: notTestedString,
+        genotype: notTestedString,
+        lookupkey: notTestedString
+      )
+    );
     return unscrollablePageScaffold(
       title: context.l10n.tab_report,
       body: Column(
         children: [
           scrollList(
-            UserData.instance.lookups!.values.map((phenotype) =>
+            userPhenotypes.map((phenotype) =>
               Column(children: [
                 GeneCard(phenotype),
                 SizedBox(height: 8)
