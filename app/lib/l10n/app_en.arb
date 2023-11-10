@@ -9,8 +9,8 @@
   "auth_success": "Successfully imported data",
 
   "drug_selection_header": "Select active drugs",
-  "drug_selection_description": "Please select the drugs you are currently taking below. If you are not taking pre-selected drugs anymore, please de-select them.",
-  "drug_selection_later": "You can always change the status for each drug later.",
+  "drug_selection_description": "Please update the drugs you are currently taking below.",
+  "drug_selection_later": "You can always change the status for a drug later.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
@@ -59,7 +59,7 @@
         }
     }
   },
-  "drugs_page_disclaimer": "This assessment is ONLY based on your genetics. Important factors like weight, age and pre-existing conditions are not considered.",
+  "drugs_page_disclaimer": "This assessment is only based on your DNA and you taking certain medications. Important factors like weight, age, pre-existing conditions, or other medications are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} can influence your results for the following gene(s): {geneSymbols}",
   "@drugs_page_is_inhibitor": {
     "description": "Disclaimer for when the current drug influences other guidelines",
@@ -135,9 +135,9 @@
       }
     }
   },
-  "drugs_page_original_phenotype": "the genetics-based phenotype is {originalPhenotype}",
+  "drugs_page_original_phenotype": "the DNA-based phenotype is {originalPhenotype}",
   "@drugs_page_original_phenotype": {
-    "description": "Information on genetics-based phenotype if it was/might be adjusted based on current drug(s)",
+    "description": "Information on DNA-based phenotype if it was/might be adjusted based on current drug(s)",
     "placeholders": {
       "originalPhenotype": {
         "type": "String",
@@ -187,7 +187,7 @@
           }
       }
   },
-  "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics. They put specific genes in relation with a drug.",
+  "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics (DNA). They put specific genes in relation with a drug.",
 
   "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by drugs you are currently taking",
   "@report_page_indicator_explanation": {
@@ -329,11 +329,11 @@
   "onboarding_3_text": "PharMe warns you if your genome makes you more likely to experience an unintended drug response.\n\nThis enables you to avoid drugs that are ineffective or have side effects.",
   "onboarding_3_disclaimer": "We DO NOT recommend drugs for specific symptoms or illnesses",
   "onboarding_4_header": "Tailored to your genome",
-  "onboarding_4_text": "For PharMe to work, you need to get your genetics tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
+  "onboarding_4_text": "For PharMe to work, you need to get your genetics (DNA) tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
   "onboarding_4_button": "Find out more about gene tests here.",
   "onboarding_4_already_tested_text": "PharMe works by matching your genetic data with known information about interactions between genes and drugs.\n\nThe information presented in PharMe is based on scientifically proven guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
   "onboarding_5_header": "We care about your data protection",
-  "onboarding_5_text": "After downloading your genetic data from your data provider, it is solely kept on your phone.\n\nOur servers know nothing about you, neither your identity nor your genetics.",
+  "onboarding_5_text": "After downloading your genetic data from your data provider, it is solely kept on your phone.\n\nOur servers know nothing about you, neither your identity nor your DNA.",
     
   "settings_page_account_settings": "Account settings",
   "settings_page_delete_data": "Delete app data",
