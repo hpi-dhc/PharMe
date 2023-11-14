@@ -13,6 +13,8 @@ void main() {
   group('test the main page', () {
     testWidgets('test that tabs change pages', (tester) async {
       await initServices();
+      await fetchAndSaveLookups();
+      await updateCachedDrugs();
       final appRouter = AppRouter();
       await tester.pumpWidget(
         MaterialApp.router(
