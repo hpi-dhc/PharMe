@@ -31,9 +31,10 @@ class DrugSearch extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
-    final noDrugsMessage = showFilter ?
-      context.l10n.search_no_drugs(' or filters right to the search bar') :
-      context.l10n.search_no_drugs('');
+    final amendment = showFilter
+      ? context.l10n.search_no_drugs_with_filter_amendment
+      : '';
+    final noDrugsMessage = context.l10n.search_no_drugs(amendment);
     return BlocProvider(
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(

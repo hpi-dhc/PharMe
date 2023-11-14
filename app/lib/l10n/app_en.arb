@@ -49,6 +49,7 @@
       }
     }
   },
+  "search_no_drugs_with_filter_amendment": " or filters right to the search bar",
   "search_no_drugs": "No drugs found. Try adjusting the search term{amendment}.",
   "@search_no_drugs": {
     "description": "Disclaimer for when no drug was found in the search",
