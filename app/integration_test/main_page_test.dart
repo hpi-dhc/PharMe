@@ -1,3 +1,4 @@
+import 'package:app/common/models/drug/cached_drugs.dart';
 import 'package:app/common/module.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,11 +11,12 @@ void main() {
 
   UserData.instance.lookups = {};
 
+  CachedDrugs.instance.version = 1;
+  CachedDrugs.instance.drugs = List.empty();
+
   group('test the main page', () {
     testWidgets('test that tabs change pages', (tester) async {
       await initServices();
-      await fetchAndSaveLookups();
-      await updateCachedDrugs();
       final appRouter = AppRouter();
       await tester.pumpWidget(
         MaterialApp.router(
