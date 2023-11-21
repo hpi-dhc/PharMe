@@ -171,6 +171,27 @@ class UserData {
   }
 }
 
+class ActiveDrugs extends ChangeNotifier {
+  List<String> activeDrugs = [];
+
+  Future<void> _preserve() async {
+    UserData.instance.activeDrugNames = activeDrugs;
+    await UserData.save();
+  }
+
+  Future<void> add(String drugName) async {
+    activeDrugs.add(drugName);
+    await _preserve();
+    notifyListeners();
+  }
+
+  Future<void> remove(String drugName) async {
+    activeDrugs = activeDrugs.filter((name) => name != drugName).toList();
+    await _preserve();
+    notifyListeners();
+  }
+}
+
 /// Initializes the user's data by registering all necessary adapters and
 /// loading pre-existing data from local storage, if it exists.
 Future<void> initUserData() async {

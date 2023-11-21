@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import '../../module.dart';
 import 'cubit.dart';
 import 'widgets/module.dart';
@@ -13,16 +15,18 @@ class DrugPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => cubit ?? DrugCubit(),
-      child: BlocBuilder<DrugCubit, DrugState>(
-        builder: (context, state) {
-          return state.when(
-            loaded: () => _buildDrugsPage(context, loading: false),
-            loading: () => _buildDrugsPage(context, loading: true),
-          );
-        },
-      ),
+    return Consumer<ActiveDrugs>(
+      builder: (context, activeDrugs, child) => BlocProvider(
+        create: (context) => cubit ?? DrugCubit(activeDrugs),
+        child: BlocBuilder<DrugCubit, DrugState>(
+          builder: (context, state) {
+            return state.when(
+              loaded: () => _buildDrugsPage(context, loading: false),
+              loading: () => _buildDrugsPage(context, loading: true),
+            );
+          },
+        ),
+      )
     );
   }
 
