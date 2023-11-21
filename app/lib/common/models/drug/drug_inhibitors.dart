@@ -21,9 +21,8 @@ const Map<String, Map<String, String>> strongDrugInhibitors = {
 };
 
 // Inhibit phenotype for gene by adapting the activity score by a defined
-// factor
-// TODO(tamslo): implement inhibition (currently only showing the warning)
-// https://github.com/hpi-dhc/PharMe/issues/667
+// factor; not implement yet, currently only showing the warning (see
+// https://github.com/hpi-dhc/PharMe/issues/667)
 const Map<String, Map<String, double>> moderateDrugInhibitors = {
   'CYP2D6': {
     'abiraterone': 0.5,
