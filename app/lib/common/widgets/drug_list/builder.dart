@@ -4,6 +4,7 @@ import 'drug_items/drug_cards.dart';
 List<Widget> buildDrugList(
   BuildContext context,
   DrugListState state,
+  ActiveDrugs activeDrugs,
   {
     String? noDrugsMessage,
     List<Widget> Function(
@@ -18,8 +19,11 @@ List<Widget> buildDrugList(
     Map? drugItemsBuildParams,
   }
 ) {
-  List<Widget> buildDrugList(List<Drug> drugs, FilterState filter) {
-    final filteredDrugs = filter.filter(drugs);
+  List<Widget> buildDrugList(
+    List<Drug> drugs,
+    FilterState filter,
+  ) {
+    final filteredDrugs = filter.filter(drugs, activeDrugs);
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
       return [errorIndicator(noDrugsMessage)];
     }

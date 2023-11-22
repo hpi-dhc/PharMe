@@ -203,6 +203,10 @@ class ActiveDrugs extends ChangeNotifier {
       await _remove(drugName);
     }
   }
+
+  bool contains(String drugName) {
+    return names.contains(drugName);
+  }
 }
 
 /// Initializes the user's data by registering all necessary adapters and
