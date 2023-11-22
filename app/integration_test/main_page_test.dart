@@ -3,6 +3,7 @@ import 'package:app/common/module.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -19,18 +20,21 @@ void main() {
       await initServices();
       final appRouter = AppRouter();
       await tester.pumpWidget(
-        MaterialApp.router(
-          routeInformationParser: appRouter.defaultRouteParser(),
-          routerDelegate: appRouter.delegate(
-            initialDeepLink: 'main',
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp.router(
+            routeInformationParser: appRouter.defaultRouteParser(),
+            routerDelegate: appRouter.delegate(
+              initialDeepLink: 'main',
+            ),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
           ),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
         ),
       );
 
