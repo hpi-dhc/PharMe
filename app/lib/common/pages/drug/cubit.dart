@@ -17,11 +17,7 @@ class DrugCubit extends Cubit<DrugState> {
   Future<void> setActivity(Drug drug, bool? value) async {
     if (value == null) return;
     emit(DrugState.loading());
-    if (value) {
-      await activeDrugs.add(drug.name);
-    } else {
-      await activeDrugs.remove(drug.name);
-    }
+    await activeDrugs.changeActivity(drug.name, value);
     emit(DrugState.loaded());
   }
 

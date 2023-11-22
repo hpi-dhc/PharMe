@@ -8,11 +8,11 @@ import '../models/drug/cached_drugs.dart';
 import '../models/module.dart';
 
 Future<void> fetchAndSaveDiplotypesAndActiveDrugs(
-  String token, String url) async {
+  String token, String url, ActiveDrugs activeDrugs) async {
   if (!shouldFetchDiplotypes()) return;
   final response = await getDiplotypes(token, url);
   if (response.statusCode == 200) {
-    await _saveDiplotypeAndActiveDrugsResponse(response);
+    await _saveDiplotypeAndActiveDrugsResponse(response, activeDrugs);
   } else {
     throw Exception();
   }
@@ -22,15 +22,18 @@ Future<Response> getDiplotypes(String? token, String url) async {
   return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 }
 
-Future<void> _saveDiplotypeAndActiveDrugsResponse(Response response) async {
+Future<void> _saveDiplotypeAndActiveDrugsResponse(
+  Response response,
+  ActiveDrugs activeDrugs,
+) async {
   // parse response to list of user's diplotypes
   final diplotypes =
       diplotypesFromHTTPResponse(response).filterValidDiplotypes();
-  final activeDrugs = activeDrugsFromHTTPResponse(response);
+  final activeDrugList = activeDrugsFromHTTPResponse(response);
 
   UserData.instance.diplotypes = {for (var d in diplotypes) d.gene: d};
-  UserData.instance.activeDrugNames = activeDrugs;
   await UserData.save();
+  await activeDrugs.setList(activeDrugList);
   // invalidate cached drugs because lookups may have changed and we need to
   // refilter the matching guidelines
   await CachedDrugs.erase();

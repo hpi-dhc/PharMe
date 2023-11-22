@@ -174,21 +174,34 @@ class UserData {
 class ActiveDrugs extends ChangeNotifier {
   List<String> activeDrugs = [];
 
-  Future<void> _preserve() async {
+  Future<void> _preserveAndNotify() async {
     UserData.instance.activeDrugNames = activeDrugs;
     await UserData.save();
+    notifyListeners();
   }
 
-  Future<void> add(String drugName) async {
+  Future<void> setList(List<String> drugNames) async {
+    activeDrugs = drugNames;
+    await _preserveAndNotify();
+  }
+
+  Future<void> _add(String drugName) async {
     activeDrugs.add(drugName);
-    await _preserve();
-    notifyListeners();
+    await _preserveAndNotify();
   }
 
-  Future<void> remove(String drugName) async {
+  Future<void> _remove(String drugName) async {
     activeDrugs = activeDrugs.filter((name) => name != drugName).toList();
-    await _preserve();
-    notifyListeners();
+    await _preserveAndNotify();
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  Future<void> changeActivity(String drugName, bool value) async {
+    if (value) {
+      await _add(drugName);
+    } else {
+      await _remove(drugName);
+    }
   }
 }
 

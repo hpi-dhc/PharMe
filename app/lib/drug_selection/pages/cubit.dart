@@ -7,18 +7,14 @@ part 'cubit.freezed.dart';
 class DrugSelectionPageCubit extends Cubit<DrugSelectionPageState> {
   DrugSelectionPageCubit(this.activeDrugs) :
     super(DrugSelectionPageState.stable());
-  
+
   final ActiveDrugs activeDrugs;
 
   // ignore: avoid_positional_boolean_parameters
   Future<void> updateDrugActivity(Drug drug, bool? value) async {
     if (value == null) return;
     emit(DrugSelectionPageState.updating());
-    if (value) {
-      await activeDrugs.add(drug.name);
-    } else {
-      await activeDrugs.remove(drug.name);
-    }
+    await activeDrugs.changeActivity(drug.name, value);
     emit(DrugSelectionPageState.stable());
   }
 }
