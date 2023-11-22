@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:provider/provider.dart';
 
 class MockLoginCubit extends MockCubit<LoginPageState>
     implements LoginPageCubit {}
@@ -23,15 +24,18 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: LoginPage(cubit: mockLoginCubit),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+            child: MaterialApp(
+            home: LoginPage(cubit: mockLoginCubit),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
+          ),
         ),
       );
 
@@ -44,15 +48,18 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: LoginPage(cubit: mockLoginCubit),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp(
+            home: LoginPage(cubit: mockLoginCubit),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
+          ),
         ),
       );
 
@@ -67,15 +74,18 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: LoginPage(cubit: mockLoginCubit)),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp(
+            home: Scaffold(body: LoginPage(cubit: mockLoginCubit)),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
+          ),
         ),
       );
 
@@ -91,15 +101,18 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: LoginPage(cubit: mockLoginCubit)),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp(
+            home: Scaffold(body: LoginPage(cubit: mockLoginCubit)),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
+          ),
         ),
       );
 

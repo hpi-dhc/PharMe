@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:provider/provider.dart';
 
 class MockDrugListCubit extends MockCubit<DrugListState> implements DrugListCubit {
   @override
@@ -52,20 +53,25 @@ void main() {
   group('integration test for the search page', () {
     testWidgets('test search page in loading state', (tester) async {
       when(() => mockDrugListCubit.state).thenReturn(DrugListState.loading());
-      await tester.pumpWidget(BlocProvider.value(
-        value: mockDrugListCubit,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: SearchPage(cubit: mockDrugListCubit),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
+      await tester.pumpWidget(
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: BlocProvider.value(
+            value: mockDrugListCubit,
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: SearchPage(cubit: mockDrugListCubit),
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: [Locale('en', '')],
+            ),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -74,20 +80,25 @@ void main() {
       when(() => mockDrugListCubit.state)
           .thenReturn(DrugListState.loaded(loadedDrugs, FilterState.initial()));
 
-      await tester.pumpWidget(BlocProvider.value(
-        value: mockDrugListCubit,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: SearchPage(cubit: mockDrugListCubit),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
+      await tester.pumpWidget(
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: BlocProvider.value(
+            value: mockDrugListCubit,
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: SearchPage(cubit: mockDrugListCubit),
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: [Locale('en', '')],
+            ),
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(

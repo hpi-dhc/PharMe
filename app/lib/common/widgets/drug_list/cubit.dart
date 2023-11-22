@@ -122,7 +122,7 @@ class FilterState {
   final Map<WarningLevel, bool> showWarningLevel;
   final String gene;
 
-  bool isAccepted(Drug drug) {
+  bool isAccepted(Drug drug, ActiveDrugs activeDrugs) {
     final userGuideline = drug.userGuideline();
     final guidelineGenes = drug.guidelines.isNotEmpty ?
       drug.guidelines.first.lookupkey.keys.toList() :
@@ -137,13 +137,14 @@ class FilterState {
         showWarningLevel[WarningLevel.green]!;
     }
     final isDrugAccepted = drug.matches(query: query) &&
-        (drug.isActive() || showInactive) &&
+        (activeDrugs.contains(drug.name) || showInactive) &&
         warningLevelMatches &&
         (gene.isBlank || (guidelineGenes.contains(gene)));
     return isDrugAccepted;
   }
 
-  List<Drug> filter(List<Drug> drugs) => drugs.filter(isAccepted).toList();
+  List<Drug> filter(List<Drug> drugs, ActiveDrugs activeDrugs) =>
+    drugs.filter((drug) => isAccepted(drug, activeDrugs)).toList();
 }
 
 @freezed

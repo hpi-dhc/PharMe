@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import '../../common/models/drug/cached_drugs.dart';
 import '../../common/module.dart' hide MetaData;
 import '../../common/widgets/drug_list/drug_items/drug_checkbox_list.dart';
@@ -15,25 +17,27 @@ class DrugSelectionPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => cubit ?? DrugSelectionPageCubit(),
-      child: BlocBuilder<DrugSelectionPageCubit, DrugSelectionPageState>(
-        builder: (context, state) {
-          return unscrollablePageScaffold(
-            title: context.l10n.drug_selection_header,
-            padding: PharMeTheme.largeSpace,
-            body: Column(
-              children: [
-                _buildDescription(context),
-                SizedBox(height: PharMeTheme.mediumSpace),
-                Expanded(child:_buildDrugList(context, state)),
-                SizedBox(height: PharMeTheme.mediumSpace),
-                _buildButton(context, state),
-              ],
-            ),
-          );
-        }
-      ),
+    return Consumer<ActiveDrugs>(
+      builder: (context, activeDrugs, child) => BlocProvider(
+        create: (context) => cubit ?? DrugSelectionPageCubit(activeDrugs),
+        child: BlocBuilder<DrugSelectionPageCubit, DrugSelectionPageState>(
+          builder: (context, state) {
+            return unscrollablePageScaffold(
+              title: context.l10n.drug_selection_header,
+              padding: PharMeTheme.largeSpace,
+              body: Column(
+                children: [
+                  _buildDescription(context),
+                  SizedBox(height: PharMeTheme.mediumSpace),
+                  Expanded(child:_buildDrugList(context, state)),
+                  SizedBox(height: PharMeTheme.mediumSpace),
+                  _buildButton(context, state),
+                ],
+              ),
+            );
+          }
+        ),
+      )
     );
   }
 

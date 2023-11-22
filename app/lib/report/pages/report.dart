@@ -1,11 +1,19 @@
+import 'package:provider/provider.dart';
+
 import '../../common/module.dart';
 import '../../common/utilities/guideline_utils.dart';
 
 class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final hasActiveInhibitors = UserData.instance.activeDrugNames != null &&
-      UserData.instance.activeDrugNames!.any(isInhibitor);
+    return Consumer<ActiveDrugs>(
+      builder: (context, activeDrugs, child) =>
+        _buildReportPage(context, activeDrugs)
+    );
+  }
+
+  Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
+    final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
     final guidelineGenes = getGuidelineGenes();
 
     final notTestedString = context.l10n.general_not_tested;

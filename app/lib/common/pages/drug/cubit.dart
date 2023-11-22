@@ -9,13 +9,15 @@ import '../../utilities/pdf_utils.dart';
 part 'cubit.freezed.dart';
 
 class DrugCubit extends Cubit<DrugState> {
-  DrugCubit() : super(DrugState.loaded());
+  DrugCubit(this.activeDrugs) : super(DrugState.loaded());
+
+  final ActiveDrugs activeDrugs;
 
   // ignore: avoid_positional_boolean_parameters
   Future<void> setActivity(Drug drug, bool? value) async {
     if (value == null) return;
     emit(DrugState.loading());
-    await setDrugActivity(drug, value);
+    await activeDrugs.changeActivity(drug.name, value);
     emit(DrugState.loaded());
   }
 
@@ -30,18 +32,6 @@ class DrugCubit extends Cubit<DrugState> {
     // ignore: use_build_context_synchronously
     DialogHelper().hide(context);
   }
-}
-
-// ignore: avoid_positional_boolean_parameters
-Future<void> setDrugActivity(Drug drug, bool value) async {
-    final active = (UserData.instance.activeDrugNames ?? [])
-        .filter((name) => name != drug.name)
-        .toList();
-    if (value) {
-      active.add(drug.name);
-    }
-    UserData.instance.activeDrugNames = active;
-    await UserData.save();
 }
 
 @freezed

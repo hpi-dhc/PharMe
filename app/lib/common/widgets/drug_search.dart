@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
 import '../../common/pages/drug/widgets/tooltip_icon.dart';
@@ -35,7 +36,8 @@ class DrugSearch extends HookWidget {
       ? context.l10n.search_no_drugs_with_filter_amendment
       : '';
     final noDrugsMessage = context.l10n.search_no_drugs(amendment);
-    return BlocProvider(
+    return Consumer<ActiveDrugs>(
+      builder: (context, activeDrugs, child) => BlocProvider(
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(
           builder: (context, state) {
@@ -61,6 +63,7 @@ class DrugSearch extends HookWidget {
                   buildDrugList(
                     context,
                     state,
+                    activeDrugs,
                     buildDrugItems: buildDrugItems,
                     noDrugsMessage: noDrugsMessage,
                     drugItemsBuildParams: drugItemsBuildParams,
@@ -71,7 +74,8 @@ class DrugSearch extends HookWidget {
                 ..._maybeShowDrugInteractionExplanation(context),
               ],
             );
-        }
+          }
+        )
       )
     );
   }

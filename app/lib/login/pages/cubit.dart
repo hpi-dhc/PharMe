@@ -11,7 +11,9 @@ import '../models/lab.dart';
 part 'cubit.freezed.dart';
 
 class LoginPageCubit extends Cubit<LoginPageState> {
-  LoginPageCubit() : super(LoginPageState.initial());
+  LoginPageCubit(this.activeDrugs): super(LoginPageState.initial());
+
+  ActiveDrugs activeDrugs;
 
   void revertToInitialState() => emit(LoginPageState.initial());
 
@@ -46,7 +48,7 @@ class LoginPageCubit extends Cubit<LoginPageState> {
     try {
       // get data
       await fetchAndSaveDiplotypesAndActiveDrugs(
-        token, lab.starAllelesUrl.toString());
+        token, lab.starAllelesUrl.toString(), activeDrugs);
       await fetchAndSaveLookups();
 
       await updateCachedDrugs();

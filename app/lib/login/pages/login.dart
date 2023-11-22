@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
 import '../../common/widgets/full_width_button.dart';
@@ -17,40 +18,42 @@ class LoginPage extends HookWidget {
   Widget build(BuildContext context) {
     final dropdownValue = useState(labs.first.name);
 
-    return BlocProvider(
-      create: (context) => cubit ?? LoginPageCubit(),
-      child: BlocBuilder<LoginPageCubit, LoginPageState>(
-        builder: (context, state) {
-          return unscrollablePageScaffold(
-            padding: PharMeTheme.largeSpace,
-            body: Stack(
-              children: [
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/images/logo.svg',
+    return Consumer<ActiveDrugs>(
+      builder: (context, activeDrugs, child) => BlocProvider(
+        create: (context) => cubit ?? LoginPageCubit(activeDrugs),
+        child: BlocBuilder<LoginPageCubit, LoginPageState>(
+          builder: (context, state) {
+            return unscrollablePageScaffold(
+              padding: PharMeTheme.largeSpace,
+              body: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(
+                        'assets/images/logo.svg',
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: state.when(
-                      initial: () =>
-                          _buildInitialScreen(context, dropdownValue),
-                      loadingUserData: CircularProgressIndicator.new,
-                      loadedUserData: () => _buildLoadedScreen(context),
-                      error: (message) =>
-                          _buildErrorScreen(context, message),
+                  Positioned(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: state.when(
+                        initial: () =>
+                            _buildInitialScreen(context, dropdownValue),
+                        loadingUserData: CircularProgressIndicator.new,
+                        loadedUserData: () => _buildLoadedScreen(context),
+                        error: (message) =>
+                            _buildErrorScreen(context, message),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                ],
+              ),
+            );
+          },
+        ),
+      )
     );
   }
 

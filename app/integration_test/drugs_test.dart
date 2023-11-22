@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:provider/provider.dart';
 
 class MockDrugsCubit extends MockCubit<DrugState> implements DrugCubit {}
 
@@ -83,21 +84,24 @@ void main() {
       late BuildContext context;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) {
-                return DrugPage(testDrug, cubit: mockDrugsCubit);
-              },
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  return DrugPage(testDrug, cubit: mockDrugsCubit);
+                },
+              ),
             ),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
           ),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
         ),
       );
 
@@ -151,24 +155,27 @@ void main() {
           DrugState.loaded());
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) {
-                return DrugPage(
-                  testDrugWithoutGuidelines,
-                  cubit: mockDrugsCubit,
-                );
-              },
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp(
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  return DrugPage(
+                    testDrugWithoutGuidelines,
+                    cubit: mockDrugsCubit,
+                  );
+                },
+              ),
             ),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
           ),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
         ),
       );
 
@@ -180,15 +187,18 @@ void main() {
       when(() => mockDrugsCubit.state).thenReturn(DrugState.loading());
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: DrugPage(testDrug, cubit: mockDrugsCubit),
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en', '')],
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp(
+            home: DrugPage(testDrug, cubit: mockDrugsCubit),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
+          ),
         ),
       );
 
