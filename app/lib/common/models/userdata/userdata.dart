@@ -172,26 +172,26 @@ class UserData {
 }
 
 class ActiveDrugs extends ChangeNotifier {
-  List<String> activeDrugs = [];
+  List<String> names = [];
 
   Future<void> _preserveAndNotify() async {
-    UserData.instance.activeDrugNames = activeDrugs;
+    UserData.instance.activeDrugNames = names;
     await UserData.save();
     notifyListeners();
   }
 
   Future<void> setList(List<String> drugNames) async {
-    activeDrugs = drugNames;
+    names = drugNames;
     await _preserveAndNotify();
   }
 
   Future<void> _add(String drugName) async {
-    activeDrugs.add(drugName);
+    names.add(drugName);
     await _preserveAndNotify();
   }
 
   Future<void> _remove(String drugName) async {
-    activeDrugs = activeDrugs.filter((name) => name != drugName).toList();
+    names = names.filter((name) => name != drugName).toList();
     await _preserveAndNotify();
   }
 

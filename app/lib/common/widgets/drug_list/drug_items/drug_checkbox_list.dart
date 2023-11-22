@@ -1,10 +1,6 @@
 import '../../../module.dart';
 import 'utils.dart';
 
-bool isDrugSelected(Drug drug) {
-  return UserData.instance.activeDrugNames!.contains(drug.name);
-}
-
 List<Widget> buildDrugCheckboxList(
   BuildContext context,
   List<Drug> drugs,
@@ -18,8 +14,8 @@ List<Widget> buildDrugCheckboxList(
   final checkboxesEnabled = buildParams['checkboxesEnabled'];
   final sortedDrugs = List<Drug>.from(drugs);
   sortedDrugs.sort((drugA, drugB) {
-    final drugASelected = isDrugSelected(drugA);
-    final drugBSelected = isDrugSelected(drugB);
+    final drugASelected = drugA.isActive();
+    final drugBSelected = drugB.isActive();
     if (drugASelected == drugBSelected) return drugA.name.compareTo(drugB.name);
     return drugASelected ? -1 : 1;
   });
@@ -27,7 +23,7 @@ List<Widget> buildDrugCheckboxList(
     ...sortedDrugs.map(
       (drug) => CheckboxListTile(
         enabled: checkboxesEnabled,
-        value: isDrugSelected(drug),
+        value: drug.isActive(),
         onChanged: (value) => onCheckboxChange(drug, value),
         title: Text(formatDrugName(drug, showDrugInteractionIndicator)),
         subtitle: (drug.annotations.brandNames.isNotEmpty) ?
