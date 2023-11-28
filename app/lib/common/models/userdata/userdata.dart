@@ -171,8 +171,15 @@ class UserData {
   }
 }
 
+// Wrapper of UserData.instance.activeDrugNames that manages changes; used to
+// notify inactive tabs in case of changes. Should be refacored to ensure
+// consistent use accross the app, see
+// https://github.com/hpi-dhc/PharMe/issues/680
 class ActiveDrugs extends ChangeNotifier {
-  List<String> names = [];
+  ActiveDrugs() {
+    names = UserData.instance.activeDrugNames ?? [];
+  }
+  late List<String> names;
 
   Future<void> _preserveAndNotify() async {
     UserData.instance.activeDrugNames = names;
@@ -206,6 +213,10 @@ class ActiveDrugs extends ChangeNotifier {
 
   bool contains(String drugName) {
     return names.contains(drugName);
+  }
+
+  bool isNotEmpty() {
+    return names.isNotEmpty;
   }
 }
 
