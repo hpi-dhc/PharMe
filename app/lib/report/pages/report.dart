@@ -28,6 +28,12 @@ class ReportPage extends StatelessWidget {
     );
     return unscrollablePageScaffold(
       title: context.l10n.tab_report,
+      barBottom: RichText(
+        text: TextSpan(
+          text: context.l10n.report_content_explanation,
+          style: PharMeTheme.textTheme.bodyLarge,
+        ),
+      ),
       body: Column(
         children: [
           scrollList(

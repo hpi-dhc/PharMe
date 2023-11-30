@@ -190,6 +190,7 @@
   },
   "drugs_page_tooltip_guideline": "Clinical guidelines help understand how drug therapy can be optimized for one's genetics (DNA). They put specific genes in relation with a drug.",
 
+  "report_content_explanation": "Explore your results for genes that have an influence on drugs. Tap on a gene name to see details about your result and a list of affected drugs.",
   "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by drugs you are currently taking",
   "@report_page_indicator_explanation": {
     "description": "Explanation of drug-drug interaction indicators",

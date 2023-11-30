@@ -4,6 +4,7 @@ Text buildTitle(String text) {
   return Text(text, style: PharMeTheme.textTheme.headlineLarge);
 }
 
+// Hint: For multiline text use RichText widget
 AppBar? buildBarBottom(Widget? barBottom) {
   return barBottom == null
     ? null
