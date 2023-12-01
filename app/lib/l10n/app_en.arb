@@ -9,9 +9,11 @@
   "auth_success": "Successfully imported data",
 
   "drug_selection_header": "Select active drugs",
-  "drug_selection_description": "Please update the drugs you are currently taking below.",
-  "drug_selection_later": "You can always change the status for a drug later.",
+  "drug_selection_description": "Please update the drugs you are currently taking below. You can always change the status for a drug later.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
+  "drug_selection_subheader_active_drugs": "Active drugs",
+  "drug_selection_subheader_all_drugs": "All drugs",
+  "drug_selection_no_active_drugs": "No drugs selected",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An error occurred while getting data, please try again later",

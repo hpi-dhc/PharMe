@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_hooks: ^0.18.5+1
+  flutter_list_view: ^1.1.22
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^5.0.2

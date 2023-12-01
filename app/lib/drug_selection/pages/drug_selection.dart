@@ -29,7 +29,7 @@ class DrugSelectionPage extends HookWidget {
                 children: [
                   _buildDescription(context),
                   SizedBox(height: PharMeTheme.mediumSpace),
-                  Expanded(child:_buildDrugList(context, state)),
+                  Expanded(child: _buildDrugList(context, state)),
                   SizedBox(height: PharMeTheme.mediumSpace),
                   _buildButton(context, state),
                 ],
@@ -49,16 +49,9 @@ class DrugSelectionPage extends HookWidget {
   }
 
   Widget _buildDescription(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          context.l10n.drug_selection_description,
-          style: PharMeTheme.textTheme.bodyLarge),
-        SizedBox(height: PharMeTheme.mediumSpace),
-        Text(
-          context.l10n.drug_selection_later,
-          style: PharMeTheme.textTheme.bodyLarge),
-      ]
+    return Text(
+      context.l10n.drug_selection_description,
+      style: PharMeTheme.textTheme.bodyLarge,
     );
   }
 
@@ -85,6 +78,7 @@ class DrugSelectionPage extends HookWidget {
     }
     return DrugSearch(
       showFilter: false,
+      keepPosition: true,
       buildDrugItems: buildDrugCheckboxList,
       drugItemsBuildParams: {
         'checkboxesEnabled': _isEditable(state),

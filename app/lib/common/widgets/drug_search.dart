@@ -11,12 +11,14 @@ class DrugSearch extends HookWidget {
     required this.showFilter,
     required this.buildDrugItems,
     required this.showDrugInteractionIndicator,
+    this.keepPosition = false,
     this.drugItemsBuildParams,
     DrugListCubit? cubit,
   })  : cubit = cubit ?? DrugListCubit(),
         super(key: key);
 
   final bool showFilter;
+  final bool keepPosition;
   final List<Widget> Function(
     BuildContext context,
     List<Drug> drugs,
@@ -60,6 +62,7 @@ class DrugSearch extends HookWidget {
                 ),
                 SizedBox(height: PharMeTheme.smallSpace),
                 scrollList(
+                  keepPosition: keepPosition,
                   buildDrugList(
                     context,
                     state,

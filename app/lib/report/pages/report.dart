@@ -38,10 +38,13 @@ class ReportPage extends StatelessWidget {
         children: [
           scrollList(
             userPhenotypes.map((phenotype) =>
-              Column(children: [
-                GeneCard(phenotype),
-                SizedBox(height: 8)
-              ])
+              Column(
+                key: Key('gene-card-${phenotype.geneSymbol}'),
+                children: [
+                  GeneCard(phenotype),
+                  SizedBox(height: 8)
+                ]  
+              )
             ).toList()),
           if (hasActiveInhibitors) drugInteractionExplanation(context),
         ]

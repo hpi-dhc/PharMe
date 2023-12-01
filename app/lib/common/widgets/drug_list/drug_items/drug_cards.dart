@@ -21,6 +21,7 @@ List<Widget> buildDrugCards(
     return warningLevelComparison;
   });
   return drugs.map((drug) => DrugCard(
+      key: Key('drug-card-${drug.name}'),
       onTap: () => context.router
           .push(DrugRoute(drug: drug))
           .then((_) => context.read<DrugListCubit>().search()),
@@ -35,7 +36,8 @@ class DrugCard extends StatelessWidget {
     required this.onTap,
     required this.drug,
     required this.showDrugInteractionIndicator,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final VoidCallback onTap;
   final Drug drug;
