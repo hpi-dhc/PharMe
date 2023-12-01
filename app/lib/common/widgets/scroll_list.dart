@@ -19,8 +19,6 @@ Widget scrollList(List<Widget> body, {bool keepPosition = false}) {
               childCount: body.length,
               onItemKey: (index) => getItemKey(body[index]),
               keepPosition: keepPosition,
-              // keepPositionOffset: 80,
-              // firstItemAlign: FirstItemAlign.end
           )
         )
       )
