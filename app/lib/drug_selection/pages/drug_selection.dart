@@ -79,6 +79,7 @@ class DrugSelectionPage extends HookWidget {
     return DrugSearch(
       showFilter: false,
       keepPosition: true,
+      useDrugClass: false,
       buildDrugItems: buildDrugCheckboxList,
       drugItemsBuildParams: {
         'checkboxesEnabled': _isEditable(state),

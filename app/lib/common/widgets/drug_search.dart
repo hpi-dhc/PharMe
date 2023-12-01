@@ -11,6 +11,7 @@ class DrugSearch extends HookWidget {
     required this.showFilter,
     required this.buildDrugItems,
     required this.showDrugInteractionIndicator,
+    this.useDrugClass = true,
     this.keepPosition = false,
     this.drugItemsBuildParams,
     DrugListCubit? cubit,
@@ -18,6 +19,7 @@ class DrugSearch extends HookWidget {
         super(key: key);
 
   final bool showFilter;
+  final bool useDrugClass;
   final bool keepPosition;
   final List<Widget> Function(
     BuildContext context,
@@ -56,7 +58,10 @@ class DrugSearch extends HookWidget {
                       ),
                     ),
                     SizedBox(width: PharMeTheme.smallToMediumSpace),
-                    TooltipIcon(context.l10n.search_page_tooltip_search),
+                    TooltipIcon(useDrugClass
+                      ? context.l10n.search_page_tooltip_search
+                      : context.l10n.search_page_tooltip_search_no_class
+                    ),
                     if (showFilter) buildFilter(context),
                   ]
                 ),
@@ -72,6 +77,7 @@ class DrugSearch extends HookWidget {
                     drugItemsBuildParams: drugItemsBuildParams,
                     showDrugInteractionIndicator:
                       showDrugInteractionIndicator,
+                    useDrugClass: useDrugClass,
                   )
                 ),
                 ..._maybeShowDrugInteractionExplanation(context),

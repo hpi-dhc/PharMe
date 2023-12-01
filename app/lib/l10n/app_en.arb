@@ -32,6 +32,7 @@
   "general_not_tested": "Not tested",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
+  "search_page_tooltip_search_no_class": "Search for drugs by their name or brand name.",
   "search_page_filter_only_active": "Only active drugs",
   "search_page_filter_green": "Green warning level",
   "search_page_filter_yellow": "Yellow warning level",

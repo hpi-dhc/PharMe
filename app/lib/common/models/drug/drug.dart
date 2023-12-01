@@ -74,10 +74,12 @@ extension DrugIsActive on Drug {
 }
 
 extension DrugMatchesQuery on Drug {
-  bool matches({required String query}) {
-    return name.ilike(query) ||
-        (annotations.drugclass.ilike(query)) ||
-        (annotations.brandNames.any((brand) => brand.ilike(query)));
+  bool matches({required String query, required bool useClass}) {
+    final namesMatch = name.ilike(query) ||
+      (annotations.brandNames.any((brand) => brand.ilike(query)));
+    return useClass
+      ? namesMatch || (annotations.drugclass.ilike(query))
+      : namesMatch;
   }
 }
 

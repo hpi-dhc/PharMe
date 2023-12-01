@@ -16,6 +16,7 @@ List<Widget> buildDrugList(
       }
     ) buildDrugItems = buildDrugCards,
     bool showDrugInteractionIndicator = false,
+    bool useDrugClass = true,
     Map? drugItemsBuildParams,
   }
 ) {
@@ -23,7 +24,11 @@ List<Widget> buildDrugList(
     List<Drug> drugs,
     FilterState filter,
   ) {
-    final filteredDrugs = filter.filter(drugs, activeDrugs);
+    final filteredDrugs = filter.filter(
+      drugs,
+      activeDrugs,
+      useDrugClass: useDrugClass,
+    );
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
       return [errorIndicator(noDrugsMessage)];
     }
