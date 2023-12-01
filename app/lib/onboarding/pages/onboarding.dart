@@ -3,6 +3,10 @@
 import '../../../common/module.dart' hide MetaData;
 
 class OnboardingPage extends HookWidget {
+  OnboardingPage({ required this.nextPage });
+
+  final PageRouteInfo<dynamic> nextPage;
+  
   final _pages = [
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/1.png',
@@ -163,7 +167,7 @@ class OnboardingPage extends HookWidget {
         if (isLastPage) {
             // Replace whole stack, see https://stackoverflow.com/a/73784156
             context.router.pushAndPopUntil(
-              DrugSelectionRouter(),
+              nextPage,
               predicate: (_) => false
             );
         } else {

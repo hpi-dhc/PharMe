@@ -15,6 +15,11 @@ class SettingsPage extends StatelessWidget {
         dense: true,
       ),
       ListTile(
+        title: Text(context.l10n.drug_selection_header),
+        trailing: Icon(Icons.chevron_right_rounded),
+        onTap: () => context.router.push(DrugSelectionRouter()),
+      ),
+      ListTile(
         title: Text(context.l10n.settings_page_delete_data),
         trailing: Icon(Icons.chevron_right_rounded),
         onTap: () => showDialog(
@@ -33,7 +38,7 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(context.l10n.settings_page_onboarding),
         trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => context.router.push(OnboardingRouter()),
+        onTap: () => context.router.push(OnboardingRouter(nextPage: MainRoute())),
       ),
       ListTile(
         title: Text(context.l10n.settings_page_about_us),
