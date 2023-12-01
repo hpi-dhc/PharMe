@@ -1,4 +1,5 @@
 import 'package:app/common/module.dart';
+import 'package:app/onboarding/pages/onboarding.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -10,13 +11,9 @@ void main() {
 
   group('integration tests for the onboarding', () {
     testWidgets('Test that pages are changing', (tester) async {
-      final appRouter = AppRouter();
-      await tester.pumpWidget(MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routeInformationParser: appRouter.defaultRouteParser(),
-        routerDelegate: appRouter.delegate(
-          initialDeepLink: 'onboarding',
-        ),
+      final nextPage = MainRoute();
+      await tester.pumpWidget(MaterialApp(
+        home: OnboardingPage(nextPage: nextPage),
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -31,11 +28,10 @@ void main() {
       final BuildContext context = tester.element(find.byType(Scaffold).first);
       expect(find.text(context.l10n.onboarding_1_header), findsOneWidget);
 
-      // change page
       await tester.tap(find.byKey(ValueKey('nextButton')));
       await tester.pumpAndSettle();
       expect(find.text(context.l10n.onboarding_2_header), findsOneWidget);
-      // change page
+
       await tester.tap(find.byKey(ValueKey('nextButton')));
       await tester.pumpAndSettle();
       expect(find.text(context.l10n.onboarding_3_header), findsOneWidget);
