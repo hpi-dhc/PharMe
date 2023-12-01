@@ -72,8 +72,7 @@ void main() {
           ),
         ),
       );
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator, skipOffstage: false), findsOneWidget);
     });
 
     testWidgets('test search page in loaded state', (tester) async {
@@ -100,9 +99,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-
       expect(
-        find.byType(DrugCard),
+        find.byType(DrugCard, skipOffstage: false),
         findsNWidgets(loadedDrugs.length),
       );
     });
