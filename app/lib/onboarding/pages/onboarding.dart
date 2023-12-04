@@ -1,5 +1,3 @@
-// import 'package:url_launcher/url_launcher.dart';
-
 import '../../../common/module.dart' hide MetaData;
 
 class OnboardingPage extends HookWidget {
@@ -12,49 +10,35 @@ class OnboardingPage extends HookWidget {
       illustrationPath: 'assets/images/onboarding/1.png',
       getHeader: (context) => context.l10n.onboarding_1_header,
       getText: (context) => context.l10n.onboarding_1_text,
-      color: Color(0xFFFF7E41),
+      color: PharMeTheme.sinaiCyan,
     ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/2.png',
       getHeader: (context) => context.l10n.onboarding_2_header,
       getText: (context) => context.l10n.onboarding_2_text,
-      color: Color(0xCCCC0700),
+      color: PharMeTheme.sinaiMagenta,
     ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/3.png',
       getHeader: (context) => context.l10n.onboarding_3_header,
       getText: (context) => context.l10n.onboarding_3_text,
-      color: Color(0xCC359600),
+      color: PharMeTheme.sinaiPurple,
       child: BottomCard(
         icon: Icon(Icons.warning_rounded, size: 32),
         getText: (context) => context.l10n.onboarding_3_disclaimer,
       ),
     ),
-    // OnboardingSubPage(
-    //   illustrationPath: 'assets/images/onboarding/4.png',
-    //   getHeader: (context) => context.l10n.onboarding_4_header,
-    //   getText: (context) => context.l10n.onboarding_4_text,
-    //   color: Color(0xFF00B9FA),
-    //   child: BottomCard(
-    //     getText: (context) => context.l10n.onboarding_4_button,
-    //     onClick: () => launchUrl(
-    //       Uri.parse(
-    //         'https://www.cdc.gov/genomics/gtesting/genetic_testing.htm',
-    //       ),
-    //     ),
-    //   ),
-    // ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/4.png',
       getHeader: (context) => context.l10n.onboarding_4_header,
       getText: (context) => context.l10n.onboarding_4_already_tested_text,
-      color: Color(0xFF00B9FA),
+      color: Colors.grey.shade600,
     ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/5.png',
       getHeader: (context) => context.l10n.onboarding_5_header,
       getText: (context) => context.l10n.onboarding_5_text,
-      color: Color(0xFF0A64BC),
+      color: PharMeTheme.sinaiCyan,
     ),
   ];
 

@@ -59,10 +59,20 @@ class PharMeTheme {
     bodySmall: themeFont(12),
   );
 
-  static final primaryColor = MaterialColorAutoShades.fromPrimary(0xff01aeef);
+  static const sinaiCyanCode = 0xff01aeef;
+  static const sinaiMagentaCode = 0xffd80b8c;
+  static const sinaiPurpleCode = 0xff221f73;
+
+  static final sinaiCyan = Color(sinaiCyanCode);
+  static final sinaiMagenta = Color(sinaiMagentaCode);
+  static final sinaiPurple = Color(sinaiPurpleCode);
+
+  static final primaryColor =
+    MaterialColorAutoShades.fromPrimary(sinaiCyanCode);
   static final primaryContainer = primaryColor.shade200;
 
-  static final secondaryColor = MaterialColorAutoShades.fromPrimary(0xffd80b8c);
+  static final secondaryColor =
+    MaterialColorAutoShades.fromPrimary(sinaiMagentaCode);
   static final secondaryContainer = secondaryColor.shade200;
 
   static const surfaceColor = Colors.white;
