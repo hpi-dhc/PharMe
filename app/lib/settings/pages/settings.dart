@@ -1,4 +1,5 @@
 import '../../common/module.dart';
+import '../../common/pages/drug/widgets/adaptive_dialog.dart';
 import '../utils.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -69,8 +70,8 @@ class DeleteDataDialog extends HookWidget {
   Widget build(BuildContext context) {
     final agreedToDeletion = useState(false);
 
-    return AlertDialog(
-      title: Text(context.l10n.settings_page_delete_data),
+    return AdaptiveAlertDialog(
+      title: context.l10n.settings_page_delete_data,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -83,14 +84,16 @@ class DeleteDataDialog extends HookWidget {
             title: Text(context.l10n.settings_page_delete_data_confirmation),
             controlAffinity: ListTileControlAffinity.leading,
             contentPadding: EdgeInsets.zero,
+            activeColor: PharMeTheme.primaryColor,
           ),
         ]),
       actions: [
-        TextButton(
+        AdaptiveDialogAction(
           onPressed: context.router.root.pop,
-          child: Text(context.l10n.action_cancel),
+          text: context.l10n.action_cancel,
         ),
-        TextButton(
+        AdaptiveDialogAction(
+          isDestructive: true,
           onPressed: agreedToDeletion.value
             ? () async {
               await deleteAllAppData();
@@ -98,12 +101,7 @@ class DeleteDataDialog extends HookWidget {
               await context.router.replaceAll([LoginRouter()]);
             }
             : null,
-          child: Text(
-            context.l10n.action_continue,
-            style: agreedToDeletion.value
-              ? TextStyle(color: PharMeTheme.secondaryColor)
-              : TextStyle(color: PharMeTheme.onSurfaceColor),
-          ),
+          text: context.l10n.action_continue,
         ),
       ],
     );

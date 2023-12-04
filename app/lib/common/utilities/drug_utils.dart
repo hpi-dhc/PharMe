@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 
 import '../models/drug/cached_drugs.dart';
 import '../module.dart';
+import '../pages/drug/widgets/adaptive_dialog.dart';
 
 Future<void> updateCachedDrugs() async {
   if (UserData.instance.lookups == null) throw Exception();
@@ -31,16 +31,16 @@ Future<void> updateCachedDrugs() async {
     final context = PharMeApp.navigatorKey.currentContext;
     if (context != null) {
       // ignore: use_build_context_synchronously
-      await showCupertinoModalPopup(
+      await showAdaptiveDialog(
         context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: Text(context.l10n.update_warning_title),
+        builder: (context) => AdaptiveAlertDialog(
+          title: context.l10n.update_warning_title,
           content: Text(context.l10n.update_warning_body),
           actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
+            AdaptiveDialogAction(
+              isDefault: true,
               onPressed: () => Navigator.pop(context),
-              child: Text(context.l10n.action_continue),
+              text: context.l10n.action_continue,
             ),
           ],
         ),

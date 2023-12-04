@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
-
 import '../../../../module.dart';
+import '../adaptive_dialog.dart';
 import '../sub_header.dart';
 
 class DrugAnnotationCard extends StatelessWidget {
@@ -52,24 +51,24 @@ class DrugAnnotationCard extends StatelessWidget {
               value: isActive,
               onChanged: disabled ? null : (newValue) => {
                 if (isInhibitor(drug.name)) {
-                  showCupertinoModalPopup(
+                  showAdaptiveDialog(
                     context: context,
-                    builder: (context) => CupertinoAlertDialog(
-                      title: Text(context.l10n.drugs_page_active_warn_header),
+                    builder: (context) => AdaptiveAlertDialog(
+                      title: context.l10n.drugs_page_active_warn_header,
                       content: Text(context.l10n.drugs_page_active_warn),
-                      actions: <CupertinoDialogAction>[
-                        CupertinoDialogAction(
-                          isDefaultAction: true,
+                      actions: [
+                        AdaptiveDialogAction(
+                          isDefault: true,
                           onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: Text(context.l10n.action_cancel),
+                          text: context.l10n.action_cancel,
                         ),
-                        CupertinoDialogAction(
-                          isDestructiveAction: true,
+                        AdaptiveDialogAction(
+                          isDestructive: true,
                           onPressed: () {
                             Navigator.pop(context, 'OK');
                             setActivity(newValue);
                           },
-                          child: Text(context.l10n.action_continue),
+                          text: context.l10n.action_continue,
                         ),
                       ],
                     ),
