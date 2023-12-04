@@ -7,19 +7,19 @@ class OnboardingPage extends HookWidget {
   
   final _pages = [
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/1.png',
+      illustrationPath: 'assets/images/onboarding/OutlinedLogo.png',
       getHeader: (context) => context.l10n.onboarding_1_header,
       getText: (context) => context.l10n.onboarding_1_text,
       color: PharMeTheme.sinaiCyan,
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/2.png',
+      illustrationPath: 'assets/images/onboarding/DrugReaction.png',
       getHeader: (context) => context.l10n.onboarding_2_header,
       getText: (context) => context.l10n.onboarding_2_text,
       color: PharMeTheme.sinaiMagenta,
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/3.png',
+      illustrationPath: 'assets/images/onboarding/GenomePower.png',
       getHeader: (context) => context.l10n.onboarding_3_header,
       getText: (context) => context.l10n.onboarding_3_text,
       color: PharMeTheme.sinaiPurple,
@@ -29,13 +29,13 @@ class OnboardingPage extends HookWidget {
       ),
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/4.png',
+      illustrationPath: 'assets/images/onboarding/Tailored.png',
       getHeader: (context) => context.l10n.onboarding_4_header,
       getText: (context) => context.l10n.onboarding_4_already_tested_text,
       color: Colors.grey.shade600,
     ),
     OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/5.png',
+      illustrationPath: 'assets/images/onboarding/DataProtection.png',
       getHeader: (context) => context.l10n.onboarding_5_header,
       getText: (context) => context.l10n.onboarding_5_text,
       color: PharMeTheme.sinaiCyan,
@@ -253,7 +253,7 @@ class OnboardingSubPage extends StatelessWidget {
               widthFactor: 0.75,
               child: Image.asset(
                 illustrationPath,
-                width: 320,
+                height: 200,
               ),
             ),
           ),
