@@ -15,15 +15,8 @@ class ReportPage extends StatelessWidget {
 
   Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
-    final genes = <String>{};
-    for (final drug in CachedDrugs.instance.drugs!) {
-      for (final guideline in drug.guidelines) {
-        guideline.lookupkey.keys.forEach(genes.add);
-      }
-    }
-
     final notTestedString = context.l10n.general_not_tested;
-    final userPhenotypes = genes.map(
+    final userPhenotypes = CachedDrugs.instance.allGuidelineGenes.map(
       (geneSymbol) => UserData.instance.lookups![geneSymbol] ??
       CpicPhenotype(
         geneSymbol: geneSymbol,
