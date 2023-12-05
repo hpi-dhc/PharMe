@@ -91,6 +91,17 @@ extension DrugWithUserGuideline on Drug {
       );
 }
 
+extension DrugGuidelineGenes on Drug {
+  List<String> get guidelineGenes => guidelines.isNotEmpty
+    ? guidelines.first.lookupkey.keys.toList()
+    : [];
+}
+
+extension DrugWarningLevel on Drug {
+  WarningLevel get warningLevel =>
+    userGuideline()?.annotations.warningLevel ?? WarningLevel.none;
+}
+
 /// Filters for drugs with non-OK warning level
 extension CriticalDrugs on List<Drug> {
   List<Drug> filterCritical() {

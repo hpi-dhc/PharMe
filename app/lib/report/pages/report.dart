@@ -1,6 +1,8 @@
 import 'package:provider/provider.dart';
 
+import '../../common/models/drug/cached_drugs.dart';
 import '../../common/module.dart';
+import '../../common/utilities/color_utils.dart';
 import '../../common/utilities/guideline_utils.dart';
 
 class ReportPage extends StatelessWidget {
@@ -79,6 +81,35 @@ class GeneCard extends StatelessWidget {
     final phenotypeText = phenotypeInformation.adaptionText.isNullOrBlank
       ? phenotypeInformation.phenotype
       : '${phenotypeInformation.phenotype}$drugInteractionIndicator';
+    final affectedDrugs = CachedDrugs.instance.drugs?.filter(
+      (drug) => drug.guidelineGenes.contains(phenotype.geneSymbol)
+    ) ?? [];
+    final warningLevelIndicators = WarningLevel.values.map(
+      (warningLevel) {
+        final warningLevelCount = affectedDrugs.filter(
+          (drug) => drug.warningLevel == warningLevel
+        ).length;
+        final textColor = darkenColor(warningLevel.color, 0.4);
+        return warningLevelCount > 0
+        ? Row(
+          textDirection: TextDirection.ltr,
+          children: [
+            Icon(
+              warningLevel.icon,
+              size: PharMeTheme.mediumSpace,
+              color: textColor,
+            ),
+            SizedBox(width: PharMeTheme.smallSpace / 2),
+            Text(
+              warningLevelCount.toString(),
+              style: TextStyle(color: textColor),
+            ),
+            SizedBox(width: PharMeTheme.smallSpace),
+          ]
+        )
+        : SizedBox.shrink();
+      }
+    ).toList();
     return RoundedCard(
       onTap: () => context.router.push(GeneRoute(phenotype: phenotype)),
       padding: EdgeInsets.all(8),
@@ -93,9 +124,16 @@ class GeneCard extends StatelessWidget {
                 style: PharMeTheme.textTheme.titleMedium
               ),
               SizedBox(height: 8),
-              Text(
-                phenotypeText,
-                  style: PharMeTheme.textTheme.titleSmall),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    phenotypeText,
+                    style: PharMeTheme.textTheme.titleSmall
+                  ),
+                  Row(children: warningLevelIndicators),
+                ],
+              ),
             ],
           ),
         ),
