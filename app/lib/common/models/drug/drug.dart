@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
 import '../../module.dart';
-import '../../utilities/guideline_utils.dart';
 
 part 'drug.g.dart';
 
@@ -40,7 +39,7 @@ class Drug {
   List<Guideline> guidelines;
 
   @override
-  bool operator ==(other) => other is Drug && id == other.id;
+  bool operator == (other) => other is Drug && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
@@ -67,13 +66,10 @@ class DrugAnnotations {
   List<String> brandNames;
 }
 
-extension DrugIsActive on Drug {
-  bool isActive() {
-    return UserData.instance.activeDrugNames?.contains(name) ?? false;
-  }
-}
+extension DrugExtension on Drug {
+  bool get isActive =>
+    UserData.instance.activeDrugNames?.contains(name) ?? false;
 
-extension DrugMatchesQuery on Drug {
   bool matches({required String query, required bool useClass}) {
     final namesMatch = name.ilike(query) ||
       (annotations.brandNames.any((brand) => brand.ilike(query)));
@@ -81,34 +77,28 @@ extension DrugMatchesQuery on Drug {
       ? namesMatch || (annotations.drugclass.ilike(query))
       : namesMatch;
   }
-}
 
-/// Gets the User's matching guideline
-extension DrugWithUserGuideline on Drug {
-  Guideline? userGuideline() => guidelines.firstOrNullWhere(
-        (guideline) => guideline.lookupkey.all((geneSymbol, geneResults) =>
-            geneResults.contains(UserData.lookupFor(geneSymbol, drug: name))),
-      );
-}
+  Guideline? get userGuideline => guidelines.firstOrNullWhere(
+    (guideline) => guideline.lookupkey.all(
+      (geneSymbol, geneResults) =>
+        geneResults.contains(UserData.lookupFor(geneSymbol, drug: name))
+    ),
+  );
 
-extension DrugGuidelineGenes on Drug {
   List<String> get guidelineGenes => guidelines.isNotEmpty
     ? guidelines.first.lookupkey.keys.toList()
     : [];
-}
 
-extension DrugWarningLevel on Drug {
   WarningLevel get warningLevel =>
-    userGuideline()?.annotations.warningLevel ?? WarningLevel.none;
+    userGuideline?.annotations.warningLevel ?? WarningLevel.none;
 }
 
 /// Filters for drugs with non-OK warning level
 extension CriticalDrugs on List<Drug> {
   List<Drug> filterCritical() {
     return filter((drug) {
-      final warningLevel = getWarningLevel(drug.userGuideline());
-      return warningLevel != WarningLevel.none &&
-        warningLevel != WarningLevel.green;
+      return drug.warningLevel != WarningLevel.none &&
+        drug.warningLevel != WarningLevel.green;
     }).toList();
   }
 }

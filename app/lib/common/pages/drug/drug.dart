@@ -31,8 +31,6 @@ class DrugPage extends StatelessWidget {
   }
 
   Widget _buildDrugsPage(BuildContext context, { required bool loading }) {
-    final userGuideline = drug.userGuideline();
-    final isActive = drug.isActive();
     return pageScaffold(
       title: drug.name.capitalize(),
       actions: [
@@ -55,7 +53,7 @@ class DrugPage extends StatelessWidget {
               SizedBox(height: 12),
               DrugAnnotationCard(
                 drug,
-                isActive: isActive,
+                isActive: drug.isActive,
                 setActivity: (value) =>
                   context.read<DrugCubit>().setActivity(drug, value),
                 disabled: loading,
@@ -66,11 +64,11 @@ class DrugPage extends StatelessWidget {
                 tooltip: context.l10n.drugs_page_tooltip_guideline,
               ),
               SizedBox(height: 12),
-              if (userGuideline != null) ...[
+              if (drug.userGuideline != null) ...[
                 Disclaimer(),
                 SizedBox(height: 12),
               ],
-              GuidelineAnnotationCard(userGuideline, drug),
+              GuidelineAnnotationCard(drug),
             ],
           ),
         ),

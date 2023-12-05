@@ -125,16 +125,10 @@ class FilterState {
   bool isAccepted(Drug drug, ActiveDrugs activeDrugs, {
     required bool useDrugClass,
   }) {
-    final userGuideline = drug.userGuideline();
-    final guidelineGenes = drug.guidelines.isNotEmpty ?
-      drug.guidelines.first.lookupkey.keys.toList() :
-      [];
-    final warningLevel =
-        userGuideline?.annotations.warningLevel ?? WarningLevel.none;
-    var warningLevelMatches = showWarningLevel[warningLevel] ?? true;
+    var warningLevelMatches = showWarningLevel[drug.warningLevel] ?? true;
     // WarningLevel.none is also shown in green in app; therefore, it should
     // also be filtered with green option
-    if (warningLevel == WarningLevel.none) {
+    if (drug.warningLevel == WarningLevel.none) {
       warningLevelMatches = warningLevelMatches &&
         showWarningLevel[WarningLevel.green]!;
     }
@@ -142,7 +136,7 @@ class FilterState {
       drug.matches(query: query, useClass: useDrugClass) &&
       (activeDrugs.contains(drug.name) || showInactive) &&
       warningLevelMatches &&
-      (gene.isBlank || (guidelineGenes.contains(gene)));
+      (gene.isBlank || (drug.guidelineGenes.contains(gene)));
     return isDrugAccepted;
   }
 

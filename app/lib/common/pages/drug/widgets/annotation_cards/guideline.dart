@@ -1,14 +1,12 @@
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../module.dart';
-import '../../../../utilities/guideline_utils.dart';
 import '../sub_header.dart';
 
 class GuidelineAnnotationCard extends StatelessWidget {
-  const GuidelineAnnotationCard(this.guideline, this.drug);
+  const GuidelineAnnotationCard(this.drug);
 
-  final Guideline? guideline;
-  final Drug? drug;
+  final Drug drug;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +16,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _buildHeader(context),
           SizedBox(height: 12),
-          if (guideline != null) ...[
+          if (drug.userGuideline != null) ...[
             _buildCard(context),
             SizedBox(height: 8),
             Divider(color: PharMeTheme.borderColor),
@@ -36,25 +34,27 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildCard(BuildContext context) {
-    final warningLevel = getWarningLevel(guideline);
-    final upperCardText = guideline?.annotations.implication ??
+    final upperCardText = drug.userGuideline?.annotations.implication ??
       context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
-        drug!.name
+        drug.name
       );
-    final lowerCardText = guideline?.annotations.recommendation ??
+    final lowerCardText = drug.userGuideline?.annotations.recommendation ??
       context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation;
     return Card(
         key: Key('annotationCard'),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        color: warningLevel.color,
+        color: drug.warningLevel.color,
         child: Padding(
             padding: EdgeInsets.all(12),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
-                Icon(warningLevel.icon, color: PharMeTheme.onSurfaceText),
+                Icon(
+                  drug.warningLevel.icon,
+                  color: PharMeTheme.onSurfaceText,
+                ),
                 SizedBox(width: 12),
                 Flexible(
                   child: Text(
@@ -74,17 +74,17 @@ class GuidelineAnnotationCard extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     var headerContent = '';
     var headerStyle = PharMeTheme.textTheme.bodyLarge!;
-    if (guideline == null && drug!.guidelines.isEmpty) {
-      headerContent = context.l10n.drugs_page_guidelines_empty(drug!.name);
+    if (drug.userGuideline == null && drug.guidelines.isEmpty) {
+      headerContent = context.l10n.drugs_page_guidelines_empty(drug.name);
       headerStyle = headerStyle.copyWith(fontStyle: FontStyle.italic);
     } else {
-      final genes = guideline?.lookupkey.keys ??
-        drug!.guidelines.first.lookupkey.keys;
+      final genes = drug.userGuideline?.lookupkey.keys ??
+        drug.guidelines.first.lookupkey.keys;
       final geneDescriptions = genes.map((geneSymbol) {
         final phenotypeInformation = UserData.phenotypeFor(
           geneSymbol,
           context,
-          drug: drug?.name,
+          drug: drug.name,
         );
         var description = '$geneSymbol: ${phenotypeInformation.phenotype}';
         if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
@@ -108,7 +108,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
     // pipes are illegal characters in URLs so please
     // - forgive the cheap hack or
     // - refactor by making a custom object and defining equality for it :)
-    final sources = guideline!.externalData
+    final sources = drug.userGuideline!.externalData
         .map((data) => '${data.source}|${data.guidelineUrl}')
         .toSet();
     return Column(children: [

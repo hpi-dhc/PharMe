@@ -169,8 +169,7 @@ String _userInfoPerGene(
   BuildContext buildContext,  
 ) {
   if (drug.guidelines.isEmpty) return buildContext.l10n.pdf_no_value;
-  final guidelineGenes = drug.guidelines.first.lookupkey.keys.toList();
-  return guidelineGenes.map((gene) =>
+  return drug.guidelineGenes.map((gene) =>
     '$gene: ${
       getInfo(gene, drug, buildContext) ?? buildContext.l10n.pdf_no_value
     }'
@@ -183,7 +182,6 @@ List<pw.Widget> _buildUserPart(
   Drug drug,
   Font emoji,
 ) {
-  final userGuideline = drug.userGuideline();
   final patientGenotype = _userInfoPerGene(
     drug,
     (gene, drug, context) => UserData.genotypeFor(gene),
@@ -210,11 +208,11 @@ List<pw.Widget> _buildUserPart(
     'green': '✅',
     null: '❔',
   };
-  final implication = userGuideline?.annotations.implication ??
+  final implication = drug.userGuideline?.annotations.implication ??
     buildContext.l10n.drugs_page_no_guidelines_for_phenotype_implication(
       drug.name
     );
-  final recommendation = userGuideline?.annotations.recommendation ??
+  final recommendation = drug.userGuideline?.annotations.recommendation ??
     buildContext.l10n.drugs_page_no_guidelines_for_phenotype_recommendation;
   return [
     _buildSubheading(buildContext.l10n.pdf_heading_user_data),
@@ -251,7 +249,7 @@ List<pw.Widget> _buildUserPart(
       child: _PdfDescription(
         title: buildContext.l10n.pdf_user_guideline,
         text: '$implication $recommendation',
-        icon: warningLevelIcons[userGuideline?.annotations.warningLevel.name],
+        icon: warningLevelIcons[drug.warningLevel.name],
         emojiFont: emoji,
       ),
     ),
@@ -262,7 +260,7 @@ List<pw.Widget> _buildExternalGuidelinePart(
   Drug drug,
   BuildContext buildContext
 ) {
-  final externalData = drug.userGuideline()?.externalData;
+  final externalData = drug.userGuideline?.externalData;
   final heading = _buildSubheading(
     buildContext.l10n.pdf_heading_clinical_guidelines
   );

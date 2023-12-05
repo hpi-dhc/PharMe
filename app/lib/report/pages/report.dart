@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../common/models/drug/cached_drugs.dart';
 import '../../common/module.dart';
 import '../../common/utilities/color_utils.dart';
-import '../../common/utilities/guideline_utils.dart';
 
 class ReportPage extends StatelessWidget {
   @override
@@ -16,10 +15,15 @@ class ReportPage extends StatelessWidget {
 
   Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
-    final guidelineGenes = getGuidelineGenes();
+    final genes = <String>{};
+    for (final drug in CachedDrugs.instance.drugs!) {
+      for (final guideline in drug.guidelines) {
+        guideline.lookupkey.keys.forEach(genes.add);
+      }
+    }
 
     final notTestedString = context.l10n.general_not_tested;
-    final userPhenotypes = guidelineGenes.map(
+    final userPhenotypes = genes.map(
       (geneSymbol) => UserData.instance.lookups![geneSymbol] ??
       CpicPhenotype(
         geneSymbol: geneSymbol,

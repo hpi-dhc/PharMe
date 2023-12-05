@@ -10,7 +10,7 @@ List<Widget> buildDrugCheckboxList(
   }
 ) {
   if (buildParams == null) throw Exception();
-  final activeDrugs = drugs.filter((drug) => drug.isActive()).toList();
+  final activeDrugs = drugs.filter((drug) => drug.isActive).toList();
   final activeDrugsList = activeDrugs.isEmpty
       ? [Padding(
           padding: EdgeInsets.all(PharMeTheme.mediumSpace),
@@ -57,7 +57,7 @@ List<CheckboxListTile> _buildCheckboxList(
     (drug) => CheckboxListTile(
       key: Key('drug-checkbox-tile-${drug.name}-$keyPrefix'),
       enabled: checkboxesEnabled,
-      value: drug.isActive(),
+      value: drug.isActive,
       onChanged: (value) => onCheckboxChange(drug, value),
       title: Text(formatDrugName(drug, showDrugInteractionIndicator)),
       subtitle: (drug.annotations.brandNames.isNotEmpty) ?
