@@ -4,7 +4,7 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ## Local Setup
 
-- Install [<img
+- Install [<img alt="flutter-logo"
   src="https://user-images.githubusercontent.com/82543715/142913349-54aafb75-8938-4299-b308-ecd2c4a226e7.png"
   width="16" height="16"> Flutter](https://flutter.dev/docs/get-started/install)
 - Open a terminal in VSCode in the `app` directory
@@ -70,3 +70,36 @@ flutter pub run flutter_launcher_icons:main
 ```
 
 This will generate icons for both iOS as well as Android.
+
+## Updating screenshots
+
+🙅 _Not working yet due to login redirect, but keeping script for Sinai_
+_version (login without redirect)._
+
+To update the screenshots in `../docs/screenshots`
+(used in [📑 App screens](../docs/App-screens.md),
+[📑 User instructions](../docs/User-instructions.html), and the
+[README](./README.md)), run the following command after adding username and
+password to:
+
+```shell
+flutter drive \
+  --driver=generate_screenshots/test_driver.dart \
+  --target=generate_screenshots/app_test.dart \
+  --dart-define=TEST_USER=<USERNAME> \
+  --dart-define=TEST_PASSWORD=<PASSWORD>
+```
+
+If the error `The following MissingPluginException was thrown running a test:
+MissingPluginException(No implementation found for method captureScreenshot on
+channel plugins.flutter.io/integration_test)` occurs, the registration in the
+file
+`ios/.symlinks/plugins/integration_test/ios/Classes/IntegrationTestPlugin.m`
+needs to be adapted (see
+[issue](https://github.com/flutter/flutter/issues/91668)):
+
+```m
++ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
+  [[IntegrationTestPlugin instance] setupChannels:registrar.messenger];
+}
+```
