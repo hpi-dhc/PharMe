@@ -26,7 +26,9 @@ void main() {
     final binding = IntegrationTestWidgetsFlutterBinding();
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
     testWidgets('take screenshots', (tester) async {
+      // ignore: unused_local_variable
       const username = String.fromEnvironment('TEST_USER');
+      // ignore: unused_local_variable
       const password = String.fromEnvironment('TEST_PASSWORD');
 
       // Part before runApp in lib/main.dart
