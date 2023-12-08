@@ -24,11 +24,10 @@ class DrugSelectionPage extends HookWidget {
           builder: (context, state) {
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
+              barBottom: context.l10n.drug_selection_description,
               padding: PharMeTheme.largeSpace,
               body: Column(
                 children: [
-                  _buildDescription(context),
-                  SizedBox(height: PharMeTheme.mediumSpace),
                   Expanded(child: _buildDrugList(context, state)),
                   SizedBox(height: PharMeTheme.mediumSpace),
                   _buildButton(context, state),
@@ -45,13 +44,6 @@ class DrugSelectionPage extends HookWidget {
     return state.when(
       stable: () => true,
       updating: () => false
-    );
-  }
-
-  Widget _buildDescription(BuildContext context) {
-    return Text(
-      context.l10n.drug_selection_description,
-      style: PharMeTheme.textTheme.bodyLarge,
     );
   }
 

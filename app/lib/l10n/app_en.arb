@@ -9,7 +9,7 @@
   "auth_success": "Successfully imported data",
 
   "drug_selection_header": "Select active drugs",
-  "drug_selection_description": "Please update the drugs you are currently taking below. You can always change the status for a drug later.",
+  "drug_selection_description": "Please update the drugs you are currently taking below. You can always change the status for a drug later on a drug page or in the settings.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
   "drug_selection_subheader_active_drugs": "Active drugs",
   "drug_selection_subheader_all_drugs": "All drugs",
@@ -340,7 +340,7 @@
   "onboarding_5_header": "We care about your data protection",
   "onboarding_5_text": "After downloading your genetic data from your data provider, it is solely kept on your phone.\n\nOur servers know nothing about you, neither your identity nor your DNA.",
     
-  "settings_page_account_settings": "Account settings",
+  "settings_page_account_settings": "Settings",
   "settings_page_delete_data": "Delete app data",
   "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genetic data and will reset the app.",
   "settings_page_delete_data_confirmation": "I understand that my genetic data will be deleted and it might not be possible to import it again.",

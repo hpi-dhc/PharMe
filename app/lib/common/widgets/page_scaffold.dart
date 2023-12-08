@@ -4,21 +4,30 @@ Text buildTitle(String text) {
   return Text(text, style: PharMeTheme.textTheme.headlineLarge);
 }
 
-// Hint: For multiline text use RichText widget
-AppBar? buildBarBottom(Widget? barBottom) {
+AppBar? buildBarBottom(String? barBottom) {
   return barBottom == null
     ? null
     : AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
         elevation: PharMeTheme.appBarTheme.elevation,
-        title: barBottom,
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: barBottom,
+                style: PharMeTheme.textTheme.bodyLarge,
+              ),
+            ]
+          ),
+        ),
       );
 }
 
 Scaffold pageScaffold({
   required String title,
   required List<Widget> body,
-  Widget? barBottom,
+  String? barBottom,
   List<Widget>? actions,
   Key? key,
 }) {
@@ -47,7 +56,7 @@ Scaffold unscrollablePageScaffold({
   required Widget body,
   double? padding,
   String? title,
-  Widget? barBottom,
+  String? barBottom,
   List<Widget>? actions,
   Key? key,
 }) {
