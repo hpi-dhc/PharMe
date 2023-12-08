@@ -50,7 +50,7 @@ class DrugSelectionPage extends HookWidget {
   Widget _buildButton(BuildContext context, DrugSelectionPageState state) {
     return FullWidthButton(
       context.l10n.action_continue,
-      () => context.router.replace(MainRoute()),
+      () => overwriteRoutes(context, nextPage: MainRoute()),
       enabled: _isEditable(state),
     );
   }
