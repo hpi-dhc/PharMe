@@ -11,9 +11,8 @@ void main() {
 
   group('integration tests for the onboarding', () {
     testWidgets('Test that pages are changing', (tester) async {
-      final nextPage = MainRoute();
       await tester.pumpWidget(MaterialApp(
-        home: OnboardingPage(nextPage: nextPage),
+        home: OnboardingPage(),
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

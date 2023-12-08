@@ -1,13 +1,10 @@
 import '../../../common/module.dart' hide MetaData;
+import '../../common/models/metadata.dart';
 
 class OnboardingPage extends HookWidget {
-  OnboardingPage({
-    this.nextPage,
-    this.isDismissible = false,
-  });
+  OnboardingPage({ this.isRevisiting = false });
 
-  final PageRouteInfo<dynamic>? nextPage;
-  final bool isDismissible;
+  final bool isRevisiting;
   
   final _pages = [
     OnboardingSubPage(
@@ -92,7 +89,7 @@ class OnboardingPage extends HookWidget {
                 children: _pages,
               ),
             ),
-            if (isDismissible) Positioned(
+            if (isRevisiting) Positioned(
               top: MediaQuery.of(context).padding.top + PharMeTheme.mediumToLargeSpace,
               right: PharMeTheme.mediumToLargeSpace,
               child: IconButton(
@@ -169,15 +166,20 @@ class OnboardingPage extends HookWidget {
     return TextButton(
       key: Key('nextButton'),
       style: buttonStyle,
-      onPressed: () {
+      onPressed: () async {
         if (isLastPage) {
-          if (nextPage != null) {
-            context.router.push(nextPage!);
-          } else {
+          if (isRevisiting) {
             context.router.navigateBack();
+          } else {
+            MetaData.instance.onboardingDone = true;
+            await MetaData.save();
+            // ignore: use_build_context_synchronously
+            await context.router.push(
+              DrugSelectionRouter(concludesOnboarding: true)
+            );
           }
         } else {
-          pageController.nextPage(
+          await pageController.nextPage(
             duration: Duration(milliseconds: 500),
             curve: Curves.ease,
           );
@@ -189,9 +191,9 @@ class OnboardingPage extends HookWidget {
         children: [
           Text(
             isLastPage
-                ? nextPage != null
-                  ? context.l10n.onboarding_get_started
-                  : context.l10n.action_back_to_app
+                ? isRevisiting
+                  ? context.l10n.action_back_to_app
+                  : context.l10n.onboarding_get_started
                 : context.l10n.onboarding_next,
             style: PharMeTheme.textTheme.headlineSmall!
                 .copyWith(color: textColor),

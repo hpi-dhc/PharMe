@@ -117,9 +117,7 @@ class LoginPage extends HookWidget {
     return _buildColumnWrapper(
       action: () => overwriteRoutes(
         context,
-        nextPage: OnboardingRouter(
-          nextPage: DrugSelectionRouter(concludesOnboarding: true)
-        ),
+        nextPage: OnboardingRouter(),
       ),
       actionText: context.l10n.general_continue,
       children: [

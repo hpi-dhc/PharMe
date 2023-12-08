@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 
 import '../../common/models/drug/cached_drugs.dart';
+import '../../common/models/metadata.dart';
 import '../../common/module.dart' hide MetaData;
 import '../../common/widgets/drug_list/drug_items/drug_checkbox_list.dart';
 import '../../common/widgets/drug_search.dart';
@@ -10,7 +11,7 @@ import 'cubit.dart';
 class DrugSelectionPage extends HookWidget {
   const DrugSelectionPage({
     Key? key,
-    this.concludesOnboarding = false,
+    this.concludesOnboarding = true,
     @visibleForTesting this.cubit,
   }) : super(key: key);
 
@@ -55,7 +56,12 @@ class DrugSelectionPage extends HookWidget {
       padding: EdgeInsets.only(top: PharMeTheme.mediumSpace),
       child: FullWidthButton(
         context.l10n.action_continue,
-        () => overwriteRoutes(context, nextPage: MainRoute()),
+        () async {
+          MetaData.instance.initialDrugSelectionDone = true;
+          await MetaData.save();
+          // ignore: use_build_context_synchronously
+          await overwriteRoutes(context, nextPage: MainRoute());
+        },
         enabled: _isEditable(state),
       )
     );

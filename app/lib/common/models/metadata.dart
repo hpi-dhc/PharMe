@@ -34,6 +34,12 @@ class MetaData {
 
   @HiveField(1)
   bool? isLoggedIn;
+
+  @HiveField(2)
+  bool? onboardingDone;
+
+  @HiveField(3)
+  bool? initialDrugSelectionDone;
 }
 
 /// Initializes the user's metadata by registering all necessary adapters and
