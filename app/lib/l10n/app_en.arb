@@ -2,6 +2,7 @@
   "@@locale": "en",
   "action_cancel": "Cancel",
   "action_continue": "Continue",
+  "action_back_to_app": "Back to app",
 
   "auth_welcome": "Welcome to PharMe",
   "auth_choose_lab": "Please select your data provider",

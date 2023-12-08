@@ -1,9 +1,9 @@
 import '../../../common/module.dart' hide MetaData;
 
 class OnboardingPage extends HookWidget {
-  OnboardingPage({ required this.nextPage });
+  OnboardingPage({ this.nextPage });
 
-  final PageRouteInfo<dynamic> nextPage;
+  final PageRouteInfo<dynamic>? nextPage;
   
   final _pages = [
     OnboardingSubPage(
@@ -149,7 +149,11 @@ class OnboardingPage extends HookWidget {
       key: Key('nextButton'),
       onPressed: () {
         if (isLastPage) {
-          context.router.push(nextPage);
+          if (nextPage != null) {
+            context.router.push(nextPage!);
+          } else {
+            context.router.navigateBack();
+          }
         } else {
           pageController.nextPage(
             duration: Duration(milliseconds: 500),
@@ -163,7 +167,9 @@ class OnboardingPage extends HookWidget {
         children: [
           Text(
             isLastPage
-                ? context.l10n.onboarding_get_started
+                ? nextPage != null
+                  ? context.l10n.onboarding_get_started
+                  : context.l10n.action_back_to_app
                 : context.l10n.onboarding_next,
             style: PharMeTheme.textTheme.headlineSmall!
                 .copyWith(color: Colors.white),

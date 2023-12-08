@@ -39,7 +39,7 @@ class SettingsPage extends StatelessWidget {
       ListTile(
         title: Text(context.l10n.settings_page_onboarding),
         trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => context.router.push(OnboardingRouter(nextPage: MainRoute())),
+        onTap: () => context.router.push(OnboardingRouter()),
       ),
       ListTile(
         title: Text(context.l10n.settings_page_about_us),
