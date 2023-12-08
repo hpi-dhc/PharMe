@@ -115,8 +115,9 @@ class LoginPage extends HookWidget {
 
   Widget _buildLoadedScreen(BuildContext context) {
     return _buildColumnWrapper(
-      action: () => context.router.replace(
-        OnboardingRouter(nextPage: DrugSelectionRouter())
+      action: () => overwriteRoutes(
+        context,
+        nextPage: OnboardingRouter(nextPage: DrugSelectionRouter()),
       ),
       actionText: context.l10n.general_continue,
       children: [

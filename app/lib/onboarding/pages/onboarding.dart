@@ -149,11 +149,7 @@ class OnboardingPage extends HookWidget {
       key: Key('nextButton'),
       onPressed: () {
         if (isLastPage) {
-            // Replace whole stack, see https://stackoverflow.com/a/73784156
-            context.router.pushAndPopUntil(
-              nextPage,
-              predicate: (_) => false
-            );
+          overwriteRoutes(context, nextPage: nextPage);
         } else {
           pageController.nextPage(
             duration: Duration(milliseconds: 500),
