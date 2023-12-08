@@ -98,7 +98,7 @@ class DeleteDataDialog extends HookWidget {
             ? () async {
               await deleteAllAppData();
               // ignore: use_build_context_synchronously
-              await context.router.replaceAll([LoginRouter()]);
+              await overwriteRoutes(context, nextPage: LoginRouter());
             }
             : null,
           text: context.l10n.action_continue,
