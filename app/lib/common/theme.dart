@@ -85,6 +85,7 @@ class PharMeTheme {
   static const smallSpace = 8.0;
   static const smallToMediumSpace = 12.0;
   static const mediumSpace = 16.0;
+  static const mediumToLargeSpace = 24.0;
   static const largeSpace = 32.0;
 
   static final appBarTheme = AppBarTheme(

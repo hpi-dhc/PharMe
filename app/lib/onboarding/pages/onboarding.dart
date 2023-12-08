@@ -89,15 +89,15 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: 80,
+              bottom: 96,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(context, currentPage.value),
               ),
             ),
             Positioned(
-              bottom: 16,
-              right: 16,
+              bottom: PharMeTheme.mediumToLargeSpace,
+              right: PharMeTheme.mediumToLargeSpace,
               child: _buildNextButton(
                 context,
                 pageController,
@@ -105,8 +105,8 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: 16,
-              left: 16,
+              bottom: PharMeTheme.mediumToLargeSpace,
+              left: PharMeTheme.mediumToLargeSpace,
               child: _buildPrevButton(
                 context,
                 pageController,
@@ -145,8 +145,18 @@ class OnboardingPage extends HookWidget {
     PageController pageController,
     bool isLastPage,
   ) {
+    final buttonStyle = isLastPage
+      ? ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))
+        )
+      : null;
+    final textColor = isLastPage
+      ? PharMeTheme.onSurfaceText
+      : Colors.white;
     return TextButton(
       key: Key('nextButton'),
+      style: buttonStyle,
       onPressed: () {
         if (isLastPage) {
           if (nextPage != null) {
@@ -172,12 +182,12 @@ class OnboardingPage extends HookWidget {
                   : context.l10n.action_back_to_app
                 : context.l10n.onboarding_next,
             style: PharMeTheme.textTheme.headlineSmall!
-                .copyWith(color: Colors.white),
+                .copyWith(color: textColor),
           ),
           SizedBox(width: 8),
           Icon(
             Icons.arrow_forward_rounded,
-            color: Colors.white,
+            color: textColor,
             size: 32,
           ),
         ],
