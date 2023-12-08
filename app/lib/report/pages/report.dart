@@ -25,24 +25,27 @@ class ReportPage extends StatelessWidget {
         lookupkey: notTestedString
       )
     );
-    return unscrollablePageScaffold(
-      title: context.l10n.tab_report,
-      barBottom: context.l10n.report_content_explanation,
-      body: Column(
-        children: [
-          scrollList(
-            userPhenotypes.map((phenotype) =>
-              Column(
-                key: Key('gene-card-${phenotype.geneSymbol}'),
-                children: [
-                  GeneCard(phenotype),
-                  SizedBox(height: 8)
-                ]  
-              )
-            ).toList()),
-          if (hasActiveInhibitors) drugInteractionExplanation(context),
-        ]
-      )
+    return WillPopScope(
+      child: unscrollablePageScaffold(
+        title: context.l10n.tab_report,
+        barBottom: context.l10n.report_content_explanation,
+        body: Column(
+          children: [
+            scrollList(
+              userPhenotypes.map((phenotype) =>
+                Column(
+                  key: Key('gene-card-${phenotype.geneSymbol}'),
+                  children: [
+                    GeneCard(phenotype),
+                    SizedBox(height: 8)
+                  ]  
+                )
+              ).toList()),
+            if (hasActiveInhibitors) drugInteractionExplanation(context),
+          ]
+        )
+      ),
+      onWillPop: () async => false,
     );
   }
 

@@ -7,63 +7,66 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return pageScaffold(title: context.l10n.tab_more, body: [
-      ListTile(
-        title: Text(
-          context.l10n.settings_page_account_settings,
-          style: PharMeTheme.textTheme.bodyMedium,
+    return WillPopScope(
+      child: pageScaffold(title: context.l10n.tab_more, body: [
+        ListTile(
+          title: Text(
+            context.l10n.settings_page_account_settings,
+            style: PharMeTheme.textTheme.bodyMedium,
+          ),
+          dense: true,
         ),
-        dense: true,
-      ),
-      ListTile(
-        title: Text(context.l10n.drug_selection_header),
-        trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => context.router.push(
-          DrugSelectionRouter(concludesOnboarding: false)
-        ),
-      ),
-      ListTile(
-        title: Text(context.l10n.settings_page_delete_data),
-        trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => showDialog(
-          context: context,
-          builder: (_) => DeleteDataDialog(),
-        ),
-      ),
-      Divider(),
-      ListTile(
-        title: Text(
-          context.l10n.settings_page_more,
-          style: PharMeTheme.textTheme.bodyMedium,
-        ),
-        dense: true,
-      ),
-      ListTile(
-        title: Text(context.l10n.settings_page_onboarding),
-        trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => context.router.push(OnboardingRouter(isRevisiting: true)),
-      ),
-      ListTile(
-        title: Text(context.l10n.settings_page_about_us),
-        trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => context.router.push(AboutUsRoute()),
-      ),
-      ListTile(
-        title: Text(context.l10n.settings_page_privacy_policy),
-        trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => context.router.push(PrivacyPolicyRoute()),
-      ),
-      ListTile(
-        title: Text(context.l10n.settings_page_terms_and_conditions),
-        trailing: Icon(Icons.chevron_right_rounded),
-        onTap: () => context.router.push(TermsAndConditionsRoute()),
-      ),
-      Divider(),
-      ListTile(
-          title: Text(context.l10n.settings_page_contact_us),
+        ListTile(
+          title: Text(context.l10n.drug_selection_header),
           trailing: Icon(Icons.chevron_right_rounded),
-          onTap: sendEmail)
-    ]);
+          onTap: () => context.router.push(
+            DrugSelectionRouter(concludesOnboarding: false)
+          ),
+        ),
+        ListTile(
+          title: Text(context.l10n.settings_page_delete_data),
+          trailing: Icon(Icons.chevron_right_rounded),
+          onTap: () => showDialog(
+            context: context,
+            builder: (_) => DeleteDataDialog(),
+          ),
+        ),
+        Divider(),
+        ListTile(
+          title: Text(
+            context.l10n.settings_page_more,
+            style: PharMeTheme.textTheme.bodyMedium,
+          ),
+          dense: true,
+        ),
+        ListTile(
+          title: Text(context.l10n.settings_page_onboarding),
+          trailing: Icon(Icons.chevron_right_rounded),
+          onTap: () => context.router.push(OnboardingRouter(isRevisiting: true)),
+        ),
+        ListTile(
+          title: Text(context.l10n.settings_page_about_us),
+          trailing: Icon(Icons.chevron_right_rounded),
+          onTap: () => context.router.push(AboutUsRoute()),
+        ),
+        ListTile(
+          title: Text(context.l10n.settings_page_privacy_policy),
+          trailing: Icon(Icons.chevron_right_rounded),
+          onTap: () => context.router.push(PrivacyPolicyRoute()),
+        ),
+        ListTile(
+          title: Text(context.l10n.settings_page_terms_and_conditions),
+          trailing: Icon(Icons.chevron_right_rounded),
+          onTap: () => context.router.push(TermsAndConditionsRoute()),
+        ),
+        Divider(),
+        ListTile(
+            title: Text(context.l10n.settings_page_contact_us),
+            trailing: Icon(Icons.chevron_right_rounded),
+            onTap: sendEmail)
+      ]),
+      onWillPop: () async => false,
+    );
   }
 }
 

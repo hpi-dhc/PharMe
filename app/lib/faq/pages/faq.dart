@@ -6,26 +6,29 @@ class FaqPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return pageScaffold(title: context.l10n.tab_faq, body: [
-      Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          key: Key('questionsColumn'),
-          children: [
-            SizedBox(height: 8),
-            ...faqList.keys.fold<List<Widget>>(
-              [], (widgets, topic) =>
-                [...widgets, ..._buildTopic(context, topic, faqList[topic]!)]
-            ),
-            Divider(),
-            ListTile(
-                title: Text(context.l10n.faq_contact_us),
-                trailing: Icon(Icons.chevron_right_rounded),
-                onTap: sendEmail)
-          ],
+    return WillPopScope(
+      child: pageScaffold(title: context.l10n.tab_faq, body: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            key: Key('questionsColumn'),
+            children: [
+              SizedBox(height: 8),
+              ...faqList.keys.fold<List<Widget>>(
+                [], (widgets, topic) =>
+                  [...widgets, ..._buildTopic(context, topic, faqList[topic]!)]
+              ),
+              Divider(),
+              ListTile(
+                  title: Text(context.l10n.faq_contact_us),
+                  trailing: Icon(Icons.chevron_right_rounded),
+                  onTap: sendEmail)
+            ],
+          ),
         ),
-      ),
-    ]);
+      ]),
+      onWillPop: () async => false,
+    );
   }
 
   List<Widget> _buildTopic(

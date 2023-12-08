@@ -18,14 +18,17 @@ class SearchPage extends HookWidget {
         await cubit.loadDrugs(useCache: false);
       }
     });
-    return unscrollablePageScaffold(
-      title: context.l10n.tab_drugs,
-      body: DrugSearch(
-        showFilter: true,
-        buildDrugItems: buildDrugCards,
-        cubit: cubit,
-        showDrugInteractionIndicator: true,
+    return WillPopScope(
+      child: unscrollablePageScaffold(
+        title: context.l10n.tab_drugs,
+        body: DrugSearch(
+          showFilter: true,
+          buildDrugItems: buildDrugCards,
+          cubit: cubit,
+          showDrugInteractionIndicator: true,
+        ),
       ),
+      onWillPop: () async => false,
     );
   }
 }
