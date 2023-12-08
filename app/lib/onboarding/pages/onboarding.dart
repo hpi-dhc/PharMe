@@ -1,9 +1,13 @@
 import '../../../common/module.dart' hide MetaData;
 
 class OnboardingPage extends HookWidget {
-  OnboardingPage({ this.nextPage });
+  OnboardingPage({
+    this.nextPage,
+    this.isDismissible = false,
+  });
 
   final PageRouteInfo<dynamic>? nextPage;
+  final bool isDismissible;
   
   final _pages = [
     OnboardingSubPage(
@@ -87,6 +91,14 @@ class OnboardingPage extends HookWidget {
                 onPageChanged: (newPage) => currentPage.value = newPage,
                 children: _pages,
               ),
+            ),
+            if (isDismissible) Positioned(
+              top: MediaQuery.of(context).padding.top + PharMeTheme.mediumToLargeSpace,
+              right: PharMeTheme.mediumToLargeSpace,
+              child: IconButton(
+                icon: Icon(Icons.close, size: 32, color: Colors.white,),
+                onPressed: () => context.navigateBack(),
+              )
             ),
             Positioned(
               bottom: 96,
