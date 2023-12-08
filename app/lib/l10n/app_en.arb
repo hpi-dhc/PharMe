@@ -9,7 +9,7 @@
   "auth_success": "Successfully imported data",
 
   "drug_selection_header": "Select active drugs",
-  "drug_selection_description": "Please update the drugs you are currently taking below. You can always change the status for a drug later on a drug page or in the settings.",
+  "drug_selection_onboarding_description": "Please update which drugs you are currently taking below. You can always change the status for a drug later on a drug page or in the settings.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
   "drug_selection_subheader_active_drugs": "Active drugs",
   "drug_selection_subheader_all_drugs": "All drugs",

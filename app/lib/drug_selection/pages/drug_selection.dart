@@ -10,10 +10,12 @@ import 'cubit.dart';
 class DrugSelectionPage extends HookWidget {
   const DrugSelectionPage({
     Key? key,
+    this.concludesOnboarding = false,
     @visibleForTesting this.cubit,
   }) : super(key: key);
 
   final DrugSelectionPageCubit? cubit;
+  final bool concludesOnboarding;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +26,14 @@ class DrugSelectionPage extends HookWidget {
           builder: (context, state) {
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
-              barBottom: context.l10n.drug_selection_description,
+              barBottom: concludesOnboarding
+                ? context.l10n.drug_selection_onboarding_description
+                : null,
               padding: PharMeTheme.largeSpace,
               body: Column(
                 children: [
                   Expanded(child: _buildDrugList(context, state)),
-                  SizedBox(height: PharMeTheme.mediumSpace),
-                  _buildButton(context, state),
+                  if (concludesOnboarding) _buildButton(context, state),
                 ],
               ),
             );
@@ -48,10 +51,13 @@ class DrugSelectionPage extends HookWidget {
   }
 
   Widget _buildButton(BuildContext context, DrugSelectionPageState state) {
-    return FullWidthButton(
-      context.l10n.action_continue,
-      () => overwriteRoutes(context, nextPage: MainRoute()),
-      enabled: _isEditable(state),
+    return Padding(
+      padding: EdgeInsets.only(top: PharMeTheme.mediumSpace),
+      child: FullWidthButton(
+        context.l10n.action_continue,
+        () => overwriteRoutes(context, nextPage: MainRoute()),
+        enabled: _isEditable(state),
+      )
     );
   }
 
