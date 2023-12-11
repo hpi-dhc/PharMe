@@ -90,7 +90,8 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             if (isRevisiting) Positioned(
-              top: MediaQuery.of(context).padding.top + PharMeTheme.mediumToLargeSpace,
+              top: MediaQuery.of(context).padding.top +
+                PharMeTheme.mediumToLargeSpace,
               right: PharMeTheme.mediumToLargeSpace,
               child: IconButton(
                 icon: Icon(Icons.close, size: 32, color: Colors.white,),
@@ -155,10 +156,7 @@ class OnboardingPage extends HookWidget {
     bool isLastPage,
   ) {
     final buttonStyle = isLastPage
-      ? ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))
-        )
+      ? ElevatedButton.styleFrom(backgroundColor: Colors.white)
       : null;
     final textColor = isLastPage
       ? PharMeTheme.onSurfaceText
@@ -189,6 +187,7 @@ class OnboardingPage extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(width: 8),
           Text(
             isLastPage
                 ? isRevisiting
