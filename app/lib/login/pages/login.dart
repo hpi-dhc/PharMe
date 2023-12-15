@@ -23,32 +23,14 @@ class LoginPage extends HookWidget {
         create: (context) => cubit ?? LoginPageCubit(activeDrugs),
         child: BlocBuilder<LoginPageCubit, LoginPageState>(
           builder: (context, state) {
-            return unscrollablePageScaffold(
-              padding: PharMeTheme.largeSpace,
-              body: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset(
-                        'assets/images/logo.svg',
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: state.when(
-                        initial: () =>
-                            _buildInitialScreen(context, dropdownValue),
-                        loadingUserData: CircularProgressIndicator.new,
-                        loadedUserData: () => _buildLoadedScreen(context),
-                        error: (message) =>
-                            _buildErrorScreen(context, message),
-                      ),
-                    ),
-                  ),
-                ],
+            return PharMeLogoPage(
+              child: state.when(
+                initial: () =>
+                    _buildInitialScreen(context, dropdownValue),
+                loadingUserData: CircularProgressIndicator.new,
+                loadedUserData: () => _buildLoadedScreen(context),
+                error: (message) =>
+                    _buildErrorScreen(context, message),
               ),
             );
           },

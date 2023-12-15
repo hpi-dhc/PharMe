@@ -7,6 +7,7 @@ import '../../report/module.dart';
 import '../../search/module.dart';
 import '../../settings/module.dart';
 import '../pages/main/main.dart';
+import '../pages/privacy/privacy.dart';
 
 part 'router.gr.dart';
 
@@ -16,6 +17,7 @@ part 'router.gr.dart';
     drugSelectionRoutes,
     loginRoutes,
     onboardingRoutes,
+    privacyRoutes,
     AutoRoute(
       path: 'main',
       page: MainPage,
