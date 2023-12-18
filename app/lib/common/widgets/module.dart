@@ -4,7 +4,6 @@ export 'drug_list/builder.dart';
 export 'drug_list/cubit.dart';
 export 'headings.dart';
 export 'indicators.dart';
-export 'lifecycle_observer.dart';
 export 'page_scaffold.dart';
 export 'pharme_logo_page.dart';
 export 'radiant_gradient_mask.dart';
