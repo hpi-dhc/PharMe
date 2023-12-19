@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../l10n.dart';
-import '../../../theme.dart';
+import '../../common/module.dart';
 
 class Disclaimer extends StatelessWidget {
   const Disclaimer({this.text});

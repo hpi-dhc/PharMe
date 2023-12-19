@@ -1,19 +1,11 @@
-import 'package:auto_route/auto_route.dart';
+import '../common/module.dart';
+import '../drug/module.dart';
 
-import '../common/pages/drug/drug.dart';
-import 'pages/search.dart';
-
-export '../common/models/module.dart';
-export '../common/pages/drug/cubit.dart';
-export '../common/pages/drug/drug.dart';
+// For generated routes
 export 'pages/search.dart';
 
-const searchRoutes = AutoRoute(
+final searchRoute = AutoRoute(
   path: 'search',
-  name: 'SearchRouter',
-  page: EmptyRouterPage,
-  children: [
-    AutoRoute(path: '', page: SearchPage),
-    AutoRoute(page: DrugPage),
-  ],
+  page: SearchRoute.page,
+  children: [ drugRoute() ],
 );

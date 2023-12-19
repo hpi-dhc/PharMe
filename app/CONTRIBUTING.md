@@ -11,8 +11,8 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
   - Run `dart pub get` to fetch all dart dependencies
   - Run `flutter pub get` to fetch all flutter dependencies and setup all
     generated code
-  - Run `flutter pub run build_runner build --delete-conflicting-outputs` or
-    `flutter pub run build_runner watch --delete-conflicting-outputs` to
+  - Run `dart run build_runner build --delete-conflicting-outputs` or
+    `dart run build_runner watch --delete-conflicting-outputs` to
     re-generate code upon file changes while developing
 
 You should now be able to run the app by opening the debug panel on the left and
@@ -24,7 +24,7 @@ For (cleaning) generated code, you might want to add the following aliases to
 your shell configuration:
 
 ```bash
-alias flutter-generate='flutter pub run build_runner build --delete-conflicting-outputs'
+alias flutter-generate='dart run build_runner build --delete-conflicting-outputs'
 alias flutter-clean='find . -maxdepth 20 -type f \( -name "*.inject.summary" -o -name "*.inject.dart" -o  -name "*.g.dart" \) -delete'
 ```
 

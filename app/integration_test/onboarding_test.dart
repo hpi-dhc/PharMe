@@ -1,5 +1,5 @@
 import 'package:app/common/module.dart';
-import 'package:app/onboarding/pages/onboarding.dart';
+import 'package:app/onboarding/module.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';

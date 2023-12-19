@@ -1,18 +1,15 @@
 import '../common/module.dart';
-import '../search/module.dart';
-import 'pages/gene.dart';
-import 'pages/report.dart';
+import '../drug/module.dart';
 
+// For generated routes
 export 'pages/gene.dart';
 export 'pages/report.dart';
 
-const reportRoutes = AutoRoute(
+final reportRoute = AutoRoute(
   path: 'report',
-  name: 'ReportRouter',
-  page: EmptyRouterPage,
+  page: ReportRoute.page,
   children: [
-    AutoRoute(path: '', page: ReportPage),
-    AutoRoute(page: GenePage),
-    AutoRoute(page: DrugPage)
+    AutoRoute(page: GeneRoute.page),
+    drugRoute(),
   ],
 );

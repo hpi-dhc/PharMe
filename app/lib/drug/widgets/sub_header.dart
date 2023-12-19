@@ -1,7 +1,4 @@
-import 'package:dartx/dartx.dart';
-import 'package:flutter/material.dart';
-
-import '../../../theme.dart';
+import '../../common/module.dart';
 import 'tooltip_icon.dart';
 
 class SubHeader extends StatelessWidget {

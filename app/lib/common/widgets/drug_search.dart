@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
-import '../../common/pages/drug/widgets/tooltip_icon.dart';
+import '../../drug/widgets/tooltip_icon.dart';
 
 class DrugSearch extends HookWidget {
   DrugSearch({
-    Key? key,
+    super.key,
     required this.showFilter,
     required this.buildDrugItems,
     required this.showDrugInteractionIndicator,
@@ -15,8 +15,7 @@ class DrugSearch extends HookWidget {
     this.keepPosition = false,
     this.drugItemsBuildParams,
     DrugListCubit? cubit,
-  })  : cubit = cubit ?? DrugListCubit(),
-        super(key: key);
+  })  : cubit = cubit ?? DrugListCubit();
 
   final bool showFilter;
   final bool useDrugClass;
@@ -111,7 +110,7 @@ class DrugSearch extends HookWidget {
           label: context.l10n.search_page_filter_only_active,
           // Invert state as filter has opposite meaning ('only show active' vs.
           // 'show inactive')
-          setState: (state) => cubit.search(showInactive: !state),
+          setState: ({ required value }) => cubit.search(showInactive: !value),
           initialState: filter != null && !filter.showInactive),
         ...WarningLevel.values.filter((level) => level != WarningLevel.none)
           .map((level) => ContextMenuCheckmark(
@@ -120,7 +119,8 @@ class DrugSearch extends HookWidget {
               WarningLevel.yellow: context.l10n.search_page_filter_yellow,
               WarningLevel.red: context.l10n.search_page_filter_red,
             }[level]!,
-            setState: (state) => cubit.search(showWarningLevel: {level: state}),
+            setState: ({ required value }) =>
+              cubit.search(showWarningLevel: { level: value }),
             initialState: filter?.showWarningLevel[level] ?? false
             )
           ),
@@ -128,8 +128,8 @@ class DrugSearch extends HookWidget {
           label: context.l10n.search_page_filter_only_with_guidelines,
           // Invert state as filter has opposite meaning ('show only with
           // guidelines' vs. 'show with unknown warning level')
-          setState: (state) => cubit.search(
-            showWarningLevel: {WarningLevel.none: !state}
+          setState: ({ required value }) => cubit.search(
+            showWarningLevel: { WarningLevel.none: !value }
           ),
           initialState: filter != null &&
             !filter.showWarningLevel[WarningLevel.none]!,)

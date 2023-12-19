@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:overlay_dialog/overlay_dialog.dart';
 
-import '../../module.dart';
-import '../../utilities/pdf_utils.dart';
+import '../common/module.dart';
 
 part 'cubit.freezed.dart';
 

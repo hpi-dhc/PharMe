@@ -1,9 +1,10 @@
 import 'package:provider/provider.dart';
 
-import '../../module.dart';
-import 'cubit.dart';
-import 'widgets/module.dart';
+import '../../common/module.dart';
+import '../cubit.dart';
+import '../widgets/module.dart';
 
+@RoutePage()
 class DrugPage extends StatelessWidget {
   const DrugPage(
     this.drug, {
@@ -54,7 +55,7 @@ class DrugPage extends StatelessWidget {
               DrugAnnotationCard(
                 drug,
                 isActive: drug.isActive,
-                setActivity: (value) =>
+                setActivity: ({ value }) =>
                   context.read<DrugCubit>().setActivity(drug, value),
                 disabled: loading,
               ),

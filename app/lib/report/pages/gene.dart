@@ -1,9 +1,9 @@
 import 'package:provider/provider.dart';
 
 import '../../common/module.dart';
-import '../../common/pages/drug/widgets/sub_header.dart';
-import '../../common/pages/drug/widgets/tooltip_icon.dart';
+import '../../drug/widgets/module.dart';
 
+@RoutePage()
 class GenePage extends HookWidget {
   GenePage(this.phenotype)
       : cubit = DrugListCubit(

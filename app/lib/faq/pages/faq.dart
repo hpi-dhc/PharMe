@@ -1,12 +1,14 @@
 import '../../common/module.dart';
 import '../constants.dart';
 
+@RoutePage()
 class FaqPage extends StatelessWidget {
-  const FaqPage({Key? key}) : super(key: key);
+  const FaqPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
       child: pageScaffold(title: context.l10n.tab_faq, body: [
         Padding(
           padding: const EdgeInsets.all(8),
@@ -27,7 +29,6 @@ class FaqPage extends StatelessWidget {
           ),
         ),
       ]),
-      onWillPop: () async => false,
     );
   }
 
@@ -44,7 +45,7 @@ class FaqPage extends StatelessWidget {
         ),
         dense: true,
       ),
-      ...questions.map((question) => _buildQuestion(context, question)).toList()
+      ...questions.map((question) => _buildQuestion(context, question))
     ];
   }
 

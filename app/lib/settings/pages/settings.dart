@@ -1,13 +1,14 @@
 import '../../common/module.dart';
-import '../../common/pages/drug/widgets/adaptive_dialog.dart';
 import '../utils.dart';
 
+@RoutePage()
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
       child: pageScaffold(title: context.l10n.tab_more, body: [
         ListTile(
           title: Text(
@@ -20,7 +21,7 @@ class SettingsPage extends StatelessWidget {
           title: Text(context.l10n.drug_selection_header),
           trailing: Icon(Icons.chevron_right_rounded),
           onTap: () => context.router.push(
-            DrugSelectionRouter(concludesOnboarding: false)
+            DrugSelectionRoute(concludesOnboarding: false)
           ),
         ),
         ListTile(
@@ -42,7 +43,7 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: Text(context.l10n.settings_page_onboarding),
           trailing: Icon(Icons.chevron_right_rounded),
-          onTap: () => context.router.push(OnboardingRouter(isRevisiting: true)),
+          onTap: () => context.router.push(OnboardingRoute(isRevisiting: true)),
         ),
         ListTile(
           title: Text(context.l10n.settings_page_about_us),
@@ -65,7 +66,6 @@ class SettingsPage extends StatelessWidget {
             trailing: Icon(Icons.chevron_right_rounded),
             onTap: sendEmail)
       ]),
-      onWillPop: () async => false,
     );
   }
 }
@@ -75,8 +75,8 @@ class DeleteDataDialog extends HookWidget {
   Widget build(BuildContext context) {
     final agreedToDeletion = useState(false);
 
-    return AdaptiveAlertDialog(
-      title: context.l10n.settings_page_delete_data,
+    return AlertDialog.adaptive(
+      title: Text(context.l10n.settings_page_delete_data),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -93,20 +93,22 @@ class DeleteDataDialog extends HookWidget {
           ),
         ]),
       actions: [
-        AdaptiveDialogAction(
+        TextButton(
           onPressed: context.router.root.pop,
-          text: context.l10n.action_cancel,
+          child: Text(context.l10n.action_cancel),
         ),
-        AdaptiveDialogAction(
-          isDestructive: true,
+        TextButton(
           onPressed: agreedToDeletion.value
             ? () async {
               await deleteAllAppData();
               // ignore: use_build_context_synchronously
-              await overwriteRoutes(context, nextPage: LoginRouter());
+              await overwriteRoutes(context, nextPage: LoginRoute());
             }
             : null,
-          text: context.l10n.action_continue,
+          child: Text(
+            context.l10n.action_continue,
+            style: TextStyle(color: PharMeTheme.errorColor),
+          ),
         ),
       ],
     );

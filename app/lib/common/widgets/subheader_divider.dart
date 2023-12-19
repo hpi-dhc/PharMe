@@ -5,8 +5,8 @@ class SubheaderDivider extends StatelessWidget {
     this.text, {
     this.indent = 20.0,
     this.color,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String text;
   final double indent;

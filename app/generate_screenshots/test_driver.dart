@@ -7,7 +7,7 @@ import 'package:integration_test/integration_test_driver_extended.dart';
 Future<void> main() async {
   try {
     await integrationDriver(
-      onScreenshot: (screenshotName, screenshotBytes) async {
+      onScreenshot: (screenshotName, screenshotBytes, [_]) async {
         final image =
           await File(
             '../docs/screenshots/$screenshotName.png'

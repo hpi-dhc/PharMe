@@ -1,5 +1,4 @@
-import '../../../../module.dart';
-import '../adaptive_dialog.dart';
+import '../../../common/module.dart';
 import '../sub_header.dart';
 
 class DrugAnnotationCard extends StatelessWidget {
@@ -12,7 +11,7 @@ class DrugAnnotationCard extends StatelessWidget {
 
   final Drug drug;
   final bool isActive;
-  final void Function(bool?) setActivity;
+  final void Function({ bool? value }) setActivity;
   final bool disabled;
 
   @override
@@ -53,28 +52,29 @@ class DrugAnnotationCard extends StatelessWidget {
                 if (isInhibitor(drug.name)) {
                   showAdaptiveDialog(
                     context: context,
-                    builder: (context) => AdaptiveAlertDialog(
-                      title: context.l10n.drugs_page_active_warn_header,
+                    builder: (context) => AlertDialog.adaptive(
+                      title: Text(context.l10n.drugs_page_active_warn_header),
                       content: Text(context.l10n.drugs_page_active_warn),
                       actions: [
-                        AdaptiveDialogAction(
-                          isDefault: true,
+                        TextButton(
                           onPressed: () => Navigator.pop(context, 'Cancel'),
-                          text: context.l10n.action_cancel,
+                          child: Text(context.l10n.action_cancel),
                         ),
-                        AdaptiveDialogAction(
-                          isDestructive: true,
+                        TextButton(
                           onPressed: () {
                             Navigator.pop(context, 'OK');
-                            setActivity(newValue);
+                            setActivity(value: newValue);
                           },
-                          text: context.l10n.action_continue,
+                          child: Text(
+                            context.l10n.action_continue,
+                            style: TextStyle(color: PharMeTheme.errorColor),
+                          ),
                         ),
                       ],
                     ),
                   )
                 } else {
-                  setActivity(newValue)
+                  setActivity(value: newValue)
                 }
               },
               controlAffinity: ListTileControlAffinity.leading,

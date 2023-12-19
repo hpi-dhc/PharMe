@@ -25,7 +25,7 @@ void main() {
           child: MaterialApp.router(
             routeInformationParser: appRouter.defaultRouteParser(),
             routerDelegate: appRouter.delegate(
-              initialDeepLink: 'main',
+              deepLinkBuilder: (_) => DeepLink.path('main'),
             ),
             localizationsDelegates: [
               AppLocalizations.delegate,

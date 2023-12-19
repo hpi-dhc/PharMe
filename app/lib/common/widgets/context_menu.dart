@@ -102,7 +102,7 @@ class ContextMenuCheckmark extends StatelessWidget {
       this.initialState = false});
 
   final String label;
-  final void Function(bool) setState;
+  final void Function({ required bool value }) setState;
   final bool initialState;
 
   @override
@@ -113,7 +113,7 @@ class ContextMenuCheckmark extends StatelessWidget {
         onTap: () {
           rebuild(() {
             state = !state;
-            setState(state);
+            setState(value: state);
           });
         },
         child: Row(

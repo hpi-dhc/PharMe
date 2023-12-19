@@ -332,8 +332,7 @@ List<pw.Widget> _buildGuidelinePart(
                     implication.key
                   ),
               text: implication.value,
-            )))
-        .toList(),
+        ))),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(

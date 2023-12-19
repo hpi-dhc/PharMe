@@ -1,8 +1,4 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
-
-import '../../l10n.dart';
-import '../../routing/router.dart';
+import '../../common/module.dart';
 
 class TabRouteDefinition {
   TabRouteDefinition({
@@ -18,30 +14,31 @@ class TabRouteDefinition {
 List<TabRouteDefinition> getTabRoutesDefinition(BuildContext context) {
   return [
     TabRouteDefinition(
-      pageRouteInfo: ReportRouter(),
+      pageRouteInfo: ReportRoute(),
       label: context.l10n.nav_report,
       icon: Icon(Icons.summarize_rounded),
     ),
     TabRouteDefinition(
-      pageRouteInfo: SearchRouter(),
+      pageRouteInfo: SearchRoute(),
       label: context.l10n.nav_drugs,
       icon: Icon(Icons.medication_rounded),
     ),
     TabRouteDefinition(
-      pageRouteInfo: FaqRouter(),
+      pageRouteInfo: FaqRoute(),
       label: context.l10n.nav_faq,
       icon: Icon(Icons.lightbulb_rounded),
     ),
     TabRouteDefinition(
-      pageRouteInfo: SettingsRouter(),
+      pageRouteInfo: SettingsRoute(),
       label: context.l10n.nav_more,
       icon: Icon(Icons.more_horiz_rounded),
     ),
   ];
 }
 
+@RoutePage()
 class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {

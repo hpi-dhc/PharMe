@@ -1,10 +1,9 @@
 import '../common/module.dart';
-import 'pages/onboarding.dart';
 
+// For generated route
 export 'pages/onboarding.dart';
 
-const onboardingRoutes = AutoRoute(
-  path: 'onboarding',
-  name: 'OnboardingRouter',
-  page: OnboardingPage,
+final onboardingRoute = AutoRoute(
+  path: '/onboarding',
+  page: OnboardingRoute.page,
 );

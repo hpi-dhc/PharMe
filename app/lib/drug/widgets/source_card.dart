@@ -1,7 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/material.dart';
+import '../../common/module.dart';
 
-import '../../../theme.dart';
 
 class SourceCard extends StatelessWidget {
   const SourceCard({

@@ -1,6 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../module.dart';
+import '../../../common/module.dart';
 import '../sub_header.dart';
 
 class GuidelineAnnotationCard extends StatelessWidget {

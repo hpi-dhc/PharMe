@@ -1,8 +1,8 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'package:app/common/module.dart';
-import 'package:app/common/pages/drug/widgets/module.dart';
-import 'package:app/search/module.dart';
+import 'package:app/drug/module.dart';
+import 'package:app/drug/widgets/disclaimer.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';

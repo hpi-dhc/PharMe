@@ -4,9 +4,9 @@ class FullWidthButton extends StatelessWidget {
   const FullWidthButton(
     this.text,
     this.action, {
-    Key? key,
+    super.key,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   final bool enabled;
   final String text;

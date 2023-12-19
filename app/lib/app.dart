@@ -1,12 +1,11 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import '../models/metadata.dart';
-import '../module.dart' hide MetaData;
+import 'common/module.dart';
 
 class PharMeApp extends StatelessWidget {
   factory PharMeApp() => _instance;
 
-  PharMeApp._({Key? key}) : super(key: key);
+  PharMeApp._();
 
   static final _instance = PharMeApp._();
   static GlobalKey<NavigatorState> get navigatorKey =>
@@ -24,13 +23,17 @@ class PharMeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routeInformationParser: _appRouter.defaultRouteParser(),
       routerDelegate: _appRouter.delegate(
-        initialDeepLink: !_isLoggedIn
-          ? 'login'
-          : !_onboardingDone
-            ? 'onboarding'
-            : !_initialDrugSelectionDone
-              ? 'drugselection'
-              : 'main',
+        deepLinkBuilder: (deepLink) {
+          late String path;
+          path = !_isLoggedIn
+            ? 'login'
+            : !_onboardingDone
+              ? 'onboarding'
+              : !_initialDrugSelectionDone
+                ? 'drugselection'
+                : 'main';
+          return DeepLink.path(path);
+        },
       ),
       theme: PharMeTheme.light,
       localizationsDelegates: [

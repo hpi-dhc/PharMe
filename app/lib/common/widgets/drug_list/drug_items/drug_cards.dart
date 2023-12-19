@@ -33,8 +33,8 @@ class DrugCard extends StatelessWidget {
     required this.onTap,
     required this.drug,
     required this.showDrugInteractionIndicator,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final VoidCallback onTap;
   final Drug drug;

@@ -4,6 +4,7 @@ import '../../common/models/drug/cached_drugs.dart';
 import '../../common/module.dart';
 import '../../common/utilities/color_utils.dart';
 
+@RoutePage()
 class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,8 @@ class ReportPage extends StatelessWidget {
         lookupkey: notTestedString
       )
     );
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
       child: unscrollablePageScaffold(
         title: context.l10n.tab_report,
         barBottom: context.l10n.report_content_explanation,
@@ -45,7 +47,6 @@ class ReportPage extends StatelessWidget {
           ]
         )
       ),
-      onWillPop: () async => false,
     );
   }
 

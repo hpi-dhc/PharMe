@@ -1,7 +1,8 @@
 import '../../common/module.dart';
 
+@RoutePage()
 class AboutUsPage extends StatelessWidget {
-  const AboutUsPage({Key? key}) : super(key: key);
+  const AboutUsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

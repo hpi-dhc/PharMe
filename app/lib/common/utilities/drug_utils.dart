@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 
+import '../../app.dart';
 import '../models/drug/cached_drugs.dart';
 import '../module.dart';
-import '../pages/drug/widgets/adaptive_dialog.dart';
 
 Future<void> updateCachedDrugs() async {
   if (UserData.instance.lookups == null) throw Exception();
@@ -33,14 +33,13 @@ Future<void> updateCachedDrugs() async {
       // ignore: use_build_context_synchronously
       await showAdaptiveDialog(
         context: context,
-        builder: (context) => AdaptiveAlertDialog(
-          title: context.l10n.update_warning_title,
+        builder: (context) => AlertDialog.adaptive(
+          title: Text(context.l10n.update_warning_title),
           content: Text(context.l10n.update_warning_body),
           actions: [
-            AdaptiveDialogAction(
-              isDefault: true,
+            TextButton(
               onPressed: () => Navigator.pop(context),
-              text: context.l10n.action_continue,
+              child: Text(context.l10n.action_continue),
             ),
           ],
         ),

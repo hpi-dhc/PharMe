@@ -15,7 +15,7 @@ void main() {
         debugShowCheckedModeBanner: false,
         routeInformationParser: appRouter.defaultRouteParser(),
         routerDelegate: appRouter.delegate(
-          initialDeepLink: 'main/settings',
+          deepLinkBuilder: (_) => DeepLink.path('main/settings'),
         ),
         localizationsDelegates: [
           AppLocalizations.delegate,
@@ -65,7 +65,7 @@ void main() {
         findsOneWidget,
       );
 
-      context.router.navigateBack();
+      context.router.back();
       await tester.pumpAndSettle();
 
       // test privacy policy
@@ -77,7 +77,7 @@ void main() {
         findsOneWidget,
       );
 
-      context.router.navigateBack();
+      context.router.back();
       await tester.pumpAndSettle();
 
       // test terms and conditions
