@@ -14,7 +14,7 @@ void main() {
     final faqWidget = MaterialApp.router(
       routeInformationParser: appRouter.defaultRouteParser(),
       routerDelegate: appRouter.delegate(
-        deepLinkBuilder: (_) => DeepLink.path('main/faq'),
+        deepLinkBuilder: (_) => DeepLink.path('/main/faq'),
       ),
       localizationsDelegates: [
         AppLocalizations.delegate,

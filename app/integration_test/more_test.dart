@@ -15,7 +15,7 @@ void main() {
         debugShowCheckedModeBanner: false,
         routeInformationParser: appRouter.defaultRouteParser(),
         routerDelegate: appRouter.delegate(
-          deepLinkBuilder: (_) => DeepLink.path('main/settings'),
+          deepLinkBuilder: (_) => DeepLink.path('/main/more'),
         ),
         localizationsDelegates: [
           AppLocalizations.delegate,

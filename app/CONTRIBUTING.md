@@ -40,21 +40,18 @@ are living in `common`. All such functions are exported from
 The structure of an example module `lib/my_module` should look as follows:
 
 - `my_module`
-  - `module.dart`:
+  - `module.dart` (see example below):
     - exports everything that is required by other modules, i.e., page(s) and
       possibly the cubit
-    - declares all routes as functions `myModuleRoute` (see example below)
+    - declares all routes as functions reeturning `AutoRoute`
     - may contain initialization code (`initMyModule()`)
   - `widgets`:
     - `my_widget.dart`: contains `MyWidget` and helpers
   - `pages`:
     - `my_module.dart`: contains `MyModulePage` and helpers
     - `my_child_page.dart`: contains
-    - `my_complex_page`: create a folder for complex pages (e.g., tabbed ones)
-      - `page.dart`: contains `MyComplexPage`
-      - `tab_first.dart`: contains `FirstTab` and helpers
-      - `tab_second.dart`: contains `SecondTab` and helpers
-      - `utils.dart`: contains utilities used by multiple files in this page
+    - `my_complex_page`: create a folder for complex pages (e.g., tabbed ones);
+      might want to create an own module if getting too complex
   - `utils.dart`: contains utilities used throughout this module
   - `cubit.dart`: contains `MyModuleCubit` and `MyModuleState`s (if needed)
 
