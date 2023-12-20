@@ -12,29 +12,13 @@ class PharMeApp extends StatelessWidget {
       _instance._appRouter.navigatorKey;
 
   final _appRouter = AppRouter();
-  final _isLoggedIn = MetaData.instance.isLoggedIn ?? false;
-  final _onboardingDone = MetaData.instance.onboardingDone ?? false;
-  final _initialDrugSelectionDone =
-    MetaData.instance.initialDrugSelectionDone ?? false;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routeInformationParser: _appRouter.defaultRouteParser(),
-      routerDelegate: _appRouter.delegate(
-        deepLinkBuilder: (deepLink) {
-          late String path;
-          path = !_isLoggedIn
-            ? 'login'
-            : !_onboardingDone
-              ? 'onboarding'
-              : !_initialDrugSelectionDone
-                ? 'drugselection'
-                : 'main';
-          return DeepLink.path(path);
-        },
-      ),
+      routerDelegate: _appRouter.delegate(deepLinkBuilder: getInitialRoute),
       theme: PharMeTheme.light,
       localizationsDelegates: [
         AppLocalizations.delegate,

@@ -4,8 +4,14 @@ import '../drug/module.dart';
 // For generated routes
 export 'pages/search.dart';
 
+@RoutePage()      
+class SearchRootPage extends AutoRouter {}
+
 final searchRoute = AutoRoute(
   path: 'search',
-  page: SearchRoute.page,
-  children: [ drugRoute() ],
+  page: SearchRootRoute.page,
+  children: [
+    AutoRoute(path: '', page: SearchRoute.page),
+    drugRoute()
+  ],
 );
