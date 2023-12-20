@@ -44,10 +44,9 @@ class DrugAnnotationCard extends StatelessWidget {
             Divider(color: PharMeTheme.borderColor),
             SizedBox(height: 4),
             SubHeader(context.l10n.drugs_page_header_active),
-            CheckboxListTile(
-              activeColor: PharMeTheme.primaryColor,
-              title: Text(context.l10n.drugs_page_active),
-              value: isActive,
+            CheckboxListTileWrapper(
+              title: context.l10n.drugs_page_active,
+              isChecked: isActive,
               onChanged: disabled ? null : (newValue) => {
                 if (isInhibitor(drug.name)) {
                   showAdaptiveDialog(

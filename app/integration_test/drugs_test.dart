@@ -139,8 +139,8 @@ void main() {
       context = tester.element(find.byType(Tooltip).first);
 
       // test that drug activity can be set
-      final checkbox = tester.widget(find.byType(CheckboxListTile))
-          as CheckboxListTile;
+      final checkbox = tester.widget(find.byType(CheckboxListTileWrapper))
+          as CheckboxListTileWrapper;
       expect(checkbox.onChanged, isNotNull);
 
       // test tooltips
@@ -202,8 +202,8 @@ void main() {
         ),
       );
 
-      final checkbox = tester.widget(find.byType(CheckboxListTile))
-          as CheckboxListTile;
+      final checkbox = tester.widget(find.byType(CheckboxListTileWrapper))
+          as CheckboxListTileWrapper;
       expect(checkbox.onChanged, isNull);
     });
   });
