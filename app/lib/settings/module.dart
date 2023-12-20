@@ -1,17 +1,23 @@
 import '../common/module.dart';
 
 // For generated routes
-export 'pages/about_us.dart';
-export 'pages/privacy_policy.dart';
-export 'pages/settings.dart';
-export 'pages/terms_and_conditions.dart';
+export 'pages/about.dart';
+export 'pages/more.dart';
+export 'pages/privacy.dart';
+export 'pages/terms.dart';
 
-final settingsRoute = AutoRoute(
-  path: 'settings',
-  page: SettingsRoute.page,
+@RoutePage()      
+class MoreRootPage extends AutoRouter {}
+
+AutoRoute aboutRoute() => AutoRoute(path: 'about', page: AboutRoute.page);
+AutoRoute privacyRoute() => AutoRoute(path: 'privacy', page: PrivacyRoute.page);
+AutoRoute termsRoute() => AutoRoute(path: 'terms', page: TermsRoute.page);
+
+AutoRoute moreRoute({ required List<AutoRoute> children }) => AutoRoute(
+  path: 'more',
+  page: MoreRootRoute.page,
   children: [
-    AutoRoute(path: 'about', page: AboutUsRoute.page),
-    AutoRoute(path: 'privacy', page: PrivacyPolicyRoute.page),
-    AutoRoute(path: 'terms', page: TermsAndConditionsRoute.page),
+    AutoRoute(path: '', page: MoreRoute.page),
+    ...children,
   ],
 );

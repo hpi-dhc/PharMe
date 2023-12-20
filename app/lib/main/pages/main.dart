@@ -29,7 +29,7 @@ List<TabRouteDefinition> getTabRoutesDefinition(BuildContext context) {
       icon: Icon(Icons.lightbulb_rounded),
     ),
     TabRouteDefinition(
-      pageRouteInfo: SettingsRoute(),
+      pageRouteInfo: MoreRoute(),
       label: context.l10n.nav_more,
       icon: Icon(Icons.more_horiz_rounded),
     ),

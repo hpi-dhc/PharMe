@@ -4,4 +4,4 @@ import '../common/module.dart';
 export 'cubit.dart';
 export 'pages/login.dart';
 
-final loginRoute = AutoRoute(path: '/login', page: LoginRoute.page);
+AutoRoute loginRoute() => AutoRoute(path: '/login', page: LoginRoute.page);

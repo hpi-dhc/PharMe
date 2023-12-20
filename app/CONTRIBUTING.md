@@ -30,36 +30,68 @@ alias flutter-clean='find . -maxdepth 20 -type f \( -name "*.inject.summary" -o 
 
 ## Architecture
 
-The app consists of multiple so-called modules. Our main modules correspond to
-the direct subfolders of `lib/`.
+The app consists of multiple so-called modules. Our main modules (usually app
+screens) correspond to the direct subfolders of `lib/`.
 
-### Example Module
+Common functions used by modules such as `models`, `widgets`, and `utilities`
+are living in `common`. All such functions are exported from
+`common/module.dart`.
 
-Structure of `lib/my_module`:
+The structure of an example module `lib/my_module` should look as follows:
 
 - `my_module`
   - `module.dart`:
-    - exports everything that is required by other modules
-    - declares all routes as a const variable (`myModuleRoutes`)
+    - exports everything that is required by other modules, i.e., page(s) and
+      possibly the cubit
+    - declares all routes as functions `myModuleRoute` (see example below)
     - may contain initialization code (`initMyModule()`)
-  - `cubit.dart`: contains `MyModuleCubit` and `MyModuleState`s
   - `widgets`:
     - `my_widget.dart`: contains `MyWidget` and helpers
   - `pages`:
-    - `my_first.dart`: contains `MyFirstPage` and helpers
-    - `my_complex`: create a folder for complex pages (e.g., tabbed ones)
+    - `my_module.dart`: contains `MyModulePage` and helpers
+    - `my_child_page.dart`: contains
+    - `my_complex_page`: create a folder for complex pages (e.g., tabbed ones)
       - `page.dart`: contains `MyComplexPage`
       - `tab_first.dart`: contains `FirstTab` and helpers
       - `tab_second.dart`: contains `SecondTab` and helpers
       - `utils.dart`: contains utilities used by multiple files in this page
   - `utils.dart`: contains utilities used throughout this module
-  - `submodule_one`
-  - `submodule_two`
+  - `cubit.dart`: contains `MyModuleCubit` and `MyModuleState`s (if needed)
 
-If a single file gets too complex for routes, the `Cubit`, a widget, a page,
-etc., you can create a folder with the same name and split the original file
-into different files. An example of that is `MyComplexPage` in the file tree
-above.
+Example for `my_module/module.dart`; the page is used as a root page in the tab
+router, which is why the empty router `MyModuleRootPage` and adding
+`AutoRoute(path: '', page: MyModuleRoute.page)` to children is needed.
+
+```dart
+import '../common/module.dart';
+
+// For generated routes
+export 'cubit.dart';
+export 'pages/my_module.dart';
+export 'pages/my_child_page.dart';
+export 'pages/my_complex_page/page.dart';
+
+@RoutePage()      
+class MyModuleRootPage extends AutoRouter {}
+
+AutoRoute myChildRoute() => AutoRoute(
+  path: 'my_child',
+  page: MyChildRoute.page,
+);
+AutoRoute myComplexRoute() => AutoRoute(
+  path: 'my_complex',
+  page: MyComplexRoute.page,
+);
+
+AutoRoute myModuleRoute({ required List<AutoRoute> children }) => AutoRoute(
+  path: 'my_module',
+  page: MyModuleRootRoute.page,
+  children: [
+    AutoRoute(path: '', page: MyModuleRoute.page),
+    ...children, // includes myChildRoute() and priva
+  ],
+);
+```
 
 ## Making app icons
 

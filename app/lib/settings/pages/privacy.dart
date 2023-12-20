@@ -1,8 +1,8 @@
 import '../../common/module.dart';
 
 @RoutePage()
-class PrivacyPolicyPage extends StatelessWidget {
-  const PrivacyPolicyPage({super.key});
+class PrivacyPage extends StatelessWidget {
+  const PrivacyPage({super.key});
 
   @override
   Widget build(BuildContext context) {

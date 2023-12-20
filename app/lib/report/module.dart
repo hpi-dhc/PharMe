@@ -1,5 +1,4 @@
 import '../common/module.dart';
-import '../drug/module.dart';
 
 // For generated routes
 export 'pages/gene.dart';
@@ -8,12 +7,13 @@ export 'pages/report.dart';
 @RoutePage()      
 class ReportRootPage extends AutoRouter {}
 
-final reportRoute = AutoRoute(
+AutoRoute geneRoute() => AutoRoute(page: GeneRoute.page);
+
+AutoRoute reportRoute({ required List<AutoRoute> children }) => AutoRoute(
   path: 'report',
   page: ReportRootRoute.page,
   children: [
     AutoRoute(path: '', page: ReportRoute.page),
-    AutoRoute(page: GeneRoute.page),
-    drugRoute(),
+    ...children,
   ],
 );

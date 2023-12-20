@@ -1,8 +1,8 @@
 import '../../common/module.dart';
 
 @RoutePage()
-class TermsAndConditionsPage extends StatelessWidget {
-  const TermsAndConditionsPage({super.key});
+class TermsPage extends StatelessWidget {
+  const TermsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

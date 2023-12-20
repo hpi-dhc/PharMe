@@ -4,7 +4,7 @@ import '../common/module.dart';
 export 'cubit.dart';
 export 'pages/drug_selection.dart';
 
-final drugSelectionRoute = AutoRoute(
+AutoRoute drugSelectionRoute() => AutoRoute(
   path: '/drugselection',
   page: DrugSelectionRoute.page,
 );

@@ -2,8 +2,8 @@ import '../../common/module.dart';
 import '../utils.dart';
 
 @RoutePage()
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class MorePage extends StatelessWidget {
+  const MorePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,17 +48,17 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: Text(context.l10n.settings_page_about_us),
           trailing: Icon(Icons.chevron_right_rounded),
-          onTap: () => context.router.push(AboutUsRoute()),
+          onTap: () => context.router.push(AboutRoute()),
         ),
         ListTile(
           title: Text(context.l10n.settings_page_privacy_policy),
           trailing: Icon(Icons.chevron_right_rounded),
-          onTap: () => context.router.push(PrivacyPolicyRoute()),
+          onTap: () => context.router.push(PrivacyRoute()),
         ),
         ListTile(
           title: Text(context.l10n.settings_page_terms_and_conditions),
           trailing: Icon(Icons.chevron_right_rounded),
-          onTap: () => context.router.push(TermsAndConditionsRoute()),
+          onTap: () => context.router.push(TermsRoute()),
         ),
         Divider(),
         ListTile(
