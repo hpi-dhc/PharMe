@@ -43,11 +43,9 @@ class DrugCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final drugName = formatDrugName(drug, showDrugInteractionIndicator);
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace / 2),
-      child: RoundedCard(
+    return RoundedCard(
         onTap: onTap,
-        padding: EdgeInsets.all(8),
+        innerPadding: EdgeInsets.all(PharMeTheme.smallSpace),
         radius: 16,
         color: drug.warningLevel.color,
         child: Row(
@@ -66,15 +64,15 @@ class DrugCard extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ]),
-                  SizedBox(height: 4),
+                  SizedBox(height: PharMeTheme.smallSpace / 2),
                   if (drug.annotations.brandNames.isNotEmpty) ...[
-                    SizedBox(width: 4),
+                    SizedBox(width: PharMeTheme.smallSpace / 2),
                     Text(
                       '(${drug.annotations.brandNames.join(', ')})',
                       style: PharMeTheme.textTheme.titleMedium,
                     ),
                   ],
-                  SizedBox(height: 8),
+                  SizedBox(height: PharMeTheme.smallSpace * 0.75),
                   Text(
                     drug.annotations.drugclass,
                     style: PharMeTheme.textTheme.titleSmall,
@@ -85,7 +83,6 @@ class DrugCard extends StatelessWidget {
             Icon(Icons.chevron_right_rounded),
           ],
         ),
-      ),
     );
   }
 }

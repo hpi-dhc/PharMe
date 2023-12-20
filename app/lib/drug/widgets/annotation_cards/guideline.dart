@@ -11,7 +11,12 @@ class GuidelineAnnotationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RoundedCard(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      innerPadding: const EdgeInsets.fromLTRB(
+        PharMeTheme.mediumSpace,
+        PharMeTheme.mediumSpace,
+        PharMeTheme.mediumSpace,
+        0
+      ),
       child: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           _buildHeader(context),

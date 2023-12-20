@@ -33,38 +33,27 @@ class ReportPage extends StatelessWidget {
         barBottom: context.l10n.report_content_explanation,
         body: Column(
           children: [
+            if (hasActiveInhibitors) PageIndicatorExplanation(
+              context.l10n.report_page_indicator_explanation(
+                drugInteractionIndicatorName,
+                drugInteractionIndicator
+              ),
+            ),
             scrollList(
-              userPhenotypes.map((phenotype) =>
-                Column(
-                  key: Key('gene-card-${phenotype.geneSymbol}'),
-                  children: [
-                    GeneCard(phenotype),
-                    SizedBox(height: 8)
-                  ]  
-                )
-              ).toList()),
-            if (hasActiveInhibitors) drugInteractionExplanation(context),
+              userPhenotypes.map((phenotype) => GeneCard(
+                phenotype,
+                key: Key('gene-card-${phenotype.geneSymbol}')
+              )).toList(),
+            ),
           ]
         )
       ),
     );
   }
-
-  Widget drugInteractionExplanation(BuildContext context) {
-    return Column(children: [
-      SizedBox(height: PharMeTheme.smallSpace),
-      Text(
-        context.l10n.report_page_indicator_explanation(
-          drugInteractionIndicatorName,
-          drugInteractionIndicator
-        )
-      ),
-    ]);
-  }
 }
 
 class GeneCard extends StatelessWidget {
-  const GeneCard(this.phenotype);
+  const GeneCard(this.phenotype, { super.key });
 
   final CpicPhenotype phenotype;
 
@@ -108,7 +97,7 @@ class GeneCard extends StatelessWidget {
     ).toList();
     return RoundedCard(
       onTap: () => context.router.push(GeneRoute(phenotype: phenotype)),
-      padding: EdgeInsets.all(8),
+      innerPadding: EdgeInsets.all(PharMeTheme.smallSpace),
       radius: 16,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Expanded(

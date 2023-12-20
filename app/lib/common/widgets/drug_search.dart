@@ -65,6 +65,13 @@ class DrugSearch extends HookWidget {
                   ]
                 ),
                 SizedBox(height: PharMeTheme.smallSpace),
+                if (showDrugInteractionIndicator)
+                  PageIndicatorExplanation(
+                    context.l10n.search_page_indicator_explanation(
+                      drugInteractionIndicatorName,
+                      drugInteractionIndicator
+                    ),
+                  ),
                 scrollList(
                   keepPosition: keepPosition,
                   buildDrugList(
@@ -79,26 +86,12 @@ class DrugSearch extends HookWidget {
                     useDrugClass: useDrugClass,
                   )
                 ),
-                ..._maybeShowDrugInteractionExplanation(context),
               ],
             );
           }
         )
       )
     );
-  }
-
-  List<Widget> _maybeShowDrugInteractionExplanation(BuildContext context) {
-    if (!showDrugInteractionIndicator) return [];
-    return [
-      SizedBox(height: PharMeTheme.smallSpace),
-      Text(
-        context.l10n.search_page_indicator_explanation(
-          drugInteractionIndicatorName,
-          drugInteractionIndicator
-        )
-      ),
-    ];
   }
 
   Widget buildFilter(BuildContext context) {

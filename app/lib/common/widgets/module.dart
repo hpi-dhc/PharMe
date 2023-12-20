@@ -7,6 +7,7 @@ export 'drug_list/builder.dart';
 export 'drug_list/cubit.dart';
 export 'headings.dart';
 export 'indicators.dart';
+export 'page_indicator_explanation.dart';
 export 'page_scaffold.dart';
 export 'radiant_gradient_mask.dart';
 export 'rounded_card.dart';
