@@ -52,23 +52,21 @@ class DrugAnnotationCard extends StatelessWidget {
                 if (isInhibitor(drug.name)) {
                   showAdaptiveDialog(
                     context: context,
-                    builder: (context) => AlertDialog.adaptive(
-                      title: Text(context.l10n.drugs_page_active_warn_header),
+                    builder: (context) => AdaptiveDialogWrapper(
+                      title: context.l10n.drugs_page_active_warn_header,
                       content: Text(context.l10n.drugs_page_active_warn),
                       actions: [
-                        TextButton(
+                        DialogAction(
                           onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: Text(context.l10n.action_cancel),
+                          text: context.l10n.action_cancel,
                         ),
-                        TextButton(
+                        DialogAction(
                           onPressed: () {
                             Navigator.pop(context, 'OK');
                             setActivity(value: newValue);
                           },
-                          child: Text(
-                            context.l10n.action_continue,
-                            style: TextStyle(color: PharMeTheme.errorColor),
-                          ),
+                          text: context.l10n.action_continue,
+                          isDestructive: true,
                         ),
                       ],
                     ),

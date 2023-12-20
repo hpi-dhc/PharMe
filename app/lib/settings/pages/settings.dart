@@ -75,8 +75,8 @@ class DeleteDataDialog extends HookWidget {
   Widget build(BuildContext context) {
     final agreedToDeletion = useState(false);
 
-    return AlertDialog.adaptive(
-      title: Text(context.l10n.settings_page_delete_data),
+    return AdaptiveDialogWrapper(
+      title: context.l10n.settings_page_delete_data,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -91,13 +91,14 @@ class DeleteDataDialog extends HookWidget {
             contentPadding: EdgeInsets.zero,
             activeColor: PharMeTheme.primaryColor,
           ),
-        ]),
+        ],
+      ),
       actions: [
-        TextButton(
+        DialogAction(
           onPressed: context.router.root.pop,
-          child: Text(context.l10n.action_cancel),
+          text: context.l10n.action_cancel,
         ),
-        TextButton(
+        DialogAction(
           onPressed: agreedToDeletion.value
             ? () async {
               await deleteAllAppData();
@@ -105,10 +106,8 @@ class DeleteDataDialog extends HookWidget {
               await overwriteRoutes(context, nextPage: LoginRoute());
             }
             : null,
-          child: Text(
-            context.l10n.action_continue,
-            style: TextStyle(color: PharMeTheme.errorColor),
-          ),
+          text: context.l10n.action_continue,
+          isDestructive: true,
         ),
       ],
     );
