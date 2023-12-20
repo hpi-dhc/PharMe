@@ -75,12 +75,12 @@ class DeleteDataDialog extends HookWidget {
   Widget build(BuildContext context) {
     final agreedToDeletion = useState(false);
 
-    return AdaptiveDialogWrapper(
+    return DialogWrapper(
       title: context.l10n.settings_page_delete_data,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(context.l10n.settings_page_delete_data_text),
+          DialogContentText(context.l10n.settings_page_delete_data_text),
           SizedBox(height: PharMeTheme.mediumSpace),
           CheckboxListTileWrapper(
             isChecked: agreedToDeletion.value,

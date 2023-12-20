@@ -51,9 +51,11 @@ class DrugAnnotationCard extends StatelessWidget {
                 if (isInhibitor(drug.name)) {
                   showAdaptiveDialog(
                     context: context,
-                    builder: (context) => AdaptiveDialogWrapper(
+                    builder: (context) => DialogWrapper(
                       title: context.l10n.drugs_page_active_warn_header,
-                      content: Text(context.l10n.drugs_page_active_warn),
+                      content: DialogContentText(
+                        context.l10n.drugs_page_active_warn,
+                      ),
                       actions: [
                         DialogAction(
                           onPressed: () => Navigator.pop(context, 'Cancel'),

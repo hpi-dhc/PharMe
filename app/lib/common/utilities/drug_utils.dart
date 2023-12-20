@@ -33,9 +33,9 @@ Future<void> updateCachedDrugs() async {
       // ignore: use_build_context_synchronously
       await showAdaptiveDialog(
         context: context,
-        builder: (context) => AdaptiveDialogWrapper(
+        builder: (context) => DialogWrapper(
           title: context.l10n.update_warning_title,
-          content: Text(context.l10n.update_warning_body),
+          content: DialogContentText(context.l10n.update_warning_body),
           actions: [
             DialogAction(
               onPressed: () => Navigator.pop(context),
