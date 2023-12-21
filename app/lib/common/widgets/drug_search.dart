@@ -97,38 +97,39 @@ class DrugSearch extends HookWidget {
   Widget buildFilter(BuildContext context) {
     final cubit = context.read<DrugListCubit>();
     final filter = cubit.filter;
-    return ContextMenu(
+    return FilterMenu(
       items: [
-        ContextMenuCheckmark(
-          label: context.l10n.search_page_filter_only_active,
-          // Invert state as filter has opposite meaning ('only show active' vs.
-          // 'show inactive')
-          setState: ({ required value }) => cubit.search(showInactive: !value),
-          initialState: filter != null && !filter.showInactive),
-        ...WarningLevel.values.filter((level) => level != WarningLevel.none)
-          .map((level) => ContextMenuCheckmark(
-            label: {
+        ...WarningLevel.values
+          .filter((level) => level != WarningLevel.none)
+          .map((level) => FilterMenuItem(
+            title: {
               WarningLevel.green: context.l10n.search_page_filter_green,
               WarningLevel.yellow: context.l10n.search_page_filter_yellow,
               WarningLevel.red: context.l10n.search_page_filter_red,
             }[level]!,
-            setState: ({ required value }) =>
-              cubit.search(showWarningLevel: { level: value }),
-            initialState: filter?.showWarningLevel[level] ?? false
+            updateSearch: ({ required isChecked }) =>
+              cubit.search(showWarningLevel: { level: isChecked }),
+            isChecked: filter?.showWarningLevel[level] ?? false
             )
           ),
-        ContextMenuCheckmark(
-          label: context.l10n.search_page_filter_only_with_guidelines,
+        FilterMenuItem(
+          title: context.l10n.search_page_filter_only_active,
+          // Invert state as filter has opposite meaning ('only show active' vs.
+          // 'show inactive')
+          updateSearch: ({ required isChecked }) => cubit.search(showInactive: !isChecked),
+          isChecked: !(filter?.showInactive ?? false)
+        ),
+        FilterMenuItem(
+          title: context.l10n.search_page_filter_only_with_guidelines,
           // Invert state as filter has opposite meaning ('show only with
           // guidelines' vs. 'show with unknown warning level')
-          setState: ({ required value }) => cubit.search(
-            showWarningLevel: { WarningLevel.none: !value }
+          updateSearch: ({ required isChecked }) => cubit.search(
+            showWarningLevel: { WarningLevel.none: !isChecked }
           ),
-          initialState: filter != null &&
-            !filter.showWarningLevel[WarningLevel.none]!,)
+          isChecked: !(filter?.showWarningLevel[WarningLevel.none] ?? false),
+        )
       ],
-      child: Padding(
-          padding: EdgeInsets.all(8), child: Icon(Icons.filter_list_rounded)),
+      iconData: Icons.filter_list_rounded,
     );
   }
 }
