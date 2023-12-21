@@ -45,8 +45,8 @@ class DrugCard extends StatelessWidget {
     final drugName = formatDrugName(drug, showDrugInteractionIndicator);
     return RoundedCard(
         onTap: onTap,
-        innerPadding: EdgeInsets.all(PharMeTheme.smallSpace),
-        radius: 16,
+        innerPadding: EdgeInsets.all(PharMeTheme.smallSpace * 1.15),
+        radius: 18,
         color: drug.warningLevel.color,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

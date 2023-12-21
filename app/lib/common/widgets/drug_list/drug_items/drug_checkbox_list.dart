@@ -33,12 +33,12 @@ List<Widget> buildDrugCheckboxList(
   );
   return [
     SubheaderDivider(
-      context.l10n.drug_selection_subheader_active_drugs,
+      text: context.l10n.drug_selection_subheader_active_drugs,
       key: Key('header-active'),
     ),
     ...activeDrugsList,
     SubheaderDivider(
-      context.l10n.drug_selection_subheader_all_drugs,
+      text: context.l10n.drug_selection_subheader_all_drugs,
       key: Key('header-all'),
     ),
     ...allDrugsList,

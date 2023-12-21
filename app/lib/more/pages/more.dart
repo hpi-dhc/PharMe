@@ -10,64 +10,63 @@ class MorePage extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: pageScaffold(title: context.l10n.tab_more, body: [
-        ListTile(
-          title: Text(
-            context.l10n.settings_page_account_settings,
-            style: PharMeTheme.textTheme.bodyMedium,
-          ),
-          dense: true,
+        SubheaderDivider(
+          text: context.l10n.settings_page_account_settings,
+          useLine: false,
         ),
-        ListTile(
-          title: Text(context.l10n.drug_selection_header),
-          trailing: Icon(Icons.chevron_right_rounded),
+        _buildSettingsItem(
+          title: context.l10n.drug_selection_header,
           onTap: () => context.router.push(
             DrugSelectionRoute(concludesOnboarding: false)
           ),
         ),
-        ListTile(
-          title: Text(context.l10n.settings_page_delete_data),
-          trailing: Icon(Icons.chevron_right_rounded),
+        _buildSettingsItem(
+          title: context.l10n.settings_page_delete_data,
           onTap: () => showDialog(
             context: context,
             builder: (_) => DeleteDataDialog(),
           ),
         ),
-        Divider(),
-        ListTile(
-          title: Text(
-            context.l10n.settings_page_more,
-            style: PharMeTheme.textTheme.bodyMedium,
-          ),
-          dense: true,
+        SubheaderDivider(
+          text: context.l10n.settings_page_more,
+          useLine: false,
         ),
-        ListTile(
-          title: Text(context.l10n.settings_page_onboarding),
-          trailing: Icon(Icons.chevron_right_rounded),
+        _buildSettingsItem(
+          title: context.l10n.settings_page_onboarding,
           onTap: () => context.router.push(OnboardingRoute(isRevisiting: true)),
         ),
-        ListTile(
-          title: Text(context.l10n.settings_page_about_us),
-          trailing: Icon(Icons.chevron_right_rounded),
+        _buildSettingsItem(
+          title: context.l10n.settings_page_about_us,
           onTap: () => context.router.push(AboutRoute()),
         ),
-        ListTile(
-          title: Text(context.l10n.settings_page_privacy_policy),
-          trailing: Icon(Icons.chevron_right_rounded),
+        _buildSettingsItem(
+          title: context.l10n.settings_page_privacy_policy,
           onTap: () => context.router.push(PrivacyRoute()),
         ),
-        ListTile(
-          title: Text(context.l10n.settings_page_terms_and_conditions),
-          trailing: Icon(Icons.chevron_right_rounded),
+        _buildSettingsItem(
+          title: context.l10n.settings_page_terms_and_conditions,
           onTap: () => context.router.push(TermsRoute()),
         ),
-        Divider(),
-        ListTile(
-            title: Text(context.l10n.settings_page_contact_us),
-            trailing: Icon(Icons.chevron_right_rounded),
+        SubheaderDivider(
+          text: context.l10n.settings_page_help_and_feedback,
+          useLine: false,
+        ),
+        _buildSettingsItem(
+            title: context.l10n.settings_page_contact_us,
             onTap: sendEmail)
       ]),
     );
   }
+
+  Widget _buildSettingsItem({
+    required String title,
+    required void Function() onTap,
+  }) => ListTile(
+    title: Text(title),
+    trailing: Icon(Icons.chevron_right_rounded),
+    iconColor: PharMeTheme.iconColor,
+    onTap: onTap,
+  );
 }
 
 class DeleteDataDialog extends HookWidget {

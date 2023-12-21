@@ -100,7 +100,6 @@ class GeneCard extends StatelessWidget {
     ).toList();
     return RoundedCard(
       onTap: () => context.router.push(GeneRoute(phenotype: phenotype)),
-      innerPadding: EdgeInsets.all(PharMeTheme.smallSpace),
       radius: 16,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Expanded(

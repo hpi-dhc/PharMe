@@ -1,26 +1,30 @@
 import '../module.dart';
+import '../utilities/color_utils.dart';
 
 class RoundedCard extends StatelessWidget {
   const RoundedCard({
     this.innerPadding,
-    this.outerPadding,
-    this.color = PharMeTheme.surfaceColor,
+    this.outerVerticalPadding,
+    this.outerHorizontalPadding,
+    this.color,
     this.radius = 20,
     this.onTap,
     required this.child,
+    super.key,
   });
 
   final EdgeInsets? innerPadding;
-  final EdgeInsets? outerPadding;
+  final double? outerVerticalPadding;
+  final double? outerHorizontalPadding;
   final VoidCallback? onTap;
-  final Color color;
+  final Color? color;
   final double radius;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     Widget child = Padding(
-      padding: innerPadding ?? EdgeInsets.all(PharMeTheme.mediumSpace),
+      padding: innerPadding ?? EdgeInsets.all(PharMeTheme.smallSpace * 1.25),
       child: this.child,
     );
 
@@ -30,20 +34,14 @@ class RoundedCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: Padding(
-        padding: outerPadding ?? EdgeInsets.symmetric(
-          horizontal: PharMeTheme.smallSpace,
-          vertical: PharMeTheme.smallSpace / 2
+        padding: EdgeInsets.symmetric(
+          vertical: outerVerticalPadding ?? PharMeTheme.smallSpace * 0.65,
+          horizontal: outerHorizontalPadding ?? PharMeTheme.smallSpace,
         ),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: color,
+            color: color ?? darkenColor(PharMeTheme.onSurfaceColor, -0.05),
             borderRadius: BorderRadius.all(Radius.circular(radius)),
-            boxShadow: [
-              BoxShadow(
-                color: PharMeTheme.onSurfaceColor,
-                blurRadius: 16,
-              ),
-            ],
           ),
           child: child,
         ),

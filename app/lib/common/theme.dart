@@ -1,4 +1,5 @@
 import 'module.dart';
+import 'utilities/color_utils.dart';
 
 class PharMeTheme {
   static ThemeData get light {
@@ -81,6 +82,7 @@ class PharMeTheme {
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xccf52a2a);
   static final borderColor = Colors.black.withOpacity(.2);
+  static final iconColor = darkenColor(PharMeTheme.onSurfaceText, -0.1);
 
   static const smallSpace = 8.0;
   static const smallToMediumSpace = 12.0;
