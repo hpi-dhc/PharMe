@@ -33,10 +33,13 @@ class ReportPage extends StatelessWidget {
         barBottom: context.l10n.report_content_explanation,
         body: Column(
           children: [
-            if (hasActiveInhibitors) PageIndicatorExplanation(
-              context.l10n.report_page_indicator_explanation(
-                drugInteractionIndicatorName,
-                drugInteractionIndicator
+            if (hasActiveInhibitors) Padding(
+              padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
+              child: PageIndicatorExplanation(
+                context.l10n.report_page_indicator_explanation(
+                  drugInteractionIndicatorName,
+                  drugInteractionIndicator
+                ),
               ),
             ),
             scrollList(
