@@ -82,13 +82,30 @@ class DeleteDataDialog extends HookWidget {
         children: [
           DialogContentText(context.l10n.settings_page_delete_data_text),
           SizedBox(height: PharMeTheme.mediumSpace),
-          CheckboxListTileWrapper(
-            isChecked: agreedToDeletion.value,
-            onChanged: (value) => agreedToDeletion.value = value
-              ?? agreedToDeletion.value,
-            title: context.l10n.settings_page_delete_data_confirmation,
-            controlAffinity: ListTileControlAffinity.leading,
-            contentPadding: EdgeInsets.zero,
+          DialogContentText(
+            context.l10n.settings_page_delete_data_additional_text,
+          ),
+          SizedBox(height: PharMeTheme.mediumSpace),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: PharMeTheme.mediumToLargeSpace,
+                height: PharMeTheme.mediumToLargeSpace,
+                child: Checkbox.adaptive(
+                  value: agreedToDeletion.value,
+                  onChanged: (value) =>
+                    agreedToDeletion.value = value ?? agreedToDeletion.value,
+                ),
+              ),
+              SizedBox(width: PharMeTheme.smallSpace),
+              Expanded(
+                child: DialogContentText(
+                  context.l10n.settings_page_delete_data_confirmation,
+                ),
+              ),
+            ],
           ),
         ],
       ),
