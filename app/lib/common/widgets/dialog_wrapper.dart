@@ -25,6 +25,7 @@ class DialogWrapper extends StatelessWidget {
       title: Text(title),
       content: materialContent,
       actions: actions,
+      elevation: 0,
     );
   }
 }

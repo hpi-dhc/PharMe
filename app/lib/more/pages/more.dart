@@ -92,8 +92,8 @@ class DeleteDataDialog extends HookWidget {
               SizedBox(
                 width: PharMeTheme.mediumToLargeSpace,
                 height: PharMeTheme.mediumToLargeSpace,
-                child: Checkbox.adaptive(
-                  value: agreedToDeletion.value,
+                child: CheckboxWrapper(
+                  isChecked: agreedToDeletion.value,
                   onChanged: (value) =>
                     agreedToDeletion.value = value ?? agreedToDeletion.value,
                 ),

@@ -43,8 +43,8 @@ class FilterMenu extends HookWidget {
             }
             return ListTile(
               title: Text(item.title),
-              leading: Checkbox.adaptive(
-                value: item.checked,
+              leading: CheckboxWrapper(
+                isChecked: item.checked,
                 onChanged: toggleCheckbox,
               ),
               onTap: toggleCheckbox,

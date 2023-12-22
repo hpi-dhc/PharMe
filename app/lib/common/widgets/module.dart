@@ -1,4 +1,5 @@
 export 'checkbox_list_tile_wrapper.dart';
+export 'checkbox_wrapper.dart';
 export 'dialog_action.dart';
 export 'dialog_content_text.dart';
 export 'dialog_wrapper.dart';

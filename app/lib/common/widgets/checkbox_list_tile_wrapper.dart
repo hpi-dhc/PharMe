@@ -8,9 +8,7 @@ class CheckboxListTileWrapper extends StatelessWidget {
     required this.onChanged,
     this.subtitle,
     this.isEnabled = true,
-    this.controlAffinity = ListTileControlAffinity.platform,
     this.contentPadding,
-    this.activeColor,
   });
 
   final String title;
@@ -19,23 +17,22 @@ class CheckboxListTileWrapper extends StatelessWidget {
   // ignore: avoid_positional_boolean_parameters
   final void Function(bool?)? onChanged;
   final bool isEnabled;
-  final ListTileControlAffinity controlAffinity;
   final EdgeInsetsGeometry? contentPadding;
-  final Color? activeColor;
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile.adaptive(
+    return ListTile(
       enabled: isEnabled,
-      value: isChecked,
-      onChanged: onChanged,
       title: Text(title, style: PharMeTheme.textTheme.bodyLarge),
       subtitle: subtitle != null
         ? Text(subtitle!, style: PharMeTheme.textTheme.bodyMedium)
         : null,
-      controlAffinity: controlAffinity,
       contentPadding: contentPadding,
-      activeColor: activeColor ?? PharMeTheme.primaryColor,
-    );  }
-
+      leading: CheckboxWrapper(
+        isEnabled: isEnabled,
+        isChecked: isChecked,
+        onChanged: onChanged,
+      ),
+    );
+  }
 }
