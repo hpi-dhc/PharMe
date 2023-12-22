@@ -1,4 +1,5 @@
 export 'anni_response.dart';
+export 'drug/cached_drugs.dart';
 export 'drug/drug.dart';
 export 'drug/drug_inhibitors.dart';
 export 'drug/guideline.dart';

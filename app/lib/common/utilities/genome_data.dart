@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../constants.dart';
-import '../models/drug/cached_drugs.dart';
 import '../models/module.dart';
 
 Future<void> fetchAndSaveDiplotypesAndActiveDrugs(
@@ -31,7 +30,9 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
       diplotypesFromHTTPResponse(response).filterValidDiplotypes();
   final activeDrugList = activeDrugsFromHTTPResponse(response);
 
-  UserData.instance.diplotypes = {for (var d in diplotypes) d.gene: d};
+  UserData.instance.diplotypes = {
+    for (final diplotype in diplotypes) diplotype.gene: diplotype
+  };
   await UserData.save();
   await activeDrugs.setList(activeDrugList);
   // invalidate cached drugs because lookups may have changed and we need to

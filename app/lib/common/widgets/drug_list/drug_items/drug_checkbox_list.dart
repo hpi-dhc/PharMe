@@ -33,19 +33,19 @@ List<Widget> buildDrugCheckboxList(
   );
   return [
     SubheaderDivider(
-      context.l10n.drug_selection_subheader_active_drugs,
+      text: context.l10n.drug_selection_subheader_active_drugs,
       key: Key('header-active'),
     ),
     ...activeDrugsList,
     SubheaderDivider(
-      context.l10n.drug_selection_subheader_all_drugs,
+      text: context.l10n.drug_selection_subheader_all_drugs,
       key: Key('header-all'),
     ),
     ...allDrugsList,
   ];
 }
 
-List<CheckboxListTile> _buildCheckboxList(
+List<CheckboxListTileWrapper> _buildCheckboxList(
   List<Drug> drugs,
   Map buildParams,
   bool showDrugInteractionIndicator,
@@ -54,14 +54,14 @@ List<CheckboxListTile> _buildCheckboxList(
   final onCheckboxChange = buildParams['onCheckboxChange'];
   final checkboxesEnabled = buildParams['checkboxesEnabled'];
   return drugs.map(
-    (drug) => CheckboxListTile(
+    (drug) => CheckboxListTileWrapper(
       key: Key('drug-checkbox-tile-${drug.name}-$keyPrefix'),
-      enabled: checkboxesEnabled,
-      value: drug.isActive,
+      isEnabled: checkboxesEnabled,
+      isChecked: drug.isActive,
       onChanged: (value) => onCheckboxChange(drug, value),
-      title: Text(formatDrugName(drug, showDrugInteractionIndicator)),
+      title: formatDrugName(drug, showDrugInteractionIndicator),
       subtitle: (drug.annotations.brandNames.isNotEmpty) ?
-        Text('(${drug.annotations.brandNames.join(", ")})') :
+        '(${drug.annotations.brandNames.join(", ")})' :
         null,
     )
   ).toList();

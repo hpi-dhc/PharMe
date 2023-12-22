@@ -3,16 +3,17 @@ import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
 import '../../common/widgets/full_width_button.dart';
+import '../cubit.dart';
 import '../models/lab.dart';
-import 'cubit.dart';
 
+@RoutePage()
 class LoginPage extends HookWidget {
   const LoginPage({
-    Key? key,
+    super.key,
     @visibleForTesting this.cubit,
-  }) : super(key: key);
+  });
 
-  final LoginPageCubit? cubit;
+  final LoginCubit? cubit;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,8 @@ class LoginPage extends HookWidget {
 
     return Consumer<ActiveDrugs>(
       builder: (context, activeDrugs, child) => BlocProvider(
-        create: (context) => cubit ?? LoginPageCubit(activeDrugs),
-        child: BlocBuilder<LoginPageCubit, LoginPageState>(
+        create: (context) => cubit ?? LoginCubit(activeDrugs),
+        child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
             return PharMeLogoPage(
               child: state.when(
@@ -48,7 +49,7 @@ class LoginPage extends HookWidget {
         (el) => el.name == dropdownValue.value,
       );
       await context
-          .read<LoginPageCubit>()
+          .read<LoginCubit>()
           .signInAndLoadUserData(context, selectedLab);
     }
 
@@ -69,7 +70,12 @@ class LoginPage extends HookWidget {
         DropdownButtonHideUnderline(
           child: DropdownButton2(
             isExpanded: true,
-            dropdownOverButton: true,
+            dropdownStyleData: DropdownStyleData(
+              isOverButton: true,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
             hint: Text(context.l10n.auth_choose_lab),
             value: dropdownValue.value,
             onChanged: (value) {
@@ -81,13 +87,12 @@ class LoginPage extends HookWidget {
                       child: Text(lab.name),
                     ))
                 .toList(),
-            buttonPadding: const EdgeInsets.only(left: 16, right: 16),
-            buttonDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: PharMeTheme.borderColor),
-            ),
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+            buttonStyleData: ButtonStyleData(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(color: PharMeTheme.borderColor),
+              ),
             ),
           ),
         ),
@@ -99,7 +104,7 @@ class LoginPage extends HookWidget {
     return _buildColumnWrapper(
       action: () => overwriteRoutes(
         context,
-        nextPage: OnboardingRouter(),
+        nextPage: OnboardingRoute(),
       ),
       actionText: context.l10n.general_continue,
       children: [
@@ -120,7 +125,7 @@ class LoginPage extends HookWidget {
 
   Widget _buildErrorScreen(BuildContext context, String message) {
     return _buildColumnWrapper(
-      action: () => context.read<LoginPageCubit>().revertToInitialState(),
+      action: () => context.read<LoginCubit>().revertToInitialState(),
       actionText: context.l10n.general_retry,
       children: [
         Icon(

@@ -4,9 +4,9 @@ class FullWidthButton extends StatelessWidget {
   const FullWidthButton(
     this.text,
     this.action, {
-    Key? key,
+    super.key,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   final bool enabled;
   final String text;
@@ -19,13 +19,10 @@ class FullWidthButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: enabled ? action : null,
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32),
-            ),
-          ),
+          backgroundColor:
+            MaterialStateProperty.all<Color>(PharMeTheme.primaryColor),
         ),
-        child: Text(text),
+        child: Text(text, style: PharMeTheme.textTheme.bodyLarge),
       ),
     );
   }

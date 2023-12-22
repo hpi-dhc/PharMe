@@ -1,7 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'models/drug/cached_drugs.dart';
-import 'models/module.dart';
+import 'module.dart';
 
 Future<void> initServices() async {
   await Hive.initFlutter();

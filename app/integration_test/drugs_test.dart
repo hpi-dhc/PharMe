@@ -1,8 +1,8 @@
 // ignore_for_file: cast_nullable_to_non_nullable
 
 import 'package:app/common/module.dart';
-import 'package:app/common/pages/drug/widgets/module.dart';
-import 'package:app/search/module.dart';
+import 'package:app/drug/module.dart';
+import 'package:app/drug/widgets/annotation_cards/disclaimer.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -126,7 +126,7 @@ void main() {
 
       // test the right color of the card
       // ignore: omit_local_variable_types
-      final Card card = tester.firstWidget(
+      final RoundedCard card = tester.firstWidget(
         find.byKey(
           ValueKey('annotationCard'),
         ),
@@ -136,14 +136,14 @@ void main() {
         testDrug.guidelines.first.annotations.warningLevel.color,
       );
 
-      context = tester.element(find.byType(Tooltip).first);
-
       // test that drug activity can be set
-      final checkbox = tester.widget(find.byType(CheckboxListTile))
-          as CheckboxListTile;
-      expect(checkbox.onChanged, isNotNull);
+      final activitySelection = tester.firstWidget(
+        find.byType(DropdownButton<bool>)
+      ) as DropdownButton<bool>;
+      expect(activitySelection.onChanged, isNotNull);
 
       // test tooltips
+      context = tester.element(find.byType(Tooltip).first);
       expect(
         find.byTooltip(context.l10n.drugs_page_tooltip_guideline),
         findsOneWidget,
@@ -202,9 +202,10 @@ void main() {
         ),
       );
 
-      final checkbox = tester.widget(find.byType(CheckboxListTile))
-          as CheckboxListTile;
-      expect(checkbox.onChanged, isNull);
+      final activitySelection = tester.firstWidget(
+        find.byType(DropdownButton<bool>)
+      ) as DropdownButton<bool>;
+      expect(activitySelection.onChanged, isNull);
     });
   });
 }

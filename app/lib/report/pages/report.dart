@@ -1,9 +1,8 @@
 import 'package:provider/provider.dart';
 
-import '../../common/models/drug/cached_drugs.dart';
 import '../../common/module.dart';
-import '../../common/utilities/color_utils.dart';
 
+@RoutePage()
 class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,45 +24,37 @@ class ReportPage extends StatelessWidget {
         lookupkey: notTestedString
       )
     );
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
       child: unscrollablePageScaffold(
         title: context.l10n.tab_report,
         barBottom: context.l10n.report_content_explanation,
         body: Column(
           children: [
+            if (hasActiveInhibitors) Padding(
+              padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
+              child: PageIndicatorExplanation(
+                context.l10n.report_page_indicator_explanation(
+                  drugInteractionIndicatorName,
+                  drugInteractionIndicator
+                ),
+              ),
+            ),
             scrollList(
-              userPhenotypes.map((phenotype) =>
-                Column(
-                  key: Key('gene-card-${phenotype.geneSymbol}'),
-                  children: [
-                    GeneCard(phenotype),
-                    SizedBox(height: 8)
-                  ]  
-                )
-              ).toList()),
-            if (hasActiveInhibitors) drugInteractionExplanation(context),
+              userPhenotypes.map((phenotype) => GeneCard(
+                phenotype,
+                key: Key('gene-card-${phenotype.geneSymbol}')
+              )).toList(),
+            ),
           ]
         )
       ),
-      onWillPop: () async => false,
     );
-  }
-
-  Widget drugInteractionExplanation(BuildContext context) {
-    return Column(children: [
-      SizedBox(height: PharMeTheme.smallSpace),
-      Text(
-        context.l10n.report_page_indicator_explanation(
-          drugInteractionIndicatorName,
-          drugInteractionIndicator
-        )
-      ),
-    ]);
   }
 }
 
 class GeneCard extends StatelessWidget {
-  const GeneCard(this.phenotype);
+  const GeneCard(this.phenotype, { super.key });
 
   final CpicPhenotype phenotype;
 
@@ -107,7 +98,6 @@ class GeneCard extends StatelessWidget {
     ).toList();
     return RoundedCard(
       onTap: () => context.router.push(GeneRoute(phenotype: phenotype)),
-      padding: EdgeInsets.all(8),
       radius: 16,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Expanded(

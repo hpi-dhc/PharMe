@@ -9,6 +9,7 @@ AppBar? buildBarBottom(String? barBottom) {
     ? null
     : AppBar(
         automaticallyImplyLeading: false,
+        scrolledUnderElevation: 0,
         backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
         elevation: PharMeTheme.appBarTheme.elevation,
         title: RichText(
@@ -35,6 +36,7 @@ Scaffold pageScaffold({
     key: key,
     body: CustomScrollView(slivers: [
       SliverAppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
         foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
         elevation: PharMeTheme.appBarTheme.elevation,
@@ -71,6 +73,7 @@ Scaffold unscrollablePageScaffold({
       title: buildTitle(title),
       actions: actions,
       bottom: buildBarBottom(barBottom),
+      scrolledUnderElevation: 0,
     );
   return Scaffold(
     key: key,

@@ -23,6 +23,7 @@
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for medications you are currently taking.",
   
+
   "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
 
   "general_continue": "Continue",
@@ -150,7 +151,6 @@
       }
     }
   },
-  "drugs_page_your_genome": "Your genome",
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
   "@drugs_page_guidelines_empty": {
     "description": "Disclaimer when a drug does not have guidelines",
@@ -161,16 +161,15 @@
         }
     }
 },
-  "drugs_page_header_further_info": "Further information",
   "drugs_page_header_synonyms": "Other names",
   "drugs_page_header_drugclass": "Drug class",
-  "drugs_page_header_drug": "Drug",
-  "drugs_page_header_druginfo": "Information",
+  "drugs_page_header_drug": "Drug information",
   "drugs_page_header_active": "Usage status",
-  "drugs_page_active": "I am currently taking this drug.",
+  "drugs_page_active": "I am currently taking this drug",
+  "drugs_page_inactive": "I am not taking this drug",
   "drugs_page_active_warn_header": "Are you sure you want to change the drug usage status?",
   "drugs_page_active_warn": "This can influence your results for other drugs.",
-  "drugs_page_header_guideline": "Clinical Guideline",
+  "drugs_page_header_guideline": "DNA-based clinical guideline",
   "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
   "@drugs_page_no_guidelines_for_phenotype_implication": {
     "description": "Disclaimer for when no guidelines was found for the current drug based on the user's phenotype",
@@ -344,7 +343,8 @@
   "settings_page_account_settings": "Settings",
   "settings_page_delete_data": "Delete app data",
   "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genetic data and will reset the app.",
-  "settings_page_delete_data_confirmation": "I understand that my genetic data will be deleted and it might not be possible to import it again.",
+  "settings_page_delete_data_additional_text": "Your genetic data will be deleted and it might not be possible to import it again.",
+  "settings_page_delete_data_confirmation": "I understand the consequences and want to delete all app data",
   "settings_page_more": "More",
   "settings_page_onboarding": "Onboarding",
   "settings_page_about_us": "About us",
@@ -353,6 +353,7 @@
   "settings_page_privacy_policy_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   "settings_page_terms_and_conditions": "Terms of use",
   "settings_page_terms_and_conditions_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "settings_page_help_and_feedback": "Help & Feedback",
   "settings_page_contact_us": "Contact us",
 
   "comprehension_intro_text": "Would you like to participate in a survey aiming to measure user comprehension of content in the app? This would help us make PharMe more understandable for everyone!",

@@ -3,6 +3,7 @@
 
 import 'dart:io';
 
+import 'package:app/app.dart';
 import 'package:app/common/module.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -51,6 +52,8 @@ void main() {
       await takeScreenshot(tester, binding, 'login');
 
       // login-redirect (not working; only taking screenshot of loading screen)
+      // could try to use cubit function to directly sign in which will only
+      // open the webview and close it again
       // await tester.tap(find.byType(FullWidthButton).first);
       // await Future.delayed(Duration(seconds: 3)); // wait for dialog
       // await takeScreenshot(tester, binding, 'login-redirect');

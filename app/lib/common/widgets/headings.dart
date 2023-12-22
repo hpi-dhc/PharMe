@@ -5,8 +5,8 @@ import '../theme.dart';
 class Heading extends StatelessWidget {
   const Heading(
     this.text, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String text;
 

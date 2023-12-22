@@ -1,4 +1,3 @@
-import 'package:app/common/models/drug/cached_drugs.dart';
 import 'package:app/common/module.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,7 +24,7 @@ void main() {
           child: MaterialApp.router(
             routeInformationParser: appRouter.defaultRouteParser(),
             routerDelegate: appRouter.delegate(
-              initialDeepLink: 'main',
+              deepLinkBuilder: (_) => DeepLink.path('/main'),
             ),
             localizationsDelegates: [
               AppLocalizations.delegate,

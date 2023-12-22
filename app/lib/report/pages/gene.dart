@@ -1,9 +1,9 @@
 import 'package:provider/provider.dart';
 
 import '../../common/module.dart';
-import '../../common/pages/drug/widgets/sub_header.dart';
-import '../../common/pages/drug/widgets/tooltip_icon.dart';
+import '../../drug/widgets/module.dart';
 
+@RoutePage()
 class GenePage extends HookWidget {
   GenePage(this.phenotype)
       : cubit = DrugListCubit(
@@ -37,6 +37,7 @@ class GenePage extends HookWidget {
                     ),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
                     RoundedCard(
+                      radius: PharMeTheme.mediumSpace,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

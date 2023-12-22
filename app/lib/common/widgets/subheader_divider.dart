@@ -1,16 +1,18 @@
 import '../module.dart';
 
 class SubheaderDivider extends StatelessWidget {
-  const SubheaderDivider(
-    this.text, {
+  const SubheaderDivider({
+    this.text = '',
     this.indent = 20.0,
     this.color,
-    Key? key,
-  }) : super(key: key);
+    this.useLine = true,
+    super.key,
+  });
 
   final String text;
   final double indent;
   final Color? color;
+  final bool useLine;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class SubheaderDivider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(color: widgetColor),
+          if (useLine) Divider(color: widgetColor, thickness: 0.5),
           Text(
             text,
             style:
