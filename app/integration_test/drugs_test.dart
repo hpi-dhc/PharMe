@@ -126,7 +126,7 @@ void main() {
 
       // test the right color of the card
       // ignore: omit_local_variable_types
-      final Card card = tester.firstWidget(
+      final RoundedCard card = tester.firstWidget(
         find.byKey(
           ValueKey('annotationCard'),
         ),
@@ -136,14 +136,14 @@ void main() {
         testDrug.guidelines.first.annotations.warningLevel.color,
       );
 
-      context = tester.element(find.byType(Tooltip).first);
-
       // test that drug activity can be set
-      final checkbox = tester.widget(find.byType(CheckboxListTileWrapper))
-          as CheckboxListTileWrapper;
-      expect(checkbox.onChanged, isNotNull);
+      final activitySelection = tester.firstWidget(
+        find.byType(DropdownButton<bool>)
+      ) as DropdownButton<bool>;
+      expect(activitySelection.onChanged, isNotNull);
 
       // test tooltips
+      context = tester.element(find.byType(Tooltip).first);
       expect(
         find.byTooltip(context.l10n.drugs_page_tooltip_guideline),
         findsOneWidget,
@@ -202,9 +202,10 @@ void main() {
         ),
       );
 
-      final checkbox = tester.widget(find.byType(CheckboxListTileWrapper))
-          as CheckboxListTileWrapper;
-      expect(checkbox.onChanged, isNull);
+      final activitySelection = tester.firstWidget(
+        find.byType(DropdownButton<bool>)
+      ) as DropdownButton<bool>;
+      expect(activitySelection.onChanged, isNull);
     });
   });
 }
