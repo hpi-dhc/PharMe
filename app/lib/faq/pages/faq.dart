@@ -1,74 +1,97 @@
 import '../../common/module.dart';
 import '../constants.dart';
 
+@RoutePage()
 class FaqPage extends StatelessWidget {
-  const FaqPage({Key? key}) : super(key: key);
+  const FaqPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
       child: pageScaffold(title: context.l10n.tab_faq, body: [
         Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(PharMeTheme.smallSpace),
           child: Column(
             key: Key('questionsColumn'),
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 8),
               ...faqList.keys.fold<List<Widget>>(
                 [], (widgets, topic) =>
                   [...widgets, ..._buildTopic(context, topic, faqList[topic]!)]
               ),
-              Divider(),
-              ListTile(
+              ..._buildTopicHeader(
+                context.l10n.settings_page_contact_us,
+                addSpace: true,
+              ),
+              _buildQuestionCard(
+                child: ListTile(
                   title: Text(context.l10n.faq_contact_us),
                   trailing: Icon(Icons.chevron_right_rounded),
-                  onTap: sendEmail)
+                  iconColor: PharMeTheme.iconColor,
+                  onTap: sendEmail
+                )
+              )
+              
             ],
           ),
         ),
       ]),
-      onWillPop: () async => false,
     );
   }
+
+  List<Widget> _buildTopicHeader(String title, { required bool addSpace }) => [
+    if (addSpace) SizedBox(height: PharMeTheme.mediumSpace),
+    SubheaderDivider(text: title, useLine: false),
+  ];
+
+  Widget _buildQuestionCard({ required Widget child, Key? key }) => RoundedCard(
+    key: key,
+    innerPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.25),
+    child: child,
+  );
 
   List<Widget> _buildTopic(
     BuildContext context,
     String topicName,
     List<Question> questions
   ) {
+    final topicIndex = faqList.keys.toList().indexOf(topicName);
     return [
-      ListTile(
-        title: Text(
-          topicName,
-          style: PharMeTheme.textTheme.bodyMedium,
-        ),
-        dense: true,
-      ),
-      ...questions.map((question) => _buildQuestion(context, question)).toList()
+      ..._buildTopicHeader(topicName, addSpace: topicIndex != 0),
+      ...questions.map((question) => _buildQuestion(context, question))
     ];
   }
 
   Widget _buildQuestion(BuildContext context, Question question) {
     final key = GlobalKey();
-
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: ExpansionTile(
-        key: key,
-        title: Text(question.question),
-        onExpansionChanged: (value) {
-          if (value) _scrollToSelectedContent(key: key);
-        },
-        children: [
-          ListTile(
-            contentPadding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-            title: Text(question.answer),
+    return _buildQuestionCard(
+          key: key,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              dividerColor: Colors.transparent,
+            ),
+            child: ExpansionTile(
+              title: Text(question.question),
+              iconColor: PharMeTheme.iconColor,
+              collapsedIconColor: PharMeTheme.iconColor,
+              onExpansionChanged: (value) {
+                if (value) _scrollToSelectedContent(key: key);
+              },
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.only(
+                    left: PharMeTheme.mediumSpace,
+                    right: PharMeTheme.mediumSpace,
+                    bottom: PharMeTheme.smallSpace,
+                  ),
+                  title: Text(question.answer),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
-    );
+        );
   }
 
   void _scrollToSelectedContent({required GlobalKey key}) {
@@ -78,6 +101,7 @@ class FaqPage extends StatelessWidget {
         Scrollable.ensureVisible(
           keyContext,
           duration: Duration(milliseconds: 200),
+          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
         );
       });
     }

@@ -1,36 +1,36 @@
 import 'package:provider/provider.dart';
 
-import '../../common/models/drug/cached_drugs.dart';
 import '../../common/models/metadata.dart';
 import '../../common/module.dart' hide MetaData;
 import '../../common/widgets/drug_list/drug_items/drug_checkbox_list.dart';
 import '../../common/widgets/drug_search.dart';
 import '../../common/widgets/full_width_button.dart';
-import 'cubit.dart';
+import '../cubit.dart';
 
+@RoutePage()
 class DrugSelectionPage extends HookWidget {
   const DrugSelectionPage({
-    Key? key,
+    super.key,
     this.concludesOnboarding = true,
     @visibleForTesting this.cubit,
-  }) : super(key: key);
+  });
 
-  final DrugSelectionPageCubit? cubit;
+  final DrugSelectionCubit? cubit;
   final bool concludesOnboarding;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ActiveDrugs>(
       builder: (context, activeDrugs, child) => BlocProvider(
-        create: (context) => cubit ?? DrugSelectionPageCubit(activeDrugs),
-        child: BlocBuilder<DrugSelectionPageCubit, DrugSelectionPageState>(
+        create: (context) => cubit ?? DrugSelectionCubit(activeDrugs),
+        child: BlocBuilder<DrugSelectionCubit, DrugSelectionState>(
           builder: (context, state) {
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
               barBottom: concludesOnboarding
                 ? context.l10n.drug_selection_onboarding_description
                 : null,
-              padding: PharMeTheme.largeSpace,
+              padding: PharMeTheme.mediumSpace,
               body: Column(
                 children: [
                   Expanded(child: _buildDrugList(context, state)),
@@ -44,16 +44,20 @@ class DrugSelectionPage extends HookWidget {
     );
   }
 
-  bool _isEditable(DrugSelectionPageState state) {
+  bool _isEditable(DrugSelectionState state) {
     return state.when(
       stable: () => true,
       updating: () => false
     );
   }
 
-  Widget _buildButton(BuildContext context, DrugSelectionPageState state) {
+  Widget _buildButton(BuildContext context, DrugSelectionState state) {
     return Padding(
-      padding: EdgeInsets.only(top: PharMeTheme.mediumSpace),
+      padding: EdgeInsets.only(
+        left: PharMeTheme.mediumSpace,
+        top: PharMeTheme.mediumSpace,
+        right: PharMeTheme.mediumSpace,
+      ),
       child: FullWidthButton(
         context.l10n.action_continue,
         () async {
@@ -67,7 +71,7 @@ class DrugSelectionPage extends HookWidget {
     );
   }
 
-  Widget _buildDrugList(BuildContext context, DrugSelectionPageState state) {
+  Widget _buildDrugList(BuildContext context, DrugSelectionState state) {
     if (CachedDrugs.instance.drugs!.isEmpty) {
       return Column(
         children: [
@@ -88,7 +92,7 @@ class DrugSelectionPage extends HookWidget {
       drugItemsBuildParams: {
         'checkboxesEnabled': _isEditable(state),
         'onCheckboxChange': (drug, value) => context
-          .read<DrugSelectionPageCubit>()
+          .read<DrugSelectionCubit>()
           .updateDrugActivity(drug, value),
       },
       showDrugInteractionIndicator: false,

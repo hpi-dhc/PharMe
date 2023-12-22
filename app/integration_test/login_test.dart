@@ -8,8 +8,8 @@ import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-class MockLoginCubit extends MockCubit<LoginPageState>
-    implements LoginPageCubit {}
+class MockLoginCubit extends MockCubit<LoginState>
+    implements LoginCubit {}
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ void main() {
   group('integration tests for the login page', () {
     testWidgets('test loading state', (tester) async {
       when(() => mockLoginCubit.state).thenReturn(
-        LoginPageState.loadingUserData(),
+        LoginState.loadingUserData(),
       );
 
       await tester.pumpWidget(
@@ -44,7 +44,7 @@ void main() {
 
     testWidgets('test error state', (tester) async {
       when(() => mockLoginCubit.state).thenReturn(
-        LoginPageState.error('Some error'),
+        LoginState.error('Some error'),
       );
 
       await tester.pumpWidget(
@@ -70,7 +70,7 @@ void main() {
 
     testWidgets('test loaded state', (tester) async {
       when(() => mockLoginCubit.state).thenReturn(
-        LoginPageState.loadedUserData(),
+        LoginState.loadedUserData(),
       );
 
       await tester.pumpWidget(
@@ -97,7 +97,7 @@ void main() {
 
     testWidgets('test initial state', (tester) async {
       when(() => mockLoginCubit.state).thenReturn(
-        LoginPageState.initial(),
+        LoginState.initial(),
       );
 
       await tester.pumpWidget(

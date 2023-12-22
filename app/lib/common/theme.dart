@@ -81,12 +81,16 @@ class PharMeTheme {
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xccf52a2a);
   static final borderColor = Colors.black.withOpacity(.2);
+  static final iconColor = darkenColor(PharMeTheme.onSurfaceText, -0.1);
 
   static const smallSpace = 8.0;
   static const smallToMediumSpace = 12.0;
   static const mediumSpace = 16.0;
   static const mediumToLargeSpace = 24.0;
   static const largeSpace = 32.0;
+
+  static const outerCardRadius = mediumSpace;
+  static const innerCardRadius = smallToMediumSpace;
 
   static final appBarTheme = AppBarTheme(
     backgroundColor: surfaceColor,

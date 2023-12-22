@@ -1,6 +1,7 @@
 import '../../../common/module.dart' hide MetaData;
 import '../../common/models/metadata.dart';
 
+@RoutePage()
 class OnboardingPage extends HookWidget {
   OnboardingPage({ this.isRevisiting = false });
 
@@ -95,7 +96,7 @@ class OnboardingPage extends HookWidget {
               right: PharMeTheme.mediumToLargeSpace,
               child: IconButton(
                 icon: Icon(Icons.close, size: 32, color: Colors.white,),
-                onPressed: () => context.navigateBack(),
+                onPressed: () => context.router.back(),
               )
             ),
             Positioned(
@@ -167,13 +168,13 @@ class OnboardingPage extends HookWidget {
       onPressed: () async {
         if (isLastPage) {
           if (isRevisiting) {
-            context.router.navigateBack();
+            context.router.back();
           } else {
             MetaData.instance.onboardingDone = true;
             await MetaData.save();
             // ignore: use_build_context_synchronously
             await context.router.push(
-              DrugSelectionRouter(concludesOnboarding: true)
+              DrugSelectionRoute(concludesOnboarding: true)
             );
           }
         } else {

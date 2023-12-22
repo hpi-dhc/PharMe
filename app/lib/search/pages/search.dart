@@ -2,12 +2,12 @@ import '../../../common/module.dart';
 import '../../common/widgets/drug_list/drug_items/drug_cards.dart';
 import '../../common/widgets/drug_search.dart';
 
+@RoutePage()
 class SearchPage extends HookWidget {
   SearchPage({
-    Key? key,
+    super.key,
     @visibleForTesting DrugListCubit? cubit,
-  })  : cubit = cubit ?? DrugListCubit(),
-        super(key: key);
+  })  : cubit = cubit ?? DrugListCubit();
 
   final DrugListCubit cubit;
 
@@ -18,7 +18,8 @@ class SearchPage extends HookWidget {
         await cubit.loadDrugs(useCache: false);
       }
     });
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
       child: unscrollablePageScaffold(
         title: context.l10n.tab_drugs,
         body: DrugSearch(
@@ -28,7 +29,6 @@ class SearchPage extends HookWidget {
           showDrugInteractionIndicator: true,
         ),
       ),
-      onWillPop: () async => false,
     );
   }
 }

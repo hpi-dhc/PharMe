@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
-import '../../common/pages/drug/widgets/tooltip_icon.dart';
+import '../../drug/widgets/tooltip_icon.dart';
 
 class DrugSearch extends HookWidget {
   DrugSearch({
-    Key? key,
+    super.key,
     required this.showFilter,
     required this.buildDrugItems,
     required this.showDrugInteractionIndicator,
@@ -15,8 +15,7 @@ class DrugSearch extends HookWidget {
     this.keepPosition = false,
     this.drugItemsBuildParams,
     DrugListCubit? cubit,
-  })  : cubit = cubit ?? DrugListCubit(),
-        super(key: key);
+  })  : cubit = cubit ?? DrugListCubit();
 
   final bool showFilter;
   final bool useDrugClass;
@@ -66,6 +65,13 @@ class DrugSearch extends HookWidget {
                   ]
                 ),
                 SizedBox(height: PharMeTheme.smallSpace),
+                if (showDrugInteractionIndicator)
+                  PageIndicatorExplanation(
+                    context.l10n.search_page_indicator_explanation(
+                      drugInteractionIndicatorName,
+                      drugInteractionIndicator
+                    ),
+                  ),
                 scrollList(
                   keepPosition: keepPosition,
                   buildDrugList(
@@ -80,7 +86,6 @@ class DrugSearch extends HookWidget {
                     useDrugClass: useDrugClass,
                   )
                 ),
-                ..._maybeShowDrugInteractionExplanation(context),
               ],
             );
           }
@@ -89,53 +94,42 @@ class DrugSearch extends HookWidget {
     );
   }
 
-  List<Widget> _maybeShowDrugInteractionExplanation(BuildContext context) {
-    if (!showDrugInteractionIndicator) return [];
-    return [
-      SizedBox(height: PharMeTheme.smallSpace),
-      Text(
-        context.l10n.search_page_indicator_explanation(
-          drugInteractionIndicatorName,
-          drugInteractionIndicator
-        )
-      ),
-    ];
-  }
-
   Widget buildFilter(BuildContext context) {
     final cubit = context.read<DrugListCubit>();
     final filter = cubit.filter;
-    return ContextMenu(
+    return FilterMenu(
       items: [
-        ContextMenuCheckmark(
-          label: context.l10n.search_page_filter_only_active,
-          // Invert state as filter has opposite meaning ('only show active' vs.
-          // 'show inactive')
-          setState: (state) => cubit.search(showInactive: !state),
-          initialState: filter != null && !filter.showInactive),
-        ...WarningLevel.values.filter((level) => level != WarningLevel.none)
-          .map((level) => ContextMenuCheckmark(
-            label: {
+        ...WarningLevel.values
+          .filter((level) => level != WarningLevel.none)
+          .map((level) => FilterMenuItem(
+            title: {
               WarningLevel.green: context.l10n.search_page_filter_green,
               WarningLevel.yellow: context.l10n.search_page_filter_yellow,
               WarningLevel.red: context.l10n.search_page_filter_red,
             }[level]!,
-            setState: (state) => cubit.search(showWarningLevel: {level: state}),
-            initialState: filter?.showWarningLevel[level] ?? false
+            updateSearch: ({ required isChecked }) =>
+              cubit.search(showWarningLevel: { level: isChecked }),
+            isChecked: filter?.showWarningLevel[level] ?? false
             )
           ),
-        ContextMenuCheckmark(
-          label: context.l10n.search_page_filter_only_with_guidelines,
+        FilterMenuItem(
+          title: context.l10n.search_page_filter_only_active,
+          // Invert state as filter has opposite meaning ('only show active' vs.
+          // 'show inactive')
+          updateSearch: ({ required isChecked }) => cubit.search(showInactive: !isChecked),
+          isChecked: !(filter?.showInactive ?? false)
+        ),
+        FilterMenuItem(
+          title: context.l10n.search_page_filter_only_with_guidelines,
           // Invert state as filter has opposite meaning ('show only with
           // guidelines' vs. 'show with unknown warning level')
-          setState: (state) => cubit.search(
-            showWarningLevel: {WarningLevel.none: !state}
+          updateSearch: ({ required isChecked }) => cubit.search(
+            showWarningLevel: { WarningLevel.none: !isChecked }
           ),
-          initialState: filter != null &&
-            !filter.showWarningLevel[WarningLevel.none]!,)
+          isChecked: !(filter?.showWarningLevel[WarningLevel.none] ?? false),
+        )
       ],
-      child: Padding(
-          padding: EdgeInsets.all(8), child: Icon(Icons.filter_list_rounded)),
+      iconData: Icons.filter_list_rounded,
     );
   }
 }

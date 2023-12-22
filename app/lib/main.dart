@@ -1,5 +1,6 @@
 import 'package:provider/provider.dart';
 
+import 'app.dart';
 import 'common/module.dart';
 
 Future<void> main() async {
