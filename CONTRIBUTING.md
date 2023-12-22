@@ -9,18 +9,23 @@ Before you begin with setting up your local development environment, ensure that
 you have the following list of tools installed:
 
 - An editor, we **strongly recommend** [<img
+  alt="vscode-icon"
   src="https://user-images.githubusercontent.com/82543715/142914400-49d5815b-71a7-4198-9501-157fc3aa40a2.png"
   width="16" height="16"> Visual Studio Code](https://code.visualstudio.com)
 - [<img
+  alt="git-icon"
   src="https://user-images.githubusercontent.com/82543715/142914382-5be71efd-9e34-46c2-aad6-04255c430594.png"
   width="16" height="16"> Git](https://git-scm.com/downloads)
 - [<img
+  alt="docker-icon"
   src="https://user-images.githubusercontent.com/58258541/143049489-668aea70-bb2c-420d-b3e8-e0edc42a4e92.png"
   width="16" height="16"> Docker](https://docs.docker.com/get-docker/)
 - [<img
+  alt="nodejs-icon"
   src="https://user-images.githubusercontent.com/58258541/143050266-4a2030d1-c319-447d-812b-2ad8a4020d48.png"
   width="16" height="16"> NodeJS](https://nodejs.org)
 - [<img
+  alt="yarn-icon"
   src="https://user-images.githubusercontent.com/58258541/143050227-b374b1f7-e28e-4b90-b7f0-b9112521d3b1.png"
   width="16" height="16"> Yarn](https://yarnpkg.com/)
 
