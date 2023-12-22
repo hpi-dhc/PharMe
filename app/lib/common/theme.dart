@@ -1,5 +1,4 @@
 import 'module.dart';
-import 'utilities/color_utils.dart';
 
 class PharMeTheme {
   static ThemeData get light {

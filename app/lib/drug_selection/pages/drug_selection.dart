@@ -1,6 +1,5 @@
 import 'package:provider/provider.dart';
 
-import '../../common/models/drug/cached_drugs.dart';
 import '../../common/models/metadata.dart';
 import '../../common/module.dart' hide MetaData;
 import '../../common/widgets/drug_list/drug_items/drug_checkbox_list.dart';

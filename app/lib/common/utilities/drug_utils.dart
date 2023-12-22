@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../../app.dart';
-import '../models/drug/cached_drugs.dart';
 import '../module.dart';
 
 Future<void> updateCachedDrugs() async {

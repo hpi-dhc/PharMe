@@ -1,6 +1,5 @@
 import 'package:path_provider/path_provider.dart';
 
-import '../common/models/drug/cached_drugs.dart';
 import '../common/module.dart';
 
 Future<void> deleteAllAppData() async {

@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../constants.dart';
-import '../models/drug/cached_drugs.dart';
 import '../models/module.dart';
 
 Future<void> fetchAndSaveDiplotypesAndActiveDrugs(

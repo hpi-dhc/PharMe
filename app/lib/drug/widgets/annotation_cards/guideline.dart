@@ -1,7 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/module.dart';
-import '../../../common/utilities/color_utils.dart';
 import '../module.dart';
 
 class GuidelineAnnotationCard extends StatelessWidget {

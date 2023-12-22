@@ -1,5 +1,4 @@
 import '../module.dart';
-import '../utilities/color_utils.dart';
 
 class RoundedCard extends StatelessWidget {
   const RoundedCard({

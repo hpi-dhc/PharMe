@@ -1,8 +1,6 @@
 import 'package:provider/provider.dart';
 
-import '../../common/models/drug/cached_drugs.dart';
 import '../../common/module.dart';
-import '../../common/utilities/color_utils.dart';
 
 @RoutePage()
 class ReportPage extends StatelessWidget {
