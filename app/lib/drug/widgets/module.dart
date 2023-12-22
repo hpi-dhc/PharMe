@@ -1,5 +1,6 @@
+export 'annotation_cards/annotation_table.dart';
+export 'annotation_cards/disclaimer.dart';
 export 'annotation_cards/drug.dart';
 export 'annotation_cards/guideline.dart';
-export 'disclaimer.dart';
 export 'sub_header.dart';
 export 'tooltip_icon.dart';

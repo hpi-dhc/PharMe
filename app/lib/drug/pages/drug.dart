@@ -50,8 +50,6 @@ class DrugPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SubHeader(context.l10n.drugs_page_header_drug),
-              SizedBox(height: 12),
               DrugAnnotationCard(
                 drug,
                 isActive: drug.isActive,
@@ -59,16 +57,12 @@ class DrugPage extends StatelessWidget {
                   context.read<DrugCubit>().setActivity(drug, value),
                 disabled: loading,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: PharMeTheme.mediumSpace),
               SubHeader(
                 context.l10n.drugs_page_header_guideline,
                 tooltip: context.l10n.drugs_page_tooltip_guideline,
               ),
-              SizedBox(height: 12),
-              if (drug.userGuideline != null) ...[
-                Disclaimer(),
-                SizedBox(height: 12),
-              ],
+              SizedBox(height: PharMeTheme.smallSpace),
               GuidelineAnnotationCard(drug),
             ],
           ),

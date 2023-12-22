@@ -1,5 +1,6 @@
 import '../../../common/module.dart';
 import '../sub_header.dart';
+import 'annotation_table.dart';
 
 class DrugAnnotationCard extends StatelessWidget {
   const DrugAnnotationCard(
@@ -16,37 +17,51 @@ class DrugAnnotationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedCard(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SubHeader(context.l10n.drugs_page_header_druginfo),
-            SizedBox(height: 12),
-            Text(drug.annotations.indication),
-            SizedBox(height: 8),
-            Table(defaultColumnWidth: IntrinsicColumnWidth(), children: [
-              _buildRow(context.l10n.drugs_page_header_drugclass,
-                  drug.annotations.drugclass),
-              if (drug.annotations.brandNames.isNotEmpty) ...[
-                _buildRow(context.l10n.drugs_page_header_synonyms,
-                    drug.annotations.brandNames.join(', ')),
-              ]
-            ]),
-            SizedBox(height: 4),
-            if (isInhibitor(drug.name)) ...[
-              SizedBox(height: 8),
-              Text(context.l10n.drugs_page_is_inhibitor(
-                drug.name,
-                inhibitedGenes(drug).join(', '),
-              )),
-            ],
-            Divider(color: PharMeTheme.borderColor),
-            SizedBox(height: 4),
-            SubHeader(context.l10n.drugs_page_header_active),
-            CheckboxListTileWrapper(
-              title: context.l10n.drugs_page_active,
-              isChecked: isActive,
+    return Column(
+      children: [
+        SubHeader(context.l10n.drugs_page_header_drug),
+        SizedBox(height: PharMeTheme.smallSpace),
+        RoundedCard(
+          innerPadding: EdgeInsets.all(PharMeTheme.mediumSpace),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(drug.annotations.indication),
+                SizedBox(height: PharMeTheme.smallSpace),
+                buildTable([
+                  TableRowDefinition(
+                    context.l10n.drugs_page_header_drugclass,
+                    drug.annotations.drugclass,
+                  ),
+                  if (drug.annotations.brandNames.isNotEmpty)
+                    TableRowDefinition(
+                      context.l10n.drugs_page_header_synonyms,
+                      drug.annotations.brandNames.join(', '),
+                    ),
+                ]),
+                if (isInhibitor(drug.name)) ...[
+                  SizedBox(height: 8),
+                  Text(context.l10n.drugs_page_is_inhibitor(
+                    drug.name,
+                    inhibitedGenes(drug).join(', '),
+                  )),
+                ],
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: PharMeTheme.mediumSpace),
+        SubHeader(context.l10n.drugs_page_header_active),
+        SizedBox(height: PharMeTheme.smallSpace),
+        RoundedCard(
+          innerPadding: EdgeInsets.all(PharMeTheme.smallSpace),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
+            child: DropdownButton<bool>(
+              value: isActive,
+              isExpanded: true,
+              icon: const Icon(Icons.expand_more),
               onChanged: disabled ? null : (newValue) => {
                 if (isInhibitor(drug.name)) {
                   showAdaptiveDialog(
@@ -76,20 +91,33 @@ class DrugAnnotationCard extends StatelessWidget {
                   setActivity(value: newValue)
                 }
               },
-              controlAffinity: ListTileControlAffinity.leading,
+              items: [
+                DropdownMenuItem<bool>(
+                  value: true,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: PharMeTheme.iconColor,
+                      ),
+                      SizedBox(width: PharMeTheme.smallSpace),
+                      Text(context.l10n.drugs_page_active),
+                    ]),
+                ),
+                DropdownMenuItem<bool>(
+                  value: false,
+                  child: Row(
+                    children: [
+                      Icon(Icons.cancel_outlined, color: PharMeTheme.iconColor),
+                      SizedBox(width: PharMeTheme.smallSpace),
+                      Text(context.l10n.drugs_page_inactive),
+                    ]),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
-
-  TableRow _buildRow(String key, String value) => TableRow(children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(0, 4, 12, 4),
-            child: Text(key,
-                style: PharMeTheme.textTheme.bodyMedium!
-                    .copyWith(fontWeight: FontWeight.bold))),
-        Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4), child: Text(value)),
-      ]);
 }

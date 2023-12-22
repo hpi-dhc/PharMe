@@ -7,7 +7,7 @@ class RoundedCard extends StatelessWidget {
     this.outerVerticalPadding,
     this.outerHorizontalPadding,
     this.color,
-    this.radius = 20,
+    this.radius,
     this.onTap,
     required this.child,
     super.key,
@@ -18,13 +18,13 @@ class RoundedCard extends StatelessWidget {
   final double? outerHorizontalPadding;
   final VoidCallback? onTap;
   final Color? color;
-  final double radius;
+  final double? radius;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     Widget child = Padding(
-      padding: innerPadding ?? EdgeInsets.all(PharMeTheme.smallSpace * 1.25),
+      padding: innerPadding ?? EdgeInsets.all(PharMeTheme.smallToMediumSpace),
       child: this.child,
     );
 
@@ -41,7 +41,9 @@ class RoundedCard extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: color ?? darkenColor(PharMeTheme.onSurfaceColor, -0.05),
-            borderRadius: BorderRadius.all(Radius.circular(radius)),
+            borderRadius: BorderRadius.all(
+              Radius.circular(radius ?? PharMeTheme.outerCardRadius)
+            ),
           ),
           child: child,
         ),

@@ -1,4 +1,4 @@
-import '../../common/module.dart';
+import '../../../common/module.dart';
 
 class Disclaimer extends StatelessWidget {
   const Disclaimer({this.text});
@@ -8,24 +8,26 @@ class Disclaimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: EdgeInsets.all(PharMeTheme.smallSpace),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(PharMeTheme.innerCardRadius * 0.75)
+        ),
         color: PharMeTheme.surfaceColor,
         border: Border.all(color: PharMeTheme.errorColor, width: 1.2),
       ),
       child: Row(children: [
         Icon(
           Icons.warning_rounded,
-          size: 52,
+          size: PharMeTheme.largeSpace,
           color: PharMeTheme.errorColor,
         ),
-        SizedBox(width: 8),
+        SizedBox(width: PharMeTheme.smallSpace),
         Flexible(
           child: Text(
             text ?? context.l10n.drugs_page_disclaimer,
             style: PharMeTheme.textTheme.labelMedium!.copyWith(
-              fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.w300,
             ),
           ),
         ),

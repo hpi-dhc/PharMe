@@ -151,7 +151,6 @@
       }
     }
   },
-  "drugs_page_your_genome": "Your genome",
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
   "@drugs_page_guidelines_empty": {
     "description": "Disclaimer when a drug does not have guidelines",
@@ -162,16 +161,15 @@
         }
     }
 },
-  "drugs_page_header_further_info": "Further information",
   "drugs_page_header_synonyms": "Other names",
   "drugs_page_header_drugclass": "Drug class",
-  "drugs_page_header_drug": "Drug",
-  "drugs_page_header_druginfo": "Information",
+  "drugs_page_header_drug": "Drug information",
   "drugs_page_header_active": "Usage status",
-  "drugs_page_active": "I am currently taking this drug.",
+  "drugs_page_active": "I am currently taking this drug",
+  "drugs_page_inactive": "I am not taking this drug",
   "drugs_page_active_warn_header": "Are you sure you want to change the drug usage status?",
   "drugs_page_active_warn": "This can influence your results for other drugs.",
-  "drugs_page_header_guideline": "Clinical Guideline",
+  "drugs_page_header_guideline": "DNA-based clinical guideline",
   "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
   "@drugs_page_no_guidelines_for_phenotype_implication": {
     "description": "Disclaimer for when no guidelines was found for the current drug based on the user's phenotype",

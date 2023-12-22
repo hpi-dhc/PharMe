@@ -37,6 +37,7 @@ class GenePage extends HookWidget {
                     ),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
                     RoundedCard(
+                      radius: PharMeTheme.mediumSpace,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

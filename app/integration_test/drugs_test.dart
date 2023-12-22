@@ -2,7 +2,7 @@
 
 import 'package:app/common/module.dart';
 import 'package:app/drug/module.dart';
-import 'package:app/drug/widgets/disclaimer.dart';
+import 'package:app/drug/widgets/annotation_cards/disclaimer.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';

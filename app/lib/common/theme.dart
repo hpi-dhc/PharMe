@@ -90,6 +90,9 @@ class PharMeTheme {
   static const mediumToLargeSpace = 24.0;
   static const largeSpace = 32.0;
 
+  static const outerCardRadius = mediumSpace;
+  static const innerCardRadius = smallToMediumSpace;
+
   static final appBarTheme = AppBarTheme(
     backgroundColor: surfaceColor,
     foregroundColor: onSurfaceText,
