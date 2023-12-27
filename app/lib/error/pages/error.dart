@@ -68,10 +68,7 @@ class ErrorPage extends StatelessWidget {
             ),
             SizedBox(height: PharMeTheme.mediumSpace),
             FullWidthButton(context.l10n.error_close_app, () async {
-              if (Platform.isIOS) {
-                exit(0);
-              }
-              await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              exit(0);
             }),
           ],
         ),
