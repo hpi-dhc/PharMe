@@ -11,7 +11,7 @@
   "error_contact_link_text": "contact us",
   "error_uncaught_message_after_link": " if this problem persists.",
   "error_close_app": "Close app",
-  "error_mail_subject": "Unknown PharMe Error Report",
+  "error_mail_subject": "[ACTION REQUIRED] Unknown Error Report",
   "error_mail_body": "Please describe what happened right before the error occurred: \n\n--- Please keep the following information, it will help us to pin down the error ---\n\n{error}",
   "@error_mail_body": {
     "placeholders": {
