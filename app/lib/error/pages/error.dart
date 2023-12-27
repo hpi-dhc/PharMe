@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/gestures.dart';
-
 import '../../common/module.dart';
 
 @RoutePage()
@@ -45,19 +43,12 @@ class ErrorPage extends StatelessWidget {
                 style: PharMeTheme.textTheme.bodyLarge,
                 children: [
                   TextSpan(text: context.l10n.error_uncaught_message_contact),
-                  TextSpan(
+                  linkTextSpan(
                     text: context.l10n.error_contact_link_text,
-                    style: TextStyle(
-                      color: PharMeTheme.secondaryColor,
-                      decoration: TextDecoration.underline,
+                    onTap: () => sendEmail(
+                      subject: context.l10n.error_mail_subject,
+                      body: context.l10n.error_mail_body(error),
                     ),
-                    recognizer: TapGestureRecognizer()..onTap =
-                      () {
-                        sendEmail(
-                          subject: context.l10n.error_mail_subject,
-                          body: context.l10n.error_mail_body(error),
-                        );
-                      },
                   ),
                   TextSpan(
                     text: context.l10n.error_uncaught_message_after_link,
@@ -66,9 +57,11 @@ class ErrorPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: PharMeTheme.mediumSpace),
-            FullWidthButton(context.l10n.error_close_app, () async {
-              exit(0);
-            }),
+            FullWidthButton(
+              context.l10n.error_close_app,
+              () => exit(0),
+              secondaryColor: true,
+            ),
           ],
         ),
       ),

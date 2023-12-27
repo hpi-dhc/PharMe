@@ -6,11 +6,13 @@ class FullWidthButton extends StatelessWidget {
     this.action, {
     super.key,
     this.enabled = true,
+    this.secondaryColor = false,
   });
 
   final bool enabled;
   final String text;
   final void Function() action;
+  final bool secondaryColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,10 @@ class FullWidthButton extends StatelessWidget {
         onPressed: enabled ? action : null,
         style: ButtonStyle(
           backgroundColor:
-            MaterialStateProperty.all<Color>(PharMeTheme.primaryColor),
+            MaterialStateProperty.all<Color>(secondaryColor
+              ? PharMeTheme.secondaryColor
+              : PharMeTheme.primaryColor
+            ),
         ),
         child: Text(text, style: PharMeTheme.textTheme.bodyLarge),
       ),

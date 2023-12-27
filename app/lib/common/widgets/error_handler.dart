@@ -34,8 +34,12 @@ class ErrorHandlerState extends State<ErrorHandler> {
   }) async {
     debugPrint(exception.toString());
     debugPrintStack(stackTrace: stackTrace);
+    final errorString = exception.toString();
     if (_needToHandleError(exception)) {
-      await widget.appRouter.push(ErrorRoute(error: exception.toString()));
+      final errorMailInfo = stackTrace != null
+        ? '$errorString\n\n${stackTrace.toString()}'
+        : errorString;
+      await widget.appRouter.push(ErrorRoute(error: errorMailInfo));
     }
   }
 

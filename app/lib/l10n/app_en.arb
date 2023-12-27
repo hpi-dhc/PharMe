@@ -12,7 +12,7 @@
   "error_uncaught_message_after_link": " if this problem persists.",
   "error_close_app": "Close app",
   "error_mail_subject": "Unknown PharMe Error Report",
-  "error_mail_body": "Error: {error} (please keep this line)\n\n<Please describe what happened right before the error occurred.>",
+  "error_mail_body": "Please describe what happened right before the error occurred: \n\n--- Please keep the following information, it will help us to pin down the error ---\n\n{error}",
   "@error_mail_body": {
     "placeholders": {
       "error": {
