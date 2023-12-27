@@ -7,6 +7,7 @@ import '../../more/module.dart';
 import '../../onboarding/module.dart';
 import '../../report/module.dart';
 import '../../search/module.dart';
+import '../../secure/module.dart';
 import '../module.dart';
 
 part 'router.gr.dart';
@@ -19,7 +20,6 @@ class AppRouter extends _$AppRouter {
   List<AutoRoute> get routes => [
     drugSelectionRoute(),
     loginRoute(),
-    onboardingRoute(),
     mainRoute(
       children: [
         reportRoute(children: [ geneRoute(), drugRoute() ]),
@@ -30,5 +30,7 @@ class AppRouter extends _$AppRouter {
         ),
       ],
     ),
+    onboardingRoute(),
+    secureRoute(),
   ];
 }

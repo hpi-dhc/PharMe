@@ -4,7 +4,7 @@ import '../common/module.dart';
 export 'pages/gene.dart';
 export 'pages/report.dart';
 
-@RoutePage()      
+@RoutePage()
 class ReportRootPage extends AutoRouter {}
 
 AutoRoute geneRoute() => AutoRoute(page: GeneRoute.page);
