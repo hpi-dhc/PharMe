@@ -1,3 +1,4 @@
+import '../../secure/module.dart';
 import '../module.dart';
 
 DeepLink getInitialRoute(_) {
@@ -14,6 +15,10 @@ DeepLink getInitialRoute(_) {
           ? '/drugselection'
           : '/main';
   return DeepLink.path(path);
+}
+
+bool currentPathIsSecurePath(AppRouter appRouter) {
+  return appRouter.currentPath == secureRoutePath;
 }
 
 // Replace whole stack, see https://stackoverflow.com/a/73784156

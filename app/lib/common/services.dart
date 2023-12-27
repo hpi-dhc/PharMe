@@ -8,6 +8,7 @@ Future<void> initServices() async {
   await initMetaData();
   await initUserData();
   await initCachedDrugs();
+  WidgetsFlutterBinding.ensureInitialized();
 }
 
 Future<void> cleanupServices() async {

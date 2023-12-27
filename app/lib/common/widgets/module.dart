@@ -8,6 +8,7 @@ export 'drug_list/cubit.dart';
 export 'filter_menu.dart';
 export 'headings.dart';
 export 'indicators.dart';
+export 'lifecycle_observer.dart';
 export 'page_indicator_explanation.dart';
 export 'page_scaffold.dart';
 export 'pharme_logo_page.dart';
