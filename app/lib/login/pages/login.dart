@@ -2,7 +2,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
-import '../../common/widgets/full_width_button.dart';
 import '../cubit.dart';
 import '../models/lab.dart';
 

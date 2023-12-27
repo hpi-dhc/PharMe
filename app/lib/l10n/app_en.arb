@@ -4,6 +4,24 @@
   "action_continue": "Continue",
   "action_back_to_app": "Back to app",
 
+  "error_title": "Something went wrong",
+  "error_uncaught_message_first_part": "PharMe has encountered an unknown error. ",
+  "error_uncaught_message_bold_part": "Please close the app and open it again.",
+  "error_uncaught_message_contact": "The error has been logged for our technical staff; however, please ",
+  "error_contact_link_text": "contact us",
+  "error_uncaught_message_after_link": " if this problem persists.",
+  "error_close_app": "Close app",
+  "error_mail_subject": "Unknown PharMe Error Report",
+  "error_mail_body": "Error: {error} (please keep this line)\n\n<Please describe what happened right before the error occurred.>",
+  "@error_mail_body": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Exception"
+      }
+    }
+  },
+
   "auth_welcome": "Welcome to PharMe",
   "auth_choose_lab": "Please select your data provider",
   "auth_sign_in": "Get data",

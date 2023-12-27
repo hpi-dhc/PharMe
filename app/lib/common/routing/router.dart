@@ -1,5 +1,6 @@
 import '../../drug/module.dart';
 import '../../drug_selection/module.dart';
+import '../../error/module.dart';
 import '../../faq/module.dart';
 import '../../login/module.dart';
 import '../../main/module.dart';
@@ -19,6 +20,7 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
     drugSelectionRoute(),
+    errorRoute(),
     loginRoute(),
     mainRoute(
       children: [

@@ -15,20 +15,23 @@ class PharMeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LifecycleObserver(
+    return ErrorHandler(
       appRouter: _appRouter,
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routeInformationParser: _appRouter.defaultRouteParser(),
-        routerDelegate: _appRouter.delegate(deepLinkBuilder: getInitialRoute),
-        theme: PharMeTheme.light,
-        localizationsDelegates: [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [Locale('en', '')],
+      child: LifecycleObserver(
+        appRouter: _appRouter,
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routeInformationParser: _appRouter.defaultRouteParser(),
+          routerDelegate: _appRouter.delegate(deepLinkBuilder: getInitialRoute),
+          theme: PharMeTheme.light,
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [Locale('en', '')],
+        ),
       ),
     );
   }
