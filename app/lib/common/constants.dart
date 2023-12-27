@@ -9,15 +9,28 @@ Uri keycloakUrl([String slug = '']) =>
 
 // Note that sending emails will not work on the iPhone Simulator since it does
 // not have any email application installed.
-String _mailContact = 'pgx-app-validation-study@lists.myhpi.de';
-Future<void> sendEmail({String subject = '', String body = ''}) async {
-  await launchUrl(Uri(
+String _mailContact = 'ehivepgx@mssm.edu';
+// Workaround according to https://pub.dev/packages/url_launcher#encoding-urls
+String? _encodeQueryParameters(Map<String, String> params) {
+return params.entries
+    .map((entry) =>
+      '${Uri.encodeComponent(entry.key)}=${Uri.encodeComponent(entry.value)}'
+    ).join('&');
+}
+Future<void> sendEmail({
+  String subject = '',
+  String body = '',
+}) async {
+  await launchUrl(
+    Uri(
       scheme: 'mailto',
       path: _mailContact,
-      queryParameters: {
+      query: _encodeQueryParameters({
         'subject': subject,
-        'body': Uri.encodeComponent(body),
-      }));
+        'body': body,
+      }),
+    ),
+  );
 }
 
 final cpicMaxCacheTime = Duration(days: 90);
