@@ -15,15 +15,6 @@ class ErrorHandler extends StatefulWidget {
 }
 
 class ErrorHandlerState extends State<ErrorHandler> {
-  Future<void> _handleError({
-    required Object exception,
-    StackTrace? stackTrace,
-  }) async {
-    debugPrint(exception.toString());
-    debugPrintStack(stackTrace: stackTrace);
-    await widget.appRouter.push(ErrorRoute(error: exception.toString()));
-  }
-
   @override
   void initState() {
     FlutterError.onError = (details) {
@@ -36,6 +27,24 @@ class ErrorHandlerState extends State<ErrorHandler> {
       };
     super.initState();
   }
+
+  Future<void> _handleError({
+    required Object exception,
+    StackTrace? stackTrace,
+  }) async {
+    debugPrint(exception.toString());
+    debugPrintStack(stackTrace: stackTrace);
+    if (_needToHandleError(exception)) {
+      await widget.appRouter.push(ErrorRoute(error: exception.toString()));
+    }
+  }
+
+  bool _needToHandleError(Object exception) {
+    final willIgnoreError = exception is FlutterError &&
+      exception.message.startsWith('A RenderFlex overflowed');
+    return !willIgnoreError;
+  }
+
   @override
   Widget build(BuildContext context) {
     return widget.child;
