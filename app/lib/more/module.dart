@@ -6,7 +6,7 @@ export 'pages/more.dart';
 export 'pages/privacy.dart';
 export 'pages/terms.dart';
 
-@RoutePage()      
+@RoutePage()
 class MoreRootPage extends AutoRouter {}
 
 AutoRoute aboutRoute() => AutoRoute(path: 'about', page: AboutRoute.page);

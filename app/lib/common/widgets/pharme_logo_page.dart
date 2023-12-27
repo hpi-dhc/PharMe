@@ -2,9 +2,9 @@ import '../module.dart';
 
 class PharMeLogoPage extends StatelessWidget {
   const PharMeLogoPage({
-    Key? key,
+    super.key,
     this.child,
-  }) : super(key: key);
+  });
 
   final Widget? child;
 

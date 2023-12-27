@@ -3,7 +3,7 @@ import '../common/module.dart';
 // For generated routes
 export 'pages/search.dart';
 
-@RoutePage()      
+@RoutePage()
 class SearchRootPage extends AutoRouter {}
 
 AutoRoute searchRoute({ required List<AutoRoute> children }) => AutoRoute(
