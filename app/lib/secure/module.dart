@@ -8,5 +8,5 @@ const secureRoutePath = '/secure';
 CustomRoute secureRoute() => CustomRoute(
   path: secureRoutePath,
   page: SecureRoute.page,
-  transitionsBuilder: TransitionsBuilders.zoomIn,
+  transitionsBuilder: TransitionsBuilders.fadeIn,
 );
