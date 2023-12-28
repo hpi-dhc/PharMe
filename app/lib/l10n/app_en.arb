@@ -99,7 +99,7 @@
   "drugs_page_inhibitor_direct_salutation_genitive": "your",
   "drugs_page_inhibitor_third_person_salutation": "the user is",
   "drugs_page_inhibitor_third_person_salutation_genitive": "the user's",
-  "drugs_page_moderate_inhibitors": "this phenotype may need to be adjusted because {salutation} currently taking {inhibitors}",
+  "drugs_page_moderate_inhibitors": "however, this phenotype may need to be adjusted because {salutation} currently taking {inhibitors}",
   "@drugs_page_moderate_inhibitors": {
     "placeholders": {
       "salutation": {
