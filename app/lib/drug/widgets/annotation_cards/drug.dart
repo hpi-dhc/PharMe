@@ -1,6 +1,5 @@
 import '../../../common/module.dart';
 import '../sub_header.dart';
-import 'annotation_table.dart';
 
 class DrugAnnotationCard extends StatelessWidget {
   const DrugAnnotationCard(
@@ -42,10 +41,16 @@ class DrugAnnotationCard extends StatelessWidget {
                 ]),
                 if (isInhibitor(drug.name)) ...[
                   SizedBox(height: 8),
-                  Text(context.l10n.drugs_page_is_inhibitor(
-                    drug.name,
-                    inhibitedGenes(drug).join(', '),
-                  )),
+                  buildTable(
+                    [TableRowDefinition(
+                      drugInteractionIndicator,
+                      context.l10n.drugs_page_is_inhibitor(
+                        drug.name,
+                        inhibitedGenes(drug).join(', '),
+                      ),
+                    )],
+                    boldHeader: false,
+                  ),
                 ],
               ],
             ),

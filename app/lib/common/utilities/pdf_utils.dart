@@ -125,22 +125,21 @@ List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
 }
 
 String? _getPhenotypeInfo(String gene, Drug drug, BuildContext context) {
-  final phenotypeInformation = UserData.phenotypeFor(
+  final phenotypeInformation = UserData.phenotypeInformationFor(
     gene,
     context,
     drug: drug.name,
-    userSalutation: context.l10n.general_the_user,  
+    thirdPerson: true,
+    useLongPrefix: true,
   );
   if (phenotypeInformation.adaptionText.isNullOrBlank) {
     return phenotypeInformation.phenotype;
   }
   var phenotypeInformationText = '${phenotypeInformation.phenotype} ('
     '${phenotypeInformation.adaptionText}';
-  if (phenotypeInformation.overwrittenPhenotype.isNotNullOrBlank) {
+  if (phenotypeInformation.overwrittenPhenotypeText.isNotNullOrBlank) {
     phenotypeInformationText = '$phenotypeInformationText; '
-      '${context.l10n.drugs_page_original_phenotype(
-        phenotypeInformation.overwrittenPhenotype!
-      )}';
+      '${phenotypeInformation.overwrittenPhenotypeText!}';
   }
   return '$phenotypeInformationText)';
 }

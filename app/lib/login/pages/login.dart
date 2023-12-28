@@ -27,7 +27,10 @@ class LoginPage extends HookWidget {
               child: state.when(
                 initial: () =>
                     _buildInitialScreen(context, dropdownValue),
-                loadingUserData: CircularProgressIndicator.new,
+                loadingUserData: () => Padding(
+                  padding: EdgeInsets.all(PharMeTheme.mediumSpace),
+                  child: CircularProgressIndicator(),
+                ),
                 loadedUserData: () => _buildLoadedScreen(context),
                 error: (message) =>
                     _buildErrorScreen(context, message),
@@ -153,6 +156,7 @@ class LoginPage extends HookWidget {
         ...children,
         SizedBox(height: PharMeTheme.mediumSpace),
         FullWidthButton(actionText, action ?? () {}),
+        SizedBox(height: PharMeTheme.mediumSpace),
       ],
     );
   }

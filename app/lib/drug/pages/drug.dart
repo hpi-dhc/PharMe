@@ -33,7 +33,9 @@ class DrugPage extends StatelessWidget {
 
   Widget _buildDrugsPage(BuildContext context, { required bool loading }) {
     return pageScaffold(
-      title: drug.name.capitalize(),
+      title: isInhibitor(drug.name)
+        ? '${drug.name.capitalize()}$drugInteractionIndicator'
+        : drug.name.capitalize(),
       actions: [
         IconButton(
           onPressed: loading ? null : () =>

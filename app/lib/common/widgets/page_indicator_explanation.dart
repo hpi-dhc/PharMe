@@ -8,11 +8,7 @@ class PageIndicatorExplanation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        left: PharMeTheme.smallSpace,
-        right: PharMeTheme.smallSpace,
-        bottom: PharMeTheme.smallSpace,
-      ),
+      padding: EdgeInsets.all(PharMeTheme.smallSpace),
       child: Text(text),
     );
   }

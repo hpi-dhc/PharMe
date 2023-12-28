@@ -48,7 +48,6 @@
   "general_retry": "Retry",
   "general_and": "and",
   "general_poor_metabolizer": "Poor Metabolizer",
-  "general_the_user": "the user",
   "general_not_tested": "Not tested",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
@@ -60,7 +59,6 @@
   "search_page_filter_only_with_guidelines": "Only drugs with guidelines",
   "search_page_indicator_explanation": "Taking drugs with an {indicatorName} ({indicator}) can influence your results for other drugs",
   "@search_page_indicator_explanation": {
-    "description": "Explanation of drug-drug interaction indicators",
     "placeholders": {
         "indicatorName": {
           "type": "String",
@@ -75,7 +73,6 @@
   "search_no_drugs_with_filter_amendment": " or filters right to the search bar",
   "search_no_drugs": "No drugs found. Try adjusting the search term{amendment}.",
   "@search_no_drugs": {
-    "description": "Disclaimer for when no drug was found in the search",
     "placeholders": {
         "amendment": {
             "type": "String",
@@ -86,7 +83,6 @@
   "drugs_page_disclaimer": "Please note the information shown on this page is ONLY based on your DNA and relevant current  medications. Other important factors like weight, age, pre-existing conditions, and drug interactions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} can influence your results for the following gene(s): {geneSymbols}",
   "@drugs_page_is_inhibitor": {
-    "description": "Disclaimer for when the current drug influences other guidelines",
     "placeholders": {
         "drugName": {
             "type": "String",
@@ -99,13 +95,16 @@
     }
   },
 
-  "drugs_page_moderate_inhibitors": "however, the phenotype can be influenced based on {salutation} taking {inhibitors}",
+  "drugs_page_inhibitor_direct_salutation": "you are",
+  "drugs_page_inhibitor_direct_salutation_genitive": "your",
+  "drugs_page_inhibitor_third_person_salutation": "the user is",
+  "drugs_page_inhibitor_third_person_salutation_genitive": "the user's",
+  "drugs_page_moderate_inhibitors": "this phenotype may need to be adjusted because {salutation} currently taking {inhibitors}",
   "@drugs_page_moderate_inhibitors": {
-    "description": "Disclaimer for when the phenotype might be adjusted based on current drug(s)",
     "placeholders": {
       "salutation": {
         "type": "String",
-        "example": "you"
+        "example": "you are"
       },
       "inhibitors": {
           "type": "String",
@@ -113,13 +112,17 @@
       }
     }
   },
-  "drugs_page_strong_inhibitors": "phenotype adjusted based on {salutation} taking {inhibitors}",
+  "strong_inhibitor_long_prefix": "however, this has been",
+  "drugs_page_strong_inhibitors": "{prefix} adjusted because {salutation} currently taking {inhibitors}",
   "@drugs_page_strong_inhibitors": {
-    "description": "Disclaimer for when the phenotype has been adjusted based on current drug(s)",
     "placeholders": {
+      "prefix": {
+        "type": "String",
+        "example": "phenotype"
+      },
       "salutation": {
         "type": "String",
-        "example": "you"
+        "example": "you are"
       },
       "inhibitors": {
           "type": "String",
@@ -127,42 +130,13 @@
       }
     }
   },
-  "drugs_page_inhibitors_poor_metabolizer": "this can be further influenced based on {salutation} taking {inhibitors}",
-  "@drugs_page_inhibitors_poor_metabolizer": {
-    "description": "Disclaimer for when the phenotype would be adjusted based on current drug(s) but is already poor metabolizer",
-    "placeholders": {
-      "salutation": {
-        "type": "String",
-        "example": "you"
-      },
-      "inhibitors": {
-          "type": "String",
-          "example": "bupropion and fluoxetine"
-      }
-    }
-  },
-  "drugs_page_moderate_and_strong_inhibitors": "phenotype adjusted based on {salutation} taking {strongInhibitors}; this can be further influenced by {moderateInhibitors}",
-  "@drugs_page_moderate_and_strong_inhibitors": {
-    "description": "Disclaimer for when the phenotype has been and might be adjusted based on current drug(s)",
-    "placeholders": {
-      "salutation": {
-        "type": "String",
-        "example": "you"
-      },
-      "strongInhibitors": {
-          "type": "String",
-          "example": "bupropion"
-      },
-      "moderateInhibitors": {
-        "type": "String",
-        "example": "abiraterone, cinacalcet, and duloxetine"
-      }
-    }
-  },
-  "drugs_page_original_phenotype": "the DNA-based phenotype is {originalPhenotype}",
+  "drugs_page_original_phenotype": "{salutation} DNA-based phenotype is {originalPhenotype}",
   "@drugs_page_original_phenotype": {
-    "description": "Information on DNA-based phenotype if it was/might be adjusted based on current drug(s)",
     "placeholders": {
+      "salutation": {
+        "type": "String",
+        "example": "your"
+      },
       "originalPhenotype": {
         "type": "String",
         "example": "Normal Metabolizer"
@@ -171,7 +145,6 @@
   },
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
   "@drugs_page_guidelines_empty": {
-    "description": "Disclaimer when a drug does not have guidelines",
     "placeholders": {
         "drugName": {
             "type": "String",
@@ -190,7 +163,6 @@
   "drugs_page_header_guideline": "DNA-based clinical guideline",
   "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
   "@drugs_page_no_guidelines_for_phenotype_implication": {
-    "description": "Disclaimer for when no guidelines was found for the current drug based on the user's phenotype",
     "placeholders": {
         "drugName": {
             "type": "String",
@@ -201,7 +173,6 @@
   "drugs_page_no_guidelines_for_phenotype_recommendation": "Clinical dosing applies; no pharmacogenetic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
   "@drugs_page_sources_description": {
-      "description": "Instructions to open external source",
       "placeholders": {
           "source": {
               "type": "String",
@@ -233,7 +204,6 @@
   "report_content_explanation": "Here is your PGx report. Tap on a gene name for more details on your results and a list of implicated drugs.",
   "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by drugs you are currently taking",
   "@report_page_indicator_explanation": {
-    "description": "Explanation of drug-drug interaction indicators",
     "placeholders": {
         "indicatorName": {
           "type": "String",
@@ -248,7 +218,6 @@
 
   "gene_page_headline": "{geneSymbol} report",
   "@gene_page_headline": {
-    "description": "Name of the gene",
     "placeholders": {
       "geneSymbol": {
         "type": "String",
@@ -258,7 +227,6 @@
   },
   "gene_page_your_variant": "Your {geneSymbol} variant",
   "@gene_page_your_variant": {
-    "description": "Name of the variant",
     "placeholders": {
       "geneSymbol": {
         "type": "String",
@@ -268,7 +236,6 @@
   },
   "gene_page_name_tooltip": "{geneSymbol} is the name of a gene.",
   "@gene_page_name_tooltip": {
-    "description": "Name of the gene (help text)",
     "placeholders": {
       "geneSymbol": {
         "type": "String",
@@ -284,7 +251,7 @@
   "gene_page_affected_drugs_tooltip": "The drugs listed here are influenced by your phenotype for this gene.",
   "gene_page_no_affected_drugs": "This gene has no known effect on any drug.",
   "gene_page_inhibitor_drugs": "Your results for this gene can be influenced if you are currently taking any of the following drugs:",
-  "gene_page_further_inhibitor_drugs": "Your results for this gene may need to be adjusted if you are currently taking any of the following drugs:",
+  "gene_page_further_inhibitor_drugs": "Your results for this gene can also be influenced by taking any of the following drugs:",
   "gene_page_activity_score": "Activity score",
 
   "pdf_pgx_report": "PGx Report",
@@ -298,7 +265,6 @@
   "pdf_user_guideline": "User guideline",
   "pdf_guideline_link": "{guidelineSource} guideline link",
   "@pdf_guideline_link": {
-    "description": "Source of the guideline",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -308,7 +274,6 @@
   },
   "pdf_guideline_recommmendation": "{guidelineSource} recommendation",
   "@pdf_guideline_recommmendation": {
-    "description": "Guideline recommendation of source",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -318,7 +283,6 @@
   },
   "pdf_guideline_gene_implication": "{guidelineSource} implication for {geneSymbol}",
   "@pdf_guideline_gene_implication": {
-    "description": "Guideline implication of source",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -332,7 +296,6 @@
   },
   "pdf_guideline_comment": "{guidelineSource} comment",
   "@pdf_guideline_comment": {
-    "description": "Guideline comment of source",
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -342,7 +305,6 @@
   },
   "pdf_activity_score_overwrite": "{originalScore} adjusted based on active medications, see phenotype",
   "@pdf_activity_score_overwrite": {
-    "description": "Disclaimer for when the lookup has been or might be adjusted based on current drug(s)",
     "placeholders": {
       "originalScore": {
         "type": "String",

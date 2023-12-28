@@ -132,3 +132,20 @@ needs to be adapted (see
   [[IntegrationTestPlugin instance] setupChannels:registrar.messenger];
 }
 ```
+
+## Adapting test data
+
+If you would like to test with specific test data but you don't have a user with
+suitable data available, adapt the code in `utilities/genome_data.dart` as
+shown below.
+
+```dart
+// TODO(after-testing): remove test data adaption
+UserData.instance.diplotypes!['CYP2D6'] = Diplotype(
+  gene: 'CYP2D6',
+  resultType: 'Diplotype',
+  genotype: '*18/*143',
+  phenotype: 'Poor Metabolizer',
+  allelesTested: '*xN.*3.*4.*5.*6.*8.*9.*10.*14A.*14B.*17.*18.*41.*143',
+);
+```

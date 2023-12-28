@@ -5,9 +5,7 @@
 
 // structure: gene symbol -> drug name -> overwriting lookupkey
 
-import 'package:dartx/dartx.dart';
-
-import 'drug.dart';
+import '../../module.dart';
 
 // Inhibit phenotype for gene by overwriting with poor metabolizer
 const Map<String, Map<String, String>> strongDrugInhibitors = {
@@ -63,9 +61,16 @@ bool isModerateInhibitor(String drugName) {
 }
 
 bool isInhibitor(String drugName) {
-  final influencingDrugs = _drugInhibitorsPerGene.keys.flatMap(
-    (gene) => _drugInhibitorsPerGene[gene]!);
-  return influencingDrugs.contains(drugName);
+  var drugIsInhibitor = false;
+  for (final geneSymbol in _drugInhibitorsPerGene.keys) {
+    final influencingDrugs = _drugInhibitorsPerGene[geneSymbol];
+    final originalLookup = UserData.lookupFor(geneSymbol, drug: drugName, useOverwrite: false);
+    if (influencingDrugs!.contains(drugName) && originalLookup != '0.0') {
+      drugIsInhibitor = true;
+      break;
+    }
+  }
+  return drugIsInhibitor;
 }
 
 List<String> inhibitedGenes(Drug drug) {
@@ -76,4 +81,9 @@ List<String> inhibitedGenes(Drug drug) {
 
 List<String> inhibitorsFor(String geneSymbol) {
   return _drugInhibitorsPerGene[geneSymbol] ?? [];
+}
+
+bool canBeInhibited(CpicPhenotype phenotype) {
+  return inhibitableGenes.contains(phenotype.geneSymbol) &&
+    phenotype.lookupkey != '0.0';
 }

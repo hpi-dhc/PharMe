@@ -64,14 +64,6 @@ class DrugSearch extends HookWidget {
                     if (showFilter) buildFilter(context),
                   ]
                 ),
-                SizedBox(height: PharMeTheme.smallSpace),
-                if (showDrugInteractionIndicator)
-                  PageIndicatorExplanation(
-                    context.l10n.search_page_indicator_explanation(
-                      drugInteractionIndicatorName,
-                      drugInteractionIndicator
-                    ),
-                  ),
                 scrollList(
                   keepPosition: keepPosition,
                   buildDrugList(
@@ -86,6 +78,18 @@ class DrugSearch extends HookWidget {
                     useDrugClass: useDrugClass,
                   )
                 ),
+                state.when(
+                  initial: SizedBox.shrink,
+                  loading: SizedBox.shrink,
+                  loaded: (allDrugs, filter) =>
+                    maybeBuildInteractionIndicator(
+                      context,
+                      activeDrugs,
+                      allDrugs,
+                      filter,
+                    ),
+                  error: SizedBox.shrink,
+                )
               ],
             );
           }
@@ -131,5 +135,28 @@ class DrugSearch extends HookWidget {
       ],
       iconData: Icons.filter_list_rounded,
     );
+  }
+  Widget maybeBuildInteractionIndicator(
+    BuildContext context,
+    ActiveDrugs activeDrugs,
+    List<Drug> drugs,
+    FilterState filter,
+  ) {
+    if (showDrugInteractionIndicator) {
+      final filteredDrugs = filter.filter(
+        drugs,
+        activeDrugs,
+        useDrugClass: useDrugClass,
+      );
+      if (filteredDrugs.any((drug) => isInhibitor(drug.name))) {
+        return PageIndicatorExplanation(
+          context.l10n.search_page_indicator_explanation(
+            drugInteractionIndicatorName,
+            drugInteractionIndicator
+          ),
+        );
+      }
+    }
+    return SizedBox.shrink();
   }
 }

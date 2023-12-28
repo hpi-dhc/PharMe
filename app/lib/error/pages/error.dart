@@ -62,6 +62,7 @@ class ErrorPage extends StatelessWidget {
               () => exit(0),
               secondaryColor: true,
             ),
+            SizedBox(height: PharMeTheme.mediumSpace),
           ],
         ),
       ),

@@ -15,12 +15,12 @@ class PhenotypeInformation {
   PhenotypeInformation({
     required this.phenotype,
     this.adaptionText,
-    this.overwrittenPhenotype,
+    this.overwrittenPhenotypeText,
   });
 
   String phenotype;
   String? adaptionText;
-  String? overwrittenPhenotype;
+  String? overwrittenPhenotypeText;
 }
 
 /// UserData is a singleton data-class which contains various user-specific
@@ -48,14 +48,21 @@ class UserData {
   @HiveField(0)
   Map<String, Diplotype>? diplotypes;
 
-  static PhenotypeInformation phenotypeFor(
+  static PhenotypeInformation phenotypeInformationFor(
     String gene,
     BuildContext context,
     {
       String? drug,
-      String userSalutation = 'you',
+      bool thirdPerson = false,
+      bool useLongPrefix = false,
     }
   ) {
+    final userSalutation = thirdPerson
+      ? context.l10n.drugs_page_inhibitor_third_person_salutation
+      : context.l10n.drugs_page_inhibitor_direct_salutation;
+    final strongInhibitorTextPrefix = useLongPrefix
+      ? context.l10n.strong_inhibitor_long_prefix
+      : context.l10n.gene_page_phenotype.toLowerCase();
     final originalPhenotype = UserData.instance.diplotypes?[gene]?.phenotype;
     if (originalPhenotype == null) {
       return PhenotypeInformation(
@@ -65,6 +72,14 @@ class UserData {
     final activeInhibitors = UserData.activeInhibitorsFor(gene, drug: drug);
     if (activeInhibitors.isEmpty) {
       return PhenotypeInformation(phenotype: originalPhenotype);
+    }
+    final overwritePhenotype = context.l10n.general_poor_metabolizer;
+    final currentPhenotypeEqualsOverwritePhenotype =
+      originalPhenotype.toLowerCase() == overwritePhenotype.toLowerCase();
+    if (currentPhenotypeEqualsOverwritePhenotype) {
+      return PhenotypeInformation(
+        phenotype: originalPhenotype,
+      );
     }
     final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
     if (overwrittenLookup == null) {
@@ -79,41 +94,20 @@ class UserData {
         ),
       );
     }
-    final activeStrongInhibitors = activeInhibitors.filter(
-      isStrongInhibitor
-    ).toList();
-    final activeModerateInhibitors = activeInhibitors.filter(
-      isModerateInhibitor
-    ).toList();
-    final overwritePhenotype = context.l10n.general_poor_metabolizer;
-    final currentPhenotypeEqualsOverwritePhenotype =
-      originalPhenotype.toLowerCase() == overwritePhenotype.toLowerCase();
-    if (currentPhenotypeEqualsOverwritePhenotype) {
-      return PhenotypeInformation(
-        phenotype: originalPhenotype,
-        adaptionText: context.l10n.drugs_page_inhibitors_poor_metabolizer(
-          userSalutation,
-          enumerationWithAnd(
-            activeInhibitors,
-            context
-          ),
-        ),
-      );
-    }
-    final adaptionText = activeModerateInhibitors.isEmpty
-      ? context.l10n.drugs_page_strong_inhibitors(
-          userSalutation,
-          enumerationWithAnd(activeStrongInhibitors, context),
-        )
-      : context.l10n.drugs_page_moderate_and_strong_inhibitors(
-          userSalutation,
-          enumerationWithAnd(activeStrongInhibitors, context),
-          enumerationWithAnd(activeModerateInhibitors, context),
-        );
+    final originalPhenotypeText = context.l10n.drugs_page_original_phenotype(
+      thirdPerson
+        ? context.l10n.drugs_page_inhibitor_third_person_salutation_genitive
+        : context.l10n.drugs_page_inhibitor_direct_salutation_genitive,
+      originalPhenotype,
+    );
     return PhenotypeInformation(
       phenotype: overwritePhenotype,
-      adaptionText: adaptionText,
-      overwrittenPhenotype: originalPhenotype,
+      adaptionText: context.l10n.drugs_page_strong_inhibitors(
+          strongInhibitorTextPrefix,
+          userSalutation,
+          enumerationWithAnd(activeInhibitors, context),
+        ),
+      overwrittenPhenotypeText: originalPhenotypeText,
     );
   }
 

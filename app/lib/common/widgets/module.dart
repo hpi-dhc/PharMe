@@ -1,3 +1,4 @@
+export 'annotation_table.dart';
 export 'checkbox_list_tile_wrapper.dart';
 export 'checkbox_wrapper.dart';
 export 'dialog_action.dart';

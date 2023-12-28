@@ -52,17 +52,10 @@ class GenePage extends HookWidget {
                                   phenotype.genotype,
                                   tooltip: context.l10n.gene_page_genotype_tooltip
                               ),
-                              _buildRow(context.l10n.gene_page_phenotype,
-                                  UserData.phenotypeFor(
-                                    phenotype.geneSymbol,
-                                    context,
-                                  ).phenotype,
-                                  tooltip:
-                                    context.l10n.gene_page_phenotype_tooltip
-                              ),
+                              _buildPhenotypeRow(context),
                             ],
                           ),
-                          if (inhibitableGenes.contains(phenotype.geneSymbol))
+                          if (canBeInhibited(phenotype))
                             ...buildDrugInteractionInfo(
                               context,
                               phenotype.geneSymbol,
@@ -82,6 +75,23 @@ class GenePage extends HookWidget {
           ),
         ),
       )
+    );
+  }
+
+  TableRow _buildPhenotypeRow(BuildContext context) {
+    final phenotypeInformation = UserData.phenotypeInformationFor(
+      phenotype.geneSymbol,
+      context,
+    );
+    final phenotypeText = phenotypeInformation.adaptionText.isNotNullOrBlank
+      ? '${phenotypeInformation.phenotype}$drugInteractionIndicator'
+      : phenotypeInformation.phenotype;
+    if (phenotypeInformation.adaptionText.isNotNullOrBlank) {}
+    return _buildRow(
+      context.l10n.gene_page_phenotype,
+      phenotypeText,
+      tooltip:
+        context.l10n.gene_page_phenotype_tooltip,
     );
   }
 
@@ -107,23 +117,33 @@ class GenePage extends HookWidget {
       ]);
 
   List<Widget> buildDrugInteractionInfo(BuildContext context, String gene) {
-    final phenotypeInformation = UserData.phenotypeFor(gene, context);
+    final phenotypeInformation = UserData.phenotypeInformationFor(
+      gene,
+      context,
+      useLongPrefix: true,
+    );
     if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
       final furtherInhibitors = inhibitorsFor(gene).filter((drugName) =>
         !UserData.activeInhibitorsFor(gene).contains(drugName)
       );
-      var phenotypeInformationText = formatAsSentence(
-        phenotypeInformation.adaptionText!
-      );
-      if (phenotypeInformation.overwrittenPhenotype.isNotNullOrBlank) {
-        phenotypeInformationText = '$phenotypeInformationText ${
-          formatAsSentence(context.l10n.drugs_page_original_phenotype(
-            phenotypeInformation.overwrittenPhenotype!
-          ))}';
+      var phenotypeInformationText = '';
+      if (phenotypeInformation.overwrittenPhenotypeText.isNotNullOrBlank) {
+        phenotypeInformationText = '${formatAsSentence(
+          phenotypeInformation.overwrittenPhenotypeText!
+        )} ';
       }
+      phenotypeInformationText = '$phenotypeInformationText${formatAsSentence(
+        phenotypeInformation.adaptionText!
+      )}';
       return [
         SizedBox(height: PharMeTheme.smallSpace),
-        Text(phenotypeInformationText),
+        buildTable(
+          [TableRowDefinition(
+            drugInteractionIndicator,
+            phenotypeInformationText,
+          )],
+          boldHeader: false,
+        ),
         SizedBox(height: PharMeTheme.smallSpace),
         Text(context.l10n.gene_page_further_inhibitor_drugs),
         SizedBox(height: PharMeTheme.smallSpace),

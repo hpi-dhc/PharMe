@@ -80,7 +80,11 @@ Scaffold unscrollablePageScaffold({
     appBar: appBar,
     body: SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(padding ?? PharMeTheme.smallSpace),
+        padding: EdgeInsets.only(
+          left: padding ?? PharMeTheme.smallSpace,
+          top: padding ?? PharMeTheme.smallSpace,
+          right: padding ?? PharMeTheme.smallSpace,
+        ),
         child: body,
       ),
     ),

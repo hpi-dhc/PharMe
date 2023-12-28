@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../module.dart';
 
 class ErrorHandler extends StatefulWidget {
@@ -34,6 +36,9 @@ class ErrorHandlerState extends State<ErrorHandler> {
   }) async {
     debugPrint(exception.toString());
     debugPrintStack(stackTrace: stackTrace);
+    if (kDebugMode) {
+      if (exception is AssertionError) return;
+    }
     final errorString = exception.toString();
     if (_needToHandleError(exception)) {
       final errorMailInfo = stackTrace != null

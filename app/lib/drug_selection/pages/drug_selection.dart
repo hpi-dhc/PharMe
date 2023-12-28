@@ -52,11 +52,7 @@ class DrugSelectionPage extends HookWidget {
 
   Widget _buildButton(BuildContext context, DrugSelectionState state) {
     return Padding(
-      padding: EdgeInsets.only(
-        left: PharMeTheme.mediumSpace,
-        top: PharMeTheme.mediumSpace,
-        right: PharMeTheme.mediumSpace,
-      ),
+      padding: EdgeInsets.all(PharMeTheme.mediumSpace),
       child: FullWidthButton(
         context.l10n.action_continue,
         () async {
