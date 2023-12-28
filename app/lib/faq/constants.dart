@@ -18,7 +18,7 @@ final Map<String, List<Question>> faqList = {
     Question(
       question: 'Why is pharmacogenetics important?',
       answer:
-          'Pharmacogenetics is important, because we can predict those who will respond well to drugs and those who may have side effects. With this information we can select the right drug and dose to avoid side effects.',
+          'Pharmacogenetics is important, because it helps to predict who will respond well to drugs and those who may have side effects. With this information we can better select the right drug and dose to avoid side effects.',
     ),
     Question(
       question: 'Which drugs are affected?',
@@ -28,12 +28,12 @@ final Map<String, List<Question>> faqList = {
     Question(
       question: 'Will my results affect my family members?',
       answer:
-          'Yes, since this is a genetic test, it is possible that your results were passed down to you from your parents and you will also pass them down to your children.',
+          'Yes, since this is a genetic test, it is possible that your results were passed down to you and your siblings from your parents and you will also pass them down to your children.',
     ),
     Question(
       question: 'Who can I share my results with?',
       answer:
-          'We recommend that you share your results with your pharmacists, doctors, and close family members such as parents and children.',
+          'We recommend that you share your results with your pharmacists, doctors, and close family members such as parents, siblings, and children.',
     ),
   ],
   'PharMe App': [
@@ -49,9 +49,9 @@ final Map<String, List<Question>> faqList = {
           'No. Whether a drug is a good choice for you depends on a lot of other factors such as age, weight, or pre-existing conditions. We highly recommend that you talk to your health care team (e.g., pharmacist and doctors) before taking, stopping or adjusting the dose of any drug.',
     ),
     Question(
-      question: 'Where does PharMe get its data?',
+      question: 'Where does PharMe get its data from?',
       answer:
-          'PharMe is showing pharmacogenomic guidelines from the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA). The language from the guidelines has been shortened by our PGx experts to make them more user-friendly and easier to understand.',
+          "PharMe is showing pharmacogenomic guidelines from the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA). Our PGx experts adapted the language from the guidelines to make them more user-friendly and easier to understand; please note that this does only affect the guidelines' presentation, not affect the guidelines' statements.",
     ),
   ],
   'Data security': [
