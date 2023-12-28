@@ -18,7 +18,7 @@ final Map<String, List<Question>> faqList = {
     Question(
       question: 'Why is pharmacogenetics important?',
       answer:
-          'Pharmacogenetics is important, because it helps to predict who will respond well to drugs and those who may have side effects. With this information we can better select the right drug and dose to avoid side effects.',
+          'Pharmacogenetics is important because it helps to predict those who will respond well to drugs and those who may have side effects. With this information we can better select the right drug and dose to avoid side effects.',
     ),
     Question(
       question: 'Which drugs are affected?',
