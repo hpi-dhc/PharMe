@@ -85,6 +85,9 @@ extension DrugExtension on Drug {
     ),
   );
 
+  Guideline? get userOrFirstGuideline => userGuideline ??
+    (guidelines.isNotEmpty ? guidelines.first : null);
+
   List<String> get guidelineGenes => guidelines.isNotEmpty
     ? guidelines.first.lookupkey.keys.toList()
     : [];

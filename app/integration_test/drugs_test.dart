@@ -145,7 +145,9 @@ void main() {
       // test tooltips
       context = tester.element(find.byType(Tooltip).first);
       expect(
-        find.byTooltip(context.l10n.drugs_page_tooltip_guideline),
+        find.byTooltip(context.l10n.drugs_page_tooltip_guideline(
+          testDrug.guidelines.first.externalData.first.source
+        )),
         findsOneWidget,
       );
     });

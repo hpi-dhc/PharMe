@@ -104,7 +104,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
     // pipes are illegal characters in URLs so please
     // - forgive the cheap hack or
     // - refactor by making a custom object and defining equality for it :)
-    final guideline = drug.userGuideline ?? drug.guidelines.first;
+    final guideline = drug.userOrFirstGuideline!;
     final sources = guideline.externalData
         .map((data) => '${data.source}|${data.guidelineUrl}')
         .toSet();
