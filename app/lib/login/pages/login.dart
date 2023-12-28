@@ -28,7 +28,7 @@ class LoginPage extends HookWidget {
                 initial: () =>
                     _buildInitialScreen(context, dropdownValue),
                 loadingUserData: () => Padding(
-                  padding: EdgeInsets.all(PharMeTheme.mediumSpace),
+                  padding: EdgeInsets.all(PharMeTheme.largeSpace),
                   child: CircularProgressIndicator(),
                 ),
                 loadedUserData: () => _buildLoadedScreen(context),
