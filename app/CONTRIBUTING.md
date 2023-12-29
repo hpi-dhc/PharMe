@@ -141,11 +141,49 @@ shown below.
 
 ```dart
 // TODO(after-testing): remove test data adaption
-UserData.instance.diplotypes!['CYP2D6'] = Diplotype(
-  gene: 'CYP2D6',
-  resultType: 'Diplotype',
-  genotype: '*18/*143',
-  phenotype: 'Poor Metabolizer',
-  allelesTested: '*xN.*3.*4.*5.*6.*8.*9.*10.*14A.*14B.*17.*18.*41.*143',
-);
+  UserData.instance.diplotypes!['CYP2D6'] = Diplotype(
+    gene: 'CYP2D6',
+    resultType: 'Diplotype',
+    genotype: '*18/*143',
+    phenotype: 'Poor Metabolizer',
+    allelesTested: '',
+  );
+```
+
+You can use the CPIC API to get reasonable genotype-phenotype pairings, e.g.,
+with
+`https://api.cpicpgx.org/v1/diplotype?genesymbol=eq.CYP2C9&select=genesymbol,diplotype,generesult`.
+
+Some more examples are collected below (this is for testing what is shown for
+Warfarin):
+
+```dart
+  UserData.instance.diplotypes!['CYP2C9'] = Diplotype(
+    gene: 'CYP2C9',
+    resultType: 'Diplotype',
+    genotype: '*11/*13',
+    phenotype: 'Poor Metabolizer',
+    allelesTested: '',
+  );
+  UserData.instance.diplotypes!['VKORC1'] = Diplotype(
+    gene: 'VKORC1',
+    resultType: 'Diplotype',
+    genotype: '-1639G>A variant carriers',
+    phenotype: '-1639G>A variant carriers',
+    allelesTested: '',
+  );
+  UserData.instance.diplotypes!['CYP4F2'] = Diplotype(
+    gene: 'CYP4F2',
+    resultType: 'Diplotype',
+    genotype: 'rs2108622 T carriers',
+    phenotype: 'rs2108622 T carriers',
+    allelesTested: '',
+  );
+  UserData.instance.diplotypes!['CYP2C'] = Diplotype(
+    gene: 'CYP2C',
+    resultType: 'Diplotype',
+    genotype: 'rs12777823 A carriers',
+    phenotype: 'rs12777823 A carriers',
+    allelesTested: '',
+  );
 ```

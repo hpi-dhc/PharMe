@@ -52,7 +52,7 @@ class DrugPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DrugAnnotationCard(
+              DrugAnnotationCards(
                 drug,
                 isActive: drug.isActive,
                 setActivity: ({ value }) =>
@@ -60,31 +60,11 @@ class DrugPage extends StatelessWidget {
                 disabled: loading,
               ),
               SizedBox(height: PharMeTheme.mediumSpace),
-              SubHeader(
-                context.l10n.drugs_page_header_guideline,
-                tooltip: _buildGuidelineTooltipText(context),
-              ),
-              SizedBox(height: PharMeTheme.smallSpace),
               GuidelineAnnotationCard(drug),
             ],
           ),
         ),
       ],
     );
-  }
-
-  String _buildGuidelineTooltipText(BuildContext context) {
-    return drug.userGuideline != null
-      ? context.l10n.drugs_page_tooltip_guideline(
-          drug.userGuideline!.externalData.first.source
-        )
-      : drug.userOrFirstGuideline != null
-        // Guideline for drug is present but not for genotype
-        ? context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
-            context.l10n.drugs_page_tooltip_missing_genotype
-          )
-        : context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
-            context.l10n.drugs_page_tooltip_missing_drug
-          );
   }
 }

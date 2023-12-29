@@ -1,8 +1,8 @@
 import '../../../common/module.dart';
 import '../sub_header.dart';
 
-class DrugAnnotationCard extends StatelessWidget {
-  const DrugAnnotationCard(
+class DrugAnnotationCards extends StatelessWidget {
+  const DrugAnnotationCards(
     this.drug, {
     required this.isActive,
     required this.setActivity,

@@ -3,6 +3,25 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../common/module.dart';
 import '../module.dart';
 
+enum WarfarinContent {
+  tooltip,
+  implication,
+  recommendation,
+  color,
+  icon,
+}
+
+final warfarinProperties = <WarfarinContent, dynamic Function(BuildContext)>{
+  WarfarinContent.tooltip: (context) =>
+    context.l10n.drugs_page_tooltip_warfarin,
+  WarfarinContent.implication: (context) =>
+    context.l10n.drugs_page_implication_warfarin,
+  WarfarinContent.recommendation: (context) =>
+    context.l10n.drugs_page_recommendation_warfarin,
+  WarfarinContent.color: (_) => WarningLevel.none.color,
+  WarfarinContent.icon: (_) => WarningLevel.none.icon,
+};
+
 class GuidelineAnnotationCard extends StatelessWidget {
   const GuidelineAnnotationCard(this.drug);
 
@@ -10,46 +29,86 @@ class GuidelineAnnotationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedCard(
-      innerPadding: const EdgeInsets.all(PharMeTheme.mediumSpace),
-      child: SingleChildScrollView(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (drug.guidelines.isNotEmpty) ...[
-            _buildHeader(context),
-            SizedBox(height: PharMeTheme.mediumSpace),
-            _buildCard(context),
-            SizedBox(height: PharMeTheme.mediumSpace),
-            _buildSourcesSection(context),
-          ]
-          else ...[
-            _buildHeader(context),
-            SizedBox(height: PharMeTheme.smallSpace),
-            _buildCard(context),
-          ],
-        ]),
-      ),
+    return Column(
+      children: [
+        SubHeader(
+          context.l10n.drugs_page_header_guideline,
+          tooltip: _buildGuidelineTooltipText(context),
+        ),
+        SizedBox(height: PharMeTheme.smallSpace),
+        RoundedCard(
+          innerPadding: const EdgeInsets.all(PharMeTheme.mediumSpace),
+          child: SingleChildScrollView(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              if (drug.guidelines.isNotEmpty) ...[
+                _buildHeader(context),
+                SizedBox(height: PharMeTheme.mediumSpace),
+                _buildCard(context),
+                SizedBox(height: PharMeTheme.mediumSpace),
+                _buildSourcesSection(context),
+              ]
+              else ...[
+                _buildHeader(context),
+                SizedBox(height: PharMeTheme.smallSpace),
+                _buildCard(context),
+              ],
+            ]),
+          ),
+        ),
+      ],
     );
   }
 
+  dynamic actualOrWarfarinContent(String drugName, BuildContext context, {
+    required dynamic actual,
+    required WarfarinContent content,
+  }) {
+    if (drugName.toLowerCase() == 'warfarin') {
+      final getWarfarinContent = warfarinProperties[content]!;
+      return getWarfarinContent(context);
+    }
+    return actual;
+  }
+
   Widget _buildCard(BuildContext context) {
-    final upperCardText = drug.userGuideline?.annotations.implication ??
-      context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
-        drug.name
-      );
-    final lowerCardText = drug.userGuideline?.annotations.recommendation ??
-      context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation;
+    final upperCardText = actualOrWarfarinContent(
+      drug.name,
+      context,
+      actual: drug.userGuideline?.annotations.implication ??
+        context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
+          drug.name
+        ),
+      content: WarfarinContent.implication,
+    );
+    final lowerCardText = actualOrWarfarinContent(
+      drug.name,
+      context,
+      actual: drug.userGuideline?.annotations.recommendation ??
+        context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation,
+      content: WarfarinContent.recommendation,
+    );
     return RoundedCard(
       key: Key('annotationCard'),
       radius: PharMeTheme.innerCardRadius,
       outerHorizontalPadding: 0,
       outerVerticalPadding: 0,
-      color: drug.warningLevel.color,
+      color: actualOrWarfarinContent(
+        drug.name,
+        context,
+        actual: drug.warningLevel.color,
+        content: WarfarinContent.color
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
             Icon(
-              drug.warningLevel.icon,
+              actualOrWarfarinContent(
+                drug.name,
+                context,
+                actual: drug.warningLevel.icon,
+                content: WarfarinContent.icon
+              ),
               color: PharMeTheme.onSurfaceText,
               size: PharMeTheme.largeSpace,
             ),
@@ -72,6 +131,27 @@ class GuidelineAnnotationCard extends StatelessWidget {
           ],
         ]
       )
+    );
+  }
+
+  String _buildGuidelineTooltipText(BuildContext context) {
+    final actualTooltip = drug.userGuideline != null
+      ? context.l10n.drugs_page_tooltip_guideline(
+          drug.userGuideline!.externalData.first.source
+        )
+      : drug.userOrFirstGuideline != null
+        // Guideline for drug is present but not for genotype
+        ? context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
+            context.l10n.drugs_page_tooltip_missing_genotype
+          )
+        : context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
+            context.l10n.drugs_page_tooltip_missing_drug
+          );
+    return actualOrWarfarinContent(
+      drug.name,
+      context,
+      actual: actualTooltip,
+      content: WarfarinContent.tooltip,
     );
   }
 
