@@ -86,7 +86,6 @@ class GenePage extends HookWidget {
     final phenotypeText = phenotypeInformation.adaptionText.isNotNullOrBlank
       ? '${phenotypeInformation.phenotype}$drugInteractionIndicator'
       : phenotypeInformation.phenotype;
-    if (phenotypeInformation.adaptionText.isNotNullOrBlank) {}
     return _buildRow(
       context.l10n.gene_page_phenotype,
       phenotypeText,
