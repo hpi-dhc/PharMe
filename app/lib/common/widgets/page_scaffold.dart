@@ -1,7 +1,10 @@
 import '../module.dart';
 
-Text buildTitle(String text) {
-  return Text(text, style: PharMeTheme.textTheme.headlineLarge);
+Widget buildTitle(String text) {
+  return FittedBox(
+    fit: BoxFit.fitWidth,
+    child: Text(text, style: PharMeTheme.textTheme.headlineLarge),
+  );
 }
 
 AppBar? buildBarBottom(String? barBottom) {
@@ -65,16 +68,16 @@ Scaffold unscrollablePageScaffold({
   final appBar = title == null
     ? null
     : AppBar(
-      backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
-      foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
-      elevation: PharMeTheme.appBarTheme.elevation,
-      leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
-      centerTitle: PharMeTheme.appBarTheme.centerTitle,
-      title: buildTitle(title),
-      actions: actions,
-      bottom: buildBarBottom(barBottom),
-      scrolledUnderElevation: 0,
-    );
+        backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
+        foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
+        elevation: PharMeTheme.appBarTheme.elevation,
+        leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
+        centerTitle: PharMeTheme.appBarTheme.centerTitle,
+        title: buildTitle(title),
+        actions: actions,
+        bottom: buildBarBottom(barBottom),
+        scrolledUnderElevation: 0,
+      );
   return Scaffold(
     key: key,
     appBar: appBar,
