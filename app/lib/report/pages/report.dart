@@ -79,21 +79,21 @@ class GeneCard extends StatelessWidget {
         final textColor = darkenColor(warningLevel.color, 0.4);
         return warningLevelCount > 0
         ? Row(
-          textDirection: TextDirection.ltr,
-          children: [
-            Icon(
-              warningLevel.icon,
-              size: PharMeTheme.mediumSpace,
-              color: textColor,
-            ),
-            SizedBox(width: PharMeTheme.smallSpace / 2),
-            Text(
-              warningLevelCount.toString(),
-              style: TextStyle(color: textColor),
-            ),
-            SizedBox(width: PharMeTheme.smallSpace),
-          ]
-        )
+            textDirection: TextDirection.ltr,
+            children: [
+              Icon(
+                warningLevel.icon,
+                size: PharMeTheme.mediumSpace,
+                color: textColor,
+              ),
+              SizedBox(width: PharMeTheme.smallSpace * 0.4),
+              Text(
+                warningLevelCount.toString(),
+                style: TextStyle(color: textColor),
+              ),
+              SizedBox(width: PharMeTheme.smallSpace * 0.8),
+            ]
+          )
         : SizedBox.shrink();
       }
     ).toList();
@@ -111,11 +111,13 @@ class GeneCard extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    phenotypeText,
-                    style: PharMeTheme.textTheme.titleSmall
+                  Expanded(
+                    child: Text(
+                      phenotypeText,
+                      style: PharMeTheme.textTheme.titleSmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   Row(children: warningLevelIndicators),
                 ],
