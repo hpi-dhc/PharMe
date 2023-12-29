@@ -23,7 +23,7 @@ class ReportPage extends StatelessWidget {
         genotype: notTestedString,
         lookupkey: notTestedString
       )
-    );
+    ).sortedBy((phenotype) => phenotype.geneSymbol);
     return PopScope(
       canPop: false,
       child: unscrollablePageScaffold(
