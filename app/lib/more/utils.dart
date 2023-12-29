@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:path_provider/path_provider.dart';
 
 import '../common/module.dart';
@@ -10,12 +12,21 @@ Future<void> deleteAllAppData() async {
   await CachedDrugs.erase();
 }
 
+// The folders themself cannot be deleted on iOS, therefore delete all content
+// inside the folders
+void _deleteFolderContent(Directory directory) {
+  if (!directory.existsSync()) return;
+  for (final item in directory.listSync()) {
+    item.deleteSync(recursive: true);
+  }
+}
+
 Future<void> _deleteCacheDir() async {
   final tempDir = await getTemporaryDirectory();
-  if (tempDir.existsSync()) tempDir.deleteSync(recursive: true);
+  _deleteFolderContent(tempDir);
 }
 
 Future<void> _deleteAppDir() async {
   final appDocDir = await getApplicationDocumentsDirectory();
-  if (appDocDir.existsSync()) appDocDir.deleteSync(recursive: true);
+  _deleteFolderContent(appDocDir);
 }
