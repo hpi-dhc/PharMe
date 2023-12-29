@@ -9,52 +9,55 @@ class MorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: pageScaffold(title: context.l10n.tab_more, body: [
-        SubheaderDivider(
-          text: context.l10n.settings_page_account_settings,
-          useLine: false,
-        ),
-        _buildSettingsItem(
-          title: context.l10n.drug_selection_header,
-          onTap: () => context.router.push(
-            DrugSelectionRoute(concludesOnboarding: false)
+      child: pageScaffold(
+        title: context.l10n.tab_more,
+        body: [
+          SubheaderDivider(
+            text: context.l10n.settings_page_account_settings,
+            useLine: false,
           ),
-        ),
-        _buildSettingsItem(
-          title: context.l10n.settings_page_delete_data,
-          onTap: () => showDialog(
-            context: context,
-            builder: (_) => DeleteDataDialog(),
+          _buildSettingsItem(
+            title: context.l10n.drug_selection_header,
+            onTap: () => context.router.push(
+              DrugSelectionRoute(concludesOnboarding: false)
+            ),
           ),
-        ),
-        SubheaderDivider(
-          text: context.l10n.settings_page_more,
-          useLine: false,
-        ),
-        _buildSettingsItem(
-          title: context.l10n.settings_page_onboarding,
-          onTap: () => context.router.push(OnboardingRoute(isRevisiting: true)),
-        ),
-        _buildSettingsItem(
-          title: context.l10n.settings_page_about_us,
-          onTap: () => context.router.push(AboutRoute()),
-        ),
-        _buildSettingsItem(
-          title: context.l10n.settings_page_privacy_policy,
-          onTap: () => context.router.push(PrivacyRoute()),
-        ),
-        _buildSettingsItem(
-          title: context.l10n.settings_page_terms_and_conditions,
-          onTap: () => context.router.push(TermsRoute()),
-        ),
-        SubheaderDivider(
-          text: context.l10n.settings_page_help_and_feedback,
-          useLine: false,
-        ),
-        _buildSettingsItem(
-            title: context.l10n.settings_page_contact_us,
-            onTap: sendEmail)
-      ]),
+          _buildSettingsItem(
+            title: context.l10n.settings_page_delete_data,
+            onTap: () => showDialog(
+              context: context,
+              builder: (_) => DeleteDataDialog(),
+            ),
+          ),
+          SubheaderDivider(
+            text: context.l10n.settings_page_more,
+            useLine: false,
+          ),
+          _buildSettingsItem(
+            title: context.l10n.settings_page_onboarding,
+            onTap: () => context.router.push(OnboardingRoute(isRevisiting: true)),
+          ),
+          _buildSettingsItem(
+            title: context.l10n.settings_page_about_us,
+            onTap: () => context.router.push(AboutRoute()),
+          ),
+          _buildSettingsItem(
+            title: context.l10n.settings_page_privacy_policy,
+            onTap: () => context.router.push(PrivacyRoute()),
+          ),
+          _buildSettingsItem(
+            title: context.l10n.settings_page_terms_and_conditions,
+            onTap: () => context.router.push(TermsRoute()),
+          ),
+          SubheaderDivider(
+            text: context.l10n.settings_page_help_and_feedback,
+            useLine: false,
+          ),
+          _buildSettingsItem(
+              title: context.l10n.settings_page_contact_us,
+              onTap: sendEmail)
+        ]
+      ),
     );
   }
 

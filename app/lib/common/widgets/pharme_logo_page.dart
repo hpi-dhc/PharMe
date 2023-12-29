@@ -13,34 +13,36 @@ class PharMeLogoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return unscrollablePageScaffold(
-      padding: PharMeTheme.largeSpace,
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              child: greyscale
-                ? ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      PharMeTheme.backgroundColor,
-                      BlendMode.softLight,
-                    ),
-                    child: ColorFiltered(
+      body: Padding(
+        padding: EdgeInsets.all(PharMeTheme.mediumSpace),
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                alignment: Alignment.center,
+                child: greyscale
+                  ? ColorFiltered(
                       colorFilter: ColorFilter.mode(
                         PharMeTheme.backgroundColor,
-                        BlendMode.saturation,
+                        BlendMode.softLight,
                       ),
-                      child: _buildLogo(context),
-                    ),
-                  )
-                : _buildLogo(context),
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          PharMeTheme.backgroundColor,
+                          BlendMode.saturation,
+                        ),
+                        child: _buildLogo(context),
+                      ),
+                    )
+                  : _buildLogo(context),
+                ),
               ),
+            Container(
+              alignment: Alignment.center,
+              child: child ?? SizedBox.shrink(),
             ),
-          Container(
-            alignment: Alignment.center,
-            child: child ?? SizedBox.shrink(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -32,9 +32,9 @@ class ReportPage extends StatelessWidget {
       canPop: false,
       child: unscrollablePageScaffold(
         title: context.l10n.tab_report,
-        barBottom: context.l10n.report_content_explanation,
         body: Column(
           children: [
+            PageDescription(context.l10n.report_content_explanation),
             scrollList(
               userPhenotypes.map((phenotype) => GeneCard(
                 phenotype,

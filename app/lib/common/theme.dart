@@ -84,6 +84,7 @@ class PharMeTheme {
   static final iconColor = darkenColor(PharMeTheme.onSurfaceText, -0.1);
 
   static const smallSpace = 8.0;
+  static const defaultPagePadding = smallSpace;
   static const smallToMediumSpace = 12.0;
   static const mediumSpace = 16.0;
   static const mediumToLargeSpace = 24.0;

@@ -13,6 +13,7 @@ export 'headings.dart';
 export 'indicators.dart';
 export 'lifecycle_observer.dart';
 export 'link_text_span.dart';
+export 'page_description.dart';
 export 'page_indicator_explanation.dart';
 export 'page_scaffold.dart';
 export 'pharme_logo_page.dart';

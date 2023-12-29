@@ -1,5 +1,10 @@
 import '../module.dart';
 
+EdgeInsets pagePadding() => EdgeInsets.only(
+  left: PharMeTheme.defaultPagePadding,
+  right: PharMeTheme.defaultPagePadding,
+);
+
 Widget buildTitle(String text) {
   return FittedBox(
     fit: BoxFit.fitWidth,
@@ -52,14 +57,16 @@ Scaffold pageScaffold({
         actions: actions,
         bottom: buildBarBottom(barBottom),
       ),
-      SliverList(delegate: SliverChildListDelegate(body))
+      SliverPadding(
+        padding: pagePadding(),
+        sliver: SliverList(delegate: SliverChildListDelegate(body)),  
+      ),
     ]),
   );
 }
 
 Scaffold unscrollablePageScaffold({
   required Widget body,
-  double? padding,
   String? title,
   String? barBottom,
   List<Widget>? actions,
@@ -83,11 +90,7 @@ Scaffold unscrollablePageScaffold({
     appBar: appBar,
     body: SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(
-          left: padding ?? PharMeTheme.smallSpace,
-          top: padding ?? PharMeTheme.smallSpace,
-          right: padding ?? PharMeTheme.smallSpace,
-        ),
+        padding: pagePadding(),
         child: body,
       ),
     ),
