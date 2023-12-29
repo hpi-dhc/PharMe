@@ -58,7 +58,6 @@ void main() {
   UserData.instance.diplotypes = {
     'CYP2C9': Diplotype(
         gene: 'CYP2C9',
-        resultType: 'Diplotype',
         phenotype: 'Normal Metabolizer',
         genotype: '*1/*1',
         allelesTested: '1')

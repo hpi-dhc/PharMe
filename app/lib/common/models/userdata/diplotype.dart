@@ -11,7 +11,6 @@ part 'diplotype.g.dart';
 class Diplotype {
   Diplotype({
     required this.gene,
-    required this.resultType,
     required this.genotype,
     required this.phenotype,
     required this.allelesTested,
@@ -24,24 +23,13 @@ class Diplotype {
   String gene;
 
   @HiveField(1)
-  String resultType;
-
-  @HiveField(2)
   String genotype;
 
-  @HiveField(3)
+  @HiveField(2)
   String phenotype;
 
-  @HiveField(4)
+  @HiveField(3)
   String allelesTested;
-}
-
-extension ValidDiplotypes on List<Diplotype> {
-  List<Diplotype> filterValidDiplotypes() {
-    final acceptedResultTypes = ['Diplotype'];
-    return where((element) => acceptedResultTypes.contains(element.resultType))
-        .toList();
-  }
 }
 
 // assumes http reponse from lab server
