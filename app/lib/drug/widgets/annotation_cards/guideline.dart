@@ -162,9 +162,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
         style: TextStyle(fontStyle: FontStyle.italic),
       );
     } else {
-      final genes = drug.userGuideline?.lookupkey.keys ??
-        drug.guidelines.first.lookupkey.keys;
-      final geneDescriptions = genes.map((gene) {
+      final geneDescriptions = drug.guidelineGenes.map((gene) {
         final phenotypeInformation = UserData.phenotypeInformationFor(
           gene,
           context,
