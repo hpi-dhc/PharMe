@@ -7,7 +7,7 @@ part 'cpic_lookup.g.dart';
 @JsonSerializable()
 class CpicLookup{
   CpicLookup({
-    required this.geneSymbol,
+    required this.gene,
     required this.phenotype,
     required this.genotype,
     required this.lookupkey,
@@ -21,7 +21,7 @@ class CpicLookup{
 
   @HiveField(0)
   @JsonKey(name: 'genesymbol')
-  String geneSymbol;
+  String gene;
 
   @HiveField(1)
   @JsonKey(name: 'diplotype')

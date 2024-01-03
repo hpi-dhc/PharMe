@@ -7,7 +7,7 @@ import '../../drug/widgets/module.dart';
 class GenePage extends HookWidget {
   GenePage(this.phenotype)
       : cubit = DrugListCubit(
-          initialFilter: FilterState.forGene(phenotype.geneSymbol),
+          initialFilter: FilterState.forGene(phenotype.gene),
         );
 
   final CpicLookup phenotype;
@@ -20,7 +20,7 @@ class GenePage extends HookWidget {
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(
           builder: (context, state) => pageScaffold(
-            title: context.l10n.gene_page_headline(phenotype.geneSymbol),
+            title: context.l10n.gene_page_headline(phenotype.gene),
             body: [
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -31,9 +31,9 @@ class GenePage extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SubHeader(
-                      context.l10n.gene_page_your_variant(phenotype.geneSymbol),
+                      context.l10n.gene_page_your_variant(phenotype.gene),
                       tooltip: context.l10n
-                          .gene_page_name_tooltip(phenotype.geneSymbol),
+                          .gene_page_name_tooltip(phenotype.gene),
                     ),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
                     RoundedCard(
@@ -58,7 +58,7 @@ class GenePage extends HookWidget {
                           if (canBeInhibited(phenotype))
                             ...buildDrugInteractionInfo(
                               context,
-                              phenotype.geneSymbol,
+                              phenotype.gene,
                             ),
                       ],
                     )),
@@ -80,7 +80,7 @@ class GenePage extends HookWidget {
 
   TableRow _buildPhenotypeRow(BuildContext context) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      phenotype.geneSymbol,
+      phenotype.gene,
       context,
     );
     final phenotypeText = phenotypeInformation.adaptionText.isNotNullOrBlank

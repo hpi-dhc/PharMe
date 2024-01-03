@@ -50,7 +50,7 @@ void main() {
       ]);
   UserData.instance.lookups = {
     'CYP2C9': CpicLookup(
-        geneSymbol: 'CYP2C9',
+        gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         genotype: '*1/*1',
         lookupkey: '2')

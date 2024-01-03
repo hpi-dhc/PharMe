@@ -84,6 +84,6 @@ List<String> inhibitorsFor(String geneSymbol) {
 }
 
 bool canBeInhibited(CpicLookup phenotype) {
-  return inhibitableGenes.contains(phenotype.geneSymbol) &&
+  return inhibitableGenes.contains(phenotype.gene) &&
     phenotype.lookupkey != '0.0';
 }

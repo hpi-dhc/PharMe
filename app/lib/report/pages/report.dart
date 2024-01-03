@@ -19,7 +19,7 @@ class ReportPage extends StatelessWidget {
       (geneSymbol) => UserData.instance.lookups![geneSymbol] ??
         // Add CpicLookup for unmatched lookup
         CpicLookup(
-          geneSymbol: geneSymbol,
+          gene: geneSymbol,
           // phenotype will be overwritten with phenotype from lab or inhibited
           // phenotype using PhenotypeInformation in GeneCard and GenePage
           phenotype: notTestedString,
@@ -27,7 +27,7 @@ class ReportPage extends StatelessWidget {
             notTestedString,
           lookupkey: notTestedString
         )
-    ).sortedBy((phenotype) => phenotype.geneSymbol);
+    ).sortedBy((phenotype) => phenotype.gene);
     return PopScope(
       canPop: false,
       child: unscrollablePageScaffold(
@@ -38,7 +38,7 @@ class ReportPage extends StatelessWidget {
             scrollList(
               userPhenotypes.map((phenotype) => GeneCard(
                 phenotype,
-                key: Key('gene-card-${phenotype.geneSymbol}')
+                key: Key('gene-card-${phenotype.gene}')
               )).toList(),
             ),
             if (hasActiveInhibitors) PageIndicatorExplanation(
@@ -62,14 +62,14 @@ class GeneCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      phenotype.geneSymbol,
+      phenotype.gene,
       context,
     );
     final phenotypeText = phenotypeInformation.adaptionText.isNullOrBlank
       ? phenotypeInformation.phenotype
       : '${phenotypeInformation.phenotype}$drugInteractionIndicator';
     final affectedDrugs = CachedDrugs.instance.drugs?.filter(
-      (drug) => drug.guidelineGenes.contains(phenotype.geneSymbol)
+      (drug) => drug.guidelineGenes.contains(phenotype.gene)
     ) ?? [];
     final warningLevelIndicators = WarningLevel.values.map(
       (warningLevel) {
@@ -106,7 +106,7 @@ class GeneCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                phenotype.geneSymbol,
+                phenotype.gene,
                 style: PharMeTheme.textTheme.titleMedium
               ),
               SizedBox(height: 8),
