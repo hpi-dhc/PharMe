@@ -15,7 +15,7 @@ class ReportPage extends StatelessWidget {
   Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
     final notTestedString = context.l10n.general_not_tested;
-    final userPhenotypes = CachedDrugs.instance.allGuidelineGenes.map(
+    final userLookus = CachedDrugs.instance.allGuidelineGenes.map(
       (gene) => UserData.instance.lookups![gene] ??
         // Add CpicLookup for unmatched lookup
         CpicLookup(
@@ -27,7 +27,7 @@ class ReportPage extends StatelessWidget {
             notTestedString,
           lookupkey: notTestedString
         )
-    ).sortedBy((phenotype) => phenotype.gene);
+    ).sortedBy((lookup) => lookup.gene);
     return PopScope(
       canPop: false,
       child: unscrollablePageScaffold(
@@ -36,9 +36,9 @@ class ReportPage extends StatelessWidget {
           children: [
             PageDescription(context.l10n.report_content_explanation),
             scrollList(
-              userPhenotypes.map((phenotype) => GeneCard(
-                phenotype,
-                key: Key('gene-card-${phenotype.gene}')
+              userLookus.map((lookup) => GeneCard(
+                lookup,
+                key: Key('gene-card-${lookup.gene}')
               )).toList(),
             ),
             if (hasActiveInhibitors) PageIndicatorExplanation(
@@ -55,21 +55,21 @@ class ReportPage extends StatelessWidget {
 }
 
 class GeneCard extends StatelessWidget {
-  const GeneCard(this.phenotype, { super.key });
+  const GeneCard(this.lookup, { super.key });
 
-  final CpicLookup phenotype;
+  final CpicLookup lookup;
 
   @override
   Widget build(BuildContext context) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      phenotype.gene,
+      lookup.gene,
       context,
     );
     final phenotypeText = phenotypeInformation.adaptionText.isNullOrBlank
       ? phenotypeInformation.phenotype
       : '${phenotypeInformation.phenotype}$drugInteractionIndicator';
     final affectedDrugs = CachedDrugs.instance.drugs?.filter(
-      (drug) => drug.guidelineGenes.contains(phenotype.gene)
+      (drug) => drug.guidelineGenes.contains(lookup.gene)
     ) ?? [];
     final warningLevelIndicators = WarningLevel.values.map(
       (warningLevel) {
@@ -98,7 +98,7 @@ class GeneCard extends StatelessWidget {
       }
     ).toList();
     return RoundedCard(
-      onTap: () => context.router.push(GeneRoute(phenotype: phenotype)),
+      onTap: () => context.router.push(GeneRoute(lookup: lookup)),
       radius: 16,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Expanded(
@@ -106,7 +106,7 @@ class GeneCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                phenotype.gene,
+                lookup.gene,
                 style: PharMeTheme.textTheme.titleMedium
               ),
               SizedBox(height: 8),

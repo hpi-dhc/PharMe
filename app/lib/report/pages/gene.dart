@@ -5,12 +5,12 @@ import '../../drug/widgets/module.dart';
 
 @RoutePage()
 class GenePage extends HookWidget {
-  GenePage(this.phenotype)
+  GenePage(this.lookup)
       : cubit = DrugListCubit(
-          initialFilter: FilterState.forGene(phenotype.gene),
+          initialFilter: FilterState.forGene(lookup.gene),
         );
 
-  final CpicLookup phenotype;
+  final CpicLookup lookup;
   final DrugListCubit cubit;
 
   @override
@@ -20,7 +20,7 @@ class GenePage extends HookWidget {
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(
           builder: (context, state) => pageScaffold(
-            title: context.l10n.gene_page_headline(phenotype.gene),
+            title: context.l10n.gene_page_headline(lookup.gene),
             body: [
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -31,9 +31,9 @@ class GenePage extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SubHeader(
-                      context.l10n.gene_page_your_variant(phenotype.gene),
+                      context.l10n.gene_page_your_variant(lookup.gene),
                       tooltip: context.l10n
-                          .gene_page_name_tooltip(phenotype.gene),
+                          .gene_page_name_tooltip(lookup.gene),
                     ),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
                     RoundedCard(
@@ -49,16 +49,16 @@ class GenePage extends HookWidget {
                             children: [
                               _buildRow(
                                   context.l10n.gene_page_genotype,
-                                  phenotype.genotype,
+                                  lookup.genotype,
                                   tooltip: context.l10n.gene_page_genotype_tooltip
                               ),
                               _buildPhenotypeRow(context),
                             ],
                           ),
-                          if (canBeInhibited(phenotype))
+                          if (canBeInhibited(lookup))
                             ...buildDrugInteractionInfo(
                               context,
-                              phenotype.gene,
+                              lookup.gene,
                             ),
                       ],
                     )),
@@ -80,7 +80,7 @@ class GenePage extends HookWidget {
 
   TableRow _buildPhenotypeRow(BuildContext context) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      phenotype.gene,
+      lookup.gene,
       context,
     );
     final phenotypeText = phenotypeInformation.adaptionText.isNotNullOrBlank

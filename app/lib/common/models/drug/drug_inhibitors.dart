@@ -83,7 +83,7 @@ List<String> inhibitorsFor(String gene) {
   return _drugInhibitorsPerGene[gene] ?? [];
 }
 
-bool canBeInhibited(CpicLookup phenotype) {
-  return inhibitableGenes.contains(phenotype.gene) &&
-    phenotype.lookupkey != '0.0';
+bool canBeInhibited(CpicLookup lookup) {
+  return inhibitableGenes.contains(lookup.gene) &&
+    lookup.lookupkey != '0.0';
 }
