@@ -49,7 +49,7 @@ class GenePage extends HookWidget {
                             children: [
                               _buildRow(
                                   context.l10n.gene_page_genotype,
-                                  lookup.genotype,
+                                  lookup.variant,
                                   tooltip: context.l10n.gene_page_genotype_tooltip
                               ),
                               _buildPhenotypeRow(context),

@@ -1,9 +1,9 @@
 abstract class Genotype{
   Genotype({
     required this.gene,
-    required this.genotype,
+    required this.variant,
   });
 
   String gene;
-  String genotype;
+  String variant;
 }

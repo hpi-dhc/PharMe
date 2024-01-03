@@ -183,7 +183,7 @@ List<pw.Widget> _buildUserPart(
 ) {
   final patientGenotype = _userInfoPerGene(
     drug,
-    (gene, drug, context) => UserData.genotypeFor(gene),
+    (gene, drug, context) => UserData.variantFor(gene),
     buildContext,
   );
   final patientPhenotype = _userInfoPerGene(

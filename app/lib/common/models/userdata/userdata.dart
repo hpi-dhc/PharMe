@@ -111,8 +111,8 @@ class UserData {
     );
   }
 
-  static String? genotypeFor(String gene) =>
-      UserData.instance.diplotypes?[gene]?.genotype;
+  static String? variantFor(String gene) =>
+      UserData.instance.diplotypes?[gene]?.variant;
 
   static String? allelesTestedFor(String gene) =>
       UserData.instance.diplotypes?[gene]?.allelesTested;

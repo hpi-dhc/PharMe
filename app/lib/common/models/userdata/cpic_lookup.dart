@@ -11,7 +11,7 @@ class CpicLookup implements Genotype {
   CpicLookup({
     required this.gene,
     required this.phenotype,
-    required this.genotype,
+    required this.variant,
     required this.lookupkey,
   });
 
@@ -29,7 +29,7 @@ class CpicLookup implements Genotype {
   @override
   @HiveField(1)
   @JsonKey(name: 'diplotype')
-  String genotype;
+  String variant;
 
   @HiveField(2)
   @JsonKey(name: 'generesult')

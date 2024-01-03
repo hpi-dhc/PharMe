@@ -52,14 +52,14 @@ void main() {
     'CYP2C9': CpicLookup(
         gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
-        genotype: '*1/*1',
+        variant: '*1/*1',
         lookupkey: '2')
   };
   UserData.instance.diplotypes = {
     'CYP2C9': GeneResult(
         gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
-        genotype: '*1/*1',
+        variant: '*1/*1',
         allelesTested: '1')
   };
   final testDrugWithoutGuidelines = Drug(

@@ -64,7 +64,7 @@ Future<void> fetchAndSaveLookups() async {
   // extract the matching lookups
   for (final diplotype in usersDiplotypes.values) {
     // the gene and the genotype build the key for the hashmap
-    final key = '${diplotype.gene}__${diplotype.genotype}';
+    final key = '${diplotype.gene}__${diplotype.variant}';
     final lookup = lookupsHashMap[key];
     if (lookup == null) continue;
     // uncomment to print literal mismatches between lab/CPIC phenotypes

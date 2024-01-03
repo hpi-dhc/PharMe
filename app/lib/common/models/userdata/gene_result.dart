@@ -12,7 +12,7 @@ part 'gene_result.g.dart';
 class GeneResult implements Genotype {
   GeneResult({
     required this.gene,
-    required this.genotype,
+    required this.variant,
     required this.phenotype,
     required this.allelesTested,
   });
@@ -26,7 +26,7 @@ class GeneResult implements Genotype {
 
   @override
   @HiveField(1)
-  String genotype;
+  String variant;
 
   @HiveField(2)
   String phenotype;
