@@ -23,7 +23,7 @@ class ReportPage extends StatelessWidget {
           // phenotype will be overwritten with phenotype from lab or inhibited
           // phenotype using PhenotypeInformation in GeneCard and GenePage
           phenotype: notTestedString,
-          variant: UserData.instance.diplotypes?[gene]?.variant ??
+          variant: UserData.instance.geneResults?[gene]?.variant ??
             notTestedString,
           lookupkey: notTestedString
         )

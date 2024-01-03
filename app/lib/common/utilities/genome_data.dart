@@ -30,7 +30,7 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
       geneResultsFromHTTPResponse(response);
   final activeDrugList = activeDrugsFromHTTPResponse(response);
 
-  UserData.instance.diplotypes = {
+  UserData.instance.geneResults = {
     for (final diplotype in diplotypes) diplotype.gene: diplotype
   };
   await UserData.save();
@@ -50,7 +50,7 @@ Future<void> fetchAndSaveLookups() async {
   final json = jsonDecode(response.body) as List<dynamic>;
   final lookups =
       json.map((e) => CpicLookup.fromJson(e as Map<String, dynamic>));
-  final usersDiplotypes = UserData.instance.diplotypes;
+  final usersDiplotypes = UserData.instance.geneResults;
   if (usersDiplotypes == null) throw Exception();
 
   // use a HashMap for better time complexity
@@ -88,13 +88,13 @@ Future<void> fetchAndSaveLookups() async {
 
 bool shouldFetchLookups() {
   final lookupsPresent = UserData.instance.lookups?.isNotEmpty ?? false;
-  final diplotypesPresent = UserData.instance.diplotypes?.isNotEmpty ?? false;
+  final diplotypesPresent = UserData.instance.geneResults?.isNotEmpty ?? false;
   final result = (_isOutDated() || !lookupsPresent) && diplotypesPresent;
   return result;
 }
 
 bool shouldFetchDiplotypes() {
-  return UserData.instance.diplotypes == null;
+  return UserData.instance.geneResults == null;
 }
 
 bool _isOutDated() {

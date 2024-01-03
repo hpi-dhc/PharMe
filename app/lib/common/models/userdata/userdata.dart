@@ -46,7 +46,7 @@ class UserData {
   }
 
   @HiveField(0)
-  Map<String, GeneResult>? diplotypes;
+  Map<String, GeneResult>? geneResults;
 
   static PhenotypeInformation phenotypeInformationFor(
     String gene,
@@ -63,7 +63,7 @@ class UserData {
     final strongInhibitorTextPrefix = useLongPrefix
       ? context.l10n.strong_inhibitor_long_prefix
       : context.l10n.gene_page_phenotype.toLowerCase();
-    final originalPhenotype = UserData.instance.diplotypes?[gene]?.phenotype;
+    final originalPhenotype = UserData.instance.geneResults?[gene]?.phenotype;
     if (originalPhenotype == null) {
       return PhenotypeInformation(
         phenotype: context.l10n.general_not_tested,
@@ -112,10 +112,10 @@ class UserData {
   }
 
   static String? variantFor(String gene) =>
-      UserData.instance.diplotypes?[gene]?.variant;
+      UserData.instance.geneResults?[gene]?.variant;
 
   static String? allelesTestedFor(String gene) =>
-      UserData.instance.diplotypes?[gene]?.allelesTested;
+      UserData.instance.geneResults?[gene]?.allelesTested;
 
   @HiveField(1)
   Map<String, CpicLookup>? lookups;
