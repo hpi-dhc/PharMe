@@ -5,6 +5,6 @@ export 'drug/drug_inhibitors.dart';
 export 'drug/guideline.dart';
 export 'drug/warning_level.dart';
 export 'metadata.dart';
-export 'userdata/cpic_phenotype.dart';
+export 'userdata/cpic_lookup.dart';
 export 'userdata/gene_result.dart';
 export 'userdata/userdata.dart';

@@ -17,8 +17,8 @@ class ReportPage extends StatelessWidget {
     final notTestedString = context.l10n.general_not_tested;
     final userPhenotypes = CachedDrugs.instance.allGuidelineGenes.map(
       (geneSymbol) => UserData.instance.lookups![geneSymbol] ??
-        // Add CpicPhenotype for unmatched lookup
-        CpicPhenotype(
+        // Add CpicLookup for unmatched lookup
+        CpicLookup(
           geneSymbol: geneSymbol,
           // phenotype will be overwritten with phenotype from lab or inhibited
           // phenotype using PhenotypeInformation in GeneCard and GenePage
@@ -57,7 +57,7 @@ class ReportPage extends StatelessWidget {
 class GeneCard extends StatelessWidget {
   const GeneCard(this.phenotype, { super.key });
 
-  final CpicPhenotype phenotype;
+  final CpicLookup phenotype;
 
   @override
   Widget build(BuildContext context) {

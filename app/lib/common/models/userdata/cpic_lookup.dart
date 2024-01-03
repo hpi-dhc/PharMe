@@ -1,22 +1,22 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
-part 'cpic_phenotype.g.dart';
+part 'cpic_lookup.g.dart';
 
 @HiveType(typeId: 2)
 @JsonSerializable()
-class CpicPhenotype {
-  CpicPhenotype({
+class CpicLookup{
+  CpicLookup({
     required this.geneSymbol,
     required this.phenotype,
     required this.genotype,
     required this.lookupkey,
   });
 
-  factory CpicPhenotype.fromJson(Map<String, dynamic> json) {
+  factory CpicLookup.fromJson(Map<String, dynamic> json) {
     // transform lookupkey map to string
     json['lookupkey'] = json['lookupkey'][json['genesymbol']];
-    return _$CpicPhenotypeFromJson(json);
+    return _$CpicLookupFromJson(json);
   }
 
   @HiveField(0)

@@ -49,18 +49,18 @@ Future<void> fetchAndSaveLookups() async {
   // to a concrete CpicLookup instance, hence the cast to a List
   final json = jsonDecode(response.body) as List<dynamic>;
   final lookups =
-      json.map((e) => CpicPhenotype.fromJson(e as Map<String, dynamic>));
+      json.map((e) => CpicLookup.fromJson(e as Map<String, dynamic>));
   final usersDiplotypes = UserData.instance.diplotypes;
   if (usersDiplotypes == null) throw Exception();
 
   // use a HashMap for better time complexity
-  final lookupsHashMap = HashMap<String, CpicPhenotype>.fromIterable(
+  final lookupsHashMap = HashMap<String, CpicLookup>.fromIterable(
     lookups,
     key: (lookup) => '${lookup.geneSymbol}__${lookup.genotype}',
     value: (lookup) => lookup,
   );
   // ignore: omit_local_variable_types
-  final Map<String, CpicPhenotype> matchingLookups = {};
+  final Map<String, CpicLookup> matchingLookups = {};
   // extract the matching lookups
   for (final diplotype in usersDiplotypes.values) {
     // the gene and the genotype build the key for the hashmap

@@ -118,7 +118,7 @@ class UserData {
       UserData.instance.diplotypes?[gene]?.allelesTested;
 
   @HiveField(1)
-  Map<String, CpicPhenotype>? lookups;
+  Map<String, CpicLookup>? lookups;
 
   static MapEntry<String, String>? overwrittenLookup(
     String gene,
@@ -223,7 +223,7 @@ Future<void> initUserData() async {
   try {
     Hive.registerAdapter(UserDataAdapter());
     Hive.registerAdapter(GeneResultAdapter());
-    Hive.registerAdapter(CpicPhenotypeAdapter());
+    Hive.registerAdapter(CpicLookupAdapter());
   } catch (e) {
     return;
   }

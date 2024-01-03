@@ -10,7 +10,7 @@ class GenePage extends HookWidget {
           initialFilter: FilterState.forGene(phenotype.geneSymbol),
         );
 
-  final CpicPhenotype phenotype;
+  final CpicLookup phenotype;
   final DrugListCubit cubit;
 
   @override
