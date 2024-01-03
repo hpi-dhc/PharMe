@@ -56,7 +56,7 @@ Future<void> fetchAndSaveLookups() async {
   // use a HashMap for better time complexity
   final lookupsHashMap = HashMap<String, CpicLookup>.fromIterable(
     lookups,
-    key: (lookup) => '${lookup.geneSymbol}__${lookup.genotype}',
+    key: (lookup) => '${lookup.gene}__${lookup.genotype}',
     value: (lookup) => lookup,
   );
   // ignore: omit_local_variable_types

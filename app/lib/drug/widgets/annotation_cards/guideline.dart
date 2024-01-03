@@ -164,9 +164,9 @@ class GuidelineAnnotationCard extends StatelessWidget {
     } else {
       final genes = drug.userGuideline?.lookupkey.keys ??
         drug.guidelines.first.lookupkey.keys;
-      final geneDescriptions = genes.map((geneSymbol) {
+      final geneDescriptions = genes.map((gene) {
         final phenotypeInformation = UserData.phenotypeInformationFor(
-          geneSymbol,
+          gene,
           context,
           drug: drug.name,
         );
@@ -174,7 +174,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
         if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
           description = '$description (${phenotypeInformation.adaptionText})';
         }
-        return TableRowDefinition(geneSymbol, description);
+        return TableRowDefinition(gene, description);
       });
       return buildTable(geneDescriptions.toList());
     }

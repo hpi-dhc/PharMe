@@ -16,14 +16,14 @@ class ReportPage extends StatelessWidget {
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
     final notTestedString = context.l10n.general_not_tested;
     final userPhenotypes = CachedDrugs.instance.allGuidelineGenes.map(
-      (geneSymbol) => UserData.instance.lookups![geneSymbol] ??
+      (gene) => UserData.instance.lookups![gene] ??
         // Add CpicLookup for unmatched lookup
         CpicLookup(
-          gene: geneSymbol,
+          gene: gene,
           // phenotype will be overwritten with phenotype from lab or inhibited
           // phenotype using PhenotypeInformation in GeneCard and GenePage
           phenotype: notTestedString,
-          genotype: UserData.instance.diplotypes?[geneSymbol]?.genotype ??
+          genotype: UserData.instance.diplotypes?[gene]?.genotype ??
             notTestedString,
           lookupkey: notTestedString
         )

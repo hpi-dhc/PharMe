@@ -37,9 +37,9 @@ final inhibitableGenes = List<String>.from(<String>{
 });
 
 final _drugInhibitorsPerGene = {
-  for (final geneSymbol in inhibitableGenes) geneSymbol: [
-    ...?strongDrugInhibitors[geneSymbol]?.keys,
-    ...?moderateDrugInhibitors[geneSymbol]?.keys,
+  for (final gene in inhibitableGenes) gene: [
+    ...?strongDrugInhibitors[gene]?.keys,
+    ...?moderateDrugInhibitors[gene]?.keys,
   ]
 };
 
@@ -62,9 +62,9 @@ bool isModerateInhibitor(String drugName) {
 
 bool isInhibitor(String drugName) {
   var drugIsInhibitor = false;
-  for (final geneSymbol in _drugInhibitorsPerGene.keys) {
-    final influencingDrugs = _drugInhibitorsPerGene[geneSymbol];
-    final originalLookup = UserData.lookupFor(geneSymbol, drug: drugName, useOverwrite: false);
+  for (final gene in _drugInhibitorsPerGene.keys) {
+    final influencingDrugs = _drugInhibitorsPerGene[gene];
+    final originalLookup = UserData.lookupFor(gene, drug: drugName, useOverwrite: false);
     if (influencingDrugs!.contains(drugName) && originalLookup != '0.0') {
       drugIsInhibitor = true;
       break;
@@ -79,8 +79,8 @@ List<String> inhibitedGenes(Drug drug) {
   ).toList();
 }
 
-List<String> inhibitorsFor(String geneSymbol) {
-  return _drugInhibitorsPerGene[geneSymbol] ?? [];
+List<String> inhibitorsFor(String gene) {
+  return _drugInhibitorsPerGene[gene] ?? [];
 }
 
 bool canBeInhibited(CpicLookup phenotype) {
