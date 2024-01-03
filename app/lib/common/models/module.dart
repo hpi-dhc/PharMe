@@ -7,4 +7,5 @@ export 'drug/warning_level.dart';
 export 'metadata.dart';
 export 'userdata/cpic_lookup.dart';
 export 'userdata/gene_result.dart';
+export 'userdata/genotype.dart';
 export 'userdata/userdata.dart';

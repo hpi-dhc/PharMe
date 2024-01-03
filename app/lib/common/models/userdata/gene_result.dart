@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+import 'genotype.dart';
 
 part 'gene_result.g.dart';
 
 @HiveType(typeId: 1)
 @JsonSerializable()
-class GeneResult {
+class GeneResult implements Genotype {
   GeneResult({
     required this.gene,
     required this.genotype,
@@ -19,9 +20,11 @@ class GeneResult {
   factory GeneResult.fromJson(dynamic json) => _$GeneResultFromJson(json);
   Map<String, dynamic> toJson() => _$GeneResultToJson(this);
 
+  @override
   @HiveField(0)
   String gene;
 
+  @override
   @HiveField(1)
   String genotype;
 

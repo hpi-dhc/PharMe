@@ -1,11 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
+import 'genotype.dart';
+
 part 'cpic_lookup.g.dart';
 
 @HiveType(typeId: 2)
 @JsonSerializable()
-class CpicLookup{
+class CpicLookup implements Genotype {
   CpicLookup({
     required this.gene,
     required this.phenotype,
@@ -19,10 +21,12 @@ class CpicLookup{
     return _$CpicLookupFromJson(json);
   }
 
+  @override
   @HiveField(0)
   @JsonKey(name: 'genesymbol')
   String gene;
 
+  @override
   @HiveField(1)
   @JsonKey(name: 'diplotype')
   String genotype;
