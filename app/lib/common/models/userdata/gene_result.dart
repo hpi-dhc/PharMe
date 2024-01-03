@@ -4,20 +4,20 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
-part 'diplotype.g.dart';
+part 'gene_result.g.dart';
 
 @HiveType(typeId: 1)
 @JsonSerializable()
-class Diplotype {
-  Diplotype({
+class GeneResult {
+  GeneResult({
     required this.gene,
     required this.genotype,
     required this.phenotype,
     required this.allelesTested,
   });
 
-  factory Diplotype.fromJson(dynamic json) => _$DiplotypeFromJson(json);
-  Map<String, dynamic> toJson() => _$DiplotypeToJson(this);
+  factory GeneResult.fromJson(dynamic json) => _$GeneResultFromJson(json);
+  Map<String, dynamic> toJson() => _$GeneResultToJson(this);
 
   @HiveField(0)
   String gene;
@@ -33,7 +33,7 @@ class Diplotype {
 }
 
 // assumes http reponse from lab server
-List<Diplotype> diplotypesFromHTTPResponse(Response resp) {
+List<GeneResult> geneResultsFromHTTPResponse(Response resp) {
   final json = jsonDecode(resp.body)['diplotypes'] as List<dynamic>;
-  return json.map<Diplotype>(Diplotype.fromJson).toList();
+  return json.map<GeneResult>(GeneResult.fromJson).toList();
 }

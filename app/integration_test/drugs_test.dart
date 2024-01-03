@@ -56,7 +56,7 @@ void main() {
         lookupkey: '2')
   };
   UserData.instance.diplotypes = {
-    'CYP2C9': Diplotype(
+    'CYP2C9': GeneResult(
         gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         genotype: '*1/*1',

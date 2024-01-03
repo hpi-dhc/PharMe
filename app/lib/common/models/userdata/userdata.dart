@@ -46,7 +46,7 @@ class UserData {
   }
 
   @HiveField(0)
-  Map<String, Diplotype>? diplotypes;
+  Map<String, GeneResult>? diplotypes;
 
   static PhenotypeInformation phenotypeInformationFor(
     String gene,
@@ -222,7 +222,7 @@ Future<void> initUserData() async {
   // session which has not yet been written to local storage.
   try {
     Hive.registerAdapter(UserDataAdapter());
-    Hive.registerAdapter(DiplotypeAdapter());
+    Hive.registerAdapter(GeneResultAdapter());
     Hive.registerAdapter(CpicPhenotypeAdapter());
   } catch (e) {
     return;

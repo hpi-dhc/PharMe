@@ -27,7 +27,7 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
 ) async {
   // parse response to list of user's diplotypes
   final diplotypes =
-      diplotypesFromHTTPResponse(response);
+      geneResultsFromHTTPResponse(response);
   final activeDrugList = activeDrugsFromHTTPResponse(response);
 
   UserData.instance.diplotypes = {
