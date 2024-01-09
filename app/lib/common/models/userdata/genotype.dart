@@ -1,4 +1,4 @@
-abstract class Genotype{
+class Genotype{
   Genotype({
     required this.gene,
     required this.variant,

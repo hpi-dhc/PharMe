@@ -80,7 +80,7 @@ class GenePage extends HookWidget {
 
   TableRow _buildPhenotypeRow(BuildContext context) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      lookup.gene,
+      lookup,
       context,
     );
     final phenotypeText = phenotypeInformation.adaptionText.isNotNullOrBlank
@@ -117,7 +117,7 @@ class GenePage extends HookWidget {
 
   List<Widget> buildDrugInteractionInfo(BuildContext context, String gene) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      gene,
+      lookup,
       context,
       useLongPrefix: true,
     );

@@ -164,7 +164,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
     } else {
       final geneDescriptions = drug.guidelineGenes.map((gene) {
         final phenotypeInformation = UserData.phenotypeInformationFor(
-          gene,
+          UserData.genotypeFor(gene, drug, useOverwrite: false),
           context,
           drug: drug.name,
         );

@@ -25,15 +25,10 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
   Response response,
   ActiveDrugs activeDrugs,
 ) async {
-  // parse response to list of user's diplotypes
-  final diplotypes =
-      geneResultsFromHTTPResponse(response);
-  final activeDrugList = activeDrugsFromHTTPResponse(response);
-
-  UserData.instance.geneResults = {
-    for (final diplotype in diplotypes) diplotype.gene: diplotype
-  };
+  // parse response to list of user's diplotypes and active drugs
+  UserData.instance.geneResults = geneResultsFromHTTPResponse(response);
   await UserData.save();
+  final activeDrugList = activeDrugsFromHTTPResponse(response);
   await activeDrugs.setList(activeDrugList);
   // invalidate cached drugs because lookups may have changed and we need to
   // refilter the matching guidelines
@@ -60,9 +55,9 @@ Future<void> fetchAndSaveLookups() async {
     value: (lookup) => lookup,
   );
   // ignore: omit_local_variable_types
-  final Map<String, CpicLookup> matchingLookups = {};
+  final List<CpicLookup> matchingLookups = [];
   // extract the matching lookups
-  for (final diplotype in usersDiplotypes.values) {
+  for (final diplotype in usersDiplotypes) {
     // the gene and the genotype build the key for the hashmap
     final key = '${diplotype.gene}__${diplotype.variant}';
     final lookup = lookupsHashMap[key];
@@ -72,7 +67,7 @@ Future<void> fetchAndSaveLookups() async {
     //   print(
     //       'Lab phenotype ${diplotype.phenotype} for ${diplotype.gene} (${diplotype.genotype}) is "${lookup.phenotype}" for CPIC');
     // }
-    matchingLookups[diplotype.gene] = lookup;
+    matchingLookups.add(lookup);
   }
 
   // uncomment to make user have CYP2D6 lookupkey 0.0

@@ -63,9 +63,19 @@ bool isModerateInhibitor(String drugName) {
 bool isInhibitor(String drugName) {
   var drugIsInhibitor = false;
   for (final gene in _drugInhibitorsPerGene.keys) {
-    final influencingDrugs = _drugInhibitorsPerGene[gene];
-    final originalLookup = UserData.lookupFor(gene, drug: drugName, useOverwrite: false);
-    if (influencingDrugs!.contains(drugName) && originalLookup != '0.0') {
+    final influencingDrugs = _drugInhibitorsPerGene[gene]!;
+    // If the drug is not in the current gene list, test the next gene
+    if (!influencingDrugs.contains(drugName)) continue;
+    // If the drug is listed as inhibitor, test if the user is already a
+    // poor metabolizer for the gene; if yes, the drug cannot inhibit the
+    // activity further and is not regarded as an inhibitor
+    final originalLookups = UserData.lookupkeysFor(gene, useOverwrite: false)!;
+    if (originalLookups.length != 1) {
+      debugPrint('[WARNING] Inhibited genes are (currently) only expected to '
+      'have one matching user lookup but found ${originalLookups.length} for '
+      '$drugName; ignoring all but the first one');
+    }
+    if (originalLookups.first != '0.0') {
       drugIsInhibitor = true;
       break;
     }

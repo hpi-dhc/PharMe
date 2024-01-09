@@ -146,12 +146,12 @@ String? _getPhenotypeInfo(String gene, Drug drug, BuildContext context) {
 
 String? _getActivityScoreInfo(String gene, Drug drug, BuildContext context) {
   final originalLookup = UserData.lookupFor(
-    gene,
+    UserData.genotypeFor(gene, drug),
     drug: drug.name,
     useOverwrite: false,
   );
   final overwrittenLookup = UserData.lookupFor(
-    gene,
+    UserData.genotypeFor(gene, drug),
     drug: drug.name,
     useOverwrite: true,
   );

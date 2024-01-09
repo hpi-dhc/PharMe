@@ -48,20 +48,20 @@ void main() {
                 implication: 'nothing',
                 warningLevel: WarningLevel.green))
       ]);
-  UserData.instance.lookups = {
-    'CYP2C9': CpicLookup(
+  UserData.instance.lookups = [
+    CpicLookup(
         gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         variant: '*1/*1',
         lookupkey: '2')
-  };
-  UserData.instance.geneResults = {
-    'CYP2C9': GeneResult(
+  ];
+  UserData.instance.geneResults = [
+    GeneResult(
         gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         variant: '*1/*1',
         allelesTested: '1')
-  };
+  ];
   final testDrugWithoutGuidelines = Drug(
     id: '2',
     version: 1,

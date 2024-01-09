@@ -46,10 +46,144 @@ class UserData {
   }
 
   @HiveField(0)
-  Map<String, GeneResult>? geneResults;
+  List<GeneResult>? geneResults;
 
-  static PhenotypeInformation phenotypeInformationFor(
+  @HiveField(1)
+  List<CpicLookup>? lookups;
+
+  // hive can't deal with sets so we have to use a list :(
+  @HiveField(2)
+  List<String>? activeDrugNames;
+
+  static List<Genotype>? _genotypesFrom(
+    List<Genotype>? genotypes,
     String gene,
+    [String? variant]
+  ) {
+    if (genotypes == null) return null;
+    final matchingGenotypes = genotypes.where(
+      (geneResult) => geneResult.gene == gene &&
+        (variant == null || geneResult.variant == variant)
+    ).toList();
+    if (matchingGenotypes.isEmpty) {
+      throw Exception(
+        'Could not find Genotype for $gene, $variant'
+      );
+    }
+    return matchingGenotypes;
+  }
+
+  static Genotype? _genotypeFrom(
+    List<Genotype>? genotypes,
+    Genotype genotype
+  ) {
+    final matchingGenotypes =
+      _genotypesFrom(genotypes, genotype.gene, genotype.variant);
+    if (matchingGenotypes != null && matchingGenotypes.length != 1) {
+      throw Exception(
+        'Found more than one Genotype for ${genotype.toString()} but should '
+        'only find one'
+      );
+    }
+    return matchingGenotypes?.first;
+  }
+
+  static GeneResult? _geneResultFor(Genotype genotype) =>
+    _genotypeFrom(UserData.instance.geneResults, genotype) as GeneResult?;
+
+  static List<GeneResult>? _geneResultsFor(String gene) =>
+    _genotypesFrom(UserData.instance.geneResults, gene) as List<GeneResult>?;
+
+  static List<CpicLookup>? _lookupkeysFor(String gene) =>
+    _genotypesFrom(UserData.instance.lookups, gene) as List<CpicLookup>?;
+
+  static String? variantFor(Genotype genotype) =>
+    _geneResultFor(genotype)?.variant;
+
+  static String? allelesTestedFor(Genotype genotype) =>
+    _geneResultFor(genotype)?.allelesTested;
+
+  static Genotype? genotypeFor(
+    String gene,
+    Drug drug,
+    { required bool useOverwrite }
+  ) {
+    final overwrite = useOverwrite
+      ? UserData.overwrittenLookup(gene, drug: drug.name)
+      : null;
+    if (overwrite != null) {
+      return Genotype(gene: gene, variant: overwrite.value);
+    }
+    final matchingGeneResults = _geneResultsFor(gene);
+    if (matchingGeneResults == null) return null;
+    if (matchingGeneResults.length == 1) {
+      return Genotype(
+        gene: gene,
+        variant: matchingGeneResults.first.variant,
+      );
+    }
+    // When multiple lookups were found it means that the gene has positive/
+    // negative results for multiple alleles; return the lookup that matches
+    // the allele
+    final guidelineAlleles = drug.userGuideline?.lookupkey[gene]?.map(
+      (lookupkey) => lookupkey.split(' ').first
+    ).toSet();
+    if (guidelineAlleles == null || guidelineAlleles.length != 1) return null;
+    final variant = matchingGeneResults.firstWhere(
+      (geneResult) => geneResult.variant.startsWith(guidelineAlleles.first)
+    ).variant;
+    return Genotype(gene: gene, variant: variant);
+  }
+
+  static List<String>? lookupkeysFor(
+    String gene,
+    {
+      String? drug,
+      bool useOverwrite = true,
+    }
+  ) {
+    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
+    final matchingLookups = _lookupkeysFor(gene);
+    return matchingLookups?.map(
+      (lookup) => (useOverwrite && overwrittenLookup != null)
+        ? overwrittenLookup.value
+        : lookup.lookupkey
+    ).toList();
+  }
+
+  static MapEntry<String, String>? overwrittenLookup(
+    String gene,
+    { String? drug }
+  ) {
+    final inhibitors = strongDrugInhibitors[gene];
+    if (inhibitors == null) return null;
+    final lookup = inhibitors.entries.firstWhereOrNull((entry) {
+      final isActiveInhitor =
+        UserData.instance.activeDrugNames?.contains(entry.key) ?? false;
+      final wouldInhibitItself = drug == entry.key;
+      return isActiveInhitor && !wouldInhibitItself;
+    });
+    if (lookup == null) return null;
+    return lookup;
+  }
+
+  static List<String> activeInhibitorsFor(String gene, { String? drug }) {
+    return UserData.instance.activeDrugNames == null
+      ? <String>[]
+      : UserData.instance.activeDrugNames!.filter(
+          (activeDrug) =>
+            inhibitorsFor(gene).contains(activeDrug) &&
+            activeDrug != drug
+        ).toList();
+  }
+
+  // TODO: revisit all the data types and their usage again; can we make this
+  // less redundant? Can we safely assume that binary gene results cannot be
+  // inhibited and what would change then?
+  // TODO(me): should probably receive geneResult already (otherwise not clear)
+  // if should use overwrite
+  static PhenotypeInformation phenotypeInformationFor(
+    Genotype? genotype,
     BuildContext context,
     {
       String? drug,
@@ -57,19 +191,20 @@ class UserData {
       bool useLongPrefix = false,
     }
   ) {
+    final missingResult = PhenotypeInformation(
+        phenotype: context.l10n.general_not_tested,
+      );
+    if (genotype == null) return missingResult;
+    final originalPhenotype = _geneResultFor(genotype)?.phenotype;
+    if (originalPhenotype == null) return missingResult;
     final userSalutation = thirdPerson
       ? context.l10n.drugs_page_inhibitor_third_person_salutation
       : context.l10n.drugs_page_inhibitor_direct_salutation;
     final strongInhibitorTextPrefix = useLongPrefix
       ? context.l10n.strong_inhibitor_long_prefix
       : context.l10n.gene_page_phenotype.toLowerCase();
-    final originalPhenotype = UserData.instance.geneResults?[gene]?.phenotype;
-    if (originalPhenotype == null) {
-      return PhenotypeInformation(
-        phenotype: context.l10n.general_not_tested,
-      );
-    }
-    final activeInhibitors = UserData.activeInhibitorsFor(gene, drug: drug);
+    final activeInhibitors =
+      UserData.activeInhibitorsFor(genotype.gene, drug: drug);
     if (activeInhibitors.isEmpty) {
       return PhenotypeInformation(phenotype: originalPhenotype);
     }
@@ -81,7 +216,8 @@ class UserData {
         phenotype: originalPhenotype,
       );
     }
-    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
+    final overwrittenLookup =
+      UserData.overwrittenLookup(genotype.gene, drug: drug);
     if (overwrittenLookup == null) {
       return PhenotypeInformation(
         phenotype: originalPhenotype,
@@ -109,59 +245,6 @@ class UserData {
         ),
       overwrittenPhenotypeText: originalPhenotypeText,
     );
-  }
-
-  static String? variantFor(String gene) =>
-      UserData.instance.geneResults?[gene]?.variant;
-
-  static String? allelesTestedFor(String gene) =>
-      UserData.instance.geneResults?[gene]?.allelesTested;
-
-  @HiveField(1)
-  Map<String, CpicLookup>? lookups;
-
-  static MapEntry<String, String>? overwrittenLookup(
-    String gene,
-    { String? drug }
-  ) {
-    final inhibitors = strongDrugInhibitors[gene];
-    if (inhibitors == null) return null;
-    final lookup = inhibitors.entries.firstWhereOrNull((entry) {
-      final isActiveInhitor =
-        UserData.instance.activeDrugNames?.contains(entry.key) ?? false;
-      final wouldInhibitItself = drug == entry.key;
-      return isActiveInhitor && !wouldInhibitItself;
-    });
-    if (lookup == null) return null;
-    return lookup;
-  }
-
-  static String? lookupFor(
-    String gene,
-    {
-      String? drug,
-      bool useOverwrite = true,
-    }
-  ) {
-    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
-    if (useOverwrite && overwrittenLookup != null) {
-      return overwrittenLookup.value;
-    }
-    return UserData.instance.lookups?[gene]?.lookupkey;
-  }
-
-  // hive can't deal with sets so we have to use a list :(
-  @HiveField(2)
-  List<String>? activeDrugNames;
-
-  static List<String> activeInhibitorsFor(String gene, { String? drug }) {
-    return UserData.instance.activeDrugNames == null
-      ? <String>[]
-      : UserData.instance.activeDrugNames!.filter(
-          (activeDrug) =>
-            inhibitorsFor(gene).contains(activeDrug) &&
-            activeDrug != drug
-        ).toList();
   }
 }
 
