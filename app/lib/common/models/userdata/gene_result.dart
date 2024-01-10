@@ -26,6 +26,7 @@ class GeneResult implements Genotype {
 
   @override
   @HiveField(1)
+  @JsonKey(name: 'genotype')
   String variant;
 
   @HiveField(2)
