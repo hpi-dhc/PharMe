@@ -48,15 +48,14 @@ Future<void> fetchAndSaveLookups() async {
   // the returned json is a list of lookups which we wish to individually map
   // to a concrete CpicLookup instance, hence the cast to a List
   final json = jsonDecode(response.body) as List<dynamic>;
-  final lookups =
-      json.map((e) => CpicLookup.fromJson(e as Map<String, dynamic>));
+  final lookups = json.map(CpicLookup.fromJson);
   final usersDiplotypes = UserData.instance.geneResults;
   if (usersDiplotypes == null) throw Exception();
 
   // use a HashMap for better time complexity
   final lookupsHashMap = HashMap<String, CpicLookup>.fromIterable(
     lookups,
-    key: (lookup) => '${lookup.gene}__${lookup.genotype}',
+    key: (lookup) => '${lookup.gene}__${lookup.variant}',
     value: (lookup) => lookup,
   );
   // ignore: omit_local_variable_types
@@ -89,8 +88,7 @@ Future<void> fetchAndSaveLookups() async {
 bool shouldFetchLookups() {
   final lookupsPresent = UserData.instance.lookups?.isNotEmpty ?? false;
   final diplotypesPresent = UserData.instance.geneResults?.isNotEmpty ?? false;
-  final result = (_isOutDated() || !lookupsPresent) && diplotypesPresent;
-  return result;
+  return (_isOutDated() || !lookupsPresent) && diplotypesPresent;
 }
 
 bool shouldFetchDiplotypes() {

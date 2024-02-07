@@ -15,10 +15,12 @@ class CpicLookup implements Genotype {
     required this.lookupkey,
   });
 
-  factory CpicLookup.fromJson(Map<String, dynamic> json) {
-    // transform lookupkey map to string
-    json['lookupkey'] = json['lookupkey'][json['genesymbol']];
-    return _$CpicLookupFromJson(json);
+  factory CpicLookup.fromJson(dynamic json) {
+    return _$CpicLookupFromJson({
+      ...json,
+      // transform lookupkey map to string
+      'lookupkey': json['lookupkey'][json['genesymbol']],
+    });
   }
 
   @override
