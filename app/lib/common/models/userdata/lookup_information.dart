@@ -3,20 +3,20 @@ import 'package:hive/hive.dart';
 
 import 'genotype.dart';
 
-part 'cpic_lookup.g.dart';
+part 'lookup_information.g.dart';
 
 @HiveType(typeId: 2)
 @JsonSerializable()
-class CpicLookup implements Genotype {
-  CpicLookup({
+class LookupInformation implements Genotype {
+  LookupInformation({
     required this.gene,
     required this.phenotype,
     required this.variant,
     required this.lookupkey,
   });
 
-  factory CpicLookup.fromJson(dynamic json) {
-    return _$CpicLookupFromJson({
+  factory LookupInformation.fromJson(dynamic json) {
+    return _$LookupInformationFromJson({
       ...json,
       // transform lookupkey map to string
       'lookupkey': json['lookupkey'][json['genesymbol']],

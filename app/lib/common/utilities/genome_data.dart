@@ -21,6 +21,12 @@ Future<Response> getDiplotypes(String? token, String url) async {
   return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 }
 
+String getGenotypeKey(Genotype genotype) {
+  // If gene is unique return gene; else return gene plus first part of variant
+  // (before space)
+  return genotype.gene;
+}
+
 Future<void> _saveDiplotypeAndActiveDrugsResponse(
   Response response,
   ActiveDrugs activeDrugs,
@@ -46,32 +52,32 @@ Future<void> fetchAndSaveLookups() async {
   if (response.statusCode != 200) throw Exception();
 
   // the returned json is a list of lookups which we wish to individually map
-  // to a concrete CpicLookup instance, hence the cast to a List
+  // to a concrete LookupInformation instance, hence the cast to a List
   final json = jsonDecode(response.body) as List<dynamic>;
-  final lookups = json.map(CpicLookup.fromJson);
-  final usersDiplotypes = UserData.instance.geneResults;
-  if (usersDiplotypes == null) throw Exception();
+  final lookups = json.map(LookupInformation.fromJson);
+  final geneResults = UserData.instance.geneResults;
+  if (geneResults == null) throw Exception();
 
   // use a HashMap for better time complexity
-  final lookupsHashMap = HashMap<String, CpicLookup>.fromIterable(
+  final lookupsHashMap = HashMap<String, LookupInformation>.fromIterable(
     lookups,
     key: (lookup) => '${lookup.gene}__${lookup.variant}',
     value: (lookup) => lookup,
   );
   // ignore: omit_local_variable_types
-  final Map<String, CpicLookup> matchingLookups = {};
+  final Map<String, LookupInformation> matchingLookups = {};
   // extract the matching lookups
-  for (final diplotype in usersDiplotypes.values) {
+  for (final geneResult in geneResults.values) {
     // the gene and the genotype build the key for the hashmap
-    final key = '${diplotype.gene}__${diplotype.variant}';
+    final key = '${geneResult.gene}__${geneResult.variant}';
     final lookup = lookupsHashMap[key];
     if (lookup == null) continue;
     // uncomment to print literal mismatches between lab/CPIC phenotypes
-    // if (diplotype.phenotype != lookup.phenotype) {
+    // if (geneResult.phenotype != lookup.phenotype) {
     //   print(
-    //       'Lab phenotype ${diplotype.phenotype} for ${diplotype.gene} (${diplotype.genotype}) is "${lookup.phenotype}" for CPIC');
+    //       'Lab phenotype ${geneResult.phenotype} for ${geneResult.gene} (${geneResult.genotype}) is "${lookup.phenotype}" for CPIC');
     // }
-    matchingLookups[diplotype.gene] = lookup;
+    matchingLookups[geneResult.gene] = lookup;
   }
 
   // uncomment to make user have CYP2D6 lookupkey 0.0

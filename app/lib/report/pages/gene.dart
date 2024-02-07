@@ -10,7 +10,7 @@ class GenePage extends HookWidget {
           initialFilter: FilterState.forGene(lookup.gene),
         );
 
-  final CpicLookup lookup;
+  final LookupInformation lookup;
   final DrugListCubit cubit;
 
   @override

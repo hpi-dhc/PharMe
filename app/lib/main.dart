@@ -5,6 +5,7 @@ import 'common/module.dart';
 
 Future<void> main() async {
   await initServices();
+  // Maybe refresh lookups on app start
   await fetchAndSaveLookups();
   runApp(
     ChangeNotifierProvider(
