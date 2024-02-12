@@ -59,7 +59,7 @@ Future<void> updateGenotypeResults() async {
     final lookup = lookupsHashMap[key];
     if (lookup == null) continue;
     final genotypeResult = GenotypeResult.fromGenotypeData(labResult, lookup);
-    genotypeResults[genotypeResult.key] = genotypeResult;
+    genotypeResults[genotypeResult.key.value] = genotypeResult;
   }
 
   UserData.instance.genotypeResults = genotypeResults;

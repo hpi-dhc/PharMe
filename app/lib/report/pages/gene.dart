@@ -8,7 +8,7 @@ class GenePage extends HookWidget {
   GenePage(this.genotypeResult)
       : cubit = DrugListCubit(
           initialFilter:
-            FilterState.forGenotypeKey(genotypeResult.key),
+            FilterState.forGenotypeKey(genotypeResult.key.value),
         );
 
   final GenotypeResult genotypeResult;
@@ -21,7 +21,8 @@ class GenePage extends HookWidget {
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(
           builder: (context, state) => pageScaffold(
-            title: context.l10n.gene_page_headline(genotypeResult.gene),
+            title:
+              context.l10n.gene_page_headline(genotypeResult.geneDisplayString),
             body: [
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -32,9 +33,13 @@ class GenePage extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SubHeader(
-                      context.l10n.gene_page_your_variant(genotypeResult.gene),
+                      context.l10n.gene_page_your_result(
+                        genotypeResult.geneDisplayString,
+                      ),
                       tooltip: context.l10n
-                          .gene_page_name_tooltip(genotypeResult.gene),
+                          .gene_page_name_tooltip(
+                            genotypeResult.geneDisplayString,
+                          ),
                     ),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
                     RoundedCard(
@@ -50,7 +55,7 @@ class GenePage extends HookWidget {
                             children: [
                               _buildRow(
                                   context.l10n.gene_page_genotype,
-                                  genotypeResult.variant,
+                                  genotypeResult.genotypeDisplayString,
                                   tooltip: context.l10n.gene_page_genotype_tooltip
                               ),
                               _buildPhenotypeRow(context),

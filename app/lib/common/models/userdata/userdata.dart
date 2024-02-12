@@ -56,7 +56,7 @@ class UserData {
     final strongInhibitorTextPrefix = useLongPrefix
       ? context.l10n.strong_inhibitor_long_prefix
       : context.l10n.gene_page_phenotype.toLowerCase();
-    final originalPhenotype = genotypeResult.phenotype;
+    final originalPhenotype = genotypeResult.phenotypeDisplayString;
     final activeInhibitors = UserData.activeInhibitorsFor(
       genotypeResult.gene,
       drug: drug,

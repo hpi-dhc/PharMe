@@ -47,7 +47,19 @@ class GenotypeResult implements Genotype {
   @HiveField(4)
   String allelesTested;
 
-  String get key => GenotypeKey.fromGenotype(this).value;
+  GenotypeKey get key => GenotypeKey.fromGenotype(this);
+
+  String get geneDisplayString => key.value;
+
+  String _removeAllele(String textWithAllele) =>
+    textWithAllele.removePrefix(key.allele).trim().capitalize();
+
+  String get phenotypeDisplayString => key.isGeneUnique
+    ? phenotype
+    : _removeAllele(phenotype);
+  String get genotypeDisplayString => key.isGeneUnique
+    ? variant
+    : _removeAllele(variant);
 }
 
 extension FindGenotypeResultByKey on Map<String, GenotypeResult> {

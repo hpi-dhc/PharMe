@@ -36,7 +36,7 @@ class ReportPage extends StatelessWidget {
             scrollList(
               userGenotypes.map((genotypeResult) => GeneCard(
                 genotypeResult,
-                key: Key('gene-card-${genotypeResult.key}')
+                key: Key('gene-card-${genotypeResult.key.value}')
               )).toList(),
             ),
             if (hasActiveInhibitors) PageIndicatorExplanation(
@@ -67,7 +67,7 @@ class GeneCard extends StatelessWidget {
       ? phenotypeInformation.phenotype
       : '${phenotypeInformation.phenotype}$drugInteractionIndicator';
     final affectedDrugs = CachedDrugs.instance.drugs?.filter(
-      (drug) => drug.guidelineGenotypes.contains(genotypeResult.key)
+      (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
     ) ?? [];
     final warningLevelIndicators = WarningLevel.values.map(
       (warningLevel) {
@@ -106,7 +106,7 @@ class GeneCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                genotypeResult.gene,
+                genotypeResult.geneDisplayString,
                 style: PharMeTheme.textTheme.titleMedium
               ),
               SizedBox(height: 8),
