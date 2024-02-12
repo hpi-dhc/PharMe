@@ -48,8 +48,8 @@ void main() {
               implication: 'nothing',
               warningLevel: WarningLevel.green))
     ]);
-    UserData.instance.geneResults = [
-      GeneResult(
+    UserData.instance.labData = [
+      LabResult(
         gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         variant: '*1/*1',
@@ -58,10 +58,10 @@ void main() {
     ];
     UserData.instance.genotypeResults = {
       'CYP2C9': GenotypeResult(
-        gene: UserData.instance.geneResults![0].gene,
-        phenotype: UserData.instance.geneResults![0].phenotype,
-        variant: UserData.instance.geneResults![0].variant,
-        allelesTested: UserData.instance.geneResults![0].variant,
+        gene: UserData.instance.labData![0].gene,
+        phenotype: UserData.instance.labData![0].phenotype,
+        variant: UserData.instance.labData![0].variant,
+        allelesTested: UserData.instance.labData![0].variant,
         lookupkey: '2',
       ),
     };

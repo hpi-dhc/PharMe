@@ -13,10 +13,10 @@ class GenotypeKey implements Genotype {
   String variant;
 
   String get value {
-    final geneResults = UserData.instance.geneResults!.where(
-    (geneResult) => geneResult.gene == gene
+    final geneData = UserData.instance.labData!.where(
+      (labData) => labData.gene == gene
     );
-    if (geneResults.length > 1) {
+    if (geneData.length > 1) {
       return '$gene ${variant.split(' ').first}';
     }
     return gene;

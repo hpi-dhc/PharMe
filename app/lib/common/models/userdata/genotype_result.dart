@@ -15,7 +15,7 @@ class GenotypeResult implements Genotype {
   });
 
   factory GenotypeResult.fromGenotypeData(
-    GeneResult labResult,
+    LabResult labResult,
     LookupInformation lookup,
   ) => GenotypeResult(
     gene: labResult.gene,

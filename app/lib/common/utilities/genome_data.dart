@@ -24,12 +24,12 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
   Response response,
   ActiveDrugs activeDrugs,
 ) async {
-  // parse response to list of user's geneResults
-  final geneResults =
-      geneResultsFromHTTPResponse(response);
+  // parse response to list of user's labData
+  final labData =
+      labDataFromHTTPResponse(response);
   final activeDrugList = activeDrugsFromHTTPResponse(response);
 
-  UserData.instance.geneResults = geneResults;
+  UserData.instance.labData = labData;
   await UserData.save();
   await activeDrugs.setList(activeDrugList);
   // invalidate cached drugs because lookups may have changed and we need to
@@ -54,7 +54,7 @@ Future<void> updateGenotypeResults() async {
   final genotypeResults = <String, GenotypeResult>{};
   // we know that labData is present because we check this in
   // shouldUpdateGenotypeResults
-  for (final labResult in UserData.instance.geneResults!) {
+  for (final labResult in UserData.instance.labData!) {
     final key = '${labResult.gene}__${labResult.variant}';
     final lookup = lookupsHashMap[key];
     if (lookup == null) continue;
@@ -72,13 +72,13 @@ Future<void> updateGenotypeResults() async {
 
 bool shouldUpdateGenotypeResults() {
   final genotypeResultsPresent =
-    UserData.instance.geneResults?.isNotEmpty ?? false;
-  final labDataPresent = UserData.instance.geneResults?.isNotEmpty ?? false;
+    UserData.instance.labData?.isNotEmpty ?? false;
+  final labDataPresent = UserData.instance.labData?.isNotEmpty ?? false;
   return (!genotypeResultsPresent || _isOutDated()) && labDataPresent;
 }
 
 bool shouldFetchDiplotypes() {
-  return UserData.instance.geneResults == null;
+  return UserData.instance.labData == null;
 }
 
 bool _isOutDated() {

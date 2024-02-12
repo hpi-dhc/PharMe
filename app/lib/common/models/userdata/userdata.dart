@@ -34,7 +34,7 @@ class UserData {
   }
 
   @HiveField(0)
-  List<GeneResult>? geneResults;
+  List<LabResult>? labData;
   @HiveField(1)
   // hive can't deal with sets so we have to use a list :(
   List<String>? activeDrugNames;
@@ -210,7 +210,7 @@ Future<void> initUserData() async {
   // session which has not yet been written to local storage.
   try {
     Hive.registerAdapter(UserDataAdapter());
-    Hive.registerAdapter(GeneResultAdapter());
+    Hive.registerAdapter(LabResultAdapter());
     Hive.registerAdapter(GenotypeResultAdapter());
   } catch (e) {
     return;
