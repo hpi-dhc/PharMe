@@ -92,7 +92,7 @@ extension DrugExtension on Drug {
     ? guidelines.first.lookupkey.keys.flatMap(
       (gene) => guidelines.first.lookupkey[gene]!.map((variant) =>
         GenotypeKey(gene, variant).value
-      ).toList()
+      ).toList().toSet()
     ).toList()
     : [];
 
