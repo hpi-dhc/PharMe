@@ -77,7 +77,7 @@ class FilterState {
     required this.query,
     required this.showInactive,
     required this.showWarningLevel,
-    required this.gene,
+    required this.genotypeKey,
   });
 
   FilterState.initial()
@@ -87,7 +87,7 @@ class FilterState {
           showWarningLevel: {
             for (var level in WarningLevel.values) level: true
           },
-          gene: '',
+          genotypeKey: '',
         );
 
   FilterState.from(
@@ -95,7 +95,7 @@ class FilterState {
     String? query,
     bool? showInactive,
     Map<WarningLevel, bool>? showWarningLevel,
-    String? gene,
+    String? genotypeKey,
   }) : this(
           query: query ?? other.query,
           showInactive: showInactive ?? other.showInactive,
@@ -103,23 +103,23 @@ class FilterState {
             for (var level in WarningLevel.values)
               level: showWarningLevel?[level] ?? other.showWarningLevel[level]!
           },
-          gene: gene ?? other.gene,
+          genotypeKey: genotypeKey ?? other.genotypeKey,
         );
 
-  FilterState.forGene(String gene)
+  FilterState.forGenotypeKey(String genotypeKey)
       : this(
           query: '',
           showInactive: true,
           showWarningLevel: {
             for (var level in WarningLevel.values) level: true
           },
-          gene: gene,
+          genotypeKey: genotypeKey,
         );
 
   final String query;
   final bool showInactive;
   final Map<WarningLevel, bool> showWarningLevel;
-  final String gene;
+  final String genotypeKey;
 
   bool isAccepted(Drug drug, ActiveDrugs activeDrugs, {
     required bool useDrugClass,
@@ -135,7 +135,7 @@ class FilterState {
       drug.matches(query: query, useClass: useDrugClass) &&
       (activeDrugs.contains(drug.name) || showInactive) &&
       warningLevelMatches &&
-      (gene.isBlank || (drug.guidelineGenes.contains(gene)));
+      (genotypeKey.isBlank || (drug.guidelineGenotypes.contains(genotypeKey)));
     return isDrugAccepted;
   }
 

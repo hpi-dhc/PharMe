@@ -9,7 +9,7 @@ void main() {
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
 
-  UserData.instance.lookups = {};
+  UserData.instance.genotypeResults = {};
 
   CachedDrugs.instance.version = 1;
   CachedDrugs.instance.drugs = List.empty();

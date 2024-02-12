@@ -3,8 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-import '../constants.dart';
-import '../models/module.dart';
+import '../module.dart';
 
 Future<void> fetchAndSaveDiplotypesAndActiveDrugs(
   String token, String url, ActiveDrugs activeDrugs) async {
@@ -21,24 +20,16 @@ Future<Response> getDiplotypes(String? token, String url) async {
   return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
 }
 
-String getGenotypeKey(Genotype genotype) {
-  // If gene is unique return gene; else return gene plus first part of variant
-  // (before space)
-  return genotype.gene;
-}
-
 Future<void> _saveDiplotypeAndActiveDrugsResponse(
   Response response,
   ActiveDrugs activeDrugs,
 ) async {
-  // parse response to list of user's diplotypes
-  final diplotypes =
+  // parse response to list of user's geneResults
+  final geneResults =
       geneResultsFromHTTPResponse(response);
   final activeDrugList = activeDrugsFromHTTPResponse(response);
 
-  UserData.instance.geneResults = {
-    for (final diplotype in diplotypes) diplotype.gene: diplotype
-  };
+  UserData.instance.geneResults = geneResults;
   await UserData.save();
   await activeDrugs.setList(activeDrugList);
   // invalidate cached drugs because lookups may have changed and we need to
@@ -46,17 +37,13 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
   await CachedDrugs.erase();
 }
 
-Future<void> fetchAndSaveLookups() async {
-  if (!shouldFetchLookups()) return;
+Future<void> updateGenotypeResults() async {
+  if (!shouldUpdateGenotypeResults()) return;
+  // fetch lookups
   final response = await get(Uri.parse(cpicLookupUrl));
   if (response.statusCode != 200) throw Exception();
-
-  // the returned json is a list of lookups which we wish to individually map
-  // to a concrete LookupInformation instance, hence the cast to a List
   final json = jsonDecode(response.body) as List<dynamic>;
   final lookups = json.map(LookupInformation.fromJson);
-  final geneResults = UserData.instance.geneResults;
-  if (geneResults == null) throw Exception();
 
   // use a HashMap for better time complexity
   final lookupsHashMap = HashMap<String, LookupInformation>.fromIterable(
@@ -64,26 +51,18 @@ Future<void> fetchAndSaveLookups() async {
     key: (lookup) => '${lookup.gene}__${lookup.variant}',
     value: (lookup) => lookup,
   );
-  // ignore: omit_local_variable_types
-  final Map<String, LookupInformation> matchingLookups = {};
-  // extract the matching lookups
-  for (final geneResult in geneResults.values) {
-    // the gene and the genotype build the key for the hashmap
-    final key = '${geneResult.gene}__${geneResult.variant}';
+  final genotypeResults = <String, GenotypeResult>{};
+  // we know that labData is present because we check this in
+  // shouldUpdateGenotypeResults
+  for (final labResult in UserData.instance.geneResults!) {
+    final key = '${labResult.gene}__${labResult.variant}';
     final lookup = lookupsHashMap[key];
     if (lookup == null) continue;
-    // uncomment to print literal mismatches between lab/CPIC phenotypes
-    // if (geneResult.phenotype != lookup.phenotype) {
-    //   print(
-    //       'Lab phenotype ${geneResult.phenotype} for ${geneResult.gene} (${geneResult.genotype}) is "${lookup.phenotype}" for CPIC');
-    // }
-    matchingLookups[geneResult.gene] = lookup;
+    final genotypeResult = GenotypeResult.fromGenotypeData(labResult, lookup);
+    genotypeResults[genotypeResult.key] = genotypeResult;
   }
 
-  // uncomment to make user have CYP2D6 lookupkey 0.0
-  // matchingLookups['CYP2D6'] = lookupsHashMap['CYP2D6__*100/*100']!;
-
-  UserData.instance.lookups = matchingLookups;
+  UserData.instance.genotypeResults = genotypeResults;
   await UserData.save();
 
   // Save datetime at which lookups were fetched
@@ -91,10 +70,11 @@ Future<void> fetchAndSaveLookups() async {
   await MetaData.save();
 }
 
-bool shouldFetchLookups() {
-  final lookupsPresent = UserData.instance.lookups?.isNotEmpty ?? false;
-  final diplotypesPresent = UserData.instance.geneResults?.isNotEmpty ?? false;
-  return (_isOutDated() || !lookupsPresent) && diplotypesPresent;
+bool shouldUpdateGenotypeResults() {
+  final genotypeResultsPresent =
+    UserData.instance.geneResults?.isNotEmpty ?? false;
+  final labDataPresent = UserData.instance.geneResults?.isNotEmpty ?? false;
+  return (!genotypeResultsPresent || _isOutDated()) && labDataPresent;
 }
 
 bool shouldFetchDiplotypes() {

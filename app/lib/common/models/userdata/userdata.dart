@@ -11,18 +11,6 @@ part 'userdata.g.dart';
 
 const _boxName = 'userdata';
 
-class PhenotypeInformation {
-  PhenotypeInformation({
-    required this.phenotype,
-    this.adaptionText,
-    this.overwrittenPhenotypeText,
-  });
-
-  String phenotype;
-  String? adaptionText;
-  String? overwrittenPhenotypeText;
-}
-
 /// UserData is a singleton data-class which contains various user-specific
 /// data It is intended to be loaded from a Hive box once at app launch, from
 /// where it's contents can be modified by accessing it's properties.
@@ -46,10 +34,15 @@ class UserData {
   }
 
   @HiveField(0)
-  Map<String, GeneResult>? geneResults;
+  List<GeneResult>? geneResults;
+  @HiveField(1)
+  // hive can't deal with sets so we have to use a list :(
+  List<String>? activeDrugNames;
+  @HiveField(2)
+  Map<String, GenotypeResult>? genotypeResults;
 
   static PhenotypeInformation phenotypeInformationFor(
-    String gene,
+    GenotypeResult genotypeResult,
     BuildContext context,
     {
       String? drug,
@@ -63,13 +56,11 @@ class UserData {
     final strongInhibitorTextPrefix = useLongPrefix
       ? context.l10n.strong_inhibitor_long_prefix
       : context.l10n.gene_page_phenotype.toLowerCase();
-    final originalPhenotype = UserData.instance.geneResults?[gene]?.phenotype;
-    if (originalPhenotype == null) {
-      return PhenotypeInformation(
-        phenotype: context.l10n.general_not_tested,
-      );
-    }
-    final activeInhibitors = UserData.activeInhibitorsFor(gene, drug: drug);
+    final originalPhenotype = genotypeResult.phenotype;
+    final activeInhibitors = UserData.activeInhibitorsFor(
+      genotypeResult.gene,
+      drug: drug,
+    );
     if (activeInhibitors.isEmpty) {
       return PhenotypeInformation(phenotype: originalPhenotype);
     }
@@ -81,7 +72,10 @@ class UserData {
         phenotype: originalPhenotype,
       );
     }
-    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
+    final overwrittenLookup = UserData.overwrittenLookup(
+      genotypeResult.gene,
+      drug: drug,
+    );
     if (overwrittenLookup == null) {
       return PhenotypeInformation(
         phenotype: originalPhenotype,
@@ -111,14 +105,11 @@ class UserData {
     );
   }
 
-  static String? variantFor(String gene) =>
-      UserData.instance.geneResults?[gene]?.variant;
+  static String? variantFor(String genotypeKey) =>
+      UserData.instance.genotypeResults?[genotypeKey]?.variant;
 
-  static String? allelesTestedFor(String gene) =>
-      UserData.instance.geneResults?[gene]?.allelesTested;
-
-  @HiveField(1)
-  Map<String, LookupInformation>? lookups;
+  static String? allelesTestedFor(String genotypeKey) =>
+      UserData.instance.genotypeResults?[genotypeKey]?.allelesTested;
 
   static MapEntry<String, String>? overwrittenLookup(
     String gene,
@@ -137,22 +128,19 @@ class UserData {
   }
 
   static String? lookupFor(
-    String gene,
+    String genotypeKey,
     {
       String? drug,
       bool useOverwrite = true,
     }
   ) {
-    final overwrittenLookup = UserData.overwrittenLookup(gene, drug: drug);
+    final overwrittenLookup =
+      UserData.overwrittenLookup(genotypeKey, drug: drug);
     if (useOverwrite && overwrittenLookup != null) {
       return overwrittenLookup.value;
     }
-    return UserData.instance.lookups?[gene]?.lookupkey;
+    return UserData.instance.genotypeResults?[genotypeKey]?.lookupkey;
   }
-
-  // hive can't deal with sets so we have to use a list :(
-  @HiveField(2)
-  List<String>? activeDrugNames;
 
   static List<String> activeInhibitorsFor(String gene, { String? drug }) {
     return UserData.instance.activeDrugNames == null
@@ -223,7 +211,7 @@ Future<void> initUserData() async {
   try {
     Hive.registerAdapter(UserDataAdapter());
     Hive.registerAdapter(GeneResultAdapter());
-    Hive.registerAdapter(LookupInformationAdapter());
+    Hive.registerAdapter(GenotypeResultAdapter());
   } catch (e) {
     return;
   }

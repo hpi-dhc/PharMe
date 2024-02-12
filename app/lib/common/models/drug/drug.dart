@@ -88,8 +88,12 @@ extension DrugExtension on Drug {
   Guideline? get userOrFirstGuideline => userGuideline ??
     (guidelines.isNotEmpty ? guidelines.first : null);
 
-  List<String> get guidelineGenes => guidelines.isNotEmpty
-    ? guidelines.first.lookupkey.keys.toList()
+  List<String> get guidelineGenotypes => guidelines.isNotEmpty
+    ? guidelines.first.lookupkey.keys.flatMap(
+      (gene) => guidelines.first.lookupkey[gene]!.map((variant) =>
+        GenotypeKey(gene, variant).value
+      ).toList()
+    ).toList()
     : [];
 
   WarningLevel get warningLevel =>

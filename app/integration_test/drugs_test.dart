@@ -19,49 +19,52 @@ void main() {
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
 
   final testDrug = Drug(
-      id: '1',
-      version: 1,
-      name: 'Ibuprofen',
-      rxNorm: 'rxnorm',
-      annotations: DrugAnnotations(
-          drugclass: 'NSAID',
-          indication: 'indication',
-          brandNames: ['brand name', 'another brand name']),
-      guidelines: [
-        Guideline(
-            id: '1',
-            version: 1,
-            lookupkey: {
-              'CYP2C9': ['2']
-            },
-            externalData: [
-              GuidelineExtData(
-                  source: 'CPIC',
-                  guidelineName: 'cpic name',
-                  guidelineUrl: 'cpic url',
-                  implications: {'CYP2C9': 'normal metabolization'},
-                  recommendation: 'default dose',
-                  comments: 'comments')
-            ],
-            annotations: GuidelineAnnotations(
+    id: '1',
+    version: 1,
+    name: 'Ibuprofen',
+    rxNorm: 'rxnorm',
+    annotations: DrugAnnotations(
+        drugclass: 'NSAID',
+        indication: 'indication',
+        brandNames: ['brand name', 'another brand name']),
+    guidelines: [
+      Guideline(
+          id: '1',
+          version: 1,
+          lookupkey: {
+            'CYP2C9': ['2']
+          },
+          externalData: [
+            GuidelineExtData(
+                source: 'CPIC',
+                guidelineName: 'cpic name',
+                guidelineUrl: 'cpic url',
+                implications: {'CYP2C9': 'normal metabolization'},
                 recommendation: 'default dose',
-                implication: 'nothing',
-                warningLevel: WarningLevel.green))
-      ]);
-  UserData.instance.lookups = {
-    'CYP2C9': LookupInformation(
+                comments: 'comments')
+          ],
+          annotations: GuidelineAnnotations(
+              recommendation: 'default dose',
+              implication: 'nothing',
+              warningLevel: WarningLevel.green))
+    ]);
+    UserData.instance.geneResults = [
+      GeneResult(
         gene: 'CYP2C9',
         phenotype: 'Normal Metabolizer',
         variant: '*1/*1',
-        lookupkey: '2')
-  };
-  UserData.instance.geneResults = {
-    'CYP2C9': GeneResult(
-        gene: 'CYP2C9',
-        phenotype: 'Normal Metabolizer',
-        variant: '*1/*1',
-        allelesTested: '1')
-  };
+        allelesTested: '1',
+      ),
+    ];
+    UserData.instance.genotypeResults = {
+      'CYP2C9': GenotypeResult(
+        gene: UserData.instance.geneResults![0].gene,
+        phenotype: UserData.instance.geneResults![0].phenotype,
+        variant: UserData.instance.geneResults![0].variant,
+        allelesTested: UserData.instance.geneResults![0].variant,
+        lookupkey: '2',
+      ),
+    };
   final testDrugWithoutGuidelines = Drug(
     id: '2',
     version: 1,

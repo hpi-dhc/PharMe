@@ -5,12 +5,13 @@ import '../../drug/widgets/module.dart';
 
 @RoutePage()
 class GenePage extends HookWidget {
-  GenePage(this.lookup)
+  GenePage(this.genotypeResult)
       : cubit = DrugListCubit(
-          initialFilter: FilterState.forGene(lookup.gene),
+          initialFilter:
+            FilterState.forGenotypeKey(genotypeResult.key),
         );
 
-  final LookupInformation lookup;
+  final GenotypeResult genotypeResult;
   final DrugListCubit cubit;
 
   @override
@@ -20,7 +21,7 @@ class GenePage extends HookWidget {
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(
           builder: (context, state) => pageScaffold(
-            title: context.l10n.gene_page_headline(lookup.gene),
+            title: context.l10n.gene_page_headline(genotypeResult.gene),
             body: [
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -31,9 +32,9 @@ class GenePage extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SubHeader(
-                      context.l10n.gene_page_your_variant(lookup.gene),
+                      context.l10n.gene_page_your_variant(genotypeResult.gene),
                       tooltip: context.l10n
-                          .gene_page_name_tooltip(lookup.gene),
+                          .gene_page_name_tooltip(genotypeResult.gene),
                     ),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
                     RoundedCard(
@@ -49,16 +50,16 @@ class GenePage extends HookWidget {
                             children: [
                               _buildRow(
                                   context.l10n.gene_page_genotype,
-                                  lookup.variant,
+                                  genotypeResult.variant,
                                   tooltip: context.l10n.gene_page_genotype_tooltip
                               ),
                               _buildPhenotypeRow(context),
                             ],
                           ),
-                          if (canBeInhibited(lookup))
+                          if (canBeInhibited(genotypeResult))
                             ...buildDrugInteractionInfo(
                               context,
-                              lookup.gene,
+                              genotypeResult,
                             ),
                       ],
                     )),
@@ -80,7 +81,7 @@ class GenePage extends HookWidget {
 
   TableRow _buildPhenotypeRow(BuildContext context) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      lookup.gene,
+      genotypeResult,
       context,
     );
     final phenotypeText = phenotypeInformation.adaptionText.isNotNullOrBlank
@@ -115,15 +116,19 @@ class GenePage extends HookWidget {
         Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4), child: Text(value)),
       ]);
 
-  List<Widget> buildDrugInteractionInfo(BuildContext context, String gene) {
+  List<Widget> buildDrugInteractionInfo(
+    BuildContext context,
+    GenotypeResult genotypeResult,
+  ) {
     final phenotypeInformation = UserData.phenotypeInformationFor(
-      gene,
+      genotypeResult,
       context,
       useLongPrefix: true,
     );
     if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
-      final furtherInhibitors = inhibitorsFor(gene).filter((drugName) =>
-        !UserData.activeInhibitorsFor(gene).contains(drugName)
+      final furtherInhibitors = inhibitorsFor(genotypeResult.gene).filter(
+        (drugName) =>
+          !UserData.activeInhibitorsFor(genotypeResult.gene).contains(drugName)
       );
       var phenotypeInformationText = '';
       if (phenotypeInformation.overwrittenPhenotypeText.isNotNullOrBlank) {
@@ -156,7 +161,7 @@ class GenePage extends HookWidget {
       Text(context.l10n.gene_page_inhibitor_drugs),
       SizedBox(height: PharMeTheme.smallSpace),
       Text(
-        inhibitorsFor(gene).join(', ')
+        inhibitorsFor(genotypeResult.gene).join(', ')
       ),
     ];
   }

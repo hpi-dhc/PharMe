@@ -162,9 +162,12 @@ class GuidelineAnnotationCard extends StatelessWidget {
         style: TextStyle(fontStyle: FontStyle.italic),
       );
     } else {
-      final geneDescriptions = drug.guidelineGenes.map((gene) {
+      final geneDescriptions = drug.guidelineGenotypes.map((genotypeKey) {
         final phenotypeInformation = UserData.phenotypeInformationFor(
-          gene,
+          UserData.instance.genotypeResults!.findOrMissing(
+            genotypeKey,
+            context,
+          ),
           context,
           drug: drug.name,
         );
@@ -172,7 +175,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
         if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
           description = '$description (${phenotypeInformation.adaptionText})';
         }
-        return TableRowDefinition(gene, description);
+        return TableRowDefinition(genotypeKey, description);
       });
       return buildTable(geneDescriptions.toList());
     }

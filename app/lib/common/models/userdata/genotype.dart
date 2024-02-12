@@ -1,9 +1,9 @@
 abstract class Genotype{
-  Genotype({
+  const Genotype({
     required this.gene,
     required this.variant,
   });
 
-  String gene;
-  String variant;
+  final String gene;
+  final String variant;
 }

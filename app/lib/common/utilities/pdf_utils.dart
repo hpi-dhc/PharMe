@@ -124,9 +124,9 @@ List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
   ];
 }
 
-String? _getPhenotypeInfo(String gene, Drug drug, BuildContext context) {
+String? _getPhenotypeInfo(String genotypeKey, Drug drug, BuildContext context) {
   final phenotypeInformation = UserData.phenotypeInformationFor(
-    gene,
+    UserData.instance.genotypeResults!.findOrMissing(genotypeKey, context),
     context,
     drug: drug.name,
     thirdPerson: true,
@@ -144,14 +144,18 @@ String? _getPhenotypeInfo(String gene, Drug drug, BuildContext context) {
   return '$phenotypeInformationText)';
 }
 
-String? _getActivityScoreInfo(String gene, Drug drug, BuildContext context) {
+String? _getActivityScoreInfo(
+  String genotypeKey,
+  Drug drug,
+  BuildContext context,
+) {
   final originalLookup = UserData.lookupFor(
-    gene,
+    genotypeKey,
     drug: drug.name,
     useOverwrite: false,
   );
   final overwrittenLookup = UserData.lookupFor(
-    gene,
+    genotypeKey,
     drug: drug.name,
     useOverwrite: true,
   );
@@ -168,9 +172,9 @@ String _userInfoPerGene(
   BuildContext buildContext,  
 ) {
   if (drug.guidelines.isEmpty) return buildContext.l10n.pdf_no_value;
-  return drug.guidelineGenes.map((gene) =>
-    '$gene: ${
-      getInfo(gene, drug, buildContext) ?? buildContext.l10n.pdf_no_value
+  return drug.guidelineGenotypes.map((genotypeKey) =>
+    '$genotypeKey: ${
+      getInfo(genotypeKey, drug, buildContext) ?? buildContext.l10n.pdf_no_value
     }'
   ).join(', ');
 }
@@ -183,7 +187,7 @@ List<pw.Widget> _buildUserPart(
 ) {
   final patientGenotype = _userInfoPerGene(
     drug,
-    (gene, drug, context) => UserData.variantFor(gene),
+    (genotypeKey, drug, context) => UserData.variantFor(genotypeKey),
     buildContext,
   );
   final patientPhenotype = _userInfoPerGene(
@@ -198,7 +202,7 @@ List<pw.Widget> _buildUserPart(
   );
   final allelesTested = _userInfoPerGene(
     drug,
-    (gene, drug, context) => UserData.allelesTestedFor(gene),
+    (genotypeKey, drug, context) => UserData.allelesTestedFor(genotypeKey),
     buildContext,
   );
   final warningLevelIcons = {

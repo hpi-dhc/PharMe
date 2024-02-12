@@ -49,7 +49,7 @@ class LoginCubit extends Cubit<LoginState> {
       // get data
       await fetchAndSaveDiplotypesAndActiveDrugs(
         token, lab.starAllelesUrl.toString(), activeDrugs);
-      await fetchAndSaveLookups();
+      await updateGenotypeResults();
 
       await updateCachedDrugs();
 

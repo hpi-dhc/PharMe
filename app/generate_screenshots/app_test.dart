@@ -34,7 +34,7 @@ void main() {
 
       // Part before runApp in lib/main.dart
       await initServices();
-      await fetchAndSaveLookups();
+      await updateGenotypeResults();
 
       // Load the app
       await tester.pumpWidget(
