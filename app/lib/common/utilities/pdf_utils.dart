@@ -259,24 +259,41 @@ List<pw.Widget> _buildUserPart(
   ];
 }
 
+pw.Text _buildInfoText(String text) => pw.Text(
+  text,
+  style: pw.TextStyle(fontStyle: pw.FontStyle.italic),
+);
+
 List<pw.Widget> _buildExternalGuidelinePart(
   Drug drug,
   BuildContext buildContext
 ) {
-  final externalData = drug.userGuideline?.externalData;
-  final heading = _buildSubheading(
-    buildContext.l10n.pdf_heading_clinical_guidelines
-  );
-  return externalData == null ?
-    [ heading, _buildTextBlockSpacer(), pw.Text(buildContext.l10n.pdf_no_value) ] :
-    [
-      heading,
-      _buildTextBlockSpacer(),
-      pw.Text(
-        buildContext.l10n.pdf_info_clinical_guidelines,
-        style: pw.TextStyle(fontStyle: pw.FontStyle.italic),
+  final heading = [
+    _buildSubheading(
+      buildContext.l10n.pdf_heading_clinical_guidelines
+    ),
+    _buildTextBlockSpacer(),
+  ];
+  if (drug.userOrFirstGuideline == null) {
+    return [
+      ...heading,
+      _buildInfoText(buildContext.l10n.drugs_page_guidelines_empty(drug.name)),
+    ];
+  }
+  if (drug.userGuideline == null) {
+    return [
+      ...heading,
+      _buildInfoText(
+        buildContext.l10n.pdf_info_clinical_guidelines_no_phenotype_guidelines,
       ),
-      ...externalData.fold([], (externalGuidelines, guideline) =>
+      _buildTextBlockSpacer(),
+      ..._buildGuidelineUrls(drug, buildContext),
+    ];
+  }
+  return [
+    ...heading,
+    _buildInfoText(buildContext.l10n.pdf_info_clinical_guidelines),
+    ...drug.userGuideline!.externalData.fold([], (externalGuidelines, guideline) =>
         [
           ...externalGuidelines,
           _buildTextBlockSpacer(),
@@ -284,8 +301,31 @@ List<pw.Widget> _buildExternalGuidelinePart(
           ..._buildGuidelinePart(guideline, buildContext)
         ]
       ),
-      _buildTextDivider()
-    ];
+      _buildTextDivider(),
+  ];
+}
+
+pw.UrlLink _buildLink(String destination, { String? displayText }) =>
+  pw.UrlLink(
+    child: pw.Text(
+      displayText ?? destination,
+      style: pw.TextStyle(
+        color: PdfColors.blue500,
+        decoration: pw.TextDecoration.underline,
+      )
+    ),
+    destination: destination,
+  );
+
+List<pw.Widget> _buildGuidelineUrls(Drug drug, BuildContext buildContext) {
+  return [
+    ...drug.userOrFirstGuideline!.externalData.fold<List<String>>([], (links, guideline) =>
+      [
+        ...links,
+        guideline.guidelineUrl,
+      ]
+    ).toSet().map(_buildLink),
+  ];
 }
 
 List<pw.Widget> _buildGuidelinePart(
@@ -306,16 +346,7 @@ List<pw.Widget> _buildGuidelinePart(
       ),
     ),
     _PdfSegment(child:
-      pw.UrlLink(
-        child: pw.Text(
-          guideline.guidelineUrl,
-          style: pw.TextStyle(
-            color: PdfColors.blue500,
-            decoration: pw.TextDecoration.underline,
-          )
-        ),
-        destination: guideline.guidelineUrl,
-      )
+      _buildLink(guideline.guidelineUrl),
     ),
     _buildTextSpacer(),
     _PdfSegment(
