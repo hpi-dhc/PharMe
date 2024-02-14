@@ -206,6 +206,9 @@
   "drugs_page_recommendation_warfarin": "Consult your pharmacist or doctor for more information.",
 
   "report_content_explanation": "Here is your PGx report. Tap on a gene name for more details on your results and a list of implicated drugs.",
+  "report_genetic_information_part_1": "If you would like to learn more about genetics, please visit ",
+  "report_genetic_information_part_2": ", a service of the National Library of Medicine.",
+  "genetic_information_source": "MedlinePlus",
   "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by drugs you are currently taking",
   "@report_page_indicator_explanation": {
     "placeholders": {

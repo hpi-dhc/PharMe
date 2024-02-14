@@ -33,6 +33,9 @@ Future<void> sendEmail({
   );
 }
 
+Future<void> openFurtherGeneticInformation() async =>
+  launchUrl(Uri.https('medlineplus.gov', '/genetics/understanding/'));
+
 final cpicMaxCacheTime = Duration(days: 90);
 const maxCachedDrugs = 10;
 const cpicLookupUrl =

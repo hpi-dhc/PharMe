@@ -28,7 +28,7 @@ class DrugSelectionPage extends HookWidget {
               title: context.l10n.drug_selection_header,
               body: Column(
                 children: [
-                  if (concludesOnboarding) PageDescription(
+                  if (concludesOnboarding) PageDescription.fromText(
                     context.l10n.drug_selection_onboarding_description,
                   ),
                   Expanded(child: _buildDrugList(context, state)),

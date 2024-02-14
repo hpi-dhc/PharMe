@@ -32,7 +32,24 @@ class ReportPage extends StatelessWidget {
         title: context.l10n.tab_report,
         body: Column(
           children: [
-            PageDescription(context.l10n.report_content_explanation),
+            PageDescription(Column(children: [
+              PageDescriptionText(context.l10n.report_content_explanation),
+              SizedBox(height: PharMeTheme.smallSpace),
+              RichText(text: TextSpan(
+                text: context.l10n.report_genetic_information_part_1,
+                style: pageDescriptionTextStyle,
+                children: [
+                  linkTextSpan(
+                    text: context.l10n.genetic_information_source,
+                    onTap: openFurtherGeneticInformation,
+                  ),
+                  TextSpan(
+                    text: context.l10n.report_genetic_information_part_2,
+                    style: pageDescriptionTextStyle,
+                  ),
+                ],
+              ))
+            ])),
             scrollList(
               userGenotypes.map((genotypeResult) => GeneCard(
                 genotypeResult,
@@ -50,6 +67,7 @@ class ReportPage extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class GeneCard extends StatelessWidget {

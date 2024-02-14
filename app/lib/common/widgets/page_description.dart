@@ -1,9 +1,12 @@
 import '../module.dart';
 
 class PageDescription extends StatelessWidget {
-  const PageDescription(this.text);
+  const PageDescription(this.widget);
 
-  final String text;
+  factory PageDescription.fromText(String text) =>
+    PageDescription(PageDescriptionText(text));
+
+  final Widget widget;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +15,20 @@ class PageDescription extends StatelessWidget {
         left: PharMeTheme.smallSpace,
         right: PharMeTheme.smallSpace,
         bottom: PharMeTheme.smallSpace),
-      child: Text(text, style: PharMeTheme.textTheme.bodyMedium),
+      child: widget,
     );
+  }
+}
+
+final pageDescriptionTextStyle = PharMeTheme.textTheme.bodyMedium;
+
+class PageDescriptionText extends StatelessWidget {
+  const PageDescriptionText(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text, style: pageDescriptionTextStyle);
   }
 }
