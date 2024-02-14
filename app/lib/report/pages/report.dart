@@ -36,7 +36,7 @@ class ReportPage extends StatelessWidget {
               PageDescriptionText(context.l10n.report_content_explanation),
               SizedBox(height: PharMeTheme.smallSpace),
               RichText(text: TextSpan(
-                text: context.l10n.report_genetic_information_part_1,
+                text: context.l10n.genetic_information_text_part_1,
                 style: pageDescriptionTextStyle,
                 children: [
                   linkTextSpan(
@@ -44,11 +44,11 @@ class ReportPage extends StatelessWidget {
                     onTap: openFurtherGeneticInformation,
                   ),
                   TextSpan(
-                    text: context.l10n.report_genetic_information_part_2,
+                    text: context.l10n.genetic_information_text_part_2,
                     style: pageDescriptionTextStyle,
                   ),
                 ],
-              ))
+              )),
             ])),
             scrollList(
               userGenotypes.map((genotypeResult) => GeneCard(

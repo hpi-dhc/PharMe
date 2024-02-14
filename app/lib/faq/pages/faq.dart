@@ -86,7 +86,9 @@ class FaqPage extends StatelessWidget {
                     right: PharMeTheme.mediumSpace,
                     bottom: PharMeTheme.smallSpace,
                   ),
-                  title: Text(question.answer),
+                  title: question is TextAnswerQuestion
+                    ? Text(question.answer)
+                    : question.answer,
                 ),
               ],
             ),
