@@ -55,7 +55,7 @@ final Map<String, List<Question>> faqList = {
       question: 'Where can I find out more about genetics?',
       answer: RichText(text: TextSpan(
         // context.l10n.genetic_information_text_part_1
-        text: 'If you would like to learn more about genetics, you can visit ',
+        text: 'If you would like to learn more about genetics, we recommend ',
         style: PharMeTheme.textTheme.titleMedium,
         children: [
           linkTextSpan(
