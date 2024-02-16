@@ -74,8 +74,8 @@
       }
     }
   },
-  "search_no_drugs_with_filter_amendment": " or filters right to the search bar",
-  "search_no_drugs": "No drugs found. Try adjusting the search term{amendment}.",
+  "search_no_drugs_with_filter_amendment": " or filters",
+  "search_no_drugs": "No drugs found. Try adjusting the search term{amendment}.\n\nIf the drug you are looking for is not included in PharMe, it might not have relevant DNA-based guidelines – then clinical dosing applies. Consult your pharmacist or doctor for more information.",
   "@search_no_drugs": {
     "placeholders": {
         "amendment": {
