@@ -46,23 +46,26 @@ class DrugSearch extends HookWidget {
           builder: (context, state) {
             return Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: CupertinoSearchTextField(
-                        controller: searchController,
-                        onChanged: (value) {
-                          context.read<DrugListCubit>().search(query: value);
-                        },
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
+                    child: Row(
+                    children: [
+                      Expanded(
+                        child: CupertinoSearchTextField(
+                          controller: searchController,
+                          onChanged: (value) {
+                            context.read<DrugListCubit>().search(query: value);
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(width: PharMeTheme.smallToMediumSpace),
-                    TooltipIcon(useDrugClass
-                      ? context.l10n.search_page_tooltip_search
-                      : context.l10n.search_page_tooltip_search_no_class
-                    ),
-                    if (showFilter) buildFilter(context),
-                  ]
+                      SizedBox(width: PharMeTheme.smallToMediumSpace),
+                      TooltipIcon(useDrugClass
+                        ? context.l10n.search_page_tooltip_search
+                        : context.l10n.search_page_tooltip_search_no_class
+                      ),
+                      if (showFilter) buildFilter(context),
+                    ]
+                  ),
                 ),
                 scrollList(
                   keepPosition: keepPosition,
