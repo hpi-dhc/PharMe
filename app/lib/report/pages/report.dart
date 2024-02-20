@@ -92,7 +92,6 @@ class GeneCard extends StatelessWidget {
         final warningLevelCount = affectedDrugs.filter(
           (drug) => drug.warningLevel == warningLevel
         ).length;
-        final textColor = darkenColor(warningLevel.color, 0.4);
         return warningLevelCount > 0
         ? Row(
             textDirection: TextDirection.ltr,
@@ -100,12 +99,12 @@ class GeneCard extends StatelessWidget {
               Icon(
                 warningLevel.icon,
                 size: PharMeTheme.mediumSpace,
-                color: textColor,
+                color: warningLevel.textColor,
               ),
               SizedBox(width: PharMeTheme.smallSpace * 0.4),
               Text(
                 warningLevelCount.toString(),
-                style: TextStyle(color: textColor),
+                style: TextStyle(color: warningLevel.textColor),
               ),
               SizedBox(width: PharMeTheme.smallSpace * 0.8),
             ]

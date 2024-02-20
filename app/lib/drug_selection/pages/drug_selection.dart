@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../common/models/metadata.dart';
 import '../../common/module.dart' hide MetaData;
 import '../../common/widgets/drug_list/drug_items/drug_checkbox_list.dart';
-import '../../common/widgets/drug_search.dart';
 import '../cubit.dart';
 
 @RoutePage()
