@@ -1,5 +1,16 @@
 import '../../module.dart';
 
+class FilterButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.filter_list),
+      color: PharMeTheme.iconColor,
+      onPressed: Scaffold.of(context).openDrawer,
+    );
+  }
+}
+
 class FilterMenuItem {
   FilterMenuItem({
     required bool initialValue,
@@ -20,32 +31,30 @@ class FilterMenuItem {
 }
 
 class FilterMenu extends HookWidget {
-  const FilterMenu(this.cubit, this.state);
+  const FilterMenu(this.cubit);
 
   final DrugListCubit cubit;
-  final DrugListState state;
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: Icon(Icons.filter_list),
-      color: PharMeTheme.onSurfaceColor,
-      elevation: 0,
-      itemBuilder: (context) => _menuItems.map(
-        (item) => PopupMenuItem(child: StatefulBuilder(
-          builder: (context, setState) {
-            return item.build(
-              context,
-              value: item.value,
-              statefulOnChange: ([_]) {
-                final newValue = !item.value;
-                setState(() => item.value = newValue);
-                item.updateSearch(newValue);
-              },
-            );
-          }),
-        ),
-      ).toList(),
+    return SafeArea(
+      child: Column(
+        children: _menuItems.map(
+          (item) => PopupMenuItem(child: StatefulBuilder(
+            builder: (context, setState) {
+              return item.build(
+                context,
+                value: item.value,
+                statefulOnChange: ([_]) {
+                  final newValue = !item.value;
+                  setState(() => item.value = newValue);
+                  item.updateSearch(newValue);
+                },
+              );
+            }),
+          ),
+        ).toList(),
+      ),
     );
   }
 

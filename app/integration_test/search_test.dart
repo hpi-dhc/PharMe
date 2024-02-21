@@ -1,5 +1,4 @@
 import 'package:app/common/module.dart';
-import 'package:app/common/widgets/drug_list/drug_items/drug_cards.dart';
 import 'package:app/search/module.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

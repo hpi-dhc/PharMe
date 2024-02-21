@@ -1,5 +1,4 @@
 import '../../../common/module.dart';
-import '../../common/widgets/drug_list/drug_items/drug_cards.dart';
 
 @RoutePage()
 class SearchPage extends HookWidget {
@@ -27,6 +26,7 @@ class SearchPage extends HookWidget {
           cubit: cubit,
           showDrugInteractionIndicator: true,
         ),
+        drawer: FilterMenu(cubit),
       ),
     );
   }

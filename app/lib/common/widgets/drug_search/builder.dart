@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../common/module.dart';
 import '../../../drug/widgets/tooltip_icon.dart';
-import 'filter_menu.dart';
 
 class DrugSearch extends HookWidget {
   DrugSearch({
@@ -53,7 +52,7 @@ class DrugSearch extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ..._buildSearchBarItems(context, searchController),
-                      if (showFilter) FilterMenu(cubit, state),
+                      if (showFilter) FilterButton(),
                     ],
                   ),
                 ),

@@ -1,5 +1,4 @@
 import '../../module.dart';
-import 'drug_items/drug_cards.dart';
 
 List<Widget> buildDrugList(
   BuildContext context,

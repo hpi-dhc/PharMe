@@ -70,6 +70,7 @@ Scaffold unscrollablePageScaffold({
   String? title,
   String? barBottom,
   List<Widget>? actions,
+  Widget? drawer,
   Key? key,
 }) {
   final appBar = title == null
@@ -79,6 +80,7 @@ Scaffold unscrollablePageScaffold({
         foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
         elevation: PharMeTheme.appBarTheme.elevation,
         leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
+        automaticallyImplyLeading: false,
         centerTitle: PharMeTheme.appBarTheme.centerTitle,
         title: buildTitle(title),
         actions: actions,
@@ -94,5 +96,6 @@ Scaffold unscrollablePageScaffold({
         child: body,
       ),
     ),
+    drawer: drawer,
   );
 }
