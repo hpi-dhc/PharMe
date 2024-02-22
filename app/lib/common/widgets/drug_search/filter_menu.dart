@@ -29,73 +29,104 @@ class FilterMenuItem {
   set value(newValue) => _value = newValue;
   bool get value => _value;
 }
-
 class FilterMenu extends HookWidget {
-  const FilterMenu(this.cubit);
+  const FilterMenu(this.cubit, this.state, this.activeDrugs, {
+    required this.useDrugClass
+  });
 
   final DrugListCubit cubit;
+  final DrugListState state;
+  final ActiveDrugs activeDrugs;
+  final bool useDrugClass;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: _menuItems.map(
-          (item) => PopupMenuItem(child: StatefulBuilder(
-            builder: (context, setState) {
-              return item.build(
-                context,
-                value: item.value,
-                statefulOnChange: ([_]) {
-                  final newValue = !item.value;
-                  setState(() => item.value = newValue);
-                  item.updateSearch(newValue);
-                },
-              );
-            }),
-          ),
-        ).toList(),
-      ),
+    return _buildFilters(context) ?? SizedBox.shrink();
+  }
+
+  Widget? _buildFilters(BuildContext context) {
+    return state.whenOrNull(loaded: (allDrugs, filter) =>
+      SafeArea(
+        child: Column(
+          children: _geMenuItems(context, allDrugs, filter, activeDrugs),
+        ),
+      )
     );
   }
 
-  List<FilterMenuItem>  get _menuItems => [
-    FilterMenuItem(
-      initialValue: cubit.filter?.showInactive ?? false,
-      updateSearch: (newValue) => cubit.search(showInactive: newValue),
-      build: (context, { required value, required statefulOnChange }) =>
-        DropdownButton<bool>(
-          value: value,
-          items: [
-            DropdownMenuItem<bool>(
-              value: true,
-              child: Text('${context.l10n.search_page_filter_all_drugs} '),
+  List<Widget> _geMenuItems(
+    BuildContext context,
+    List<Drug> drugs,
+    FilterState filter,
+    ActiveDrugs activeDrugs,
+  ) {
+    String formatItemFilterNumber(FilterState itemFilter) =>
+      '(${
+        itemFilter.filter(drugs, activeDrugs, useDrugClass: useDrugClass).length
+      })';
+    String drugStatusNumber({ required bool showInactive}) =>
+      formatItemFilterNumber(FilterState.from(
+        FilterState.initial(),
+        showInactive: showInactive,
+      ));
+    String warningLevelNumber(WarningLevel warningLevel) {
+      final currentWarningLevelFilter = FilterState.from(filter);
+      currentWarningLevelFilter.showWarningLevel.forEach(
+        (currentWarningLevel, currentValue) =>
+          currentWarningLevelFilter.showWarningLevel[currentWarningLevel] =
+            currentWarningLevel == warningLevel
+      );
+      return formatItemFilterNumber(currentWarningLevelFilter);
+    }
+    Widget buildDrugStatusItem() {
+      final value = filter.showInactive;
+      return DropdownButton<bool>(
+        value: value,
+        items: [
+          DropdownMenuItem<bool>(
+            value: true,
+            child: Text(
+              '${context.l10n.search_page_filter_all_drugs} '
+              '${drugStatusNumber(showInactive: true)}'
             ),
-            DropdownMenuItem<bool>(
-              value: false,
-              child: Text('${context.l10n.search_page_filter_only_active_drugs} '),
-            ),
-          ],
-          onChanged: (newValue) => statefulOnChange(newValue),
-        ),
-    ),
-    ...WarningLevel.values
-      .filter((warningLevel) => warningLevel != WarningLevel.none)
-      .map((warningLevel) => FilterMenuItem(
-        initialValue: cubit.filter?.showWarningLevel[warningLevel] ?? false,
-        updateSearch: (newValue) => cubit.search(
-          showWarningLevel: { warningLevel: newValue },
-        ),
-        build: (context, { required value, required statefulOnChange }) =>
-          ActionChip(
-            onPressed: () => statefulOnChange(!value),
-            avatar: Icon(
-              value ? warningLevel.icon : warningLevel.outlinedIcon,
-              color: value ? PharMeTheme.onSurfaceText : warningLevel.textColor,
-            ),
-            label: Text('', style: TextStyle(color: PharMeTheme.onSurfaceText)),
-            visualDensity: VisualDensity.compact,
-            color: MaterialStatePropertyAll(value ? warningLevel.color : Colors.transparent),
           ),
-      )),
-  ];
+          DropdownMenuItem<bool>(
+            value: false,
+            child: Text(
+              '${context.l10n.search_page_filter_only_active_drugs} '
+              '${drugStatusNumber(showInactive: false)}'
+            ),
+          ),
+        ],
+        onChanged: (newValue) => newValue != value
+          ? cubit.search(showInactive: newValue)
+          : null,
+      );
+    }
+    Widget buildWarningLevelItem(WarningLevel warningLevel) {
+      final value = filter.showWarningLevel[warningLevel]!;
+      return ActionChip(
+        onPressed: () => cubit.search(
+          showWarningLevel: { warningLevel: !value },
+        ),
+        avatar: Icon(
+          value ? warningLevel.icon : warningLevel.outlinedIcon,
+          color: value ? PharMeTheme.onSurfaceText : warningLevel.textColor,
+        ),
+        label: Text(warningLevelNumber(warningLevel),
+        style: TextStyle(color: PharMeTheme.onSurfaceText)),
+        visualDensity: VisualDensity.compact,
+        color: MaterialStatePropertyAll(value
+          ? warningLevel.color
+          : Colors.transparent
+        ),
+      );
+    }
+    return [
+      buildDrugStatusItem(),
+      ...WarningLevel.values
+        .filter((warningLevel) => warningLevel != WarningLevel.none)
+        .map(buildWarningLevelItem),
+    ];
+  }
 }

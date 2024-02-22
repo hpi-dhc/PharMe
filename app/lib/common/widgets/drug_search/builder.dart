@@ -1,21 +1,22 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../common/module.dart';
 import '../../../drug/widgets/tooltip_icon.dart';
 
 class DrugSearch extends HookWidget {
-  DrugSearch({
+  const DrugSearch({
     super.key,
     required this.showFilter,
     required this.buildDrugItems,
     required this.showDrugInteractionIndicator,
-    this.useDrugClass = true,
+    required this.useDrugClass,
+    required this.cubit,
+    required this.state,
+    required this.activeDrugs,
     this.keepPosition = false,
     this.drugItemsBuildParams,
-    DrugListCubit? cubit,
-  })  : cubit = cubit ?? DrugListCubit();
+  });
 
   final bool showFilter;
   final bool useDrugClass;
@@ -30,57 +31,50 @@ class DrugSearch extends HookWidget {
   ) buildDrugItems;
   final bool showDrugInteractionIndicator;
   final DrugListCubit cubit;
+  final DrugListState state;
+  final ActiveDrugs activeDrugs;
   final Map? drugItemsBuildParams;
 
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
-    return Consumer<ActiveDrugs>(
-      builder: (context, activeDrugs, child) => BlocProvider(
-        create: (context) => cubit,
-        child: BlocBuilder<DrugListCubit, DrugListState>(
-          builder: (context, state) {
-            return Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: PharMeTheme.smallSpace,
-                    right: PharMeTheme.smallSpace,
-                    bottom: PharMeTheme.smallSpace,
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ..._buildSearchBarItems(context, searchController),
-                      if (showFilter) FilterButton(),
-                    ],
-                  ),
-                ),
-                scrollList(
-                  keepPosition: keepPosition,
-                  buildDrugList(
-                    context,
-                    state,
-                    activeDrugs,
-                    buildDrugItems: buildDrugItems,
-                    noDrugsMessage: context.l10n.search_no_drugs(
-                      showFilter
-                        ? context.l10n.search_no_drugs_with_filter_amendment
-                        : ''
-                    ),
-                    drugItemsBuildParams: drugItemsBuildParams,
-                    showDrugInteractionIndicator:
-                      showDrugInteractionIndicator,
-                    useDrugClass: useDrugClass,
-                  )
-                ),
-                _maybeBuildInteractionIndicator(context, state, activeDrugs)
-                  ?? SizedBox.shrink(),
-              ],
-            );
-          }
-        )
-      )
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: PharMeTheme.smallSpace,
+            right: PharMeTheme.smallSpace,
+            bottom: PharMeTheme.smallSpace,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ..._buildSearchBarItems(context, searchController),
+              if (showFilter) FilterButton(),
+            ],
+          ),
+        ),
+        scrollList(
+          keepPosition: keepPosition,
+          buildDrugList(
+            context,
+            state,
+            activeDrugs,
+            buildDrugItems: buildDrugItems,
+            noDrugsMessage: context.l10n.search_no_drugs(
+              showFilter
+                ? context.l10n.search_no_drugs_with_filter_amendment
+                : ''
+            ),
+            drugItemsBuildParams: drugItemsBuildParams,
+            showDrugInteractionIndicator:
+              showDrugInteractionIndicator,
+            useDrugClass: useDrugClass,
+          )
+        ),
+        _maybeBuildInteractionIndicator(context, state, activeDrugs)
+          ?? SizedBox.shrink(),
+      ],
     );
   }
 

@@ -37,7 +37,7 @@ class DrugSelectionPage extends HookWidget {
             );
           }
         ),
-      )
+      ),
     );
   }
 
@@ -77,18 +77,24 @@ class DrugSelectionPage extends HookWidget {
         ],
       );
     }
-    return DrugSearch(
-      showFilter: false,
-      keepPosition: true,
-      useDrugClass: false,
-      buildDrugItems: buildDrugCheckboxList,
-      drugItemsBuildParams: {
-        'checkboxesEnabled': _isEditable(state),
-        'onCheckboxChange': (drug, value) => context
-          .read<DrugSelectionCubit>()
-          .updateDrugActivity(drug, value),
-      },
-      showDrugInteractionIndicator: false,
+    return withFilterData(
+      cubit: DrugListCubit(),
+      builder: (context, builderCubit, builderState, activeDrugs) => DrugSearch(
+        showFilter: false,
+        cubit: builderCubit,
+        state: builderState,
+        activeDrugs: activeDrugs,
+        keepPosition: true,
+        useDrugClass: false,
+        buildDrugItems: buildDrugCheckboxList,
+        drugItemsBuildParams: {
+          'checkboxesEnabled': _isEditable(state),
+          'onCheckboxChange': (drug, value) => context
+            .read<DrugSelectionCubit>()
+            .updateDrugActivity(drug, value),
+        },
+        showDrugInteractionIndicator: false,
+      ),
     );
   }
 }

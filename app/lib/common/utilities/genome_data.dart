@@ -73,16 +73,13 @@ Future<void> updateGenotypeResults() async {
 bool shouldUpdateGenotypeResults() {
   final genotypeResultsPresent =
     UserData.instance.labData?.isNotEmpty ?? false;
+  final lookupsAreOutdated = MetaData.instance.lookupsLastFetchDate == null ||
+    DateTime.now().difference(MetaData.instance.lookupsLastFetchDate!) >
+      cpicMaxCacheTime;
   final labDataPresent = UserData.instance.labData?.isNotEmpty ?? false;
-  return (!genotypeResultsPresent || _isOutDated()) && labDataPresent;
+  return labDataPresent && (!genotypeResultsPresent || lookupsAreOutdated);
 }
 
 bool shouldFetchDiplotypes() {
   return UserData.instance.labData == null;
-}
-
-bool _isOutDated() {
-  final lastFetchDate = MetaData.instance.lookupsLastFetchDate;
-  if (lastFetchDate == null) return true;
-  return DateTime.now().difference(lastFetchDate) > cpicMaxCacheTime;
 }
