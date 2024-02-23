@@ -118,20 +118,35 @@ class FilterMenu extends HookWidget {
       .length;
   }
 
+  bool _filterIsEnabled({
+    required FilterState itemFilter,
+    required List<Drug> drugs,
+  }) => _getFilteredNumber(itemFilter: itemFilter, drugs: drugs) > 0;
+
   Widget _getFilterText(
     String text, {
     required FilterState itemFilter,
     required List<Drug> drugs,
+    bool enabled = true,
   }) {
+    final numberTextColor = darkenColor(PharMeTheme.onSurfaceText, -0.2);
+    final disabledTextColor = darkenColor(numberTextColor, -0.2);
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(text),
+        Text(
+          text,
+          style: PharMeTheme.textTheme.bodyMedium!.copyWith(
+            color: enabled
+              ? PharMeTheme.textTheme.bodyMedium!.color
+              : disabledTextColor,
+          ),
+        ),
         Text(
           ' (${_getFilteredNumber(itemFilter: itemFilter, drugs: drugs)})',
           style: PharMeTheme.textTheme.labelMedium!.copyWith(
-            color: darkenColor(PharMeTheme.onSurfaceText, -0.2),
+            color: enabled ? numberTextColor : disabledTextColor,
           ),
         ),
       ],
@@ -144,31 +159,37 @@ class FilterMenu extends HookWidget {
     FilterState filter,
   ) {
     final value = filter.showInactive;
-    FilterState drugStatusFilterState({required bool showInactive}) {
+    FilterState drugStatusFilterState({ required bool showInactive }) {
       return FilterState.from(
         FilterState.initial(),
         showInactive: showInactive,
       );
     }
+    DropdownMenuItem<bool> buildDrugStatusDropdownItem({
+      required bool showInactive,
+    }) {
+      final itemFilter = drugStatusFilterState(showInactive: showInactive);
+      final text = showInactive
+        ? context.l10n.search_page_filter_all_drugs
+        : context.l10n.search_page_filter_only_active_drugs;
+      final enabled = _filterIsEnabled(itemFilter: itemFilter, drugs: drugs);
+      return DropdownMenuItem<bool>(
+        value: showInactive,
+        enabled: enabled,
+        child: _getFilterText(
+          text,
+          itemFilter: itemFilter,
+          drugs: drugs,
+          enabled: enabled,
+        ),
+      );
+    }
+
     return DropdownButton<bool>(
       value: value,
       items: [
-        DropdownMenuItem<bool>(
-          value: true,
-          child: _getFilterText(
-            context.l10n.search_page_filter_all_drugs,
-            itemFilter: drugStatusFilterState(showInactive: true),
-            drugs: drugs,
-          ),
-        ),
-        DropdownMenuItem<bool>(
-          value: false,
-          child: _getFilterText(
-            context.l10n.search_page_filter_only_active_drugs,
-            itemFilter: drugStatusFilterState(showInactive: false),
-            drugs: drugs,
-          ),
-        ),
+        buildDrugStatusDropdownItem(showInactive: true),
+        buildDrugStatusDropdownItem(showInactive: false),
       ],
       onChanged: (newValue) =>
           newValue != value ? cubit.search(showInactive: newValue) : null,
@@ -190,24 +211,31 @@ class FilterMenu extends HookWidget {
     }
     Widget buildWarningLevelItem(WarningLevel warningLevel) {
       final value = filter.showWarningLevel[warningLevel]!;
+      final itemFilter = warningLevelFilter(warningLevel);
+      final enabled = _filterIsEnabled(itemFilter: itemFilter, drugs: drugs);
       return ActionChip(
-        onPressed: () => cubit.search(
-          showWarningLevel: {warningLevel: !value},
-        ),
+        onPressed: enabled
+          ? () => cubit.search(
+            showWarningLevel: {warningLevel: !value},
+          )
+          : null,
         avatar: Icon(
-          value ? warningLevel.icon : warningLevel.outlinedIcon,
+          value && enabled ? warningLevel.icon : warningLevel.outlinedIcon,
           color: PharMeTheme.onSurfaceText,
         ),
         label: _getFilterText(
           warningLevel.getLabel(context),
-          itemFilter: warningLevelFilter(warningLevel),
+          itemFilter: itemFilter,
           drugs: drugs,
         ),
         visualDensity: VisualDensity.compact,
         color: MaterialStatePropertyAll(
-            value ? warningLevel.color : Colors.transparent),
+          value && enabled ? warningLevel.color : Colors.transparent,
+        ),
         side: BorderSide(
-          color: value ? warningLevel.color : PharMeTheme.onSurfaceColor,
+          color: value && enabled
+            ? warningLevel.color
+            : PharMeTheme.onSurfaceColor,
         ),
       );
     }
