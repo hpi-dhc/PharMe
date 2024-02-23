@@ -50,7 +50,11 @@ class DrugSearch extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ..._buildSearchBarItems(context, searchController),
-              if (showFilter) FilterButton(),
+              if (showFilter) FilterButton(
+                state,
+                activeDrugs,
+                useDrugClass: useDrugClass,
+              ),
             ],
           ),
         ),
