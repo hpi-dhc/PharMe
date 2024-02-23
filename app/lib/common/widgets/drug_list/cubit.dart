@@ -124,13 +124,7 @@ class FilterState {
   bool isAccepted(Drug drug, ActiveDrugs activeDrugs, {
     required bool useDrugClass,
   }) {
-    var warningLevelMatches = showWarningLevel[drug.warningLevel] ?? true;
-    // WarningLevel.none is also shown in green in app; therefore, it should
-    // also be filtered with green option
-    if (drug.warningLevel == WarningLevel.none) {
-      warningLevelMatches = warningLevelMatches &&
-        showWarningLevel[WarningLevel.green]!;
-    }
+    final warningLevelMatches = showWarningLevel[drug.warningLevel] ?? true;
     final isDrugAccepted =
       drug.matches(query: query, useClass: useDrugClass) &&
       (activeDrugs.contains(drug.name) || showInactive) &&

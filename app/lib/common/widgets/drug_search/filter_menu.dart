@@ -1,16 +1,5 @@
 import '../../module.dart';
 
-class FilterButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.filter_list),
-      color: PharMeTheme.iconColor,
-      onPressed: Scaffold.of(context).openDrawer,
-    );
-  }
-}
-
 class FilterMenuItem {
   FilterMenuItem({
     required bool initialValue,
@@ -29,6 +18,7 @@ class FilterMenuItem {
   set value(newValue) => _value = newValue;
   bool get value => _value;
 }
+
 class FilterMenu extends HookWidget {
   const FilterMenu(this.cubit, this.state, this.activeDrugs, {
     required this.useDrugClass
@@ -125,7 +115,6 @@ class FilterMenu extends HookWidget {
     return [
       buildDrugStatusItem(),
       ...WarningLevel.values
-        .filter((warningLevel) => warningLevel != WarningLevel.none)
         .map(buildWarningLevelItem),
     ];
   }

@@ -38,7 +38,8 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
 }
 
 Future<void> updateGenotypeResults() async {
-  if (!shouldUpdateGenotypeResults()) return;
+  final skipUpdate = !shouldUpdateGenotypeResults();
+  if (skipUpdate) return;
   // fetch lookups
   final response = await get(Uri.parse(cpicLookupUrl));
   if (response.statusCode != 200) throw Exception();
