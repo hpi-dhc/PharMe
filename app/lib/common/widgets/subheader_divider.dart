@@ -3,14 +3,14 @@ import '../module.dart';
 class SubheaderDivider extends StatelessWidget {
   const SubheaderDivider({
     this.text = '',
-    this.indent = 20.0,
+    this.padding,
     this.color,
     this.useLine = true,
     super.key,
   });
 
   final String text;
-  final double indent;
+  final double? padding;
   final Color? color;
   final bool useLine;
 
@@ -18,7 +18,7 @@ class SubheaderDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     final widgetColor = color ?? Colors.grey[600];
     return Padding(
-      padding: EdgeInsets.all(PharMeTheme.smallSpace),
+      padding: EdgeInsets.all(padding ?? PharMeTheme.smallSpace),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -16,6 +16,18 @@ enum WarningLevel {
   none,
 }
 
+extension WarningLevelLabel on WarningLevel {
+  String getLabel(BuildContext context) {
+    final labelMap = {
+      WarningLevel.red.name: context.l10n.warning_level_red,
+      WarningLevel.yellow.name: context.l10n.warning_level_yellow,
+      WarningLevel.green.name: context.l10n.warning_level_green,
+      WarningLevel.none.name: context.l10n.warning_level_missing,
+    };
+    return labelMap[name]!;
+  }
+}
+
 extension WarningLevelIcon on WarningLevel {
   static final _iconMap = {
     WarningLevel.red.name: Icons.dangerous_rounded,

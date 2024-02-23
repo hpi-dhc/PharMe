@@ -53,15 +53,19 @@
   "general_and": "and",
   "general_poor_metabolizer": "Poor Metabolizer",
   "general_not_tested": "Not tested",
+
+  "warning_level_green": "Standard precaution",
+  "warning_level_missing": "Standard precaution (missing data)",
+  "warning_level_yellow": "Use with caution",
+  "warning_level_red": "Consider avoiding",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
   "search_page_tooltip_search_no_class": "Search for drugs by their name or brand name.",
+  "search_page_filter_heading": "Filter drugs",
+  "search_page_filter_subheading_usage": "Filter by usage status",
+  "search_page_filter_subheading_level": "Filter by guideline result",
   "search_page_filter_all_drugs": "All drugs",
   "search_page_filter_only_active_drugs": "Currently taken drugs",
-  "search_page_filter_green": "Green warning level",
-  "search_page_filter_yellow": "Yellow warning level",
-  "search_page_filter_red": "Red warning level",
-  "search_page_filter_only_with_guidelines": "Only drugs with guidelines",
   "search_page_indicator_explanation": "Taking drugs with an {indicatorName} ({indicator}) can influence your results for other drugs",
   "@search_page_indicator_explanation": {
     "placeholders": {
