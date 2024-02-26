@@ -71,6 +71,7 @@ Scaffold unscrollablePageScaffold({
   String? barBottom,
   List<Widget>? actions,
   Widget? drawer,
+  bool automaticallyImplyLeading = true,
   Key? key,
 }) {
   final appBar = title == null
@@ -80,7 +81,7 @@ Scaffold unscrollablePageScaffold({
         foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
         elevation: PharMeTheme.appBarTheme.elevation,
         leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: automaticallyImplyLeading,
         centerTitle: PharMeTheme.appBarTheme.centerTitle,
         title: buildTitle(title),
         actions: actions,

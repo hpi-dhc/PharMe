@@ -31,10 +31,10 @@
   "genetic_information_text_part_2": ", a service of the National Library of Medicine.",
   "genetic_information_source": "MedlinePlus",
 
-  "drug_selection_header": "Select active drugs",
+  "drug_selection_header": "Currently taken drugs",
   "drug_selection_onboarding_description": "Please update which drugs you are currently taking below. You can always change the status for a drug later on a drug page or in the settings.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
-  "drug_selection_subheader_active_drugs": "Active drugs",
+  "drug_selection_subheader_active_drugs": "Selected drugs",
   "drug_selection_subheader_all_drugs": "All drugs",
   "drug_selection_no_active_drugs": "No drugs selected",
   
@@ -317,7 +317,7 @@
       }
     }
   },
-  "pdf_activity_score_overwrite": "{originalScore} adjusted based on active medications, see phenotype",
+  "pdf_activity_score_overwrite": "{originalScore} adjusted based on currently taken medications, see phenotype",
   "@pdf_activity_score_overwrite": {
     "placeholders": {
       "originalScore": {

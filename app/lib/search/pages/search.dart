@@ -38,6 +38,7 @@ class SearchPage extends HookWidget {
             activeDrugs,
             useDrugClass: useDrugClass,
           ),
+          automaticallyImplyLeading: false, // do not show leading "menu" icon
         ),
       ),
     );
