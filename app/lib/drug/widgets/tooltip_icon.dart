@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../common/module.dart';
+
 class TooltipIcon extends StatelessWidget {
   const TooltipIcon(this.message);
 
@@ -9,8 +11,9 @@ class TooltipIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tooltip(
       message: message,
+      margin: EdgeInsets.all(PharMeTheme.smallSpace),
       triggerMode: TooltipTriggerMode.tap,
-      showDuration: const Duration(seconds: 2),
+      showDuration: const Duration(seconds: 3),
       child: Icon(Icons.help_outline_rounded, size: 16),
     );
   }
