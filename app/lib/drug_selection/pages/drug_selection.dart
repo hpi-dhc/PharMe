@@ -26,9 +26,15 @@ class DrugSelectionPage extends HookWidget {
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
               body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (concludesOnboarding) PageDescription.fromText(
-                    context.l10n.drug_selection_onboarding_description,
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace),
+                    child: PageDescription.fromText(
+                      concludesOnboarding
+                        ? context.l10n.drug_selection_onboarding_description
+                        : context.l10n.drug_selection_settings_description,
+                    ),
                   ),
                   Expanded(child: _buildDrugList(context, state)),
                   if (concludesOnboarding) _buildButton(context, state),

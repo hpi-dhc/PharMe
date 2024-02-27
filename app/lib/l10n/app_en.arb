@@ -33,6 +33,7 @@
 
   "drug_selection_header": "Currently taken drugs",
   "drug_selection_onboarding_description": "Please update which drugs you are currently taking below. You can always change the status for a drug later on a drug page or in the settings.",
+  "drug_selection_settings_description": "Review your currently taken drugs below.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
   "drug_selection_subheader_active_drugs": "Selected drugs",
   "drug_selection_subheader_all_drugs": "All drugs",
