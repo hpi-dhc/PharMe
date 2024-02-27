@@ -30,31 +30,30 @@ class ReportPage extends StatelessWidget {
       canPop: false,
       child: unscrollablePageScaffold(
         title: context.l10n.tab_report,
+        titleTooltip: context.l10n.report_page_faq_tooltip,
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PageDescription(Column(children: [
-              PageDescriptionText(context.l10n.report_content_explanation),
-              SizedBox(height: PharMeTheme.smallSpace),
-              RichText(text: TextSpan(
-                text: context.l10n.genetic_information_text_part_1,
-                style: pageDescriptionTextStyle,
-                children: [
-                  linkTextSpan(
-                    text: context.l10n.genetic_information_source,
-                    onTap: openFurtherGeneticInformation,
-                  ),
-                  TextSpan(
-                    text: context.l10n.genetic_information_text_part_2,
-                    style: pageDescriptionTextStyle,
-                  ),
-                ],
-              )),
-            ])),
+            PageDescription.fromText(context.l10n.report_content_explanation),
             scrollList(
-              userGenotypes.map((genotypeResult) => GeneCard(
-                genotypeResult,
-                key: Key('gene-card-${genotypeResult.key.value}')
-              )).toList(),
+              [
+                PageDescription(
+                  Column(
+                    children: [
+                      PageDescriptionText(context.l10n.report_legend_text),
+                      _buildWarningLevelIndicators(
+                        getText: (warningLevel) =>
+                          warningLevel.getLabel(context),
+                        separator: TextSpan(text: ', ')
+                      ),
+                    ]
+                  ),
+                ),
+                ...userGenotypes.map((genotypeResult) => GeneCard(
+                  genotypeResult,
+                  key: Key('gene-card-${genotypeResult.key.value}')
+                )),
+              ],
             ),
             if (hasActiveInhibitors) PageIndicatorExplanation(
               context.l10n.report_page_indicator_explanation(
@@ -67,7 +66,6 @@ class ReportPage extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class GeneCard extends StatelessWidget {
@@ -87,31 +85,6 @@ class GeneCard extends StatelessWidget {
     final affectedDrugs = CachedDrugs.instance.drugs?.filter(
       (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
     ) ?? [];
-    final warningLevelIndicators = WarningLevel.values.map(
-      (warningLevel) {
-        final warningLevelCount = affectedDrugs.filter(
-          (drug) => drug.warningLevel == warningLevel
-        ).length;
-        return warningLevelCount > 0
-        ? Row(
-            textDirection: TextDirection.ltr,
-            children: [
-              Icon(
-                warningLevel.icon,
-                size: PharMeTheme.mediumSpace,
-                color: warningLevel.textColor,
-              ),
-              SizedBox(width: PharMeTheme.smallSpace * 0.4),
-              Text(
-                warningLevelCount.toString(),
-                style: TextStyle(color: warningLevel.textColor),
-              ),
-              SizedBox(width: PharMeTheme.smallSpace * 0.8),
-            ]
-          )
-        : SizedBox.shrink();
-      }
-    ).toList();
     return RoundedCard(
       onTap: () => context.router.push(
         GeneRoute(genotypeResult: genotypeResult)
@@ -136,7 +109,16 @@ class GeneCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Row(children: warningLevelIndicators),
+                  _buildWarningLevelIndicators(
+                    getText: (warningLevel) {
+                      final warningLevelCount = affectedDrugs.filter(
+                        (drug) => drug.warningLevel == warningLevel
+                      ).length;
+                      return warningLevelCount > 0
+                        ? warningLevelCount.toString()
+                        : null;
+                    },
+                  ),
                 ],
               ),
             ],
@@ -146,4 +128,61 @@ class GeneCard extends StatelessWidget {
       ]),
     );
   }
+}
+
+RichText _buildWarningLevelIndicators({
+    required String? Function(WarningLevel) getText,
+    InlineSpan? separator,
+}) {
+  var content = <InlineSpan>[];
+  for (final (index, warningLevel) in WarningLevel.values.indexed) {
+    final text = getText(warningLevel);
+    if (text.isNullOrEmpty) continue;
+    final warningLevelIndicator = _buildWarningLevelIndicator(
+      warningLevel,
+      text: text!,
+    );
+    final isLastItem = index == WarningLevel.values.length - 1;
+    content = isLastItem
+      ? [ ...content, ...warningLevelIndicator ]
+      : [
+          ...content,
+          ...warningLevelIndicator,
+          separator ?? WidgetSpan(
+            child: SizedBox(width: PharMeTheme.smallSpace * 0.8),
+          ),
+        ];
+  }
+  return RichText(
+    text: TextSpan(
+      style: PharMeTheme.textTheme.bodyMedium,
+      children: content,
+    )
+  );
+}
+
+List<InlineSpan> _buildWarningLevelIndicator(
+  WarningLevel warningLevel,
+  {
+    required String text,
+    Widget? separator,
+  }
+) {
+  return [
+    WidgetSpan(
+      child: Icon(
+        warningLevel.icon,
+        color: warningLevel.textColor,
+        size: pageDescriptionTextStyle!.fontSize,
+      ),
+    ),
+    WidgetSpan(
+      child: separator ??
+        SizedBox(width: PharMeTheme.smallSpace * 0.4),
+    ),
+    TextSpan(
+      text: text,
+      style: pageDescriptionTextStyle!.copyWith(color: warningLevel.textColor)
+    ),
+  ];
 }

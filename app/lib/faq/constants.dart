@@ -36,23 +36,8 @@ final Map<String, List<Question>> faqList = {
       answer:
           'Pharmacogenetics is important because it helps to predict those who will respond well to drugs and those who may have side effects. With this information we can better select the right drug and dose to avoid side effects.',
     ),
-    TextAnswerQuestion(
-      question: 'Which drugs are affected?',
-      answer:
-          'Examples of affected drug classes include anti-clotting medications (like clopidogrel and warfarin), antidepressants (like sertraline, citalopram, and paroxetine), anti-cholesterol drugs (like simvastatin and atorvastatin), acid reducers (like pantoprazole and omeprazole), pain killers (like codeine, tramadol, and ibuprofen), antifungals (like voriconazole), drugs that suppress the immune system (like tacrolimus), and anti-cancer drugs (like fluorouracil and irinotecan). You can find out whether a certain drug is affected in the Search tab.',
-    ),
-    TextAnswerQuestion(
-      question: 'Will my results affect my family members?',
-      answer:
-          'Yes, since this is a genetic test, it is possible that your results were passed down to you and your siblings from your parents and you will also pass them down to your children.',
-    ),
-    TextAnswerQuestion(
-      question: 'Who can I share my results with?',
-      answer:
-          'We recommend that you share your results with your pharmacists, doctors, and close family members such as parents, siblings, and children.',
-    ),
     WidgetAnswerQuestion(
-      question: 'Where can I find out more about genetics?',
+      question: 'Where can I find out more about genetics in general?',
       answer: RichText(text: TextSpan(
         // context.l10n.genetic_information_text_part_1
         text: 'If you would like to learn more about genetics, we recommend ',
@@ -68,7 +53,22 @@ final Map<String, List<Question>> faqList = {
           ),
         ],
       )),
-    )
+    ),
+    TextAnswerQuestion(
+      question: 'Which drugs are affected?',
+      answer:
+          'Examples of affected drug classes include anti-clotting medications (like clopidogrel and warfarin), antidepressants (like sertraline, citalopram, and paroxetine), anti-cholesterol drugs (like simvastatin and atorvastatin), acid reducers (like pantoprazole and omeprazole), pain killers (like codeine, tramadol, and ibuprofen), antifungals (like voriconazole), drugs that suppress the immune system (like tacrolimus), and anti-cancer drugs (like fluorouracil and irinotecan). You can find out whether a certain drug is affected in the Search tab.',
+    ),
+    TextAnswerQuestion(
+      question: 'Will my results affect my family members?',
+      answer:
+          'Yes, since this is a genetic test, it is possible that your results were passed down to you and your siblings from your parents and you will also pass them down to your children.',
+    ),
+    TextAnswerQuestion(
+      question: 'Who can I share my results with?',
+      answer:
+          'We recommend that you share your results with your pharmacists, doctors, and close family members such as parents, siblings, and children.',
+    ),
   ],
   'PharMe App': [
     TextAnswerQuestion(

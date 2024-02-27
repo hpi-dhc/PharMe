@@ -1,3 +1,4 @@
+import '../../drug/widgets/tooltip_icon.dart';
 import '../module.dart';
 
 EdgeInsets pagePadding() => EdgeInsets.only(
@@ -5,10 +6,22 @@ EdgeInsets pagePadding() => EdgeInsets.only(
   right: PharMeTheme.defaultPagePadding,
 );
 
-Widget buildTitle(String text) {
+Widget buildTitle(String text, { String? tooltipText }) {
   return FittedBox(
     fit: BoxFit.fitWidth,
-    child: Text(text, style: PharMeTheme.textTheme.headlineLarge),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(text, style: PharMeTheme.textTheme.headlineLarge),
+        if (tooltipText.isNotNullOrBlank) Padding(
+          padding: EdgeInsets.only(left: PharMeTheme.smallSpace),
+          child: TooltipIcon(
+            tooltipText!,
+            size: PharMeTheme.textTheme.headlineLarge!.fontSize! * 0.8,
+          ),
+        ),
+      ]
+    ),
   );
 }
 
@@ -68,6 +81,7 @@ Scaffold pageScaffold({
 Scaffold unscrollablePageScaffold({
   required Widget body,
   String? title,
+  String? titleTooltip,
   String? barBottom,
   List<Widget>? actions,
   Widget? drawer,
@@ -83,7 +97,7 @@ Scaffold unscrollablePageScaffold({
         leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
         automaticallyImplyLeading: automaticallyImplyLeading,
         centerTitle: PharMeTheme.appBarTheme.centerTitle,
-        title: buildTitle(title),
+        title: buildTitle(title, tooltipText: titleTooltip),
         actions: actions,
         bottom: buildBarBottom(barBottom),
         scrolledUnderElevation: 0,
