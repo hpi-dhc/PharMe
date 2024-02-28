@@ -251,7 +251,7 @@
       }
     }
   },
-  "gene_page_name_tooltip": "{gene} is the name of a segment of your DNA.",
+  "gene_page_name_tooltip": "{gene} is the name of a gene.",
   "@gene_page_name_tooltip": {
     "placeholders": {
       "gene": {
@@ -261,11 +261,19 @@
     }
   },
   "gene_page_genotype": "Genotype",
-  "gene_page_genotype_tooltip": "The genotype is the variant you carry for this DNA segment.",
+  "gene_page_genotype_tooltip": "The genotype is the variant you carry for this gene.",
   "gene_page_phenotype": "Phenotype",
-  "gene_page_phenotype_tooltip": "The phenotype is the observable impact that your genotype has for this protein. It often describes the gene's activity level or whether a specific variant is present.",
+  "gene_page_phenotype_tooltip": "The phenotype often describes the gene's activity level or whether a specific variant is present.",
   "gene_page_relevant_drugs": "Relevant drugs",
-  "gene_page_relevant_drugs_tooltip": "The drugs listed here are influenced by your phenotype for this DNA segment.",
+  "gene_page_relevant_drugs_tooltip": "The drugs listed here are influenced by your {geneDisplayString} result.",
+  "@gene_page_relevant_drugs_tooltip": {
+    "placeholders": {
+      "geneDisplayString": {
+        "type": "String",
+        "example": "HLA-B *58:01"
+      }
+    }
+  },
   "gene_page_no_relevant_drugs": "This gene has no known effect on any drug.",
   "gene_page_inhibitor_drugs": "Your results for this gene can be influenced if you are currently taking any of the following drugs:",
   "gene_page_further_inhibitor_drugs": "Your results for this gene can also be influenced by taking any of the following drugs:",

@@ -38,7 +38,7 @@ class GenePage extends HookWidget {
                       ),
                       tooltip: context.l10n
                           .gene_page_name_tooltip(
-                            genotypeResult.geneDisplayString,
+                            genotypeResult.gene,
                           ),
                     ),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
@@ -55,7 +55,7 @@ class GenePage extends HookWidget {
                             children: [
                               _buildRow(
                                   context.l10n.gene_page_genotype,
-                                  genotypeResult.genotypeDisplayString,
+                                  genotypeResult.variantDisplayString,
                                   tooltip: context.l10n.gene_page_genotype_tooltip
                               ),
                               _buildPhenotypeRow(context),
@@ -69,8 +69,12 @@ class GenePage extends HookWidget {
                       ],
                     )),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
-                    SubHeader(context.l10n.gene_page_relevant_drugs,
-                        tooltip: context.l10n.gene_page_relevant_drugs_tooltip),
+                    SubHeader(
+                      context.l10n.gene_page_relevant_drugs,
+                      tooltip: context.l10n.gene_page_relevant_drugs_tooltip(
+                        genotypeResult.geneDisplayString
+                      ),
+                    ),
                     SizedBox(height: PharMeTheme.smallSpace),
                     ...buildDrugList(context, state, activeDrugs,
                         noDrugsMessage: context.l10n.gene_page_no_relevant_drugs)

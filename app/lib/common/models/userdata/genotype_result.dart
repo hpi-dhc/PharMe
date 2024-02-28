@@ -51,6 +51,8 @@ class GenotypeResult implements Genotype {
 
   String get geneDisplayString => key.value;
 
+  String get variantDisplayString => key.allele;
+
   String _removeAllele(String textWithAllele) =>
     textWithAllele.removePrefix(key.allele).trim().capitalize();
 
