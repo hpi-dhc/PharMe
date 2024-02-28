@@ -96,6 +96,14 @@ List<pw.Widget> _buildHeader(Drug drug, BuildContext buildContext) {
         textAlign: pw.TextAlign.center,
       ),
     ),
+    _buildTextSpacer(),
+    _buildTextSpacer(),
+    _PdfSegment(
+      child: pw.Text(
+        buildContext.l10n.pdf_disclaimer,
+        style: pw.TextStyle(fontStyle: FontStyle.italic),
+      ),
+    ),
   ];
 }
 
@@ -301,7 +309,6 @@ List<pw.Widget> _buildExternalGuidelinePart(
           ..._buildGuidelinePart(guideline, buildContext)
         ]
       ),
-      _buildTextDivider(),
   ];
 }
 
