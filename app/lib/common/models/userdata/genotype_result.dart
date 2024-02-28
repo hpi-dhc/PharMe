@@ -63,9 +63,13 @@ class GenotypeResult implements Genotype {
 }
 
 extension FindGenotypeResultByKey on Map<String, GenotypeResult> {
+  bool isMissing(String genotypeKey) => this[genotypeKey] == null;
+
   GenotypeResult findOrMissing(String genotypeKey, BuildContext context) =>
-    this[genotypeKey] ?? GenotypeResult.missingResult(
-      GenotypeKey.extractGene(genotypeKey),
-      context,
-    );
+    isMissing(genotypeKey)
+      ? GenotypeResult.missingResult(
+          GenotypeKey.extractGene(genotypeKey),
+          context,
+        )
+      : this[genotypeKey]!;
 }

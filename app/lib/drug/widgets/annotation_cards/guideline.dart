@@ -136,14 +136,20 @@ class GuidelineAnnotationCard extends StatelessWidget {
 
   String _buildGuidelineTooltipText(BuildContext context) {
     final actualTooltip = drug.userGuideline != null
+      // Case 1: a guideline is present
       ? context.l10n.drugs_page_tooltip_guideline(
           drug.userGuideline!.externalData.first.source
         )
       : drug.userOrFirstGuideline != null
-        // Guideline for drug is present but not for genotype
-        ? context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
+        // Case 2: a guideline for the drug is present but not for the genotype
+        ? drug.guidelineGenotypes.all(UserData.instance.genotypeResults!.isMissing)
+          // Case 2.1: all genes are not tested
+          ? context.l10n.drugs_page_tooltip_missing_guideline_not_tested
+          // Case 2.2: at least some genes tested
+          : context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
             context.l10n.drugs_page_tooltip_missing_genotype
           )
+        // Case 3: the drug has no guidelines
         : context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
             context.l10n.drugs_page_tooltip_missing_drug
           );
