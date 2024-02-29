@@ -55,8 +55,8 @@
   "general_poor_metabolizer": "Poor Metabolizer",
   "general_not_tested": "Not tested",
 
-  "warning_level_green": "Usual precaution",
-  "warning_level_missing": "Usual precaution (incomplete data)",
+  "warning_level_green": "Usual caution",
+  "warning_level_missing": "Usual caution (incomplete data)",
   "warning_level_yellow": "Use cautiously",
   "warning_level_red": "Consider avoiding",
   
