@@ -9,7 +9,7 @@ Uri keycloakUrl([String slug = '']) =>
 
 // Note that sending emails will not work on the iPhone Simulator since it does
 // not have any email application installed.
-String _mailContact = 'ehivepgx@mssm.edu';
+String contactEmailAddress = 'ehivepgx@mssm.edu';
 // Workaround according to https://pub.dev/packages/url_launcher#encoding-urls
 String? _encodeQueryParameters(Map<String, String> params) {
 return params.entries
@@ -24,7 +24,7 @@ Future<void> sendEmail({
   await launchUrl(
     Uri(
       scheme: 'mailto',
-      path: _mailContact,
+      path: contactEmailAddress,
       query: _encodeQueryParameters({
         'subject': subject,
         'body': body,
@@ -33,8 +33,13 @@ Future<void> sendEmail({
   );
 }
 
+final geneticInformationUrl = Uri.https(
+  'medlineplus.gov',
+  '/genetics/understanding/',
+);
+
 Future<void> openFurtherGeneticInformation() async =>
-  launchUrl(Uri.https('medlineplus.gov', '/genetics/understanding/'));
+  launchUrl(geneticInformationUrl);
 
 final cpicMaxCacheTime = Duration(days: 90);
 const maxCachedDrugs = 10;

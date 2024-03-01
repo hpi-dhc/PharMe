@@ -38,21 +38,20 @@ final Map<String, List<Question>> faqList = {
     ),
     WidgetAnswerQuestion(
       question: 'Where can I find out more about genetics in general?',
-      answer: RichText(text: TextSpan(
-        // context.l10n.genetic_information_text_part_1
-        text: 'If you would like to learn more about genetics, we recommend ',
-        style: PharMeTheme.textTheme.titleMedium,
+      answer: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          linkTextSpan(
-            text: 'MedlinePlus', // context.l10n.genetic_information_source
+          Text(
+            'To learn more about genetics, we recommend MedlinePlus,'
+            ' a service of the National Library of Medicine:'
+          ),
+          SizedBox(height: PharMeTheme.smallSpace * 0.5),
+          Hyperlink(
+            text: geneticInformationUrl.toString(),
             onTap: openFurtherGeneticInformation,
           ),
-          TextSpan(
-            // context.l10n.genetic_information_text_part_2
-            text: ', a service of the National Library of Medicine.',
-          ),
         ],
-      )),
+      ),
     ),
     TextAnswerQuestion(
       question: 'Which drugs are affected?',

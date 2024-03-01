@@ -7,9 +7,7 @@
   "error_title": "Something went wrong",
   "error_uncaught_message_first_part": "PharMe has encountered an unknown error. ",
   "error_uncaught_message_bold_part": "Please close the app and open it again.",
-  "error_uncaught_message_contact": "The error has been logged for our technical staff; however, please ",
-  "error_contact_link_text": "contact us",
-  "error_uncaught_message_after_link": " if this problem persists.",
+  "error_uncaught_message_contact": "The error has been logged for our technical staff; however, if this problem persists, please contact us:",
   "error_close_app": "Close app",
   "error_mail_subject": "[ACTION REQUIRED] Unknown Error Report",
   "error_mail_body": "Please describe what happened right before the error occurred: \n\n--- Please keep the following information, it will help us to pin down the error ---\n\n{error}",
@@ -27,10 +25,6 @@
   "auth_sign_in": "Get data",
   "auth_success": "Successfully imported data",
 
-  "genetic_information_text_part_1": "If you would like to learn more about genetics, we recommend ",
-  "genetic_information_text_part_2": ", a service of the National Library of Medicine.",
-  "genetic_information_source": "MedlinePlus",
-
   "drug_selection_header": "Currently taken drugs",
   "drug_selection_onboarding_description": "Please update which drugs you are currently taking below. You can always change the status for a drug later on a drug page or in the settings.",
   "drug_selection_settings_description": "Review your currently taken drugs below.",
@@ -46,7 +40,6 @@
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for drugs you are currently taking.",
   
-
   "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
 
   "general_continue": "Continue",

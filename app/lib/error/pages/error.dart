@@ -15,10 +15,12 @@ class ErrorPage extends StatelessWidget {
       child: PharMeLogoPage(
         greyscale: true,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               context.l10n.error_title,
               style: PharMeTheme.textTheme.headlineMedium,
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: PharMeTheme.mediumSpace),
             RichText(
@@ -37,23 +39,16 @@ class ErrorPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: PharMeTheme.mediumSpace),
-            RichText(
+            Text(
+              context.l10n.error_uncaught_message_contact,
+              style: PharMeTheme.textTheme.bodyLarge,
               textAlign: TextAlign.center,
-              text: TextSpan(
-                style: PharMeTheme.textTheme.bodyLarge,
-                children: [
-                  TextSpan(text: context.l10n.error_uncaught_message_contact),
-                  linkTextSpan(
-                    text: context.l10n.error_contact_link_text,
-                    onTap: () => sendEmail(
-                      subject: context.l10n.error_mail_subject,
-                      body: context.l10n.error_mail_body(error),
-                    ),
-                  ),
-                  TextSpan(
-                    text: context.l10n.error_uncaught_message_after_link,
-                  ),
-                ],
+            ),
+            Hyperlink(
+              text: contactEmailAddress,
+              onTap: () => sendEmail(
+                subject: context.l10n.error_mail_subject,
+                body: context.l10n.error_mail_body(error),
               ),
             ),
             SizedBox(height: PharMeTheme.mediumSpace),

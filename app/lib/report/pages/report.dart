@@ -173,7 +173,7 @@ List<InlineSpan> _buildWarningLevelIndicator(
       child: Icon(
         warningLevel.icon,
         color: warningLevel.textColor,
-        size: pageDescriptionTextStyle!.fontSize,
+        size: PharMeTheme.textTheme.bodyMedium!.fontSize,
       ),
     ),
     WidgetSpan(
@@ -182,7 +182,7 @@ List<InlineSpan> _buildWarningLevelIndicator(
     ),
     TextSpan(
       text: text,
-      style: pageDescriptionTextStyle!.copyWith(color: warningLevel.textColor)
+      style: PharMeTheme.textTheme.bodyMedium!.copyWith(color: warningLevel.textColor)
     ),
   ];
 }
