@@ -8,6 +8,14 @@ class ErrorPage extends StatelessWidget {
 
   final String error;
 
+  Text _errorText(String text, { TextStyle? style }) => Text(
+    text,
+    textAlign: TextAlign.center,
+    style: style != null
+      ? PharMeTheme.textTheme.bodyLarge!.merge(style)
+      : PharMeTheme.textTheme.bodyLarge,
+  );
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -17,35 +25,23 @@ class ErrorPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
+            _errorText(
               context.l10n.error_title,
               style: PharMeTheme.textTheme.headlineMedium,
-              textAlign: TextAlign.center,
             ),
             SizedBox(height: PharMeTheme.mediumSpace),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: PharMeTheme.textTheme.bodyLarge,
-                children: [
-                  TextSpan(
-                    text: context.l10n.error_uncaught_message_first_part,
-                  ),
-                  TextSpan(
-                    text: context.l10n.error_uncaught_message_bold_part,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
+            _errorText(context.l10n.error_uncaught_message_first_part),
+            SizedBox(height: PharMeTheme.smallSpace),
+            _errorText(
+              context.l10n.error_uncaught_message_bold_part,
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: PharMeTheme.mediumSpace),
-            Text(
-              context.l10n.error_uncaught_message_contact,
-              style: PharMeTheme.textTheme.bodyLarge,
-              textAlign: TextAlign.center,
-            ),
+            SizedBox(height: PharMeTheme.smallSpace),
+            _errorText(context.l10n.error_uncaught_message_contact),
+            SizedBox(height: PharMeTheme.smallSpace),
             Hyperlink(
               text: contactEmailAddress,
+              style: PharMeTheme.textTheme.bodyLarge,
               onTap: () => sendEmail(
                 subject: context.l10n.error_mail_subject,
                 body: context.l10n.error_mail_body(error),
