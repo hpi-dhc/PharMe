@@ -25,31 +25,9 @@ Widget buildTitle(String text, { String? tooltipText }) {
   );
 }
 
-AppBar? buildBarBottom(String? barBottom) {
-  return barBottom == null
-    ? null
-    : AppBar(
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 0,
-        backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
-        elevation: PharMeTheme.appBarTheme.elevation,
-        title: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: barBottom,
-                style: PharMeTheme.textTheme.bodyLarge,
-              ),
-            ]
-          ),
-        ),
-      );
-}
-
 Scaffold pageScaffold({
   required String title,
   required List<Widget> body,
-  String? barBottom,
   List<Widget>? actions,
   Key? key,
 }) {
@@ -68,7 +46,6 @@ Scaffold pageScaffold({
         centerTitle: PharMeTheme.appBarTheme.centerTitle,
         title: buildTitle(title),
         actions: actions,
-        bottom: buildBarBottom(barBottom),
       ),
       SliverPadding(
         padding: pagePadding(),
@@ -82,7 +59,6 @@ Scaffold unscrollablePageScaffold({
   required Widget body,
   String? title,
   String? titleTooltip,
-  String? barBottom,
   List<Widget>? actions,
   Widget? drawer,
   bool automaticallyImplyLeading = true,
@@ -99,7 +75,6 @@ Scaffold unscrollablePageScaffold({
         centerTitle: PharMeTheme.appBarTheme.centerTitle,
         title: buildTitle(title, tooltipText: titleTooltip),
         actions: actions,
-        bottom: buildBarBottom(barBottom),
         scrolledUnderElevation: 0,
       );
   return Scaffold(
