@@ -40,7 +40,7 @@ class ReportPage extends StatelessWidget {
                 PageDescription(
                   Column(
                     children: [
-                      PageDescriptionText(context.l10n.report_legend_text),
+                      Text(context.l10n.report_legend_text),
                       SizedBox(height: PharMeTheme.smallSpace * 0.5),
                       _buildWarningLevelIndicators(
                         getText: (warningLevel) =>
