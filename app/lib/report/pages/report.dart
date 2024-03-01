@@ -41,6 +41,7 @@ class ReportPage extends StatelessWidget {
                   Column(
                     children: [
                       PageDescriptionText(context.l10n.report_legend_text),
+                      SizedBox(height: PharMeTheme.smallSpace * 0.5),
                       _buildWarningLevelIndicators(
                         getText: (warningLevel) =>
                           warningLevel.getLabel(context),
@@ -130,7 +131,7 @@ class GeneCard extends StatelessWidget {
   }
 }
 
-RichText _buildWarningLevelIndicators({
+Text _buildWarningLevelIndicators({
     required String? Function(WarningLevel) getText,
     InlineSpan? separator,
 }) {
@@ -153,8 +154,8 @@ RichText _buildWarningLevelIndicators({
           ),
         ];
   }
-  return RichText(
-    text: TextSpan(
+  return Text.rich(
+    TextSpan(
       style: PharMeTheme.textTheme.bodyMedium,
       children: content,
     )
@@ -163,10 +164,7 @@ RichText _buildWarningLevelIndicators({
 
 List<InlineSpan> _buildWarningLevelIndicator(
   WarningLevel warningLevel,
-  {
-    required String text,
-    Widget? separator,
-  }
+  { required String text }
 ) {
   return [
     WidgetSpan(
@@ -177,8 +175,7 @@ List<InlineSpan> _buildWarningLevelIndicator(
       ),
     ),
     WidgetSpan(
-      child: separator ??
-        SizedBox(width: PharMeTheme.smallSpace * 0.4),
+      child: SizedBox(width: PharMeTheme.smallSpace * 0.4),
     ),
     TextSpan(
       text: text,
