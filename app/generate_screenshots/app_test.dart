@@ -5,10 +5,10 @@ import 'dart:io';
 
 import 'package:app/app.dart';
 import 'package:app/common/module.dart';
+import 'package:dartx/dartx_io.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
-
 
 Future<void> takeScreenshot(
   WidgetTester tester,
@@ -20,6 +20,12 @@ Future<void> takeScreenshot(
     await tester.pumpAndSettle();
   }
   await binding.takeScreenshot(fileName);
+}
+
+void logTimeStamp(String description) {
+  final timestamp = DateTime.now().millisecondsSinceEpoch;
+  // ignore: avoid_print
+  print('TIMESTAMP: $timestamp $description');
 }
 
 void main() {
@@ -45,11 +51,15 @@ void main() {
       );
       await tester.pumpAndSettle();
 
+      logTimeStamp('test_start');
+
       // Click though the app and create screenshots
 
       // login
-      await Future.delayed(Duration(seconds: 1)); // wait for logo
+      await Future.delayed(Duration(seconds: 5)); // wait for logo & screencast
       await takeScreenshot(tester, binding, 'login');
+
+      logTimeStamp('login');
 
       // login-redirect (not working; only taking screenshot of loading screen)
       // could try to use cubit function to directly sign in which will only

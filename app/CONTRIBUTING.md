@@ -100,12 +100,19 @@ flutter pub run flutter_launcher_icons:main
 
 This will generate icons for both iOS as well as Android.
 
-## Updating screenshots
+## Updating screencast and screenshots
 
 🙅 _Not working yet due to login redirect, but keeping script for Sinai_
 _version (login without redirect)._
 
-To update the screenshots in `../docs/screenshots`
+The `generate_screenshots/generate_screencast.sh` script will create screenshots
+and screencasts. It uses Xcode to record the screencast and
+[`ffmpeg`](https://ffmpeg.org/)
+to cut the `full.mov` to relevant subsets.
+
+Run the script with `bash generate_screenshots/generate_screencast.sh`.
+
+To only update the screenshots in `../docs/screenshots`
 (used in [📑 App screens](../docs/App-screens.md),
 [📑 User instructions](../docs/User-instructions.html), and the
 [README](./README.md)), run the following command after adding username and
