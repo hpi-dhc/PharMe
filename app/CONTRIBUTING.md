@@ -103,28 +103,30 @@ This will generate icons for both iOS as well as Android.
 ## Updating screencast and screenshots
 
 🙅 _Not working yet due to login redirect, but keeping script for Sinai_
-_version (login without redirect)._
+_version (login without redirect) – can adopt once different login types are_
+_supported._
 
-The `generate_screenshots/generate_screencast.sh` script will create screenshots
-and screencasts. It uses Xcode to record the screencast and
-[`ffmpeg`](https://ffmpeg.org/)
-to cut the `full.mov` to relevant subsets.
+Scripts were created to click through the app using tests and record the
+screeen.
 
-Run the script with `bash generate_screenshots/generate_screencast.sh`.
+A simulator with the app in its initial state (or not installed) needs to be
+running.
 
-To only update the screenshots in `../docs/screenshots`
+### Screencasts
+
+The `generate_screendocs/generate_screencast.sh` script will create screencasts.
+It uses Xcode to record the screencast and [`ffmpeg`](https://ffmpeg.org/)
+to cut the `full.mov` to relevant subsets (needs to be installed).
+
+Run the script with `bash generate_screendocs/generate_screencast.sh`.
+
+## Screenshots
+
+To update the screenshots in `../docs/screenshots`
 (used in [📑 App screens](../docs/App-screens.md),
 [📑 User instructions](../docs/User-instructions.html), and the
-[README](./README.md)), run the following command after adding username and
-password to:
-
-```shell
-flutter drive \
-  --driver=generate_screenshots/test_driver.dart \
-  --target=generate_screenshots/app_test.dart \
-  --dart-define=TEST_USER=<USERNAME> \
-  --dart-define=TEST_PASSWORD=<PASSWORD>
-```
+[README](./README.md)), run the following command:
+`bash generate_screendocs/generate_screenshots.sh`.
 
 If the error `The following MissingPluginException was thrown running a test:
 MissingPluginException(No implementation found for method captureScreenshot on
