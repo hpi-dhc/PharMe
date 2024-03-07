@@ -29,7 +29,7 @@ flutter drive \
 --driver=generate_screenshots/test_driver.dart \
 --target=generate_screenshots/app_test.dart \
 --dart-define=TEST_USER="$username" \
---dart-define=TEST_PASSWORD="$password" > "$test_log_path"
+--dart-define=TEST_PASSWORD="$password" | tee "$test_log_path"
 
 # Write cut timestamps from test.log to cut.log
 
