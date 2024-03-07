@@ -81,16 +81,24 @@ format_seconds_as_time() {
 for ((i=2; i<${#timestamps[@]}-1; i++))
 do
     description=${descriptions[i]}
-    echo "Cutting $description"
+    start_offset=0
+    end_offset=0
     start_seconds=$(get_seconds_since_start ${timestamps[i-1]})
+    ((start_seconds-=$start_offset))
     end_seconds=$(get_seconds_since_start ${timestamps[i]})
+    ((end_seconds+=$end_offset))
+    if [ $start_seconds -eq $end_seconds ]; then
+        ((end_seconds+=1))
+    fi
     start_time=$(format_seconds_as_time start_seconds)
     end_time=$(format_seconds_as_time end_seconds)
-    ## Use ffmpeg to cut, see https://stackoverflow.com/a/42827058
+    echo "Cutting $description ($start_time – $end_time)"
     video_path="${output_directory}${description}.mov"
-    ffmpeg -y -loglevel error \
+    log_level="warning"
+    ffmpeg -y -loglevel "$log_level" \
+        -i "$full_video_path" \
         -ss "$start_time" \
         -to "$end_time" \
-        -i "$full_video_path" \
-        -c copy "$video_path"
+        -vcodec libx264 -pix_fmt yuv420p \
+        "$video_path"
 done
