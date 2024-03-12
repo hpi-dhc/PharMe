@@ -15,7 +15,7 @@ class CheckboxListTileWrapper extends StatelessWidget {
   final String? subtitle;
   final bool isChecked;
   // ignore: avoid_positional_boolean_parameters
-  final void Function(bool?)? onChanged;
+  final void Function(bool?) onChanged;
   final bool isEnabled;
   final EdgeInsetsGeometry? contentPadding;
 
@@ -28,6 +28,7 @@ class CheckboxListTileWrapper extends StatelessWidget {
         ? Text(subtitle!, style: PharMeTheme.textTheme.bodyMedium)
         : null,
       contentPadding: contentPadding,
+      onTap: () => isEnabled ? onChanged(!isChecked) : null,
       leading: CheckboxWrapper(
         isEnabled: isEnabled,
         isChecked: isChecked,
