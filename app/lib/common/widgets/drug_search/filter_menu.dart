@@ -62,6 +62,7 @@ class FilterMenu extends HookWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         IconButton(
+                          key: Key('close-filter-drawer-button'),
                           onPressed: Scaffold.of(context).closeDrawer,
                           icon: Icon(Icons.arrow_back_ios_rounded),
                           color: PharMeTheme.iconColor,
