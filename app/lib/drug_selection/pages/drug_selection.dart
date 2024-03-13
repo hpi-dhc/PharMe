@@ -86,6 +86,7 @@ class DrugSelectionPage extends HookWidget {
     return withFilterData(
       cubit: DrugListCubit(),
       builder: (context, builderCubit, builderState, activeDrugs) => DrugSearch(
+        key: Key('drug-selection'),
         showFilter: false,
         cubit: builderCubit,
         state: builderState,
