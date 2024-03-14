@@ -5,6 +5,12 @@ cuts_log_path="${output_directory}cuts.log"
 test_log_path="${output_directory}test.log"
 full_video_path="${output_directory}full.mov"
 
+ffmpeg_log_level="warning"
+
+# Time margin to be added, if needed
+end_offset=0
+start_offset=0
+
 read -p "Enter username: " username
 read -p "Enter password: " password
 
@@ -78,27 +84,54 @@ format_seconds_as_time() {
     echo $(printf "%02d:%02d:%02d" $hrs $min $sec)
 }
 
-for ((i=2; i<${#timestamps[@]}-1; i++))
-do
-    description=${descriptions[i]}
-    start_offset=0
-    end_offset=0
-    start_seconds=$(get_seconds_since_start ${timestamps[i-1]})
+cut_video() {
+    description=$1
+    start_seconds=$2
+    end_seconds=$3
     ((start_seconds-=$start_offset))
-    end_seconds=$(get_seconds_since_start ${timestamps[i]})
     ((end_seconds+=$end_offset))
     if [ $start_seconds -eq $end_seconds ]; then
         ((end_seconds+=1))
     fi
+    total_seconds=$(($end_seconds-$start_seconds))
     start_time=$(format_seconds_as_time start_seconds)
     end_time=$(format_seconds_as_time end_seconds)
-    echo "Cutting $description ($start_time – $end_time)"
-    video_path="${output_directory}${description}.mov"
-    log_level="warning"
-    ffmpeg -y -loglevel "$log_level" \
+    total_time=$(format_seconds_as_time total_seconds)
+    echo "Cutting $description ($total_time, $start_time – $end_time)"
+    video_path="${output_directory}${description}.mp4"
+    ffmpeg -y -loglevel "$ffmpeg_log_level" -an \
         -i "$full_video_path" \
+        -pix_fmt yuv420p -vcodec h264 -crf 21 \
         -ss "$start_time" \
         -to "$end_time" \
-        -vcodec libx264 -pix_fmt yuv420p \
+        -avoid_negative_ts make_zero -async 1 \
         "$video_path"
+
+    # Starting at first keyframe does not work as intended,
+    # but leaving this code here in case somebody will try to cut out the
+    # black frames in the beginning
+    # first_keyframe=$(
+    #     ffprobe -loglevel "$ffmpeg_log_level" \
+    #         -select_streams v \
+    #         -show_entries packet=pts_time \
+    #         -of csv=print_section=0 \
+    #         "$video_path" \
+    #         | awk -F',' '{print $1}' \
+    #         | head -1
+    # )
+    # echo $first_keyframe
+}
+
+cut_video "full_clean" \
+    $(get_seconds_since_start ${timestamps[1]}) \
+    $(get_seconds_since_start ${timestamps[${#timestamps[@]}-2]})
+
+for ((i=2; i<${#timestamps[@]}-1; i++))
+do
+    description=${descriptions[i]}
+    start_seconds=$(get_seconds_since_start ${timestamps[i-1]})
+    ((start_seconds-=$start_offset))
+    end_seconds=$(get_seconds_since_start ${timestamps[i]})
+    ((end_seconds+=$end_offset))
+    cut_video $description $start_seconds $end_seconds
 done
