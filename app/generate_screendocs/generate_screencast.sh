@@ -5,7 +5,7 @@ cuts_log_path="${output_directory}cuts.log"
 flutter_log_path="${output_directory}flutter.log"
 full_video_path="${output_directory}full.mov"
 
-start_offset=3
+start_offset=1
 end_offset=1
 
 timestamp_prefix="TIMESTAMP: "
