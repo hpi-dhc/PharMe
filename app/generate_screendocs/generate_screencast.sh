@@ -66,7 +66,7 @@ fi
 
 # Cut smaller screencasts
 
-echo "Cutting smaller screencasts at keyframes closest to logged times"
+echo "Cutting smaller screencasts at keyframes closest before logged times"
 
 timestamps=()
 descriptions=()
@@ -115,12 +115,16 @@ get_difference() {
     echo ${difference#-}
 }
 
-get_closest_frame_start() {
+get_closest_previous_frame_start() {
     local target=$1
     local best_fit_index=0
     local smallest_difference=$(get_difference $target ${frame_starts[0]})
     for ((j=1; j<${#frame_starts[@]}; j++)); do
-        current_difference=$(get_difference $target ${frame_starts[j]})
+        local current_value=${frame_starts[j]}
+        local current_difference=$(get_difference $target $current_value)
+        if (( $(echo "$current_value > $target" | bc) )); then
+            break
+        fi
         if (( $(echo "$current_difference < $smallest_difference" | bc) )); then
             smallest_difference=$current_difference
             best_fit_index=$j
@@ -136,12 +140,16 @@ get_frame_end() {
     echo $(echo "$frame_start + $frame_duration" | bc)
 }
 
-get_closest_frame_end() {
+get_closest_previous_frame_end() {
     local target=$1
     local best_fit_index=0
     local smallest_difference=$(get_difference $target $(get_frame_end 0))
     for ((j=1; j<${#frame_starts[@]}; j++)); do
-        current_difference=$(get_difference $target $(get_frame_end $j))
+        local current_value=$(get_frame_end $j)
+        local current_difference=$(get_difference $target $current_value)
+        if (( $(echo "$current_value > $target" | bc) )); then
+            break
+        fi
         if (( $(echo "$current_difference < $smallest_difference" | bc) )); then
             smallest_difference=$current_difference
             best_fit_index=$j
@@ -156,9 +164,9 @@ get_seconds_since_start() {
 
 cut_video() {
     local description=$1
-    local start_seconds=$(get_closest_frame_start $2)
+    local start_seconds=$(get_closest_previous_frame_start $2)
     local exact_end_with_offset=$(echo "$3 + $end_offset" | bc)
-    local end_seconds=$(get_closest_frame_end $exact_end_with_offset)
+    local end_seconds=$(get_closest_previous_frame_end $exact_end_with_offset)
 
     echo "Cutting $description $start_seconds – $end_seconds (originally $2 – $3, with offset $exact_end_with_offset)"
 
