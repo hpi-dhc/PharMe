@@ -6,10 +6,10 @@ import 'package:integration_test/integration_test.dart';
 
 import 'sequence_utils.dart';
 
-void logTimeStamp(String description) {
+void logTimeStamp(String prefix, String description) {
   final timestamp = DateTime.now().millisecondsSinceEpoch;
   // ignore: avoid_print
-  print('TIMESTAMP: $timestamp $description');
+  print('$prefix$timestamp $description');
 }
 
 void main() {
@@ -20,13 +20,16 @@ void main() {
       const username = String.fromEnvironment('TEST_USER');
       // ignore: unused_local_variable
       const password = String.fromEnvironment('TEST_PASSWORD');
+      const timestampPrefix = String.fromEnvironment('TIMESTAMP_PREFIX');
+      // ignore: unused_local_variable
+      const startOffset = int.fromEnvironment('START_OFFSET');
 
       await loadApp(tester);
-      logTimeStamp('test_start');
 
       // login
+      logTimeStamp(timestampPrefix, 'login');
       await wait(5);
-      logTimeStamp('login');
+      logTimeStamp(timestampPrefix, 'login');
 
       // login-redirect (not working; only taking screenshot of loading screen)
       // could try to use cubit function to directly sign in which will only
