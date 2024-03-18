@@ -5,7 +5,8 @@ cuts_log_path="${output_directory}cuts.log"
 flutter_log_path="${output_directory}flutter.log"
 full_video_path="${output_directory}full.mov"
 
-end_offset=3
+start_offset=3
+end_offset=1
 
 timestamp_prefix="TIMESTAMP: "
 
@@ -38,7 +39,7 @@ if $redo_recording; then
         --driver=generate_screendocs/test_driver.dart \
         --target=generate_screendocs/screencast_sequence.dart \
         --dart-define=TIMESTAMP_PREFIX="$timestamp_prefix" \
-        --dart-define=START_OFFSET="$end_offset" \
+        --dart-define=START_OFFSET="$start_offset" \
         --dart-define=TEST_USER="$username" \
         --dart-define=TEST_PASSWORD="$password" | tee "$flutter_log_path"
 
