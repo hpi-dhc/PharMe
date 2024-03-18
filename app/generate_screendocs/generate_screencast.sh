@@ -168,6 +168,7 @@ cut_video() {
         -i "$full_video_path" \
         -ss "$start_seconds" \
         -to "$end_seconds" \
+        -pix_fmt yuv420p \
         "$video_path"
 }
 
