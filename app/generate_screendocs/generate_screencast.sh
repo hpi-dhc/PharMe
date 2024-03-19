@@ -5,9 +5,6 @@ cuts_log_path="${output_directory}cuts.log"
 flutter_log_path="${output_directory}flutter.log"
 full_video_path="${output_directory}full.mov"
 
-start_offset=1
-end_offset=1
-
 timestamp_prefix="TIMESTAMP: "
 
 ffmpeg_log_level="warning"
@@ -39,7 +36,6 @@ if $redo_recording; then
         --driver=generate_screendocs/test_driver.dart \
         --target=generate_screendocs/screencast_sequence.dart \
         --dart-define=TIMESTAMP_PREFIX="$timestamp_prefix" \
-        --dart-define=START_OFFSET="$start_offset" \
         --dart-define=TEST_USER="$username" \
         --dart-define=TEST_PASSWORD="$password" | tee "$flutter_log_path"
 
@@ -165,10 +161,9 @@ get_seconds_since_start() {
 cut_video() {
     local description=$1
     local start_seconds=$(get_closest_previous_frame_start $2)
-    local exact_end_with_offset=$(echo "$3 + $end_offset" | bc)
-    local end_seconds=$(get_closest_previous_frame_end $exact_end_with_offset)
+    local end_seconds=$(get_closest_previous_frame_end $3)
 
-    echo "Cutting $description $start_seconds – $end_seconds (originally $2 – $3, with offset $exact_end_with_offset)"
+    echo "Cutting $description $start_seconds – $end_seconds (originally $2 – $3)"
 
     local video_path="${output_directory}${description}.mp4"
 
@@ -185,7 +180,7 @@ cut_video "full_clean" \
     $(get_seconds_since_start ${timestamps[${#timestamps[@]}-2]})
 
 # Skip first and last entries (recording_start and recording_end)
-for ((i=2; i<${#timestamps[@]}-1; i++)); do
+for ((i=2; i<${#timestamps[@]}-1; i+=2)); do
     description=${descriptions[i]}
     start_seconds=$(get_seconds_since_start ${timestamps[i-1]})
     end_seconds=$(get_seconds_since_start ${timestamps[i]})

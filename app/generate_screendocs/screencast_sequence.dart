@@ -12,6 +12,25 @@ void logTimeStamp(String prefix, String description) {
   print('$prefix$timestamp $description');
 }
 
+Future<void> beginPart(
+  WidgetTester tester,
+  String timestampPrefix,
+  String description,
+) async{
+  await settleAndWait(tester, 1);
+  logTimeStamp(timestampPrefix, description);
+  await settleAndWait(tester, 1);
+}
+
+Future<void> endPart(
+  WidgetTester tester,
+  String timestampPrefix,
+  String description,
+) async {
+  await settleAndWait(tester, 1);
+  logTimeStamp(timestampPrefix, description);
+}
+
 void main() {
   group('click through the app and create screenshots', () {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -27,9 +46,10 @@ void main() {
       await loadApp(tester);
 
       // login
-      logTimeStamp(timestampPrefix, 'login');
-      await wait(5);
-      logTimeStamp(timestampPrefix, 'login');
+      const loginDescription = 'login';
+      await beginPart(tester, timestampPrefix, loginDescription);
+      await settleAndWait(tester, 3);
+      await endPart(tester, timestampPrefix, loginDescription);
 
       // login-redirect (not working; only taking screenshot of loading screen)
       // could try to use cubit function to directly sign in which will only
@@ -38,7 +58,9 @@ void main() {
       // await Future.delayed(Duration(seconds: 3)); // wait for dialog
       // await takeScreenshot(tester, binding, 'login-redirect');
 
-      await cleanupApp();
+      // await beginPart(tester, timestampPrefix, moreDescription);
+      // await useBottomNavigation(tester, 'More');
+      // await endPart(tester, timestampPrefix, moreDescription);
     });
   });
 }
