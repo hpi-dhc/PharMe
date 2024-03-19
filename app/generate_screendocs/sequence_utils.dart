@@ -193,8 +193,28 @@ Future<void> useBottomNavigation(
   ).first);
 }
 
+Future<void> changeDrugStatus(
+  WidgetTester tester,
+  String drug,
+  String activity,
+) async {
+  final dropdownKey = 'drug-status-selection-${drug.toLowerCase()}';
+  await tester.tap(
+    find.byKey(Key(dropdownKey)).first,
+  );
+  await settleAndWait(tester, 2);
+  await tester.tap(
+    find.byKey(Key('$dropdownKey-$activity')).first,
+  );
+}
+
 Future<void> tapFirstFaqItem(WidgetTester tester) async {
-  await tester.tap(find.byType(ExpansionTile).first);
+  await tester.tap(
+    find.descendant(
+      of: find.byType(ExpansionTile).first,
+      matching: find.byType(Icon),
+    ),
+  );
 }
 
 Future<void> tapDrugSearchTooltip(WidgetTester tester) async {
@@ -212,8 +232,18 @@ Future<void> closeDrugFilters(WidgetTester tester) async {
   await tester.tap(find.byKey(Key('close-filter-drawer-button')).first);
 }
 
+Future<void> filterByDrugStatus(
+  WidgetTester tester,
+  { required bool showInactive }
+) async {
+  await tester.tap(find.byKey(Key('drug-status-filter-dropdown')).first);
+  await settleAndWait(tester, 1);
+  await tester.tap(
+    find.byKey(Key('drug-status-filter-${showInactive.toString()}')).first,
+  );
+}
 
-Future<void> hideMissingWarningLevel(WidgetTester tester) async {
+Future<void> toggleMissingWarningLevel(WidgetTester tester) async {
   await tester.tap(find.byType(ActionChip).last);
 }
 

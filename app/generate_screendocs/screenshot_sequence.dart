@@ -33,7 +33,7 @@ void main() {
       await loadApp(tester);
 
       // login
-      await wait(5); // wait for logo
+      await settleAndWait(tester, 5); // wait for logo
       await takeScreenshot(tester, binding, 'login');
 
       // login-redirect (not working; only taking screenshot of loading screen)
