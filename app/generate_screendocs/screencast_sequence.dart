@@ -32,7 +32,7 @@ Future<void> endPart(
 }
 
 void main() {
-  group('click through the app and create screenshots', () {
+  group('click through the app and create screencasts', () {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
     testWidgets('take screencast', (tester) async {
       // ignore: unused_local_variable
