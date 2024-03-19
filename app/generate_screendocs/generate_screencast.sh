@@ -1,6 +1,7 @@
 #!/bin/bash
 
 output_directory="../docs/screencasts/"
+assets_directory="assets/images/tutorial/"
 cuts_log_path="${output_directory}cuts.log"
 flutter_log_path="${output_directory}flutter.log"
 full_video_path="${output_directory}full.mov"
@@ -8,7 +9,8 @@ full_video_path="${output_directory}full.mov"
 timestamp_prefix="TIMESTAMP: "
 
 ffmpeg_log_level="warning"
-redo_recording=true # should be true, set false to only test cutting
+redo_recording=false # should be true, set false to only test post-editing
+redo_cutting=false # should be true, set false to only test further steps
 
 log_timestamp() {
     echo "$(date +%s000) $1" >> "$cuts_log_path"
@@ -60,129 +62,145 @@ if $redo_recording; then
 
 fi
 
-# Cut smaller screencasts
+if $redo_cutting; then
 
-echo "Cutting smaller screencasts at keyframes closest before logged times"
+    # Cut smaller screencasts
 
-timestamps=()
-descriptions=()
-while read cut_info; do
-    if [ -z "$cut_info" ]; then
-        continue
-    fi
-    cut_info_array=($cut_info)
-    timestamp=${cut_info_array[0]}
-    description=${cut_info_array[1]}
-    timestamps+=("$timestamp")
-    descriptions+=("$description")
-done < "$cuts_log_path"
+    echo "Cutting smaller screencasts at keyframes closest before logged times"
 
-get_frame_starts() {
-    local video_path=$1
-    echo $(
-        ffprobe -loglevel "$ffmpeg_log_level" \
-            -select_streams v \
-            -show_entries frame=pts_time \
-            -of csv=print_section=0 \
-            "$video_path" \
-            | awk -F',' '{print $1}'
-    )
-}
-
-get_frame_durations() {
-    local video_path=$1
-    echo $(
-        ffprobe -loglevel "$ffmpeg_log_level" \
-            -select_streams v \
-            -show_entries frame=pkt_duration_time \
-            -of csv=print_section=0 \
-            "$video_path" \
-            | awk -F',' '{print $1}'
-    )
-}
-
-frame_starts=($(get_frame_starts $full_video_path))
-frame_durations=($(get_frame_durations $full_video_path))
-
-get_difference() {
-    local first_float=$1
-    local second_float=$2
-    local difference=$(echo "$first_float - $second_float" | bc)
-    echo ${difference#-}
-}
-
-get_closest_previous_frame_start() {
-    local target=$1
-    local best_fit_index=0
-    local smallest_difference=$(get_difference $target ${frame_starts[0]})
-    for ((j=1; j<${#frame_starts[@]}; j++)); do
-        local current_value=${frame_starts[j]}
-        local current_difference=$(get_difference $target $current_value)
-        if (( $(echo "$current_value > $target" | bc) )); then
-            break
+    timestamps=()
+    descriptions=()
+    while read cut_info; do
+        if [ -z "$cut_info" ]; then
+            continue
         fi
-        if (( $(echo "$current_difference < $smallest_difference" | bc) )); then
-            smallest_difference=$current_difference
-            best_fit_index=$j
-        fi
+        cut_info_array=($cut_info)
+        timestamp=${cut_info_array[0]}
+        description=${cut_info_array[1]}
+        timestamps+=("$timestamp")
+        descriptions+=("$description")
+    done < "$cuts_log_path"
+
+    get_frame_starts() {
+        local video_path=$1
+        echo $(
+            ffprobe -loglevel "$ffmpeg_log_level" \
+                -select_streams v \
+                -show_entries frame=pts_time \
+                -of csv=print_section=0 \
+                "$video_path" \
+                | awk -F',' '{print $1}'
+        )
+    }
+
+    get_frame_durations() {
+        local video_path=$1
+        echo $(
+            ffprobe -loglevel "$ffmpeg_log_level" \
+                -select_streams v \
+                -show_entries frame=pkt_duration_time \
+                -of csv=print_section=0 \
+                "$video_path" \
+                | awk -F',' '{print $1}'
+        )
+    }
+
+    frame_starts=($(get_frame_starts $full_video_path))
+    frame_durations=($(get_frame_durations $full_video_path))
+
+    get_difference() {
+        local first_float=$1
+        local second_float=$2
+        local difference=$(echo "$first_float - $second_float" | bc)
+        echo ${difference#-}
+    }
+
+    get_closest_previous_frame_start() {
+        local target=$1
+        local best_fit_index=0
+        local smallest_difference=$(get_difference $target ${frame_starts[0]})
+        for ((j=1; j<${#frame_starts[@]}; j++)); do
+            local current_value=${frame_starts[j]}
+            local current_difference=$(get_difference $target $current_value)
+            if (( $(echo "$current_value > $target" | bc) )); then
+                break
+            fi
+            if (( $(echo "$current_difference < $smallest_difference" | bc) )); then
+                smallest_difference=$current_difference
+                best_fit_index=$j
+            fi
+        done
+        echo "${frame_starts[best_fit_index]}"
+    }
+
+    get_frame_end() {
+        local index=$1
+        local frame_start=${frame_starts[index]}
+        local frame_duration=${frame_durations[index]}
+        echo $(echo "$frame_start + $frame_duration" | bc)
+    }
+
+    get_closest_previous_frame_end() {
+        local target=$1
+        local best_fit_index=0
+        local smallest_difference=$(get_difference $target $(get_frame_end 0))
+        for ((j=1; j<${#frame_starts[@]}; j++)); do
+            local current_value=$(get_frame_end $j)
+            local current_difference=$(get_difference $target $current_value)
+            if (( $(echo "$current_value > $target" | bc) )); then
+                break
+            fi
+            if (( $(echo "$current_difference < $smallest_difference" | bc) )); then
+                smallest_difference=$current_difference
+                best_fit_index=$j
+            fi
+        done
+        echo "$(get_frame_end $best_fit_index)"
+    }
+
+    get_seconds_since_start() {
+        echo $(printf %.3f "$(($1-${timestamps[0]}))e-3")
+    }
+
+    cut_video() {
+        local description=$1
+        local start_seconds=$(get_closest_previous_frame_start $2)
+        local end_seconds=$(get_closest_previous_frame_end $3)
+
+        echo "Cutting $description $start_seconds – $end_seconds (originally $2 – $3)"
+
+        local video_path="${output_directory}${description}.mp4"
+
+        ffmpeg -y -loglevel "$ffmpeg_log_level" -an \
+            -i "$full_video_path" \
+            -ss "$start_seconds" \
+            -to "$end_seconds" \
+            -pix_fmt yuv420p \
+            "$video_path"
+    }
+
+    cut_video "full_clean" \
+        $(get_seconds_since_start ${timestamps[1]}) \
+        $(get_seconds_since_start ${timestamps[${#timestamps[@]}-2]})
+
+    # Skip first and last entries (recording_start and recording_end)
+    for ((i=2; i<${#timestamps[@]}-1; i+=2)); do
+        description=${descriptions[i]}
+        start_seconds=$(get_seconds_since_start ${timestamps[i-1]})
+        end_seconds=$(get_seconds_since_start ${timestamps[i]})
+        cut_video $description $start_seconds $end_seconds
     done
-    echo "${frame_starts[best_fit_index]}"
-}
 
-get_frame_end() {
-    local index=$1
-    local frame_start=${frame_starts[index]}
-    local frame_duration=${frame_durations[index]}
-    echo $(echo "$frame_start + $frame_duration" | bc)
-}
+fi
 
-get_closest_previous_frame_end() {
-    local target=$1
-    local best_fit_index=0
-    local smallest_difference=$(get_difference $target $(get_frame_end 0))
-    for ((j=1; j<${#frame_starts[@]}; j++)); do
-        local current_value=$(get_frame_end $j)
-        local current_difference=$(get_difference $target $current_value)
-        if (( $(echo "$current_value > $target" | bc) )); then
-            break
-        fi
-        if (( $(echo "$current_difference < $smallest_difference" | bc) )); then
-            smallest_difference=$current_difference
-            best_fit_index=$j
-        fi
-    done
-    echo "$(get_frame_end $best_fit_index)"
-}
-
-get_seconds_since_start() {
-    echo $(printf %.3f "$(($1-${timestamps[0]}))e-3")
-}
-
-cut_video() {
-    local description=$1
-    local start_seconds=$(get_closest_previous_frame_start $2)
-    local end_seconds=$(get_closest_previous_frame_end $3)
-
-    echo "Cutting $description $start_seconds – $end_seconds (originally $2 – $3)"
-
-    local video_path="${output_directory}${description}.mp4"
-
-    ffmpeg -y -loglevel "$ffmpeg_log_level" -an \
-        -i "$full_video_path" \
-        -ss "$start_seconds" \
-        -to "$end_seconds" \
-        -pix_fmt yuv420p \
-        "$video_path"
-}
-
-cut_video "full_clean" \
-    $(get_seconds_since_start ${timestamps[1]}) \
-    $(get_seconds_since_start ${timestamps[${#timestamps[@]}-2]})
-
-# Skip first and last entries (recording_start and recording_end)
-for ((i=2; i<${#timestamps[@]}-1; i+=2)); do
-    description=${descriptions[i]}
-    start_seconds=$(get_seconds_since_start ${timestamps[i-1]})
-    end_seconds=$(get_seconds_since_start ${timestamps[i]})
-    cut_video $description $start_seconds $end_seconds
+for video_path in `find $output_directory -name "*_loopable.mp4" -type f`; do
+    video_name=$(basename $video_path)
+    gif_name="${video_name%.mp4}.gif"
+    assets_path="${assets_directory}$gif_name"
+    echo "Creating $assets_path"
+    # From https://superuser.com/a/556031
+    ffmpeg -y -loglevel "$ffmpeg_log_level" \
+        -i "$video_path" \
+        -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | \
+        convert -delay 10 - -loop 0 -layers optimize "$assets_path"
 done

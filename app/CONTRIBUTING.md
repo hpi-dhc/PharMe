@@ -118,6 +118,10 @@ The `generate_screendocs/generate_screencast.sh` script will create screencasts.
 It uses Xcode to record the screencast and [`ffmpeg`](https://ffmpeg.org/)
 to cut the `full.mov` to relevant subsets (needs to be installed).
 
+To generate GIFs used in the Tutorial,
+[ImageMagick](https://imagemagick.org/index.php) is used
+(which also needs to be installed).
+
 Run the script with `bash generate_screendocs/generate_screencast.sh`.
 
 ## Screenshots
