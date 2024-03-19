@@ -9,8 +9,8 @@ full_video_path="${output_directory}full.mov"
 timestamp_prefix="TIMESTAMP: "
 
 ffmpeg_log_level="warning"
-redo_recording=false # should be true, set false to only test post-editing
-redo_cutting=false # should be true, set false to only test further steps
+redo_recording=true # should be true, set false to only test post-editing
+redo_cutting=true # should be true, set false to only test further steps
 
 log_timestamp() {
     echo "$(date +%s000) $1" >> "$cuts_log_path"
