@@ -38,6 +38,7 @@ class DrugPage extends StatelessWidget {
         : drug.name.capitalize(),
       actions: [
         IconButton(
+          key: Key('share-${drug.name}'),
           onPressed: loading ? null : () =>
             context.read<DrugCubit>().createAndSharePdf(drug, context),
           icon: Icon(

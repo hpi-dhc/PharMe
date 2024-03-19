@@ -175,6 +175,7 @@ class FilterMenu extends HookWidget {
         : context.l10n.search_page_filter_only_active_drugs;
       final enabled = _filterIsEnabled(itemFilter: itemFilter, drugs: drugs);
       return DropdownMenuItem<bool>(
+        key: Key('drug-status-filter-${showInactive.toString()}'),
         value: showInactive,
         enabled: enabled,
         child: _getFilterText(
@@ -187,6 +188,7 @@ class FilterMenu extends HookWidget {
     }
 
     return DropdownButton<bool>(
+      key: Key('drug-status-filter-dropdown'),
       value: value,
       items: [
         buildDrugStatusDropdownItem(showInactive: true),

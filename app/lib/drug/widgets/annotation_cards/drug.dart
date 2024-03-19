@@ -64,6 +64,7 @@ class DrugAnnotationCards extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
             child: DropdownButton<bool>(
+              key: Key('drug-status-selection-${drug.name}'),
               value: isActive,
               isExpanded: true,
               icon: const Icon(Icons.expand_more),
@@ -98,6 +99,7 @@ class DrugAnnotationCards extends StatelessWidget {
               },
               items: [
                 DropdownMenuItem<bool>(
+                  key: Key('drug-status-selection-${drug.name}-active'),
                   value: true,
                   child: Row(
                     children: [
@@ -110,6 +112,7 @@ class DrugAnnotationCards extends StatelessWidget {
                     ]),
                 ),
                 DropdownMenuItem<bool>(
+                  key: Key('drug-status-selection-${drug.name}-inactive'),
                   value: false,
                   child: Row(
                     children: [
