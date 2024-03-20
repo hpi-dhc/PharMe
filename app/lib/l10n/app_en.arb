@@ -358,7 +358,7 @@
   "onboarding_4_button": "Find out more about gene tests here.",
   "onboarding_4_already_tested_text": "PharMe works by matching your genetic data with known information about interactions between certain genes and drugs.\n\nThe information presented in PharMe is based on scientifically proven guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
   "onboarding_5_header": "We care about your data protection",
-  "onboarding_5_text": "After downloading your genetic data from your data provider, it is encrypted and solely kept on your phone.\n\nOur servers know nothing about you, neither your identity nor your DNA.",
+  "onboarding_5_text": "After downloading your genetic data from your data provider, it is solely kept on your phone in encrypted form.\n\nOur servers know nothing about you, neither your identity nor your DNA.",
     
   "settings_page_account_settings": "Settings",
   "settings_page_delete_data": "Delete app data",
