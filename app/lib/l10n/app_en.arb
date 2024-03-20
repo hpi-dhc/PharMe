@@ -365,7 +365,7 @@
   "settings_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genetic data and will reset the app.",
   "settings_page_delete_data_additional_text": "Your genetic data will be deleted and it might not be possible to import it again.",
   "settings_page_delete_data_confirmation": "I understand the consequences and want to delete all app data",
-  "settings_page_more": "More",
+  "settings_page_app_information": "App information",
   "settings_page_onboarding": "Onboarding",
   "settings_page_about_us": "About us",
   "settings_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboraion with health professionals from the Mount Sinai Health System in New York City, NY, USA.",

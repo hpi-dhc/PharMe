@@ -30,7 +30,7 @@ class MorePage extends StatelessWidget {
             ),
           ),
           SubheaderDivider(
-            text: context.l10n.settings_page_more,
+            text: context.l10n.settings_page_app_information,
             useLine: false,
           ),
           _buildSettingsItem(
