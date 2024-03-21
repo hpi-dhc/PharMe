@@ -25,9 +25,9 @@
   "auth_sign_in": "Get data",
   "auth_success": "Successfully imported data",
 
-  "drug_selection_header": "Currently taken drugs",
-  "drug_selection_onboarding_description": "Please update which drugs you are currently taking below. You can always change the status for a drug later on a drug page or in the settings.",
-  "drug_selection_settings_description": "Review your currently taken drugs below.",
+  "drug_selection_header": "Your current drugs",
+  "drug_selection_onboarding_description": "Please update your current drugs below. You can always change the status for a drug later on a drug page or in the settings.",
+  "drug_selection_settings_description": "Review your current drugs below.",
   "drug_selection_no_drugs_loaded": "No drugs loaded",
   "drug_selection_subheader_active_drugs": "Selected drugs",
   "drug_selection_subheader_all_drugs": "All drugs",
@@ -38,7 +38,7 @@
   "err_generic": "Error",
 
   "update_warning_title": "Updated guidelines",
-  "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your information, especially for drugs you are currently taking.",
+  "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your results in the app, especially for your current drugs.",
   
   "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
 
@@ -59,7 +59,7 @@
   "search_page_filter_subheading_usage": "Filter by usage status",
   "search_page_filter_subheading_level": "Filter by guideline result",
   "search_page_filter_all_drugs": "All drugs",
-  "search_page_filter_only_active_drugs": "Currently taken drugs",
+  "search_page_filter_only_active_drugs": "Your current drugs",
   "search_page_indicator_explanation": "Taking drugs with an {indicatorName} ({indicator}) can influence your results for other drugs",
   "@search_page_indicator_explanation": {
     "placeholders": {
@@ -83,7 +83,7 @@
         }
     }
   },
-  "drugs_page_disclaimer": "Please note the information shown on this page is ONLY based on your DNA and relevant currently taken drugs. Other important factors like weight, age, pre-existing conditions, and drug interactions are not considered.",
+  "drugs_page_disclaimer": "Please note the information shown on this page is ONLY based on your DNA and certain drug interactions. Other important factors like weight, age, pre-existing conditions, and further drug interactions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} can influence your results for the following gene(s): {genes}",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
@@ -212,7 +212,7 @@
   "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated drugs.",
   "report_legend_text": "Next to your gene result the number of implicated drugs per guideline result is shown:",
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
-  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by drugs you are currently taking",
+  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by your current drugs",
   "@report_page_indicator_explanation": {
     "placeholders": {
         "indicatorName": {
@@ -268,7 +268,7 @@
     }
   },
   "gene_page_no_relevant_drugs": "This gene has no known effect on any drug.",
-  "gene_page_inhibitor_drugs": "Your results for this gene can be influenced if you are currently taking any of the following drugs:",
+  "gene_page_inhibitor_drugs": "Your results for this gene can be influenced by the following drugs:",
   "gene_page_further_inhibitor_drugs": "Your results for this gene can also be influenced by taking any of the following drugs:",
   "gene_page_activity_score": "Activity score",
 
@@ -324,7 +324,7 @@
       }
     }
   },
-  "pdf_activity_score_overwrite": "{originalScore} adjusted based on currently taken medications, see phenotype",
+  "pdf_activity_score_overwrite": "{originalScore} adjusted based on current medications, see phenotype",
   "@pdf_activity_score_overwrite": {
     "placeholders": {
       "originalScore": {
