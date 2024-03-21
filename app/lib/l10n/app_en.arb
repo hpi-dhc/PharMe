@@ -48,10 +48,10 @@
   "general_poor_metabolizer": "Poor Metabolizer",
   "general_not_tested": "Not tested",
 
-  "warning_level_green": "Usual caution",
-  "warning_level_missing": "Usual caution (incomplete data)",
-  "warning_level_yellow": "Increased caution",
-  "warning_level_red": "Consider avoiding",
+  "warning_level_green": "Standard precautions",
+  "warning_level_missing": "Standard precautions (incomplete data)",
+  "warning_level_yellow": "Use with caution",
+  "warning_level_red": "Consider alternatives",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
   "search_page_tooltip_search_no_class": "Search for drugs by their name or brand name.",
