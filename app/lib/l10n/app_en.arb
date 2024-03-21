@@ -50,7 +50,7 @@
 
   "warning_level_green": "Usual caution",
   "warning_level_missing": "Usual caution (incomplete data)",
-  "warning_level_yellow": "Use cautiously",
+  "warning_level_yellow": "Increased caution",
   "warning_level_red": "Consider avoiding",
   
   "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
