@@ -202,10 +202,12 @@ Future<void> changeDrugStatus(
   await tester.tap(
     find.byKey(Key(dropdownKey)).first,
   );
-  await settleAndWait(tester, 2);
+  await tester.pump();
+  await settleAndWait(tester, 1);
   await tester.tap(
     find.byKey(Key('$dropdownKey-$activity')).first,
   );
+  await tester.pump();
 }
 
 Future<void> tapFirstFaqItem(WidgetTester tester) async {
