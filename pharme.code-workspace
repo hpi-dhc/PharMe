@@ -30,6 +30,21 @@
     }
   ],
   "settings": {
-    "typescript.preferences.importModuleSpecifier": "relative"
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "cSpell.words": [
+      "abiraterone",
+      "anni",
+      "bupropion",
+      "cinacalcet",
+      "CPIC",
+      "drugclass",
+      "duloxetine",
+      "Hasso",
+      "MedlinePlus",
+      "Metabolizer",
+      "Pharmacogenetics",
+      "PharMe",
+      "Plattner"
+    ]
   }
 }
