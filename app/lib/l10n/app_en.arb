@@ -83,7 +83,8 @@
         }
     }
   },
-  "drugs_page_disclaimer": "Please note that the information shown on this page is ONLY based on your DNA and certain medications you are currently taking. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
+  "drugs_page_disclaimer_description": "Please note: ",
+  "drugs_page_disclaimer_text": "The information shown on this page is ONLY based on your DNA and certain medications you are currently taking. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} can influence your results for the following gene(s): {genes}",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
@@ -206,6 +207,8 @@
   "drugs_page_tooltip_missing_guideline_not_tested": "Guidelines provide recommendations on which medications to use based on your DNA. However, your genetic test result does not include the information needed to make such a recommendation for this medication.",
 
   "drugs_page_tooltip_warfarin": "CPIC guidelines provide recommendations on which medications to use based on your DNA. However, to calculate your warfarin dose, more information is needed.",
+  "drugs_page_implication_description": "Why: ",
+  "drugs_page_recommendation_description": "What to do: ",
   "drugs_page_implication_warfarin": "More information is needed to calculate your warfarin dose.",
   "drugs_page_recommendation_warfarin": "Consult your pharmacist or doctor for more information.",
 

@@ -9,6 +9,7 @@ enum WarfarinContent {
   recommendation,
   color,
   icon,
+  heading,
 }
 
 final warfarinProperties = <WarfarinContent, dynamic Function(BuildContext)>{
@@ -20,6 +21,7 @@ final warfarinProperties = <WarfarinContent, dynamic Function(BuildContext)>{
     context.l10n.drugs_page_recommendation_warfarin,
   WarfarinContent.color: (_) => WarningLevel.none.color,
   WarfarinContent.icon: (_) => WarningLevel.none.icon,
+  WarfarinContent.heading: (context) => WarningLevel.none.getLabel(context),
 };
 
 class GuidelineAnnotationCard extends StatelessWidget {
@@ -60,32 +62,32 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   dynamic actualOrWarfarinContent(String drugName, BuildContext context, {
-    required dynamic actual,
-    required WarfarinContent content,
+    required dynamic actualContent,
+    required WarfarinContent warfarinContent,
   }) {
     if (drugName.toLowerCase() == 'warfarin') {
-      final getWarfarinContent = warfarinProperties[content]!;
+      final getWarfarinContent = warfarinProperties[warfarinContent]!;
       return getWarfarinContent(context);
     }
-    return actual;
+    return actualContent;
   }
 
   Widget _buildCard(BuildContext context) {
-    final upperCardText = actualOrWarfarinContent(
+    final implicationText = actualOrWarfarinContent(
       drug.name,
       context,
-      actual: drug.userGuideline?.annotations.implication ??
+      actualContent: drug.userGuideline?.annotations.implication ??
         context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
           drug.name
         ),
-      content: WarfarinContent.implication,
+      warfarinContent: WarfarinContent.implication,
     );
-    final lowerCardText = actualOrWarfarinContent(
+    final recommendationText = actualOrWarfarinContent(
       drug.name,
       context,
-      actual: drug.userGuideline?.annotations.recommendation ??
+      actualContent: drug.userGuideline?.annotations.recommendation ??
         context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation,
-      content: WarfarinContent.recommendation,
+      warfarinContent: WarfarinContent.recommendation,
     );
     return RoundedCard(
       key: Key('annotationCard'),
@@ -95,35 +97,59 @@ class GuidelineAnnotationCard extends StatelessWidget {
       color: actualOrWarfarinContent(
         drug.name,
         context,
-        actual: drug.warningLevel.color,
-        content: WarfarinContent.color
+        actualContent: drug.warningLevel.color,
+        warfarinContent: WarfarinContent.color,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(children: [
-            Icon(
-              actualOrWarfarinContent(
-                drug.name,
-                context,
-                actual: drug.warningLevel.icon,
-                content: WarfarinContent.icon
+          Text.rich(
+            TextSpan(children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Icon(
+                  actualOrWarfarinContent(
+                    drug.name,
+                    context,
+                    actualContent: drug.warningLevel.icon,
+                    warfarinContent: WarfarinContent.icon,
+                  ),
+                  color: PharMeTheme.onSurfaceText,
+                  size: PharMeTheme.mediumToLargeSpace,
+                ),
               ),
-              color: PharMeTheme.onSurfaceText,
-              size: PharMeTheme.largeSpace,
+              TextSpan(
+                text: ' ${actualOrWarfarinContent(
+                  drug.name,
+                  context,
+                  actualContent: drug.warningLevel.getLabel(context),
+                  warfarinContent: WarfarinContent.heading,
+                )}',
+              ),
+            ]),
+            style: PharMeTheme.textTheme.titleMedium!.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(width: PharMeTheme.smallToMediumSpace),
-            Flexible(
-              child: Text(
-                upperCardText,
-                style: PharMeTheme.textTheme.bodyMedium,
-              ),
-            )
-          ]),
+          ),
           SizedBox(height: PharMeTheme.smallToMediumSpace),
-          Text(
-            lowerCardText,
-            style: PharMeTheme.textTheme.bodyMedium,
+          Text.rich(
+            TextSpan(children: [
+              TextSpan(
+                text: context.l10n.drugs_page_implication_description,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: implicationText),
+            ]),
+          ),
+          SizedBox(height: PharMeTheme.smallToMediumSpace),
+          Text.rich(
+            TextSpan(children: [
+              TextSpan(
+                text: context.l10n.drugs_page_recommendation_description,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: recommendationText),
+            ]),
           ),
           if (drug.userGuideline != null) ...[
             SizedBox(height: PharMeTheme.smallToMediumSpace),
@@ -156,8 +182,8 @@ class GuidelineAnnotationCard extends StatelessWidget {
     return actualOrWarfarinContent(
       drug.name,
       context,
-      actual: actualTooltip,
-      content: WarfarinContent.tooltip,
+      actualContent: actualTooltip,
+      warfarinContent: WarfarinContent.tooltip,
     );
   }
 
