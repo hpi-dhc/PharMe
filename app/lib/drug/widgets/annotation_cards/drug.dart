@@ -126,9 +126,11 @@ class DrugAnnotationCards extends StatelessWidget {
     TextSpan(
       children: [
         WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
           child: Icon(
             iconData,
             color: PharMeTheme.iconColor,
+            size: PharMeTheme.mediumSpace,
           ),
         ),
         TextSpan(text: ' $text'),
