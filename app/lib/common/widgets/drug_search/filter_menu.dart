@@ -132,25 +132,25 @@ class FilterMenu extends HookWidget {
   }) {
     final numberTextColor = darkenColor(PharMeTheme.onSurfaceText, -0.2);
     final disabledTextColor = darkenColor(numberTextColor, -0.2);
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          text,
+    return Text.rich(
+      TextSpan(children: [
+        TextSpan(
+          text: text,
           style: PharMeTheme.textTheme.bodyMedium!.copyWith(
             color: enabled
               ? PharMeTheme.textTheme.bodyMedium!.color
               : disabledTextColor,
           ),
         ),
-        Text(
-          ' (${_getFilteredNumber(itemFilter: itemFilter, drugs: drugs)})',
+        TextSpan(
+          text: ' (${
+            _getFilteredNumber(itemFilter: itemFilter, drugs: drugs)
+          })',
           style: PharMeTheme.textTheme.labelMedium!.copyWith(
             color: enabled ? numberTextColor : disabledTextColor,
           ),
         ),
-      ],
+      ]),
     );
   }
 

@@ -101,25 +101,18 @@ class DrugAnnotationCards extends StatelessWidget {
                 DropdownMenuItem<bool>(
                   key: Key('drug-status-selection-${drug.name}-active'),
                   value: true,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline,
-                        color: PharMeTheme.iconColor,
-                      ),
-                      SizedBox(width: PharMeTheme.smallSpace),
-                      Text(context.l10n.drugs_page_active),
-                    ]),
+                  child: _buildStatusMenuItem(
+                    context.l10n.drugs_page_active,
+                    Icons.check_circle_outline,
+                  ),
                 ),
                 DropdownMenuItem<bool>(
                   key: Key('drug-status-selection-${drug.name}-inactive'),
                   value: false,
-                  child: Row(
-                    children: [
-                      Icon(Icons.cancel_outlined, color: PharMeTheme.iconColor),
-                      SizedBox(width: PharMeTheme.smallSpace),
-                      Text(context.l10n.drugs_page_inactive),
-                    ]),
+                  child: _buildStatusMenuItem(
+                    context.l10n.drugs_page_inactive,
+                    Icons.cancel_outlined,
+                  ),
                 ),
               ],
             ),
@@ -128,4 +121,21 @@ class DrugAnnotationCards extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildStatusMenuItem(String text, IconData iconData) => Text.rich(
+    TextSpan(
+      children: [
+        WidgetSpan(
+          child: Icon(
+            iconData,
+            color: PharMeTheme.iconColor,
+          ),
+        ),
+        TextSpan(text: ' $text'),
+      ],
+    ),
+    maxLines: 1,
+    softWrap: false,
+    overflow: TextOverflow.fade,
+  );
 }
