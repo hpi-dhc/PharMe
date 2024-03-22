@@ -293,8 +293,8 @@
       }
     }
   },
-  "pdf_guideline_recommmendation": "{guidelineSource} recommendation",
-  "@pdf_guideline_recommmendation": {
+  "pdf_guideline_recommendation": "{guidelineSource} recommendation",
+  "@pdf_guideline_recommendation": {
     "placeholders": {
       "guidelineSource": {
         "type": "String",
@@ -368,11 +368,11 @@
   "settings_page_app_information": "App information",
   "settings_page_onboarding": "Onboarding",
   "settings_page_about_us": "About us",
-  "settings_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboraion with health professionals from the Mount Sinai Health System in New York City, NY, USA.",
+  "settings_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboration with health professionals from the Mount Sinai Health System in New York City, NY, USA.",
   "settings_page_privacy_policy": "Privacy policy",
-  "settings_page_privacy_policy_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "settings_page_privacy_policy_text": "These aren't the Droids you're looking for.",
   "settings_page_terms_and_conditions": "Terms of use",
-  "settings_page_terms_and_conditions_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "settings_page_terms_and_conditions_text": "These aren't the Droids you're looking for.",
   "settings_page_help_and_feedback": "Help & Feedback",
   "settings_page_genetic_information": "Learn about genetics (MedlinePlus)",
   "settings_page_contact_us": "Contact us",

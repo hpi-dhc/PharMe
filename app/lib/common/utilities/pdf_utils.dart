@@ -358,7 +358,7 @@ List<pw.Widget> _buildGuidelinePart(
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-          title: buildContext.l10n.pdf_guideline_recommmendation(
+          title: buildContext.l10n.pdf_guideline_recommendation(
             guideline.source,
           ),
           text: guideline.recommendation),
