@@ -25,16 +25,16 @@ class WidgetAnswerQuestion extends Question {
 }
 
 final Map<String, List<Question>> faqList = {
-  'Pharmacogenetics (PGx)': [
+  'Pharmacogenomics (PGx)': [
     TextAnswerQuestion(
-      question: 'What is pharmacogenetics?',
+      question: 'What is pharmacogenomics?',
       answer:
-          'Pharmacogenetics (PGx) is the study of how your genes (DNA) affect your response to drugs.',
+          'Pharmacogenomics (PGx) is the study of how your genes (DNA) affect your response to drugs.',
     ),
     TextAnswerQuestion(
-      question: 'Why is pharmacogenetics important?',
+      question: 'Why is pharmacogenomics important?',
       answer:
-          'Pharmacogenetics is important because it helps to predict those who will respond well to drugs and those who may have side effects. With this information we can better select the right drug and dose to avoid side effects.',
+          'Pharmacogenomics is important because it helps to predict those who will respond well to drugs and those who may have side effects. With this information we can better select the right drug and dose to avoid side effects.',
     ),
     WidgetAnswerQuestion(
       question: 'Where can I find out more about genetics in general?',
