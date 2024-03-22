@@ -11,13 +11,9 @@ understanding of this project's code.
   <dd>PGx is an abbreviation of <em>pharmacogenetics</em>, the study of how
   pharmacology is affected by <em>individual genes</em>.</dd>
 
-  <dt>Drug</dt>
-  <dd>Linguistically synonymous to the term <em>medication</em>, but preferred
-  for this project. Ibuprofen is an example of a <em>drug</em>.</dd>
-
   <dt>RxNorm, RxCUI</dt>
-  <dd><em>RxNorm</em> is a US-specific standardized naming system for drugs.
-  RxNorm also defines IDs for drugs, known as
+  <dd><em>RxNorm</em> is a US-specific standardized naming system for
+  medications. RxNorm also defines IDs for medications, known as
   <em>RxCUI</em>s.</dd>
   <dd><a href="https://www.merriam-webster.com/dictionary/Rx">Trivia</a>: Rx
   stems from the latin word <em>recipe</em> meaning "take". The first doctor to
@@ -26,7 +22,7 @@ understanding of this project's code.
   "Rx concept unique identifier".</dd>
 
   <dt>Indication</dt>
-  <dd>Defines the reason a drug is used, e.g. fever for ibuprofen.</dd>
+  <dd>Defines the reason a medication is used, e.g. fever for ibuprofen.</dd>
 </dl>
 
 ## Biomedical terms
