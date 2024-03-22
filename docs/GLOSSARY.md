@@ -74,28 +74,29 @@ understanding of this project's code.
   individual that has one CYP2D6 star one variant from one parent and one star
   two variant from the other.</dd>
 </dl>
-s
+
 ## Terms used in our projects
 
 <dl>
   <dt>Implication</dt>
-  <dd>For a given drug-phenotype pair, an implication describes what
-  effects the phenotype has on use of the drug. An example for an
+  <dd>For a given medication-phenotype pair, an implication describes what
+  effects the phenotype has on use of the medication. An example for an
   implication is "Increased risk of side effects".</dd>
 
   <dt>Recommendation</dt>
-  <dd>For a given drug-phenotype pair, a recommendation describes what an
+  <dd>For a given medication-phenotype pair, a recommendation describes what an
   individual should do based on the corresponding implication, e.g. "Use a lower
   dose".</dd>
 
   <dt>Guideline</dt>
   <dd>Consists of the implication and recommendation for a given
-  drug-phenotype pair.</dd>
+  medication-phenotype pair.</dd>
 
   <dt>Annotation</dt>
   <dd>Describes data that is manually curated for our project, i.e. implication
-  and recommendation for a drug-phenotype pair and indication, a
-  patient-friendly drug-class, and common brand names for a drug.</dd>
+  and recommendation for a medication-phenotype pair and indication, a
+  patient-friendly medication class, and common brand names for a
+  medication.</dd>
 
   <dt>(Text) Brick</dt>
   <dd>*Text Bricks* are predefined components that are used to create texts for
@@ -103,5 +104,5 @@ s
   combinations of Bricks to ensure consistency and enable easy multi-language
   support without the need of the maintainer having to know more than one
   supported language. Bricks can also include placeholders such as a given
-  drug's name</dd>
+  medication's name</dd>
 </dl>

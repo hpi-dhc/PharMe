@@ -29,12 +29,12 @@ final Map<String, List<Question>> faqList = {
     TextAnswerQuestion(
       question: 'What is pharmacogenomics?',
       answer:
-          'Pharmacogenomics (PGx) is the study of how your genes (DNA) affect your response to drugs.',
+          'Pharmacogenomics (PGx) is the study of how your genes (DNA) affect your response to medications.',
     ),
     TextAnswerQuestion(
       question: 'Why is pharmacogenomics important?',
       answer:
-          'Pharmacogenomics is important because it helps to predict those who will respond well to drugs and those who may have side effects. With this information we can better select the right drug and dose to avoid side effects.',
+          'Pharmacogenomics is important because it helps to predict those who will respond well to medications and those who may have side effects. With this information we can better select the right medication and dose to avoid side effects.',
     ),
     WidgetAnswerQuestion(
       question: 'Where can I find out more about genetics in general?',
@@ -54,9 +54,9 @@ final Map<String, List<Question>> faqList = {
       ),
     ),
     TextAnswerQuestion(
-      question: 'Which drugs are affected?',
+      question: 'Which medications are affected?',
       answer:
-          'Examples of affected drug classes include anti-clotting medications (like clopidogrel and warfarin), antidepressants (like sertraline, citalopram, and paroxetine), anti-cholesterol drugs (like simvastatin and atorvastatin), acid reducers (like pantoprazole and omeprazole), pain killers (like codeine, tramadol, and ibuprofen), antifungals (like voriconazole), drugs that suppress the immune system (like tacrolimus), and anti-cancer drugs (like fluorouracil and irinotecan). You can find out whether a certain drug is affected in the Search tab.',
+          'Examples of affected medication classes include anti-clotting medications (like clopidogrel and warfarin), antidepressants (like sertraline, citalopram, and paroxetine), anti-cholesterol medications (like simvastatin and atorvastatin), acid reducers (like pantoprazole and omeprazole), pain killers (like codeine, tramadol, and ibuprofen), antifungals (like voriconazole), medications that suppress the immune system (like tacrolimus), and anti-cancer medications (like fluorouracil and irinotecan). You can find out whether a certain medication is affected in the Medications tab.',
     ),
     TextAnswerQuestion(
       question: 'Will my results affect my family members?',
@@ -73,13 +73,13 @@ final Map<String, List<Question>> faqList = {
     TextAnswerQuestion(
       question: 'What does PharMe do?',
       answer:
-          'PharMe provides user-friendly information on how your body reacts to drugs based on your genes. This enables you to better understand which drugs may be ineffective for you or could have potential side effects. We recommend that you share consult your health care team before making any changes to your treatments.',
+          'PharMe provides user-friendly information on how your body reacts to medications based on your genes. This enables you to better understand which medications may be ineffective for you or could have potential side effects. We recommend that you share consult your health care team before making any changes to your treatments.',
     ),
     TextAnswerQuestion(
       question:
           'Can I use PharMe\'s results without consulting a medical professional?',
       answer:
-          'No. Whether a drug is a good choice for you depends on a lot of other factors such as age, weight, or pre-existing conditions. We highly recommend that you talk to your health care team (e.g., pharmacist and doctors) before taking, stopping or adjusting the dose of any drug.',
+          'No. Whether a medication is a good choice for you depends on a lot of other factors such as age, weight, or pre-existing conditions. We highly recommend that you talk to your health care team (e.g., pharmacist and doctors) before taking, stopping or adjusting the dose of any medication.',
     ),
     TextAnswerQuestion(
       question: 'Where does PharMe get its data from?',
