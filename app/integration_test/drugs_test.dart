@@ -39,7 +39,7 @@ void main() {
                 source: 'CPIC',
                 guidelineName: 'cpic name',
                 guidelineUrl: 'cpic url',
-                implications: {'CYP2C9': 'normal metabolization'},
+                implications: {'CYP2C9': 'Normal Metabolizer'},
                 recommendation: 'default dose',
                 comments: 'comments')
           ],
@@ -111,11 +111,13 @@ void main() {
       expect(find.text(testDrug.annotations.drugclass), findsOneWidget);
       expect(find.text(testDrug.annotations.indication), findsOneWidget);
       expect(
-        find.text(testDrug.guidelines.first.annotations.recommendation),
+        find.textContaining(
+          testDrug.guidelines.first.annotations.recommendation,
+        ),
         findsOneWidget,
       );
       expect(
-        find.text(testDrug.guidelines.first.annotations.implication),
+        find.textContaining(testDrug.guidelines.first.annotations.implication),
         findsOneWidget,
       );
       expect(
