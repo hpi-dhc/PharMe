@@ -25,20 +25,20 @@
   "auth_sign_in": "Get data",
   "auth_success": "Successfully imported data",
 
-  "drug_selection_header": "Your current drugs",
-  "drug_selection_onboarding_description": "Please update your current drugs below. You can always change the status for a drug later on a drug page or in the settings.",
-  "drug_selection_settings_description": "Review your current drugs below.",
-  "drug_selection_no_drugs_loaded": "No drugs loaded",
-  "drug_selection_subheader_active_drugs": "Selected drugs",
-  "drug_selection_subheader_all_drugs": "All drugs",
-  "drug_selection_no_active_drugs": "No drugs selected",
+  "drug_selection_header": "Current medications",
+  "drug_selection_onboarding_description": "Please review the medications you are currently taking below and update them if needed. You can always change the status for a medication later on a medication page or in the settings.",
+  "drug_selection_settings_description": "Review the medications you are currently taking below.",
+  "drug_selection_no_drugs_loaded": "No medications loaded",
+  "drug_selection_subheader_active_drugs": "Current medications",
+  "drug_selection_subheader_all_drugs": "All medications",
+  "drug_selection_no_active_drugs": "No current medications selected",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An error occurred while getting data, please try again later",
   "err_generic": "Error",
 
   "update_warning_title": "Updated guidelines",
-  "update_warning_body": "The guidelines for gene-drug interactions were updated. Please review your results in the app, especially for your current drugs.",
+  "update_warning_body": "The guidelines for interactions between genes and medications were updated. Please review your results, especially for the medications you are currently taking.",
   
   "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
 
@@ -53,14 +53,14 @@
   "warning_level_yellow": "Use with caution",
   "warning_level_red": "Consider alternatives",
   
-  "search_page_tooltip_search": "Search for drugs by their name, brand name or class.",
-  "search_page_tooltip_search_no_class": "Search for drugs by their name or brand name.",
-  "search_page_filter_heading": "Filter drugs",
+  "search_page_tooltip_search": "Search for medications by their name, brand name or class.",
+  "search_page_tooltip_search_no_class": "Search for medications by their name or brand name.",
+  "search_page_filter_heading": "Filter medications",
   "search_page_filter_subheading_usage": "Filter by usage status",
   "search_page_filter_subheading_level": "Filter by guideline result",
-  "search_page_filter_all_drugs": "All drugs",
-  "search_page_filter_only_active_drugs": "Your current drugs",
-  "search_page_indicator_explanation": "Taking drugs with an {indicatorName} ({indicator}) can influence your results for other drugs",
+  "search_page_filter_all_drugs": "All medications",
+  "search_page_filter_only_active_drugs": "Current medications",
+  "search_page_indicator_explanation": "Taking medications with an {indicatorName} ({indicator}) can influence your results for other medications",
   "@search_page_indicator_explanation": {
     "placeholders": {
         "indicatorName": {
@@ -74,7 +74,7 @@
     }
   },
   "search_no_drugs_with_filter_amendment": " or filters",
-  "search_no_drugs": "No drugs found. Try adjusting the search term{amendment}.\n\nIf the drug you are looking for is not included in PharMe, it might not have relevant DNA-based guidelines – then clinical dosing applies. Consult your pharmacist or doctor for more information.",
+  "search_no_drugs": "No medications found. Try adjusting the search term{amendment}.\n\nIf the medication you are looking for is not included in PharMe, it might not have relevant DNA-based guidelines – then clinical dosing applies. Consult your pharmacist or doctor for more information.",
   "@search_no_drugs": {
     "placeholders": {
         "amendment": {
@@ -83,7 +83,7 @@
         }
     }
   },
-  "drugs_page_disclaimer": "Please note the information shown on this page is ONLY based on your DNA and certain drug interactions. Other important factors like weight, age, pre-existing conditions, and further drug interactions are not considered.",
+  "drugs_page_disclaimer": "Please note that the information shown on this page is ONLY based on your DNA and certain medications you are currently taking. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} can influence your results for the following gene(s): {genes}",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
@@ -156,13 +156,13 @@
     }
 },
   "drugs_page_header_synonyms": "Other names",
-  "drugs_page_header_drugclass": "Drug class",
-  "drugs_page_header_drug": "Drug information",
+  "drugs_page_header_drugclass": "Medication class",
+  "drugs_page_header_drug": "Medication information",
   "drugs_page_header_active": "Usage status",
-  "drugs_page_active": "I am currently taking this drug",
-  "drugs_page_inactive": "I am not taking this drug",
-  "drugs_page_active_warn_header": "Are you sure you want to change the drug usage status?",
-  "drugs_page_active_warn": "This can influence your results for other drugs.",
+  "drugs_page_active": "I am currently taking this medication",
+  "drugs_page_inactive": "I am not taking this medication",
+  "drugs_page_active_warn_header": "Are you sure you want to change the medication usage status?",
+  "drugs_page_active_warn": "This can influence your results for other medications.",
   "drugs_page_header_guideline": "DNA-based clinical guideline",
   "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
   "@drugs_page_no_guidelines_for_phenotype_implication": {
@@ -192,27 +192,27 @@
       }
     }
   },
-  "drugs_page_tooltip_missing_drug": "this drug",
+  "drugs_page_tooltip_missing_drug": "this medication",
   "drugs_page_tooltip_missing_genotype": "your genotype",
-  "drugs_page_tooltip_missing_guideline_for_drug_or_genotype": "Guidelines provide recommendations on which drugs to use based on your DNA. However, no guideline is present for {drugOrGenotype} (yet).",
+  "drugs_page_tooltip_missing_guideline_for_drug_or_genotype": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present for {drugOrGenotype} (yet).",
   "@drugs_page_tooltip_missing_guideline_for_drug_or_genotype": {
     "placeholders": {
       "drugOrGenotype": {
         "type": "String",
-        "example": "drug"
+        "example": "this medication"
       }
     }
   },
-  "drugs_page_tooltip_missing_guideline_not_tested": "Guidelines provide recommendations on which drugs to use based on your DNA. However, your genetic test result does not include the information needed to make such a recommendation for this drug.",
+  "drugs_page_tooltip_missing_guideline_not_tested": "Guidelines provide recommendations on which medications to use based on your DNA. However, your genetic test result does not include the information needed to make such a recommendation for this medication.",
 
-  "drugs_page_tooltip_warfarin": "CPIC guidelines provide recommendations on which drugs to use based on your DNA. However, to calculate your warfarin dose, more information is needed.",
+  "drugs_page_tooltip_warfarin": "CPIC guidelines provide recommendations on which medications to use based on your DNA. However, to calculate your warfarin dose, more information is needed.",
   "drugs_page_implication_warfarin": "More information is needed to calculate your warfarin dose.",
   "drugs_page_recommendation_warfarin": "Consult your pharmacist or doctor for more information.",
 
-  "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated drugs.",
-  "report_legend_text": "Next to your gene result the number of implicated drugs per guideline result is shown:",
+  "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",
+  "report_legend_text": "Next to your gene result the number of implicated medications per guideline result is shown:",
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
-  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by your current drugs",
+  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be influenced by medications you are currently taking",
   "@report_page_indicator_explanation": {
     "placeholders": {
         "indicatorName": {
@@ -257,8 +257,8 @@
   "gene_page_genotype_tooltip": "The genotype is the variant you carry for this gene.",
   "gene_page_phenotype": "Phenotype",
   "gene_page_phenotype_tooltip": "The phenotype often describes the gene's activity level or whether a specific variant is present.",
-  "gene_page_relevant_drugs": "Relevant drugs",
-  "gene_page_relevant_drugs_tooltip": "The drugs listed here are influenced by your {geneDisplayString} result.",
+  "gene_page_relevant_drugs": "Implicated medications",
+  "gene_page_relevant_drugs_tooltip": "The medications listed here are influenced by your {geneDisplayString} result.",
   "@gene_page_relevant_drugs_tooltip": {
     "placeholders": {
       "geneDisplayString": {
@@ -267,9 +267,9 @@
       }
     }
   },
-  "gene_page_no_relevant_drugs": "This gene has no known effect on any drug.",
-  "gene_page_inhibitor_drugs": "Your results for this gene can be influenced by the following drugs:",
-  "gene_page_further_inhibitor_drugs": "Your results for this gene can also be influenced by taking any of the following drugs:",
+  "gene_page_no_relevant_drugs": "This gene has no known effect on any medications.",
+  "gene_page_inhibitor_drugs": "Your results for this gene can be influenced if you are currently taking any of the following medications:",
+  "gene_page_further_inhibitor_drugs": "Your results for this gene can also be influenced if you are currently taking any of the following medications:",
   "gene_page_activity_score": "Activity score",
 
 
@@ -336,8 +336,8 @@
 
   "nav_report": "Report",
   "tab_report": "Gene report",
-  "nav_drugs": "Drugs",
-  "tab_drugs": "Drugs",
+  "nav_drugs": "Medications",
+  "tab_drugs": "Medications",
   "nav_faq": "FAQ",
   "tab_faq": "Common questions",
   "nav_more": "More",
@@ -347,16 +347,16 @@
   "onboarding_next": "Next",
   "onboarding_prev": "Back",
   "onboarding_1_header": "Welcome to PharMe",
-  "onboarding_1_text": "Your genome influences your health more than you might think, including how you react to medical drugs.\n\nMore than 90 percent of people are vulnerable to unintended drug reactions.\n\nUse PharMe to find out about yours.",
+  "onboarding_1_text": "Your genome influences your health more than you might think, including how you react to medications.\n\nMore than 90 percent of people are vulnerable to unintended medication reactions.\n\nUse PharMe to find out about yours.",
   "onboarding_2_header": "One size does not fit all",
-  "onboarding_2_text": "Each person’s body reacts to drugs differently.\n\nDrugs that are effective for a majority of people can have adverse side effects for you.",
+  "onboarding_2_text": "Each person’s body reacts to medications differently.\n\nMedications that are effective for a majority of people can have adverse side effects for you.",
   "onboarding_3_header": "Genome power unlocked to improve human health",
-  "onboarding_3_text": "PharMe informs you if your genome makes you more likely to experience an unintended drug response.\n\nThis enables you to avoid drugs that are ineffective or have side effects.",
-  "onboarding_3_disclaimer": "We DO NOT recommend drugs for specific symptoms or illnesses",
+  "onboarding_3_text": "PharMe informs you if your genome makes you more likely to experience an unintended medication response.\n\nThis enables you to avoid medications that are ineffective or have side effects.",
+  "onboarding_3_disclaimer": "We DO NOT recommend medications for specific symptoms or illnesses",
   "onboarding_4_header": "Tailored to your genome",
   "onboarding_4_text": "For PharMe to work, you need to get your genetics (DNA) tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
   "onboarding_4_button": "Find out more about gene tests here.",
-  "onboarding_4_already_tested_text": "PharMe works by matching your genetic data with known information about interactions between certain genes and drugs.\n\nThe information presented in PharMe is based on scientifically proven guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
+  "onboarding_4_already_tested_text": "PharMe works by matching your genetic data with known information about interactions between certain genes and medications.\n\nThe information presented in PharMe is based on scientifically proven guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
   "onboarding_5_header": "We care about your data protection",
   "onboarding_5_text": "After downloading your genetic data from your data provider, it is solely kept on your phone in encrypted form.\n\nOur servers know nothing about you, neither your identity nor your DNA.",
     
