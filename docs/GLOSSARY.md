@@ -8,8 +8,9 @@ understanding of this project's code.
 
 <dl>
   <dt>PGx</dt>
-  <dd>PGx is an abbreviation of <em>pharmacogenetics</em>, the study of how
-  pharmacology is affected by <em>individual genes</em>.</dd>
+  <dd>PGx is an abbreviation for the study of how pharmacology is affected by
+  <em>multiple genes</em> (<em>pharmacogenomics</em>) or
+  <em>individual genes</em> (<em>pharmacogenetics</em>).</dd>
 
   <dt>RxNorm, RxCUI</dt>
   <dd><em>RxNorm</em> is a US-specific standardized naming system for
@@ -73,7 +74,7 @@ understanding of this project's code.
   individual that has one CYP2D6 star one variant from one parent and one star
   two variant from the other.</dd>
 </dl>
-
+s
 ## Terms used in our projects
 
 <dl>
