@@ -9,8 +9,12 @@ full_video_path="${output_directory}full.mov"
 timestamp_prefix="TIMESTAMP: "
 
 ffmpeg_log_level="warning"
-redo_recording=true # should be true, set false to only test post-editing
-redo_cutting=true # should be true, set false to only test further steps
+
+# The following flags are for testing single steps and should be set to true
+redo_recording=true
+redo_cutting=true
+redo_gif_creation=true
+redo_gif_copying=true
 
 log_timestamp() {
     echo "$(date +%s000) $1" >> "$cuts_log_path"
@@ -193,14 +197,30 @@ if $redo_cutting; then
 
 fi
 
-for video_path in `find $output_directory -name "*_loopable.mp4" -type f`; do
-    video_name=$(basename $video_path)
-    gif_name="${video_name%.mp4}.gif"
-    assets_path="${assets_directory}$gif_name"
-    echo "Creating $assets_path"
-    # From https://superuser.com/a/556031
-    ffmpeg -y -loglevel "$ffmpeg_log_level" \
-        -i "$video_path" \
-        -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | \
-        convert -delay 10 - -loop 0 -layers optimize "$assets_path"
-done
+if $redo_gif_creation; then
+
+    for video_path in `find $output_directory -name "*.mp4" -type f`; do
+        video_name=$(basename $video_path)
+        if [[ "$video_name" == full*.mp4 ]]; then continue; fi
+        gif_name="${video_name%.mp4}.gif"
+        gif_path="${output_directory}$gif_name"
+        echo "Creating $gif_path"
+        # From https://superuser.com/a/556031
+        ffmpeg -y -loglevel "$ffmpeg_log_level" \
+            -i "$video_path" \
+            -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | \
+            convert -delay 10 - -loop 0 -layers optimize "$gif_path"
+    done
+
+fi
+
+if $redo_gif_copying; then
+
+    for gif_path in `find $output_directory -name "*_loopable.gif" -type f`; do
+        gif_name="$(basename $gif_path)"
+        assets_path="${assets_directory}$gif_name"
+        echo "Copying $gif_name to $assets_directory"
+        cp $gif_path $assets_path
+    done
+
+fi
