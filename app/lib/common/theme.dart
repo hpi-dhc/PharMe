@@ -21,6 +21,10 @@ class PharMeTheme {
         surfaceVariant: surfaceColor,
       ),
       textTheme: textTheme,
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: surfaceColor,
+        dragHandleColor: onSurfaceColor,
+      )
     );
   }
 

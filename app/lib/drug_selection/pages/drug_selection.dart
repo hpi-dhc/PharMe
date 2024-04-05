@@ -23,6 +23,23 @@ class DrugSelectionPage extends HookWidget {
         create: (context) => cubit ?? DrugSelectionCubit(activeDrugs),
         child: BlocBuilder<DrugSelectionCubit, DrugSelectionState>(
           builder: (context, state) {
+            if (concludesOnboarding) {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                await showTutorial(
+                  context: context,
+                  pages: [
+                    TutorialContent(
+                      title: (context) =>
+                        context.l10n.tutorial_initial_drug_selection_title,
+                      content: (context) => TextSpan(
+                        text: context.l10n.tutorial_initial_drug_selection_body,
+                      ),
+                    ),
+                  ],
+                  concludesWholeTutorial: false,
+                );
+              });
+            }
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
               body: Column(

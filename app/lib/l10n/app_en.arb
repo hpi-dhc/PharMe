@@ -346,6 +346,10 @@
   "nav_more": "More",
   "tab_more": "More",
   
+  "tutorial_to_the_app": "Proceed to the app",
+  "tutorial_initial_drug_selection_title": "Setup PharMe",
+  "tutorial_initial_drug_selection_body": "As a first step, please update the list of your current medications.",
+
   "onboarding_get_started": "Get started",
   "onboarding_next": "Next",
   "onboarding_prev": "Back",

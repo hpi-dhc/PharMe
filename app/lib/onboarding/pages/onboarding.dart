@@ -156,15 +156,14 @@ class OnboardingPage extends HookWidget {
     PageController pageController,
     bool isLastPage,
   ) {
-    final buttonStyle = isLastPage
-      ? ElevatedButton.styleFrom(backgroundColor: Colors.white)
-      : null;
-    final textColor = isLastPage
-      ? PharMeTheme.onSurfaceText
-      : Colors.white;
-    return TextButton(
+    return DirectionButton(
       key: Key('nextButton'),
-      style: buttonStyle,
+      direction: ButtonDirection.forward,
+      text: isLastPage
+        ? isRevisiting
+          ? context.l10n.action_back_to_app
+          : context.l10n.onboarding_get_started
+        : context.l10n.onboarding_next,
       onPressed: () async {
         if (isLastPage) {
           if (isRevisiting) {
@@ -184,28 +183,8 @@ class OnboardingPage extends HookWidget {
           );
         }
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(width: 8),
-          Text(
-            isLastPage
-                ? isRevisiting
-                  ? context.l10n.action_back_to_app
-                  : context.l10n.onboarding_get_started
-                : context.l10n.onboarding_next,
-            style: PharMeTheme.textTheme.headlineSmall!
-                .copyWith(color: textColor),
-          ),
-          SizedBox(width: 8),
-          Icon(
-            Icons.arrow_forward_rounded,
-            color: textColor,
-            size: 32,
-          ),
-        ],
-      ),
+      onDarkBackground: true,
+      emphasize: isLastPage,
     );
   }
 
@@ -215,31 +194,17 @@ class OnboardingPage extends HookWidget {
     bool isFirstPage,
   ) {
     if (!isFirstPage) {
-      return TextButton(
+      return DirectionButton(
         key: Key('prevButton'),
+        direction: ButtonDirection.backward,
         onPressed: () {
           pageController.previousPage(
               duration: Duration(milliseconds: 500),
               curve: Curves.ease,
             );
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.white,
-              size: 32,
-            ),
-            SizedBox(width: 8),
-            Text(
-              context.l10n.onboarding_prev,
-              style: PharMeTheme.textTheme.headlineSmall!
-                  .copyWith(color: Colors.white),
-            ),
-          ],
-        ),
+        text: context.l10n.onboarding_prev,
+        onDarkBackground: true,
       );
     } else {
       return SizedBox.shrink();
