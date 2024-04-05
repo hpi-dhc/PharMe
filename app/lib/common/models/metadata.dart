@@ -6,8 +6,8 @@ part 'metadata.g.dart';
 
 const _boxName = 'metadata';
 
-/// MetaData is a singleton dataclass which contains various user-specific
-/// preferences and datapoints. It is intended to be loaded from a hive box
+/// MetaData is a singleton data class which contains various user-specific
+/// preferences and data points. It is intended to be loaded from a hive box
 /// once at app launch, from where it's contents can be modified by accessing
 /// it's properties.
 @HiveType(typeId: 4)
@@ -40,6 +40,9 @@ class MetaData {
 
   @HiveField(3)
   bool? initialDrugSelectionDone;
+
+  @HiveField(4)
+  bool? tutorialDone;
 }
 
 /// Initializes the user's metadata by registering all necessary adapters and
