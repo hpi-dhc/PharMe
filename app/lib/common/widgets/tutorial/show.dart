@@ -4,7 +4,8 @@ import 'container.dart';
 Future<void> showTutorial({
   required BuildContext context,
   required List<TutorialContent> pages,
-  required bool concludesWholeTutorial,
+  String? lastNextButtonText,
+  required Function() updateMetadata,
 }) =>  showModalBottomSheet(
   context: context,
   enableDrag: true,
@@ -15,15 +16,11 @@ Future<void> showTutorial({
   elevation: 0,
   builder: (context) => TutorialContainer(
     pages: pages,
-    lastNextButtonText: concludesWholeTutorial
-      ? context.l10n.tutorial_to_the_app
-      : null,
+    lastNextButtonText: lastNextButtonText,
     finishTutorial: () async {
       final closeTutorial = Navigator.of(context).pop;
-      if (concludesWholeTutorial) {
-        MetaData.instance.tutorialDone = true;
-        await MetaData.save();
-      }
+      updateMetadata();
+      await MetaData.save();
       closeTutorial();
     },
   ),

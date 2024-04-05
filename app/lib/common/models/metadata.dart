@@ -39,9 +39,12 @@ class MetaData {
   bool? onboardingDone;
 
   @HiveField(3)
-  bool? initialDrugSelectionDone;
+  bool? initialDrugSelectionInitiated;
 
   @HiveField(4)
+  bool? initialDrugSelectionDone;
+
+  @HiveField(5)
   bool? tutorialDone;
 }
 

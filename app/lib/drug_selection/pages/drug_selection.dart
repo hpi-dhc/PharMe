@@ -23,7 +23,9 @@ class DrugSelectionPage extends HookWidget {
         create: (context) => cubit ?? DrugSelectionCubit(activeDrugs),
         child: BlocBuilder<DrugSelectionCubit, DrugSelectionState>(
           builder: (context, state) {
-            if (concludesOnboarding) {
+            final initialDrugSelectionInitiated =
+              MetaData.instance.initialDrugSelectionInitiated ?? false;
+            if (concludesOnboarding && !initialDrugSelectionInitiated) {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
                 await showTutorial(
                   context: context,
@@ -36,7 +38,8 @@ class DrugSelectionPage extends HookWidget {
                       ),
                     ),
                   ],
-                  concludesWholeTutorial: false,
+                  updateMetadata: () =>
+                    MetaData.instance.initialDrugSelectionInitiated = true,
                 );
               });
             }
