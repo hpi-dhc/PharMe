@@ -59,8 +59,7 @@ class MainPage extends StatelessWidget {
             ),
           ],
           onClose: () async {
-            // TODO: set true once finished testing
-            MetaData.instance.tutorialDone = false;
+            MetaData.instance.tutorialDone = true;
             await MetaData.save();
           },
           lastNextButtonText: context.l10n.tutorial_to_the_app,
