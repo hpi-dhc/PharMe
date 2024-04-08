@@ -27,4 +27,4 @@ export 'rounded_card.dart';
 export 'scroll_list.dart';
 export 'subheader_divider.dart';
 export 'tutorial/content.dart';
-export 'tutorial/show.dart';
+export 'tutorial/controller.dart';

@@ -27,7 +27,7 @@ class DrugSelectionPage extends HookWidget {
               MetaData.instance.initialDrugSelectionInitiated ?? false;
             if (concludesOnboarding && !initialDrugSelectionInitiated) {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
-                await showTutorial(
+                await TutorialController().showTutorial(
                   context: context,
                   pages: [
                     TutorialContent(
@@ -38,8 +38,10 @@ class DrugSelectionPage extends HookWidget {
                       ),
                     ),
                   ],
-                  updateMetadata: () =>
-                    MetaData.instance.initialDrugSelectionInitiated = true,
+                  onClose: () async {
+                    MetaData.instance.initialDrugSelectionInitiated = true;
+                    await MetaData.save();
+                  }
                 );
               });
             }
