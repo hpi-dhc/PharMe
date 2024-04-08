@@ -38,6 +38,14 @@ class MorePage extends StatelessWidget {
             onTap: () => context.router.push(OnboardingRoute(isRevisiting: true)),
           ),
           _buildSettingsItem(
+            title: context.l10n.settings_page_app_tour,
+            onTap: () async => showAppTour(
+              context,
+              lastNextButtonText: context.l10n.action_back_to_app,
+              revisiting: true,
+            ),
+          ),
+          _buildSettingsItem(
             title: context.l10n.settings_page_about_us,
             onTap: () => context.router.push(AboutRoute()),
           ),

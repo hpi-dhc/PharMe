@@ -375,6 +375,7 @@
   "settings_page_delete_data_confirmation": "I understand the consequences and want to delete all app data",
   "settings_page_app_information": "App information",
   "settings_page_onboarding": "Onboarding",
+  "settings_page_app_tour": "Repeat app tour",
   "settings_page_about_us": "About us",
   "settings_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboration with health professionals from the Mount Sinai Health System in New York City, NY, USA.",
   "settings_page_privacy_policy": "Privacy policy",
