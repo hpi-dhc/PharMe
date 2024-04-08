@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import '../../module.dart';
-import 'content.dart';
-import 'controller.dart';
+import 'tutorial_controller.dart';
+import 'tutorial_page.dart';
 
 FutureOr<void> showDrugSelectionIntro(BuildContext context) =>
   TutorialController.instance.showTutorial(
     context: context,
     pages: [
-      TutorialContent(
+      TutorialPage(
         title: (context) =>
           context.l10n.tutorial_initial_drug_selection_title,
         content: (context) => TextSpan(

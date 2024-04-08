@@ -1,14 +1,14 @@
 import '../../module.dart';
-import 'content.dart';
+import 'tutorial_page.dart';
 
-class TutorialContainer extends HookWidget {
-  const TutorialContainer({
+class TutorialBuilder extends HookWidget {
+  const TutorialBuilder({
     super.key,
     required this.pages,
     this.lastNextButtonText,
   });
 
-  final List<TutorialContent> pages;
+  final List<TutorialPage> pages;
   final String? lastNextButtonText;
 
   @override

@@ -1,7 +1,7 @@
 import '../../module.dart';
 
-class TutorialContent {
-  TutorialContent({
+class TutorialPage {
+  TutorialPage ({
     this.title,
     this.content,
     this.assetPath,

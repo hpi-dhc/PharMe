@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import '../../module.dart';
-import 'content.dart';
-import 'controller.dart';
+import 'tutorial_controller.dart';
+import 'tutorial_page.dart';
 
 FutureOr<void> showAppTour(
   BuildContext context,
@@ -13,7 +13,7 @@ FutureOr<void> showAppTour(
     TutorialController.instance.showTutorial(
       context: context,
       pages: [
-        TutorialContent(
+        TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_1_title,
           content: (context) => TextSpan(

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import '../../module.dart';
-import 'container.dart';
-import 'content.dart';
+import 'tutorial_builder.dart';
+import 'tutorial_page.dart';
 
 class TutorialController {
   factory TutorialController() {
@@ -16,7 +16,7 @@ class TutorialController {
 
   FutureOr<void> showTutorial({
     required BuildContext context,
-    required List<TutorialContent> pages,
+    required List<TutorialPage> pages,
     String? lastNextButtonText,
     FutureOr<void> Function()? onClose,
   }) async {
@@ -30,7 +30,7 @@ class TutorialController {
       isScrollControlled: true,
       useSafeArea: true,
       elevation: 0,
-      builder: (context) => TutorialContainer(
+      builder: (context) => TutorialBuilder(
         pages: pages,
         lastNextButtonText: lastNextButtonText,
       ),
