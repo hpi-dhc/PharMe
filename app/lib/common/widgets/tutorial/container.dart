@@ -6,12 +6,10 @@ class TutorialContainer extends HookWidget {
   const TutorialContainer({
     super.key,
     required this.pages,
-    required this.finishTutorial,
     this.lastNextButtonText,
   });
 
   final List<TutorialContent> pages;
-  final Future<void> Function() finishTutorial;
   final String? lastNextButtonText;
 
   @override
@@ -92,7 +90,7 @@ class TutorialContainer extends HookWidget {
         DirectionButton(
           direction: ButtonDirection.forward,
           onPressed: isLastPage
-            ? finishTutorial
+            ? Navigator.of(context).pop
             : () => currentPageIndex.value = currentPageIndex.value + 1,
           
           text: isLastPage && lastNextButtonText != null

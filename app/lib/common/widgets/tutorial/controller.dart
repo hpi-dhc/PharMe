@@ -17,10 +17,10 @@ class TutorialController {
     required List<TutorialContent> pages,
     String? lastNextButtonText,
     FutureOr<void> Function()? onClose,
-  }) {
+  }) async {
     if (_isOpen) return null;
     _isOpen = true;
-    return showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       enableDrag: true,
       showDragHandle: true,
@@ -31,13 +31,9 @@ class TutorialController {
       builder: (context) => TutorialContainer(
         pages: pages,
         lastNextButtonText: lastNextButtonText,
-        finishTutorial: () async {
-          final closeTutorial = Navigator.of(context).pop;
-          if (onClose != null) await onClose();
-          _isOpen = false;
-          closeTutorial();
-        },
       ),
     );
+    if (onClose != null) await onClose();
+    _isOpen = false;
   }
 }
