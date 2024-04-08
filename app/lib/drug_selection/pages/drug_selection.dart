@@ -2,7 +2,6 @@ import 'package:provider/provider.dart';
 
 import '../../common/models/metadata.dart';
 import '../../common/module.dart' hide MetaData;
-import '../../common/widgets/drug_list/drug_items/drug_checkbox_list.dart';
 import '../cubit.dart';
 
 @RoutePage()
@@ -27,22 +26,7 @@ class DrugSelectionPage extends HookWidget {
               MetaData.instance.initialDrugSelectionInitiated ?? false;
             if (concludesOnboarding && !initialDrugSelectionInitiated) {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
-                await TutorialController().showTutorial(
-                  context: context,
-                  pages: [
-                    TutorialContent(
-                      title: (context) =>
-                        context.l10n.tutorial_initial_drug_selection_title,
-                      content: (context) => TextSpan(
-                        text: context.l10n.tutorial_initial_drug_selection_body,
-                      ),
-                    ),
-                  ],
-                  onClose: () async {
-                    MetaData.instance.initialDrugSelectionInitiated = true;
-                    await MetaData.save();
-                  }
-                );
+                await showDrugSelectionIntro(context);
               });
             }
             return unscrollablePageScaffold(

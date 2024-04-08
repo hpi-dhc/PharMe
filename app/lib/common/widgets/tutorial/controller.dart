@@ -2,6 +2,7 @@ import 'dart:async';
 
 import '../../module.dart';
 import 'container.dart';
+import 'content.dart';
 
 class TutorialController {
   factory TutorialController() {
@@ -9,6 +10,7 @@ class TutorialController {
   }
   TutorialController._();
   static final TutorialController _instance = TutorialController._();
+  static TutorialController get instance => _instance;
 
   bool _isOpen = false;
 

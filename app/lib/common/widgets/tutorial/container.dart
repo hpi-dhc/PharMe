@@ -1,4 +1,5 @@
 import '../../module.dart';
+import 'content.dart';
 
 class TutorialContainer extends HookWidget {
   const TutorialContainer({
