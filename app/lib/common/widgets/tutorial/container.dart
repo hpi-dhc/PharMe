@@ -50,20 +50,15 @@ class TutorialContainer extends HookWidget {
           fontSize: PharMeTheme.textTheme.headlineSmall!.fontSize,
         ),
       ),
-      if (content != null || asset != null) Padding(
+      if (content != null) Padding(
         padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
-        child: Expanded(
-          child: Center(child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                if (content != null)
-                  Text.rich(content, style: PharMeTheme.textTheme.bodyLarge),
-                if (asset != null) asset,
-              ],
-            ),
-          )),
+        child: Text.rich(content, style: PharMeTheme.textTheme.bodyLarge),
+      ),
+      if (asset != null) Expanded(
+        child: Padding(
+          padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
+          // child: Container(),
+          child: Center(child: asset),
         ),
       ),
       Padding(

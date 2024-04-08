@@ -42,6 +42,31 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tutorialDone = MetaData.instance.tutorialDone ?? false;
+    if (!tutorialDone) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await TutorialController().showTutorial(
+          context: context,
+          pages: [
+            TutorialContent(
+              title: (context) =>
+                context.l10n.tutorial_app_tour_1_title,
+              content: (context) => TextSpan(
+                text: context.l10n.tutorial_app_tour_1_body,
+              ),
+              assetPath:
+                'assets/images/tutorial/04_bottom_navigation_loopable.gif',
+            ),
+          ],
+          onClose: () async {
+            // TODO: set true once finished testing
+            MetaData.instance.tutorialDone = false;
+            await MetaData.save();
+          },
+          lastNextButtonText: context.l10n.tutorial_to_the_app,
+        );
+      });
+    }
     return AutoTabsScaffold(
       routes: getTabRoutesDefinition(context).map(
         (routeDefinition) => routeDefinition.pageRouteInfo
