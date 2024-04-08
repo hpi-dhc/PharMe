@@ -118,10 +118,10 @@ class UserData {
     final inhibitors = strongDrugInhibitors[gene];
     if (inhibitors == null) return null;
     final lookup = inhibitors.entries.firstWhereOrNull((entry) {
-      final isActiveInhitor =
+      final isActiveInhibitor =
         UserData.instance.activeDrugNames?.contains(entry.key) ?? false;
       final wouldInhibitItself = drug == entry.key;
-      return isActiveInhitor && !wouldInhibitItself;
+      return isActiveInhibitor && !wouldInhibitItself;
     });
     if (lookup == null) return null;
     return lookup;
@@ -154,8 +154,8 @@ class UserData {
 }
 
 // Wrapper of UserData.instance.activeDrugNames that manages changes; used to
-// notify inactive tabs in case of changes. Should be refacored to ensure
-// consistent use accross the app, see
+// notify inactive tabs in case of changes. Should be refactored to ensure
+// consistent use across the app, see
 // https://github.com/hpi-dhc/PharMe/issues/680
 class ActiveDrugs extends ChangeNotifier {
   ActiveDrugs() {
@@ -226,7 +226,7 @@ Future<void> initUserData() async {
   UserData._instance = userData.get('data') ?? UserData();
 }
 
-// assumes http reponse from lab server
+// assumes http response from lab server
 List<String> activeDrugsFromHTTPResponse(Response resp) {
   var activeDrugs = <String>[];
   final json = jsonDecode(resp.body) as Map<String, dynamic>;

@@ -41,6 +41,7 @@
       "clopidogrel",
       "CPIC",
       "Cupertino",
+      "dartx",
       "diplotype",
       "diplotypes",
       "drugclass",
@@ -49,9 +50,12 @@
       "haplotype",
       "haplotypes",
       "Hasso",
+      "horiz",
+      "ilike",
       "irinotecan",
       "Keycloak",
       "lookupkey",
+      "loopable",
       "LTRB",
       "MedlinePlus",
       "Metabolizer",
@@ -73,6 +77,7 @@
       "tacrolimus",
       "tramadol",
       "unscrollable",
+      "userdata",
       "voriconazole"
     ]
   }
