@@ -17,6 +17,8 @@ void main() {
   group('test the main page', () {
     testWidgets('test that tabs change pages', (tester) async {
       await initServices();
+      MetaData.instance.tutorialDone = true;
+      await MetaData.save();
       final appRouter = AppRouter();
       await tester.pumpWidget(
         ChangeNotifierProvider(

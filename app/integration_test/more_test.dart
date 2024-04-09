@@ -10,6 +10,9 @@ void main() {
 
   group('test settings page', () {
     testWidgets('right things are getting rendered', (tester) async {
+      await initServices();
+      MetaData.instance.tutorialDone = true;
+      await MetaData.save();
       final appRouter = AppRouter();
       await tester.pumpWidget(MaterialApp.router(
         debugShowCheckedModeBanner: false,
