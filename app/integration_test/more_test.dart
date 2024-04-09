@@ -33,16 +33,16 @@ void main() {
       final BuildContext context = tester.element(find.byType(Scaffold).first);
 
       expect(
-        find.text(context.l10n.settings_page_account_settings),
+        find.text(context.l10n.more_page_account_settings),
         findsOneWidget,
       );
 
       // test opening of a dialog
-      await tester.tap(find.text(context.l10n.settings_page_delete_data));
+      await tester.tap(find.text(context.l10n.more_page_delete_data));
       await tester.pumpAndSettle();
 
       expect(
-        find.text(context.l10n.settings_page_delete_data_text),
+        find.text(context.l10n.more_page_delete_data_text),
         findsOneWidget,
       );
 
@@ -51,7 +51,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // test onboarding button
-      await tester.tap(find.text(context.l10n.settings_page_onboarding));
+      await tester.tap(find.text(context.l10n.more_page_onboarding));
       await tester.pumpAndSettle();
 
       expect(find.text(context.l10n.onboarding_1_header), findsOneWidget);
@@ -60,11 +60,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // test about us
-      await tester.tap(find.text(context.l10n.settings_page_about_us));
+      await tester.tap(find.text(context.l10n.more_page_about_us));
       await tester.pumpAndSettle();
 
       expect(
-        find.text(context.l10n.settings_page_about_us_text),
+        find.text(context.l10n.more_page_about_us_text),
         findsOneWidget,
       );
 
@@ -72,11 +72,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // test privacy policy
-      await tester.tap(find.text(context.l10n.settings_page_privacy_policy));
+      await tester.tap(find.text(context.l10n.more_page_privacy_policy));
       await tester.pumpAndSettle();
 
       expect(
-        find.text(context.l10n.settings_page_privacy_policy_text),
+        find.text(context.l10n.more_page_privacy_policy_text),
         findsOneWidget,
       );
 
@@ -85,12 +85,12 @@ void main() {
 
       // test terms and conditions
       await tester.tap(
-        find.text(context.l10n.settings_page_terms_and_conditions),
+        find.text(context.l10n.more_page_terms_and_conditions),
       );
       await tester.pumpAndSettle();
 
       expect(
-        find.text(context.l10n.settings_page_terms_and_conditions_text),
+        find.text(context.l10n.more_page_terms_and_conditions_text),
         findsOneWidget,
       );
     });

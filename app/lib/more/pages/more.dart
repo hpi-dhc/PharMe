@@ -13,7 +13,7 @@ class MorePage extends StatelessWidget {
         title: context.l10n.tab_more,
         body: [
           SubheaderDivider(
-            text: context.l10n.settings_page_account_settings,
+            text: context.l10n.more_page_account_settings,
             useLine: false,
           ),
           _buildSettingsItem(
@@ -23,22 +23,23 @@ class MorePage extends StatelessWidget {
             ),
           ),
           _buildSettingsItem(
-            title: context.l10n.settings_page_delete_data,
+            title: context.l10n.more_page_delete_data,
             onTap: () => showDialog(
               context: context,
               builder: (_) => DeleteDataDialog(),
             ),
           ),
           SubheaderDivider(
-            text: context.l10n.settings_page_app_information,
+            text: context.l10n.more_page_app_information,
             useLine: false,
           ),
           _buildSettingsItem(
-            title: context.l10n.settings_page_onboarding,
-            onTap: () => context.router.push(OnboardingRoute(isRevisiting: true)),
+            title: context.l10n.more_page_onboarding,
+            onTap: () =>
+              context.router.push(OnboardingRoute(isRevisiting: true)),
           ),
           _buildSettingsItem(
-            title: context.l10n.settings_page_app_tour,
+            title: context.l10n.more_page_app_tour,
             onTap: () async => showAppTour(
               context,
               lastNextButtonText: context.l10n.action_back_to_app,
@@ -46,26 +47,26 @@ class MorePage extends StatelessWidget {
             ),
           ),
           _buildSettingsItem(
-            title: context.l10n.settings_page_about_us,
+            title: context.l10n.more_page_about_us,
             onTap: () => context.router.push(AboutRoute()),
           ),
           _buildSettingsItem(
-            title: context.l10n.settings_page_privacy_policy,
+            title: context.l10n.more_page_privacy_policy,
             onTap: () => context.router.push(PrivacyRoute()),
           ),
           _buildSettingsItem(
-            title: context.l10n.settings_page_terms_and_conditions,
+            title: context.l10n.more_page_terms_and_conditions,
             onTap: () => context.router.push(TermsRoute()),
           ),
           SubheaderDivider(
-            text: context.l10n.settings_page_help_and_feedback,
+            text: context.l10n.more_page_help_and_feedback,
             useLine: false,
           ),
           _buildSettingsItem(
-              title: context.l10n.settings_page_genetic_information,
+              title: context.l10n.more_page_genetic_information,
               onTap: openFurtherGeneticInformation),
           _buildSettingsItem(
-              title: context.l10n.settings_page_contact_us,
+              title: context.l10n.more_page_contact_us,
               onTap: sendEmail)
         ]
       ),
@@ -89,14 +90,14 @@ class DeleteDataDialog extends HookWidget {
     final agreedToDeletion = useState(false);
 
     return DialogWrapper(
-      title: context.l10n.settings_page_delete_data,
+      title: context.l10n.more_page_delete_data,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DialogContentText(context.l10n.settings_page_delete_data_text),
+          DialogContentText(context.l10n.more_page_delete_data_text),
           SizedBox(height: PharMeTheme.mediumSpace),
           DialogContentText(
-            context.l10n.settings_page_delete_data_additional_text,
+            context.l10n.more_page_delete_data_additional_text,
           ),
           SizedBox(height: PharMeTheme.mediumSpace),
           Row(
@@ -115,7 +116,7 @@ class DeleteDataDialog extends HookWidget {
               SizedBox(width: PharMeTheme.smallSpace),
               Expanded(
                 child: DialogContentText(
-                  context.l10n.settings_page_delete_data_confirmation,
+                  context.l10n.more_page_delete_data_confirmation,
                 ),
               ),
             ],

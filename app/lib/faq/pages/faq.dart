@@ -22,7 +22,7 @@ class FaqPage extends StatelessWidget {
                   [...widgets, ..._buildTopic(context, topic, faqList[topic]!)]
               ),
               ..._buildTopicHeader(
-                context.l10n.settings_page_contact_us,
+                context.l10n.more_page_contact_us,
                 addSpace: true,
               ),
               _buildQuestionCard(
