@@ -35,7 +35,7 @@ class DrugAnnotationCards extends StatelessWidget {
                   ),
                   if (drug.annotations.brandNames.isNotEmpty)
                     TableRowDefinition(
-                      context.l10n.drugs_page_header_synonyms,
+                      context.l10n.drug_item_brand_names,
                       drug.annotations.brandNames.join(', '),
                     ),
                 ]),

@@ -25,6 +25,8 @@
   "auth_sign_in": "Get data",
   "auth_success": "Successfully imported data",
 
+  "drug_item_brand_names": "Brand names",
+
   "drug_selection_header": "Current medications",
   "drug_selection_onboarding_description": "Please review the medications you are currently taking below and update them if needed. You can always change the status for a medication later on a medication page or in the settings.",
   "drug_selection_settings_description": "Review the medications you are currently taking below.",
@@ -156,7 +158,6 @@
         }
     }
 },
-  "drugs_page_header_synonyms": "Other names",
   "drugs_page_header_drugclass": "Medication class",
   "drugs_page_header_drug": "Medication information",
   "drugs_page_header_active": "Usage status",

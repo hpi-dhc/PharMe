@@ -73,8 +73,8 @@ class DrugCard extends StatelessWidget {
                   if (drug.annotations.brandNames.isNotEmpty) ...[
                     SizedBox(width: PharMeTheme.smallSpace / 2),
                     Text(
-                      '(${drug.annotations.brandNames.join(', ')})',
-                      style: PharMeTheme.textTheme.titleMedium,
+                      formatBrandNames(context, drug),
+                      style: PharMeTheme.textTheme.titleSmall,
                     ),
                   ],
                   SizedBox(height: PharMeTheme.smallSpace * 0.75),

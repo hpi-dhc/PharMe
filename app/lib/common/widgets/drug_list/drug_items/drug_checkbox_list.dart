@@ -20,12 +20,14 @@ List<Widget> buildDrugCheckboxList(
           ),
         )]
       : _buildCheckboxList(
+          context,
           activeDrugs,
           buildParams,
           showDrugInteractionIndicator,
           keyPrefix: 'active',
         );
   final allDrugsList = _buildCheckboxList(
+    context,
     drugs,
     buildParams,
     showDrugInteractionIndicator,
@@ -48,6 +50,7 @@ List<Widget> buildDrugCheckboxList(
 }
 
 List<CheckboxListTileWrapper> _buildCheckboxList(
+  BuildContext context,
   List<Drug> drugs,
   Map buildParams,
   bool showDrugInteractionIndicator,
@@ -63,7 +66,7 @@ List<CheckboxListTileWrapper> _buildCheckboxList(
       onChanged: (value) => onCheckboxChange(drug, value),
       title: formatDrugName(drug, showDrugInteractionIndicator),
       subtitle: (drug.annotations.brandNames.isNotEmpty) ?
-        '(${drug.annotations.brandNames.join(", ")})' :
+        formatBrandNames(context, drug) :
         null,
     )
   ).toList();
