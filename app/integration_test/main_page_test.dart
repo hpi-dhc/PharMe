@@ -1,6 +1,7 @@
 import 'package:app/common/module.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
@@ -41,8 +42,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.summarize_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.medication_rounded), findsOneWidget);
+      expect(find.byIcon(FontAwesomeIcons.pills), findsOneWidget);
+      expect(find.byIcon(FontAwesomeIcons.dna), findsOneWidget);
       expect(find.byIcon(Icons.lightbulb_rounded), findsOneWidget);
       expect(find.byIcon(Icons.more_horiz_rounded), findsOneWidget);
 

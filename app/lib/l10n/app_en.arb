@@ -338,10 +338,10 @@
     }
   },
 
-  "nav_report": "Report",
+  "nav_report": "Genes",
   "tab_report": "Gene report",
   "nav_drugs": "Medications",
-  "tab_drugs": "Medications",
+  "tab_drugs": "Medication overview",
   "nav_faq": "FAQ",
   "tab_faq": "Common questions",
   "nav_more": "More",

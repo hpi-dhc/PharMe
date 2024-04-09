@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../common/module.dart';
 
 class TabRouteDefinition {
@@ -8,30 +10,30 @@ class TabRouteDefinition {
   });
   PageRouteInfo<void> pageRouteInfo;
   String label;
-  Icon icon;
+  IconData icon;
 }
 
 List<TabRouteDefinition> getTabRoutesDefinition(BuildContext context) {
   return [
     TabRouteDefinition(
-      pageRouteInfo: ReportRoute(),
-      label: context.l10n.nav_report,
-      icon: Icon(Icons.summarize_rounded),
-    ),
-    TabRouteDefinition(
       pageRouteInfo: SearchRoute(),
       label: context.l10n.nav_drugs,
-      icon: Icon(Icons.medication_rounded),
+      icon: FontAwesomeIcons.pills,
+    ),
+    TabRouteDefinition(
+      pageRouteInfo: ReportRoute(),
+      label: context.l10n.nav_report,
+      icon: FontAwesomeIcons.dna,
     ),
     TabRouteDefinition(
       pageRouteInfo: FaqRoute(),
       label: context.l10n.nav_faq,
-      icon: Icon(Icons.lightbulb_rounded),
+      icon: Icons.lightbulb_rounded,
     ),
     TabRouteDefinition(
       pageRouteInfo: MoreRoute(),
       label: context.l10n.nav_more,
-      icon: Icon(Icons.more_horiz_rounded),
+      icon: Icons.more_horiz_rounded,
     ),
   ];
 }
@@ -78,7 +80,7 @@ class MainPage extends StatelessWidget {
   ) {
     return getTabRoutesDefinition(context).map(
       (routeDefinition) => BottomNavigationBarItem(
-        icon: routeDefinition.icon,
+        icon: Icon(routeDefinition.icon),
         label: routeDefinition.label,  
       )
     ).toList();
