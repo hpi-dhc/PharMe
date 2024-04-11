@@ -20,7 +20,7 @@ FutureOr<void> showAppTour(
             text: context.l10n.tutorial_app_tour_1_body,
           ),
           assetPath:
-            'assets/images/tutorial/04_bottom_navigation_loopable.gif',
+            'assets/images/tutorial/05_bottom_navigation_loopable.gif',
         ),
       ],
       onClose: revisiting
