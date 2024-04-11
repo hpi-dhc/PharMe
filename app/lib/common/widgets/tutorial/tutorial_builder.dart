@@ -40,7 +40,10 @@ class TutorialBuilder extends HookWidget {
       ? currentPage.content!(context)
       : null;
     final asset = currentPage.assetPath != null
-      ? Image.asset(currentPage.assetPath!)
+      ? Container(
+        color: PharMeTheme.onSurfaceColor,
+        child: Center(child: Image.asset(currentPage.assetPath!)),
+      )
       : null;
     return [
       if (title != null) Text(
@@ -57,7 +60,7 @@ class TutorialBuilder extends HookWidget {
         child: Padding(
           padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
           // child: Container(),
-          child: Center(child: asset),
+          child: asset,
         ),
       ),
       Padding(
@@ -74,7 +77,10 @@ class TutorialBuilder extends HookWidget {
     final isFirstPage = currentPageIndex.value == 0;
     final isLastPage = currentPageIndex.value == pages.length - 1;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: isFirstPage
+        ? MainAxisAlignment.end
+        : MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
       children: [
         if (!isFirstPage) DirectionButton(
           direction: ButtonDirection.backward,
@@ -86,11 +92,10 @@ class TutorialBuilder extends HookWidget {
           onPressed: isLastPage
             ? Navigator.of(context).pop
             : () => currentPageIndex.value = currentPageIndex.value + 1,
-          
           text: isLastPage && lastNextButtonText != null
             ? lastNextButtonText!
             : context.l10n.action_continue,
-          emphasize: isLastPage,
+          emphasize: true,
           ),
       ],
     );

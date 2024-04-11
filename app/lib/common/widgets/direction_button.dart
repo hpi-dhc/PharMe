@@ -41,9 +41,14 @@ class DirectionButton extends StatelessWidget {
       color: textColor,
       size: 32,
     );
-    final buttonText = Text(
-      text,
-      style: PharMeTheme.textTheme.titleLarge!.copyWith(color: textColor),
+    final buttonText = Flexible(
+      child: Text(
+        text,
+        style: PharMeTheme.textTheme.titleLarge!.copyWith(
+          color: textColor,
+          overflow: TextOverflow.fade,
+        ),
+      ),
     );
     final buttonContent = direction == ButtonDirection.forward
       ? [ separator, buttonText, separator, icon ]

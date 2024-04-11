@@ -42,11 +42,7 @@ class ReportPage extends StatelessWidget {
                     children: [
                       Text(context.l10n.report_legend_text),
                       SizedBox(height: PharMeTheme.smallSpace * 0.5),
-                      _buildWarningLevelIndicators(
-                        getText: (warningLevel) =>
-                          warningLevel.getLabel(context),
-                        separator: TextSpan(text: ', ')
-                      ),
+                      Text.rich(WarningLevel.values.getTextLegend(context)),
                     ]
                   ),
                 ),
@@ -110,7 +106,7 @@ class GeneCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  _buildWarningLevelIndicators(
+                  Text.rich(WarningLevel.values.buildLegend(
                     getText: (warningLevel) {
                       final warningLevelCount = affectedDrugs.filter(
                         (drug) => drug.warningLevel == warningLevel
@@ -118,7 +114,7 @@ class GeneCard extends StatelessWidget {
                       return warningLevelCount > 0
                         ? warningLevelCount.toString()
                         : null;
-                    },
+                    }),
                   ),
                 ],
               ),
@@ -129,57 +125,4 @@ class GeneCard extends StatelessWidget {
       ]),
     );
   }
-}
-
-Text _buildWarningLevelIndicators({
-    required String? Function(WarningLevel) getText,
-    InlineSpan? separator,
-}) {
-  var content = <InlineSpan>[];
-  for (final (index, warningLevel) in WarningLevel.values.indexed) {
-    final text = getText(warningLevel);
-    if (text.isNullOrEmpty) continue;
-    final warningLevelIndicator = _buildWarningLevelIndicator(
-      warningLevel,
-      text: text!,
-    );
-    final isLastItem = index == WarningLevel.values.length - 1;
-    content = isLastItem
-      ? [ ...content, ...warningLevelIndicator ]
-      : [
-          ...content,
-          ...warningLevelIndicator,
-          separator ?? WidgetSpan(
-            child: SizedBox(width: PharMeTheme.smallSpace * 0.8),
-          ),
-        ];
-  }
-  return Text.rich(
-    TextSpan(
-      style: PharMeTheme.textTheme.bodyMedium,
-      children: content,
-    )
-  );
-}
-
-List<InlineSpan> _buildWarningLevelIndicator(
-  WarningLevel warningLevel,
-  { required String text }
-) {
-  return [
-    WidgetSpan(
-      child: Icon(
-        warningLevel.icon,
-        color: warningLevel.textColor,
-        size: PharMeTheme.textTheme.bodyMedium!.fontSize,
-      ),
-    ),
-    WidgetSpan(
-      child: SizedBox(width: PharMeTheme.smallSpace * 0.4),
-    ),
-    TextSpan(
-      text: text,
-      style: PharMeTheme.textTheme.bodyMedium!.copyWith(color: warningLevel.textColor)
-    ),
-  ];
 }

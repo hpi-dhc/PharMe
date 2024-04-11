@@ -68,3 +68,57 @@ extension WarningLevelColor on WarningLevel {
   Color get color => WarningLevelColor._colorMap[name]!;
   Color get textColor => darkenColor(color, 0.4);
 }
+
+extension WarningLevelDescription on WarningLevel {
+  TextSpan getDescription(String text) => TextSpan(
+    children: [
+      WidgetSpan(
+        child: Icon(
+          icon,
+          color: textColor,
+          size: PharMeTheme.textTheme.bodyMedium!.fontSize,
+        ),
+      ),
+      WidgetSpan(
+        child: SizedBox(width: PharMeTheme.smallSpace * 0.4),
+      ),
+      TextSpan(
+        text: text,
+        style: PharMeTheme.textTheme.bodyMedium!.copyWith(color: textColor)
+      ),
+    ],
+  );
+}
+
+extension WarningLevelLegend on List<WarningLevel> {
+  TextSpan buildLegend({
+    required String? Function(WarningLevel) getText,
+    InlineSpan? separator,
+  }) {
+    var content = <InlineSpan>[];
+    for (final (index, warningLevel) in indexed) {
+      final text = getText(warningLevel);
+      if (text.isNullOrEmpty) continue;
+      final warningLevelIndicator = warningLevel.getDescription(text!);
+      final isLastItem = index == WarningLevel.values.length - 1;
+      content = isLastItem
+        ? [ ...content, warningLevelIndicator ]
+        : [
+            ...content,
+            warningLevelIndicator,
+            separator ?? WidgetSpan(
+              child: SizedBox(width: PharMeTheme.smallSpace * 0.8),
+            ),
+          ];
+    }
+    return TextSpan(
+      style: PharMeTheme.textTheme.bodyMedium,
+      children: content,
+    );
+  }
+
+  TextSpan getTextLegend(BuildContext context) => buildLegend(
+    getText: (warningLevel) => warningLevel.getLabel(context),
+    separator: TextSpan(text: ', '),
+  );
+}

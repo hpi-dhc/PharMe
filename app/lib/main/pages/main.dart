@@ -49,7 +49,7 @@ class MainPage extends StatelessWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await showAppTour(
           context,
-          lastNextButtonText: context.l10n.tutorial_to_the_app,
+          lastNextButtonText: context.l10n.action_finish,
           revisiting: false,
         );
       });
