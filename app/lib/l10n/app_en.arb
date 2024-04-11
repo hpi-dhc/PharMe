@@ -87,7 +87,8 @@
     }
   },
   "drugs_page_disclaimer_description": "Please note: ",
-  "drugs_page_disclaimer_text": "The information shown on this page is ONLY based on your DNA and certain medications you are currently taking. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
+  "drugs_page_disclaimer_text_part_1": "The information shown on this page is ONLY based on your DNA and certain medications you are currently taking.",
+  "drugs_page_disclaimer_text_part_2": "Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} can influence your results for the following gene(s): {genes}",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
@@ -367,6 +368,7 @@
   "onboarding_1_header": "Welcome to PharMe",
   "onboarding_1_text": "Your genome influences your health more than you might think, including how you react to medications.\n\nMore than 90 percent of people are vulnerable to unintended medication reactions.\n\nUse PharMe to find out about yours.",
   "onboarding_2_header": "One size does not fit all",
+  "onboarding_1_disclaimer_part_1": "The information information provided in PharMe is ONLY based on your DNA and and certain medications that may interact with your genetic result.",
   "onboarding_2_text": "Each person’s body reacts to medications differently.\n\nMedications that are effective for a majority of people can have adverse side effects for you.",
   "onboarding_3_header": "Genome power unlocked to improve human health",
   "onboarding_3_text": "PharMe informs you if your genome makes you more likely to experience an unintended medication response.\n\nThis enables you to avoid medications that are ineffective or have side effects.",

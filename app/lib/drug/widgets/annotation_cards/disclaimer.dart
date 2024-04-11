@@ -31,7 +31,12 @@ class Disclaimer extends StatelessWidget {
             text: description ?? context.l10n.drugs_page_disclaimer_description,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          TextSpan(text: text ?? context.l10n.drugs_page_disclaimer_text),
+          if (text != null) TextSpan(text: text),
+          if (text == null) TextSpan(children: [
+            TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_1),
+            TextSpan(text: ' '),
+            TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_2),
+          ])
         ]),
         style: PharMeTheme.textTheme.labelMedium!.copyWith(
           fontWeight: FontWeight.w300,

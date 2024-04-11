@@ -13,6 +13,11 @@ class OnboardingPage extends HookWidget {
       getHeader: (context) => context.l10n.onboarding_1_header,
       getText: (context) => context.l10n.onboarding_1_text,
       color: PharMeTheme.sinaiCyan,
+      child: disclaimerCard(
+        getText: (context) => context.l10n.onboarding_1_disclaimer_part_1,
+        getSecondLineText: (context) =>
+          context.l10n.drugs_page_disclaimer_text_part_2,
+      ),
     ),
     OnboardingSubPage(
       illustrationPath: 'assets/images/onboarding/DrugReaction.png',
@@ -25,8 +30,7 @@ class OnboardingPage extends HookWidget {
       getHeader: (context) => context.l10n.onboarding_3_header,
       getText: (context) => context.l10n.onboarding_3_text,
       color: PharMeTheme.sinaiPurple,
-      child: BottomCard(
-        icon: Icon(Icons.warning_rounded, size: 32),
+      child: disclaimerCard(
         getText: (context) => context.l10n.onboarding_3_disclaimer,
       ),
     ),
@@ -274,31 +278,57 @@ class OnboardingSubPage extends StatelessWidget {
   }
 }
 
+BottomCard disclaimerCard({
+  required String Function(BuildContext) getText,
+  String Function(BuildContext)? getSecondLineText,
+}) => BottomCard(
+  getText: getText,
+  icon: Icon(Icons.warning_rounded, size: 32),
+  getSecondLineText: getSecondLineText,
+);
+
 class BottomCard extends StatelessWidget {
-  const BottomCard({this.icon, required this.getText, this.onClick});
+  const BottomCard({
+    this.icon,
+    required this.getText,
+    this.getSecondLineText,
+    this.onClick,
+  });
 
   final Icon? icon;
   final String Function(BuildContext) getText;
+  final String Function(BuildContext)? getSecondLineText;
   final GestureTapCallback? onClick;
 
   @override
   Widget build(BuildContext context) {
     final widget = Card(
+      color: PharMeTheme.surfaceColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-        child: Row(children: [
-          if (icon != null) ...[icon!, SizedBox(width: 4)],
-          Expanded(
-            child: Text(
-              getText(context),
-              style: PharMeTheme.textTheme.bodyMedium,
-              textAlign: (icon != null) ? TextAlign.start : TextAlign.center,
+        padding: EdgeInsets.all(PharMeTheme.smallSpace),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (icon != null) ...[
+              icon!,
+              SizedBox(width: PharMeTheme.smallSpace),
+            ],
+            Expanded(
+              child: Column(
+                children: [
+                  getTextWidget(getText(context)),
+                  if (getSecondLineText != null) ...[
+                    SizedBox(height: PharMeTheme.smallSpace),
+                    getTextWidget(getSecondLineText!(context)),
+                  ]
+                ],
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
 
@@ -306,4 +336,10 @@ class BottomCard extends StatelessWidget {
 
     return widget;
   }
+
+  Widget getTextWidget(String text) => Text(
+    text,
+    style: PharMeTheme.textTheme.bodyMedium,
+    textAlign: (icon != null) ? TextAlign.start : TextAlign.center,
+  );
 }
