@@ -56,7 +56,7 @@ void main() {
 
       expect(find.text(context.l10n.onboarding_1_header), findsOneWidget);
 
-      await context.router.root.pop();
+      await context.router.root.maybePop();
       await tester.pumpAndSettle();
 
       // test about us

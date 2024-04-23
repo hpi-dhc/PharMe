@@ -25,8 +25,8 @@ Future<void> updateCachedDrugs() async {
   if (previousVersion != null) {
     final context = PharMeApp.navigatorKey.currentContext;
     if (context != null) {
-      // ignore: use_build_context_synchronously
       await showAdaptiveDialog(
+      // ignore: use_build_context_synchronously
         context: context,
         builder: (context) => DialogWrapper(
           title: context.l10n.update_warning_title,

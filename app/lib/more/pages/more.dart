@@ -125,7 +125,7 @@ class DeleteDataDialog extends HookWidget {
       ),
       actions: [
         DialogAction(
-          onPressed: context.router.root.pop,
+          onPressed: context.router.root.maybePop,
           text: context.l10n.action_cancel,
         ),
         DialogAction(
