@@ -13,7 +13,7 @@ defaults:
 env:
   JAVA_VERSION: 17.x
   FLUTTER_CHANNEL: stable
-  FLUTTER_VERSION: 3.16.4
+  FLUTTER_VERSION: 3.19.6
 
 jobs:
   lint:
