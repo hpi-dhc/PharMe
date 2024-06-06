@@ -38,6 +38,14 @@ by deleting the history data and published data.
 Run `python reset.py <PATH_TO_BACKUP>.base64` to receive
 `<PATH_TO_BACKUP>_reset_<TIMESTAMP>.base64`.
 
+## Unstage data
+
+This is probably a use case only relevant once, we want to unstage all data and
+do a second review.
+
+Run `python unstage.py <PATH_TO_BACKUP>.base64` to receive
+`<PATH_TO_BACKUP>_reset_<TIMESTAMP>.base64`.
+
 ## Migrate data
 
 Run `pyhthon migrate.py <PATH_TO_BACKUP>[.json|.base64]` to receive
