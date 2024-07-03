@@ -37,8 +37,11 @@ def decode_and_unzip(base64_zip_path):
         TEMP_DIR_NAME,
         os.path.basename(base64_zip_path).replace(BASE64_ENDING, '.zip'))
     with open(zip_path, 'wb') as zip_file:
-        with open(base64_zip_path, 'rb') as input_file:
-            base64.decode(input_file, zip_file)
+        with open(base64_zip_path, 'r') as input_file:
+            file_content = json.load(input_file)
+            base64_content = file_content['data']['base64']
+            zip_content = base64.b64decode(base64_content)
+            zip_file.write(zip_content)
     wrong_zip_content_text = '[ERROR] Please make sure that the zipped input ' \
         'archive holds exactly one file with "{}" extension'.format(JSON_ENDING)
     with zipfile.ZipFile(zip_path) as zip_file:
