@@ -4,7 +4,7 @@ import os
 import sys
 import zipfile
 
-from .constants import JSON_ENDING
+from .constants import DRUG_COLLECTION_NAME, JSON_ENDING
 from .constants import BASE64_ENDING
 from .constants import TEMP_DIR_NAME
 from .constants import VALID_INPUT_ENDINGS
@@ -63,8 +63,24 @@ def get_guidelines_by_ids(data, ids):
     return list(map(lambda id: get_guideline_by_id(data, id), ids))
 
 def get_guideline_by_id(data, id):
-    guidelines = data[GUIDELINE_COLLECTION_NAME]
-    return next(guideline for guideline in guidelines if guideline['_id'] == id)
+    return _get_from_collection_by_field_value(
+        data,
+        GUIDELINE_COLLECTION_NAME,
+        '_id',
+        id,
+    )
+
+def get_drug_by_name(data, drug_name):
+    return _get_from_collection_by_field_value(
+        data,
+        DRUG_COLLECTION_NAME,
+        'name',
+        drug_name,
+    )
+
+def _get_from_collection_by_field_value(data, collection_name, field, value):
+    items = data[collection_name]
+    return  next(item for item in items if item[field] == value)
 
 def get_phenotype_value_lengths(guideline, expect_same_length = False):
     phenotype_values = list(guideline['lookupkey'].values()) + \

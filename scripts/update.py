@@ -1,6 +1,6 @@
 import copy
 
-from common.get_data import get_data
+from common.get_data import get_data, get_drug_by_name
 from common.get_data import get_guidelines_by_ids
 from common.get_data import get_phenotype_key
 from common.get_data import get_lookupkey_key
@@ -12,11 +12,10 @@ from common.constants import NON_RESULT_PHENOTYPES
 from common.constants import get_history_collection_name
 from common.constants import SCRIPT_POSTFIXES
 from common.write_data import write_data, write_log
-from common.write_data import get_output_file_path
 
 VERBOSE = False
 
-def get_source(drug, data):
+def get_single_source(drug, data):
     collected_external_data = []
     guidelines = get_guidelines_by_ids(data, drug['guidelines'])
     for guideline in guidelines:
@@ -32,6 +31,13 @@ def get_source(drug, data):
         return '_missing source_'
     source = sources.pop()
     return source
+
+def get_source(drug, data, updated_drug, updated_external_data):
+    former_source = get_single_source(drug, data)
+    updated_source = get_single_source(updated_drug, updated_external_data)
+    return former_source if former_source == updated_source \
+        else f'{updated_source}, formerly {former_source}'
+
 
 def get_drug_names(data):
     return list(map(
@@ -82,7 +88,7 @@ def remove_outdated_drugs(data, updated_external_data):
             stale_guideline_ids += drug_guidelines
             remove_log.append(log_item(
                 f'{drug_name} (with {len(drug_guidelines)} guideline(s) ' \
-                    f'from {get_source(drug, data)})'))
+                    f'from {get_single_source(drug, data)})'))
     data = remove_from_collection(data, DRUG_COLLECTION_NAME, stale_drug_ids)
     data = remove_from_collection(
         data, GUIDELINE_COLLECTION_NAME, stale_guideline_ids)
@@ -98,7 +104,9 @@ def add_missing_drugs(data, updated_external_data):
                 updated_external_data, drug['guidelines'])
             data[DRUG_COLLECTION_NAME].append(drug)
             data[GUIDELINE_COLLECTION_NAME] += drug_guidelines
-            add_log.append(log_item(f'{drug_name} ({get_source(drug, data)})'))
+            add_log.append(log_item(
+                f'{drug_name} ({get_single_source(drug, data)})'
+            ))
     return data, add_log
 
 def get_guideline_phenotypes(guidelines):
@@ -170,7 +178,7 @@ def update_guidelines(data, guidelines, updated_guidelines):
     for guideline in guidelines:
         guideline_updates = []
         phenotype_key = get_phenotype_key(guideline)
-        # To not be dependend on removal and addotion of guidelines
+        # To not be dependent on removal and addition of guidelines
         updated_phenotypes = list(map(
             lambda guideline: get_phenotype_key(guideline),
             updated_guidelines))
@@ -285,8 +293,17 @@ def update_drugs(data, updated_external_data):
         if not drug_name in updated_drugs_map:
             continue
 
-        drug_log_item = log_item(f'{drug_name} ' \
-                                 f'({get_source(current_drug, data)})')
+        updated_drug = get_drug_by_name(updated_external_data, drug_name)
+        source = get_source(
+            current_drug,
+            data,
+            updated_drug,
+            updated_external_data,
+        )
+        drug_log_item = log_item(
+            f'{drug_name} ' \
+            f'({source})'
+        )
         updated_drug = updated_drugs_map[drug_name]
         drug_updates = []
 
