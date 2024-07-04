@@ -14,3 +14,19 @@ interface.
 ## Getting Started
 
 See our [Contribution Guide](CONTRIBUTING.md) to get started.
+
+## Updating
+
+To update data from external sources, execute the following steps (API
+request can be executed with Postman):
+
+* Get current backup using the `GET /api/backup` route and save the response to
+  `./backup.base64.json`
+* Init external sources using the `POST /api/init-external` route (overwrites
+  present data, make sure it was backed up properly)
+* Get overwritten backup using the `/api/backup` route again and save the
+  response to `./initiated.base64.json`
+* Run update script
+  `python update.py ./backup.base64.json ./initiated.base64.json`
+* Upload the updated backup `./backup_updated_[timestamp].base64.json` with
+  `POST /api/backup`

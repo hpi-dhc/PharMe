@@ -33,5 +33,5 @@ Backupper has its own environment file!). Then, run the following command from
 the repository's root:
 
 ```sh
-docker compose --file anni/docker-compose.yaml --profile production --profile with-backupper up
+docker compose --file anni/docker-compose.yaml --profile production --profile with-backupper up -d
 ```
