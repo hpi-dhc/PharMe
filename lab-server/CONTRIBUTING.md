@@ -38,13 +38,17 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
   configured in the `.env` file
 - Create a realm called `KEYCLOAK_REALM` (see `.env`)
 - Create clients (one for the backend and one for the frontend)
-  - For the backend with name `KEYCLOAK_CLIENT_ID` (see `.env`) and
-    `access-type` "bearer only"; in the credentials tab create a secret and
-    update the `.env` value `KEYCLOAK_SECRET` accordingly
+  - For the backend with name `KEYCLOAK_CLIENT_ID` (see `.env`)
+    - `access-type` "bearer only" (uncheck all other types, see
+      [StackOverflow](https://stackoverflow.com/a/75040248))
+    - In the credentials tab (enable "Client authentication" and save to enable
+      tab, see [StackOverflow](https://stackoverflow.com/a/44753547)) create a
+      secret and update the `.env` value `KEYCLOAK_SECRET` accordingly
   - For the frontend with the name `pharme-app` (as `clientId` in
-    `app/lib/login/pages/cubit.dart`) and `access-type` "public";
-    set the redirect URI to `*` (note that this is bad practice security-wise
-    and should only be done in a local testing environment!)
+    `app/lib/login/pages/cubit.dart`)
+    - `access-type` "public" ("Client authentication" off)
+    - set the redirect URI to `localhost:/*` (as specified in
+      `callbackUrlScheme` in `app/lib/login/pages/cubit.dart`)
 - Create a user for testing (you can choose username and password freely, no
   roles are required); when setting the password, set "Temporary" to "OFF"
 - For more information see
