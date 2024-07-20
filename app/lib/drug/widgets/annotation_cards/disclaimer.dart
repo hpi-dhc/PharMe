@@ -1,10 +1,9 @@
 import '../../../common/module.dart';
 
 class Disclaimer extends StatelessWidget {
-  const Disclaimer({ this.description, this.text });
+  const Disclaimer({ this.userGuideline });
 
-  final String? description;
-  final String? text;
+  final Guideline? userGuideline;
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +27,25 @@ class Disclaimer extends StatelessWidget {
           ),
           TextSpan(text: ' '),
           TextSpan(
-            text: description ?? context.l10n.drugs_page_disclaimer_description,
+            text: context.l10n.drugs_page_disclaimer_description,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          if (text != null) TextSpan(text: text),
-          if (text == null) TextSpan(children: [
-            TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_1),
-            TextSpan(text: ' '),
-            TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_2),
-          ])
+          TextSpan(
+            text: context.l10n.drugs_page_disclaimer_text_part_0,
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          if (userGuideline != null) TextSpan(
+            children: [
+              TextSpan(text: '\n\n'),
+              TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_1),
+              TextSpan(text: ' '),
+              TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_2),
+            ],
+            style: PharMeTheme.textTheme.labelMedium!.copyWith(
+              fontWeight: FontWeight.w300,
+            ),
+          )
         ]),
-        style: PharMeTheme.textTheme.labelMedium!.copyWith(
-          fontWeight: FontWeight.w300,
-        ),
       ),
     );
   }

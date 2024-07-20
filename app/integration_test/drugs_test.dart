@@ -186,7 +186,6 @@ void main() {
       );
 
       expect(find.text(testDrugWithoutGuidelines.name), findsOneWidget);
-      expect(find.byType(Disclaimer), findsNothing);
     });
 
     testWidgets('test loading', (tester) async {

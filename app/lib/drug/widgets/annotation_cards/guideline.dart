@@ -151,9 +151,9 @@ class GuidelineAnnotationCard extends StatelessWidget {
               TextSpan(text: recommendationText),
             ]),
           ),
-          if (drug.userGuideline != null) ...[
+          ...[
             SizedBox(height: PharMeTheme.smallToMediumSpace),
-            Disclaimer(),
+            Disclaimer(userGuideline: drug.userGuideline),
           ],
         ]
       )

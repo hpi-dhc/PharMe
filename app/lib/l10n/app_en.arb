@@ -87,7 +87,8 @@
     }
   },
   "drugs_page_disclaimer_description": "Please note: ",
-  "drugs_page_disclaimer_text_part_1": "The information shown on this page is ONLY based on your DNA and certain medications you are currently taking.",
+  "drugs_page_disclaimer_text_part_0": "Never stop taking or change the dose of your medications without consulting your pharmacist or doctor.",
+  "drugs_page_disclaimer_text_part_1": "Also, the information shown on this page is ONLY based on your DNA and certain medications you are currently taking.",
   "drugs_page_disclaimer_text_part_2": "Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
   "drugs_page_is_inhibitor": "Taking {drugName} can interact with your results for the following gene(s): {genes}",
   "@drugs_page_is_inhibitor": {
