@@ -133,13 +133,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
           ),
           SizedBox(height: PharMeTheme.smallToMediumSpace),
           Text.rich(
-            TextSpan(children: [
-              TextSpan(
-                text: context.l10n.drugs_page_implication_description,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(text: implicationText),
-            ]),
+            TextSpan(text: implicationText),
           ),
           SizedBox(height: PharMeTheme.smallToMediumSpace),
           Text.rich(
