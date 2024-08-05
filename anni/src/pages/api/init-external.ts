@@ -12,7 +12,7 @@ import dbConnect from '../../database/helpers/connect';
 import {
     DrugWithGuidelines,
     getAdditionalDrugs,
-    getDrugsWithContractedGuidelines,
+    getDrugsWithGuidelines,
 } from '../../database/helpers/cpic-constructors';
 import Drug from '../../database/models/Drug';
 import Guideline from '../../database/models/Guideline';
@@ -25,7 +25,7 @@ const getCpicData = async (): Promise<DrugWithGuidelines[]> => {
         },
     );
     const recommendations = response.data;
-    return getDrugsWithContractedGuidelines(recommendations, 'CPIC');
+    return getDrugsWithGuidelines(recommendations, 'CPIC');
 };
 
 type GHContentResponse = {
@@ -57,7 +57,7 @@ const getAdditionalData = async (): Promise<DrugWithGuidelines[][]> => {
                 if (source == 'additional_drugs') {
                     return getAdditionalDrugs(response.data);
                 }
-                return getDrugsWithContractedGuidelines(response.data, source);
+                return getDrugsWithGuidelines(response.data, source);
             }),
     );
 };
