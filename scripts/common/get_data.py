@@ -1,3 +1,4 @@
+import copy
 import base64
 import json
 import os
@@ -89,7 +90,7 @@ def get_phenotype_value_lengths(guideline, expect_same_length = False):
     if expect_same_length:
         if len(phenotype_values_lengths) != 1:
             raise Exception('[ERROR] Expecting lookupkey and phenotypes per ' \
-                            'gene to have same lenghts but lengths differ ' \
+                            'gene to have same lengths but lengths differ ' \
                             'for guideline {}'.format(guideline['_id']))
         return phenotype_values_lengths[0]
     return phenotype_values_lengths
@@ -105,16 +106,25 @@ def dict_to_key(dictionary, format_value=lambda value: value):
         lambda key: f'{key} {format_value(dictionary[key])}',
         dict(sorted(dictionary.items())).keys()))
 
-def get_phenotype_description_key(guideline, property):
+def get_phenotype_description_key(dictionary):
     return dict_to_key(
-        guideline[property],
+        dictionary,
         lambda phenotype_value: ', '.join(sorted(phenotype_value)))
 
 def get_lookupkey_key(guideline):
-    return get_phenotype_description_key(guideline, 'lookupkey')
+    return get_phenotype_description_key(guideline['lookupkey'])
+
+def get_phenotype(guideline):
+    return get_phenotype_description_key(guideline['phenotypes'])
 
 def get_phenotype_key(guideline):
-    return get_phenotype_description_key(guideline, 'phenotypes')
+    phenotypes = {}
+    for gene in guideline['phenotypes'].keys():
+        phenotypes[gene] = copy.deepcopy(guideline['phenotypes'][gene])
+        for lookupkey in guideline['lookupkey'][gene]:
+            if not lookupkey in phenotypes[gene]:
+                phenotypes[gene].append(lookupkey)
+    return get_phenotype_description_key(phenotypes)
 
 def get_information_key(external_data):
     information_key = external_data['comments'] \
