@@ -93,12 +93,37 @@ function contractByLookupkey(
     });
 }
 
+function contractRedundantExternalData(
+    drugsWithGuidelines: Array<DrugWithGuidelines>,
+): Array<DrugWithGuidelines> {
+    return drugsWithGuidelines.map(({ drug, guidelines }) => {
+        return {
+            drug,
+            guidelines: guidelines.map((guideline) => {
+                const informationMap = new Map<string, IExternalData>();
+                guideline.externalData.forEach((externalData) => {
+                    const key = externalDataInformationKey(externalData);
+                    if (!informationMap.has(key)) {
+                        informationMap.set(key, externalData);
+                    }
+                });
+                return {
+                    ...guideline,
+                    externalData: Array.from(informationMap.values()),
+                };
+            }),
+        };
+    });
+}
+
 export function contractGuidelines(
     drugsWithGuidelines: Array<DrugWithGuidelines>,
     source: string,
 ): Array<DrugWithGuidelines> {
-    return contractByPhenotypeAndInformation(
-        contractByLookupkey(drugsWithGuidelines),
-        source,
+    return contractRedundantExternalData(
+        contractByPhenotypeAndInformation(
+            contractByLookupkey(drugsWithGuidelines),
+            source,
+        ),
     );
 }
