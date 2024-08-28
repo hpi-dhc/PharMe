@@ -37,6 +37,10 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
   await CachedDrugs.erase();
 }
 
+String formatLookupMapKey(String gene, String variant) {
+  return '${gene}__$variant';
+}
+
 Future<void> updateGenotypeResults() async {
   final skipUpdate = !shouldUpdateGenotypeResults();
   if (skipUpdate) return;
@@ -47,17 +51,31 @@ Future<void> updateGenotypeResults() async {
   final lookups = json.map(LookupInformation.fromJson);
 
   // use a HashMap for better time complexity
-  final lookupsHashMap = HashMap<String, LookupInformation>.fromIterable(
-    lookups,
-    key: (lookup) => '${lookup.gene}__${lookup.variant}',
-    value: (lookup) => lookup,
-  );
+  // also add lookupkey for genes where, e.g., activity scores are reported as
+  // genotype, such as DPYD or "Indeterminate"
+  final Map<String, LookupInformation> lookupsHashMap = HashMap();
+  for (final lookup in lookups) {
+    final variantKey = formatLookupMapKey(lookup.gene, lookup.variant);
+    final lookupKey = formatLookupMapKey(lookup.gene, lookup.lookupkey);
+    lookupsHashMap[variantKey] = lookup;
+    if (variantKey != lookupKey) lookupsHashMap[lookupKey] = lookup;
+  }
   final genotypeResults = <String, GenotypeResult>{};
   // we know that labData is present because we check this in
   // shouldUpdateGenotypeResults
   for (final labResult in UserData.instance.labData!) {
-    final key = '${labResult.gene}__${labResult.variant}';
-    final lookup = lookupsHashMap[key];
+    final variantAlternatives = [
+      labResult.variant,
+      labResult.phenotype.toLowerCase(), // for HLA matching
+    ];
+    LookupInformation? lookup;
+    for (final variant in variantAlternatives) {
+      final potentialLookupMapKey = formatLookupMapKey(labResult.gene, variant);
+      if (lookupsHashMap.containsKey(potentialLookupMapKey)) {
+        lookup = lookupsHashMap[potentialLookupMapKey];
+        break;
+      }
+    }
     if (lookup == null) continue;
     final genotypeResult = GenotypeResult.fromGenotypeData(labResult, lookup);
     genotypeResults[genotypeResult.key.value] = genotypeResult;
