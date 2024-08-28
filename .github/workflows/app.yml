@@ -79,7 +79,7 @@ jobs:
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: open -a Simulator.app
-      - run: flutter test integration_test -d iPhone --coverage
+      - run: flutter test integration_test --coverage
       - uses: codecov/codecov-action@v3
         with:
           flags: app
