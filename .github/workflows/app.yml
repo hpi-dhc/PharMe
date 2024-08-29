@@ -76,10 +76,13 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
+      - uses: futureware-tech/simulator-action@v3
+        with:
+          model: 'iPhone 14'
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: open -a Simulator.app
-      - run: flutter test integration_test -d iPhone --coverage
+      - run: flutter test integration_test --coverage
       - uses: codecov/codecov-action@v3
         with:
           flags: app
