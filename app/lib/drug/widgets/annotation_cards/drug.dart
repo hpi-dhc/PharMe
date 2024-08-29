@@ -18,6 +18,48 @@ class DrugAnnotationCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        RoundedCard(
+          innerPadding: EdgeInsets.symmetric(horizontal: PharMeTheme.mediumSpace),
+          child: SwitchListTile.adaptive(
+            value: isActive,
+            activeColor: PharMeTheme.primaryColor,
+            title: Text(context.l10n.drugs_page_text_active),
+            contentPadding: EdgeInsets.zero,
+            onChanged: disabled ? null : (newValue) {
+              if (isInhibitor(drug.name)) {
+                showAdaptiveDialog(
+                  context: context,
+                  builder: (context) => DialogWrapper(
+                    title: context.l10n.drugs_page_active_warn_header,
+                    content: DialogContentText(
+                      context.l10n.drugs_page_active_warn,
+                    ),
+                    actions: [
+                      DialogAction(
+                        onPressed: () => Navigator.pop(
+                          context,
+                          'Cancel',
+                        ),
+                        text: context.l10n.action_cancel,
+                      ),
+                      DialogAction(
+                        onPressed: () {
+                          Navigator.pop(context, 'OK');
+                          setActivity(value: newValue);
+                        },
+                        text: context.l10n.action_continue,
+                        isDestructive: true,
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                setActivity(value: newValue);
+              }
+            },
+          ),
+        ),
+        SizedBox(height: PharMeTheme.smallSpace),
         SubHeader(context.l10n.drugs_page_header_drug),
         SizedBox(height: PharMeTheme.smallSpace),
         RoundedCard(
@@ -40,7 +82,7 @@ class DrugAnnotationCards extends StatelessWidget {
                     ),
                 ]),
                 if (isInhibitor(drug.name)) ...[
-                  SizedBox(height: 8),
+                  SizedBox(height: PharMeTheme.smallSpace),
                   buildTable(
                     [TableRowDefinition(
                       drugInteractionIndicator,
@@ -52,68 +94,6 @@ class DrugAnnotationCards extends StatelessWidget {
                     boldHeader: false,
                   ),
                 ],
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: PharMeTheme.mediumSpace),
-        SubHeader(context.l10n.drugs_page_header_active),
-        SizedBox(height: PharMeTheme.smallSpace),
-        RoundedCard(
-          innerPadding: EdgeInsets.all(PharMeTheme.smallSpace),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
-            child: DropdownButton<bool>(
-              key: Key('drug-status-selection-${drug.name}'),
-              value: isActive,
-              isExpanded: true,
-              icon: const Icon(Icons.expand_more),
-              onChanged: disabled ? null : (newValue) => {
-                if (isInhibitor(drug.name)) {
-                  showAdaptiveDialog(
-                    context: context,
-                    builder: (context) => DialogWrapper(
-                      title: context.l10n.drugs_page_active_warn_header,
-                      content: DialogContentText(
-                        context.l10n.drugs_page_active_warn,
-                      ),
-                      actions: [
-                        DialogAction(
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          text: context.l10n.action_cancel,
-                        ),
-                        DialogAction(
-                          onPressed: () {
-                            Navigator.pop(context, 'OK');
-                            setActivity(value: newValue);
-                          },
-                          text: context.l10n.action_continue,
-                          isDestructive: true,
-                        ),
-                      ],
-                    ),
-                  )
-                } else {
-                  setActivity(value: newValue)
-                }
-              },
-              items: [
-                DropdownMenuItem<bool>(
-                  key: Key('drug-status-selection-${drug.name}-active'),
-                  value: true,
-                  child: _buildStatusMenuItem(
-                    context.l10n.drugs_page_active,
-                    Icons.check_circle_outline,
-                  ),
-                ),
-                DropdownMenuItem<bool>(
-                  key: Key('drug-status-selection-${drug.name}-inactive'),
-                  value: false,
-                  child: _buildStatusMenuItem(
-                    context.l10n.drugs_page_inactive,
-                    Icons.cancel_outlined,
-                  ),
-                ),
               ],
             ),
           ),

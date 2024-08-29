@@ -160,12 +160,10 @@
             "example": "bupropion"
         }
     }
-},
+  },
   "drugs_page_header_drugclass": "Medication class",
   "drugs_page_header_drug": "Medication information",
-  "drugs_page_header_active": "Usage status",
-  "drugs_page_active": "I am currently taking this medication",
-  "drugs_page_inactive": "I am not taking this medication",
+  "drugs_page_text_active": "Current medication",
   "drugs_page_active_warn_header": "Are you sure you want to change the medication usage status?",
   "drugs_page_active_warn": "This can interact with your results for other medications.",
   "drugs_page_header_guideline": "DNA-based clinical guideline",
