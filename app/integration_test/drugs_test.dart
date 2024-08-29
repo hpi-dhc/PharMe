@@ -142,8 +142,8 @@ void main() {
 
       // test that drug activity can be set
       final activitySelection = tester.firstWidget(
-        find.byType(DropdownButton<bool>)
-      ) as DropdownButton<bool>;
+        find.byType(Switch)
+      ) as Switch;
       expect(activitySelection.onChanged, isNotNull);
 
       // test tooltips
@@ -208,8 +208,8 @@ void main() {
       );
 
       final activitySelection = tester.firstWidget(
-        find.byType(DropdownButton<bool>)
-      ) as DropdownButton<bool>;
+        find.byType(Switch)
+      ) as Switch;
       expect(activitySelection.onChanged, isNull);
     });
   });
