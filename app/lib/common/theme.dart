@@ -100,7 +100,7 @@ class PharMeTheme {
   static final appBarTheme = AppBarTheme(
     backgroundColor: surfaceColor,
     foregroundColor: onSurfaceText,
-    leadingWidth: smallSpace + mediumSpace
+    leadingWidth: largeSpace + mediumToLargeSpace,
   );
 }
 
