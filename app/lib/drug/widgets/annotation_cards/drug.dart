@@ -101,23 +101,4 @@ class DrugAnnotationCards extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildStatusMenuItem(String text, IconData iconData) => Text.rich(
-    TextSpan(
-      children: [
-        WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: Icon(
-            iconData,
-            color: PharMeTheme.iconColor,
-            size: PharMeTheme.mediumSpace,
-          ),
-        ),
-        TextSpan(text: ' $text'),
-      ],
-    ),
-    maxLines: 1,
-    softWrap: false,
-    overflow: TextOverflow.fade,
-  );
 }
