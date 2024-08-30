@@ -370,7 +370,7 @@
   "onboarding_2_text": "Each person’s body reacts to medications differently.\n\nMedications that are effective for a majority of people can have adverse side effects for you.",
   "onboarding_3_header": "Genome power unlocked to improve human health",
   "onboarding_3_text": "PharMe informs you if your genome makes you more likely to experience an unintended medication response.\n\nThis enables you to avoid medications that are ineffective or have side effects.",
-  "onboarding_3_disclaimer": "We DO NOT recommend medications for specific symptoms or illnesses",
+  "onboarding_3_disclaimer": "Please note that this app does not provide recommendations for medications or dosages. Always consult your pharmacist or doctor for personalized advice.",
   "onboarding_4_header": "Tailored to your genome",
   "onboarding_4_text": "For PharMe to work, you need to get your genetics (DNA) tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
   "onboarding_4_button": "Find out more about gene tests here.",
