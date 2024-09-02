@@ -40,15 +40,18 @@ class TutorialBuilder extends HookWidget {
       ? currentPage.content!(context)
       : null;
     final imageAsset = currentPage.assetPath != null
-      ? Image.asset(currentPage.assetPath!)
+      ? Container(
+          color: PharMeTheme.onSurfaceColor,
+          child: Center(child: Image.asset(currentPage.assetPath!)),
+        )
       : null;
+    final titleStyle = PharMeTheme.textTheme.headlineMedium!.copyWith(
+      fontSize: PharMeTheme.textTheme.headlineSmall!.fontSize,
+    );
     final assetContainer = imageAsset != null
       ? Stack(
           children: [
-            Container(
-              color: PharMeTheme.onSurfaceColor,
-              child: Center(child: imageAsset),
-            ),
+            imageAsset,
             Positioned(
               top: PharMeTheme.smallSpace,
               right: PharMeTheme.smallSpace,
@@ -58,30 +61,51 @@ class TutorialBuilder extends HookWidget {
                 ),
                 color: PharMeTheme.onSurfaceColor,
                 onPressed: () async => {
-                  await showAdaptiveDialog(
+                  await showDialog(
                   // ignore: use_build_context_synchronously
                     context: context,
-                    builder: (context) => AlertDialog.adaptive(
-                      content: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                    builder: (context) => Dialog.fullscreen(
+                      backgroundColor: Colors.transparent,
+                      child: SafeArea(
+                        child: RoundedCard(
+                          outerHorizontalPadding: 0,
+                          outerVerticalPadding: 0,
+                          innerPadding: EdgeInsets.all(PharMeTheme.largeSpace),
+                          child: Column(
                             children: [
-                              GestureDetector(
-                                onTap: () => Navigator.pop(context),
-                                child: Icon(
-                                  Icons.close,
-                                  color: PharMeTheme.onSurfaceText,
-                                ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  if (title != null) Expanded(
+                                    child: FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Text(
+                                        title,
+                                        style: titleStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: PharMeTheme.smallSpace),
+                                  GestureDetector(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: PharMeTheme.onSurfaceText,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: PharMeTheme.smallToMediumSpace),
+                              Expanded(
+                                child: imageAsset,
                               ),
                             ],
                           ),
-                          SizedBox(height: PharMeTheme.smallToMediumSpace),
-                          imageAsset,
-                        ],
+                        ),
                       ),
                     ),
-                  )
+                  ),
                 },
                 icon: Icon(Icons.zoom_in),
               ),
@@ -92,9 +116,7 @@ class TutorialBuilder extends HookWidget {
     return [
       if (title != null) Text(
         title,
-        style: PharMeTheme.textTheme.headlineMedium!.copyWith(
-          fontSize: PharMeTheme.textTheme.headlineSmall!.fontSize,
-        ),
+        style: titleStyle,
       ),
       if (content != null) Padding(
         padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
