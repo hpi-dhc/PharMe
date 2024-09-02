@@ -9,21 +9,18 @@ class OnboardingPage extends HookWidget {
 
   final iconSize = 32.0;
   final sidePadding = PharMeTheme.mediumSpace;
-  final bottomPadding = PharMeTheme.smallSpace;
   final indicatorSize = PharMeTheme.smallSpace;
 
-  double getCloseIconPadding(BuildContext context) {
+  double getTopPadding(BuildContext context) {
     return MediaQuery.of(context).padding.top + sidePadding;
   }
 
-  double getTopPadding(BuildContext context) {
-    return isRevisiting
-      ? getCloseIconPadding(context)
-      : MediaQuery.of(context).padding.top;
+  double getBottomPadding(BuildContext context) {
+    return MediaQuery.of(context).padding.bottom + PharMeTheme.smallSpace;
   }
 
-  double getBottomSpace() {
-    return iconSize + 2 * bottomPadding + 4 * indicatorSize;
+  double getBottomSpace(BuildContext context) {
+    return iconSize + 2 * getBottomPadding(context) + 4 * indicatorSize;
   }
   
   final _pages = [
@@ -106,7 +103,7 @@ class OnboardingPage extends HookWidget {
           alignment: Alignment.topCenter,
           children: [
             if (isRevisiting) Positioned(
-              top: getCloseIconPadding(context),
+              top: getTopPadding(context),
               right: sidePadding,
               child: IconButton(
                 icon: Icon(
@@ -121,7 +118,7 @@ class OnboardingPage extends HookWidget {
               top: isRevisiting
                 ? getTopPadding(context) + iconSize
                 : getTopPadding(context),
-              bottom: getBottomSpace(),
+              bottom: getBottomSpace(context),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: sidePadding),
                 child: PageView(
@@ -132,14 +129,14 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: getBottomSpace() - 2 * indicatorSize,
+              bottom: getBottomSpace(context) - 2 * indicatorSize,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(context, currentPage.value),
               ),
             ),
             Positioned(
-              bottom: bottomPadding,
+              bottom: getBottomPadding(context),
               right: sidePadding,
               child: _buildNextButton(
                 context,
@@ -148,7 +145,7 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: bottomPadding,
+              bottom: getBottomPadding(context),
               left: sidePadding,
               child: _buildPrevButton(
                 context,
@@ -267,7 +264,7 @@ class OnboardingSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const scrollbarThickness = 3.0;
+    const scrollbarThickness = 4.0;
     const iconButtonPadding = 16.0; // to align the scrollbar
 
     final scrollController = ScrollController();
@@ -302,7 +299,7 @@ class OnboardingSubPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: PharMeTheme.mediumSpace),
+              SizedBox(height: PharMeTheme.mediumToLargeSpace),
               Column(children: [
                 AutoSizeText(
                   getHeader(context),
@@ -311,7 +308,7 @@ class OnboardingSubPage extends StatelessWidget {
                   ),
                   maxLines: 2,
                 ),
-                SizedBox(height: PharMeTheme.mediumSpace),
+                SizedBox(height: PharMeTheme.mediumToLargeSpace),
                 Text(
                   getText(context),
                   style: PharMeTheme.textTheme.bodyLarge!.copyWith(
