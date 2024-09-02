@@ -10,6 +10,7 @@ class OnboardingPage extends HookWidget {
   final iconSize = 32.0;
   final sidePadding = PharMeTheme.mediumSpace;
   final indicatorSize = PharMeTheme.smallSpace;
+  final indicatorPadding = PharMeTheme.mediumSpace;
 
   double getTopPadding(BuildContext context) {
     return MediaQuery.of(context).padding.top + sidePadding;
@@ -19,8 +20,13 @@ class OnboardingPage extends HookWidget {
     return MediaQuery.of(context).padding.bottom + PharMeTheme.smallSpace;
   }
 
-  double getBottomSpace(BuildContext context) {
-    return iconSize + 2 * getBottomPadding(context) + 4 * indicatorSize;
+  double getBottomSpace(context) {
+    // Icon button height and indicators
+    final bottomWidgetsSize =  iconSize + indicatorSize + indicatorPadding;
+    const spaceBetweenBottomWidgets = PharMeTheme.mediumToLargeSpace;
+    return getBottomPadding(context)
+      + bottomWidgetsSize
+      + spaceBetweenBottomWidgets;
   }
   
   final _pages = [
@@ -129,7 +135,7 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: getBottomSpace(context) - 2 * indicatorSize,
+              bottom: getBottomSpace(context) - indicatorSize - indicatorPadding,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(context, currentPage.value),
