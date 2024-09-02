@@ -39,10 +39,54 @@ class TutorialBuilder extends HookWidget {
     final content = currentPage.content != null
       ? currentPage.content!(context)
       : null;
-    final asset = currentPage.assetPath != null
-      ? Container(
-        color: PharMeTheme.onSurfaceColor,
-        child: Center(child: Image.asset(currentPage.assetPath!)),
+    final imageAsset = currentPage.assetPath != null
+      ? Image.asset(currentPage.assetPath!)
+      : null;
+    final assetContainer = imageAsset != null
+      ? Stack(
+          children: [
+            Container(
+              color: PharMeTheme.onSurfaceColor,
+              child: Center(child: imageAsset),
+            ),
+            Positioned(
+              top: PharMeTheme.smallSpace,
+              right: PharMeTheme.smallSpace,
+              child: IconButton.filled(
+                style: IconButton.styleFrom(
+                  backgroundColor: PharMeTheme.onSurfaceText,
+                ),
+                color: PharMeTheme.onSurfaceColor,
+                onPressed: () async => {
+                  await showAdaptiveDialog(
+                  // ignore: use_build_context_synchronously
+                    context: context,
+                    builder: (context) => AlertDialog.adaptive(
+                      content: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                                child: Icon(
+                                  Icons.close,
+                                  color: PharMeTheme.onSurfaceText,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: PharMeTheme.smallToMediumSpace),
+                          imageAsset,
+                        ],
+                      ),
+                    ),
+                  )
+                },
+                icon: Icon(Icons.zoom_in),
+              ),
+            ),
+          ],
       )
       : null;
     return [
@@ -56,11 +100,10 @@ class TutorialBuilder extends HookWidget {
         padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
         child: Text.rich(content, style: PharMeTheme.textTheme.bodyLarge),
       ),
-      if (asset != null) Expanded(
+      if (assetContainer != null) Expanded(
         child: Padding(
           padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
-          // child: Container(),
-          child: asset,
+          child: assetContainer,
         ),
       ),
       Padding(
