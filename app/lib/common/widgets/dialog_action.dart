@@ -6,11 +6,13 @@ class DialogAction extends StatelessWidget {
   const DialogAction({
     super.key,
     this.isDestructive = false,
+    this.isDefault = false,
     this.onPressed,
     required this.text,
   });
 
   final bool isDestructive;
+  final bool isDefault;
   final void Function()? onPressed;
   final String text;
 
@@ -20,6 +22,7 @@ class DialogAction extends StatelessWidget {
       case SupportedPlatform.ios:
         return CupertinoDialogAction(
           isDestructiveAction: isDestructive,
+          isDefaultAction: isDefault,
           onPressed: onPressed,
           child: Text(text),
         );

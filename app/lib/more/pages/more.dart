@@ -67,7 +67,7 @@ class MorePage extends StatelessWidget {
               onTap: openFurtherGeneticInformation),
           _buildSettingsItem(
               title: context.l10n.more_page_contact_us,
-              onTap: sendEmail)
+              onTap: () => sendEmail(context)),
         ]
       ),
     );

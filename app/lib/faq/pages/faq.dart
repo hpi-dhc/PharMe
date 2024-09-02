@@ -30,10 +30,9 @@ class FaqPage extends StatelessWidget {
                   title: Text(context.l10n.faq_contact_us),
                   trailing: Icon(Icons.chevron_right_rounded),
                   iconColor: PharMeTheme.iconColor,
-                  onTap: sendEmail
+                  onTap: () => sendEmail(context),
                 )
-              )
-              
+              ),
             ],
           ),
         ),

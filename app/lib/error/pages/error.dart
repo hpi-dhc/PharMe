@@ -43,6 +43,7 @@ class ErrorPage extends StatelessWidget {
               text: contactEmailAddress,
               style: PharMeTheme.textTheme.bodyLarge,
               onTap: () => sendEmail(
+                context,
                 subject: context.l10n.error_mail_subject,
                 body: context.l10n.error_mail_body(error),
               ),
