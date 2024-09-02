@@ -6,6 +6,25 @@ class OnboardingPage extends HookWidget {
   OnboardingPage({ this.isRevisiting = false });
 
   final bool isRevisiting;
+
+  final iconSize = 32.0;
+  final sidePadding = PharMeTheme.mediumSpace;
+  final bottomPadding = PharMeTheme.smallSpace;
+  final indicatorSize = PharMeTheme.smallSpace;
+
+  double getCloseIconPadding(BuildContext context) {
+    return MediaQuery.of(context).padding.top + sidePadding;
+  }
+
+  double getTopPadding(BuildContext context) {
+    return isRevisiting
+      ? getCloseIconPadding(context)
+      : MediaQuery.of(context).padding.top;
+  }
+
+  double getBottomSpace() {
+    return iconSize + 2 * bottomPadding + 4 * indicatorSize;
+  }
   
   final _pages = [
     OnboardingSubPage(
@@ -86,33 +105,42 @@ class OnboardingPage extends HookWidget {
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
-            Positioned.fill(
-              bottom: 96,
-              child: PageView(
-                controller: pageController,
-                onPageChanged: (newPage) => currentPage.value = newPage,
-                children: _pages,
-              ),
-            ),
             if (isRevisiting) Positioned(
-              top: MediaQuery.of(context).padding.top +
-                PharMeTheme.mediumToLargeSpace,
-              right: PharMeTheme.mediumToLargeSpace,
+              top: getCloseIconPadding(context),
+              right: sidePadding,
               child: IconButton(
-                icon: Icon(Icons.close, size: 32, color: Colors.white,),
+                icon: Icon(
+                  Icons.close,
+                  size: iconSize,
+                  color: Colors.white,
+                ),
                 onPressed: () => context.router.back(),
               )
             ),
+            Positioned.fill(
+              top: isRevisiting
+                ? getTopPadding(context) + iconSize
+                : getTopPadding(context),
+              bottom: getBottomSpace(),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: sidePadding),
+                child: PageView(
+                  controller: pageController,
+                  onPageChanged: (newPage) => currentPage.value = newPage,
+                  children: _pages,
+                ),
+              ),
+            ),
             Positioned(
-              bottom: 96,
+              bottom: getBottomSpace() - 2 * indicatorSize,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(context, currentPage.value),
               ),
             ),
             Positioned(
-              bottom: PharMeTheme.mediumToLargeSpace,
-              right: PharMeTheme.mediumToLargeSpace,
+              bottom: bottomPadding,
+              right: sidePadding,
               child: _buildNextButton(
                 context,
                 pageController,
@@ -120,8 +148,8 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: PharMeTheme.mediumToLargeSpace,
-              left: PharMeTheme.mediumToLargeSpace,
+              bottom: bottomPadding,
+              left: sidePadding,
               child: _buildPrevButton(
                 context,
                 pageController,
@@ -145,9 +173,11 @@ class OnboardingPage extends HookWidget {
   Widget _indicator(BuildContext context, bool isActive) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
-      margin: EdgeInsets.symmetric(horizontal: 8),
-      height: 8,
-      width: isActive ? 24 : 16,
+      margin: EdgeInsets.symmetric(horizontal: indicatorSize),
+      height: indicatorSize,
+      width: isActive
+        ? PharMeTheme.mediumToLargeSpace
+        : PharMeTheme.mediumSpace,
       decoration: BoxDecoration(
         color: isActive ? Colors.white : PharMeTheme.onSurfaceColor,
         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -187,6 +217,7 @@ class OnboardingPage extends HookWidget {
           );
         }
       },
+      iconSize: iconSize,
       onDarkBackground: true,
       emphasize: isLastPage,
     );
@@ -208,6 +239,7 @@ class OnboardingPage extends HookWidget {
             );
         },
         text: context.l10n.onboarding_prev,
+        iconSize: iconSize,
         onDarkBackground: true,
       );
     } else {
@@ -235,44 +267,67 @@ class OnboardingSubPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(32, 16, 32, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: PharMeTheme.mediumSpace),
-          Center(
-            child: FractionallySizedBox(
-              alignment: Alignment.topCenter,
-              widthFactor: 0.75,
-              child: Image.asset(
-                illustrationPath,
-                height: 200,
-              ),
-            ),
+    const scrollbarThickness = 3.0;
+    const iconButtonPadding = 16.0; // to align the scrollbar
+
+    final scrollController = ScrollController();
+    return RawScrollbar(
+      controller: scrollController, // needed to always show scrollbar
+      thumbVisibility: true,
+      shape: StadiumBorder(),
+      padding: EdgeInsets.only(
+        top: PharMeTheme.mediumToLargeSpace,
+        right: iconButtonPadding,
+      ),
+      thumbColor: Colors.white54,
+      thickness: scrollbarThickness,
+      child: SingleChildScrollView(
+        controller: scrollController,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: iconButtonPadding + 3 * scrollbarThickness,
           ),
-          SizedBox(height: PharMeTheme.mediumSpace),
-          Column(children: [
-            AutoSizeText(
-              getHeader(context),
-              style: PharMeTheme.textTheme.headlineLarge!.copyWith(
-                color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: PharMeTheme.mediumSpace),
+              Center(
+                child: FractionallySizedBox(
+                  alignment: Alignment.topCenter,
+                  widthFactor: 0.75,
+                  child: Image.asset(
+                    illustrationPath,
+                    height: 175,
+                  ),
+                ),
               ),
-              maxLines: 2,
-            ),
-            SizedBox(height: PharMeTheme.mediumSpace),
-            Text(
-              getText(context),
-              style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-                color: Colors.white,
-              ),
-            ),
-            if (child != null) ...[SizedBox(height: PharMeTheme.mediumSpace), child!],
-          ]),
-          // Empty widget for spaceBetween in this column to work properly
-          Container(),
-        ],
+              SizedBox(height: PharMeTheme.mediumSpace),
+              Column(children: [
+                AutoSizeText(
+                  getHeader(context),
+                  style: PharMeTheme.textTheme.headlineLarge!.copyWith(
+                    color: Colors.white,
+                  ),
+                  maxLines: 2,
+                ),
+                SizedBox(height: PharMeTheme.mediumSpace),
+                Text(
+                  getText(context),
+                  style: PharMeTheme.textTheme.bodyLarge!.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+                if (child != null) ...[
+                  SizedBox(height: PharMeTheme.mediumSpace),
+                  child!,
+                ],
+              ]),
+              // Empty widget for spaceBetween in this column to work properly
+              Container(),
+            ],
+          ),
+        ),
       ),
     );
   }

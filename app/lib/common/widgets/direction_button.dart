@@ -10,6 +10,7 @@ class DirectionButton extends StatelessWidget {
     required this.direction,
     required this.text,
     required this.onPressed,
+    this.iconSize = 32,
     this.emphasize = false,
     this.onDarkBackground = false,
   });
@@ -17,6 +18,7 @@ class DirectionButton extends StatelessWidget {
   final ButtonDirection direction;
   final String text;
   final FutureOr<void> Function() onPressed;
+  final double iconSize;
   final bool emphasize;
   final bool onDarkBackground;
 
@@ -32,14 +34,14 @@ class DirectionButton extends StatelessWidget {
     final textColor = emphasize == onDarkBackground
       ? PharMeTheme.onSurfaceText
       : Colors.white;
-    final separator = SizedBox(width: 8);
+    final separator = SizedBox(width: iconSize / 4);
     final iconData = direction == ButtonDirection.forward
       ? Icons.arrow_forward_rounded
       : Icons.arrow_back_rounded;
     final icon = Icon(
       iconData,
       color: textColor,
-      size: 32,
+      size: iconSize,
     );
     final buttonText = Flexible(
       child: Text(
