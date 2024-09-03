@@ -159,7 +159,7 @@ class GeneCard extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 2,
-                        horizontal: 4,
+                        horizontal: 6,
                       ),
                       child: Text.rich(WarningLevel.values.buildLegend(
                         getText: (warningLevel) {

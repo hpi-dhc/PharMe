@@ -95,18 +95,24 @@ extension WarningLevelLegend on List<WarningLevel> {
     required String? Function(WarningLevel) getText,
     InlineSpan? separator,
   }) {
-    // TODO(tamslo): isLastItem should consider skipped items and consider potential icon margin to add after text, https://github.com/hpi-dhc/PharMe/issues/712
     var content = <InlineSpan>[];
-    for (final (index, warningLevel) in indexed) {
+    for (final warningLevel in this) {
       final text = getText(warningLevel);
       if (text.isNullOrEmpty) continue;
-      final warningLevelIndicator = warningLevel.getDescription(text!);
-      final isLastItem = index == WarningLevel.values.length - 1;
-      content = isLastItem
-        ? [ ...content, warningLevelIndicator ]
+      content = [
+        ...content,
+        warningLevel.getDescription(text!),
+      ];
+      
+    }
+    var separatedContent = <InlineSpan>[];
+    for (final (index, contentItem) in content.indexed) {
+      final isLastItem = index == content.length - 1;
+      separatedContent = isLastItem
+        ? [ ...separatedContent, contentItem ]
         : [
-            ...content,
-            warningLevelIndicator,
+            ...separatedContent,
+            contentItem,
             separator ?? WidgetSpan(
               child: SizedBox(width: PharMeTheme.smallSpace * 0.8),
             ),
@@ -114,7 +120,7 @@ extension WarningLevelLegend on List<WarningLevel> {
     }
     return TextSpan(
       style: PharMeTheme.textTheme.bodyMedium,
-      children: content,
+      children: separatedContent,
     );
   }
 
