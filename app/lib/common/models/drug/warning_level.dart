@@ -95,6 +95,7 @@ extension WarningLevelLegend on List<WarningLevel> {
     required String? Function(WarningLevel) getText,
     InlineSpan? separator,
   }) {
+    // TODO(tamslo): isLastItem should consider skipped items and consider potential icon margin to add after text, https://github.com/hpi-dhc/PharMe/issues/712
     var content = <InlineSpan>[];
     for (final (index, warningLevel) in indexed) {
       final text = getText(warningLevel);

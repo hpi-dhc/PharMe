@@ -2,6 +2,8 @@ import 'package:provider/provider.dart';
 
 import '../../common/module.dart';
 
+typedef WarningLevelCounts = Map<WarningLevel, int>;
+
 @RoutePage()
 class ReportPage extends StatelessWidget {
   @override
@@ -10,6 +12,12 @@ class ReportPage extends StatelessWidget {
       builder: (context, activeDrugs, child) =>
         _buildReportPage(context, activeDrugs)
     );
+  }
+
+  int _getSeverityCount(WarningLevelCounts warningLevelCounts, int severity) {
+    return warningLevelCounts.filter(
+      (warningLevelCount) => warningLevelCount.key.severity == severity
+    ).values.first;
   }
 
   Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
@@ -24,7 +32,34 @@ class ReportPage extends StatelessWidget {
       ...missingGenes.map(
         (gene) => GenotypeResult.missingResult(gene, context),
       ),
-    ].sortedBy((genotypeResult) => genotypeResult.gene);
+    ];
+    final warningLevelCounts = <String, WarningLevelCounts>{};
+    for (final genotypeResult in userGenotypes) {
+      warningLevelCounts[genotypeResult.gene] = {};
+      final affectedDrugs = CachedDrugs.instance.drugs?.filter(
+        (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
+      ) ?? [];
+      for (final warningLevel in WarningLevel.values) {
+        warningLevelCounts[genotypeResult.gene]![warningLevel] =
+          affectedDrugs.filter(
+            (drug) => drug.warningLevel == warningLevel
+          ).length;
+      }
+    }
+    var sortedGenotypes = userGenotypes.sortedBy(
+      (genotypeResult) => genotypeResult.gene
+    );
+    final sortedWarningLevels = WarningLevel.values.sortedBy(
+      (warningLevel) => warningLevel.severity
+    );
+    for (final warningLevel in sortedWarningLevels) {
+      sortedGenotypes = sortedGenotypes.sortedByDescending((genotypeResult) =>
+        _getSeverityCount(
+          warningLevelCounts[genotypeResult.gene]!,
+          warningLevel.severity,
+        ),
+      );
+    }
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
     return PopScope(
       canPop: false,
@@ -46,8 +81,9 @@ class ReportPage extends StatelessWidget {
                     ]
                   ),
                 ),
-                ...userGenotypes.map((genotypeResult) => GeneCard(
+                ...sortedGenotypes.map((genotypeResult) => GeneCard(
                   genotypeResult,
+                  warningLevelCounts[genotypeResult.gene]!,
                   key: Key('gene-card-${genotypeResult.key.value}')
                 )),
               ],
@@ -66,9 +102,19 @@ class ReportPage extends StatelessWidget {
 }
 
 class GeneCard extends StatelessWidget {
-  const GeneCard(this.genotypeResult, { super.key });
+  const GeneCard(this.genotypeResult, this.warningLevelCounts, { super.key });
 
   final GenotypeResult genotypeResult;
+  final WarningLevelCounts warningLevelCounts;
+
+  Color? _getHighestSeverityColor(WarningLevelCounts warningLevelCounts) {
+    final sortedWarningLevels = WarningLevel.values.sortedByDescending(
+      (warningLevel) => warningLevel.severity
+    );
+    return sortedWarningLevels.filter(
+      (warningLevel) => warningLevelCounts[warningLevel]! > 0
+    ).firstOrNull?.color;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +125,13 @@ class GeneCard extends StatelessWidget {
     final phenotypeText = phenotypeInformation.adaptionText.isNullOrBlank
       ? phenotypeInformation.phenotype
       : '${phenotypeInformation.phenotype}$drugInteractionIndicator';
-    final affectedDrugs = CachedDrugs.instance.drugs?.filter(
-      (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
-    ) ?? [];
+    final hasLegend = warningLevelCounts.values.any((count) => count > 0);
     return RoundedCard(
       onTap: () => context.router.push(
         GeneRoute(genotypeResult: genotypeResult)
       ),
       radius: 16,
+      color: _getHighestSeverityColor(warningLevelCounts),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Expanded(
           child: Column(
@@ -106,15 +151,26 @@ class GeneCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Text.rich(WarningLevel.values.buildLegend(
-                    getText: (warningLevel) {
-                      final warningLevelCount = affectedDrugs.filter(
-                        (drug) => drug.warningLevel == warningLevel
-                      ).length;
-                      return warningLevelCount > 0
-                        ? warningLevelCount.toString()
-                        : null;
-                    }),
+                  if (hasLegend) DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 2,
+                        horizontal: 4,
+                      ),
+                      child: Text.rich(WarningLevel.values.buildLegend(
+                        getText: (warningLevel) {
+                          final warningLevelCount =
+                            warningLevelCounts[warningLevel]!;
+                          return warningLevelCount > 0
+                            ? warningLevelCount.toString()
+                            : null;
+                        }),
+                      ),
+                    ),
                   ),
                 ],
               ),
