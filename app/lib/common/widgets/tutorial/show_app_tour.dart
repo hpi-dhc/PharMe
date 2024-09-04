@@ -4,6 +4,25 @@ import '../../module.dart';
 import 'tutorial_controller.dart';
 import 'tutorial_page.dart';
 
+TextSpan _buildContent(String text, { InlineSpan? trailingSpan }) {
+  final paragraphs = text.split('\n');
+  final spacerSpan = WidgetSpan(child: SizedBox(height: 25));
+  var spacedParagraphs = <InlineSpan>[];
+  for (final (index, paragraph) in paragraphs.indexed) {
+    final isLast = index == paragraphs.length - 1;
+    final paragraphSpan = isLast
+      ? TextSpan(text: paragraph)
+      : TextSpan(text: '$paragraph\n');
+    spacedParagraphs = isLast
+      ? [...spacedParagraphs, paragraphSpan]
+      : [...spacedParagraphs, paragraphSpan, spacerSpan];
+  }
+  if (trailingSpan != null) {
+    spacedParagraphs = [...spacedParagraphs, TextSpan(text: '\n'), spacerSpan, trailingSpan];
+  }
+  return TextSpan(children: spacedParagraphs);
+}
+
 FutureOr<void> showAppTour(
   BuildContext context,
   {
@@ -16,8 +35,8 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_1_title,
-          content: (context) => TextSpan(
-            text: context.l10n.tutorial_app_tour_1_body,
+          content: (context) => _buildContent(
+            context.l10n.tutorial_app_tour_1_body,
           ),
           assetPath:
             'assets/images/tutorial/05_bottom_navigation_loopable.gif',
@@ -27,8 +46,10 @@ FutureOr<void> showAppTour(
             context.l10n.tutorial_app_tour_2_title,
           content: (context) => TextSpan(
             children: [
-              TextSpan(text: context.l10n.tutorial_app_tour_2_body),
-              WarningLevel.values.getTextLegend(context),
+              _buildContent(
+                context.l10n.tutorial_app_tour_2_body,
+                trailingSpan: buildWarningLevelTextLegend(context),
+              ),
             ],
           ),
           assetPath:
@@ -37,8 +58,8 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_3_title,
-          content: (context) => TextSpan(
-            text: context.l10n.tutorial_app_tour_3_body,
+          content: (context) => _buildContent(
+            context.l10n.tutorial_app_tour_3_body,
           ),
           assetPath:
             'assets/images/tutorial/07_clopidogrel_loopable.gif',
@@ -46,8 +67,8 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_4_title,
-          content: (context) => TextSpan(
-            text: context.l10n.tutorial_app_tour_4_body,
+          content: (context) => _buildContent(
+            context.l10n.tutorial_app_tour_4_body,
           ),
           assetPath:
             'assets/images/tutorial/08_report_and_cyp2c19_loopable.gif',
@@ -55,8 +76,8 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_5_title,
-          content: (context) => TextSpan(
-            text: context.l10n.tutorial_app_tour_5_body,
+          content: (context) => _buildContent(
+            context.l10n.tutorial_app_tour_5_body,
           ),
           assetPath:
             'assets/images/tutorial/09_faq_and_more_loopable.gif',

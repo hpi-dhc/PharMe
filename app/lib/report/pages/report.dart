@@ -74,10 +74,11 @@ class ReportPage extends StatelessWidget {
               [
                 PageDescription(
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(context.l10n.report_legend_text),
                       SizedBox(height: PharMeTheme.smallSpace * 0.5),
-                      Text.rich(WarningLevel.values.getTextLegend(context)),
+                      Text.rich(buildWarningLevelTextLegend(context)),
                     ]
                   ),
                 ),
@@ -161,7 +162,7 @@ class GeneCard extends StatelessWidget {
                         vertical: 2,
                         horizontal: 6,
                       ),
-                      child: Text.rich(WarningLevel.values.buildLegend(
+                      child: Text.rich(buildWarningLevelLegend(
                         getText: (warningLevel) {
                           final warningLevelCount =
                             warningLevelCounts[warningLevel]!;

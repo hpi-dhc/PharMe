@@ -90,42 +90,49 @@ extension WarningLevelDescription on WarningLevel {
   );
 }
 
-extension WarningLevelLegend on List<WarningLevel> {
-  TextSpan buildLegend({
-    required String? Function(WarningLevel) getText,
+TextSpan buildWarningLevelTextLegend(
+  BuildContext context,
+  {
     InlineSpan? separator,
-  }) {
-    var content = <InlineSpan>[];
-    for (final warningLevel in this) {
-      final text = getText(warningLevel);
-      if (text.isNullOrEmpty) continue;
-      content = [
-        ...content,
-        warningLevel.getDescription(text!),
-      ];
-      
-    }
-    var separatedContent = <InlineSpan>[];
-    for (final (index, contentItem) in content.indexed) {
-      final isLastItem = index == content.length - 1;
-      separatedContent = isLastItem
-        ? [ ...separatedContent, contentItem ]
-        : [
-            ...separatedContent,
-            contentItem,
-            separator ?? WidgetSpan(
-              child: SizedBox(width: PharMeTheme.smallSpace * 0.8),
-            ),
-          ];
-    }
-    return TextSpan(
-      style: PharMeTheme.textTheme.bodyMedium,
-      children: separatedContent,
-    );
+    InlineSpan? prefix,
   }
+) => buildWarningLevelLegend(
+  getText: (warningLevel) => warningLevel.getLabel(context),
+  separator: separator ?? TextSpan(text: '\n'),
+  prefix: prefix,
+);
 
-  TextSpan getTextLegend(BuildContext context) => buildLegend(
-    getText: (warningLevel) => warningLevel.getLabel(context),
-    separator: TextSpan(text: ', '),
+TextSpan buildWarningLevelLegend({
+  required String? Function(WarningLevel) getText,
+  InlineSpan? separator,
+  InlineSpan? prefix,
+}) {
+  var content = <InlineSpan>[];
+  for (final warningLevel in WarningLevel.values) {
+    final text = getText(warningLevel);
+    if (text.isNullOrEmpty) continue;
+    content = [
+      ...content,
+      warningLevel.getDescription(text!),
+    ];
+    
+  }
+  var separatedContent = <InlineSpan>[];
+  for (final (index, contentItem) in content.indexed) {
+    final isLastItem = index == content.length - 1;
+    separatedContent = isLastItem
+      ? [ ...separatedContent, contentItem ]
+      : [
+          ...separatedContent,
+          contentItem,
+          separator ?? WidgetSpan(
+            child: SizedBox(width: PharMeTheme.smallSpace * 0.8),
+          ),
+        ];
+  }
+  if (prefix != null) separatedContent = [prefix, ...separatedContent];
+  return TextSpan(
+    style: PharMeTheme.textTheme.bodyMedium,
+    children: separatedContent,
   );
 }
