@@ -121,9 +121,6 @@ class GeneCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final phenotypeText = isInhibited(genotypeResult)
-      ? genotypeResult.phenotypeDisplayString
-      : '${genotypeResult.phenotypeDisplayString}$drugInteractionIndicator';
     final hasLegend = warningLevelCounts.values.any((count) => count > 0);
     return RoundedCard(
       onTap: () => context.router.push(
@@ -143,7 +140,7 @@ class GeneCard extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                phenotypeText,
+                possiblyAdaptedPhenotype(genotypeResult),
                 style: PharMeTheme.textTheme.titleSmall,
               ),
             ],

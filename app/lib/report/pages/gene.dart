@@ -89,12 +89,9 @@ class GenePage extends HookWidget {
   }
 
   TableRow _buildPhenotypeRow(BuildContext context) {
-    final phenotypeText = isInhibited(genotypeResult)
-      ? '${genotypeResult.phenotypeDisplayString}$drugInteractionIndicator'
-      : genotypeResult.phenotypeDisplayString;
     return _buildRow(
       context.l10n.gene_page_phenotype,
-      phenotypeText,
+      possiblyAdaptedPhenotype(genotypeResult),
       tooltip:
         context.l10n.gene_page_phenotype_tooltip,
     );

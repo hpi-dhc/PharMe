@@ -230,6 +230,18 @@ List<String> activeDrugsFromHTTPResponse(Response resp) {
   return activeDrugs;
 }
 
+String possiblyAdaptedPhenotype(GenotypeResult genotypeResult) {
+  final originalPhenotype = genotypeResult.phenotypeDisplayString;
+  if (!isInhibited(genotypeResult)) {
+    return originalPhenotype;
+  }
+  final overwrittenLookup = UserData.overwrittenLookup(genotypeResult.gene);
+  if (overwrittenLookup == null) {
+    return '$originalPhenotype$drugInteractionIndicator';
+  }
+  return '$overwritePhenotype$drugInteractionIndicator';
+}
+
 bool isInhibited(
     GenotypeResult genotypeResult,
     { String? drug }
