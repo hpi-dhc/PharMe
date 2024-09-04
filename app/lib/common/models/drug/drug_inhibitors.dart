@@ -97,6 +97,54 @@ String possiblyAdaptedPhenotype(GenotypeResult genotypeResult) {
   return '$overwritePhenotype$drugInteractionIndicator';
 }
 
+String getDrugNames(String drugName) {
+  final drug = CachedDrugs.instance.drugs!.firstWhere(
+    (drug) => drug.name == drugName
+  );
+  if (drug.annotations.brandNames.isEmpty) return drugName;
+  return '$drugName (${drug.annotations.brandNames.join(', ')})';
+}
+
+String inhibitionTooltipText(
+  BuildContext context,
+  GenotypeResult genotypeResult,
+  { String? drug }
+) {
+  final activeInhibitors = activeInhibitorsFor(
+    genotypeResult.gene,
+    drug: drug,
+  );
+  final activeInhibitorsWithBrandNames =
+    activeInhibitors.map(getDrugNames).toList();
+  final inhibitorsString = enumerationWithAnd(
+      activeInhibitorsWithBrandNames,
+      context,
+    );
+  return context.l10n.inhibitors_tooltip(inhibitorsString);
+}
+
+Table buildDrugInteractionInfo(
+  BuildContext context,
+  GenotypeResult genotypeResult,
+  { String? drug }
+) {
+  final activeInhibitors = activeInhibitorsFor(
+    genotypeResult.gene,
+    drug: drug,
+  );
+  final consequence = activeInhibitors.all(isModerateInhibitor)
+    ? context.l10n.inhibitors_consequence_not_adapted
+    : context.l10n.inhibitors_consequence_adapted(genotypeResult.phenotype);
+  return buildTable([
+    TableRowDefinition(
+      drugInteractionIndicator,
+      '${context.l10n.inhibitor_message} ($consequence)',
+      tooltip: inhibitionTooltipText(context, genotypeResult, drug: drug),
+    )],
+    boldHeader: false,
+  );
+}
+
 bool isInhibited(
     GenotypeResult genotypeResult,
     { String? drug }

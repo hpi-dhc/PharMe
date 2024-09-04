@@ -103,6 +103,11 @@
     }
   },
 
+  "inhibitor_message": "One or more of the medications you are currently taking may interact with your genetic result",
+  "inhibitors_consequence_adapted": "phenotype adapted from {originalPhenotype}",
+  "inhibitors_consequence_not_adapted": "phenotype not adapted",
+  "inhibitors_tooltip": "Current interacting medications: {inhibitors}",
+
   "drugs_page_inhibitor_direct_salutation": "you are",
   "drugs_page_inhibitor_direct_salutation_genitive": "your",
   "drugs_page_inhibitor_third_person_salutation": "the user is",
@@ -271,8 +276,6 @@
     }
   },
   "gene_page_no_relevant_drugs": "This gene has no known effect on any medications.",
-  "gene_page_inhibitor_drugs": "The following medications can interact with your results for this gene:",
-  "gene_page_further_inhibitor_drugs": "The following medications can also interact with your results for this gene:",
   "gene_page_activity_score": "Activity score",
 
 

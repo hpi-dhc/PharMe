@@ -61,11 +61,13 @@ class GenePage extends HookWidget {
                               _buildPhenotypeRow(context),
                             ],
                           ),
-                          if (isInhibited(genotypeResult))
-                            ...buildDrugInteractionInfo(
+                          if (isInhibited(genotypeResult)) ...[
+                            SizedBox(height: PharMeTheme.smallSpace),
+                            buildDrugInteractionInfo(
                               context,
                               genotypeResult,
                             ),
+                          ]
                       ],
                     )),
                     SizedBox(height: PharMeTheme.smallToMediumSpace),
@@ -117,54 +119,4 @@ class GenePage extends HookWidget {
         ),
         Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4), child: Text(value)),
       ]);
-
-  List<Widget> buildDrugInteractionInfo(
-    BuildContext context,
-    GenotypeResult genotypeResult,
-  ) {
-    final phenotypeInformation = UserData.phenotypeInformationFor(
-      genotypeResult,
-      context,
-      useLongPrefix: true,
-    );
-    if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
-      final furtherInhibitors = inhibitorsFor(genotypeResult.gene).filter(
-        (drugName) =>
-          !UserData.activeInhibitorsFor(genotypeResult.gene).contains(drugName)
-      );
-      var phenotypeInformationText = '';
-      if (phenotypeInformation.overwrittenPhenotypeText.isNotNullOrBlank) {
-        phenotypeInformationText = '${formatAsSentence(
-          phenotypeInformation.overwrittenPhenotypeText!
-        )} ';
-      }
-      phenotypeInformationText = '$phenotypeInformationText${formatAsSentence(
-        phenotypeInformation.adaptionText!
-      )}';
-      return [
-        SizedBox(height: PharMeTheme.smallSpace),
-        buildTable(
-          [TableRowDefinition(
-            drugInteractionIndicator,
-            phenotypeInformationText,
-          )],
-          boldHeader: false,
-        ),
-        SizedBox(height: PharMeTheme.smallSpace),
-        Text(context.l10n.gene_page_further_inhibitor_drugs),
-        SizedBox(height: PharMeTheme.smallSpace),
-        Text(
-          furtherInhibitors.join(', ')
-        ),
-      ];
-    }
-    return [
-      SizedBox(height: PharMeTheme.smallSpace),
-      Text(context.l10n.gene_page_inhibitor_drugs),
-      SizedBox(height: PharMeTheme.smallSpace),
-      Text(
-        inhibitorsFor(genotypeResult.gene).join(', ')
-      ),
-    ];
-  }
 }

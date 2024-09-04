@@ -1,9 +1,11 @@
+import '../../drug/widgets/tooltip_icon.dart';
 import '../module.dart';
 
 class TableRowDefinition {
-  const TableRowDefinition(this.key, this.value);
+  const TableRowDefinition(this.key, this.value, { this.tooltip });
   final String key;
   final String value;
+  final String? tooltip;
 }
 
 Table buildTable(
@@ -21,6 +23,7 @@ Table buildTable(
       style ?? PharMeTheme.textTheme.bodyMedium!,
       boldHeader: boldHeader,
       isLast: index == rowDefinitions.length - 1,
+      tooltip: rowDefinition.tooltip,
     )).toList(),
   );
 }
@@ -32,6 +35,7 @@ TableRow _buildRow(
   {
     required bool boldHeader,
     required bool isLast,
+    String? tooltip,
   }
 ) {
   return TableRow(
@@ -48,7 +52,20 @@ TableRow _buildRow(
             : textStyle,
         ),
       ),
-      Text(value, style: textStyle),
+      Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: value),
+            if (tooltip.isNotNullOrBlank) ...[
+              TextSpan(text: ' '),
+              WidgetSpan(
+                child: TooltipIcon(tooltip!),
+              ),
+            ],
+          ],
+          style: textStyle,
+        ),
+      ),
     ],
   );
 }
