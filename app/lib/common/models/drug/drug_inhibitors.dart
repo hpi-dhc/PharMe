@@ -117,10 +117,13 @@ String inhibitionTooltipText(
   final activeInhibitorsWithBrandNames =
     activeInhibitors.map(getDrugNames).toList();
   final inhibitorsString = enumerationWithAnd(
-      activeInhibitorsWithBrandNames,
-      context,
-    );
-  return context.l10n.inhibitors_tooltip(inhibitorsString);
+    activeInhibitorsWithBrandNames,
+    context,
+  );
+  final consequence = activeInhibitors.all(isModerateInhibitor)
+    ? context.l10n.inhibitors_consequence_not_adapted
+    : context.l10n.inhibitors_consequence_adapted(genotypeResult.phenotype);
+  return '$consequence\n\n${context.l10n.inhibitors_tooltip(inhibitorsString)}';
 }
 
 Table buildDrugInteractionInfo(
@@ -128,17 +131,10 @@ Table buildDrugInteractionInfo(
   GenotypeResult genotypeResult,
   { String? drug }
 ) {
-  final activeInhibitors = activeInhibitorsFor(
-    genotypeResult.gene,
-    drug: drug,
-  );
-  final consequence = activeInhibitors.all(isModerateInhibitor)
-    ? context.l10n.inhibitors_consequence_not_adapted
-    : context.l10n.inhibitors_consequence_adapted(genotypeResult.phenotype);
   return buildTable([
     TableRowDefinition(
       drugInteractionIndicator,
-      '${context.l10n.inhibitor_message} ($consequence)',
+      context.l10n.inhibitor_message,
       tooltip: inhibitionTooltipText(context, genotypeResult, drug: drug),
     )],
     boldHeader: false,

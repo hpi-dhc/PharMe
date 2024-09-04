@@ -104,8 +104,8 @@
   },
 
   "inhibitor_message": "One or more of the medications you are currently taking may interact with your genetic result",
-  "inhibitors_consequence_adapted": "phenotype adapted from {originalPhenotype}",
-  "inhibitors_consequence_not_adapted": "phenotype not adapted",
+  "inhibitors_consequence_adapted": "Your phenotype was adapted from {originalPhenotype}.",
+  "inhibitors_consequence_not_adapted": "Your phenotype was not adapted.",
   "inhibitors_tooltip": "Current interacting medications: {inhibitors}",
 
   "drugs_page_inhibitor_direct_salutation": "you are",
