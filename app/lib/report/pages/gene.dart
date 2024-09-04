@@ -14,15 +14,6 @@ class GenePage extends HookWidget {
   final GenotypeResult genotypeResult;
   final DrugListCubit cubit;
 
-  bool _isInhibited(BuildContext context, GenotypeResult genotypeResult) {
-    final phenotypeInformation = UserData.phenotypeInformationFor(
-      genotypeResult,
-      context,
-    );
-    return phenotypeInformation.overwrittenPhenotypeText.isNotNullOrBlank;
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ActiveDrugs>(
@@ -70,7 +61,7 @@ class GenePage extends HookWidget {
                               _buildPhenotypeRow(context),
                             ],
                           ),
-                          if (_isInhibited(context, genotypeResult))
+                          if (isInhibited(genotypeResult))
                             ...buildDrugInteractionInfo(
                               context,
                               genotypeResult,
@@ -98,13 +89,9 @@ class GenePage extends HookWidget {
   }
 
   TableRow _buildPhenotypeRow(BuildContext context) {
-    final phenotypeInformation = UserData.phenotypeInformationFor(
-      genotypeResult,
-      context,
-    );
-    final phenotypeText = phenotypeInformation.adaptionText.isNotNullOrBlank
-      ? '${phenotypeInformation.phenotype}$drugInteractionIndicator'
-      : phenotypeInformation.phenotype;
+    final phenotypeText = isInhibited(genotypeResult)
+      ? '${genotypeResult.phenotypeDisplayString}$drugInteractionIndicator'
+      : genotypeResult.phenotypeDisplayString;
     return _buildRow(
       context.l10n.gene_page_phenotype,
       phenotypeText,

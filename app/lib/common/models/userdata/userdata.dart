@@ -11,6 +11,8 @@ part 'userdata.g.dart';
 
 const _boxName = 'userdata';
 
+const overwritePhenotype = 'Poor Metabolizer';
+
 /// UserData is a singleton data-class which contains various user-specific
 /// data It is intended to be loaded from a Hive box once at app launch, from
 /// where it's contents can be modified by accessing it's properties.
@@ -61,16 +63,8 @@ class UserData {
       genotypeResult.gene,
       drug: drug,
     );
-    if (activeInhibitors.isEmpty) {
+    if (!isInhibited(genotypeResult, drug: drug)) {
       return PhenotypeInformation(phenotype: originalPhenotype);
-    }
-    final overwritePhenotype = context.l10n.general_poor_metabolizer;
-    final currentPhenotypeEqualsOverwritePhenotype =
-      originalPhenotype.toLowerCase() == overwritePhenotype.toLowerCase();
-    if (currentPhenotypeEqualsOverwritePhenotype) {
-      return PhenotypeInformation(
-        phenotype: originalPhenotype,
-      );
     }
     final overwrittenLookup = UserData.overwrittenLookup(
       genotypeResult.gene,
@@ -235,3 +229,18 @@ List<String> activeDrugsFromHTTPResponse(Response resp) {
   }
   return activeDrugs;
 }
+
+bool isInhibited(
+    GenotypeResult genotypeResult,
+    { String? drug }
+) {
+  final activeInhibitors = UserData.activeInhibitorsFor(
+    genotypeResult.gene,
+    drug: drug,
+  );
+  final originalPhenotype = genotypeResult.phenotypeDisplayString;
+  final phenotypeCanBeInhibited =
+    originalPhenotype.toLowerCase() != overwritePhenotype.toLowerCase();
+  return activeInhibitors.isNotEmpty && phenotypeCanBeInhibited;
+}
+
