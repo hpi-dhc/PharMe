@@ -43,14 +43,14 @@ class GuidelineAnnotationCard extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               if (drug.guidelines.isNotEmpty) ...[
-                _buildHeader(context),
+                ..._buildHeader(context),
                 SizedBox(height: PharMeTheme.mediumSpace),
                 _buildCard(context),
                 SizedBox(height: PharMeTheme.mediumSpace),
                 _buildSourcesSection(context),
               ]
               else ...[
-                _buildHeader(context),
+                ..._buildHeader(context),
                 SizedBox(height: PharMeTheme.smallSpace),
                 _buildCard(context),
               ],
@@ -181,29 +181,46 @@ class GuidelineAnnotationCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  List<Widget> _buildHeader(BuildContext context) {
     if (drug.userGuideline == null && drug.guidelines.isEmpty) {
-      return Text(
-        context.l10n.drugs_page_guidelines_empty(drug.name),
-        style: TextStyle(fontStyle: FontStyle.italic),
-      );
+      return [
+        Text(
+          context.l10n.drugs_page_guidelines_empty(drug.name),
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+      ];
     } else {
+      var inhibitedGenotypeResults = <GenotypeResult>[];
       final geneDescriptions = drug.guidelineGenotypes.map((genotypeKey) {
-        final phenotypeInformation = phenotypeInformationFor(
-          UserData.instance.genotypeResults!.findOrMissing(
-            genotypeKey,
-            context,
-          ),
+        final genotypeResult = UserData.instance.genotypeResults!.findOrMissing(
+          genotypeKey,
           context,
-          drug: drug.name,
         );
-        var description = phenotypeInformation.phenotype;
-        if (phenotypeInformation.adaptionText.isNotNullOrBlank) {
-          description = '$description (${phenotypeInformation.adaptionText})';
+        if (isInhibited(genotypeResult, drug: drug.name)) {
+          inhibitedGenotypeResults = [
+            ...inhibitedGenotypeResults,
+            genotypeResult,  
+          ];
         }
-        return TableRowDefinition(genotypeKey, description);
+        return TableRowDefinition(
+          genotypeKey,
+          possiblyAdaptedPhenotype(
+            genotypeResult,
+            drug: drug.name,
+          ),
+        );
       });
-      return buildTable(geneDescriptions.toList());
+      return [
+        buildTable(geneDescriptions.toList()),
+        if (inhibitedGenotypeResults.isNotEmpty) ...[
+          SizedBox(height: PharMeTheme.smallSpace),
+          buildDrugInteractionInfoForMultipleGenes(
+            context,
+            inhibitedGenotypeResults,
+            drug: drug.name,
+          ),
+        ],
+      ];
     }
   }
 

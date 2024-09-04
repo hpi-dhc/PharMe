@@ -85,12 +85,18 @@ List<String> inhibitorsFor(String gene) {
   return _drugInhibitorsPerGene[gene] ?? [];
 }
 
-String possiblyAdaptedPhenotype(GenotypeResult genotypeResult) {
+String possiblyAdaptedPhenotype(
+  GenotypeResult genotypeResult,
+  { String? drug }
+) {
   final originalPhenotype = genotypeResult.phenotypeDisplayString;
-  if (!isInhibited(genotypeResult)) {
+  if (!isInhibited(genotypeResult, drug: drug)) {
     return originalPhenotype;
   }
-  final overwrittenLookup = getOverwrittenLookup(genotypeResult.gene);
+  final overwrittenLookup = getOverwrittenLookup(
+    genotypeResult.gene,
+    drug: drug,
+  );
   if (overwrittenLookup == null) {
     return '$originalPhenotype$drugInteractionIndicator';
   }
@@ -124,6 +130,29 @@ String inhibitionTooltipText(
     ? context.l10n.inhibitors_consequence_not_adapted
     : context.l10n.inhibitors_consequence_adapted(genotypeResult.phenotype);
   return '$consequence\n\n${context.l10n.inhibitors_tooltip(inhibitorsString)}';
+}
+
+Table buildDrugInteractionInfoForMultipleGenes(
+  BuildContext context,
+  List<GenotypeResult> genotypeResults,
+  { String? drug }
+) {
+  var tooltipText = '';
+  for (final (index, genotypeResult) in genotypeResults.indexed) {
+    final separator = index == 0 ? '' : '\n\n';
+    // ignore: use_string_buffers
+    tooltipText = '$tooltipText$separator${
+      inhibitionTooltipText(context, genotypeResult, drug: drug)
+    }';
+  }
+  return buildTable([
+    TableRowDefinition(
+      drugInteractionIndicator,
+      context.l10n.inhibitor_message,
+      tooltip: tooltipText,
+    )],
+    boldHeader: false,
+  );
 }
 
 Table buildDrugInteractionInfo(
