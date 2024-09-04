@@ -189,7 +189,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
       );
     } else {
       final geneDescriptions = drug.guidelineGenotypes.map((genotypeKey) {
-        final phenotypeInformation = UserData.phenotypeInformationFor(
+        final phenotypeInformation = phenotypeInformationFor(
           UserData.instance.genotypeResults!.findOrMissing(
             genotypeKey,
             context,

@@ -133,7 +133,7 @@ List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
 }
 
 String? _getPhenotypeInfo(String genotypeKey, Drug drug, BuildContext context) {
-  final phenotypeInformation = UserData.phenotypeInformationFor(
+  final phenotypeInformation = phenotypeInformationFor(
     UserData.instance.genotypeResults!.findOrMissing(genotypeKey, context),
     context,
     drug: drug.name,

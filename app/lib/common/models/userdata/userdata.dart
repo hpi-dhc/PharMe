@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
@@ -43,83 +42,11 @@ class UserData {
   @HiveField(2)
   Map<String, GenotypeResult>? genotypeResults;
 
-  static PhenotypeInformation phenotypeInformationFor(
-    GenotypeResult genotypeResult,
-    BuildContext context,
-    {
-      String? drug,
-      bool thirdPerson = false,
-      bool useLongPrefix = false,
-    }
-  ) {
-    final userSalutation = thirdPerson
-      ? context.l10n.drugs_page_inhibitor_third_person_salutation
-      : context.l10n.drugs_page_inhibitor_direct_salutation;
-    final strongInhibitorTextPrefix = useLongPrefix
-      ? context.l10n.strong_inhibitor_long_prefix
-      : context.l10n.gene_page_phenotype.toLowerCase();
-    final originalPhenotype = genotypeResult.phenotypeDisplayString;
-    final activeInhibitors = UserData.activeInhibitorsFor(
-      genotypeResult.gene,
-      drug: drug,
-    );
-    if (!isInhibited(genotypeResult, drug: drug)) {
-      return PhenotypeInformation(phenotype: originalPhenotype);
-    }
-    final overwrittenLookup = UserData.overwrittenLookup(
-      genotypeResult.gene,
-      drug: drug,
-    );
-    if (overwrittenLookup == null) {
-      return PhenotypeInformation(
-        phenotype: originalPhenotype,
-        adaptionText: context.l10n.drugs_page_moderate_inhibitors(
-          userSalutation,
-          enumerationWithAnd(
-            activeInhibitors,
-            context
-          ),
-        ),
-      );
-    }
-    final originalPhenotypeText = context.l10n.drugs_page_original_phenotype(
-      thirdPerson
-        ? context.l10n.drugs_page_inhibitor_third_person_salutation_genitive
-        : context.l10n.drugs_page_inhibitor_direct_salutation_genitive,
-      originalPhenotype,
-    );
-    return PhenotypeInformation(
-      phenotype: overwritePhenotype,
-      adaptionText: context.l10n.drugs_page_strong_inhibitors(
-          strongInhibitorTextPrefix,
-          userSalutation,
-          enumerationWithAnd(activeInhibitors, context),
-        ),
-      overwrittenPhenotypeText: originalPhenotypeText,
-    );
-  }
-
   static String? variantFor(String genotypeKey) =>
       UserData.instance.genotypeResults?[genotypeKey]?.variant;
 
   static String? allelesTestedFor(String genotypeKey) =>
       UserData.instance.genotypeResults?[genotypeKey]?.allelesTested;
-
-  static MapEntry<String, String>? overwrittenLookup(
-    String gene,
-    { String? drug }
-  ) {
-    final inhibitors = strongDrugInhibitors[gene];
-    if (inhibitors == null) return null;
-    final lookup = inhibitors.entries.firstWhereOrNull((entry) {
-      final isActiveInhibitor =
-        UserData.instance.activeDrugNames?.contains(entry.key) ?? false;
-      final wouldInhibitItself = drug == entry.key;
-      return isActiveInhibitor && !wouldInhibitItself;
-    });
-    if (lookup == null) return null;
-    return lookup;
-  }
 
   static String? lookupFor(
     String genotypeKey,
@@ -129,21 +56,11 @@ class UserData {
     }
   ) {
     final overwrittenLookup =
-      UserData.overwrittenLookup(genotypeKey, drug: drug);
+      getOverwrittenLookup(genotypeKey, drug: drug);
     if (useOverwrite && overwrittenLookup != null) {
       return overwrittenLookup.value;
     }
     return UserData.instance.genotypeResults?[genotypeKey]?.lookupkey;
-  }
-
-  static List<String> activeInhibitorsFor(String gene, { String? drug }) {
-    return UserData.instance.activeDrugNames == null
-      ? <String>[]
-      : UserData.instance.activeDrugNames!.filter(
-          (activeDrug) =>
-            inhibitorsFor(gene).contains(activeDrug) &&
-            activeDrug != drug
-        ).toList();
   }
 }
 
@@ -229,30 +146,3 @@ List<String> activeDrugsFromHTTPResponse(Response resp) {
   }
   return activeDrugs;
 }
-
-String possiblyAdaptedPhenotype(GenotypeResult genotypeResult) {
-  final originalPhenotype = genotypeResult.phenotypeDisplayString;
-  if (!isInhibited(genotypeResult)) {
-    return originalPhenotype;
-  }
-  final overwrittenLookup = UserData.overwrittenLookup(genotypeResult.gene);
-  if (overwrittenLookup == null) {
-    return '$originalPhenotype$drugInteractionIndicator';
-  }
-  return '$overwritePhenotype$drugInteractionIndicator';
-}
-
-bool isInhibited(
-    GenotypeResult genotypeResult,
-    { String? drug }
-) {
-  final activeInhibitors = UserData.activeInhibitorsFor(
-    genotypeResult.gene,
-    drug: drug,
-  );
-  final originalPhenotype = genotypeResult.phenotypeDisplayString;
-  final phenotypeCanBeInhibited =
-    originalPhenotype.toLowerCase() != overwritePhenotype.toLowerCase();
-  return activeInhibitors.isNotEmpty && phenotypeCanBeInhibited;
-}
-
