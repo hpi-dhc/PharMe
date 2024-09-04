@@ -133,9 +133,10 @@ class GeneCard extends StatelessWidget {
       ),
       radius: 16,
       color: _getHighestSeverityColor(warningLevelCounts),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Expanded(
-          child: Column(
+      child: IntrinsicHeight(child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -143,43 +144,52 @@ class GeneCard extends StatelessWidget {
                 style: PharMeTheme.textTheme.titleMedium
               ),
               SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      phenotypeText,
-                      style: PharMeTheme.textTheme.titleSmall,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  if (hasLegend) DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 2,
-                        horizontal: 6,
-                      ),
-                      child: Text.rich(buildWarningLevelLegend(
-                        getText: (warningLevel) {
-                          final warningLevelCount =
-                            warningLevelCounts[warningLevel]!;
-                          return warningLevelCount > 0
-                            ? warningLevelCount.toString()
-                            : null;
-                        }),
-                      ),
-                    ),
-                  ),
-                ],
+              Text(
+                phenotypeText,
+                style: PharMeTheme.textTheme.titleSmall,
               ),
             ],
           ),
-        ),
-        Icon(Icons.chevron_right_rounded),
-      ]),
+          Expanded(
+            child: hasLegend
+              ? Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                padding: EdgeInsets.only(
+                  left: PharMeTheme.mediumSpace,
+                  right: PharMeTheme.smallSpace,
+                ),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: PharMeTheme.smallSpace * 0.35,
+                    horizontal: PharMeTheme.smallSpace,
+                  ),
+                  child: Text.rich(
+                    buildWarningLevelLegend(
+                      getText: (warningLevel) {
+                        final warningLevelCount =
+                          warningLevelCounts[warningLevel]!;
+                        return warningLevelCount > 0
+                          ? warningLevelCount.toString()
+                          : null;
+                      }
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  ),
+                )),
+              )
+              : SizedBox.shrink(),
+          ),
+          Icon(Icons.chevron_right_rounded),
+        ]
+      )),
     );
   }
 }
