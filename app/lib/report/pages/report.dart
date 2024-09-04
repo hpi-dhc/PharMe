@@ -17,7 +17,7 @@ class ReportPage extends StatelessWidget {
   int _getSeverityCount(WarningLevelCounts warningLevelCounts, int severity) {
     return warningLevelCounts.filter(
       (warningLevelCount) => warningLevelCount.key.severity == severity
-    ).values.first;
+    ).values.sum();
   }
 
   Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
@@ -49,14 +49,16 @@ class ReportPage extends StatelessWidget {
     var sortedGenotypes = userGenotypes.sortedBy(
       (genotypeResult) => genotypeResult.gene
     );
-    final sortedWarningLevels = WarningLevel.values.sortedBy(
-      (warningLevel) => warningLevel.severity
-    );
-    for (final warningLevel in sortedWarningLevels) {
+    final sortedWarningLevelSeverities = Set<int>.from(
+      WarningLevel.values
+      .sortedBy((warningLevel) => warningLevel.severity)
+      .map((warningLevel) => warningLevel.severity)
+     );
+    for (final severity in sortedWarningLevelSeverities) {
       sortedGenotypes = sortedGenotypes.sortedByDescending((genotypeResult) =>
         _getSeverityCount(
           warningLevelCounts[genotypeResult.gene]!,
-          warningLevel.severity,
+          severity,
         ),
       );
     }
