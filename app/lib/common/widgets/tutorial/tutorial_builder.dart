@@ -11,6 +11,13 @@ class TutorialBuilder extends HookWidget {
   final List<TutorialPage> pages;
   final String? lastNextButtonText;
 
+  Widget getImageAsset(String assetPath) {
+    return Container(
+      color: PharMeTheme.onSurfaceColor,
+      child: Center(child: Image.asset(assetPath)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentPageIndex = useState(0);
@@ -39,19 +46,13 @@ class TutorialBuilder extends HookWidget {
     final content = currentPage.content != null
       ? currentPage.content!(context)
       : null;
-    final imageAsset = currentPage.assetPath != null
-      ? Container(
-          color: PharMeTheme.onSurfaceColor,
-          child: Center(child: Image.asset(currentPage.assetPath!)),
-        )
-      : null;
     final titleStyle = PharMeTheme.textTheme.headlineMedium!.copyWith(
       fontSize: PharMeTheme.textTheme.headlineSmall!.fontSize,
     );
-    final assetContainer = imageAsset != null
+    final assetContainer = currentPage.assetPath != null
       ? Stack(
           children: [
-            imageAsset,
+            getImageAsset(currentPage.assetPath!),
             Positioned(
               top: PharMeTheme.smallSpace,
               right: PharMeTheme.smallSpace,
@@ -98,7 +99,7 @@ class TutorialBuilder extends HookWidget {
                               ),
                               SizedBox(height: PharMeTheme.smallToMediumSpace),
                               Expanded(
-                                child: imageAsset,
+                                child: getImageAsset(currentPage.assetPath!),
                               ),
                             ],
                           ),
