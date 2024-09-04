@@ -15,11 +15,12 @@ Table buildTable(
 ) {
   return Table(
     defaultColumnWidth: IntrinsicColumnWidth(),
-    children: rowDefinitions.map((rowDefinition) => _buildRow(
+    children: rowDefinitions.mapIndexed((index, rowDefinition) => _buildRow(
       rowDefinition.key,
       rowDefinition.value,
       style ?? PharMeTheme.textTheme.bodyMedium!,
       boldHeader: boldHeader,
+      isLast: index == rowDefinitions.length - 1,
     )).toList(),
   );
 }
@@ -28,12 +29,18 @@ TableRow _buildRow(
   String key,
   String value,
   TextStyle textStyle,
-  { required bool boldHeader }
+  {
+    required bool boldHeader,
+    required bool isLast,
+  }
 ) {
   return TableRow(
     children: [
       Padding(
-        padding: EdgeInsets.only(right: PharMeTheme.smallSpace),
+        padding: EdgeInsets.only(
+          right: PharMeTheme.smallSpace,
+          bottom: isLast ? 0 : PharMeTheme.smallSpace,
+        ),
         child: Text(
           key,
           style: boldHeader

@@ -20,44 +20,62 @@ class DrugAnnotationCards extends StatelessWidget {
       children: [
         RoundedCard(
           innerPadding: EdgeInsets.symmetric(horizontal: PharMeTheme.mediumSpace),
-          child: SwitchListTile.adaptive(
-            value: isActive,
-            activeColor: PharMeTheme.primaryColor,
-            title: Text(context.l10n.drugs_page_text_active),
-            contentPadding: EdgeInsets.zero,
-            onChanged: disabled ? null : (newValue) {
-              if (isInhibitor(drug.name)) {
-                showAdaptiveDialog(
-                  context: context,
-                  builder: (context) => DialogWrapper(
-                    title: context.l10n.drugs_page_active_warn_header,
-                    content: DialogContentText(
-                      context.l10n.drugs_page_active_warn,
-                    ),
-                    actions: [
-                      DialogAction(
-                        onPressed: () => Navigator.pop(
-                          context,
-                          'Cancel',
+          child: Column(
+            children: [
+              SwitchListTile.adaptive(
+                value: isActive,
+                activeColor: PharMeTheme.primaryColor,
+                title: Text(context.l10n.drugs_page_text_active),
+                contentPadding: EdgeInsets.zero,
+                onChanged: disabled ? null : (newValue) {
+                  if (isInhibitor(drug.name)) {
+                    showAdaptiveDialog(
+                      context: context,
+                      builder: (context) => DialogWrapper(
+                        title: context.l10n.drugs_page_active_warn_header,
+                        content: DialogContentText(
+                          context.l10n.drugs_page_active_warn,
                         ),
-                        text: context.l10n.action_cancel,
+                        actions: [
+                          DialogAction(
+                            onPressed: () => Navigator.pop(
+                              context,
+                              'Cancel',
+                            ),
+                            text: context.l10n.action_cancel,
+                          ),
+                          DialogAction(
+                            onPressed: () {
+                              Navigator.pop(context, 'OK');
+                              setActivity(value: newValue);
+                            },
+                            text: context.l10n.action_continue,
+                            isDestructive: true,
+                          ),
+                        ],
                       ),
-                      DialogAction(
-                        onPressed: () {
-                          Navigator.pop(context, 'OK');
-                          setActivity(value: newValue);
-                        },
-                        text: context.l10n.action_continue,
-                        isDestructive: true,
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                setActivity(value: newValue);
-              }
-            },
-          ),
+                    );
+                  } else {
+                    setActivity(value: newValue);
+                  }
+                },
+              ),
+              if (isInhibitor(drug.name)) ...[
+                SizedBox(height: PharMeTheme.smallSpace),
+                buildTable(
+                  [TableRowDefinition(
+                    drugInteractionIndicator,
+                    context.l10n.drugs_page_is_inhibitor(
+                      drug.name,
+                      inhibitedGenes(drug).join(', '),
+                    ),
+                  )],
+                  boldHeader: false,
+                ),
+                SizedBox(height: PharMeTheme.smallSpace),
+              ],
+            ],
+          )
         ),
         SizedBox(height: PharMeTheme.smallSpace),
         SubHeader(context.l10n.drugs_page_header_drug),
@@ -81,19 +99,6 @@ class DrugAnnotationCards extends StatelessWidget {
                       drug.annotations.brandNames.join(', '),
                     ),
                 ]),
-                if (isInhibitor(drug.name)) ...[
-                  SizedBox(height: PharMeTheme.smallSpace),
-                  buildTable(
-                    [TableRowDefinition(
-                      drugInteractionIndicator,
-                      context.l10n.drugs_page_is_inhibitor(
-                        drug.name,
-                        inhibitedGenes(drug).join(', '),
-                      ),
-                    )],
-                    boldHeader: false,
-                  ),
-                ],
               ],
             ),
           ),
