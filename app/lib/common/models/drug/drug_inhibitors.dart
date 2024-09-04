@@ -82,8 +82,3 @@ List<String> inhibitedGenes(Drug drug) {
 List<String> inhibitorsFor(String gene) {
   return _drugInhibitorsPerGene[gene] ?? [];
 }
-
-bool canBeInhibited(GenotypeResult genotypeResult) {
-  return inhibitableGenes.contains(genotypeResult.gene) &&
-    genotypeResult.lookupkey != '0.0';
-}
