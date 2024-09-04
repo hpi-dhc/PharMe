@@ -30,7 +30,7 @@ class SearchPage extends HookWidget {
             cubit: cubit,
             state: state,
             activeDrugs: activeDrugs,
-            showDrugInteractionIndicator: true,
+            showDrugInteractionIndicator: false,
             useDrugClass: useDrugClass,
           ),
           drawer: FilterMenu(
