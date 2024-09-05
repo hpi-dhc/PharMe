@@ -42,8 +42,6 @@
 
   "update_warning_title": "Updated guidelines",
   "update_warning_body": "The guidelines for interactions between genes and medications were updated. Please review your results, especially for the medications you are currently taking.",
-  
-  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
 
   "general_continue": "Continue",
   "general_retry": "Retry",
@@ -362,5 +360,33 @@
   "contact_open_mail": "Send mail",
 
   "comprehension_intro_text": "Would you like to participate in a survey aiming to measure user comprehension of content in the app? This would help us make PharMe more understandable for everyone!",
-  "comprehension_survey_button_text": "Continue to survey"
+  "comprehension_survey_button_text": "Continue to survey",
+
+  "faq_section_title_pgx": "Pharmacogenomics (PGx)",
+  "faq_question_pgx_what": "What is pharmacogenomics?",
+  "faq_answer_pgx_what": "Pharmacogenomics (PGx) is the study of how your genes (DNA) affect your response to medications.",
+  "faq_question_pgx_why": "Why is pharmacogenomics important?",
+  "faq_answer_pgx_why": "Pharmacogenomics is important because it helps to predict those who will respond well to medications and those who may have side effects. With this information we can better select the right medication and dose to avoid side effects.",
+  "faq_question_genetics_info": "Where can I find out more about genetics in general?",
+  "faq_answer_genetics_info": "To learn more about genetics, we recommend MedlinePlus, a service of the National Library of Medicine:",
+  "faq_question_which_medications": "Which medications have known gene interactions?",
+  "faq_answer_which_medications": "Examples of medication classes with known gene interactions include anti-clotting medications (like clopidogrel and warfarin), antidepressants (like sertraline, citalopram, and paroxetine), anti-cholesterol medications (like simvastatin and atorvastatin), acid reducers (like pantoprazole and omeprazole), pain killers (like codeine, tramadol, and ibuprofen), antifungals (like voriconazole), medications that suppress the immune system (like tacrolimus), and anti-cancer medications (like fluorouracil and irinotecan).\n\nSearch a medication in the Medications tab to find out whether it has known gene interactions according to CPIC® and FDA guidelines.",
+  "faq_question_family": "Will my results affect my family members?",
+  "faq_answer_family": "Yes, since this is a genetic test, it is possible that your results were passed down to you and your siblings from your parents and you will also pass them down to your children.",
+  "faq_question_share": "Who can I share my results with?",
+  "faq_answer_share": "We recommend that you share your results with your pharmacists, doctors, and close family members such as parents, siblings, and children.",
+  
+  "faq_section_title_pharme": "PharMe App",
+  "faq_question_pharme_function": "What does PharMe do?",
+  "faq_answer_pharme_function": "PharMe provides user-friendly information on how your body reacts to medications based on your genes. This enables you to better understand which medications may be ineffective for you or could have potential side effects. We recommend that you share consult your health care team before making any changes to your treatments.",
+  "faq_question_pharme_hcp": "Can I use PharMe's results without consulting a medical professional?",
+  "faq_answer_pharme_hcp": "No. Whether a medication is a good choice for you depends on a lot of other factors such as age, weight, or pre-existing conditions. We highly recommend that you talk to your health care team (e.g., pharmacist and doctors) before taking, stopping or adjusting the dose of any medication.",
+  "faq_question_pharme_data_source": "Where does PharMe get its data from?",
+  "faq_answer_pharme_data_source": "PharMe is showing pharmacogenomic guidelines from the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA). Our PGx experts adapted the language from the guidelines to make them more user-friendly and easier to understand; please note that this does only affect the guidelines' presentation, not affect the guidelines' statements.",
+  
+  "faq_section_title_security": "Data security",
+  "faq_question_data_security": "How is the security of my genetic data ensured?",
+  "faq_answer_data_security": "Once securely imported from the lab, your genetic data is re-encrypted, saved and never sent anywhere else. All computation is done on your phone. When fetching data from external resources, PharMe always uses generalized requests and only personalizes information locally on your phone. No personal data is sent to third parties. This provides the highest level of security for your personal information.",
+
+  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us"
 }

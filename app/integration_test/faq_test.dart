@@ -1,5 +1,5 @@
 import 'package:app/common/module.dart';
-import 'package:app/faq/constants.dart';
+import 'package:app/faq/pages/content.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -38,8 +38,8 @@ void main() {
         await tester.pumpWidget(faqWidget);
         await tester.pumpAndSettle();
 
-        final expectedNumberOfQuestions = faqList.keys.fold<int>(
-          0, (number, topic) => number + faqList[topic]!.length
+        final expectedNumberOfQuestions = faqContent.fold<int>(
+          0, (number, topic) => number + topic.questions.length
         );
 
         expect(
@@ -53,7 +53,9 @@ void main() {
           expectedNumberOfQuestions,
         );
 
-        final firstQuestion = faqList[faqList.keys.first]![0];
+        final BuildContext context =
+          tester.element(find.byType(Scaffold).first);
+        final firstQuestion = faqContent.first.questions.first(context);
         expect(find.text(firstQuestion.question), findsOneWidget);
         expect(find.text(firstQuestion.answer), findsNothing);
 

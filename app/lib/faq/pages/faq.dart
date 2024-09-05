@@ -1,5 +1,5 @@
 import '../../common/module.dart';
-import '../constants.dart';
+import 'content.dart';
 
 @RoutePage()
 class FaqPage extends StatelessWidget {
@@ -17,10 +17,8 @@ class FaqPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 8),
-              ...faqList.keys.fold<List<Widget>>(
-                [], (widgets, topic) =>
-                  [...widgets, ..._buildTopic(context, topic, faqList[topic]!)]
-              ),
+              ...faqContent.flatMap((faqSection) =>
+                _buildTopic(context, faqSection)),
               ..._buildTopicHeader(
                 context.l10n.more_page_contact_us,
                 addSpace: true,
@@ -53,18 +51,23 @@ class FaqPage extends StatelessWidget {
 
   List<Widget> _buildTopic(
     BuildContext context,
-    String topicName,
-    List<Question> questions
+    FaqSection faqSection,
   ) {
-    final topicIndex = faqList.keys.toList().indexOf(topicName);
+    final isFirst = faqContent.indexOf(faqSection) == 0;
     return [
-      ..._buildTopicHeader(topicName, addSpace: topicIndex != 0),
-      ...questions.map((question) => _buildQuestion(context, question))
+      ..._buildTopicHeader(faqSection.title(context), addSpace: !isFirst),
+      ...faqSection.questions.map(
+        (questionBuilder) => _buildQuestion(context, questionBuilder)
+      )
     ];
   }
 
-  Widget _buildQuestion(BuildContext context, Question question) {
+  Widget _buildQuestion(
+    BuildContext context,
+    FaqQuestionBuilder questionBuilder,
+  ) {
     final key = GlobalKey();
+    final question = questionBuilder(context);
     return _buildQuestionCard(
           key: key,
           child: Theme(
@@ -85,7 +88,7 @@ class FaqPage extends StatelessWidget {
                     right: PharMeTheme.mediumSpace,
                     bottom: PharMeTheme.smallSpace,
                   ),
-                  title: question is TextAnswerQuestion
+                  title: question is FaqTextAnswerQuestion
                     ? Text(question.answer)
                     : question.answer,
                 ),
