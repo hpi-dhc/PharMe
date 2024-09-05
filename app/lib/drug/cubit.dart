@@ -12,8 +12,7 @@ class DrugCubit extends Cubit<DrugState> {
 
   final ActiveDrugs activeDrugs;
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> setActivity(Drug drug, bool? value) async {
+  Future<void> setActivity({required Drug drug, required bool? value}) async {
     if (value == null) return;
     emit(DrugState.loading());
     await activeDrugs.changeActivity(drug.name, value);

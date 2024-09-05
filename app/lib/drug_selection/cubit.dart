@@ -10,8 +10,10 @@ class DrugSelectionCubit extends Cubit<DrugSelectionState> {
 
   final ActiveDrugs activeDrugs;
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> updateDrugActivity(Drug drug, bool? value) async {
+  Future<void> updateDrugActivity({
+    required Drug drug,
+    required bool? value,
+  }) async {
     if (value == null) return;
     emit(DrugSelectionState.updating());
     await activeDrugs.changeActivity(drug.name, value);

@@ -127,7 +127,7 @@ Future<void> _interactWithDrugListItem(
     // ignore: avoid_print
     print(contextDetails);
     // ignore: avoid_print
-    print('Avilable drug items:');
+    print('Available drug items:');
     final availableItems = find.descendant(
       of: listFinder,
       matching: find.byType(itemType, skipOffstage: false),
@@ -154,9 +154,9 @@ Future<void> interactWithDrugInSelection(
 ) async {
   await _interactWithDrugListItem(
     tester,
-    itemKey: 'drug-checkbox-tile-${drug.toLowerCase()}-all',
+    itemKey: 'drug-selection-tile-${drug.toLowerCase()}-all',
     listKey: 'drug-selection',
-    itemType: CheckboxListTileWrapper,
+    itemType: SwitchListTile,
     scroll: scroll,
     tap: tap,
     raiseException: raiseException,

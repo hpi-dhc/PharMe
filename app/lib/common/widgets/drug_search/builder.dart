@@ -25,7 +25,7 @@ class DrugSearch extends HookWidget {
     BuildContext context,
     List<Drug> drugs,
     {
-      Map? buildParams,
+      DrugItemsBuildParams? buildParams,
       bool showDrugInteractionIndicator,
     }
   ) buildDrugItems;
@@ -33,7 +33,7 @@ class DrugSearch extends HookWidget {
   final DrugListCubit cubit;
   final DrugListState state;
   final ActiveDrugs activeDrugs;
-  final Map? drugItemsBuildParams;
+  final DrugItemsBuildParams? drugItemsBuildParams;
 
   @override
   Widget build(BuildContext context) {

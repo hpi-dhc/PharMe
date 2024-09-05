@@ -5,7 +5,7 @@ List<Widget> buildDrugCards(
   BuildContext context,
   List<Drug> drugs,
   {
-    Map? buildParams,
+    DrugItemsBuildParams? buildParams,
     bool showDrugInteractionIndicator = false,
   }
 ) {

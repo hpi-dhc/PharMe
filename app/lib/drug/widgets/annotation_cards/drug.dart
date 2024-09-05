@@ -11,7 +11,7 @@ class DrugAnnotationCards extends StatelessWidget {
 
   final Drug drug;
   final bool isActive;
-  final void Function({ bool? value }) setActivity;
+  final SetDrugActivityFunction setActivity;
   final bool disabled;
 
   @override
@@ -22,43 +22,14 @@ class DrugAnnotationCards extends StatelessWidget {
           innerPadding: EdgeInsets.symmetric(horizontal: PharMeTheme.mediumSpace),
           child: Column(
             children: [
-              SwitchListTile.adaptive(
-                value: isActive,
-                activeColor: PharMeTheme.primaryColor,
-                title: Text(context.l10n.drugs_page_text_active),
+              buildDrugActivitySelection(
+                context: context,
+                drug: drug,
+                setActivity: setActivity,
+                title: context.l10n.drugs_page_text_active,
+                isActive: isActive,
+                disabled: disabled,
                 contentPadding: EdgeInsets.zero,
-                onChanged: disabled ? null : (newValue) {
-                  if (isInhibitor(drug.name)) {
-                    showAdaptiveDialog(
-                      context: context,
-                      builder: (context) => DialogWrapper(
-                        title: context.l10n.drugs_page_active_warn_header,
-                        content: DialogContentText(
-                          context.l10n.drugs_page_active_warn,
-                        ),
-                        actions: [
-                          DialogAction(
-                            onPressed: () => Navigator.pop(
-                              context,
-                              'Cancel',
-                            ),
-                            text: context.l10n.action_cancel,
-                          ),
-                          DialogAction(
-                            onPressed: () {
-                              Navigator.pop(context, 'OK');
-                              setActivity(value: newValue);
-                            },
-                            text: context.l10n.action_continue,
-                            isDestructive: true,
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    setActivity(value: newValue);
-                  }
-                },
               ),
               if (isInhibitor(drug.name)) ...[
                 SizedBox(height: PharMeTheme.smallSpace),

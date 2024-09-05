@@ -100,12 +100,10 @@ class DrugSelectionPage extends HookWidget {
         keepPosition: true,
         useDrugClass: false,
         buildDrugItems: buildDrugSelectionList,
-        drugItemsBuildParams: {
-          'checkboxesEnabled': _isEditable(state),
-          'onCheckboxChange': (drug, value) => context
-            .read<DrugSelectionCubit>()
-            .updateDrugActivity(drug, value),
-        },
+        drugItemsBuildParams: DrugItemsBuildParams(
+          isEditable: _isEditable(state),
+          setActivity: context.read<DrugSelectionCubit>().updateDrugActivity,
+        ),
         showDrugInteractionIndicator: !concludesOnboarding,
       ),
     );

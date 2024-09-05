@@ -5,7 +5,7 @@ List<Widget> buildDrugSelectionList(
   BuildContext context,
   List<Drug> drugs,
   {
-    Map? buildParams,
+    DrugItemsBuildParams? buildParams,
     bool showDrugInteractionIndicator = false,
   }
 ) {
@@ -19,14 +19,14 @@ List<Widget> buildDrugSelectionList(
             style: TextStyle(fontStyle: FontStyle.italic),
           ),
         )]
-      : _buildCheckboxList(
+      : _buildSelectionList(
           context,
           activeDrugs,
           buildParams,
           showDrugInteractionIndicator,
           keyPrefix: 'active',
         );
-  final allDrugsList = _buildCheckboxList(
+  final allDrugsList = _buildSelectionList(
     context,
     drugs,
     buildParams,
@@ -49,21 +49,21 @@ List<Widget> buildDrugSelectionList(
   ];
 }
 
-List<CheckboxListTileWrapper> _buildCheckboxList(
+List<SwitchListTile> _buildSelectionList(
   BuildContext context,
   List<Drug> drugs,
-  Map buildParams,
+  DrugItemsBuildParams buildParams,
   bool showDrugInteractionIndicator,
   { required String keyPrefix }
 ) {
-  final onCheckboxChange = buildParams['onCheckboxChange'];
-  final checkboxesEnabled = buildParams['checkboxesEnabled'];
   return drugs.map(
-    (drug) => CheckboxListTileWrapper(
-      key: Key('drug-checkbox-tile-${drug.name}-$keyPrefix'),
-      isEnabled: checkboxesEnabled,
-      isChecked: drug.isActive,
-      onChanged: (value) => onCheckboxChange(drug, value),
+    (drug) => buildDrugActivitySelection(
+      key: Key('drug-selection-tile-${drug.name}-$keyPrefix'),
+      context: context,
+      drug: drug,
+      disabled: !buildParams.isEditable,
+      isActive: drug.isActive,
+      setActivity: buildParams.setActivity,
       title: formatDrugName(drug, showDrugInteractionIndicator),
       subtitle: (drug.annotations.brandNames.isNotEmpty) ?
         formatBrandNames(context, drug) :

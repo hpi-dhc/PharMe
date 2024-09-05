@@ -1,5 +1,12 @@
 import '../../module.dart';
 
+class DrugItemsBuildParams {
+  DrugItemsBuildParams({required this.isEditable, required this.setActivity});
+
+  final bool isEditable;
+  final SetDrugActivityFunction setActivity;
+}
+
 List<Widget> buildDrugList(
   BuildContext context,
   DrugListState state,
@@ -10,13 +17,13 @@ List<Widget> buildDrugList(
       BuildContext context,
       List<Drug> drugs,
       {
-        Map? buildParams,
+        DrugItemsBuildParams? buildParams,
         bool showDrugInteractionIndicator,
       }
     ) buildDrugItems = buildDrugCards,
     bool showDrugInteractionIndicator = false,
     bool useDrugClass = true,
-    Map? drugItemsBuildParams,
+    DrugItemsBuildParams? drugItemsBuildParams,
   }
 ) {
   List<Widget> buildDrugList(

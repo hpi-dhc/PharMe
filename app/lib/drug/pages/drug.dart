@@ -56,8 +56,7 @@ class DrugPage extends StatelessWidget {
               DrugAnnotationCards(
                 drug,
                 isActive: drug.isActive,
-                setActivity: ({ value }) =>
-                  context.read<DrugCubit>().setActivity(drug, value),
+                setActivity: context.read<DrugCubit>().setActivity,
                 disabled: loading,
               ),
               SizedBox(height: PharMeTheme.mediumSpace),
