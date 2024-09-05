@@ -65,7 +65,7 @@ class GenePage extends HookWidget {
                             SizedBox(height: PharMeTheme.smallSpace),
                             buildDrugInteractionInfo(
                               context,
-                              genotypeResult,
+                              [genotypeResult],
                             ),
                           ]
                       ],

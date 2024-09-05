@@ -103,60 +103,16 @@
     }
   },
 
-  "inhibitor_message": "One or more of the medications you are currently taking may interact with your genetic result",
-  "inhibitors_consequence_adapted": "Your phenotype was adapted from {originalPhenotype}. Consult your pharmacist or doctor for more information.",
-  "inhibitors_consequence_per_gene_adapted": "Your {geneName} phenotype was adapted from {originalPhenotype}. Consult your pharmacist or doctor for more information.",
-  "inhibitors_consequence_not_adapted": "Your phenotype was not adapted but may need to be. Consult your pharmacist or doctor for more information.",
-  "inhibitors_tooltip": "Current interacting medications: {inhibitors}",
+  "inhibitor_direct_salutation": "you are",
+  "inhibitor_direct_salutation_genitive": "your",
+  "inhibitor_third_person_salutation": "the user is",
+  "inhibitor_third_person_salutation_genitive": "the user's",
+  "inhibitor_message": "One or more of the medications {salutation} currently taking may interact with {salutationGenitive} genetic result",
+  "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} phenotype was adapted from {originalPhenotype}.",
+  "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} phenotype was not adapted but may need to be.",
+  "inhibitors_tooltip": "Current interacting medications: {inhibitors}.",
+  "consult_text": "Consult your pharmacist or doctor for more information.",
 
-  "drugs_page_inhibitor_direct_salutation": "you are",
-  "drugs_page_inhibitor_direct_salutation_genitive": "your",
-  "drugs_page_inhibitor_third_person_salutation": "the user is",
-  "drugs_page_inhibitor_third_person_salutation_genitive": "the user's",
-  "drugs_page_moderate_inhibitors": "however, this phenotype may need to be adjusted because {salutation} currently taking {inhibitors}",
-  "@drugs_page_moderate_inhibitors": {
-    "placeholders": {
-      "salutation": {
-        "type": "String",
-        "example": "you are"
-      },
-      "inhibitors": {
-          "type": "String",
-          "example": "abiraterone, cinacalcet, and duloxetine"
-      }
-    }
-  },
-  "strong_inhibitor_long_prefix": "however, this has been",
-  "drugs_page_strong_inhibitors": "{prefix} adjusted because {salutation} currently taking {inhibitors}",
-  "@drugs_page_strong_inhibitors": {
-    "placeholders": {
-      "prefix": {
-        "type": "String",
-        "example": "phenotype"
-      },
-      "salutation": {
-        "type": "String",
-        "example": "you are"
-      },
-      "inhibitors": {
-          "type": "String",
-          "example": "bupropion and fluoxetine"
-      }
-    }
-  },
-  "drugs_page_original_phenotype": "{salutation} DNA-based phenotype is {originalPhenotype}",
-  "@drugs_page_original_phenotype": {
-    "placeholders": {
-      "salutation": {
-        "type": "String",
-        "example": "your"
-      },
-      "originalPhenotype": {
-        "type": "String",
-        "example": "Normal Metabolizer"
-      }
-    }
-  },
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
   "@drugs_page_guidelines_empty": {
     "placeholders": {

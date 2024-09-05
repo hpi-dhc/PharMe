@@ -190,33 +190,30 @@ class GuidelineAnnotationCard extends StatelessWidget {
         ),
       ];
     } else {
-      var inhibitedGenotypeResults = <GenotypeResult>[];
-      final geneDescriptions = drug.guidelineGenotypes.map((genotypeKey) {
-        final genotypeResult = UserData.instance.genotypeResults!.findOrMissing(
+      final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
+        UserData.instance.genotypeResults!.findOrMissing(
           genotypeKey,
           context,
-        );
-        if (isInhibited(genotypeResult, drug: drug.name)) {
-          inhibitedGenotypeResults = [
-            ...inhibitedGenotypeResults,
-            genotypeResult,  
-          ];
-        }
-        return TableRowDefinition(
-          genotypeKey,
+        )
+      ).toList();
+      final geneDescriptions = genotypeResults.map((genotypeResult) =>
+        TableRowDefinition(
+          genotypeResult.geneDisplayString,
           possiblyAdaptedPhenotype(
             genotypeResult,
             drug: drug.name,
           ),
-        );
-      });
+        )
+      ).toList();
       return [
-        buildTable(geneDescriptions.toList()),
-        if (inhibitedGenotypeResults.isNotEmpty) ...[
+        buildTable(geneDescriptions),
+        if (genotypeResults.any(
+          (genotypeResult) => isInhibited(genotypeResult, drug: drug.name)
+        )) ...[
           SizedBox(height: PharMeTheme.smallSpace),
-          buildDrugInteractionInfoForMultipleGenes(
+          buildDrugInteractionInfo(
             context,
-            inhibitedGenotypeResults,
+            genotypeResults,
             drug: drug.name,
           ),
         ],

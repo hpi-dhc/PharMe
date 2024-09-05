@@ -133,23 +133,30 @@ List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
 }
 
 String? _getPhenotypeInfo(String genotypeKey, Drug drug, BuildContext context) {
-  final phenotypeInformation = phenotypeInformationFor(
-    UserData.instance.genotypeResults!.findOrMissing(genotypeKey, context),
+  final genotypeResult = UserData.instance.genotypeResults!.findOrMissing(
+    genotypeKey,
     context,
-    drug: drug.name,
-    thirdPerson: true,
-    useLongPrefix: true,
   );
-  if (phenotypeInformation.adaptionText.isNullOrBlank) {
-    return phenotypeInformation.phenotype;
+  if (!isInhibited(genotypeResult, drug: drug.name)) {
+    return genotypeResult.phenotypeDisplayString;
   }
-  var phenotypeInformationText = '${phenotypeInformation.phenotype} ('
-    '${phenotypeInformation.adaptionText}';
-  if (phenotypeInformation.overwrittenPhenotypeText.isNotNullOrBlank) {
-    phenotypeInformationText = '$phenotypeInformationText; '
-      '${phenotypeInformation.overwrittenPhenotypeText!}';
-  }
-  return '$phenotypeInformationText)';
+  return possiblyAdaptedPhenotype(genotypeResult, drug: drug.name);
+}
+
+String? _getPhenoconversionInfo(Drug drug, BuildContext context) {
+  if (drug.guidelines.isEmpty) return null;
+  final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
+    UserData.instance.genotypeResults!.findOrMissing(
+      genotypeKey,
+      context,
+    )
+  ).toList();
+  return '$drugInteractionIndicator ${inhibitionTooltipText(
+    context,
+    genotypeResults,
+    drug: drug.name,
+    userFacing: false,
+  )}';
 }
 
 String? _getActivityScoreInfo(
@@ -198,11 +205,15 @@ List<pw.Widget> _buildUserPart(
     (genotypeKey, drug, context) => UserData.variantFor(genotypeKey),
     buildContext,
   );
-  final patientPhenotype = _userInfoPerGene(
+  var patientPhenotype = _userInfoPerGene(
     drug,
     _getPhenotypeInfo,
     buildContext,
   );
+  final phenoconversionInfo = _getPhenoconversionInfo(drug, buildContext);
+  if (phenoconversionInfo.isNotNullOrBlank) {
+    patientPhenotype = '$patientPhenotype\n\n$phenoconversionInfo';
+  }
   final patientActivityScore = _userInfoPerGene(
     drug,
     _getActivityScoreInfo,
@@ -238,14 +249,14 @@ List<pw.Widget> _buildUserPart(
     _PdfSegment(
       child: _PdfDescription(
         title: buildContext.l10n.gene_page_phenotype,
-        text: patientPhenotype
+        text: patientPhenotype,
       ),
     ),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
         title: buildContext.l10n.gene_page_activity_score,
-        text: patientActivityScore
+        text: patientActivityScore,
       ),
     ),
     _buildTextSpacer(),

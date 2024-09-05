@@ -33,17 +33,23 @@ const Map<String, Map<String, double>> moderateDrugInhibitors = {
   },
 };
 
-final inhibitableGenes = List<String>.from(<String>{
+// Private helper functions
+
+final _inhibitableGenes = List<String>.from(<String>{
   ...strongDrugInhibitors.keys,
   ...moderateDrugInhibitors.keys,
 });
 
 final _drugInhibitorsPerGene = {
-  for (final gene in inhibitableGenes) gene: [
+  for (final gene in _inhibitableGenes) gene: [
     ...?strongDrugInhibitors[gene]?.keys,
     ...?moderateDrugInhibitors[gene]?.keys,
   ]
 };
+
+List<String> _inhibitorsFor(String gene) {
+  return _drugInhibitorsPerGene[gene] ?? [];
+}
 
 bool _isInhibitorOfType(
   String drugName,
@@ -54,13 +60,136 @@ bool _isInhibitorOfType(
   return influencingDrugs.contains(drugName);
 }
 
-bool isStrongInhibitor(String drugName) {
-  return _isInhibitorOfType(drugName, strongDrugInhibitors);
-}
-
-bool isModerateInhibitor(String drugName) {
+bool _isModerateInhibitor(String drugName) {
   return _isInhibitorOfType(drugName, moderateDrugInhibitors);
 }
+
+class _DisplayConfig {
+  _DisplayConfig({
+    required this.partSeparator,
+    required this.userSalutation,
+    required this.userGenitive,
+    required this.useConsult,
+  });
+
+  final String partSeparator;
+  final String userSalutation;
+  final String userGenitive;
+  final bool useConsult;
+}
+
+_DisplayConfig _getDisplayConfig(
+  BuildContext context,
+  { required bool userFacing }
+) {
+  final displayConfigs = <bool, _DisplayConfig>{
+    true: _DisplayConfig(
+      partSeparator: '\n\n',
+      userSalutation: context.l10n.inhibitor_direct_salutation,
+      userGenitive: context.l10n.inhibitor_direct_salutation_genitive,
+      useConsult: true,
+    ),
+    false: _DisplayConfig(
+      partSeparator: ' ',
+      userSalutation: context.l10n.inhibitor_third_person_salutation,
+      userGenitive: context.l10n.inhibitor_third_person_salutation_genitive,
+      useConsult: false,
+    ),
+  };
+  return displayConfigs[userFacing]!;
+}
+
+String _getPhenoconversionConsequence(
+  BuildContext context,
+  GenotypeResult genotypeResult,
+  {
+    String? drug,
+    required _DisplayConfig displayConfig,
+  }
+) {
+  final activeInhibitors = _activeInhibitorsFor(
+    genotypeResult.gene,
+    drug: drug,
+  );
+  return activeInhibitors.all(_isModerateInhibitor)
+    ? context.l10n.inhibitors_consequence_not_adapted(
+        genotypeResult.geneDisplayString,
+        displayConfig.userGenitive,
+      ).capitalize()
+    : context.l10n.inhibitors_consequence_adapted(
+        genotypeResult.geneDisplayString,
+        genotypeResult.phenotype,
+        displayConfig.userGenitive,
+      ).capitalize();
+}
+
+String _getInhibitorsString(
+  BuildContext context,
+  GenotypeResult genotypeResult,
+  { String? drug }
+) {
+  return context.l10n.inhibitors_tooltip(enumerationWithAnd(
+    getDrugsWithBrandNames(_activeInhibitorsFor(
+      genotypeResult.gene,
+      drug: drug,
+    )),
+    context,
+  ));
+}
+
+String _inhibitionTooltipText(
+  BuildContext context,
+  GenotypeResult genotypeResult,
+  {
+    String? drug,
+    required _DisplayConfig displayConfig,
+  }
+) {
+  final inhibitorsString = _getInhibitorsString(
+    context,
+    genotypeResult,
+    drug: drug,
+  );
+  final consequence = _getPhenoconversionConsequence(
+    context,
+    genotypeResult,
+    drug: drug,
+    displayConfig: displayConfig,
+  );
+  return '$consequence${
+    displayConfig.useConsult ? ' ${context.l10n.consult_text}' : ''
+  }${displayConfig.partSeparator}$inhibitorsString';
+}
+
+Table _drugInteractionTemplate(
+  BuildContext context,
+  String tooltipText,
+  _DisplayConfig displayConfig,
+) {
+  return buildTable([
+    TableRowDefinition(
+      drugInteractionIndicator,
+      context.l10n.inhibitor_message(
+        displayConfig.userSalutation,
+        displayConfig.userGenitive,
+      ),
+      tooltip: tooltipText,
+    )],
+    boldHeader: false,
+  );
+}
+
+List<String> _activeInhibitorsFor(String gene, { String? drug }) {
+  return UserData.instance.activeDrugNames == null
+    ? <String>[]
+    : UserData.instance.activeDrugNames!.filter(
+        (activeDrug) =>
+          _inhibitorsFor(gene).contains(activeDrug) &&
+          activeDrug != drug
+      ).toList();
+}
+
+// Public helper functions
 
 bool isInhibitor(String drugName) {
   var drugIsInhibitor = false;
@@ -75,14 +204,40 @@ bool isInhibitor(String drugName) {
   return drugIsInhibitor;
 }
 
+bool isInhibited(
+    GenotypeResult genotypeResult,
+    { String? drug }
+) {
+  final activeInhibitors = _activeInhibitorsFor(
+    genotypeResult.gene,
+    drug: drug,
+  );
+  final originalPhenotype = genotypeResult.phenotypeDisplayString;
+  final phenotypeCanBeInhibited =
+    originalPhenotype.toLowerCase() != overwritePhenotype.toLowerCase();
+  return activeInhibitors.isNotEmpty && phenotypeCanBeInhibited;
+}
+
 List<String> inhibitedGenes(Drug drug) {
   return _drugInhibitorsPerGene.keys.filter(
     (gene) => _drugInhibitorsPerGene[gene]!.contains(drug.name)
   ).toList();
 }
 
-List<String> inhibitorsFor(String gene) {
-  return _drugInhibitorsPerGene[gene] ?? [];
+MapEntry<String, String>? getOverwrittenLookup (
+  String gene,
+  { String? drug }
+) {
+  final inhibitors = strongDrugInhibitors[gene];
+  if (inhibitors == null) return null;
+  final lookup = inhibitors.entries.firstWhereOrNull((entry) {
+    final isActiveInhibitor =
+      UserData.instance.activeDrugNames?.contains(entry.key) ?? false;
+    final wouldInhibitItself = drug == entry.key;
+    return isActiveInhibitor && !wouldInhibitItself;
+  });
+  if (lookup == null) return null;
+  return lookup;
 }
 
 String possiblyAdaptedPhenotype(
@@ -103,165 +258,48 @@ String possiblyAdaptedPhenotype(
   return '$overwritePhenotype$drugInteractionIndicator';
 }
 
-String getDrugNames(String drugName) {
-  final drug = CachedDrugs.instance.drugs!.firstWhere(
-    (drug) => drug.name == drugName
-  );
-  if (drug.annotations.brandNames.isEmpty) return drugName;
-  return '$drugName (${drug.annotations.brandNames.join(', ')})';
-}
-
 String inhibitionTooltipText(
   BuildContext context,
-  GenotypeResult genotypeResult,
-  { String? drug }
-) {
-  final activeInhibitors = activeInhibitorsFor(
-    genotypeResult.gene,
-    drug: drug,
-  );
-  final activeInhibitorsWithBrandNames =
-    activeInhibitors.map(getDrugNames).toList();
-  final inhibitorsString = enumerationWithAnd(
-    activeInhibitorsWithBrandNames,
-    context,
-  );
-  final consequence = activeInhibitors.all(isModerateInhibitor)
-    ? context.l10n.inhibitors_consequence_not_adapted
-    : context.l10n.inhibitors_consequence_adapted(genotypeResult.phenotype);
-  return '$consequence\n\n${context.l10n.inhibitors_tooltip(inhibitorsString)}';
-}
-
-Table buildDrugInteractionInfoForMultipleGenes(
-  BuildContext context,
   List<GenotypeResult> genotypeResults,
-  { String? drug }
+  {
+    String? drug,
+    String partSeparator = '\n\n',
+    bool userFacing = true,
+  }
 ) {
+  final inhibitedGenotypeResults = genotypeResults.filter(
+    (genotypeResult) => isInhibited(genotypeResult, drug: drug)
+  ).toList();
   var tooltipText = '';
-  for (final (index, genotypeResult) in genotypeResults.indexed) {
-    final separator = index == 0 ? '' : '\n\n';
+  for (final (index, genotypeResult) in inhibitedGenotypeResults.indexed) {
+    final separator = index == 0 ? '' : partSeparator;
     // ignore: use_string_buffers
     tooltipText = '$tooltipText$separator${
-      inhibitionTooltipText(context, genotypeResult, drug: drug)
+      _inhibitionTooltipText(
+        context,
+        genotypeResult,
+        drug: drug,
+        displayConfig: _getDisplayConfig(context, userFacing: userFacing),
+      )
     }';
   }
-  return buildTable([
-    TableRowDefinition(
-      drugInteractionIndicator,
-      context.l10n.inhibitor_message,
-      tooltip: tooltipText,
-    )],
-    boldHeader: false,
-  );
+  return tooltipText;
 }
 
 Table buildDrugInteractionInfo(
   BuildContext context,
-  GenotypeResult genotypeResult,
-  { String? drug }
-) {
-  return buildTable([
-    TableRowDefinition(
-      drugInteractionIndicator,
-      context.l10n.inhibitor_message,
-      tooltip: inhibitionTooltipText(context, genotypeResult, drug: drug),
-    )],
-    boldHeader: false,
-  );
-}
-
-bool isInhibited(
-    GenotypeResult genotypeResult,
-    { String? drug }
-) {
-  final activeInhibitors = activeInhibitorsFor(
-    genotypeResult.gene,
-    drug: drug,
-  );
-  final originalPhenotype = genotypeResult.phenotypeDisplayString;
-  final phenotypeCanBeInhibited =
-    originalPhenotype.toLowerCase() != overwritePhenotype.toLowerCase();
-  return activeInhibitors.isNotEmpty && phenotypeCanBeInhibited;
-}
-
-List<String> activeInhibitorsFor(String gene, { String? drug }) {
-  return UserData.instance.activeDrugNames == null
-    ? <String>[]
-    : UserData.instance.activeDrugNames!.filter(
-        (activeDrug) =>
-          inhibitorsFor(gene).contains(activeDrug) &&
-          activeDrug != drug
-      ).toList();
-}
-
-PhenotypeInformation phenotypeInformationFor(
-  GenotypeResult genotypeResult,
-  BuildContext context,
+  List<GenotypeResult> genotypeResults,
   {
-    String? drug,
-    bool thirdPerson = false,
-    bool useLongPrefix = false,
+    String? drug, 
   }
 ) {
-  final userSalutation = thirdPerson
-    ? context.l10n.drugs_page_inhibitor_third_person_salutation
-    : context.l10n.drugs_page_inhibitor_direct_salutation;
-  final strongInhibitorTextPrefix = useLongPrefix
-    ? context.l10n.strong_inhibitor_long_prefix
-    : context.l10n.gene_page_phenotype.toLowerCase();
-  final originalPhenotype = genotypeResult.phenotypeDisplayString;
-  final activeInhibitors = activeInhibitorsFor(
-    genotypeResult.gene,
-    drug: drug,
+  return _drugInteractionTemplate(
+    context,
+    inhibitionTooltipText(
+      context,
+      genotypeResults,
+      drug: drug,
+    ),
+    _getDisplayConfig(context, userFacing: false),
   );
-  if (!isInhibited(genotypeResult, drug: drug)) {
-    return PhenotypeInformation(phenotype: originalPhenotype);
-  }
-  final overwrittenLookup = getOverwrittenLookup(
-    genotypeResult.gene,
-    drug: drug,
-  );
-  if (overwrittenLookup == null) {
-    return PhenotypeInformation(
-      phenotype: originalPhenotype,
-      adaptionText: context.l10n.drugs_page_moderate_inhibitors(
-        userSalutation,
-        enumerationWithAnd(
-          activeInhibitors,
-          context
-        ),
-      ),
-    );
-  }
-  final originalPhenotypeText = context.l10n.drugs_page_original_phenotype(
-    thirdPerson
-      ? context.l10n.drugs_page_inhibitor_third_person_salutation_genitive
-      : context.l10n.drugs_page_inhibitor_direct_salutation_genitive,
-    originalPhenotype,
-  );
-  return PhenotypeInformation(
-    phenotype: overwritePhenotype,
-    adaptionText: context.l10n.drugs_page_strong_inhibitors(
-        strongInhibitorTextPrefix,
-        userSalutation,
-        enumerationWithAnd(activeInhibitors, context),
-      ),
-    overwrittenPhenotypeText: originalPhenotypeText,
-  );
-}
-
-MapEntry<String, String>? getOverwrittenLookup (
-  String gene,
-  { String? drug }
-) {
-  final inhibitors = strongDrugInhibitors[gene];
-  if (inhibitors == null) return null;
-  final lookup = inhibitors.entries.firstWhereOrNull((entry) {
-    final isActiveInhibitor =
-      UserData.instance.activeDrugNames?.contains(entry.key) ?? false;
-    final wouldInhibitItself = drug == entry.key;
-    return isActiveInhibitor && !wouldInhibitItself;
-  });
-  if (lookup == null) return null;
-  return lookup;
 }

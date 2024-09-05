@@ -109,3 +109,15 @@ extension CriticalDrugs on List<Drug> {
     }).toList();
   }
 }
+
+List<String> getDrugsWithBrandNames(List<String>? drugNames) {
+  return drugNames?.map(getDrugWithBrandNames).toList() ?? [];
+}
+
+String getDrugWithBrandNames(String drugName) {
+  final drug = CachedDrugs.instance.drugs!.firstWhere(
+    (drug) => drug.name == drugName
+  );
+  if (drug.annotations.brandNames.isEmpty) return drugName;
+  return '$drugName (${drug.annotations.brandNames.join(', ')})';
+}
