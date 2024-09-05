@@ -33,6 +33,31 @@ class FaqWidgetAnswerQuestion extends FaqQuestion {
   });
 }
 
+Column _getPhenoconversionString(
+  Map<String, Map<String, dynamic>> modulators,
+  String Function(String) getDescriptionPerGene,
+) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      ...modulators.keys.flatMap(
+      (geneName) => [
+        Text(
+          getDescriptionPerGene(geneName),
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+        SizedBox(height: PharMeTheme.smallSpace * 0.5),
+        UnorderedList(
+          getDrugsWithBrandNames(
+            modulators[geneName]!.keys.toList(),
+            capitalize: true,
+          ),
+        ),
+      ]),
+    ],
+  );
+}
+
 final faqContent = <FaqSection>[
   FaqSection(
     title: (context) => context.l10n.faq_section_title_pgx,
@@ -62,6 +87,25 @@ final faqContent = <FaqSection>[
       (context) => FaqTextAnswerQuestion(
         question: context.l10n.faq_question_which_medications,
         answer: context.l10n.faq_answer_which_medications,
+      ),
+      (context) => FaqWidgetAnswerQuestion(
+        question: context.l10n.faq_question_phenoconversion,
+        answer: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(context.l10n.faq_answer_phenoconversion),
+            SizedBox(height: PharMeTheme.smallSpace * 0.5),
+            _getPhenoconversionString(
+              strongDrugInhibitors,
+              context.l10n.faq_strong_inhibitors,
+            ),
+            SizedBox(height: PharMeTheme.smallSpace * 0.5),
+            _getPhenoconversionString(
+              moderateDrugInhibitors,
+              context.l10n.faq_moderate_inhibitors,
+            ),
+          ],
+        ),
       ),
       (context) => FaqTextAnswerQuestion(
         question: context.l10n.faq_question_family,
