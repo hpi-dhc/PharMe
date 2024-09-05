@@ -1,7 +1,7 @@
 import '../../../module.dart';
 import 'utils.dart';
 
-List<Widget> buildDrugCheckboxList(
+List<Widget> buildDrugSelectionList(
   BuildContext context,
   List<Drug> drugs,
   {
