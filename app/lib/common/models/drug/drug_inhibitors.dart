@@ -103,7 +103,7 @@ String _getPhenoconversionConsequence(
   BuildContext context,
   GenotypeResult genotypeResult,
   {
-    String? drug,
+    required String? drug,
     required _DisplayConfig displayConfig,
   }
 ) {
@@ -126,7 +126,7 @@ String _getPhenoconversionConsequence(
 String _getInhibitorsString(
   BuildContext context,
   GenotypeResult genotypeResult,
-  { String? drug }
+  { required String? drug }
 ) {
   return context.l10n.inhibitors_tooltip(enumerationWithAnd(
     getDrugsWithBrandNames(_activeInhibitorsFor(
@@ -141,7 +141,7 @@ String _inhibitionTooltipText(
   BuildContext context,
   GenotypeResult genotypeResult,
   {
-    String? drug,
+    required String? drug,
     required _DisplayConfig displayConfig,
   }
 ) {
@@ -179,7 +179,7 @@ Table _drugInteractionTemplate(
   );
 }
 
-List<String> _activeInhibitorsFor(String gene, { String? drug }) {
+List<String> _activeInhibitorsFor(String gene, { required String? drug }) {
   return UserData.instance.activeDrugNames == null
     ? <String>[]
     : UserData.instance.activeDrugNames!.filter(
@@ -206,7 +206,7 @@ bool isInhibitor(String drugName) {
 
 bool isInhibited(
     GenotypeResult genotypeResult,
-    { String? drug }
+    { required String? drug }
 ) {
   final activeInhibitors = _activeInhibitorsFor(
     genotypeResult.gene,
@@ -226,7 +226,7 @@ List<String> inhibitedGenes(Drug drug) {
 
 MapEntry<String, String>? getOverwrittenLookup (
   String gene,
-  { String? drug }
+  { required String? drug }
 ) {
   final inhibitors = strongDrugInhibitors[gene];
   if (inhibitors == null) return null;
@@ -242,7 +242,7 @@ MapEntry<String, String>? getOverwrittenLookup (
 
 String possiblyAdaptedPhenotype(
   GenotypeResult genotypeResult,
-  { String? drug }
+  { required String? drug }
 ) {
   final originalPhenotype = genotypeResult.phenotypeDisplayString;
   if (!isInhibited(genotypeResult, drug: drug)) {
@@ -262,24 +262,24 @@ String inhibitionTooltipText(
   BuildContext context,
   List<GenotypeResult> genotypeResults,
   {
-    String? drug,
-    String partSeparator = '\n\n',
+    required String? drug,
     bool userFacing = true,
   }
 ) {
+  final displayConfig = _getDisplayConfig(context, userFacing: userFacing);
   final inhibitedGenotypeResults = genotypeResults.filter(
     (genotypeResult) => isInhibited(genotypeResult, drug: drug)
   ).toList();
   var tooltipText = '';
   for (final (index, genotypeResult) in inhibitedGenotypeResults.indexed) {
-    final separator = index == 0 ? '' : partSeparator;
+    final separator = index == 0 ? '' : displayConfig.partSeparator;
     // ignore: use_string_buffers
     tooltipText = '$tooltipText$separator${
       _inhibitionTooltipText(
         context,
         genotypeResult,
         drug: drug,
-        displayConfig: _getDisplayConfig(context, userFacing: userFacing),
+        displayConfig: displayConfig,
       )
     }';
   }
@@ -289,9 +289,7 @@ String inhibitionTooltipText(
 Table buildDrugInteractionInfo(
   BuildContext context,
   List<GenotypeResult> genotypeResults,
-  {
-    String? drug, 
-  }
+  { required String? drug }
 ) {
   return _drugInteractionTemplate(
     context,

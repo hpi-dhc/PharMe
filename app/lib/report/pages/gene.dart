@@ -61,11 +61,12 @@ class GenePage extends HookWidget {
                               _buildPhenotypeRow(context),
                             ],
                           ),
-                          if (isInhibited(genotypeResult)) ...[
+                          if (isInhibited(genotypeResult, drug: null)) ...[
                             SizedBox(height: PharMeTheme.smallSpace),
                             buildDrugInteractionInfo(
                               context,
                               [genotypeResult],
+                              drug: null,
                             ),
                           ]
                       ],
@@ -93,7 +94,7 @@ class GenePage extends HookWidget {
   TableRow _buildPhenotypeRow(BuildContext context) {
     return _buildRow(
       context.l10n.gene_page_phenotype,
-      possiblyAdaptedPhenotype(genotypeResult),
+      possiblyAdaptedPhenotype(genotypeResult, drug: null),
       tooltip:
         context.l10n.gene_page_phenotype_tooltip,
     );

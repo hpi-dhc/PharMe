@@ -140,7 +140,7 @@ class GeneCard extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                possiblyAdaptedPhenotype(genotypeResult),
+                possiblyAdaptedPhenotype(genotypeResult, drug: null),
                 style: PharMeTheme.textTheme.titleSmall,
               ),
             ],
