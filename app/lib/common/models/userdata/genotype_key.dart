@@ -12,7 +12,10 @@ class GenotypeKey implements Genotype {
   @override
   String variant;
 
-  bool get isGeneUnique => UserData.instance.labData!.where(
+  // Not nice but format HLA-A (which is currently unique) as HLA-B; also,
+  // shorter check
+  bool get isGeneUnique => !gene.startsWith('HLA') &&
+    UserData.instance.labData!.where(
       (labData) => labData.gene == gene
     ).length <= 1;
 
