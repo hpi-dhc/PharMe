@@ -23,6 +23,7 @@ class SearchPage extends HookWidget {
         canPop: false,
         child: unscrollablePageScaffold(
           title: context.l10n.tab_drugs,
+          canNavigateBack: false,
           body: DrugSearch(
             key: Key('drug-search'),
             showFilter: true,
@@ -39,7 +40,6 @@ class SearchPage extends HookWidget {
             activeDrugs,
             useDrugClass: useDrugClass,
           ),
-          automaticallyImplyLeading: false, // do not show leading "menu" icon
         ),
       ),
     );

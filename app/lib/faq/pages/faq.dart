@@ -9,28 +9,31 @@ class FaqPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: pageScaffold(title: context.l10n.tab_faq, body: [
-        Padding(
-          padding: const EdgeInsets.all(PharMeTheme.smallSpace),
-          child: Column(
-            key: Key('questionsColumn'),
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 8),
-              ...faqContent.flatMap((faqSection) =>
-                _buildTopic(context, faqSection)),
-              ..._buildTopicHeader(
-                context.l10n.more_page_contact_us,
-                addSpace: true,
-              ),
-              _buildQuestionCard(
-                child: ListTile(
-                  title: Text(context.l10n.faq_contact_us),
-                  trailing: Icon(Icons.chevron_right_rounded),
-                  iconColor: PharMeTheme.iconColor,
-                  onTap: () => sendEmail(context),
-                )
-              ),
+      child: pageScaffold(
+        title: context.l10n.tab_faq,
+        canNavigateBack: false,
+        body: [
+          Padding(
+            padding: const EdgeInsets.all(PharMeTheme.smallSpace),
+            child: Column(
+              key: Key('questionsColumn'),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 8),
+                ...faqContent.flatMap((faqSection) =>
+                  _buildTopic(context, faqSection)),
+                ..._buildTopicHeader(
+                  context.l10n.more_page_contact_us,
+                  addSpace: true,
+                ),
+                _buildQuestionCard(
+                  child: ListTile(
+                    title: Text(context.l10n.faq_contact_us),
+                    trailing: Icon(Icons.chevron_right_rounded),
+                    iconColor: PharMeTheme.iconColor,
+                    onTap: () => sendEmail(context),
+                  )
+                ),
             ],
           ),
         ),

@@ -67,6 +67,7 @@ class ReportPage extends StatelessWidget {
       canPop: false,
       child: unscrollablePageScaffold(
         title: context.l10n.tab_report,
+        canNavigateBack: false,
         titleTooltip: context.l10n.report_page_faq_tooltip,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

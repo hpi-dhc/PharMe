@@ -11,6 +11,7 @@ class MorePage extends StatelessWidget {
       canPop: false,
       child: pageScaffold(
         title: context.l10n.tab_more,
+        canNavigateBack: false,
         body: [
           SubheaderDivider(
             text: context.l10n.more_page_account_settings,
