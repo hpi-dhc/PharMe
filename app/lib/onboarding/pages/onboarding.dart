@@ -10,21 +10,21 @@ class OnboardingPage extends HookWidget {
   final iconSize = 32.0;
   final sidePadding = PharMeTheme.mediumSpace;
   final indicatorSize = PharMeTheme.smallSpace;
-  final indicatorPadding = PharMeTheme.mediumSpace;
+  final indicatorPadding = PharMeTheme.largeSpace;
 
   double getTopPadding(BuildContext context) {
     return MediaQuery.of(context).padding.top + sidePadding;
   }
 
-  double getBottomPadding(BuildContext context) {
-    return MediaQuery.of(context).padding.bottom + PharMeTheme.smallSpace;
+  double _getBottomPadding(BuildContext context) {
+    return MediaQuery.of(context).padding.bottom + PharMeTheme.mediumSpace;
   }
 
-  double getBottomSpace(context) {
+  double _getBottomSpace(context) {
     // Icon button height and indicators
     final bottomWidgetsSize =  iconSize + indicatorSize + indicatorPadding;
-    const spaceBetweenBottomWidgets = PharMeTheme.mediumToLargeSpace;
-    return getBottomPadding(context)
+    const spaceBetweenBottomWidgets = PharMeTheme.largeSpace;
+    return _getBottomPadding(context)
       + bottomWidgetsSize
       + spaceBetweenBottomWidgets;
   }
@@ -124,7 +124,7 @@ class OnboardingPage extends HookWidget {
               top: isRevisiting
                 ? getTopPadding(context) + iconSize
                 : getTopPadding(context),
-              bottom: getBottomSpace(context),
+              bottom: _getBottomSpace(context),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: sidePadding),
                 child: PageView(
@@ -135,14 +135,14 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: getBottomSpace(context) - indicatorSize - indicatorPadding,
+              bottom: _getBottomSpace(context) - indicatorSize - indicatorPadding,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(context, currentPage.value),
               ),
             ),
             Positioned(
-              bottom: getBottomPadding(context),
+              bottom: _getBottomPadding(context),
               right: sidePadding,
               child: _buildNextButton(
                 context,
@@ -151,7 +151,7 @@ class OnboardingPage extends HookWidget {
               ),
             ),
             Positioned(
-              bottom: getBottomPadding(context),
+              bottom: _getBottomPadding(context),
               left: sidePadding,
               child: _buildPrevButton(
                 context,
