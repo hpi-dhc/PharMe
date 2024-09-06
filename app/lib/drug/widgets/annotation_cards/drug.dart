@@ -43,7 +43,7 @@ class DrugAnnotationCards extends StatelessWidget {
                   )],
                   boldHeader: false,
                 ),
-                SizedBox(height: PharMeTheme.smallSpace),
+                SizedBox(height: PharMeTheme.mediumSpace),
               ],
             ],
           )
