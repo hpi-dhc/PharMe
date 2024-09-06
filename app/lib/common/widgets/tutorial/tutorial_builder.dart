@@ -142,6 +142,9 @@ class TutorialBuilder extends HookWidget {
   ) {
     final isFirstPage = currentPageIndex.value == 0;
     final isLastPage = currentPageIndex.value == pages.length - 1;
+    final directionButtonTextStyle =
+      PharMeTheme.textTheme.titleLarge!.copyWith(fontSize: 20);
+    const directionButtonIconSize = 22.0;
     return Row(
       mainAxisAlignment: isFirstPage
         ? MainAxisAlignment.end
@@ -152,6 +155,8 @@ class TutorialBuilder extends HookWidget {
           direction: ButtonDirection.backward,
           onPressed: () => currentPageIndex.value = currentPageIndex.value - 1,
           text: context.l10n.onboarding_prev,
+          buttonTextStyle: directionButtonTextStyle,
+          iconSize: directionButtonIconSize,
         ),
         DirectionButton(
           direction: ButtonDirection.forward,
@@ -162,7 +167,9 @@ class TutorialBuilder extends HookWidget {
             ? lastNextButtonText!
             : context.l10n.action_continue,
           emphasize: true,
-          ),
+          buttonTextStyle: directionButtonTextStyle,
+          iconSize: directionButtonIconSize,
+        ),
       ],
     );
   }

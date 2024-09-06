@@ -11,6 +11,7 @@ class DirectionButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.iconSize = 32,
+    this.buttonTextStyle,
     this.emphasize = false,
     this.onDarkBackground = false,
   });
@@ -19,6 +20,7 @@ class DirectionButton extends StatelessWidget {
   final String text;
   final FutureOr<void> Function() onPressed;
   final double iconSize;
+  final TextStyle? buttonTextStyle;
   final bool emphasize;
   final bool onDarkBackground;
 
@@ -43,10 +45,12 @@ class DirectionButton extends StatelessWidget {
       color: textColor,
       size: iconSize,
     );
+    final buttonTextBaseStyle = buttonTextStyle ??
+      PharMeTheme.textTheme.titleLarge;
     final buttonText = Flexible(
       child: Text(
         text,
-        style: PharMeTheme.textTheme.titleLarge!.copyWith(
+        style: buttonTextBaseStyle!.copyWith(
           color: textColor,
           overflow: TextOverflow.fade,
         ),
