@@ -35,19 +35,19 @@ class ReportPage extends StatelessWidget {
     ];
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
-      warningLevelCounts[genotypeResult.gene] = {};
+      warningLevelCounts[genotypeResult.key.value] = {};
       final affectedDrugs = CachedDrugs.instance.drugs?.filter(
         (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
       ) ?? [];
       for (final warningLevel in WarningLevel.values) {
-        warningLevelCounts[genotypeResult.gene]![warningLevel] =
+        warningLevelCounts[genotypeResult.key.value]![warningLevel] =
           affectedDrugs.filter(
             (drug) => drug.warningLevel == warningLevel
           ).length;
       }
     }
     var sortedGenotypes = userGenotypes.sortedBy(
-      (genotypeResult) => genotypeResult.gene
+      (genotypeResult) => genotypeResult.key.value
     );
     final sortedWarningLevelSeverities = Set<int>.from(
       WarningLevel.values
@@ -57,7 +57,7 @@ class ReportPage extends StatelessWidget {
     for (final severity in sortedWarningLevelSeverities) {
       sortedGenotypes = sortedGenotypes.sortedByDescending((genotypeResult) =>
         _getSeverityCount(
-          warningLevelCounts[genotypeResult.gene]!,
+          warningLevelCounts[genotypeResult.key.value]!,
           severity,
         ),
       );
@@ -86,7 +86,7 @@ class ReportPage extends StatelessWidget {
                 ),
                 ...sortedGenotypes.map((genotypeResult) => GeneCard(
                   genotypeResult,
-                  warningLevelCounts[genotypeResult.gene]!,
+                  warningLevelCounts[genotypeResult.key.value]!,
                   key: Key('gene-card-${genotypeResult.key.value}')
                 )),
               ],

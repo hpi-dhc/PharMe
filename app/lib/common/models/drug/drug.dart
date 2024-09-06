@@ -80,8 +80,12 @@ extension DrugExtension on Drug {
 
   Guideline? get userGuideline => guidelines.firstOrNullWhere(
     (guideline) => guideline.lookupkey.all(
-      (gene, variants) =>
-        variants.contains(UserData.lookupFor(gene, drug: name))
+      (gene, variants) => variants.any((variant) =>
+        variants.contains(UserData.lookupFor(
+          GenotypeKey(gene, variant).value,
+          drug: name,
+        )
+      )),
     ),
   );
 

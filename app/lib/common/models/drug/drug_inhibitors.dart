@@ -195,7 +195,12 @@ bool isInhibitor(String drugName) {
   var drugIsInhibitor = false;
   for (final gene in _drugInhibitorsPerGene.keys) {
     final influencingDrugs = _drugInhibitorsPerGene[gene];
-    final originalLookup = UserData.lookupFor(gene, drug: drugName, useOverwrite: false);
+    // WARNING: this does not work for non-unique genes, such as HLA-B
+    final originalLookup = UserData.lookupFor(
+      gene,
+      drug: drugName,
+      useOverwrite: false,
+    );
     if (influencingDrugs!.contains(drugName) && originalLookup != '0.0') {
       drugIsInhibitor = true;
       break;
