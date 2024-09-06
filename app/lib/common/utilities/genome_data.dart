@@ -64,18 +64,8 @@ Future<void> updateGenotypeResults() async {
   // we know that labData is present because we check this in
   // shouldUpdateGenotypeResults
   for (final labResult in UserData.instance.labData!) {
-    final variantAlternatives = [
-      labResult.variant,
-      labResult.phenotype.toLowerCase(), // for HLA matching
-    ];
-    LookupInformation? lookup;
-    for (final variant in variantAlternatives) {
-      final potentialLookupMapKey = formatLookupMapKey(labResult.gene, variant);
-      if (lookupsHashMap.containsKey(potentialLookupMapKey)) {
-        lookup = lookupsHashMap[potentialLookupMapKey];
-        break;
-      }
-    }
+    final lookupMapKey = formatLookupMapKey(labResult.gene, labResult.variant);
+    final lookup = lookupsHashMap[lookupMapKey];
     if (lookup == null) continue;
     final genotypeResult = GenotypeResult.fromGenotypeData(labResult, lookup);
     genotypeResults[genotypeResult.key.value] = genotypeResult;
