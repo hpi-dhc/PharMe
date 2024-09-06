@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 
 import '../../module.dart';
@@ -25,14 +26,22 @@ class GenotypeResult implements Genotype {
     allelesTested: labResult.allelesTested,
   );
 
-  factory GenotypeResult.missingResult(String gene, BuildContext context) =>
-    GenotypeResult(
+  factory GenotypeResult.missingResult(String gene, BuildContext context) {
+    final potentialLabResultWithoutLookups =
+      UserData.instance.labData?.firstWhereOrNull(
+        (labResult) => labResult.gene == gene
+      );
+    return GenotypeResult(
       gene: gene,
-      variant: context.l10n.general_not_tested,
-      phenotype: context.l10n.general_not_tested,
+      variant: potentialLabResultWithoutLookups?.variant
+        ?? context.l10n.general_not_tested,
+      phenotype: potentialLabResultWithoutLookups?.phenotype
+        ?? context.l10n.general_not_tested,
       lookupkey: context.l10n.general_not_tested,
-      allelesTested: context.l10n.general_not_tested,
+      allelesTested: potentialLabResultWithoutLookups?.allelesTested
+        ?? context.l10n.general_not_tested,
     );
+  }
   
   @override
   @HiveField(0)
