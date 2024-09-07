@@ -20,7 +20,7 @@ class LoginCubit extends Cubit<LoginState> {
   // signInAndLoadUserData authenticates a user with a Lab and fetches their
   // genomic data from it's endpoint.
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
-    emit(LoginState.loadingUserData());
+    emit(LoginState.loadingUserData(null));
 
     // authenticate
     String? token;
@@ -46,11 +46,21 @@ class LoginCubit extends Cubit<LoginState> {
     }
 
     try {
+      final needNewDataLoad =
+        shouldFetchDiplotypes() || shouldUpdateGenotypeResults();
       // get data
+      if (needNewDataLoad) {
+        // ignore: use_build_context_synchronously
+        emit(LoginState.loadingUserData(context.l10n.auth_loading_data));
+      }
       await fetchAndSaveDiplotypesAndActiveDrugs(
         token, lab.starAllelesUrl.toString(), activeDrugs);
       await updateGenotypeResults();
 
+      if (!needNewDataLoad) {
+        // ignore: use_build_context_synchronously
+        emit(LoginState.loadingUserData(context.l10n.auth_updating_data));
+      }
       await updateCachedDrugs();
 
       // login + fetching of data successful
@@ -104,7 +114,8 @@ class LoginCubit extends Cubit<LoginState> {
 @freezed
 class LoginState with _$LoginState {
   const factory LoginState.initial() = _InitialState;
-  const factory LoginState.loadingUserData() = _LoadingUserDataState;
+  const factory LoginState.loadingUserData(String? loadingMessage) =
+    _LoadingUserDataState;
   const factory LoginState.loadedUserData() = _LoadedUserDataState;
   const factory LoginState.error(String string) = _ErrorState;
 }

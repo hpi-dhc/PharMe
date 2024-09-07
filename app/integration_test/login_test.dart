@@ -20,7 +20,7 @@ void main() {
   group('integration tests for the login page', () {
     testWidgets('test loading state', (tester) async {
       when(() => mockLoginCubit.state).thenReturn(
-        LoginState.loadingUserData(),
+        LoginState.loadingUserData(null),
       );
 
       await tester.pumpWidget(

@@ -25,6 +25,8 @@
   "auth_choose_lab": "Please select your data provider",
   "auth_sign_in": "Get data",
   "auth_success": "Successfully imported data",
+  "auth_loading_data": "Loading your data, please do not close the app...",
+  "auth_updating_data": "Checking for updates, please do not close the app...",
 
   "drug_item_brand_names": "Brand names",
 

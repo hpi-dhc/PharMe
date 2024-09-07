@@ -27,9 +27,21 @@ class LoginPage extends HookWidget {
               child: state.when(
                 initial: () =>
                     _buildInitialScreen(context, dropdownValue),
-                loadingUserData: () => Padding(
+                loadingUserData: (loadingMessage) => Padding(
                   padding: EdgeInsets.all(PharMeTheme.largeSpace),
-                  child: CircularProgressIndicator(),
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      if (loadingMessage != null) ...[
+                        SizedBox(height: PharMeTheme.largeSpace),
+                        Text(
+                          loadingMessage,
+                          style: context.textTheme.titleLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
                 loadedUserData: () => _buildLoadedScreen(context),
                 error: (message) =>
