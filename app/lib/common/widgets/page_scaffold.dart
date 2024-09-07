@@ -30,11 +30,11 @@ Widget buildTitle(String text, { String? tooltipText }) {
 }
 
 Scaffold pageScaffold({
-  required String title,
   required List<Widget> body,
+  required String title,
   List<Widget>? actions,
-  Key? key,
   bool canNavigateBack = true,
+  Key? key,
 }) {
   return Scaffold(
     key: key,
@@ -67,7 +67,6 @@ Scaffold unscrollablePageScaffold({
   String? title,
   String? titleTooltip,
   List<Widget>? actions,
-  Widget? drawer,
   bool canNavigateBack = true,
   Key? key,
 }) {
@@ -94,6 +93,5 @@ Scaffold unscrollablePageScaffold({
         child: body,
       ),
     ),
-    drawer: drawer,
   );
 }

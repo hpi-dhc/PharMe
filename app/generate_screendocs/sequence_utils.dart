@@ -226,10 +226,6 @@ Future<void> tapDrugSearchTooltip(WidgetTester tester) async {
   ).first);
 }
 
-Future<void> openDrugFilters(WidgetTester tester) async {
-  await tester.tap(find.byType(FilterButton).first);
-}
-
 Future<void> closeDrugFilters(WidgetTester tester) async {
   await tester.tap(find.byKey(Key('close-filter-drawer-button')).first);
 }

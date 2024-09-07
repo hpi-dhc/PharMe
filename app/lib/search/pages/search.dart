@@ -34,12 +34,6 @@ class SearchPage extends HookWidget {
             searchForDrugClass: searchForDrugClass,
             showDrugInteractionIndicator: false,
           ),
-          drawer: FilterMenu(
-            cubit,
-            state,
-            activeDrugs,
-            searchForDrugClass: searchForDrugClass,
-          ),
         ),
       ),
     );
