@@ -1,54 +1,61 @@
 import '../../module.dart';
 
-class DrugItemsBuildParams {
-  DrugItemsBuildParams({required this.isEditable, required this.setActivity});
-
-  final bool isEditable;
-  final SetDrugActivityFunction setActivity;
-}
-
-List<Widget> buildDrugList(
+typedef DrugItemBuilder = List<Widget> Function(
   BuildContext context,
-  DrugListState state,
-  ActiveDrugs activeDrugs,
-  {
-    String? noDrugsMessage,
-    List<Widget> Function(
-      BuildContext context,
-      List<Drug> drugs,
-      {
-        DrugItemsBuildParams? buildParams,
-        bool showDrugInteractionIndicator,
-      }
-    ) buildDrugItems = buildDrugCards,
-    bool showDrugInteractionIndicator = false,
-    bool useDrugClass = true,
-    DrugItemsBuildParams? drugItemsBuildParams,
-  }
-) {
-  List<Widget> buildDrugList(
+  List<Drug> drugs,
+  { required bool showDrugInteractionIndicator }
+);
+
+class DrugList extends StatelessWidget {
+  const DrugList({
+    super.key,
+    required this.state,
+    required this.activeDrugs,
+    this.noDrugsMessage,
+    this.buildDrugItems = buildDrugCards,
+    this.showDrugInteractionIndicator = false,
+    this.searchForDrugClass = true,
+    this.buildContainer,
+  });
+
+  final DrugListState state;
+  final ActiveDrugs activeDrugs;
+  final String? noDrugsMessage;
+  final DrugItemBuilder buildDrugItems;
+  final bool showDrugInteractionIndicator;
+  final bool searchForDrugClass;
+  final Widget Function(List<Widget> children)? buildContainer;
+
+  Widget _buildDrugList(
+    BuildContext context,
     List<Drug> drugs,
     FilterState filter,
   ) {
     final filteredDrugs = filter.filter(
       drugs,
       activeDrugs,
-      useDrugClass: useDrugClass,
+      searchForDrugClass: searchForDrugClass,
     );
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
-      return [errorIndicator(noDrugsMessage)];
+      return errorIndicator(noDrugsMessage!);
     }
-    return buildDrugItems(
+    final drugItems = buildDrugItems(
       context,
       filteredDrugs.sortedBy((drug) => drug.name),
-      buildParams: drugItemsBuildParams,
       showDrugInteractionIndicator: showDrugInteractionIndicator,
     );
+    return (buildContainer != null)
+      ? buildContainer!(drugItems)
+      : Column(children: drugItems);
   }
-  return state.when(
-    initial: () => [Container()],
-    error: () => [errorIndicator(context.l10n.err_generic)],
-    loaded: buildDrugList,
-    loading: () => [loadingIndicator()],
-  );
+
+  @override
+  Widget build(BuildContext context) {
+    return state.when(
+      initial: SizedBox.shrink,
+      error: () => errorIndicator(context.l10n.err_generic),
+      loaded: (allDrugs, filter) => _buildDrugList(context, allDrugs, filter),
+      loading: loadingIndicator,
+   );
+  }
 }

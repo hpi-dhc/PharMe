@@ -1,12 +1,19 @@
 import '../../../module.dart';
 import 'utils.dart';
 
+class DrugItemsBuildParams {
+  DrugItemsBuildParams({required this.isEditable, required this.setActivity});
+
+  final bool isEditable;
+  final SetDrugActivityFunction setActivity;
+}
+
 List<Widget> buildDrugSelectionList(
   BuildContext context,
   List<Drug> drugs,
   {
     DrugItemsBuildParams? buildParams,
-    bool showDrugInteractionIndicator = false,
+    required bool showDrugInteractionIndicator,
   }
 ) {
   if (buildParams == null) throw Exception();

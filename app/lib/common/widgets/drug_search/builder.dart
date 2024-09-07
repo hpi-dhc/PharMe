@@ -10,30 +10,21 @@ class DrugSearch extends HookWidget {
     required this.showFilter,
     required this.buildDrugItems,
     required this.showDrugInteractionIndicator,
-    required this.useDrugClass,
+    required this.searchForDrugClass,
     required this.cubit,
     required this.state,
     required this.activeDrugs,
     this.keepPosition = false,
-    this.drugItemsBuildParams,
   });
 
   final bool showFilter;
-  final bool useDrugClass;
+  final bool searchForDrugClass;
   final bool keepPosition;
-  final List<Widget> Function(
-    BuildContext context,
-    List<Drug> drugs,
-    {
-      DrugItemsBuildParams? buildParams,
-      bool showDrugInteractionIndicator,
-    }
-  ) buildDrugItems;
+  final DrugItemBuilder buildDrugItems;
   final bool showDrugInteractionIndicator;
   final DrugListCubit cubit;
   final DrugListState state;
   final ActiveDrugs activeDrugs;
-  final DrugItemsBuildParams? drugItemsBuildParams;
 
   @override
   Widget build(BuildContext context) {
@@ -53,28 +44,24 @@ class DrugSearch extends HookWidget {
               if (showFilter) FilterButton(
                 state,
                 activeDrugs,
-                useDrugClass: useDrugClass,
+                searchForDrugClass: searchForDrugClass,
               ),
             ],
           ),
         ),
-        scrollList(
-          keepPosition: keepPosition,
-          buildDrugList(
-            context,
-            state,
-            activeDrugs,
-            buildDrugItems: buildDrugItems,
-            noDrugsMessage: context.l10n.search_no_drugs(
+        DrugList(
+          state: state,
+          activeDrugs: activeDrugs,
+          buildDrugItems: buildDrugItems,
+          showDrugInteractionIndicator: showDrugInteractionIndicator,
+          noDrugsMessage: context.l10n.search_no_drugs(
               showFilter
                 ? context.l10n.search_no_drugs_with_filter_amendment
                 : ''
             ),
-            drugItemsBuildParams: drugItemsBuildParams,
-            showDrugInteractionIndicator:
-              showDrugInteractionIndicator,
-            useDrugClass: useDrugClass,
-          )
+            searchForDrugClass: searchForDrugClass,
+            buildContainer:
+              (children) => scrollList(keepPosition: keepPosition, children),
         ),
         _maybeBuildInteractionIndicator(context, state, activeDrugs)
           ?? SizedBox.shrink(),
@@ -98,7 +85,7 @@ class DrugSearch extends HookWidget {
         ),
       ),
       SizedBox(width: PharMeTheme.smallToMediumSpace),
-      TooltipIcon(useDrugClass
+      TooltipIcon(searchForDrugClass
         ? context.l10n.search_page_tooltip_search
         : context.l10n.search_page_tooltip_search_no_class
       ),
@@ -116,7 +103,7 @@ class DrugSearch extends HookWidget {
           final filteredDrugs = filter.filter(
             drugs,
             activeDrugs,
-            useDrugClass: useDrugClass,
+            searchForDrugClass: searchForDrugClass,
           );
           if (filteredDrugs.any((drug) => isInhibitor(drug.name))) {
             return PageIndicatorExplanation(

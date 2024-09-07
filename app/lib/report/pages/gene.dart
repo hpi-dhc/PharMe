@@ -79,8 +79,11 @@ class GenePage extends HookWidget {
                       ),
                     ),
                     SizedBox(height: PharMeTheme.smallSpace),
-                    ...buildDrugList(context, state, activeDrugs,
-                        noDrugsMessage: context.l10n.gene_page_no_relevant_drugs)
+                    DrugList(
+                      state: state,
+                      activeDrugs: activeDrugs,
+                      noDrugsMessage: context.l10n.gene_page_no_relevant_drugs,
+                    ),
                   ],
                 ),
               ),

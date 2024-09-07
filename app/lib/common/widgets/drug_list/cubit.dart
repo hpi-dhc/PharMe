@@ -122,11 +122,11 @@ class FilterState {
   final String genotypeKey;
 
   bool isAccepted(Drug drug, ActiveDrugs activeDrugs, {
-    required bool useDrugClass,
+    required bool searchForDrugClass,
   }) {
     final warningLevelMatches = showWarningLevel[drug.warningLevel] ?? true;
     final isDrugAccepted =
-      drug.matches(query: query, useClass: useDrugClass) &&
+      drug.matches(query: query, useClass: searchForDrugClass) &&
       (activeDrugs.contains(drug.name) || showInactive) &&
       warningLevelMatches &&
       (genotypeKey.isBlank || (drug.guidelineGenotypes.contains(genotypeKey)));
@@ -134,12 +134,12 @@ class FilterState {
   }
 
   List<Drug> filter(List<Drug> drugs, ActiveDrugs activeDrugs, {
-    required bool useDrugClass,
+    required bool searchForDrugClass,
   }) =>
     drugs.filter((drug) => isAccepted(
         drug,
         activeDrugs,
-        useDrugClass: useDrugClass,
+        searchForDrugClass: searchForDrugClass,
       )
     ).toList();
 }

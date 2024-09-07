@@ -16,7 +16,7 @@ class SearchPage extends HookWidget {
         await cubit.loadDrugs(useCache: false);
       }
     });
-    const useDrugClass = true;
+    const searchForDrugClass = true;
     return withFilterData(
       cubit: cubit,
       builder: (context, cubit, state, activeDrugs) => PopScope(
@@ -31,14 +31,14 @@ class SearchPage extends HookWidget {
             cubit: cubit,
             state: state,
             activeDrugs: activeDrugs,
+            searchForDrugClass: searchForDrugClass,
             showDrugInteractionIndicator: false,
-            useDrugClass: useDrugClass,
           ),
           drawer: FilterMenu(
             cubit,
             state,
             activeDrugs,
-            useDrugClass: useDrugClass,
+            searchForDrugClass: searchForDrugClass,
           ),
         ),
       ),

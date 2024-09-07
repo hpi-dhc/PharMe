@@ -99,12 +99,20 @@ class DrugSelectionPage extends HookWidget {
         state: builderState,
         activeDrugs: activeDrugs,
         keepPosition: true,
-        useDrugClass: false,
-        buildDrugItems: buildDrugSelectionList,
-        drugItemsBuildParams: DrugItemsBuildParams(
-          isEditable: _isEditable(state),
-          setActivity: context.read<DrugSelectionCubit>().updateDrugActivity,
-        ),
+        searchForDrugClass: false,
+        buildDrugItems: (
+          context,
+          drugs,
+          { required showDrugInteractionIndicator }
+        ) =>
+          buildDrugSelectionList(
+            context,
+            drugs,
+            showDrugInteractionIndicator: showDrugInteractionIndicator,
+            buildParams: DrugItemsBuildParams(
+              isEditable: _isEditable(state),
+              setActivity: context.read<DrugSelectionCubit>().updateDrugActivity,
+            )),
         showDrugInteractionIndicator: !concludesOnboarding,
       ),
     );

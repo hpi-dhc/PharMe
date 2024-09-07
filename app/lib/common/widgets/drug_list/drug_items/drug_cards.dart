@@ -4,10 +4,7 @@ import 'utils.dart';
 List<Widget> buildDrugCards(
   BuildContext context,
   List<Drug> drugs,
-  {
-    DrugItemsBuildParams? buildParams,
-    bool showDrugInteractionIndicator = false,
-  }
+  { required bool showDrugInteractionIndicator }
 ) {
   drugs.sort((drugA, drugB) {
     final warningLevelComparison = -drugA.warningLevel.severity

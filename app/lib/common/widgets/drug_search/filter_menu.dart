@@ -22,12 +22,12 @@ class FilterMenuItem {
 
 class FilterMenu extends HookWidget {
   const FilterMenu(this.cubit, this.state, this.activeDrugs,
-      {required this.useDrugClass});
+      {required this.searchForDrugClass});
 
   final DrugListCubit cubit;
   final DrugListState state;
   final ActiveDrugs activeDrugs;
-  final bool useDrugClass;
+  final bool searchForDrugClass;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class FilterMenu extends HookWidget {
     required List<Drug> drugs,
   }) {
     return itemFilter
-      .filter(drugs, activeDrugs, useDrugClass: useDrugClass)
+      .filter(drugs, activeDrugs, searchForDrugClass: searchForDrugClass)
       .length;
   }
 

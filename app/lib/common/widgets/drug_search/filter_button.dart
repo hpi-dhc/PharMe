@@ -5,13 +5,13 @@ class FilterButton extends StatelessWidget {
     this.state,
     this.activeDrugs,
     {
-      required this.useDrugClass,
+      required this.searchForDrugClass,
     }
   );
 
   final DrugListState state;
   final ActiveDrugs activeDrugs;
-  final bool useDrugClass;
+  final bool searchForDrugClass;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class FilterButton extends StatelessWidget {
         final currentNumberOfDrugs = filter.filter(
           allDrugs,
           activeDrugs,
-          useDrugClass: useDrugClass,
+          searchForDrugClass: searchForDrugClass,
         ).length;
         return totalNumberOfDrugs != currentNumberOfDrugs;
       },
