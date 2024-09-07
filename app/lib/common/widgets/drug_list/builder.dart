@@ -40,7 +40,7 @@ List<Widget> buildDrugList(
     }
     return buildDrugItems(
       context,
-      filteredDrugs,
+      filteredDrugs.sortedBy((drug) => drug.name),
       buildParams: drugItemsBuildParams,
       showDrugInteractionIndicator: showDrugInteractionIndicator,
     );
