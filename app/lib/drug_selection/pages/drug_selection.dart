@@ -103,17 +103,20 @@ class DrugSelectionPage extends HookWidget {
         buildDrugItems: (
           context,
           drugs,
-          { required showDrugInteractionIndicator }
+          { required showDrugInteractionIndicator, required keyPrefix }
         ) =>
           buildDrugSelectionList(
             context,
             drugs,
             showDrugInteractionIndicator: showDrugInteractionIndicator,
+            keyPrefix: keyPrefix,
             buildParams: DrugItemsBuildParams(
               isEditable: _isEditable(state),
               setActivity: context.read<DrugSelectionCubit>().updateDrugActivity,
             )),
         showDrugInteractionIndicator: !concludesOnboarding,
+        // to not confuse users when selecting a medication that then is removed from the list
+        repeatMedications: true,
       ),
     );
   }

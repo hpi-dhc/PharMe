@@ -4,7 +4,10 @@ import 'utils.dart';
 List<Widget> buildDrugCards(
   BuildContext context,
   List<Drug> drugs,
-  { required bool showDrugInteractionIndicator }
+  {
+    required bool showDrugInteractionIndicator,
+    required String keyPrefix,
+  }
 ) {
   drugs.sort((drugA, drugB) {
     final warningLevelComparison = -drugA.warningLevel.severity
@@ -15,7 +18,7 @@ List<Widget> buildDrugCards(
     return warningLevelComparison;
   });
   return drugs.map((drug) => DrugCard(
-      key: Key('drug-card-${drug.name}'),
+      key: Key('${keyPrefix}drug-card-${drug.name}'),
       onTap: () => context.router
           .push(DrugRoute(drug: drug))
           .then((_) => context.read<DrugListCubit>().search()),

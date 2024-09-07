@@ -34,9 +34,10 @@
   "drug_selection_onboarding_description": "Please review the medications you are currently taking below and update them if needed. You can always change the status for a medication later on a medication page or in the settings.",
   "drug_selection_settings_description": "Review the medications you are currently taking below.",
   "drug_selection_no_drugs_loaded": "No medications loaded",
-  "drug_selection_subheader_active_drugs": "Current medications",
-  "drug_selection_subheader_all_drugs": "All medications",
-  "drug_selection_no_active_drugs": "No current medications selected",
+
+  "drug_list_subheader_active_drugs": "Current medications",
+  "drug_list_subheader_all_drugs": "All medications",
+  "drug_list_subheader_other_drugs": "Other medications",
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
   "err_fetch_user_data_failed": "An error occurred while getting data, please try again later",

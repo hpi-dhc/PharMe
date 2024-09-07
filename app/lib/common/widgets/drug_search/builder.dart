@@ -15,11 +15,13 @@ class DrugSearch extends HookWidget {
     required this.state,
     required this.activeDrugs,
     this.keepPosition = false,
+    this.repeatMedications = false,
   });
 
   final bool showFilter;
   final bool searchForDrugClass;
   final bool keepPosition;
+  final bool repeatMedications;
   final DrugItemBuilder buildDrugItems;
   final bool showDrugInteractionIndicator;
   final DrugListCubit cubit;
@@ -55,13 +57,14 @@ class DrugSearch extends HookWidget {
           buildDrugItems: buildDrugItems,
           showDrugInteractionIndicator: showDrugInteractionIndicator,
           noDrugsMessage: context.l10n.search_no_drugs(
-              showFilter
-                ? context.l10n.search_no_drugs_with_filter_amendment
-                : ''
-            ),
-            searchForDrugClass: searchForDrugClass,
-            buildContainer:
-              (children) => scrollList(keepPosition: keepPosition, children),
+            showFilter
+              ? context.l10n.search_no_drugs_with_filter_amendment
+              : ''
+          ),
+          searchForDrugClass: searchForDrugClass,
+          buildContainer:
+            (children) => scrollList(keepPosition: keepPosition, children),
+          repeatMedications: repeatMedications,
         ),
         _maybeBuildInteractionIndicator(context, state, activeDrugs)
           ?? SizedBox.shrink(),

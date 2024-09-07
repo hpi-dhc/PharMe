@@ -14,46 +14,17 @@ List<Widget> buildDrugSelectionList(
   {
     DrugItemsBuildParams? buildParams,
     required bool showDrugInteractionIndicator,
+    required String keyPrefix,
   }
 ) {
   if (buildParams == null) throw Exception();
-  final activeDrugs = drugs.filter((drug) => drug.isActive).toList();
-  final activeDrugsList = activeDrugs.isEmpty
-      ? [Padding(
-          padding: EdgeInsets.all(PharMeTheme.mediumSpace),
-          child: Text(
-            context.l10n.drug_selection_no_active_drugs,
-            style: TextStyle(fontStyle: FontStyle.italic),
-          ),
-        )]
-      : _buildSelectionList(
-          context,
-          activeDrugs,
-          buildParams,
-          showDrugInteractionIndicator,
-          keyPrefix: 'active',
-        );
-  final allDrugsList = _buildSelectionList(
+  return _buildSelectionList(
     context,
     drugs,
     buildParams,
     showDrugInteractionIndicator,
-    keyPrefix: 'all',
+    keyPrefix: keyPrefix,
   );
-  return [
-    SubheaderDivider(
-      text: context.l10n.drug_selection_subheader_active_drugs,
-      key: Key('header-active'),
-      useLine: false,
-    ),
-    ...activeDrugsList,
-    SubheaderDivider(
-      text: context.l10n.drug_selection_subheader_all_drugs,
-      key: Key('header-all'),
-      useLine: false,
-    ),
-    ...allDrugsList,
-  ];
 }
 
 List<SwitchListTile> _buildSelectionList(

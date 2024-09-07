@@ -3,7 +3,10 @@ import '../../module.dart';
 typedef DrugItemBuilder = List<Widget> Function(
   BuildContext context,
   List<Drug> drugs,
-  { required bool showDrugInteractionIndicator }
+  {
+    required bool showDrugInteractionIndicator,
+    required String keyPrefix,
+  }
 );
 
 class DrugList extends StatelessWidget {
@@ -15,6 +18,7 @@ class DrugList extends StatelessWidget {
     this.buildDrugItems = buildDrugCards,
     this.showDrugInteractionIndicator = false,
     this.searchForDrugClass = true,
+    this.repeatMedications = false,
     this.buildContainer,
   });
 
@@ -24,6 +28,7 @@ class DrugList extends StatelessWidget {
   final DrugItemBuilder buildDrugItems;
   final bool showDrugInteractionIndicator;
   final bool searchForDrugClass;
+  final bool repeatMedications;
   final Widget Function(List<Widget> children)? buildContainer;
 
   Widget _buildDrugList(
@@ -35,18 +40,51 @@ class DrugList extends StatelessWidget {
       drugs,
       activeDrugs,
       searchForDrugClass: searchForDrugClass,
-    );
+    ).sortedBy((drug) => drug.name);
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
       return errorIndicator(noDrugsMessage!);
     }
-    final drugItems = buildDrugItems(
+    final activeFilteredDrugs =
+      filteredDrugs.filter((drug) => drug.isActive).toList();
+    final activeDrugsList = activeFilteredDrugs.isNotEmpty
+      ? buildDrugItems(
+          context,
+          activeFilteredDrugs,
+          showDrugInteractionIndicator: showDrugInteractionIndicator,
+          keyPrefix: 'active-',
+        )
+      : null;
+    final otherDrugs = repeatMedications
+      ? filteredDrugs
+      : filteredDrugs.filter((drug) => !drug.isActive).toList();
+    final otherDrugsHeader = repeatMedications
+      ? context.l10n.drug_list_subheader_all_drugs
+      : context.l10n.drug_list_subheader_other_drugs;
+    final allDrugsList = buildDrugItems(
       context,
-      filteredDrugs.sortedBy((drug) => drug.name),
+      otherDrugs,
       showDrugInteractionIndicator: showDrugInteractionIndicator,
+      keyPrefix: 'other-',
     );
+    final drugLists = [
+      if (activeDrugsList != null) ...[
+        SubheaderDivider(
+          text: context.l10n.drug_list_subheader_active_drugs,
+          key: Key('header-active'),
+          useLine: false,
+        ),
+        ...activeDrugsList,
+      ],
+      if (activeDrugsList != null) SubheaderDivider(
+        text: otherDrugsHeader,
+        key: Key('header-other'),
+        useLine: false,
+      ),
+      ...allDrugsList,
+    ];
     return (buildContainer != null)
-      ? buildContainer!(drugItems)
-      : Column(children: drugItems);
+      ? buildContainer!(drugLists)
+      : Column(crossAxisAlignment: CrossAxisAlignment.start, children: drugLists);
   }
 
   @override
