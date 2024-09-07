@@ -151,7 +151,7 @@ class DrugSearch extends HookWidget {
         ),
         color: value && enabled ? warningLevel.color : Colors.transparent,
         borderColor: value && enabled
-          ? warningLevel.color
+          ? darkenColor(warningLevel.color, 0.05)
           : PharMeTheme.onSurfaceColor,
       );
     }
@@ -176,26 +176,36 @@ class DrugSearch extends HookWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: _buildSearchBarItems(context, searchController),
               ),
-              if (showFilter) state.whenOrNull(
-                loaded: (allDrugs, filter) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(height: PharMeTheme.smallSpace),
-                    Wrap(
-                      spacing: PharMeTheme.smallSpace,
-                      runSpacing: PharMeTheme.smallSpace,
-                      runAlignment: WrapAlignment.center,
-                      alignment: WrapAlignment.start,
-                      children: [
-                        ..._buildWarningLevelFilters(context, allDrugs, filter),
-                      ],
-                    ),
-                  ],
-                )
-              ) ?? SizedBox.shrink(),
             ],
           ),
         ),
+        if (showFilter) state.whenOrNull(
+          loaded: (allDrugs, filter) => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SubheaderDivider(
+                text: context.l10n.search_page_filter_label,
+                useLine: false,
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: PharMeTheme.smallSpace,
+                  right: PharMeTheme.smallSpace,
+                  bottom: PharMeTheme.smallSpace,
+                ),
+                child: Wrap(
+                  spacing: PharMeTheme.smallSpace,
+                  runSpacing: PharMeTheme.smallSpace,
+                  runAlignment: WrapAlignment.center,
+                  alignment: WrapAlignment.start,
+                  children: [
+                    ..._buildWarningLevelFilters(context, allDrugs, filter),
+                  ],
+                ),
+              ),
+            ],
+          )
+        ) ?? SizedBox.shrink(),
         DrugList(
           state: state,
           activeDrugs: activeDrugs,

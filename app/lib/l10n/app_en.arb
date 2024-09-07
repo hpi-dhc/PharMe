@@ -58,7 +58,7 @@
   
   "search_page_tooltip_search": "Search for medications by their name, brand name or class.",
   "search_page_tooltip_search_no_class": "Search for medications by their name or brand name.",
-  "search_page_filter_label": "Filter",
+  "search_page_filter_label": "Filter by guideline result",
   "search_page_indicator_explanation": "Taking medications with an {indicatorName} ({indicator}) can interact with your results for other medications",
   "@search_page_indicator_explanation": {
     "placeholders": {
