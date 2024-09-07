@@ -34,7 +34,7 @@ Future<void> updateCachedDrugs() async {
           actions: [
             DialogAction(
               onPressed: () => Navigator.pop(context),
-              text: context.l10n.action_continue,
+              text: context.l10n.action_understood,
             ),
           ],
         ),

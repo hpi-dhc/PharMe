@@ -2,6 +2,7 @@
   "@@locale": "en",
   "action_cancel": "Cancel",
   "action_continue": "Continue",
+  "action_understood": "Understood",
   "action_back_to_app": "Back to app",
   "action_finish": "Finish",
 
