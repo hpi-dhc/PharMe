@@ -10,6 +10,7 @@ export 'drug_list/cubit.dart';
 export 'drug_list/drug_items/drug_cards.dart';
 export 'drug_list/drug_items/drug_selection_list.dart';
 export 'drug_search/builder.dart';
+export 'drug_search/drug_filters.dart';
 export 'drug_search/filter_data_wrapper.dart';
 export 'error_handler.dart';
 export 'full_width_button.dart';
