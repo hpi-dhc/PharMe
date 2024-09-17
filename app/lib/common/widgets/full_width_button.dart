@@ -22,7 +22,7 @@ class FullWidthButton extends StatelessWidget {
         onPressed: enabled ? action : null,
         style: ButtonStyle(
           backgroundColor:
-            MaterialStateProperty.all<Color>(secondaryColor
+            WidgetStateProperty.all<Color>(secondaryColor
               ? PharMeTheme.secondaryColor
               : PharMeTheme.primaryColor
             ),

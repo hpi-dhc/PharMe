@@ -4,10 +4,8 @@ class PharMeTheme {
   static ThemeData get light {
     return ThemeData(
       colorScheme: ColorScheme(
-        background: backgroundColor,
         brightness: Brightness.light,
         error: errorColor,
-        onBackground: backgroundColor.highEmphasisOnColor,
         onError: errorColor.highEmphasisOnColor,
         onPrimary: primaryColor.highEmphasisOnColor,
         onSecondary: secondaryColor.highEmphasisOnColor,
@@ -17,8 +15,8 @@ class PharMeTheme {
         primaryContainer: primaryContainer,
         secondary: secondaryColor,
         secondaryContainer: secondaryContainer,
-        surface: onSurfaceColor,
-        surfaceVariant: surfaceColor,
+        surface: surfaceColor,
+        surfaceContainerHighest: surfaceColor,
       ),
       textTheme: textTheme,
       bottomSheetTheme: BottomSheetThemeData(
