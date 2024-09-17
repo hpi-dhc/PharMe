@@ -39,15 +39,9 @@ class DrugSearch extends HookWidget {
             right: PharMeTheme.smallSpace,
             bottom: PharMeTheme.smallSpace,
           ),
-          // TODO: why row in column? try only column
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: _buildSearchBarItems(context, searchController),
-              ),
-            ],
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: _buildSearchBarItems(context, searchController),
           ),
         ),
         DrugList(

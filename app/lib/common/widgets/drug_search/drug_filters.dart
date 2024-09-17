@@ -192,7 +192,6 @@ class DrugFilters extends StatelessWidget {
           if (enableIndicator && _showActiveIndicator()) _buildActiveIndicator(),
         ],
       ),
-      // TODO: test if greyed out if null
       color: PharMeTheme.iconColor,
     );
   }
