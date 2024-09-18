@@ -46,7 +46,7 @@ android {
     defaultConfig {
         applicationId 'de.hpi.pharme'
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 33
+        targetSdkVersion flutter.targetSdkVersion
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
