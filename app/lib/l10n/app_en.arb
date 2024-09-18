@@ -74,7 +74,7 @@
     }
   },
   "search_no_drugs_with_filter_amendment": " or filters",
-  "search_no_drugs": "No medications found. Try adjusting the search term{amendment}.\n\nIf the medication you are looking for is not included in PharMe, it might not have relevant DNA-based guidelines – then clinical dosing applies. Consult your pharmacist or doctor for more information.",
+  "search_no_drugs": "No medications found. Try adjusting the search term{amendment}.\n\nIf the medication you are looking for is not included in PharMe, it might not have relevant DNA-based guidelines. Clinical dosing may apply, consult your pharmacist or doctor for more information.",
   "@search_no_drugs": {
     "placeholders": {
         "amendment": {

@@ -18,7 +18,7 @@ class DrugList extends StatelessWidget {
     this.buildDrugItems = buildDrugCards,
     this.showDrugInteractionIndicator = false,
     this.searchForDrugClass = true,
-    this.repeatMedications = false,
+    this.repeatMedicationsWhenNotFiltered = false,
     this.buildContainer,
   });
 
@@ -28,7 +28,7 @@ class DrugList extends StatelessWidget {
   final DrugItemBuilder buildDrugItems;
   final bool showDrugInteractionIndicator;
   final bool searchForDrugClass;
-  final bool repeatMedications;
+  final bool repeatMedicationsWhenNotFiltered;
   final Widget Function(List<Widget> children)? buildContainer;
 
   Widget _buildDrugList(
@@ -54,6 +54,12 @@ class DrugList extends StatelessWidget {
           keyPrefix: 'active-',
         )
       : null;
+    final repeatMedications = repeatMedicationsWhenNotFiltered &&
+      !areDrugsFiltered(
+        state: state,
+        activeDrugs: activeDrugs,
+        searchForDrugClass: searchForDrugClass,
+      );
     final otherDrugs = repeatMedications
       ? filteredDrugs
       : filteredDrugs.filter((drug) => !drug.isActive).toList();
@@ -75,7 +81,7 @@ class DrugList extends StatelessWidget {
         ),
         ...activeDrugsList,
       ],
-      if (activeDrugsList != null) SubheaderDivider(
+      if (activeDrugsList != null && allDrugsList.isNotEmpty) SubheaderDivider(
         text: otherDrugsHeader,
         key: Key('header-other'),
         useLine: false,

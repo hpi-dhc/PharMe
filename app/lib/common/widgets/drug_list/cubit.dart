@@ -154,3 +154,19 @@ class DrugListState with _$DrugListState {
   ) = _LoadedState;
   const factory DrugListState.error() = _ErrorState;
 }
+
+bool areDrugsFiltered({
+  required DrugListState state,
+  required ActiveDrugs activeDrugs,
+  required bool searchForDrugClass,
+}) => state.whenOrNull(
+  loaded: (allDrugs, filter) {
+    final totalNumberOfDrugs = allDrugs.length;
+    final currentNumberOfDrugs = filter.filter(
+      allDrugs,
+      activeDrugs,
+      searchForDrugClass: searchForDrugClass,
+    ).length;
+    return totalNumberOfDrugs != currentNumberOfDrugs;
+  },
+) ?? false;

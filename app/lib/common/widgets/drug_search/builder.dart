@@ -57,7 +57,7 @@ class DrugSearch extends HookWidget {
           searchForDrugClass: searchForDrugClass,
           buildContainer:
             (children) => scrollList(keepPosition: keepPosition, children),
-          repeatMedications: repeatMedications,
+          repeatMedicationsWhenNotFiltered: repeatMedications,
         ),
         _maybeBuildInteractionIndicator(context, state, activeDrugs)
           ?? SizedBox.shrink(),

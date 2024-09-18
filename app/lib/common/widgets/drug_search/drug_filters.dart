@@ -142,18 +142,11 @@ class DrugFilters extends StatelessWidget {
   final bool searchForDrugClass;
 
   bool _showActiveIndicator() {
-    final itemsAreFiltered = state.whenOrNull(
-      loaded: (allDrugs, filter) {
-        final totalNumberOfDrugs = allDrugs.length;
-        final currentNumberOfDrugs = filter.filter(
-          allDrugs,
-          activeDrugs,
-          searchForDrugClass: searchForDrugClass,
-        ).length;
-        return totalNumberOfDrugs != currentNumberOfDrugs;
-      },
+    return areDrugsFiltered(
+      state: state,
+      activeDrugs: activeDrugs,
+      searchForDrugClass: searchForDrugClass,
     );
-    return itemsAreFiltered ?? false;
   }
 
   Widget _buildActiveIndicator() {
@@ -212,7 +205,8 @@ class DrugFilters extends StatelessWidget {
       icon: Stack(
         children: [
           Icon(Icons.filter_list),
-          if (enableIndicator && _showActiveIndicator()) _buildActiveIndicator(),
+          if (enableIndicator && _showActiveIndicator())
+            _buildActiveIndicator(),
         ],
       ),
       color: PharMeTheme.iconColor,
