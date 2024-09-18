@@ -47,9 +47,8 @@ class DrugList extends StatelessWidget {
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
       return errorIndicator(noDrugsMessage!);
     }
-    final activeFilteredDrugs = drugActivityChangeable
-      ? drugs.filter((drug) => drug.isActive).toList()
-      : filteredDrugs.filter((drug) => drug.isActive).toList();
+    final activeFilteredDrugs =
+      filteredDrugs.filter((drug) => drug.isActive).toList();
     final activeDrugsList = activeFilteredDrugs.isNotEmpty
       ? buildDrugItems(
           context,
