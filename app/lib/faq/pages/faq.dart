@@ -19,7 +19,7 @@ class FaqPage extends StatelessWidget {
               key: Key('questionsColumn'),
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 8),
+                SizedBox(height: PharMeTheme.smallSpace),
                 ...faqContent.flatMap((faqSection) =>
                   _buildTopic(context, faqSection)),
                 ..._buildTopicHeader(

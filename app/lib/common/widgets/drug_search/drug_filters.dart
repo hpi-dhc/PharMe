@@ -181,15 +181,26 @@ class DrugFilters extends StatelessWidget {
     FilterState filter,
   ) {
     Widget buildWarningLevelItem(WarningLevel warningLevel) =>
-      _WarningLevelFilterChip(
-        warningLevel: warningLevel,
-        cubit: cubit,
-        drugs: drugs,
-        filter: filter,
-        activeDrugs: activeDrugs,
-        searchForDrugClass: searchForDrugClass,
+      Padding(
+        padding: EdgeInsets.only(
+          bottom: PharMeTheme.smallSpace,
+          left: PharMeTheme.smallToMediumSpace,
+          right: PharMeTheme.smallToMediumSpace,
+        ),
+        child: _WarningLevelFilterChip(
+          warningLevel: warningLevel,
+          cubit: cubit,
+          drugs: drugs,
+          filter: filter,
+          activeDrugs: activeDrugs,
+          searchForDrugClass: searchForDrugClass,
+        ),
       );
-    return WarningLevel.values.map(buildWarningLevelItem).toList();
+    return [
+      ...WarningLevel.values.map(buildWarningLevelItem),
+      // General padding minus applied bottom padding 
+      SizedBox(height: PharMeTheme.mediumSpace - PharMeTheme.smallSpace),
+    ];
   }
 
   IconButton _buildButton({
@@ -223,11 +234,11 @@ class DrugFilters extends StatelessWidget {
           context: context,
           bodyBuilder: (context) => Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: PharMeTheme.smallToMediumSpace
+              horizontal: PharMeTheme.mediumSpace,
             ),
             child: Container(
               decoration: BoxDecoration(
-                color: PharMeTheme.onSurfaceColor,
+                color: PharMeTheme.surfaceColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: IntrinsicWidth(
@@ -238,6 +249,7 @@ class DrugFilters extends StatelessWidget {
                     SubheaderDivider(
                       text: context.l10n.search_page_filter_label,
                       useLine: false,
+                      padding: PharMeTheme.smallToMediumSpace,
                     ),
                     ..._buildWarningLevelFilters(allDrugs, filter),
                   ],
