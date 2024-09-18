@@ -106,6 +106,7 @@ class FaqPage extends StatelessWidget {
     if (keyContext != null) {
       Future.delayed(Duration(milliseconds: 200)).then((value) {
         Scrollable.ensureVisible(
+          // ignore: use_build_context_synchronously
           keyContext,
           duration: Duration(milliseconds: 200),
           alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,

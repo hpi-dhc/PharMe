@@ -21,6 +21,7 @@ List<Widget> buildDrugCards(
       key: Key('${keyPrefix}drug-card-${drug.name}'),
       onTap: () => context.router
           .push(DrugRoute(drug: drug))
+          // ignore: use_build_context_synchronously
           .then((_) => context.read<DrugListCubit>().search()),
       drug: drug,
       showDrugInteractionIndicator: showDrugInteractionIndicator,
