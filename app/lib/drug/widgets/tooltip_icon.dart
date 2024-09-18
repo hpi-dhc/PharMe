@@ -8,12 +8,28 @@ class TooltipIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tooltipKey = GlobalKey<TooltipState>();
     return Tooltip(
+      key: tooltipKey,
       message: message,
-      margin: EdgeInsets.all(PharMeTheme.smallSpace),
-      triggerMode: TooltipTriggerMode.tap,
-      showDuration: const Duration(seconds: 3),
-      child: Icon(Icons.help_outline_rounded, size: size),
+      margin: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
+      triggerMode: TooltipTriggerMode.manual,
+      child: SizedBox(
+        height: size + PharMeTheme.smallSpace,
+        width: size +  PharMeTheme.smallSpace,
+        child: IconButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => tooltipKey.currentState?.ensureTooltipVisible(),
+          icon: Icon(
+            Icons.help_outline_rounded,
+            size: size,
+            color: PharMeTheme.iconColor,
+          ),
+          style: ButtonStyle(
+            fixedSize: WidgetStateProperty.all(Size.fromHeight(size)),
+          ),
+        ),
+      ),
     );
   }
 }
