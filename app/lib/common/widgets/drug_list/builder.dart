@@ -18,7 +18,7 @@ class DrugList extends StatelessWidget {
     this.buildDrugItems = buildDrugCards,
     this.showDrugInteractionIndicator = false,
     this.searchForDrugClass = true,
-    this.repeatMedicationsWhenNotFiltered = false,
+    this.drugActivityChangeable = false,
     this.buildContainer,
   });
 
@@ -28,7 +28,10 @@ class DrugList extends StatelessWidget {
   final DrugItemBuilder buildDrugItems;
   final bool showDrugInteractionIndicator;
   final bool searchForDrugClass;
-  final bool repeatMedicationsWhenNotFiltered;
+  // if drugActivityChangeable, active medications are not filtered and repeated
+  // in the "All medications" list to make searching and toggling a medication's
+  // activity less confusing
+  final bool drugActivityChangeable;
   final Widget Function(List<Widget> children)? buildContainer;
 
   Widget _buildDrugList(
@@ -44,8 +47,9 @@ class DrugList extends StatelessWidget {
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
       return errorIndicator(noDrugsMessage!);
     }
-    final activeFilteredDrugs =
-      filteredDrugs.filter((drug) => drug.isActive).toList();
+    final activeFilteredDrugs = drugActivityChangeable
+      ? drugs.filter((drug) => drug.isActive).toList()
+      : filteredDrugs.filter((drug) => drug.isActive).toList();
     final activeDrugsList = activeFilteredDrugs.isNotEmpty
       ? buildDrugItems(
           context,
@@ -54,16 +58,10 @@ class DrugList extends StatelessWidget {
           keyPrefix: 'active-',
         )
       : null;
-    final repeatMedications = repeatMedicationsWhenNotFiltered &&
-      !areDrugsFiltered(
-        state: state,
-        activeDrugs: activeDrugs,
-        searchForDrugClass: searchForDrugClass,
-      );
-    final otherDrugs = repeatMedications
+    final otherDrugs = drugActivityChangeable
       ? filteredDrugs
       : filteredDrugs.filter((drug) => !drug.isActive).toList();
-    final otherDrugsHeader = repeatMedications
+    final otherDrugsHeader = drugActivityChangeable
       ? context.l10n.drug_list_subheader_all_drugs
       : context.l10n.drug_list_subheader_other_drugs;
     final allDrugsList = buildDrugItems(

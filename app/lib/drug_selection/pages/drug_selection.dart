@@ -116,7 +116,7 @@ class DrugSelectionPage extends HookWidget {
             )),
         showDrugInteractionIndicator: !concludesOnboarding,
         // to not confuse users when selecting a medication that then is removed from the list
-        repeatMedications: true,
+        drugActivityChangeable: true,
       ),
     );
   }
