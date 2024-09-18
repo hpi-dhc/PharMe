@@ -15,8 +15,8 @@ class TooltipIcon extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
       triggerMode: TooltipTriggerMode.manual,
       child: SizedBox(
-        height: size + PharMeTheme.smallSpace,
-        width: size +  PharMeTheme.smallSpace,
+        height: size,
+        width: size,
         child: IconButton(
           padding: EdgeInsets.zero,
           onPressed: () => tooltipKey.currentState?.ensureTooltipVisible(),

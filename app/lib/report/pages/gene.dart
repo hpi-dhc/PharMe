@@ -115,7 +115,7 @@ class GenePage extends HookWidget {
                   style: PharMeTheme.textTheme.bodyMedium!
                       .copyWith(fontWeight: FontWeight.bold)),
               if (tooltip.isNotNullOrEmpty) ...[
-                SizedBox(width: 4),
+                SizedBox(width: PharMeTheme.smallSpace),
                 TooltipIcon(tooltip!),
               ],
             ],

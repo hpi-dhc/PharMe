@@ -38,6 +38,8 @@ TableRow _buildRow(
     String? tooltip,
   }
 ) {
+  const tooltipSize = 16.0;
+
   return TableRow(
     children: [
       Padding(
@@ -57,11 +59,12 @@ TableRow _buildRow(
           children: [
             TextSpan(text: value),
             if (tooltip.isNotNullOrBlank) ...[
-              TextSpan(text: ' '),
+              WidgetSpan(child: SizedBox(width: PharMeTheme.smallSpace)),
               WidgetSpan(
-                child: TooltipIcon(tooltip!),
+                child: TooltipIcon(tooltip!, size: tooltipSize),
               ),
             ],
+            WidgetSpan(child: SizedBox(height: tooltipSize)),
           ],
           style: textStyle,
         ),
