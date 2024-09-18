@@ -268,7 +268,7 @@ String inhibitionTooltipText(
   List<GenotypeResult> genotypeResults,
   {
     required String? drug,
-    bool userFacing = true,
+    required bool userFacing,
   }
 ) {
   final displayConfig = _getDisplayConfig(context, userFacing: userFacing);
@@ -302,7 +302,8 @@ Table buildDrugInteractionInfo(
       context,
       genotypeResults,
       drug: drug,
+      userFacing: true,
     ),
-    _getDisplayConfig(context, userFacing: false),
+    _getDisplayConfig(context, userFacing: true),
   );
 }
