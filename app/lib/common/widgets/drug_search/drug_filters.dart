@@ -141,27 +141,35 @@ class DrugFilters extends StatelessWidget {
   final ActiveDrugs activeDrugs;
   final bool searchForDrugClass;
 
-  bool _showActiveIndicator() {
-    return areDrugsFiltered(
-      state: state,
-      activeDrugs: activeDrugs,
-      searchForDrugClass: searchForDrugClass,
-    );
-  }
+  bool _showActiveIndicator() => state.whenOrNull(
+    loaded: (allDrugs, filter) {
+      final relevantDrugsFilter = FilterState.from(
+        FilterState.initial(),
+        query: filter.query,
+      );
+      final totalNumberOfDrugs = relevantDrugsFilter.filter(
+        allDrugs,
+        activeDrugs,
+        searchForDrugClass: searchForDrugClass,
+      ).length;
+      final currentNumberOfDrugs = filter.filter(
+        allDrugs,
+        activeDrugs,
+        searchForDrugClass: searchForDrugClass,
+      ).length;
+      return totalNumberOfDrugs != currentNumberOfDrugs;
+    },
+  ) ?? false;
 
   Widget _buildActiveIndicator() {
-    const indicatorSize = PharMeTheme.smallToMediumSpace;
+    const indicatorSize = PharMeTheme.smallSpace;
     return Positioned(
-      right: 0,
-      bottom: 0,
+      right: 0 + indicatorSize * 0.25,
+      bottom: 0 + indicatorSize * 0.25,
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: PharMeTheme.sinaiPurple,
-          border: Border.all(
-            color: PharMeTheme.surfaceColor,
-            width: indicatorSize / 8,
-          ),
+          color: PharMeTheme.sinaiMagenta,
         ),
         width: indicatorSize,
         height: indicatorSize,
