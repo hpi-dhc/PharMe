@@ -41,12 +41,8 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   Widget _buildCard(BuildContext context) {
-    final implicationText = drug.userGuideline?.annotations.implication ??
-        context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
-          drug.name
-        );
-    final recommendationText = drug.userGuideline?.annotations.recommendation ??
-        context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation;
+    final implicationText = drug.userGuideline?.annotations.implication;
+    final recommendationText = drug.userGuideline?.annotations.recommendation;
     return RoundedCard(
       key: Key('annotationCard'),
       radius: PharMeTheme.innerCardRadius,
@@ -76,46 +72,36 @@ class GuidelineAnnotationCard extends StatelessWidget {
           ),
           SizedBox(height: PharMeTheme.smallToMediumSpace),
           Text.rich(
-            TextSpan(text: implicationText),
+            TextSpan(
+              text:
+                implicationText ?? context.l10n.drugs_page_no_guidelines_text,
+            ),
           ),
-          SizedBox(height: PharMeTheme.smallToMediumSpace),
-          Text.rich(
-            TextSpan(children: [
-              TextSpan(
-                text: context.l10n.drugs_page_recommendation_description,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(text: recommendationText),
-            ]),
-          ),
-          ...[
+          if (recommendationText != null) ...[
             SizedBox(height: PharMeTheme.smallToMediumSpace),
-            Disclaimer(userGuideline: drug.userGuideline),
+            Text.rich(
+              TextSpan(children: [
+                TextSpan(
+                  text: context.l10n.drugs_page_recommendation_description,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(text: recommendationText),
+              ]),
+            ),
           ],
+          SizedBox(height: PharMeTheme.smallToMediumSpace),
+          Disclaimer(userGuideline: drug.userGuideline),
         ]
       )
     );
   }
 
   String _buildGuidelineTooltipText(BuildContext context) {
-    return drug.userGuideline != null
-      // Case 1: a guideline is present
-      ? context.l10n.drugs_page_tooltip_guideline(
-          drug.userGuideline!.externalData.first.source
+    return drug.userOrFirstGuideline != null
+      ? context.l10n.drugs_page_tooltip_guidelines_present(
+          drug.userOrFirstGuideline!.externalData.first.source
         )
-      : drug.userOrFirstGuideline != null
-        // Case 2: a guideline for the drug is present but not for the genotype
-        ? drug.guidelineGenotypes.all(UserData.instance.genotypeResults!.isMissing)
-          // Case 2.1: all genes are not tested
-          ? context.l10n.drugs_page_tooltip_missing_guideline_not_tested
-          // Case 2.2: at least some genes tested
-          : context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
-            context.l10n.drugs_page_tooltip_missing_genotype
-          )
-        // Case 3: the drug has no guidelines
-        : context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
-            context.l10n.drugs_page_tooltip_missing_drug
-          );
+      : context.l10n.drugs_page_tooltip_guidelines_missing;
   }
 
   List<Widget> _buildHeader(BuildContext context) {

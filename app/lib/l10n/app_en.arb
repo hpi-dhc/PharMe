@@ -126,16 +126,7 @@
   "drugs_page_active_warn_header": "Are you sure you want to change the medication usage status?",
   "drugs_page_active_warn": "This can interact with your results for other medications.",
   "drugs_page_header_guideline": "DNA-based clinical guideline",
-  "drugs_page_no_guidelines_for_phenotype_implication": "More information is needed to comment on your DNA's influence on {drugName}.",
-  "@drugs_page_no_guidelines_for_phenotype_implication": {
-    "placeholders": {
-        "drugName": {
-            "type": "String",
-            "example": "bupropion"
-        }
-    }
-  },
-  "drugs_page_no_guidelines_for_phenotype_recommendation": "Clinical dosing may apply; no pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
+  "drugs_page_no_guidelines_text": "No pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
   "@drugs_page_sources_description": {
       "placeholders": {
@@ -145,7 +136,7 @@
           }
       }
   },
-  "drugs_page_tooltip_guideline": "{source} guidelines are used to inform the content on this page. These guidelines provide recommendations on which drugs to use based on your DNA.",
+  "drugs_page_tooltip_guidelines_present": "{source} guidelines are used to inform the content on this page. These guidelines provide recommendations on which drugs to use based on your DNA.",
   "@drugs_page_tooltip_guideline": {
     "placeholders": {
       "source": {
@@ -154,18 +145,7 @@
       }
     }
   },
-  "drugs_page_tooltip_missing_drug": "this medication",
-  "drugs_page_tooltip_missing_genotype": "your genotype",
-  "drugs_page_tooltip_missing_guideline_for_drug_or_genotype": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present for {drugOrGenotype} (yet).",
-  "@drugs_page_tooltip_missing_guideline_for_drug_or_genotype": {
-    "placeholders": {
-      "drugOrGenotype": {
-        "type": "String",
-        "example": "this medication"
-      }
-    }
-  },
-  "drugs_page_tooltip_missing_guideline_not_tested": "Guidelines provide recommendations on which medications to use based on your DNA. However, your genetic test result does not include the information needed to make such a recommendation for this medication.",
+  "drugs_page_tooltip_guidelines_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present for this medication (yet).",
   "drugs_page_recommendation_description": "What to do: ",
 
   "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",

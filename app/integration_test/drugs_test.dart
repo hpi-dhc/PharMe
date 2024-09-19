@@ -80,12 +80,32 @@ void main() {
   UserData.instance.activeDrugNames = ['Ibuprofen'];
 
   group('integration test for the drugs page', () {
+    testWidgets('test loading', (tester) async {
+      when(() => mockDrugsCubit.state).thenReturn(DrugState.loading());
+      await tester.pumpWidget(
+        ChangeNotifierProvider(
+          create: (context) => ActiveDrugs(),
+          child: MaterialApp(
+            home: DrugPage(testDrug, cubit: mockDrugsCubit),
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [Locale('en', '')],
+          ),
+        ),
+      );
+      final activitySelection = tester.firstWidget(
+        find.byType(Switch)
+      ) as Switch;
+      expect(activitySelection.onChanged, isNull);
+    });
+
     testWidgets('test loaded page', (tester) async {
       when(() => mockDrugsCubit.state)
           .thenReturn(DrugState.loaded());
-
-      late BuildContext context;
-
       await tester.pumpWidget(
         ChangeNotifierProvider(
           create: (context) => ActiveDrugs(),
@@ -107,7 +127,6 @@ void main() {
           ),
         ),
       );
-
       expect(find.text(testDrug.name.capitalize()), findsOneWidget);
       expect(
         find.textContaining(
@@ -133,29 +152,22 @@ void main() {
         findsOneWidget,
       );
       expect(find.byType(Disclaimer), findsOneWidget);
-
-      // test the right color of the card
-      // ignore: omit_local_variable_types
-      final RoundedCard card = tester.firstWidget(
+      final card = tester.firstWidget(
         find.byKey(
           ValueKey('annotationCard'),
         ),
-      );
+      ) as RoundedCard;
       expect(
         card.color,
         testDrug.guidelines.first.annotations.warningLevel.color,
       );
-
-      // test that drug activity can be set
       final activitySelection = tester.firstWidget(
         find.byType(Switch)
       ) as Switch;
       expect(activitySelection.onChanged, isNotNull);
-
-      // test tooltips
-      context = tester.element(find.byType(Tooltip).first);
+      final context = tester.element(find.byType(Tooltip).first);
       expect(
-        find.byTooltip(context.l10n.drugs_page_tooltip_guideline(
+        find.byTooltip(context.l10n.drugs_page_tooltip_guidelines_present(
           testDrug.guidelines.first.externalData.first.source
         )),
         findsOneWidget,
@@ -165,7 +177,6 @@ void main() {
     testWidgets('test loaded page without guidelines', (tester) async {
       when(() => mockDrugsCubit.state).thenReturn(
           DrugState.loaded());
-
       await tester.pumpWidget(
         ChangeNotifierProvider(
           create: (context) => ActiveDrugs(),
@@ -190,33 +201,16 @@ void main() {
           ),
         ),
       );
-
       expect(find.text(testDrugWithoutGuidelines.name), findsOneWidget);
-    });
-
-    testWidgets('test loading', (tester) async {
-      when(() => mockDrugsCubit.state).thenReturn(DrugState.loading());
-
-      await tester.pumpWidget(
-        ChangeNotifierProvider(
-          create: (context) => ActiveDrugs(),
-          child: MaterialApp(
-            home: DrugPage(testDrug, cubit: mockDrugsCubit),
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [Locale('en', '')],
-          ),
-        ),
+      final context = tester.element(find.byType(Scaffold).first);
+      expect(
+        find.text(context.l10n.drugs_page_no_guidelines_text),
+        findsOneWidget,
       );
-
-      final activitySelection = tester.firstWidget(
-        find.byType(Switch)
-      ) as Switch;
-      expect(activitySelection.onChanged, isNull);
+      expect(
+        find.byTooltip(context.l10n.drugs_page_tooltip_guidelines_missing),
+        findsOneWidget,
+      );
     });
   });
 }
