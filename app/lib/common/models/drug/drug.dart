@@ -78,16 +78,24 @@ extension DrugExtension on Drug {
       : namesMatch;
   }
 
-  Guideline? get userGuideline => guidelines.firstOrNullWhere(
-    (guideline) => guideline.lookupkey.all(
-      (gene, variants) => variants.any((variant) =>
-        variants.contains(UserData.lookupFor(
-          GenotypeKey(gene, variant).value,
-          drug: name,
-        )
-      )),
-    ),
-  );
+  Guideline? get userGuideline {
+    final anyFallbackGuideline = guidelines.firstOrNullWhere(
+      (guideline) => guideline.lookupkey.all(
+        (gene, variants) => variants.any((variant) => variant == '*')
+      ),
+    );
+    if (anyFallbackGuideline != null) return anyFallbackGuideline;
+    return guidelines.firstOrNullWhere(
+      (guideline) => guideline.lookupkey.all(
+        (gene, variants) => variants.any((variant) =>
+          variants.contains(UserData.lookupFor(
+            GenotypeKey(gene, variant).value,
+            drug: name,
+          )
+        )),
+      ),
+    );
+  }
 
   Guideline? get userOrFirstGuideline => userGuideline ??
     (guidelines.isNotEmpty ? guidelines.first : null);

@@ -7,6 +7,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
+import 'fixtures/drugs/with_any_fallback_guideline.dart';
 import 'fixtures/drugs/with_proper_guideline.dart';
 import 'fixtures/drugs/without_guidelines.dart';
 import 'fixtures/set_user_data_for_drug.dart';
@@ -63,6 +64,14 @@ void main() {
         mockDrugsCubit,
         drug: drugWithoutGuidelines,
         expectNoGuidelines: true,
+      );
+    });
+
+    testWidgets('test drug content with any fallback guideline', (tester) async {
+      await _expectDrugContent(
+        tester,
+        mockDrugsCubit,
+        drug: drugWithAnyFallbackGuideline,
       );
     });
   });
@@ -132,33 +141,40 @@ Future<void> _expectDrugContent(
       : drug.guidelines.first.annotations.warningLevel.color,
   );
   expect(find.byType(Disclaimer), findsOneWidget);
-  String tooltipText;
-  List<String> guidelineTexts;
   final context = tester.element(find.byType(Scaffold).first);
   if (expectNoGuidelines) {
-    tooltipText = context.l10n.drugs_page_tooltip_guideline_missing;
-    guidelineTexts = [
-      context.l10n.drugs_page_guidelines_empty(drug.name),
-      context.l10n.drugs_page_no_guidelines_text,
-    ];
-  } else {
-    tooltipText = context.l10n.drugs_page_tooltip_guideline_present(
-      drug.guidelines.first.externalData.first.source,
-    );
-    guidelineTexts = [
-      drug.guidelines.first.annotations.implication,
-      drug.guidelines.first.annotations.recommendation,
-      ...drug.guidelineGenotypes
-    ];
-  }
-  for (final guidelineText in guidelineTexts) {
     expect(
-      find.textContaining(guidelineText),
+      find.byTooltip(context.l10n.drugs_page_tooltip_guideline_missing),
       findsOneWidget,
     );
+    expect(
+      find.text(context.l10n.drugs_page_guidelines_empty(drug.name)),
+      findsOneWidget,
+    );
+    expect(
+      find.text(context.l10n.drugs_page_no_guidelines_text),
+      findsOneWidget,
+    );
+  } else {
+    expect(
+      find.byTooltip(context.l10n.drugs_page_tooltip_guideline_present(
+        drug.guidelines.first.externalData.first.source,
+      )),
+      findsOneWidget,
+    );
+    expect(
+      find.text(drug.guidelines.first.annotations.implication),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining(drug.guidelines.first.annotations.recommendation),
+      findsOneWidget,
+    );
+    for (final genotypeKey in drug.guidelineGenotypes) {
+      expect(
+        find.text(genotypeKey),
+        findsOneWidget,
+      );
+    }
   }
-  expect(
-    find.byTooltip(tooltipText),
-    findsOneWidget,
-  );
 }
