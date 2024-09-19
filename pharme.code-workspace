@@ -40,6 +40,7 @@
       "cinacalcet",
       "citalopram",
       "clopidogrel",
+      "Coumadin",
       "CPIC",
       "Cupertino",
       "dartx",
@@ -55,9 +56,11 @@
       "haplotypes",
       "Hasso",
       "horiz",
+      "Ibutab",
       "ilike",
       "inhibitable",
       "irinotecan",
+      "Jantoven",
       "Keycloak",
       "lookupkey",
       "lookupkeys",
@@ -69,6 +72,7 @@
       "mirabegron",
       "mocktail",
       "Myrbetriq",
+      "Neoprofen",
       "noto",
       "NSAID",
       "omeprazole",
@@ -81,6 +85,7 @@
       "PharMe",
       "phenoconversion",
       "Plattner",
+      "Proprinal",
       "RGBO",
       "rxnorm",
       "sertraline",
@@ -92,6 +97,7 @@
       "unstage",
       "unstaged",
       "userdata",
+      "Vicoprofen",
       "voriconazole"
     ]
   }

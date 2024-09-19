@@ -1,15 +1,13 @@
 import 'package:app/common/module.dart';
 import 'package:app/login/models/lab.dart';
 import 'package:app/login/module.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-class MockLoginCubit extends MockCubit<LoginState>
-    implements LoginCubit {}
+import 'mocks/login_cubit.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();

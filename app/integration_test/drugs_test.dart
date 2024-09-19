@@ -1,16 +1,72 @@
-// ignore_for_file: cast_nullable_to_non_nullable
-
 import 'package:app/common/module.dart';
 import 'package:app/drug/module.dart';
 import 'package:app/drug/widgets/annotation_cards/disclaimer.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-class MockDrugsCubit extends MockCubit<DrugState> implements DrugCubit {}
+import 'fixtures/drugs/with_proper_guideline.dart';
+import 'fixtures/drugs/without_guidelines.dart';
+import 'fixtures/set_user_data_for_drug.dart';
+import 'mocks/drug_cubit.dart';
+
+void main() {
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
+
+  late MockDrugsCubit mockDrugsCubit;
+
+  setUp(() {
+    UserData.instance.activeDrugNames = [];
+    UserData.instance.labData = null;
+    UserData.instance.genotypeResults = null;
+    setUserDataForDrug(drugWithProperGuideline);
+    mockDrugsCubit = MockDrugsCubit();
+  });
+
+  group('integration test for the drugs page', () {
+    testWidgets(
+      'test that activity selection is disabled when loading',
+      (tester) async {
+        await _expectDrugContent(
+          tester,
+          mockDrugsCubit,
+          drug: drugWithProperGuideline,
+          isLoading: true,
+        );
+      },
+    );
+
+    testWidgets('test drug content with proper guideline', (tester) async {
+      await _expectDrugContent(
+        tester,
+        mockDrugsCubit,
+        drug: drugWithProperGuideline,
+      );
+    });
+
+    testWidgets('test active drug content', (tester) async {
+      UserData.instance.activeDrugNames = ['ibuprofen'];
+      await _expectDrugContent(
+        tester,
+        mockDrugsCubit,
+        drug: drugWithProperGuideline,
+        expectDrugToBeActive: true,
+      );
+    });
+
+    testWidgets('test drug content without guidelines', (tester) async {
+      await _expectDrugContent(
+        tester,
+        mockDrugsCubit,
+        drug: drugWithoutGuidelines,
+        expectNoGuidelines: true,
+      );
+    });
+  });
+}
 
 Future<void> _expectDrugContent(
   WidgetTester tester,
@@ -105,113 +161,4 @@ Future<void> _expectDrugContent(
     find.byTooltip(tooltipText),
     findsOneWidget,
   );
-}
-
-void main() {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  final mockDrugsCubit = MockDrugsCubit();
-
-  binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
-
-  final drugWithProperGuideline = Drug(
-    id: '6407768b92a4868065b6c466',
-    version: 1,
-    name: 'ibuprofen',
-    rxNorm: 'RxNorm:5640',
-    annotations: DrugAnnotations(
-        drugclass: 'Non-steroidal anti-inflammatory drug (NSAID)',
-        indication: 'Ibuprofen is used to treat pain, fever, and inflammation.',
-        brandNames: ['Advil', 'Motrin']),
-    guidelines: [
-      Guideline(
-          id: '64552859a1b68082babc8c31',
-          version: 1,
-          lookupkey: {
-            'CYP2C9': ['2.0']
-          },
-          externalData: [
-            GuidelineExtData(
-                source: 'CPIC',
-                guidelineName: 'CYP2C9 and NSAIDs',
-                guidelineUrl: 'https://cpicpgx.org/guidelines/cpic-guideline-for-nsaids-based-on-cyp2c9-genotype/',
-                implications: {'CYP2C9': 'Normal metabolism'},
-                recommendation: 'Initiate therapy with recommended starting dose. In accordance with the prescribing information, use the lowest effective dosage for shortest duration consistent with individual patient treatment goals.',
-                comments: 'n/a')
-          ],
-          annotations: GuidelineAnnotations(
-              implication: 'You break down ibuprofen as expected.',
-              recommendation: 'You can use ibuprofen at standard dose. Consult your pharmacist or doctor for more information.',
-              warningLevel: WarningLevel.green))
-    ]);
-    UserData.instance.labData = [
-      LabResult(
-        gene: 'CYP2C9',
-        phenotype: 'Normal Metabolizer',
-        variant: '*1/*1',
-        allelesTested: '"*2.*3.*5.*11"',
-      ),
-    ];
-    UserData.instance.genotypeResults = {
-      'CYP2C9': GenotypeResult(
-        gene: UserData.instance.labData![0].gene,
-        phenotype: UserData.instance.labData![0].phenotype,
-        variant: UserData.instance.labData![0].variant,
-        allelesTested: UserData.instance.labData![0].variant,
-        lookupkey: '2.0',
-      ),
-    };
-  final drugWithoutGuidelines = Drug(
-    id: '64c187431006f51bc6e24959',
-    version: 2,
-    name: 'mirabegron',
-    rxNorm: 'RxNorm:1300786',
-    annotations: DrugAnnotations(
-        drugclass: 'Urology drug',
-        indication: 'Mirabegron is used to treat overactive bladder.',
-        brandNames: ['Myrbetriq']),
-    guidelines: [],
-  );
-
-  setUp(() => UserData.instance.activeDrugNames = []);
-
-  group('integration test for the drugs page', () {
-    testWidgets(
-      'test that activity selection is disabled when loading',
-      (tester) async {
-        await _expectDrugContent(
-          tester,
-          mockDrugsCubit,
-          drug: drugWithProperGuideline,
-          isLoading: true,
-        );
-      },
-    );
-
-    testWidgets('test drug content with proper guideline', (tester) async {
-      await _expectDrugContent(
-        tester,
-        mockDrugsCubit,
-        drug: drugWithProperGuideline,
-      );
-    });
-
-    testWidgets('test active drug content', (tester) async {
-      UserData.instance.activeDrugNames = ['ibuprofen'];
-      await _expectDrugContent(
-        tester,
-        mockDrugsCubit,
-        drug: drugWithProperGuideline,
-        expectDrugToBeActive: true,
-      );
-    });
-
-    testWidgets('test drug content without guidelines', (tester) async {
-      await _expectDrugContent(
-        tester,
-        mockDrugsCubit,
-        drug: drugWithoutGuidelines,
-        expectNoGuidelines: true,
-      );
-    });
-  });
 }

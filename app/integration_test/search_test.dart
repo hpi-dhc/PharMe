@@ -1,53 +1,26 @@
 import 'package:app/common/module.dart';
 import 'package:app/search/module.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-class MockDrugListCubit extends MockCubit<DrugListState> implements DrugListCubit {
-  @override
-  FilterState get filter => FilterState.initial();
-}
+import 'fixtures/drugs/with_any_fallback_guideline.dart';
+import 'fixtures/drugs/with_proper_guideline.dart';
+import 'fixtures/drugs/without_guidelines.dart';
+import 'mocks/drug_list_cubit.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   final mockDrugListCubit = MockDrugListCubit();
+  UserData.instance.labData = [];
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
   final loadedDrugs = [
-    Drug(
-        id: '1',
-        version: 1,
-        name: 'Ibuprofen',
-        rxNorm: 'rxnorm',
-        annotations: DrugAnnotations(
-            drugclass: 'NSAID',
-            indication: 'indication',
-            brandNames: ['brand name', 'another brand name']),
-        guidelines: []),
-    Drug(
-        id: '2',
-        version: 1,
-        name: 'Codeine',
-        rxNorm: 'rxnorm',
-        annotations: DrugAnnotations(
-            drugclass: 'Pain killer',
-            indication: 'indication',
-            brandNames: ['brand name', 'another brand name']),
-        guidelines: []),
-    Drug(
-        id: '3',
-        version: 1,
-        name: 'Amitryptiline',
-        rxNorm: 'rxnorm',
-        annotations: DrugAnnotations(
-            drugclass: 'Antidepressant',
-            indication: 'indication',
-            brandNames: ['brand name', 'another brand name']),
-        guidelines: []),
+    drugWithProperGuideline,
+    drugWithoutGuidelines,
+    drugWithAnyFallbackGuideline,
   ];
   group('integration test for the search page', () {
     testWidgets('test search page in loading state', (tester) async {
