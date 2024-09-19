@@ -136,7 +136,7 @@
           }
       }
   },
-  "drugs_page_tooltip_guidelines_present": "{source} guidelines are used to inform the content on this page. These guidelines provide recommendations on which drugs to use based on your DNA.",
+  "drugs_page_tooltip_guideline_present": "{source} guidelines are used to inform the content on this page. These guidelines provide recommendations on which drugs to use based on your DNA.",
   "@drugs_page_tooltip_guideline": {
     "placeholders": {
       "source": {
@@ -145,7 +145,7 @@
       }
     }
   },
-  "drugs_page_tooltip_guidelines_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present for this medication (yet).",
+  "drugs_page_tooltip_guideline_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present in your case (yet).",
   "drugs_page_recommendation_description": "What to do: ",
 
   "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",

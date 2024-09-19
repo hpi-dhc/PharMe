@@ -20,20 +20,23 @@ class GuidelineAnnotationCard extends StatelessWidget {
         RoundedCard(
           innerPadding: const EdgeInsets.all(PharMeTheme.mediumSpace),
           child: SingleChildScrollView(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              if (drug.guidelines.isNotEmpty) ...[
-                ..._buildHeader(context),
-                SizedBox(height: PharMeTheme.mediumSpace),
-                _buildCard(context),
-                SizedBox(height: PharMeTheme.mediumSpace),
-                _buildSourcesSection(context),
-              ]
-              else ...[
-                ..._buildHeader(context),
-                SizedBox(height: PharMeTheme.smallSpace),
-                _buildCard(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (drug.guidelines.isNotEmpty) ...[
+                  ..._buildHeader(context),
+                  SizedBox(height: PharMeTheme.mediumSpace),
+                  _buildCard(context),
+                  SizedBox(height: PharMeTheme.mediumSpace),
+                  _buildSourcesSection(context),
+                ]
+                else ...[
+                  ..._buildHeader(context),
+                  SizedBox(height: PharMeTheme.smallSpace),
+                  _buildCard(context),
+                ],
               ],
-            ]),
+            ),
           ),
         ),
       ],
@@ -97,11 +100,11 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   String _buildGuidelineTooltipText(BuildContext context) {
-    return drug.userOrFirstGuideline != null
-      ? context.l10n.drugs_page_tooltip_guidelines_present(
+    return drug.userGuideline != null
+      ? context.l10n.drugs_page_tooltip_guideline_present(
           drug.userOrFirstGuideline!.externalData.first.source
         )
-      : context.l10n.drugs_page_tooltip_guidelines_missing;
+      : context.l10n.drugs_page_tooltip_guideline_missing;
   }
 
   List<Widget> _buildHeader(BuildContext context) {
