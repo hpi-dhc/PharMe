@@ -47,16 +47,22 @@ class DrugList extends StatelessWidget {
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
       return errorIndicator(noDrugsMessage!);
     }
-    final activeFilteredDrugs =
+    List<Widget>? activeDrugsList;
+    // Do not show repeated active drugs when searching
+    if (drugActivityChangeable && filteredDrugs.length != drugs.length) {
+      activeDrugsList = null;
+    } else {
+      final activeFilteredDrugs =
       filteredDrugs.filter((drug) => drug.isActive).toList();
-    final activeDrugsList = activeFilteredDrugs.isNotEmpty
-      ? buildDrugItems(
-          context,
-          activeFilteredDrugs,
-          showDrugInteractionIndicator: showDrugInteractionIndicator,
-          keyPrefix: 'active-',
-        )
-      : null;
+      activeDrugsList = activeFilteredDrugs.isNotEmpty
+        ? buildDrugItems(
+            context,
+            activeFilteredDrugs,
+            showDrugInteractionIndicator: showDrugInteractionIndicator,
+            keyPrefix: 'active-',
+          )
+        : null;
+    }
     final otherDrugs = drugActivityChangeable
       ? filteredDrugs
       : filteredDrugs.filter((drug) => !drug.isActive).toList();
