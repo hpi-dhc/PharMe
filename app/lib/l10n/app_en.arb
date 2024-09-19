@@ -166,11 +166,7 @@
     }
   },
   "drugs_page_tooltip_missing_guideline_not_tested": "Guidelines provide recommendations on which medications to use based on your DNA. However, your genetic test result does not include the information needed to make such a recommendation for this medication.",
-
-  "drugs_page_tooltip_warfarin": "CPIC guidelines provide recommendations on which medications to use based on your DNA. However, to calculate your warfarin dose, more information is needed.",
   "drugs_page_recommendation_description": "What to do: ",
-  "drugs_page_implication_warfarin": "More information is needed to calculate your warfarin dose.",
-  "drugs_page_recommendation_warfarin": "Consult your pharmacist or doctor for more information.",
 
   "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",
   "report_legend_text": "Next to your gene result the number of implicated medications per guideline result is shown:",

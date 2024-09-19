@@ -76,6 +76,7 @@ void main() {
         brandNames: ['brand name', 'another brand name']),
     guidelines: [],
   );
+
   UserData.instance.activeDrugNames = ['Ibuprofen'];
 
   group('integration test for the drugs page', () {

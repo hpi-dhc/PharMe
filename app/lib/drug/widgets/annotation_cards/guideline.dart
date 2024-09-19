@@ -3,27 +3,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../common/module.dart';
 import '../module.dart';
 
-enum WarfarinContent {
-  tooltip,
-  implication,
-  recommendation,
-  color,
-  icon,
-  heading,
-}
-
-final warfarinProperties = <WarfarinContent, dynamic Function(BuildContext)>{
-  WarfarinContent.tooltip: (context) =>
-    context.l10n.drugs_page_tooltip_warfarin,
-  WarfarinContent.implication: (context) =>
-    context.l10n.drugs_page_implication_warfarin,
-  WarfarinContent.recommendation: (context) =>
-    context.l10n.drugs_page_recommendation_warfarin,
-  WarfarinContent.color: (_) => WarningLevel.none.color,
-  WarfarinContent.icon: (_) => WarningLevel.none.icon,
-  WarfarinContent.heading: (context) => WarningLevel.none.getLabel(context),
-};
-
 class GuidelineAnnotationCard extends StatelessWidget {
   const GuidelineAnnotationCard(this.drug);
 
@@ -61,45 +40,19 @@ class GuidelineAnnotationCard extends StatelessWidget {
     );
   }
 
-  dynamic actualOrWarfarinContent(String drugName, BuildContext context, {
-    required dynamic actualContent,
-    required WarfarinContent warfarinContent,
-  }) {
-    if (drugName.toLowerCase() == 'warfarin') {
-      final getWarfarinContent = warfarinProperties[warfarinContent]!;
-      return getWarfarinContent(context);
-    }
-    return actualContent;
-  }
-
   Widget _buildCard(BuildContext context) {
-    final implicationText = actualOrWarfarinContent(
-      drug.name,
-      context,
-      actualContent: drug.userGuideline?.annotations.implication ??
+    final implicationText = drug.userGuideline?.annotations.implication ??
         context.l10n.drugs_page_no_guidelines_for_phenotype_implication(
           drug.name
-        ),
-      warfarinContent: WarfarinContent.implication,
-    );
-    final recommendationText = actualOrWarfarinContent(
-      drug.name,
-      context,
-      actualContent: drug.userGuideline?.annotations.recommendation ??
-        context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation,
-      warfarinContent: WarfarinContent.recommendation,
-    );
+        );
+    final recommendationText = drug.userGuideline?.annotations.recommendation ??
+        context.l10n.drugs_page_no_guidelines_for_phenotype_recommendation;
     return RoundedCard(
       key: Key('annotationCard'),
       radius: PharMeTheme.innerCardRadius,
       outerHorizontalPadding: 0,
       outerVerticalPadding: 0,
-      color: actualOrWarfarinContent(
-        drug.name,
-        context,
-        actualContent: drug.warningLevel.color,
-        warfarinContent: WarfarinContent.color,
-      ),
+      color: drug.warningLevel.color,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -108,23 +61,13 @@ class GuidelineAnnotationCard extends StatelessWidget {
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: Icon(
-                  actualOrWarfarinContent(
-                    drug.name,
-                    context,
-                    actualContent: drug.warningLevel.icon,
-                    warfarinContent: WarfarinContent.icon,
-                  ),
+                  drug.warningLevel.icon,
                   color: PharMeTheme.onSurfaceText,
                   size: PharMeTheme.mediumToLargeSpace,
                 ),
               ),
               TextSpan(
-                text: ' ${actualOrWarfarinContent(
-                  drug.name,
-                  context,
-                  actualContent: drug.warningLevel.getLabel(context),
-                  warfarinContent: WarfarinContent.heading,
-                )}',
+                text: ' ${drug.warningLevel.getLabel(context)}',
               ),
             ]),
             style: PharMeTheme.textTheme.titleMedium!.copyWith(
@@ -155,7 +98,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   String _buildGuidelineTooltipText(BuildContext context) {
-    final actualTooltip = drug.userGuideline != null
+    return drug.userGuideline != null
       // Case 1: a guideline is present
       ? context.l10n.drugs_page_tooltip_guideline(
           drug.userGuideline!.externalData.first.source
@@ -173,12 +116,6 @@ class GuidelineAnnotationCard extends StatelessWidget {
         : context.l10n.drugs_page_tooltip_missing_guideline_for_drug_or_genotype(
             context.l10n.drugs_page_tooltip_missing_drug
           );
-    return actualOrWarfarinContent(
-      drug.name,
-      context,
-      actualContent: actualTooltip,
-      warfarinContent: WarfarinContent.tooltip,
-    );
   }
 
   List<Widget> _buildHeader(BuildContext context) {
