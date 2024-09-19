@@ -33,7 +33,7 @@ jobs:
       - run: flutter analyze
 
   build-android:
-    name: Build Android APK
+    name: Build Android App Bundle
     needs: [lint]
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +47,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
       - run: flutter pub get
       - run: flutter pub run build_runner build
-      - run: flutter build apk
+      - run: flutter build appbundle
 
   build-ios:
     name: Build iOS Package
