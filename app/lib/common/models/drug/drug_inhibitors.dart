@@ -161,7 +161,7 @@ String _inhibitionTooltipText(
   }${displayConfig.partSeparator}$inhibitorsString';
 }
 
-Table _drugInteractionTemplate(
+Widget _drugInteractionTemplate(
   BuildContext context,
   String tooltipText,
   _DisplayConfig displayConfig,
@@ -291,7 +291,7 @@ String inhibitionTooltipText(
   return tooltipText;
 }
 
-Table buildDrugInteractionInfo(
+Widget buildDrugInteractionInfo(
   BuildContext context,
   List<GenotypeResult> genotypeResults,
   { required String? drug }

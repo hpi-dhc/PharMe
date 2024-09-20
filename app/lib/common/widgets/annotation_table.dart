@@ -8,23 +8,30 @@ class TableRowDefinition {
   final String? tooltip;
 }
 
-Table buildTable(
+Widget buildTable(
   List<TableRowDefinition> rowDefinitions,
   {
     TextStyle? style,
     bool boldHeader = true,
   }
 ) {
-  return Table(
-    defaultColumnWidth: IntrinsicColumnWidth(),
-    children: rowDefinitions.mapIndexed((index, rowDefinition) => _buildRow(
-      rowDefinition.key,
-      rowDefinition.value,
-      style ?? PharMeTheme.textTheme.bodyMedium!,
-      boldHeader: boldHeader,
-      isLast: index == rowDefinitions.length - 1,
-      tooltip: rowDefinition.tooltip,
-    )).toList(),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: rowDefinitions.mapIndexed(
+      (index, rowDefinition) => Table(
+        defaultColumnWidth: IntrinsicColumnWidth(),
+        children: [
+          _buildRow(
+            rowDefinition.key,
+            rowDefinition.value,
+            style ?? PharMeTheme.textTheme.bodyMedium!,
+            boldHeader: boldHeader,
+            isLast: index == rowDefinitions.length - 1,
+            tooltip: rowDefinition.tooltip,
+          ),
+        ],
+      ),
+    ).toList(),
   );
 }
 
