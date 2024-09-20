@@ -43,7 +43,7 @@ The structure of an example module `lib/my_module` should look as follows:
   - `module.dart` (see example below):
     - exports everything that is required by other modules, i.e., page(s) and
       possibly the cubit
-    - declares all routes as functions reeturning `AutoRoute`
+    - declares all routes as functions returning `AutoRoute`
     - may contain initialization code (`initMyModule()`)
   - `widgets`:
     - `my_widget.dart`: contains `MyWidget` and helpers
@@ -85,7 +85,7 @@ AutoRoute myModuleRoute({ required List<AutoRoute> children }) => AutoRoute(
   page: MyModuleRootRoute.page,
   children: [
     AutoRoute(path: '', page: MyModuleRoute.page),
-    ...children, // includes myChildRoute() and priva
+    ...children, // includes myChildRoute()
   ],
 );
 ```
@@ -107,14 +107,14 @@ _version (login without redirect) – can adopt once different login types are_
 _supported._
 
 Scripts were created to click through the app using tests and record the
-screeen.
+screen.
 
 A simulator with the app in its initial state (or not installed) needs to be
 running.
 
 ### Screencasts
 
-The `generate_screendocs/generate_screencast.sh` script will create screencasts.
+The `generate_screendocs/generate_screencast.sh` script will create screencast.
 It uses Xcode to record the screencast and [`ffmpeg`](https://ffmpeg.org/)
 to cut the `full.mov` to relevant subsets (needs to be installed).
 
@@ -154,13 +154,24 @@ shown below.
 
 ```dart
 // TODO(after-testing): remove test data adaption
-  UserData.instance.diplotypes!['CYP2D6'] = Diplotype(
-    gene: 'CYP2D6',
-    resultType: 'Diplotype',
-    genotype: '*18/*143',
+  UserData.instance.labData = UserData.instance.labData!.filter(
+    (labResult) => labResult.gene != 'UGT1A1'
+  ).toList();
+  UserData.instance.labData!.add(LabResult(
+    gene: 'UGT1A1',
+    variant: '*28/*28',
     phenotype: 'Poor Metabolizer',
     allelesTested: '',
-  );
+  ));
+  UserData.instance.labData = UserData.instance.labData!.filter(
+    (labResult) => labResult.gene != 'HLA-B' && labResult.variant != '*57:01 negative'
+  ).toList();
+  UserData.instance.labData!.add(LabResult(
+    gene: 'HLA-B',
+    variant: '*57:01 positive',
+    phenotype: '*57:01 positive',
+    allelesTested: '',
+  ));
 ```
 
 You can use the CPIC API to get reasonable genotype-phenotype pairings, e.g.,
