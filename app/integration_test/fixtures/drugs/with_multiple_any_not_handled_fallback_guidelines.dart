@@ -2,7 +2,7 @@ import 'package:app/common/models/drug/drug.dart';
 import 'package:app/common/models/drug/guideline.dart';
 import 'package:app/common/models/drug/warning_level.dart';
 
-final drugWithMultipleAnyOtherFallbackGuidelines = Drug(
+final drugWithMultipleAnyNotHandledFallbackGuidelines = Drug(
   id: '6686a865826414ec5b05c44e',
   version: 1,
   name: 'pazopanib',

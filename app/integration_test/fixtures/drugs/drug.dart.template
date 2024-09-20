@@ -1,0 +1,41 @@
+import 'package:app/common/models/drug/drug.dart';
+import 'package:app/common/models/drug/guideline.dart';
+import 'package:app/common/models/drug/warning_level.dart';
+
+final drugWithNonCompilingPlaceholders = Drug(
+  id: null,
+  version: null,
+  name: null,
+  rxNorm: null,
+  annotations: DrugAnnotations(
+    drugclass: null,
+    indication: null,
+    brandNames: [null],
+  ),
+  guidelines: [
+    Guideline(
+      id: null,
+      version: null,
+      lookupkey: {
+        null: [null],
+      },
+      externalData: [
+        GuidelineExtData(
+          source: null,
+          guidelineName: null,
+          guidelineUrl: null,
+          implications: {
+            null: null,
+          },
+          recommendation: null,
+          comments: null,
+        ),
+      ],
+      annotations: GuidelineAnnotations(
+        implication: null,
+        recommendation: null,
+        warningLevel: WarningLevel.null,
+      ),  
+    ),
+  ],
+);

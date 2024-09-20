@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'fixtures/drugs/with_any_fallback_guideline.dart';
-import 'fixtures/drugs/with_multiple_any_other_fallback_guidelines.dart';
+import 'fixtures/drugs/with_multiple_any_not_handled_fallback_guidelines.dart';
 import 'fixtures/drugs/with_proper_guideline.dart';
 import 'fixtures/drugs/without_guidelines.dart';
 import 'fixtures/set_user_data_for_drug.dart';
@@ -76,7 +76,7 @@ void main() {
       );
     });
 
-    testWidgets('test drug content with any other fallback guidelines', (tester) async {
+    testWidgets('test drug content with any not handled fallback guidelines', (tester) async {
       // Work in progress; this should fail!
       // Open TODOs:
       // 1. Start with easy case (not pazopanib, add fixture for FDA w/ HLA-B)
@@ -97,7 +97,7 @@ void main() {
         }
       }
       // await testPerGuideline(drugWithAnyOtherFallbackGuideline);
-      await testPerGuideline(drugWithMultipleAnyOtherFallbackGuidelines);
+      await testPerGuideline(drugWithMultipleAnyNotHandledFallbackGuidelines);
     });
   });
 }
