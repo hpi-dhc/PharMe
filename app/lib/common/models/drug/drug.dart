@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:trotter/trotter.dart';
 
 import '../../module.dart';
 
@@ -78,6 +79,54 @@ extension DrugExtension on Drug {
       : namesMatch;
   }
 
+  bool _lookupsMatchUserData(String gene, List<String> variants) =>
+    variants.any((variant) => variants.contains(
+      UserData.lookupFor(
+        GenotypeKey(gene, variant).value,
+        drug: name,
+      ),
+    ));
+
+  Guideline? _getExactGuideline() {
+    final exactGuidelines = guidelines.filter(
+      (guideline) => guideline.lookupkey.none(
+        (gene, variants) => variants.contains('~')
+      )
+    );
+    return exactGuidelines.firstOrNullWhere(
+      (guideline) => guideline.lookupkey.all(_lookupsMatchUserData)
+    );
+  }
+
+  Guideline? _getPartiallyHandledGuideline() {
+    if (guidelines.isEmpty) return null;
+    final partialGuidelines = guidelines.filter(
+      (guideline) => guideline.lookupkey.values.any(
+        (values) => values.contains('~'),
+      ),
+    );
+    if (partialGuidelines.isEmpty) return null;
+    final guidelineGenes = guidelines.first.lookupkey.keys.toList();
+    Guideline? partiallyHandledGuideline;
+    var currentMatchingNumber = guidelineGenes.length - 1;
+    while (currentMatchingNumber > 0 && partiallyHandledGuideline == null) {
+      final currentGeneCombinations =
+        Combinations(currentMatchingNumber, guidelineGenes)().toList();
+      for (final geneCombination in currentGeneCombinations) {
+        if (partiallyHandledGuideline != null) break;
+        partiallyHandledGuideline = partialGuidelines.firstOrNullWhere(
+          (guideline) => guideline.lookupkey.all(
+            (gene, variants) => geneCombination.contains(gene)
+              ? _lookupsMatchUserData(gene, variants)
+              : variants.any((variant) => variant == '~'),
+          ),
+        );
+      }
+      currentMatchingNumber--;
+    }
+    return partiallyHandledGuideline;
+  }
+
   Guideline? get userGuideline {
     final anyFallbackGuideline = guidelines.firstOrNullWhere(
       (guideline) => guideline.lookupkey.all(
@@ -85,17 +134,10 @@ extension DrugExtension on Drug {
       ),
     );
     if (anyFallbackGuideline != null) return anyFallbackGuideline;
-    final exactGuideline = guidelines.firstOrNullWhere(
-      (guideline) => guideline.lookupkey.all(
-        (gene, variants) => variants.any((variant) =>
-          variants.contains(UserData.lookupFor(
-            GenotypeKey(gene, variant).value,
-            drug: name,
-          )
-        )),
-      ),
-    );
+    final exactGuideline = _getExactGuideline();
     if (exactGuideline != null) return exactGuideline;
+    final partiallyHandledGuideline = _getPartiallyHandledGuideline();
+    if (partiallyHandledGuideline != null) return partiallyHandledGuideline;
     return guidelines.firstOrNullWhere(
       (guideline) => guideline.lookupkey.all(
         (gene, variants) => variants.any((variant) => variant == '~')

@@ -1246,6 +1246,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  trotter:
+    dependency: "direct main"
+    description:
+      name: trotter
+      sha256: "59c8d5e98904355e887d80aae52b02828a811fe96474645aaf8fa7761ea64851"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   typed_data:
     dependency: transitive
     description:

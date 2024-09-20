@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'fixtures/drugs/with_any_fallback_guideline.dart';
 import 'fixtures/drugs/with_any_not_handled_guideline.dart';
-// import 'fixtures/drugs/with_multiple_any_not_handled_fallback_guidelines.dart';
+import 'fixtures/drugs/with_multiple_any_not_handled_fallback_guidelines.dart';
 import 'fixtures/drugs/with_proper_guideline.dart';
 import 'fixtures/drugs/without_guidelines.dart';
 import 'fixtures/set_user_data.dart';
@@ -42,7 +42,7 @@ void main() {
       },
     );
 
-    testWidgets('test drug content with proper guideline', (tester) async {
+    testWidgets('test drug content with guideline', (tester) async {
       await _expectDrugContent(
         tester,
         mockDrugsCubit,
@@ -68,7 +68,9 @@ void main() {
         expectNoGuidelines: true,
       );
     });
+  });
 
+  group('integration test for special guidelines', () {
     testWidgets('test drug content with any fallback guideline', (tester) async {
       await _expectDrugContent(
         tester,
@@ -77,13 +79,20 @@ void main() {
       );
     });
 
-    testWidgets(
-      'test drug content with any not handled fallback guidelines',
-      (tester) async {
-        Future<void> testPerGuideline(Drug drug) async {
-          for (
-            final guideline in drug.guidelines
-          ) {
+    final anyNotHandledTestCases = <String, Drug>{
+      'any not handled fallback guideline':
+        drugWithAnyNotHandledFallbackGuideline,
+      'multiple any not handled fallback guidelines':
+        drugWithMultipleAnyNotHandledFallbackGuidelines,
+    };
+    for (final (anyNotHandledTestCase) in anyNotHandledTestCases.entries) {
+      final description = 'test drug content with ${anyNotHandledTestCase.key}';
+      final drug = anyNotHandledTestCase.value;
+      for (final (index, guideline) in drug.guidelines.indexed) {
+        // Run per case to ensure clean setup
+        testWidgets(
+          '$description (${index + 1}/${drug.guidelines.length})',
+          (tester) async {        
             setUserDataForGuideline(guideline);
             await _expectDrugContent(
               tester,
@@ -91,12 +100,10 @@ void main() {
               drug: drug,
               guideline: guideline,
             );
-          }
-        }
-        await testPerGuideline(drugWithAnyNotHandledFallbackGuideline);
-        // await testPerGuideline(drugWithMultipleAnyNotHandledFallbackGuidelines);
-      },
-    );
+          },
+        );
+      }
+    }
   });
 }
 
@@ -111,7 +118,6 @@ Future<void> _expectDrugContent(
 }) async {
   when(() => mockDrugsCubit.state)
     .thenReturn(isLoading ? DrugState.loading() : DrugState.loaded());
-  final relevantGuideline = guideline ?? drug.guidelines.first;
   await tester.pumpWidget(
     ChangeNotifierProvider(
       create: (context) => ActiveDrugs(),
@@ -159,15 +165,10 @@ Future<void> _expectDrugContent(
       ValueKey('annotationCard'),
     ),
   ) as RoundedCard;
-  expect(
-    card.color,
-    expectNoGuidelines
-      ? WarningLevel.green.color
-      : relevantGuideline.annotations.warningLevel.color,
-  );
   expect(find.byType(Disclaimer), findsOneWidget);
   final context = tester.element(find.byType(Scaffold).first);
   if (expectNoGuidelines) {
+    expect(card.color, WarningLevel.green.color);
     expect(
       find.byTooltip(context.l10n.drugs_page_tooltip_guideline_missing),
       findsOneWidget,
@@ -181,6 +182,8 @@ Future<void> _expectDrugContent(
       findsOneWidget,
     );
   } else {
+    final relevantGuideline = guideline ?? drug.guidelines.first;
+    expect(card.color, relevantGuideline.annotations.warningLevel.color);
     expect(
       find.byTooltip(context.l10n.drugs_page_tooltip_guideline_present(
         relevantGuideline.externalData.first.source,
@@ -196,10 +199,17 @@ Future<void> _expectDrugContent(
       findsOneWidget,
     );
     for (final genotypeKey in drug.guidelineGenotypes) {
-      expect(
-        find.text(genotypeKey),
-        findsOneWidget,
-      );
+      if (genotypeKey.contains(' ')) {
+        expect(
+          find.textContaining(genotypeKey.split(' ').first),
+          findsOneWidget,
+        );
+      } else {
+        expect(
+          find.text(genotypeKey),
+          findsOneWidget,
+        );
+      }
     }
   }
 }

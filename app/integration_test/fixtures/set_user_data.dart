@@ -7,8 +7,8 @@ class _UserDataConfig {
   });
   final String gene;
   final String lookupkey;
-  final String phenotype = 'phenotype does not matter for test';
-  final String variant = 'variant does not matter for test';
+  String get phenotype => lookupkey;
+  String get variant => lookupkey;
   final String allelesTested = 'allelesTested does not matter for test';
 }
 
@@ -32,11 +32,11 @@ void setUserDataForGuideline(Guideline guideline) {
       lookupkey: lookupkey,
     );
     // Need to be careful with non-unique genes here; e.g., is we want to use
-    // multiple HLA-B variants in the tests, we will need to check for the
-    // genotype key (which is in the current setup not possible without the
-    // variant)
+    // multiple HLA-B variants in the tests or overwrite a specific HLA-B
+    // variant, we will need to check for the genotype key (which is in the
+    // current setup not possible without the proper variant)
     UserData.instance.labData = UserData.instance.labData!.filter(
-      (labResult) => labResult.gene != gene  
+      (labResult) => labResult.gene != gene
     ).toList();
     UserData.instance.labData!.add(
       LabResult(
@@ -46,7 +46,9 @@ void setUserDataForGuideline(Guideline guideline) {
         allelesTested: userDataConfig.allelesTested,
       ),
     );
-    UserData.instance.genotypeResults![userDataConfig.gene] = GenotypeResult(
+    UserData.instance.genotypeResults![
+      GenotypeKey(userDataConfig.gene, userDataConfig.variant).value
+    ] = GenotypeResult(
       gene: userDataConfig.gene,
       phenotype: userDataConfig.phenotype,
       variant: userDataConfig.variant,
