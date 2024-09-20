@@ -85,7 +85,7 @@ extension DrugExtension on Drug {
       ),
     );
     if (anyFallbackGuideline != null) return anyFallbackGuideline;
-    return guidelines.firstOrNullWhere(
+    final exactGuideline = guidelines.firstOrNullWhere(
       (guideline) => guideline.lookupkey.all(
         (gene, variants) => variants.any((variant) =>
           variants.contains(UserData.lookupFor(
@@ -93,6 +93,12 @@ extension DrugExtension on Drug {
             drug: name,
           )
         )),
+      ),
+    );
+    if (exactGuideline != null) return exactGuideline;
+    return guidelines.firstOrNullWhere(
+      (guideline) => guideline.lookupkey.all(
+        (gene, variants) => variants.any((variant) => variant == '~')
       ),
     );
   }

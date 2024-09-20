@@ -8,10 +8,11 @@ import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
 import 'fixtures/drugs/with_any_fallback_guideline.dart';
-import 'fixtures/drugs/with_multiple_any_not_handled_fallback_guidelines.dart';
+import 'fixtures/drugs/with_any_not_handled_guideline.dart';
+// import 'fixtures/drugs/with_multiple_any_not_handled_fallback_guidelines.dart';
 import 'fixtures/drugs/with_proper_guideline.dart';
 import 'fixtures/drugs/without_guidelines.dart';
-import 'fixtures/set_user_data_for_drug.dart';
+import 'fixtures/set_user_data.dart';
 import 'mocks/drug_cubit.dart';
 
 void main() {
@@ -24,7 +25,7 @@ void main() {
     UserData.instance.activeDrugNames = [];
     UserData.instance.labData = null;
     UserData.instance.genotypeResults = null;
-    setUserDataForDrug(drugWithProperGuideline);
+    setUserDataForGuideline(drugWithProperGuideline.guidelines.first);
     mockDrugsCubit = MockDrugsCubit();
   });
 
@@ -76,29 +77,26 @@ void main() {
       );
     });
 
-    testWidgets('test drug content with any not handled fallback guidelines', (tester) async {
-      // Work in progress; this should fail!
-      // Open TODOs:
-      // 1. Start with easy case (not pazopanib, add fixture for FDA w/ HLA-B)
-      // 2. Set user data for different guidelines and test that selected
-      //    guidelines are different (may want to refactor set user data
-      //    to be useful here)
-      // 3. Add all pazopanib guidelines for complex case
-      Future<void> testPerGuideline(Drug drug) async {
-        for (
-          final guideline in drug.guidelines
-        ) {
-          await _expectDrugContent(
-            tester,
-            mockDrugsCubit,
-            drug: drug,
-            guideline: guideline,
-          );
+    testWidgets(
+      'test drug content with any not handled fallback guidelines',
+      (tester) async {
+        Future<void> testPerGuideline(Drug drug) async {
+          for (
+            final guideline in drug.guidelines
+          ) {
+            setUserDataForGuideline(guideline);
+            await _expectDrugContent(
+              tester,
+              mockDrugsCubit,
+              drug: drug,
+              guideline: guideline,
+            );
+          }
         }
-      }
-      // await testPerGuideline(drugWithAnyOtherFallbackGuideline);
-      await testPerGuideline(drugWithMultipleAnyNotHandledFallbackGuidelines);
-    });
+        await testPerGuideline(drugWithAnyNotHandledFallbackGuideline);
+        // await testPerGuideline(drugWithMultipleAnyNotHandledFallbackGuidelines);
+      },
+    );
   });
 }
 
