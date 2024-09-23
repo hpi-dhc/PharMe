@@ -12,9 +12,13 @@ class _UserDataConfig {
   final String allelesTested = 'allelesTested does not matter for test';
 }
 
+void setGenotypeResult(GenotypeResult genotypeResult ) {
+  UserData.instance.genotypeResults = UserData.instance.genotypeResults ?? {};
+  UserData.instance.genotypeResults![genotypeResult.key.value] = genotypeResult;
+}
+
 void setUserDataForGuideline(Guideline guideline) {
   UserData.instance.labData = UserData.instance.labData ?? [];
-  UserData.instance.genotypeResults = UserData.instance.genotypeResults ?? {};
   for (final gene in guideline.lookupkey.keys) {
     final lookupkeys = guideline.lookupkey[gene]!;
     if (lookupkeys.length != 1) {
@@ -46,14 +50,12 @@ void setUserDataForGuideline(Guideline guideline) {
         allelesTested: userDataConfig.allelesTested,
       ),
     );
-    UserData.instance.genotypeResults![
-      GenotypeKey(userDataConfig.gene, userDataConfig.variant).value
-    ] = GenotypeResult(
+    setGenotypeResult(GenotypeResult(
       gene: userDataConfig.gene,
       phenotype: userDataConfig.phenotype,
       variant: userDataConfig.variant,
       allelesTested: userDataConfig.variant,
       lookupkey: userDataConfig.lookupkey,
-    );
+    ));
   }
 }
