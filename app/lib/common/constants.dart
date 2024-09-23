@@ -22,6 +22,10 @@ const cpicLookupUrl =
 const drugInteractionIndicator = '*';
 const drugInteractionIndicatorName = 'asterisk';
 
+// For shorter uniqueness check that also does not rely on variant; also format
+// HLA-A (which is currently unique) as HLA-B
+const definedNonUniqueGenes = ['HLA-A', 'HLA-B'];
+
 enum SpecialLookup {
   any,
   anyNotHandled,

@@ -12,12 +12,16 @@ class GenotypeKey implements Genotype {
   @override
   String variant;
 
-  // Not nice but format HLA-A (which is currently unique) as HLA-B; also,
-  // shorter check
-  bool get isGeneUnique => !gene.startsWith('HLA') &&
-    UserData.instance.labData!.where(
+  bool get isGeneUnique {
+    final isDefinedAsNonUnique = definedNonUniqueGenes.contains(gene);
+    if (isDefinedAsNonUnique){
+      return false;
+    }
+    final labData = UserData.instance.labData ?? [];
+    return labData.where(
       (labData) => labData.gene == gene
     ).length <= 1;
+  }
 
   // heavily relies on "non-unique" gene HLA-B, for which the variant is
   // in the format "[allele] [positive/negative]" (which currently is the only)
