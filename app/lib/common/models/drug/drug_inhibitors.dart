@@ -118,7 +118,7 @@ String _getPhenoconversionConsequence(
       ).capitalize()
     : context.l10n.inhibitors_consequence_adapted(
         genotypeResult.geneDisplayString,
-        genotypeResult.phenotype,
+        genotypeResult.phenotypeDisplayString(context),
         displayConfig.userGenitive,
       ).capitalize();
 }
@@ -217,9 +217,9 @@ bool isInhibited(
     genotypeResult.gene,
     drug: drug,
   );
-  final originalPhenotype = genotypeResult.phenotypeDisplayString;
+  final originalPhenotype = genotypeResult.phenotype;
   final phenotypeCanBeInhibited =
-    originalPhenotype.toLowerCase() != overwritePhenotype.toLowerCase();
+    originalPhenotype?.toLowerCase() != overwritePhenotype.toLowerCase();
   return activeInhibitors.isNotEmpty && phenotypeCanBeInhibited;
 }
 
@@ -246,10 +246,11 @@ MapEntry<String, String>? getOverwrittenLookup (
 }
 
 String possiblyAdaptedPhenotype(
+  BuildContext context,
   GenotypeResult genotypeResult,
   { required String? drug }
 ) {
-  final originalPhenotype = genotypeResult.phenotypeDisplayString;
+  final originalPhenotype = genotypeResult.phenotypeDisplayString(context);
   if (!isInhibited(genotypeResult, drug: drug)) {
     return originalPhenotype;
   }

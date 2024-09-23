@@ -117,15 +117,13 @@ class GuidelineAnnotationCard extends StatelessWidget {
       ];
     } else {
       final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
-        UserData.instance.genotypeResults!.findOrMissing(
-          genotypeKey,
-          context,
-        )
+        UserData.instance.genotypeResults![genotypeKey]!
       ).toList();
       final geneDescriptions = genotypeResults.map((genotypeResult) =>
         TableRowDefinition(
           genotypeResult.geneDisplayString,
           possiblyAdaptedPhenotype(
+            context,
             genotypeResult,
             drug: drug.name,
           ),

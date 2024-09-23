@@ -133,23 +133,17 @@ List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
 }
 
 String? _getPhenotypeInfo(String genotypeKey, Drug drug, BuildContext context) {
-  final genotypeResult = UserData.instance.genotypeResults!.findOrMissing(
-    genotypeKey,
-    context,
-  );
+  final genotypeResult = UserData.instance.genotypeResults![genotypeKey]!;
   if (!isInhibited(genotypeResult, drug: drug.name)) {
-    return genotypeResult.phenotypeDisplayString;
+    return genotypeResult.phenotypeDisplayString(context);
   }
-  return possiblyAdaptedPhenotype(genotypeResult, drug: drug.name);
+  return possiblyAdaptedPhenotype(context, genotypeResult, drug: drug.name);
 }
 
 String? _getPhenoconversionInfo(Drug drug, BuildContext context) {
   if (drug.guidelines.isEmpty) return null;
   final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
-    UserData.instance.genotypeResults!.findOrMissing(
-      genotypeKey,
-      context,
-    )
+    UserData.instance.genotypeResults![genotypeKey]!
   ).toList();
   return '$drugInteractionIndicator ${inhibitionTooltipText(
     context,

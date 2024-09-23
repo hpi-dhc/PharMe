@@ -55,7 +55,8 @@ class GenePage extends HookWidget {
                             children: [
                               _buildRow(
                                   context.l10n.gene_page_genotype,
-                                  genotypeResult.variantDisplayString,
+                                  genotypeResult.variantDisplayString ??
+                                    context.l10n.general_not_tested,
                                   tooltip: context.l10n.gene_page_genotype_tooltip
                               ),
                               _buildPhenotypeRow(context),
@@ -97,7 +98,7 @@ class GenePage extends HookWidget {
   TableRow _buildPhenotypeRow(BuildContext context) {
     return _buildRow(
       context.l10n.gene_page_phenotype,
-      possiblyAdaptedPhenotype(genotypeResult, drug: null),
+      possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
       tooltip:
         context.l10n.gene_page_phenotype_tooltip,
     );

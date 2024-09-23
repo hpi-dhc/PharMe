@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 
 import '../../module.dart';
@@ -17,29 +16,22 @@ class GenotypeResult implements Genotype {
 
   factory GenotypeResult.fromGenotypeData(
     LabResult labResult,
-    LookupInformation lookup,
+    LookupInformation? lookup,
   ) => GenotypeResult(
     gene: labResult.gene,
     variant: labResult.variant,
     phenotype: labResult.phenotype,
-    lookupkey: lookup.lookupkey,
+    lookupkey: lookup?.lookupkey,
     allelesTested: labResult.allelesTested,
   );
 
-  factory GenotypeResult.missingResult(String gene, BuildContext context) {
-    final potentialLabResultWithoutLookups =
-      UserData.instance.labData?.firstWhereOrNull(
-        (labResult) => labResult.gene == gene
-      );
+  factory GenotypeResult.missingResult(String gene, {String? variant}) {
     return GenotypeResult(
       gene: gene,
-      variant: potentialLabResultWithoutLookups?.variant
-        ?? context.l10n.general_not_tested,
-      phenotype: potentialLabResultWithoutLookups?.phenotype
-        ?? context.l10n.general_not_tested,
-      lookupkey: context.l10n.general_not_tested,
-      allelesTested: potentialLabResultWithoutLookups?.allelesTested
-        ?? context.l10n.general_not_tested,
+      variant: variant,
+      phenotype: null,
+      lookupkey: null,
+      allelesTested: null,
     );
   }
   
@@ -48,39 +40,35 @@ class GenotypeResult implements Genotype {
   String gene;
   @override
   @HiveField(1)
-  String variant;
+  String? variant;
   @HiveField(2)
-  String phenotype;
+  String? phenotype;
   @HiveField(3)
-  String lookupkey;
+  String? lookupkey;
   @HiveField(4)
-  String allelesTested;
+  String? allelesTested;
 
   GenotypeKey get key => GenotypeKey.fromGenotype(this);
 
   String get geneDisplayString => key.value;
 
-  String get variantDisplayString => key.allele;
+  String? get variantDisplayString => key.allele;
 
-  String _removeAllele(String textWithAllele) =>
-    textWithAllele.removePrefix(key.allele).trim().capitalize();
+  String _removeAlleleOrNull(String textWithAllele) =>
+    key.allele != null
+     ? textWithAllele.removePrefix(key.allele!).trim().capitalize()
+     : textWithAllele;
+  
+  String _getDisplayString(BuildContext context, String? text) {
+    final displayString = text ?? context.l10n.general_not_tested;
+    return key.isGeneUnique
+      ? displayString
+      :  _removeAlleleOrNull(displayString);
+  }
 
-  String get phenotypeDisplayString => key.isGeneUnique
-    ? phenotype
-    : _removeAllele(phenotype);
-  String get genotypeDisplayString => key.isGeneUnique
-    ? variant
-    : _removeAllele(variant);
-}
+  String phenotypeDisplayString(BuildContext context) =>
+    _getDisplayString(context, phenotype);
 
-extension FindGenotypeResultByKey on Map<String, GenotypeResult> {
-  bool isMissing(String genotypeKey) => this[genotypeKey] == null;
-
-  GenotypeResult findOrMissing(String genotypeKey, BuildContext context) =>
-    isMissing(genotypeKey)
-      ? GenotypeResult.missingResult(
-          GenotypeKey.extractGene(genotypeKey),
-          context,
-        )
-      : this[genotypeKey]!;
+  String genotypeDisplayString(BuildContext context) =>
+    _getDisplayString(context, variant);
 }

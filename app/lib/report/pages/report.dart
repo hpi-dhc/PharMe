@@ -21,18 +21,7 @@ class ReportPage extends StatelessWidget {
   }
 
   Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
-    final presentGenes = Set.from(UserData.instance.genotypeResults!.values.map(
-      (genotypeResult) => genotypeResult.gene
-    ));
-    final missingGenes = Set.from(CachedDrugs.instance.allGuidelineGenes.filter(
-      (gene) => !presentGenes.contains(gene)
-    ));
-    final userGenotypes = [
-      ...UserData.instance.genotypeResults!.values,
-      ...missingGenes.map(
-        (gene) => GenotypeResult.missingResult(gene, context),
-      ),
-    ];
+    final userGenotypes = UserData.instance.genotypeResults!.values;
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
       warningLevelCounts[genotypeResult.key.value] = {};
@@ -141,7 +130,7 @@ class GeneCard extends StatelessWidget {
               ),
               SizedBox(height: 8),
               Text(
-                possiblyAdaptedPhenotype(genotypeResult, drug: null),
+                possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
                 style: PharMeTheme.textTheme.titleSmall,
               ),
             ],

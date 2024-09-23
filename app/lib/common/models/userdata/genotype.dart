@@ -5,5 +5,5 @@ abstract class Genotype{
   });
 
   final String gene;
-  final String variant;
+  final String? variant;
 }

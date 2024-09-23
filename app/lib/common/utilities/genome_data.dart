@@ -41,9 +41,35 @@ String formatLookupMapKey(String gene, String variant) {
   return '${gene}__$variant';
 }
 
+Map<String, GenotypeResult> _initializeGenotypeResultKeys() {
+  final emptyGenotypeResults = <String, GenotypeResult>{};
+  for (final drug in CachedDrugs.instance.drugs ?? <Drug>[]) {
+    for (final guideline in drug.guidelines) {
+      for (final gene in guideline.lookupkey.keys) {
+        for (final variant in guideline.lookupkey[gene]!) {
+          final skipLookup = variant == SpecialLookup.anyNotHandled.value ||
+            variant == SpecialLookup.noResult.value;
+          if (skipLookup) continue;
+          final currentGenotypeKey = GenotypeKey(gene, variant);
+          final variantIsRelevant = definedNonUniqueGenes.contains(gene);
+          emptyGenotypeResults[currentGenotypeKey.value] =
+            GenotypeResult.missingResult(
+              gene,
+              variant: variantIsRelevant ? currentGenotypeKey.allele : null,
+            );
+        }
+      }
+    }
+  }
+  return emptyGenotypeResults;
+}
+
 Future<void> updateGenotypeResults() async {
   final skipUpdate = !shouldUpdateGenotypeResults();
   if (skipUpdate) return;
+
+  final genotypeResults = _initializeGenotypeResultKeys();
+
   // fetch lookups
   final response = await get(Uri.parse(cpicLookupUrl));
   if (response.statusCode != 200) throw Exception();
@@ -60,17 +86,14 @@ Future<void> updateGenotypeResults() async {
     lookupsHashMap[variantKey] = lookup;
     if (variantKey != lookupKey) lookupsHashMap[lookupKey] = lookup;
   }
-  final genotypeResults = <String, GenotypeResult>{};
-  // we know that labData is present because we check this in
-  // shouldUpdateGenotypeResults
-  for (final labResult in UserData.instance.labData!) {
+
+  for (final labResult in UserData.instance.labData ?? []) {
     final lookupMapKey = formatLookupMapKey(labResult.gene, labResult.variant);
     final lookup = lookupsHashMap[lookupMapKey];
-    if (lookup == null) continue;
     final genotypeResult = GenotypeResult.fromGenotypeData(labResult, lookup);
+    if (!genotypeResults.keys.contains(genotypeResult.key.value)) continue;
     genotypeResults[genotypeResult.key.value] = genotypeResult;
   }
-
   UserData.instance.genotypeResults = genotypeResults;
   await UserData.save();
 
@@ -80,13 +103,16 @@ Future<void> updateGenotypeResults() async {
 }
 
 bool shouldUpdateGenotypeResults() {
-  final genotypeResultsPresent =
-    UserData.instance.labData?.isNotEmpty ?? false;
+  final genotypeResultsMissing =
+    UserData.instance.genotypeResults?.isEmpty ?? true;
   final lookupsAreOutdated = MetaData.instance.lookupsLastFetchDate == null ||
     DateTime.now().difference(MetaData.instance.lookupsLastFetchDate!) >
       cpicMaxCacheTime;
   final labDataPresent = UserData.instance.labData?.isNotEmpty ?? false;
-  return labDataPresent && (!genotypeResultsPresent || lookupsAreOutdated);
+  final cachedDrugsPresent = CachedDrugs.instance.drugs?.isNotEmpty ?? false;
+  return labDataPresent &&
+    cachedDrugsPresent &&
+    (genotypeResultsMissing || lookupsAreOutdated);
 }
 
 bool shouldFetchDiplotypes() {

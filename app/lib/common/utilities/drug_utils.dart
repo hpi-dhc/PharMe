@@ -22,6 +22,7 @@ Future<void> updateCachedDrugs() async {
   CachedDrugs.instance.drugs = data.drugs;
   CachedDrugs.instance.version = data.version;
   await CachedDrugs.save();
+  await updateGenotypeResults();
   if (previousVersion != null) {
     final context = PharMeApp.navigatorKey.currentContext;
     if (context != null) {

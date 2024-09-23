@@ -56,17 +56,3 @@ Future<void> initCachedDrugs() async {
   final cachedDrugs = Hive.box<CachedDrugs>(_boxName);
   CachedDrugs._instance = cachedDrugs.get('data') ?? CachedDrugs();
 }
-
-extension CachedDrugsMethods on CachedDrugs {
-  Set<String> get allGuidelineGenes {
-    final guidelineGenes = <String>{};
-    if (CachedDrugs.instance.drugs != null) {
-      for (final drug in CachedDrugs.instance.drugs!) {
-        for (final guideline in drug.guidelines) {
-          guideline.lookupkey.keys.forEach(guidelineGenes.add);
-        }
-      }
-    }
-    return guidelineGenes;
-  }
-}

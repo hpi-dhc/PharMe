@@ -10,7 +10,7 @@ class GenotypeKey implements Genotype {
   String gene;
   
   @override
-  String variant;
+  String? variant;
 
   bool get isGeneUnique {
     final isDefinedAsNonUnique = definedNonUniqueGenes.contains(gene);
@@ -26,7 +26,9 @@ class GenotypeKey implements Genotype {
   // heavily relies on "non-unique" gene HLA-B, for which the variant is
   // in the format "[allele] [positive/negative]" (which currently is the only)
   // relevant case for "non-unique" genes)
-  String get allele => isGeneUnique ? variant : variant.split(' ').first;
+  String? get allele => variant != null
+    ? isGeneUnique ? variant : variant!.split(' ').first
+    : null;
 
   String get value => isGeneUnique
     ? gene
@@ -34,4 +36,11 @@ class GenotypeKey implements Genotype {
 
   static String extractGene(String genotypeKey) =>
     genotypeKey.split(' ').first;
+  
+  static String? maybeExtractVariant(String genotypeKey) {
+    final relevantGenotypeParts = genotypeKey.split(' ');
+    return relevantGenotypeParts.length > 1
+      ? genotypeKey.removePrefix(relevantGenotypeParts.first)
+      : null;
+  }
 }
