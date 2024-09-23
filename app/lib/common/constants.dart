@@ -21,3 +21,20 @@ const cpicLookupUrl =
 
 const drugInteractionIndicator = '*';
 const drugInteractionIndicatorName = 'asterisk';
+
+enum SpecialLookup {
+  any,
+  anyNotHandled,
+  noResult,
+}
+
+extension SpecialLookupValue on SpecialLookup {
+  String get value {
+    final valueMap = {
+      SpecialLookup.any: '*',
+      SpecialLookup.anyNotHandled: '~',
+      SpecialLookup.noResult: 'No Result',
+    };
+    return valueMap[this]!;
+  }
+}

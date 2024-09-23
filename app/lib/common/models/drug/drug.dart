@@ -90,7 +90,7 @@ extension DrugExtension on Drug {
   Guideline? _getExactGuideline() {
     final exactGuidelines = guidelines.filter(
       (guideline) => guideline.lookupkey.none(
-        (gene, variants) => variants.contains('~')
+        (gene, variants) => variants.contains(SpecialLookup.anyNotHandled.value)
       )
     );
     return exactGuidelines.firstOrNullWhere(
@@ -102,7 +102,7 @@ extension DrugExtension on Drug {
     if (guidelines.isEmpty) return null;
     final partialGuidelines = guidelines.filter(
       (guideline) => guideline.lookupkey.values.any(
-        (values) => values.contains('~'),
+        (values) => values.contains(SpecialLookup.anyNotHandled.value),
       ),
     );
     if (partialGuidelines.isEmpty) return null;
@@ -118,7 +118,9 @@ extension DrugExtension on Drug {
           (guideline) => guideline.lookupkey.all(
             (gene, variants) => geneCombination.contains(gene)
               ? _lookupsMatchUserData(gene, variants)
-              : variants.any((variant) => variant == '~'),
+              : variants.any(
+                (variant) => variant == SpecialLookup.anyNotHandled.value
+              ),
           ),
         );
       }
@@ -130,7 +132,9 @@ extension DrugExtension on Drug {
   Guideline? get userGuideline {
     final anyFallbackGuideline = guidelines.firstOrNullWhere(
       (guideline) => guideline.lookupkey.all(
-        (gene, variants) => variants.any((variant) => variant == '*')
+        (gene, variants) => variants.any(
+          (variant) => variant == SpecialLookup.any.value
+        )
       ),
     );
     if (anyFallbackGuideline != null) return anyFallbackGuideline;
@@ -140,7 +144,9 @@ extension DrugExtension on Drug {
     if (partiallyHandledGuideline != null) return partiallyHandledGuideline;
     return guidelines.firstOrNullWhere(
       (guideline) => guideline.lookupkey.all(
-        (gene, variants) => variants.any((variant) => variant == '~')
+        (gene, variants) => variants.any(
+          (variant) => variant == SpecialLookup.anyNotHandled.value
+        )
       ),
     );
   }
