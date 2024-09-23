@@ -45,9 +45,11 @@
       "CPIC",
       "Cupertino",
       "dartx",
+      "datetime",
       "dhclab",
       "diplotype",
       "diplotypes",
+      "DPYD",
       "drugclass",
       "drugid",
       "drugrecommendation",
@@ -108,6 +110,15 @@
       "Vicoprofen",
       "voriconazole",
       "Votrient"
+    ],
+    "cSpell.ignorePaths": [
+      "package-lock.json",
+      "node_modules",
+      "vscode-extension",
+      ".git/objects",
+      ".vscode",
+      ".vscode-insiders",
+      "package.json"
     ]
   }
 }
