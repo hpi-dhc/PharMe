@@ -12,7 +12,7 @@ import 'fixtures/drugs/with_any_not_handled_guideline.dart';
 import 'fixtures/drugs/with_multiple_any_not_handled_fallback_guidelines.dart';
 import 'fixtures/drugs/with_proper_guideline.dart';
 import 'fixtures/drugs/without_guidelines.dart';
-import 'fixtures/set_user_data.dart';
+import 'fixtures/set_app_data.dart';
 import 'mocks/drug_cubit.dart';
 
 void main() {
@@ -25,7 +25,10 @@ void main() {
     UserData.instance.activeDrugNames = [];
     UserData.instance.labData = null;
     UserData.instance.genotypeResults = null;
-    setUserDataForGuideline(drugWithProperGuideline.guidelines.first);
+    setAppData(
+      drug: drugWithProperGuideline,
+      guideline: drugWithProperGuideline.guidelines.first,
+    );
     mockDrugsCubit = MockDrugsCubit();
   });
 
@@ -93,7 +96,6 @@ void main() {
         testWidgets(
           '$description (${index + 1}/${drug.guidelines.length})',
           (tester) async {        
-            setUserDataForGuideline(guideline);
             await _expectDrugContent(
               tester,
               mockDrugsCubit,
@@ -116,6 +118,11 @@ Future<void> _expectDrugContent(
   bool expectDrugToBeActive = false,
   Guideline? guideline,
 }) async {
+  Guideline? relevantGuideline;
+  if (!expectNoGuidelines) {
+    relevantGuideline = guideline ?? drug.guidelines.first;
+    setAppData(drug: drug, guideline: relevantGuideline);
+  }
   when(() => mockDrugsCubit.state)
     .thenReturn(isLoading ? DrugState.loading() : DrugState.loaded());
   await tester.pumpWidget(
@@ -139,6 +146,7 @@ Future<void> _expectDrugContent(
       ),
     ),
   );
+  
   // Title
   final drugName = isInhibitor(drug.name) ? '${drug.name}*' : drug.name;
   expect(
@@ -182,8 +190,7 @@ Future<void> _expectDrugContent(
       findsOneWidget,
     );
   } else {
-    final relevantGuideline = guideline ?? drug.guidelines.first;
-    expect(card.color, relevantGuideline.annotations.warningLevel.color);
+    expect(card.color, relevantGuideline!.annotations.warningLevel.color);
     expect(
       find.byTooltip(context.l10n.drugs_page_tooltip_guideline_present(
         relevantGuideline.externalData.first.source,

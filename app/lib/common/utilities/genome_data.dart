@@ -41,7 +41,8 @@ String formatLookupMapKey(String gene, String variant) {
   return '${gene}__$variant';
 }
 
-Map<String, GenotypeResult> _initializeGenotypeResultKeys() {
+@visibleForTesting
+Map<String, GenotypeResult> initializeGenotypeResultKeys() {
   final emptyGenotypeResults = <String, GenotypeResult>{};
   for (final drug in CachedDrugs.instance.drugs ?? <Drug>[]) {
     for (final guideline in drug.guidelines) {
@@ -68,7 +69,7 @@ Future<void> updateGenotypeResults() async {
   final skipUpdate = !shouldUpdateGenotypeResults();
   if (skipUpdate) return;
 
-  final genotypeResults = _initializeGenotypeResultKeys();
+  final genotypeResults = initializeGenotypeResultKeys();
 
   // fetch lookups
   final response = await get(Uri.parse(cpicLookupUrl));

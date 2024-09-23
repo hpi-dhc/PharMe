@@ -12,7 +12,7 @@ class _UserDataConfig {
   final String allelesTested = 'allelesTested does not matter for test';
 }
 
-void setGenotypeResult(GenotypeResult genotypeResult ) {
+void setGenotypeResult(GenotypeResult genotypeResult) {
   UserData.instance.genotypeResults = UserData.instance.genotypeResults ?? {};
   UserData.instance.genotypeResults![genotypeResult.key.value] = genotypeResult;
 }
@@ -58,4 +58,19 @@ void setUserDataForGuideline(Guideline guideline) {
       lookupkey: userDataConfig.lookupkey,
     ));
   }
+}
+
+void addDrugToCachedDrugs(Drug drug) {
+  CachedDrugs.instance.drugs = CachedDrugs.instance.drugs ?? [];
+  final drugIsPresent = CachedDrugs.instance.drugs!.any(
+    (presentDrug) => presentDrug.name == drug.name,
+  );
+  if (drugIsPresent) return;
+  CachedDrugs.instance.drugs!.add(drug);
+}
+
+void setAppData({required Drug drug, required Guideline guideline}) {
+  addDrugToCachedDrugs(drug);
+  initializeGenotypeResultKeys().values.forEach(setGenotypeResult);
+  setUserDataForGuideline(guideline);
 }

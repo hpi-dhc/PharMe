@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'fixtures/guidelines/aripiprazole_cyp2d6_poor.dart';
 import 'fixtures/guidelines/pazopanib_hlab5701_positive_ugt1a1_poor_guideline.dart';
-import 'fixtures/set_user_data.dart';
+import 'fixtures/set_app_data.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
