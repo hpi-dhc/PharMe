@@ -52,23 +52,28 @@ class GenotypeResult implements Genotype {
 
   String get geneDisplayString => key.value;
 
-  String? get variantDisplayString => key.allele;
-
   String _removeAlleleOrNull(String textWithAllele) =>
     key.allele != null
      ? textWithAllele.removePrefix(key.allele!).trim().capitalize()
      : textWithAllele;
   
-  String _getDisplayString(BuildContext context, String? text) {
+  String _displayStringOrMissing(
+    BuildContext context,
+    String? text, {
+      bool removeAllele = false,
+  }) {
     final displayString = text ?? context.l10n.general_not_tested;
-    return key.isGeneUnique
+    return !removeAllele || key.isGeneUnique
       ? displayString
       :  _removeAlleleOrNull(displayString);
   }
 
+  String variantDisplayString(BuildContext context) =>
+    _displayStringOrMissing(context, key.allele);
+
   String phenotypeDisplayString(BuildContext context) =>
-    _getDisplayString(context, phenotype);
+    _displayStringOrMissing(context, phenotype, removeAllele: true);
 
   String genotypeDisplayString(BuildContext context) =>
-    _getDisplayString(context, variant);
+    _displayStringOrMissing(context, variant, removeAllele: true);
 }
