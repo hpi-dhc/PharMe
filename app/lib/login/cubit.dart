@@ -61,7 +61,7 @@ class LoginCubit extends Cubit<LoginState> {
         // ignore: use_build_context_synchronously
         emit(LoginState.loadingUserData(context.l10n.auth_updating_data));
       }
-      await updateCachedDrugs();
+      await updateDrugsWithGuidelines();
 
       // login + fetching of data successful
       MetaData.instance.isLoggedIn = true;

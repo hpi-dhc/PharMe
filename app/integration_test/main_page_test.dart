@@ -12,8 +12,8 @@ void main() {
 
   UserData.instance.genotypeResults = {};
 
-  CachedDrugs.instance.version = 1;
-  CachedDrugs.instance.drugs = List.empty();
+  DrugsWithGuidelines.instance.version = 1;
+  DrugsWithGuidelines.instance.drugs = List.empty();
 
   group('test the main page', () {
     testWidgets('test that tabs change pages', (tester) async {

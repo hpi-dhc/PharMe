@@ -49,7 +49,7 @@ class DrugListCubit extends Cubit<DrugListState> {
         FilterState.initial();
 
     if (useCache) {
-      final drugs = CachedDrugs.instance.drugs;
+      final drugs = DrugsWithGuidelines.instance.drugs;
       if (drugs != null) {
         emit(DrugListState.loaded(drugs, filter));
         return;
@@ -62,7 +62,7 @@ class DrugListCubit extends Cubit<DrugListState> {
 
     emit(DrugListState.loading());
     try {
-      await updateCachedDrugs();
+      await updateDrugsWithGuidelines();
       await loadDrugs(updateIfNull: false, filter: filter);
     } catch (error) {
       emit(DrugListState.error());

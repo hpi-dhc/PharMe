@@ -7,7 +7,7 @@ Future<void> initServices() async {
 
   await initMetaData();
   await initUserData();
-  await initCachedDrugs();
+  await initDrugsWithGuidelines();
   WidgetsFlutterBinding.ensureInitialized();
 }
 
@@ -15,5 +15,5 @@ Future<void> cleanupServices() async {
   await MetaData.save();
   await UserData.save();
 
-  await CachedDrugs.save();
+  await DrugsWithGuidelines.save();
 }

@@ -3,27 +3,27 @@ import 'package:hive/hive.dart';
 import '../../utilities/hive_utils.dart';
 import '../module.dart';
 
-part 'cached_drugs.g.dart';
+part 'drugs_with_guidelines.g.dart';
 
-const _boxName = 'cachedDrugs';
+const _boxName = 'DrugsWithGuidelines';
 
 @HiveType(typeId: 5)
-class CachedDrugs {
-  factory CachedDrugs() => _instance;
+class DrugsWithGuidelines {
+  factory DrugsWithGuidelines() => _instance;
 
   // private constructor
-  CachedDrugs._();
+  DrugsWithGuidelines._();
 
-  static CachedDrugs _instance = CachedDrugs._();
-  static CachedDrugs get instance => _instance;
+  static DrugsWithGuidelines _instance = DrugsWithGuidelines._();
+  static DrugsWithGuidelines get instance => _instance;
 
   /// Writes the current instance to local storage
   static Future<void> save() async =>
-      Hive.box<CachedDrugs>(_boxName).put('data', _instance);
+      Hive.box<DrugsWithGuidelines>(_boxName).put('data', _instance);
 
   static Future<void> erase() async {
-    _instance = CachedDrugs._();
-    await CachedDrugs.save();
+    _instance = DrugsWithGuidelines._();
+    await DrugsWithGuidelines.save();
   }
 
   @HiveField(0)
@@ -33,9 +33,9 @@ class CachedDrugs {
   List<Drug>? drugs;
 }
 
-Future<void> initCachedDrugs() async {
+Future<void> initDrugsWithGuidelines() async {
   try {
-    Hive.registerAdapter(CachedDrugsAdapter());
+    Hive.registerAdapter(DrugsWithGuidelinesAdapter());
     Hive.registerAdapter(DrugAdapter());
     Hive.registerAdapter(DrugAnnotationsAdapter());
     Hive.registerAdapter(GuidelineAdapter());
@@ -49,10 +49,11 @@ Future<void> initCachedDrugs() async {
   // cached drugs have exactly the matching guidelines saved, i.e. they can be
   // used to figure out the user's gene lookupkeys, i.e. we have to encrypt.
   final encryptionKey = await retrieveExistingOrGenerateKey();
-  await Hive.openBox<CachedDrugs>(
+  await Hive.openBox<DrugsWithGuidelines>(
     _boxName,
     encryptionCipher: HiveAesCipher(encryptionKey),
   );
-  final cachedDrugs = Hive.box<CachedDrugs>(_boxName);
-  CachedDrugs._instance = cachedDrugs.get('data') ?? CachedDrugs();
+  final drugsWithGuidelines = Hive.box<DrugsWithGuidelines>(_boxName);
+  DrugsWithGuidelines._instance =
+    drugsWithGuidelines.get('data') ?? DrugsWithGuidelines();
 }

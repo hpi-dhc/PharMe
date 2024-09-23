@@ -9,7 +9,7 @@ Future<void> deleteAllAppData() async {
   await _deleteAppDir();
   await UserData.erase();
   await MetaData.erase();
-  await CachedDrugs.erase();
+  await DrugsWithGuidelines.erase();
 }
 
 // The folders themself cannot be deleted on iOS, therefore delete all content

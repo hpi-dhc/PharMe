@@ -25,7 +25,7 @@ class ReportPage extends StatelessWidget {
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
       warningLevelCounts[genotypeResult.key.value] = {};
-      final affectedDrugs = CachedDrugs.instance.drugs?.filter(
+      final affectedDrugs = DrugsWithGuidelines.instance.drugs?.filter(
         (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
       ) ?? [];
       for (final warningLevel in WarningLevel.values) {

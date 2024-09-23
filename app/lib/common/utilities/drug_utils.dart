@@ -4,9 +4,9 @@ import 'package:http/http.dart';
 import '../../app.dart';
 import '../module.dart';
 
-Future<void> updateCachedDrugs() async {
+Future<void> updateDrugsWithGuidelines() async {
   final isOnline = await hasConnectionTo(anniUrl().host);
-  if (!isOnline && CachedDrugs.instance.version == null) {
+  if (!isOnline && DrugsWithGuidelines.instance.version == null) {
     throw Exception();
   }
   final versionResponse = await get(anniUrl('version'));
@@ -14,14 +14,14 @@ Future<void> updateCachedDrugs() async {
   final version = AnniVersionResponse.fromJson(jsonDecode(versionResponse.body))
       .data
       .version;
-  if (version == CachedDrugs.instance.version) return;
+  if (version == DrugsWithGuidelines.instance.version) return;
   final dataResponse = await get(anniUrl('data'));
   if (dataResponse.statusCode != 200) throw Exception();
   final data = AnniDataResponse.fromJson(jsonDecode(dataResponse.body)).data;
-  final previousVersion = CachedDrugs.instance.version;
-  CachedDrugs.instance.drugs = data.drugs;
-  CachedDrugs.instance.version = data.version;
-  await CachedDrugs.save();
+  final previousVersion = DrugsWithGuidelines.instance.version;
+  DrugsWithGuidelines.instance.drugs = data.drugs;
+  DrugsWithGuidelines.instance.version = data.version;
+  await DrugsWithGuidelines.save();
   await updateGenotypeResults();
   if (previousVersion != null) {
     final context = PharMeApp.navigatorKey.currentContext;

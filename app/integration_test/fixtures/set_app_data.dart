@@ -60,17 +60,17 @@ void setUserDataForGuideline(Guideline guideline) {
   }
 }
 
-void addDrugToCachedDrugs(Drug drug) {
-  CachedDrugs.instance.drugs = CachedDrugs.instance.drugs ?? [];
-  final drugIsPresent = CachedDrugs.instance.drugs!.any(
+void addDrugToDrugsWithGuidelines(Drug drug) {
+  DrugsWithGuidelines.instance.drugs = DrugsWithGuidelines.instance.drugs ?? [];
+  final drugIsPresent = DrugsWithGuidelines.instance.drugs!.any(
     (presentDrug) => presentDrug.name == drug.name,
   );
   if (drugIsPresent) return;
-  CachedDrugs.instance.drugs!.add(drug);
+  DrugsWithGuidelines.instance.drugs!.add(drug);
 }
 
 void setAppData({required Drug drug, required Guideline guideline}) {
-  addDrugToCachedDrugs(drug);
+  addDrugToDrugsWithGuidelines(drug);
   initializeGenotypeResultKeys().values.forEach(setGenotypeResult);
   setUserDataForGuideline(guideline);
 }

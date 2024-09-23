@@ -189,7 +189,7 @@ String _getDrugWithBrandNames(
   String drugName,
   { required bool capitalize }
 ) {
-  final drug = CachedDrugs.instance.drugs?.firstOrNullWhere(
+  final drug = DrugsWithGuidelines.instance.drugs?.firstOrNullWhere(
     (drug) => drug.name == drugName
   );
   final displayedDrugName = capitalize ? drugName.capitalize() : drugName;

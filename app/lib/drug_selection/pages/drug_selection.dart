@@ -78,7 +78,7 @@ class DrugSelectionPage extends HookWidget {
   }
 
   Widget _buildDrugList(BuildContext context, DrugSelectionState state) {
-    if (CachedDrugs.instance.drugs!.isEmpty) {
+    if (DrugsWithGuidelines.instance.drugs!.isEmpty) {
       return Column(
         children: [
           Text(

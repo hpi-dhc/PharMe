@@ -34,7 +34,7 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
   await activeDrugs.setList(activeDrugList);
   // invalidate cached drugs because lookups may have changed and we need to
   // refilter the matching guidelines
-  await CachedDrugs.erase();
+  await DrugsWithGuidelines.erase();
 }
 
 String formatLookupMapKey(String gene, String variant) {
@@ -44,7 +44,7 @@ String formatLookupMapKey(String gene, String variant) {
 @visibleForTesting
 Map<String, GenotypeResult> initializeGenotypeResultKeys() {
   final emptyGenotypeResults = <String, GenotypeResult>{};
-  for (final drug in CachedDrugs.instance.drugs ?? <Drug>[]) {
+  for (final drug in DrugsWithGuidelines.instance.drugs ?? <Drug>[]) {
     for (final guideline in drug.guidelines) {
       for (final gene in guideline.lookupkey.keys) {
         for (final variant in guideline.lookupkey[gene]!) {
@@ -110,9 +110,10 @@ bool shouldUpdateGenotypeResults() {
     DateTime.now().difference(MetaData.instance.lookupsLastFetchDate!) >
       cpicMaxCacheTime;
   final labDataPresent = UserData.instance.labData?.isNotEmpty ?? false;
-  final cachedDrugsPresent = CachedDrugs.instance.drugs?.isNotEmpty ?? false;
+  final drugsWithGuidelinesPresent =
+    DrugsWithGuidelines.instance.drugs?.isNotEmpty ?? false;
   return labDataPresent &&
-    cachedDrugsPresent &&
+    drugsWithGuidelinesPresent &&
     (genotypeResultsMissing || lookupsAreOutdated);
 }
 
