@@ -57,6 +57,7 @@ Map<String, GenotypeResult> initializeGenotypeResultKeys() {
             GenotypeResult.missingResult(
               gene,
               variant: variantIsRelevant ? currentGenotypeKey.allele : null,
+              lookupkey: SpecialLookup.noResult.value,
             );
         }
       }

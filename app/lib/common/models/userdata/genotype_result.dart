@@ -25,12 +25,16 @@ class GenotypeResult implements Genotype {
     allelesTested: labResult.allelesTested,
   );
 
-  factory GenotypeResult.missingResult(String gene, {String? variant}) {
+  factory GenotypeResult.missingResult(
+    String gene, {
+      String? variant,
+      String? lookupkey,
+    }) {
     return GenotypeResult(
       gene: gene,
       variant: variant,
       phenotype: null,
-      lookupkey: null,
+      lookupkey: lookupkey,
       allelesTested: null,
     );
   }
