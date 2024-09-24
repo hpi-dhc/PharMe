@@ -2,7 +2,7 @@ import 'package:app/common/models/drug/drug.dart';
 import 'package:app/common/models/drug/guideline.dart';
 import 'package:app/common/models/drug/warning_level.dart';
 
-final drugWithProperGuideline = Drug(
+final ibuprofenWithProperGuideline = Drug(
   id: '6407768b92a4868065b6c466',
   version: 1,
   name: 'ibuprofen',

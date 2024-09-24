@@ -6,9 +6,9 @@ import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-import 'fixtures/drugs/with_any_fallback_guideline.dart';
-import 'fixtures/drugs/with_proper_guideline.dart';
-import 'fixtures/drugs/without_guidelines.dart';
+import 'fixtures/drugs/aripiprazole_with_any_not_handled_guideline.dart';
+import 'fixtures/drugs/ibuprofen_with_proper_guideline.dart';
+import 'fixtures/drugs/mirabegron_without_guidelines.dart';
 import 'mocks/drug_list_cubit.dart';
 
 void main() {
@@ -18,9 +18,9 @@ void main() {
 
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
   final loadedDrugs = [
-    drugWithProperGuideline,
-    drugWithoutGuidelines,
-    drugWithAnyFallbackGuideline,
+    ibuprofenWithProperGuideline,
+    mirabegronWithoutGuidelines,
+    aripiprazoleWithAnyNotHandledFallbackGuideline,
   ];
   group('integration test for the search page', () {
     testWidgets('test search page in loading state', (tester) async {

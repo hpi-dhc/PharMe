@@ -2,7 +2,7 @@ import 'package:app/common/models/drug/drug.dart';
 import 'package:app/common/models/drug/guideline.dart';
 import 'package:app/common/models/drug/warning_level.dart';
 
-final drugWithAnyFallbackGuideline = Drug(
+final warfarinWithAnyFallbackGuideline = Drug(
   id: '658df37b3aa92cbd80bbe352',
   version: 1,
   name: 'warfarin',

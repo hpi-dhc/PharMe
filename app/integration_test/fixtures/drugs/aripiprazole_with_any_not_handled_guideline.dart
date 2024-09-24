@@ -4,7 +4,7 @@ import 'package:app/common/models/drug/warning_level.dart';
 
 import '../guidelines/aripiprazole_cyp2d6_poor.dart';
 
-final drugWithAnyNotHandledFallbackGuideline = Drug(
+final aripiprazoleWithAnyNotHandledFallbackGuideline = Drug(
   id: '6492f8e9918ddcae7349c30c',
   version: 1,
   name: 'aripiprazole',

@@ -1,6 +1,6 @@
 import 'package:app/common/models/drug/drug.dart';
 
-final drugWithoutGuidelines = Drug(
+final mirabegronWithoutGuidelines = Drug(
   id: '64c187431006f51bc6e24959',
   version: 2,
   name: 'mirabegron',
