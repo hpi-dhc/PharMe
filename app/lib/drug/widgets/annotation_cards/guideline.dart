@@ -117,7 +117,12 @@ class GuidelineAnnotationCard extends StatelessWidget {
       ];
     } else {
       final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
-        UserData.instance.genotypeResults![genotypeKey]!
+        UserData.instance.genotypeResults![genotypeKey] ??
+          // Should not be null but to be safe
+          GenotypeResult.missingResult(
+            GenotypeKey.extractGene(genotypeKey),
+            variant: GenotypeKey.maybeExtractVariant(genotypeKey),
+          )
       ).toList();
       final geneDescriptions = genotypeResults.map((genotypeResult) =>
         TableRowDefinition(

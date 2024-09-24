@@ -154,13 +154,30 @@ extension DrugExtension on Drug {
   Guideline? get userOrFirstGuideline => userGuideline ??
     (guidelines.isNotEmpty ? guidelines.first : null);
 
-  List<String> get guidelineGenotypes => guidelines.isNotEmpty
-    ? guidelines.first.lookupkey.keys.flatMap(
-      (gene) => guidelines.first.lookupkey[gene]!.map((variant) =>
-        GenotypeKey(gene, variant).value
-      ).toList().toSet()
-    ).toList()
-    : [];
+  List<String> get guidelineGenotypes {
+    if (guidelines.isEmpty) return [];
+    final genotypeKeys = <String, GenotypeKey>{};
+    final lookupGeneCount = guidelines.first.lookupkey.keys.length;
+    for (final guideline in guidelines) {
+      if (genotypeKeys.length == lookupGeneCount) break;
+      for (final lookupEntry in guideline.lookupkey.entries) {
+        final gene = lookupEntry.key;
+        GenotypeKey? genotypeKey;
+        if (isGeneUnique(gene)) {
+          genotypeKey = GenotypeKey(gene, null);
+        } else {
+          for (final variant in lookupEntry.value) {
+            if (variant == SpecialLookup.noResult.value) continue;
+            genotypeKey = GenotypeKey(gene, variant);
+          }
+        }
+        if (genotypeKey != null) {
+          genotypeKeys[genotypeKey.value] = genotypeKey;
+        }
+      }
+    }
+    return genotypeKeys.values.map((genotypeKey) => genotypeKey.value).toList();
+  }
 
   WarningLevel get warningLevel =>
     userGuideline?.annotations.warningLevel ?? WarningLevel.none;

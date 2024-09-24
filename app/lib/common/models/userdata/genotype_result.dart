@@ -63,7 +63,7 @@ class GenotypeResult implements Genotype {
       bool removeAllele = false,
   }) {
     final displayString = text ?? context.l10n.general_not_tested;
-    return !removeAllele || key.isGeneUnique
+    return !removeAllele || isGeneUnique(key.gene)
       ? displayString
       :  _removeAlleleOrNull(displayString);
   }
