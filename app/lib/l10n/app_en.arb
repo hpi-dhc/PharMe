@@ -145,7 +145,7 @@
       }
     }
   },
-  "drugs_page_tooltip_guideline_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present in your case (yet).",
+  "drugs_page_tooltip_guideline_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present in this case (yet).",
   "drugs_page_recommendation_description": "What to do: ",
 
   "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",
