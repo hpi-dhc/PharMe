@@ -11,6 +11,7 @@ import 'fixtures/drugs/aripiprazole_with_any_not_handled_guideline.dart';
 import 'fixtures/drugs/ibuprofen_with_proper_guideline.dart';
 import 'fixtures/drugs/mirabegron_without_guidelines.dart';
 import 'fixtures/drugs/pazopanib_with_multiple_any_not_handled_fallback_guidelines.dart';
+import 'fixtures/drugs/rosuvastatin_with_no_result_guideline.dart';
 import 'fixtures/drugs/warfarin_with_any_fallback_guideline.dart';
 import 'fixtures/set_app_data.dart';
 import 'mocks/drug_cubit.dart';
@@ -160,21 +161,6 @@ void main() {
           findsOneWidget,
         );
       }
-      if (explicitNoResult != null) {
-        for (final noResultGene in explicitNoResult) {
-          final geneRowFinder = find.ancestor(
-            of: find.text(noResultGene),
-            matching: find.byType(Table),
-          );
-          expect(
-            find.descendant(
-              of: geneRowFinder,
-              matching: find.textContaining(context.l10n.general_not_tested),
-            ),
-            findsOneWidget,
-          );
-        }
-      }
     } else {
       expect(card.color, relevantGuideline!.annotations.warningLevel.color);
       expect(
@@ -206,6 +192,29 @@ void main() {
             findsOneWidget,
           );
         }
+      }
+    }
+    final noResultGenes = [
+      ...(explicitNoResult ?? []),
+      ...(relevantGuideline?.lookupkey.entries.filter(
+        (lookupEntry) => lookupEntry.value.any(
+          (variant) => variant == SpecialLookup.noResult.value
+        )
+      ).map((lookupEntry) => lookupEntry.key).toList() ?? [])
+    ];
+    if (noResultGenes.isNotEmpty) {
+      for (final noResultGene in noResultGenes) {
+        final geneRowFinder = find.ancestor(
+          of: find.text(noResultGene),
+          matching: find.byType(Table),
+        );
+        expect(
+          find.descendant(
+            of: geneRowFinder,
+            matching: find.textContaining(context.l10n.general_not_tested),
+          ),
+          findsOneWidget,
+        );
       }
     }
   }
@@ -307,6 +316,11 @@ void main() {
               '0.0',
           },
           expectNoMappedGuidelines: true,
+        ),
+        _TestCase(
+          description: 'mappable no result',
+          drug: rosuvastatinWithNoResultGuidelines,
+          expectNoMappedGuidelines: false,
         ),
       ]);
     });

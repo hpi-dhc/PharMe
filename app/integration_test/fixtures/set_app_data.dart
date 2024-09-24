@@ -49,7 +49,9 @@ void setUserDataForGuideline(
     // multiple HLA-B variants in the tests or overwrite a specific HLA-B
     // variant, we will need to check for the genotype key (which is in the
     // current setup not possible without the proper variant)
-    if (!(explicitNoResult?.contains(gene) ?? false)) {
+    final lookupIsMissing = lookupkey == SpecialLookup.noResult.value ||
+      (explicitNoResult?.contains(gene) ?? false);
+    if (!lookupIsMissing) {
       UserData.instance.labData = UserData.instance.labData!.filter(
         (labResult) => labResult.gene != gene
       ).toList();
