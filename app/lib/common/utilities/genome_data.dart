@@ -32,9 +32,6 @@ Future<void> _saveDiplotypeAndActiveDrugsResponse(
   UserData.instance.labData = labData;
   await UserData.save();
   await activeDrugs.setList(activeDrugList);
-  // invalidate cached drugs because lookups may have changed and we need to
-  // refilter the matching guidelines
-  await DrugsWithGuidelines.erase();
 }
 
 String formatLookupMapKey(String gene, String variant) {
