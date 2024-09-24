@@ -17,7 +17,11 @@ void setGenotypeResult(GenotypeResult genotypeResult) {
   UserData.instance.genotypeResults![genotypeResult.key.value] = genotypeResult;
 }
 
-void setUserDataForGuideline(Guideline guideline) {
+void setUserDataForGuideline(
+  Guideline guideline, {
+  List<String>? explicitNoResult,
+  Map<String, String>? explicitLookups,
+}) {
   UserData.instance.labData = UserData.instance.labData ?? [];
   for (final gene in guideline.lookupkey.keys) {
     final lookupkeys = guideline.lookupkey[gene]!;
@@ -28,8 +32,14 @@ void setUserDataForGuideline(Guideline guideline) {
       );
     }
     var lookupkey = lookupkeys.first;
-    if (lookupkey == '*' || lookupkey == '~') {
+    if (
+      lookupkey == SpecialLookup.any.value ||
+      lookupkey == SpecialLookup.anyNotHandled.value
+    ) {
       lookupkey = 'certainly not handled lookupkey';
+    }
+    if (explicitLookups?.keys.contains(gene) ?? false) {
+      lookupkey = explicitLookups![gene]!;
     }
     final userDataConfig = _UserDataConfig(
       gene: gene,
@@ -39,24 +49,26 @@ void setUserDataForGuideline(Guideline guideline) {
     // multiple HLA-B variants in the tests or overwrite a specific HLA-B
     // variant, we will need to check for the genotype key (which is in the
     // current setup not possible without the proper variant)
-    UserData.instance.labData = UserData.instance.labData!.filter(
-      (labResult) => labResult.gene != gene
-    ).toList();
-    UserData.instance.labData!.add(
-      LabResult(
+    if (!(explicitNoResult?.contains(gene) ?? false)) {
+      UserData.instance.labData = UserData.instance.labData!.filter(
+        (labResult) => labResult.gene != gene
+      ).toList();
+      UserData.instance.labData!.add(
+        LabResult(
+          gene: userDataConfig.gene,
+          variant: userDataConfig.variant,
+          phenotype: userDataConfig.phenotype,
+          allelesTested: userDataConfig.allelesTested,
+        ),
+      );
+      setGenotypeResult(GenotypeResult(
         gene: userDataConfig.gene,
-        variant: userDataConfig.variant,
         phenotype: userDataConfig.phenotype,
-        allelesTested: userDataConfig.allelesTested,
-      ),
-    );
-    setGenotypeResult(GenotypeResult(
-      gene: userDataConfig.gene,
-      phenotype: userDataConfig.phenotype,
-      variant: userDataConfig.variant,
-      allelesTested: userDataConfig.variant,
-      lookupkey: userDataConfig.lookupkey,
-    ));
+        variant: userDataConfig.variant,
+        allelesTested: userDataConfig.variant,
+        lookupkey: userDataConfig.lookupkey,
+      ));
+    }
   }
 }
 
@@ -69,8 +81,17 @@ void addDrugToDrugsWithGuidelines(Drug drug) {
   DrugsWithGuidelines.instance.drugs!.add(drug);
 }
 
-void setAppData({required Drug drug, required Guideline guideline}) {
+void setAppData({
+  required Drug drug,
+  required Guideline guideline,
+  List<String>? explicitNoResult,
+  Map<String, String>? explicitLookups,
+}) {
   addDrugToDrugsWithGuidelines(drug);
   initializeGenotypeResultKeys().values.forEach(setGenotypeResult);
-  setUserDataForGuideline(guideline);
+  setUserDataForGuideline(
+    guideline,
+    explicitNoResult: explicitNoResult,
+    explicitLookups: explicitLookups,
+  );
 }

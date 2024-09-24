@@ -163,6 +163,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
         (source) => GestureDetector(
           onTap: () => _launchUrl(Uri.parse(source.split('|')[1])),
           child: RoundedCard(
+            key: Key('sourceCard'),
             radius: PharMeTheme.innerCardRadius,
             outerHorizontalPadding: 0,
             outerVerticalPadding: 0,

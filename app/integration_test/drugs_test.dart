@@ -15,6 +15,22 @@ import 'fixtures/drugs/warfarin_with_any_fallback_guideline.dart';
 import 'fixtures/set_app_data.dart';
 import 'mocks/drug_cubit.dart';
 
+class _TestCase {
+  _TestCase({
+    required this.description,
+    required this.drug,
+    this.expectNoMappedGuidelines = false,
+    this.explicitNoResult,
+    this.explicitLookups,
+  });
+
+  final String description;
+  final Drug drug;
+  final bool expectNoMappedGuidelines;
+  final List<String>? explicitNoResult;
+  final Map<String, String>? explicitLookups;
+}
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
@@ -36,15 +52,22 @@ void main() {
     WidgetTester tester, {
     required Drug drug,
     bool isLoading = false,
-    bool expectNoGuidelines = false,
+    bool expectNoMappedGuidelines = false,
     bool expectDrugToBeActive = false,
     bool expectNoBrandNames = false,
+    List<String>? explicitNoResult,
+    Map<String, String>? explicitLookups,
     Guideline? guideline,
   }) async {
     Guideline? relevantGuideline;
-    if (!expectNoGuidelines) {
+    if (guideline != null || drug.guidelines.isNotEmpty) {
       relevantGuideline = guideline ?? drug.guidelines.first;
-      setAppData(drug: drug, guideline: relevantGuideline);
+      setAppData(
+        drug: drug,
+        guideline: relevantGuideline,
+        explicitNoResult: explicitNoResult,
+        explicitLookups: explicitLookups,
+      );
     }
     when(() => mockDrugsCubit.state)
       .thenReturn(isLoading ? DrugState.loading() : DrugState.loaded());
@@ -97,6 +120,7 @@ void main() {
       ),
     ) as RoundedCard;
     expect(find.byType(Disclaimer), findsOneWidget);
+    final sourcesSection = find.byKey(Key('sourceCard'));
     final context = tester.element(find.byType(Scaffold).first);
     if (expectNoBrandNames) {
       expect(
@@ -115,20 +139,42 @@ void main() {
         );
       }
     }
-    if (expectNoGuidelines) {
+    if (expectNoMappedGuidelines) {
       expect(card.color, WarningLevel.green.color);
       expect(
         find.byTooltip(context.l10n.drugs_page_tooltip_guideline_missing),
         findsOneWidget,
       );
       expect(
-        find.text(context.l10n.drugs_page_guidelines_empty(drug.name)),
-        findsOneWidget,
-      );
-      expect(
         find.text(context.l10n.drugs_page_no_guidelines_text),
         findsOneWidget,
       );
+      if (drug.guidelines.isNotEmpty) {
+        expect(sourcesSection, findsOneWidget);
+      } else {
+        expect(sourcesSection, findsNothing);
+      }
+      if (drug.guidelines.isEmpty) {
+        expect(
+          find.text(context.l10n.drugs_page_guidelines_empty(drug.name)),
+          findsOneWidget,
+        );
+      }
+      if (explicitNoResult != null) {
+        for (final noResultGene in explicitNoResult) {
+          final geneRowFinder = find.ancestor(
+            of: find.text(noResultGene),
+            matching: find.byType(Table),
+          );
+          expect(
+            find.descendant(
+              of: geneRowFinder,
+              matching: find.textContaining(context.l10n.general_not_tested),
+            ),
+            findsOneWidget,
+          );
+        }
+      }
     } else {
       expect(card.color, relevantGuideline!.annotations.warningLevel.color);
       expect(
@@ -145,6 +191,9 @@ void main() {
         find.textContaining(relevantGuideline.annotations.recommendation),
         findsOneWidget,
       );
+      expect(sourcesSection, findsOneWidget);
+    }
+    if (!expectNoMappedGuidelines || explicitLookups != null) {
       for (final genotypeKey in drug.guidelineGenotypes) {
         if (genotypeKey.contains(' ')) {
           expect(
@@ -161,14 +210,10 @@ void main() {
     }
   }
 
-  Future<void> runTestCasePerGuideline(
-    Map<String, Drug> testCases, {
-      bool expectNoGuidelines = false,
-    }
-  ) async {
-    for (final (testCase) in testCases.entries) {
-      final description = 'test drug content with ${testCase.key}';
-      final drug = testCase.value;
+  Future<void> runTestCases(List<_TestCase> testCases) async {
+    for (final (testCase) in testCases) {
+      final description = 'test drug content with ${testCase.description}';
+      final drug = testCase.drug;
       for (final (index, guideline) in drug.guidelines.indexed) {
         // Run per case to ensure clean setup
         final caseDescription = drug.guidelines.length > 1
@@ -181,7 +226,9 @@ void main() {
               tester,
               drug: drug,
               guideline: guideline,
-              expectNoGuidelines: expectNoGuidelines,
+              expectNoMappedGuidelines: testCase.expectNoMappedGuidelines,
+              explicitNoResult: testCase.explicitNoResult,
+              explicitLookups: testCase.explicitLookups,
             );
           },
         );
@@ -238,24 +285,47 @@ void main() {
     });
 
     group('test missing guidelines', () {
-      final missingGuidelinesCases = {
-        'for drug without guidelines': mirabegronWithoutGuidelines,
-      };
-      runTestCasePerGuideline(
-        missingGuidelinesCases,
-        expectNoGuidelines: true,
-      );
+      runTestCases([
+        _TestCase(
+          description: 'no guidelines',
+          drug: mirabegronWithoutGuidelines,
+          expectNoMappedGuidelines: true,
+        ),
+        _TestCase(
+          description: 'no result and no explicit guideline',
+          drug: ibuprofenWithProperGuideline,
+          explicitNoResult: [
+            ibuprofenWithProperGuideline.guidelines.first.lookupkey.keys.first,
+          ],
+          expectNoMappedGuidelines: true,
+        ),
+        _TestCase(
+          description: 'no result and no mappable lookup',
+          drug: ibuprofenWithProperGuideline,
+          explicitLookups: {
+            ibuprofenWithProperGuideline.guidelines.first.lookupkey.keys.first:
+              '0.0',
+          },
+          expectNoMappedGuidelines: true,
+        ),
+      ]);
     });
 
     group('test special guidelines', () {
-      final specialGuidelineTestCases = <String, Drug>{
-        'any fallback guideline': warfarinWithAnyFallbackGuideline,
-        'any not handled fallback guideline':
-          aripiprazoleWithAnyNotHandledFallbackGuideline,
-        'multiple any not handled fallback guidelines':
-          pazopanibWithMultipleAnyNotHandledFallbackGuidelines,
-      };
-      runTestCasePerGuideline(specialGuidelineTestCases);
+      runTestCases([
+        _TestCase(
+          description: 'any fallback guideline',
+          drug: warfarinWithAnyFallbackGuideline,
+        ),
+        _TestCase(
+          description: 'any not handled fallback guideline',
+          drug: aripiprazoleWithAnyNotHandledFallbackGuideline,
+        ),
+        _TestCase(
+          description: 'multiple any not handled fallback guidelines',
+          drug: pazopanibWithMultipleAnyNotHandledFallbackGuidelines,
+        )
+      ]);
     });
   });
 }
