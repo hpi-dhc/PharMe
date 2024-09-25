@@ -164,6 +164,7 @@
       }
     }
   },
+  "report_no_result_genes": "Genes with no result",
 
   "gene_page_headline": "{gene} report",
   "@gene_page_headline": {

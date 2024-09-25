@@ -51,6 +51,10 @@ class ReportPage extends StatelessWidget {
         ),
       );
     }
+    final sortedGenotypesWithResults = sortedGenotypes.filter(
+      (genotypeResult) => !_hasNoResult(genotypeResult)
+    );
+    final sortedGenotypesWithoutResults = sortedGenotypes.filter(_hasNoResult);
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
     return PopScope(
       canPop: false,
@@ -74,11 +78,25 @@ class ReportPage extends StatelessWidget {
                     ]
                   ),
                 ),
-                ...sortedGenotypes.map((genotypeResult) => GeneCard(
+                ...sortedGenotypesWithResults.map((genotypeResult) => GeneCard(
                   genotypeResult,
                   warningLevelCounts[genotypeResult.key.value]!,
                   key: Key('gene-card-${genotypeResult.key.value}')
                 )),
+                if (sortedGenotypesWithoutResults.isNotEmpty) ...[
+                  SubheaderDivider(
+                    text: context.l10n.report_no_result_genes,
+                    key: Key('header-no-result'),
+                    useLine: false,
+                  ),
+                  ...sortedGenotypesWithoutResults.map((genotypeResult) =>
+                    GeneCard(
+                      genotypeResult,
+                      warningLevelCounts[genotypeResult.key.value]!,
+                      key: Key('gene-card-${genotypeResult.key.value}')
+                    )
+                  ),
+                ],
               ],
             ),
             if (hasActiveInhibitors) PageIndicatorExplanation(
@@ -93,6 +111,9 @@ class ReportPage extends StatelessWidget {
     );
   }
 }
+
+bool _hasNoResult(GenotypeResult genotypeResult) =>
+  UserData.lookupFor(genotypeResult.key.value) == SpecialLookup.noResult.value;
 
 class GeneCard extends StatelessWidget {
   const GeneCard(this.genotypeResult, this.warningLevelCounts, { super.key });
@@ -117,7 +138,7 @@ class GeneCard extends StatelessWidget {
         GeneRoute(genotypeResult: genotypeResult)
       ),
       radius: 16,
-      color: _getHighestSeverityColor(warningLevelCounts),
+      color: _hasNoResult(genotypeResult) ? PharMeTheme.onSurfaceColor : _getHighestSeverityColor(warningLevelCounts),
       child: IntrinsicHeight(child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
