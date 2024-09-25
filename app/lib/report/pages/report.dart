@@ -121,6 +121,11 @@ class GeneCard extends StatelessWidget {
   final GenotypeResult genotypeResult;
   final WarningLevelCounts warningLevelCounts;
 
+  @visibleForTesting
+  Color? get color => _hasNoResult(genotypeResult)
+    ? PharMeTheme.onSurfaceColor
+    : _getHighestSeverityColor(warningLevelCounts);
+
   Color? _getHighestSeverityColor(WarningLevelCounts warningLevelCounts) {
     final sortedWarningLevels = WarningLevel.values.sortedByDescending(
       (warningLevel) => warningLevel.severity
@@ -138,7 +143,7 @@ class GeneCard extends StatelessWidget {
         GeneRoute(genotypeResult: genotypeResult)
       ),
       radius: 16,
-      color: _hasNoResult(genotypeResult) ? PharMeTheme.onSurfaceColor : _getHighestSeverityColor(warningLevelCounts),
+      color: color,
       child: IntrinsicHeight(child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

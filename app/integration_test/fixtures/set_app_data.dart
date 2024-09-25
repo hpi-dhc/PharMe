@@ -21,6 +21,7 @@ void setUserDataForGuideline(
   Guideline guideline, {
   List<String>? explicitNoResult,
   Map<String, String>? explicitLookups,
+  bool missingLookup = false,
 }) {
   UserData.instance.labData = UserData.instance.labData ?? [];
   for (final gene in guideline.lookupkey.keys) {
@@ -49,9 +50,9 @@ void setUserDataForGuideline(
     // multiple HLA-B variants in the tests or overwrite a specific HLA-B
     // variant, we will need to check for the genotype key (which is in the
     // current setup not possible without the proper variant)
-    final lookupIsMissing = lookupkey == SpecialLookup.noResult.value ||
+    final resultIsMissing = lookupkey == SpecialLookup.noResult.value ||
       (explicitNoResult?.contains(gene) ?? false);
-    if (!lookupIsMissing) {
+    if (!resultIsMissing) {
       UserData.instance.labData = UserData.instance.labData!.filter(
         (labResult) => labResult.gene != gene
       ).toList();
@@ -68,7 +69,7 @@ void setUserDataForGuideline(
         phenotype: userDataConfig.phenotype,
         variant: userDataConfig.variant,
         allelesTested: userDataConfig.variant,
-        lookupkey: userDataConfig.lookupkey,
+        lookupkey: missingLookup ? null : userDataConfig.lookupkey,
       ));
     }
   }
@@ -85,15 +86,23 @@ void addDrugToDrugsWithGuidelines(Drug drug) {
 
 void setAppData({
   required Drug drug,
-  required Guideline guideline,
+  Guideline? guideline,
   List<String>? explicitNoResult,
   Map<String, String>? explicitLookups,
+  bool missingLookup = false,
 }) {
   addDrugToDrugsWithGuidelines(drug);
-  initializeGenotypeResultKeys().values.forEach(setGenotypeResult);
-  setUserDataForGuideline(
-    guideline,
-    explicitNoResult: explicitNoResult,
-    explicitLookups: explicitLookups,
-  );
+  for (final noResultGenotypeResult in initializeGenotypeResultKeys().values) {
+    if (drug.guidelineGenotypes.contains(noResultGenotypeResult.key.value)) {
+      setGenotypeResult(noResultGenotypeResult);
+    }
+  }
+  if (guideline != null) {
+    setUserDataForGuideline(
+      guideline,
+      explicitNoResult: explicitNoResult,
+      explicitLookups: explicitLookups,
+      missingLookup: missingLookup,
+    );
+  }
 }
