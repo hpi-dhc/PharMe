@@ -56,19 +56,25 @@ class DrugCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        drug.warningLevel.icon,
-                        color: PharMeTheme.onSurfaceText,
+                  Text.rich(
+                    TextSpan(
+                      style: PharMeTheme.textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(width: 4),
-                      Text(
-                        drugName,
-                        style: PharMeTheme.textTheme.titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            drug.warningLevel.icon,
+                            color: PharMeTheme.onSurfaceText,
+                          ),
+                          alignment: PlaceholderAlignment.middle,
+                        ),
+                      TextSpan(text: ' '),
+                      TextSpan(text: drugName),
+                      ],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: PharMeTheme.smallSpace / 2),
                   if (drug.annotations.brandNames.isNotEmpty) ...[
