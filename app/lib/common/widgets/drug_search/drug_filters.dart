@@ -1,8 +1,9 @@
 import 'package:popover/popover.dart';
 import '../../module.dart';
 
-class _WarningLevelFilterChip extends HookWidget {
-  const _WarningLevelFilterChip({
+@visibleForTesting
+class WarningLevelFilterChip extends HookWidget {
+  const WarningLevelFilterChip({
     required this.warningLevel,
     required this.cubit,
     required this.filter,
@@ -188,7 +189,7 @@ class DrugFilters extends StatelessWidget {
           left: PharMeTheme.smallToMediumSpace,
           right: PharMeTheme.smallToMediumSpace,
         ),
-        child: _WarningLevelFilterChip(
+        child: WarningLevelFilterChip(
           warningLevel: warningLevel,
           cubit: cubit,
           drugs: drugs,

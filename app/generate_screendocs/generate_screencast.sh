@@ -102,7 +102,7 @@ if $redo_cutting; then
         echo $(
             ffprobe -loglevel "$ffmpeg_log_level" \
                 -select_streams v \
-                -show_entries frame=pkt_duration_time \
+                -show_entries frame=duration_time \
                 -of csv=print_section=0 \
                 "$video_path" \
                 | awk -F',' '{print $1}'
@@ -209,7 +209,7 @@ if $redo_gif_creation; then
         ffmpeg -y -loglevel "$ffmpeg_log_level" \
             -i "$video_path" \
             -vf "fps=10,scale=320:-1:flags=lanczos" -c:v pam -f image2pipe - | \
-            convert -delay 10 - -loop 0 -layers optimize "$gif_path"
+            magick -delay 10 - -loop 0 -layers optimize "$gif_path"
     done
 
 fi

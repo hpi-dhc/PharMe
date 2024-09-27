@@ -3,7 +3,7 @@ import 'package:app/common/module.dart';
 import 'package:app/drug/widgets/module.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart'; 
 
 Future<void> loadApp(WidgetTester tester) async {
   // Part before runApp in lib/main.dart
@@ -75,8 +75,14 @@ Future<void> tapFullWidthButton(WidgetTester tester) async {
   await tester.tap(find.byType(FullWidthButton).first);
 }
 
+Finder _findText(String text) {
+  final exactMatch = find.text(text, skipOffstage: false).first;
+  if (exactMatch.hasFound) return exactMatch;
+  return find.textContaining(text, skipOffstage: false).first;
+}
+
 Future<void> tapText(WidgetTester tester, String text) async {
-  await tester.tap(find.text(text, skipOffstage: false).first);
+  await tester.tap(_findText(text));
 }
 
 Future<void> jumpToText(WidgetTester tester, String text) async {
@@ -154,7 +160,7 @@ Future<void> interactWithDrugInSelection(
 ) async {
   await _interactWithDrugListItem(
     tester,
-    itemKey: 'drug-selection-tile-${drug.toLowerCase()}-all',
+    itemKey: 'other-drug-selection-tile-${drug.toLowerCase()}',
     listKey: 'drug-selection',
     itemType: SwitchListTile,
     scroll: scroll,
@@ -198,16 +204,9 @@ Future<void> changeDrugStatus(
   String drug,
   String activity,
 ) async {
-  final dropdownKey = 'drug-status-selection-${drug.toLowerCase()}';
   await tester.tap(
-    find.byKey(Key(dropdownKey)).first,
+    find.byType(Switch).first,
   );
-  await tester.pump();
-  await settleAndWait(tester, 1);
-  await tester.tap(
-    find.byKey(Key('$dropdownKey-$activity')).first,
-  );
-  await tester.pump();
 }
 
 Future<void> tapFirstFaqItem(WidgetTester tester) async {
@@ -226,23 +225,25 @@ Future<void> tapDrugSearchTooltip(WidgetTester tester) async {
   ).first);
 }
 
+Future<void> toggleNthWarningLevel(WidgetTester tester, int n) async {
+  // We are basically testing :shrug:
+  // ignore: invalid_use_of_visible_for_testing_member
+  await tester.tap(find.byType(WarningLevelFilterChip).at(n));
+}
+
+Future<void> selectDialogAction(WidgetTester tester) async {
+  await tester.tap(find.byType(DialogAction));
+}
+
+Future<void> openDrugFilters(WidgetTester tester) async {
+  await tester.tap(find.ancestor(
+    of: find.byIcon(Icons.filter_list),
+    matching: find.byType(IconButton),
+  ));
+}
+
 Future<void> closeDrugFilters(WidgetTester tester) async {
-  await tester.tap(find.byKey(Key('close-filter-drawer-button')).first);
-}
-
-Future<void> filterByDrugStatus(
-  WidgetTester tester,
-  { required bool showInactive }
-) async {
-  await tester.tap(find.byKey(Key('drug-status-filter-dropdown')).first);
-  await settleAndWait(tester, 1);
-  await tester.tap(
-    find.byKey(Key('drug-status-filter-${showInactive.toString()}')).first,
-  );
-}
-
-Future<void> toggleMissingWarningLevel(WidgetTester tester) async {
-  await tester.tap(find.byType(ActionChip).last);
+  await tester.tapAt(Offset(0, 0));
 }
 
 // Sometimes tester.pageBack is not working, then can use this

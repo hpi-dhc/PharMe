@@ -36,7 +36,7 @@ List<SwitchListTile> _buildSelectionList(
 ) {
   return drugs.map(
     (drug) => buildDrugActivitySelection(
-      key: Key('drug-selection-tile-${drug.name}-$keyPrefix'),
+      key: Key('${keyPrefix}drug-selection-tile-${drug.name}'),
       context: context,
       drug: drug,
       disabled: !buildParams.isEditable,
