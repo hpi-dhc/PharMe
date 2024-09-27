@@ -62,7 +62,7 @@ FutureOr<void> showAppTour(
             context.l10n.tutorial_app_tour_3_body,
           ),
           assetPath:
-            'assets/images/tutorial/07_clopidogrel_loopable.gif',
+            'assets/images/tutorial/07_ibuprofen_loopable.gif',
         ),
         TutorialPage(
           title: (context) =>
@@ -71,7 +71,7 @@ FutureOr<void> showAppTour(
             context.l10n.tutorial_app_tour_4_body,
           ),
           assetPath:
-            'assets/images/tutorial/08_report_and_cyp2c19_loopable.gif',
+            'assets/images/tutorial/08_report_and_cyp2c9_loopable.gif',
         ),
         TutorialPage(
           title: (context) =>
