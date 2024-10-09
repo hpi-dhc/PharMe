@@ -66,29 +66,52 @@ def has_consult(_, annotations):
     return CONSULT_TEXT in annotations['recommendation']
 
 def check_implication_severity(guideline, annotations):
-    phenotype = get_phenotype_key(guideline).lower()
-    gene_number = len(guideline['phenotypes'].keys())
-    missing_genes = phenotype.count('no result') + \
-        phenotype.count('indeterminate')
-    if gene_number - missing_genes != 1:
+    ignored_phenotypes = ['no result', 'indeterminate', 'normal metabolizer']
+    multiple_relevant_phenotypes = False
+    relevant_gene = None
+    for current_gene, current_phenotypes in guideline['phenotypes'].items():
+        if not current_phenotypes[0].lower() in ignored_phenotypes:
+            if relevant_gene != None:
+                multiple_relevant_phenotypes = True
+                break
+            relevant_gene = current_gene
+    if multiple_relevant_phenotypes or relevant_gene == None:
         return None
-    severity_rules = [
-        { 'has_much': True, 'phenotype': 'ultrarapid', 'implication': 'faster' },
-        { 'has_much': True, 'phenotype': 'poor', 'implication': 'slower' },
-        { 'has_much': False, 'phenotype': 'rapid', 'implication': 'faster' },
-        { 'has_much': False, 'phenotype': 'intermediate', 'implication': 'slower' },
+    implication = \
+        guideline['externalData'][0]['implications'][relevant_gene].lower()
+    much_implying_formulations = [
+        'greatly decreased',
+        'greatly reduced',
+        'significantly reduced',
+        'extremely high concentrations',
+        'when compared to cyp2c19 rapid and normal metabolizers',
+        'as compared to non-poor metabolizers',
+        'when compared to cyp2c19 normal and intermediate metabolizers',
+        'as compared to normal and intermediate metabolizer',
+        'complete dpd deficiency',
     ]
-    check_applies = True
-    for severity_rule in severity_rules:
-        if severity_rule['phenotype'] == 'rapid' and 'ultrarapid' in phenotype:
-            continue
-        rule_broken = severity_rule['phenotype'] in phenotype and \
-            severity_rule['implication'] in annotations['implication'] and \
-                severity_rule['has_much'] != ('much' in annotations['implication'])
-        if rule_broken:
-            check_applies = False
-            break
-    return check_applies
+    much_formulations = [
+        'much faster',
+        'much slower'
+    ]
+    much_is_implied = any(
+        map(
+            lambda much_implying_formulation:
+                much_implying_formulation in implication,
+            much_implying_formulations,
+        )
+    )
+    implication_has_much = any(
+        map(
+            lambda much_formulation: much_formulation in annotations['implication'],
+            much_formulations,
+        )
+    )
+    if not much_is_implied == implication_has_much:
+        print(implication_has_much)
+        print(annotations['implication'])
+        print(implication)
+    return much_is_implied == implication_has_much
 
 def check_red_warning_level(_, annotations):
     has_warning_level = annotations['warning_level'] == 'red'

@@ -92,7 +92,7 @@ optionally correct what can be corrected easily in
 | Check | Description | `--correct`ed | Only for single-gene results* |
 | ----- | ----------- | ------------- | ----------------------------- |
 | `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ | ❌ |
-| `implication_severity` | Poor/ultrarapid phenotypes with "faster" or "slower" implication should have "much" keyword, intermediate/rapid not. | ❌ | ✅ |
+| `implication_severity` | "Much" keyword, should only be used if reflected by guideline implication. | ❌ | ✅ |
 | `red_warning` | Red warning level should always have recommendation "may not be the right medication" and vice versa. | ❌ | ❌ |
 | `yellow_warning` | Recommendation containing "adjusted" or "higher" or "lower" but not "may not be the right" should have yellow warning level. | ❌ | ❌ |
 | `green_warning` | Green warning level should have recommendation "at standard dose" but not "adjusted" and vise versa. | ❌ | ❌ |
