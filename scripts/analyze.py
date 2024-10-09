@@ -107,10 +107,6 @@ def check_implication_severity(guideline, annotations):
             much_formulations,
         )
     )
-    if not much_is_implied == implication_has_much:
-        print(implication_has_much)
-        print(annotations['implication'])
-        print(implication)
     return much_is_implied == implication_has_much
 
 def check_red_warning_level(_, annotations):
