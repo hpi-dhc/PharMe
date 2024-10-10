@@ -85,14 +85,14 @@ Run `python clean.py` to remove the `scripts/temp` directory and all files in
 
 ## Analyze (and correct) annotations
 
-Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations and
-optionally correct what can be corrected easily in
+Run `python run_analysis.py <PATH_TO_BACKUP> [--correct]` to analyze annotations
+and optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64.json`.
 
 | Check | Description | `--correct`ed | Only for single-gene results* |
 | ----- | ----------- | ------------- | ----------------------------- |
 | `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ | ❌ |
-| `implication_severity` | "Much" keyword, should only be used if reflected by guideline implication. | ❌ | ✅ |
+| `check_metabolization_severity` | "Much" keyword, should only be used if reflected by guideline implication. | ❌ | ✅ |
 | `red_warning` | Red warning level should be present with recommendation containing "may not be the right medication". | ❌ | ❌ |
 | `yellow_warning` | Yellow warning level should be present when the red warning level does not apply but the implication contains "may not work" or "side effects" or the recommendation contains non-standard dose. | ❌ | ❌ |
 | `green_warning` | Green warning level should be applied in all non-red and non-yellow cases and when the recommendation states "at standard dose" or similar formulations. | ❌ | ❌ |

@@ -1,0 +1,131 @@
+import sys
+
+from analyze.checks.brand_name_whitespace import check_brand_name_whitespace
+from analyze.checks.warning_levels import check_green_warning_level, \
+    check_none_warning_level, check_red_warning_level, \
+        check_yellow_warning_level
+from analyze.checks.consult import has_consult
+from analyze.checks.metabolization_severity import check_metabolization_severity
+
+from analyze.corrections.consult import add_consult
+from analyze.corrections.brand_name_whitespace import correct_brand_name_whitespace
+
+from analyze.data_helpers import get_drug_annotations, get_guideline_annotations, has_annotations
+from common.constants import DRUG_COLLECTION_NAME, SCRIPT_POSTFIXES
+from common.get_data import get_data, get_guideline_by_id, get_phenotype_key
+from common.write_data import write_data, write_log
+
+DRUG_CHECKS = {
+    'brand_whitespace': check_brand_name_whitespace,
+}
+
+DRUG_CORRECTIONS = {
+    'brand_whitespace': correct_brand_name_whitespace,
+}
+
+GUIDELINE_CHECKS = {
+    'has_consult': has_consult,
+    'check_metabolization_severity': check_metabolization_severity,
+    'red_warning_level': check_red_warning_level,
+    'yellow_warning_level': check_yellow_warning_level,
+    'green_warning_level': check_green_warning_level,
+    'none_warning_level': check_none_warning_level,
+}
+
+GUIDELINE_CORRECTIONS = {
+    'has_consult': add_consult,
+}
+
+
+def analyze_annotations(item, annotations, checks):
+    results = {}
+    for check_name, check_function in checks.items():
+        results[check_name] = check_function(item, annotations)
+    return results
+
+def correct_inconsistency(data, item, check_name, corrections):
+    if check_name in corrections:
+        corrections[check_name](data, item)
+    return check_name in corrections
+
+def log_not_annotated(log_content):
+    log_content.append(' – _not annotated_\n')
+
+def log_all_passed(log_content, postfix=''):
+    log_content.append(f' – _all checks passed_{postfix}\n')
+
+def log_annotations(log_content, annotations):
+    for key, value in annotations.items():
+        pretty_key = key.capitalize().replace('_', ' ')
+        log_content.append(f'   {pretty_key}: {value}\n')
+
+def handle_failed_checks(
+    data, item, result, corrections, should_correct, annotations, log_content):
+    failed_checks = []
+    skipped_checks = []
+    for check_name, check_result in result.items():
+        if check_result == False:
+            corrected = should_correct and \
+                correct_inconsistency(data, item,
+                    check_name, corrections)
+            check_name = f'{check_name} (corrected)' if corrected \
+                else check_name
+            failed_checks.append(check_name)
+        if check_result == None:
+            skipped_checks.append(check_name)
+    skipped_checks_string = ''
+    if len(skipped_checks) > 0:
+        skipped_checks_string = (' (skipped checks: ' \
+        f'{", ".join(skipped_checks)})')
+    if len(failed_checks) > 0:
+        log_content.append(' - _some checks failed_: ' \
+            f'{", ".join(failed_checks)}{skipped_checks_string}\n')
+        log_annotations(log_content, annotations)
+    else:
+        log_all_passed(log_content, postfix=skipped_checks_string)
+
+def main():
+    correct_inconsistencies = '--correct' in sys.argv
+    data = get_data()
+    log_content = [
+        '# Analyze annotation data\n\n',
+        f'_Correct if possible: {correct_inconsistencies}_\n\n'
+    ]
+    for drug in data[DRUG_COLLECTION_NAME]:
+        drug_name = drug['name']
+        log_content.append(f'* {drug_name}')
+        drug_annotations = get_drug_annotations(data, drug)
+        if not has_annotations(drug_annotations): log_not_annotated(log_content)
+        else:
+            drug_result = analyze_annotations(
+                drug, drug_annotations, DRUG_CHECKS)
+            if not all(drug_result.values()):
+                handle_failed_checks(data, drug, drug_result,
+                    DRUG_CORRECTIONS, correct_inconsistencies,
+                    drug_annotations, log_content)
+            else:
+                log_all_passed(log_content)
+        for guideline_id in drug['guidelines']:
+            guideline = get_guideline_by_id(data, guideline_id)
+            phenotype = get_phenotype_key(guideline)
+            log_content.append(f'  * {phenotype}')
+            guideline_annotations = get_guideline_annotations(data, guideline)
+            if not has_annotations(guideline_annotations):
+                log_not_annotated(log_content)
+                continue
+            guideline_result = analyze_annotations(
+                guideline, guideline_annotations, GUIDELINE_CHECKS)
+            if guideline_result == None: continue
+            if not all(guideline_result.values()):
+                handle_failed_checks(data, guideline, guideline_result,
+                    GUIDELINE_CORRECTIONS, correct_inconsistencies,
+                    guideline_annotations, log_content)
+            else:
+                log_all_passed(log_content)
+
+    write_log(log_content, postfix=SCRIPT_POSTFIXES['correct'])
+    if correct_inconsistencies:
+        write_data(data, postfix=SCRIPT_POSTFIXES['correct'])
+
+if __name__ == '__main__':
+    main()
