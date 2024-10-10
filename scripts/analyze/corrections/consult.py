@@ -1,7 +1,7 @@
 from analyze.data_helpers import ensure_unique_item, get_english_text
 from common.constants import BRICK_COLLECTION_NAME
 
-from analyze.checks.constants import CONSULT_TEXT
+from analyze.constants import CONSULT_TEXT
 
 def get_consult_brick(data):
     brick_filter = filter(

@@ -1,3 +1,5 @@
+import analyze.constants as constants
+
 def check_metabolization_severity(guideline, annotations):
     ignored_phenotypes = ['no result', 'indeterminate', 'normal metabolizer']
     multiple_relevant_phenotypes = False
@@ -12,32 +14,17 @@ def check_metabolization_severity(guideline, annotations):
         return None
     implication = \
         guideline['externalData'][0]['implications'][relevant_gene].lower()
-    much_implying_formulations = [
-        'greatly decreased',
-        'greatly reduced',
-        'significantly reduced',
-        'extremely high concentrations',
-        'when compared to cyp2c19 rapid and normal metabolizers',
-        'as compared to non-poor metabolizers',
-        'when compared to cyp2c19 normal and intermediate metabolizers',
-        'as compared to normal and intermediate metabolizer',
-        'complete dpd deficiency',
-    ]
-    much_formulations = [
-        'much faster',
-        'much slower'
-    ]
     much_is_implied = any(
         map(
             lambda much_implying_formulation:
                 much_implying_formulation in implication,
-            much_implying_formulations,
+            constants.MUCH_IMPLYING_METABOLIZATION_FORMULATIONS,
         )
     )
     implication_has_much = any(
         map(
             lambda much_formulation: much_formulation in annotations['implication'],
-            much_formulations,
+            constants.MUCH_METABOLIZATION_FORMULATIONS,
         )
     )
     return much_is_implied == implication_has_much

@@ -1,1 +1,0 @@
-CONSULT_TEXT = 'consult your pharmacist or doctor'

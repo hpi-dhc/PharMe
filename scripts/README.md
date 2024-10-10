@@ -98,6 +98,7 @@ and optionally correct what can be corrected easily in
 | `green_warning` | Green warning level should be applied in all non-red and non-yellow cases and when the recommendation states "at standard dose" or similar formulations. | ❌ | ❌ |
 | `none_warning` | None warning level should be applied in all not handled warning level cases. | ❌ | ❌ |
 | `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
+| `metabolization_before_consequence` | Metabolization implications should come before consequences. | ❌ | ❌ |
 
 \* Skips guidelines with multiple genes unless all results but one are missing
 or indeterminate.

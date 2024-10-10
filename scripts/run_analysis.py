@@ -1,6 +1,7 @@
 import sys
 
 from analyze.checks.brand_name_whitespace import check_brand_name_whitespace
+from analyze.checks.metabolization_before_consequence import check_metabolization_before_consequence
 from analyze.checks.warning_levels import check_green_warning_level, \
     check_none_warning_level, check_red_warning_level, \
         check_yellow_warning_level
@@ -30,6 +31,7 @@ GUIDELINE_CHECKS = {
     'yellow_warning_level': check_yellow_warning_level,
     'green_warning_level': check_green_warning_level,
     'none_warning_level': check_none_warning_level,
+    'metabolization_before_consequence': check_metabolization_before_consequence,
 }
 
 GUIDELINE_CORRECTIONS = {
