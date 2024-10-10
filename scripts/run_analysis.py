@@ -83,26 +83,34 @@ def handle_failed_checks(
         log_annotations(log_content, annotations)
     else:
         log_all_passed(log_content, postfix=skipped_checks_string)
+    return len(skipped_checks), len(failed_checks)
 
 def main():
     correct_inconsistencies = '--correct' in sys.argv
     data = get_data()
-    log_content = [
-        '# Analyze annotation data\n\n',
-        f'_Correct if possible: {correct_inconsistencies}_\n\n'
-    ]
+    missing_drug_annotation_count = 0
+    skipped_drug_annotation_count = 0
+    failed_drug_annotation_count = 0
+    missing_guideline_annotation_count = 0
+    skipped_guideline_annotation_count = 0
+    failed_guideline_annotation_count = 0
+    log_content = []
     for drug in data[DRUG_COLLECTION_NAME]:
         drug_name = drug['name']
         log_content.append(f'* {drug_name}')
         drug_annotations = get_drug_annotations(data, drug)
-        if not has_annotations(drug_annotations): log_not_annotated(log_content)
+        if not has_annotations(drug_annotations):
+            missing_drug_annotation_count += 1
+            log_not_annotated(log_content)
         else:
             drug_result = analyze_annotations(
                 drug, drug_annotations, DRUG_CHECKS)
             if not all(drug_result.values()):
-                handle_failed_checks(data, drug, drug_result,
+                skipped, failed = handle_failed_checks(data, drug, drug_result,
                     DRUG_CORRECTIONS, correct_inconsistencies,
                     drug_annotations, log_content)
+                skipped_drug_annotation_count += skipped
+                failed_drug_annotation_count += failed
             else:
                 log_all_passed(log_content)
         for guideline_id in drug['guidelines']:
@@ -111,19 +119,35 @@ def main():
             log_content.append(f'  * {phenotype}')
             guideline_annotations = get_guideline_annotations(data, guideline)
             if not has_annotations(guideline_annotations):
+                missing_guideline_annotation_count += 1
                 log_not_annotated(log_content)
                 continue
             guideline_result = analyze_annotations(
                 guideline, guideline_annotations, GUIDELINE_CHECKS)
             if guideline_result == None: continue
             if not all(guideline_result.values()):
-                handle_failed_checks(data, guideline, guideline_result,
+                skipped, failed = handle_failed_checks(
+                    data, guideline, guideline_result,
                     GUIDELINE_CORRECTIONS, correct_inconsistencies,
                     guideline_annotations, log_content)
+                skipped_guideline_annotation_count += skipped
+                failed_guideline_annotation_count += failed
             else:
                 log_all_passed(log_content)
-
-    write_log(log_content, postfix=SCRIPT_POSTFIXES['correct'])
+    log_header = [
+        '# Analyze annotation data\n\n',
+        f'Correct if possible: {correct_inconsistencies}\n\n',
+        'Failed annotation checks (search for `_some checks failed_`):\n\n',
+        f'* Drugs: {failed_drug_annotation_count}\n',
+        f'* Guidelines: {failed_guideline_annotation_count}\n\n',
+        'Missing annotations (search for `_not annotated_`):\n\n',
+        f'* Drugs: {missing_drug_annotation_count}\n',
+        f'* Guidelines: {missing_guideline_annotation_count}\n\n',
+        'Skipped annotation checks (search for `skipped checks`)\n\n',
+        f'* Drugs: {skipped_drug_annotation_count}\n',
+        f'* Guidelines: {skipped_guideline_annotation_count}\n\n',
+    ]
+    write_log([*log_header, *log_content], postfix=SCRIPT_POSTFIXES['correct'])
     if correct_inconsistencies:
         write_data(data, postfix=SCRIPT_POSTFIXES['correct'])
 
