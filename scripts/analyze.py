@@ -5,6 +5,7 @@ from common.get_data import get_data, get_guideline_by_id, get_phenotype_key
 from common.write_data import write_data, write_log
 
 CONSULT_TEXT = 'consult your pharmacist or doctor'
+WHOLE_CONSULT_TEXT = '{} for more information.'.format(CONSULT_TEXT)
 RED_TEXT = 'not be the right medication'
 NOT_RED_TEXTS = [
     'if more than this dose is needed',
@@ -141,8 +142,7 @@ def should_be_yellow(annotations):
         YELLOW_IMPLICATION_TEXTS,
     )) or (
         # Special case: no other recommendation given
-        annotations['recommendation'] == \
-            'consult your pharmacist or doctor for more information.'
+        annotations['recommendation'] == WHOLE_CONSULT_TEXT
     )
 
 def should_be_green(annotations):
