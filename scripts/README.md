@@ -89,6 +89,14 @@ Run `python run_analysis.py <PATH_TO_BACKUP> [--correct]` to analyze annotations
 and optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64.json`.
 
+### Drug annotation checks
+
+| Check | Description | `--correct`ed | Only for single-gene results* |
+| ----- | ----------- | ------------- | ----------------------------- |
+| `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
+
+### Guideline annotation checks
+
 | Check | Description | `--correct`ed | Only for single-gene results* |
 | ----- | ----------- | ------------- | ----------------------------- |
 | `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ | ❌ |
@@ -97,7 +105,6 @@ and optionally correct what can be corrected easily in
 | `yellow_warning` | Yellow warning level should be present when the red warning level does not apply but the implication contains "may not work" or "side effects" or the recommendation contains non-standard dose. | ❌ | ❌ |
 | `green_warning` | Green warning level should be applied in all non-red and non-yellow cases and when the recommendation states "at standard dose" or similar formulations. | ❌ | ❌ |
 | `none_warning` | None warning level should be applied in all not handled warning level cases. | ❌ | ❌ |
-| `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
 | `metabolization_before_consequence` | Metabolization implications should come before consequences. | ❌ | ❌ |
 
 \* Skips guidelines with multiple genes unless all results but one are missing
