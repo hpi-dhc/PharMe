@@ -93,9 +93,10 @@ optionally correct what can be corrected easily in
 | ----- | ----------- | ------------- | ----------------------------- |
 | `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ | ❌ |
 | `implication_severity` | "Much" keyword, should only be used if reflected by guideline implication. | ❌ | ✅ |
-| `red_warning` | Red warning level should always have recommendation "may not be the right medication" and vice versa. | ❌ | ❌ |
-| `yellow_warning` | Recommendation containing "adjusted" or "higher" or "lower" but not "may not be the right" should have yellow warning level. | ❌ | ❌ |
-| `green_warning` | Green warning level should have recommendation "at standard dose" but not "adjusted" and vise versa. | ❌ | ❌ |
+| `red_warning` | Red warning level should be present with recommendation containing "may not be the right medication". | ❌ | ❌ |
+| `yellow_warning` | Yellow warning level should be present when the red warning level does not apply but the implication contains "may not work" or "side effects" or the recommendation contains non-standard dose. | ❌ | ❌ |
+| `green_warning` | Green warning level should be applied in all non-red and non-yellow cases and when the recommendation states "at standard dose" or similar formulations. | ❌ | ❌ |
+| `none_warning` | None warning level should be applied in all not handled warning level cases. | ❌ | ❌ |
 | `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
 
 \* Skips guidelines with multiple genes unless all results but one are missing
