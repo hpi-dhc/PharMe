@@ -95,6 +95,7 @@ and optionally correct what can be corrected easily in
 | ----- | ----------- | ------------- | ----------------------------- |
 | `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
 | `single_any_fallback` | If any fallback guidelines `*` are present, only one guideline should be present (otherwise other guidelines are ignored) | ❌ | ❌ |
+| `fallback_single_lookup` | If fallback guidelines `*` or `~` are present, only one lookup value per gene should be present (otherwise other lookup values are ignored) | ❌ | ❌ |
 
 ### Guideline annotation checks
 

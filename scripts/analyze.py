@@ -2,7 +2,7 @@ import sys
 
 from analyze_functions.checks.brand_name_whitespace import check_brand_name_whitespace
 from analyze_functions.checks.metabolization_before_consequence import check_metabolization_before_consequence
-from analyze_functions.checks.single_any_fallback_guideline import check_single_any_fallback_guideline
+from analyze_functions.checks.fallback_guidelines import check_single_any_fallback_guideline, check_single_lookup_fallback_guideline
 from analyze_functions.checks.warning_levels import check_green_warning_level, \
     check_none_warning_level, check_red_warning_level, \
         check_yellow_warning_level
@@ -20,6 +20,7 @@ from common.write_data import write_data, write_log
 DRUG_CHECKS = {
     'brand_whitespace': check_brand_name_whitespace,
     'single_any_fallback': check_single_any_fallback_guideline,
+    'fallback_single_lookup': check_single_lookup_fallback_guideline,
 }
 
 DRUG_CORRECTIONS = {
