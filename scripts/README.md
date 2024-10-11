@@ -85,7 +85,7 @@ Run `python clean.py` to remove the `scripts/temp` directory and all files in
 
 ## Analyze (and correct) annotations
 
-Run `python run_analysis.py <PATH_TO_BACKUP> [--correct]` to analyze annotations
+Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations
 and optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64.json`.
 
@@ -94,6 +94,7 @@ and optionally correct what can be corrected easily in
 | Check | Description | `--correct`ed | Only for single-gene results* |
 | ----- | ----------- | ------------- | ----------------------------- |
 | `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
+| `single_any_fallback` | If any fallback guidelines `*` are present, only one guideline should be present (otherwise other guidelines are ignored) | ❌ | ❌ |
 
 ### Guideline annotation checks
 

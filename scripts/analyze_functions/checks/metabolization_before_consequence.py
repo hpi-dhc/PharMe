@@ -1,4 +1,4 @@
-import analyze.constants as constants
+import analyze_functions.constants as constants
 
 def _get_first_substring_position(string, substrings):
     positions = list(filter(
@@ -11,7 +11,8 @@ def _get_first_substring_position(string, substrings):
     if (len(positions) == 0): return None
     return min(positions)
 
-def check_metabolization_before_consequence(_, annotations):
+def check_metabolization_before_consequence(args):
+    annotations = args['annotations']
     implication = annotations['implication']
     metabolization_position = _get_first_substring_position(
         implication,

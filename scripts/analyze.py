@@ -1,23 +1,25 @@
 import sys
 
-from analyze.checks.brand_name_whitespace import check_brand_name_whitespace
-from analyze.checks.metabolization_before_consequence import check_metabolization_before_consequence
-from analyze.checks.warning_levels import check_green_warning_level, \
+from analyze_functions.checks.brand_name_whitespace import check_brand_name_whitespace
+from analyze_functions.checks.metabolization_before_consequence import check_metabolization_before_consequence
+from analyze_functions.checks.single_any_fallback_guideline import check_single_any_fallback_guideline
+from analyze_functions.checks.warning_levels import check_green_warning_level, \
     check_none_warning_level, check_red_warning_level, \
         check_yellow_warning_level
-from analyze.checks.consult import has_consult
-from analyze.checks.metabolization_severity import check_metabolization_severity
+from analyze_functions.checks.consult import has_consult
+from analyze_functions.checks.metabolization_severity import check_metabolization_severity
 
-from analyze.corrections.consult import add_consult
-from analyze.corrections.brand_name_whitespace import correct_brand_name_whitespace
+from analyze_functions.corrections.consult import add_consult
+from analyze_functions.corrections.brand_name_whitespace import correct_brand_name_whitespace
 
-from analyze.data_helpers import get_drug_annotations, get_guideline_annotations, has_annotations
+from analyze_functions.data_helpers import get_drug_annotations, get_guideline_annotations, has_annotations
 from common.constants import DRUG_COLLECTION_NAME, SCRIPT_POSTFIXES
 from common.get_data import get_data, get_guideline_by_id, get_phenotype_key
 from common.write_data import write_data, write_log
 
 DRUG_CHECKS = {
     'brand_whitespace': check_brand_name_whitespace,
+    'single_any_fallback': check_single_any_fallback_guideline,
 }
 
 DRUG_CORRECTIONS = {
@@ -38,11 +40,14 @@ GUIDELINE_CORRECTIONS = {
     'has_consult': add_consult,
 }
 
-
-def analyze_annotations(item, annotations, checks):
+def analyze_annotations(item, annotations, checks, data = None):
     results = {}
     for check_name, check_function in checks.items():
-        results[check_name] = check_function(item, annotations)
+        results[check_name] = check_function({
+            'item': item,
+            'annotations': annotations,
+            'data': data,
+        })
     return results
 
 def correct_inconsistency(data, item, check_name, corrections):
@@ -87,7 +92,7 @@ def handle_failed_checks(
         log_all_passed(log_content, postfix=skipped_checks_string)
     return len(skipped_checks), len(failed_checks)
 
-def main():
+def run_analyses():
     correct_inconsistencies = '--correct' in sys.argv
     data = get_data()
     missing_drug_annotation_count = 0
@@ -106,7 +111,7 @@ def main():
             log_not_annotated(log_content)
         else:
             drug_result = analyze_annotations(
-                drug, drug_annotations, DRUG_CHECKS)
+                drug, drug_annotations, DRUG_CHECKS, data)
             if not all(drug_result.values()):
                 skipped, failed = handle_failed_checks(data, drug, drug_result,
                     DRUG_CORRECTIONS, correct_inconsistencies,
@@ -154,4 +159,4 @@ def main():
         write_data(data, postfix=SCRIPT_POSTFIXES['correct'])
 
 if __name__ == '__main__':
-    main()
+    run_analyses()

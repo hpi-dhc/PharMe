@@ -1,6 +1,8 @@
-import analyze.constants as constants
+import analyze_functions.constants as constants
 
-def check_metabolization_severity(guideline, annotations):
+def check_metabolization_severity(args):
+    guideline = args['item']
+    annotations = args['annotations']
     ignored_phenotypes = ['no result', 'indeterminate', 'normal metabolizer']
     multiple_relevant_phenotypes = False
     relevant_gene = None
