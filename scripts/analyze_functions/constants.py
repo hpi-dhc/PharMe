@@ -1,5 +1,13 @@
 CONSULT_TEXT = 'consult your pharmacist or doctor'
 WHOLE_CONSULT_TEXT = '{} for more information.'.format(CONSULT_TEXT)
+NORMAL_RISK_TEXTS = [
+    'normal risk',
+    'low or reduced risk',
+    'typical myopathy risk',
+    'weak or no evidence for an increased risk',
+    '"normal" risk',
+]
+IGNORED_PHENOTYPES = ['no result', 'indeterminate', 'normal metabolizer']
 RED_TEXT = 'not be the right medication'
 NOT_RED_TEXTS = [
     'if more than this dose is needed',

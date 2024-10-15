@@ -3,11 +3,10 @@ import analyze_functions.constants as constants
 def check_metabolization_severity(args):
     guideline = args['item']
     annotations = args['annotations']
-    ignored_phenotypes = ['no result', 'indeterminate', 'normal metabolizer']
     multiple_relevant_phenotypes = False
     relevant_gene = None
     for current_gene, current_phenotypes in guideline['phenotypes'].items():
-        if not current_phenotypes[0].lower() in ignored_phenotypes:
+        if not current_phenotypes[0].lower() in constants.IGNORED_PHENOTYPES:
             if relevant_gene != None:
                 multiple_relevant_phenotypes = True
                 break

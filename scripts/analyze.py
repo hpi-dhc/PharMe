@@ -4,6 +4,7 @@ from analyze_functions.checks.fully_annotated_staged import check_if_fully_annot
 from analyze_functions.checks.brand_name_whitespace import check_brand_name_whitespace
 from analyze_functions.checks.metabolization_before_consequence import check_metabolization_before_consequence
 from analyze_functions.checks.fallback_guidelines import check_single_any_fallback_guideline, check_single_lookup_fallback_guideline
+from analyze_functions.checks.normal_side_effect_risk import check_normal_side_effect_risk
 from analyze_functions.checks.warning_levels import check_green_warning_level, \
     check_none_warning_level, check_red_warning_level, \
         check_yellow_warning_level
@@ -38,6 +39,7 @@ GUIDELINE_CHECKS = {
     'none_warning_level': check_none_warning_level,
     'metabolization_before_consequence': check_metabolization_before_consequence,
     'annotated_but_not_staged': check_if_fully_annotated_staged,
+    'should_not_have_normal_risk': check_normal_side_effect_risk,
 }
 
 GUIDELINE_CORRECTIONS = {
