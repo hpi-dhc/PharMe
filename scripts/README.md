@@ -94,6 +94,7 @@ and optionally correct what can be corrected easily in
 | Check | Description | `--correct`ed | Only for single-gene results* |
 | ----- | ----------- | ------------- | ----------------------------- |
 | `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
+| `brand_comma` | Drug brand names should not include commas (spit these, could do automatically). | ❌ | ❌ |
 | `single_any_fallback` | If any fallback guidelines `*` are present, only one guideline should be present (otherwise other guidelines are ignored) | ❌ | ❌ |
 | `fallback_single_lookup` | If fallback guidelines `*` or `~` are present, only one lookup value per gene should be present (otherwise other lookup values are ignored) | ❌ | ❌ |
 | `annotated_but_not_staged` | Warns if a drug is annotated but not staged (ignored drugs in `IGNORE_STAGED_CHECK`) | ❌ | ❌ |
