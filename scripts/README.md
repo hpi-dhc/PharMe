@@ -113,6 +113,7 @@ and optionally correct what can be corrected easily in
 | `annotated_but_not_staged` | Warns if a guideline is annotated but not staged (ignored drugs in `IGNORE_STAGED_CHECK`) | ❌ | ❌ |
 | `should_not_have_normal_risk` | Warns if an annotation uses "normal risk" if not mentioned in external data. | ❌ | ❌ |
 | `non_metabolizer` | Warns if an annotation uses "break down" or "activate" but is for `NON_METABOLIZERS`. | ❌ | ❌ |
+| `slow_titration` | If otherwise standard dose, "slow titration" and "cautiously and slowly" should be used together. | ❌ | ❌ |
 
 \* Skips guidelines with multiple genes unless all results but one are missing
 or indeterminate.

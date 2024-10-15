@@ -1,11 +1,12 @@
 from analyze_functions.constants import IGNORED_PHENOTYPES, NORMAL_RISK_TEXTS
+from analyze_functions.data_helpers import joint_annotation_text
 
 def check_normal_side_effect_risk(args):
     guideline = args['item']
     annotations = args['annotations']
     can_have_normal_risk = any(map(
         lambda normal_risk_text: normal_risk_text in \
-            '–'.join(guideline['externalData'][0]['implications'].values()).lower(),
+            joint_annotation_text(guideline),
         NORMAL_RISK_TEXTS,
     )) or all(map(
         lambda gene:

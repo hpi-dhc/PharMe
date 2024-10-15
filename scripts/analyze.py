@@ -6,6 +6,7 @@ from analyze_functions.checks.metabolization_before_consequence import check_met
 from analyze_functions.checks.fallback_guidelines import check_single_any_fallback_guideline, check_single_lookup_fallback_guideline
 from analyze_functions.checks.non_metabolizer import check_non_metabolizer
 from analyze_functions.checks.normal_side_effect_risk import check_normal_side_effect_risk
+from analyze_functions.checks.slow_titration import check_slow_titration
 from analyze_functions.checks.warning_levels import check_green_warning_level, \
     check_none_warning_level, check_red_warning_level, \
         check_yellow_warning_level
@@ -43,6 +44,7 @@ GUIDELINE_CHECKS = {
     'annotated_but_not_staged': check_if_fully_annotated_staged,
     'should_not_have_normal_risk': check_normal_side_effect_risk,
     'non_metabolizer': check_non_metabolizer,
+    'slow_titration': check_slow_titration,
 }
 
 GUIDELINE_CORRECTIONS = {
