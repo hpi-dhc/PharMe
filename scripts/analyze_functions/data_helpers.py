@@ -32,6 +32,18 @@ def get_bricks_meaning(data, brick_ids):
         lambda brick_id: get_brick_meaning(data, brick_id),
         brick_ids))
 
+def get_used_bricks(item):
+    used_bricks = []
+    for brick_list in item['annotations'].values():
+        used_bricks += brick_list
+    return used_bricks
+
+def get_brick_ids(data):
+    return list(map(
+        lambda brick: brick['_id'],
+        data[BRICK_COLLECTION_NAME],
+    ))
+
 def get_annotation(data, item, key, resolve=True):
     if not key in item['annotations']: return None
     annotation = item['annotations'][key]

@@ -89,6 +89,8 @@ Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations
 and optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64.json`.
 
+Also checks which bricks are not used in guidelines.
+
 ### Drug annotation checks
 
 | Check | Description | `--correct`ed | Only for single-gene results* |

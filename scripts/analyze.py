@@ -16,7 +16,7 @@ from analyze_functions.checks.metabolization_severity import check_metabolizatio
 from analyze_functions.corrections.consult import add_consult
 from analyze_functions.corrections.brand_name_whitespace import correct_brand_name_whitespace
 
-from analyze_functions.data_helpers import get_drug_annotations, get_guideline_annotations, has_annotations
+from analyze_functions.data_helpers import get_brick_ids, get_brick_meaning, get_drug_annotations, get_guideline_annotations, get_used_bricks, has_annotations
 from common.constants import DRUG_COLLECTION_NAME, SCRIPT_POSTFIXES
 from common.get_data import get_data, get_guideline_by_id, get_phenotype_key
 from common.write_data import write_data, write_log
@@ -109,9 +109,11 @@ def run_analyses():
     skipped_guideline_annotation_count = 0
     failed_guideline_annotation_count = 0
     log_content = []
+    used_bricks = []
     for drug in data[DRUG_COLLECTION_NAME]:
         drug_name = drug['name']
         log_content.append(f'* {drug_name}')
+        used_bricks += get_used_bricks(drug)
         drug_annotations = get_drug_annotations(data, drug)
         if not has_annotations(drug_annotations):
             missing_drug_annotation_count += 1
@@ -136,6 +138,7 @@ def run_analyses():
                 log_all_passed(log_content)
         for guideline_id in drug['guidelines']:
             guideline = get_guideline_by_id(data, guideline_id)
+            used_bricks += get_used_bricks(guideline)
             phenotype = get_phenotype_key(guideline)
             log_content.append(f'  * {phenotype}')
             guideline_annotations = get_guideline_annotations(data, guideline)
@@ -174,6 +177,19 @@ def run_analyses():
         f'* Drugs: {skipped_drug_annotation_count}\n',
         f'* Guidelines: {skipped_guideline_annotation_count}\n\n',
     ]
+    used_bricks = set(used_bricks)
+    unused_bricks = list(map(
+        lambda brick_id: get_brick_meaning(data, brick_id),
+        filter(
+            lambda brick_id: brick_id not in used_bricks,
+            get_brick_ids(data),
+        ),
+    ))
+    if (len(unused_bricks) > 0):
+        log_header.append('* Unused bricks:\n')
+        for unused_brick in unused_bricks:
+            log_header.append(f'  * {unused_brick}\n')
+        log_header.append('\n')
     write_log([*log_header, *log_content], postfix=SCRIPT_POSTFIXES['correct'])
     if correct_inconsistencies:
         write_data(data, postfix=SCRIPT_POSTFIXES['correct'])
