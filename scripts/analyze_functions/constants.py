@@ -7,7 +7,16 @@ NORMAL_RISK_TEXTS = [
     'weak or no evidence for an increased risk',
     '"normal" risk',
 ]
-IGNORED_PHENOTYPES = ['no result', 'indeterminate', 'normal metabolizer']
+NON_METABOLIZERS = [
+    'G6PD',
+    'SLCO1B1',
+    'MT-RNR1',
+    'HLA-B',
+    'HLA-A',
+]
+METABOLIZER_TEXTS = ['break down', 'activate']
+MISSING_PHENOTYPES = ['no result', 'indeterminate']
+IGNORED_PHENOTYPES = [*MISSING_PHENOTYPES, 'normal metabolizer']
 RED_TEXT = 'not be the right medication'
 NOT_RED_TEXTS = [
     'if more than this dose is needed',
