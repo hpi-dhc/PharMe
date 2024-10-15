@@ -1,5 +1,6 @@
 import sys
 
+from analyze_functions.checks.fully_annotated_staged import check_if_fully_annotated_staged
 from analyze_functions.checks.brand_name_whitespace import check_brand_name_whitespace
 from analyze_functions.checks.metabolization_before_consequence import check_metabolization_before_consequence
 from analyze_functions.checks.fallback_guidelines import check_single_any_fallback_guideline, check_single_lookup_fallback_guideline
@@ -21,6 +22,7 @@ DRUG_CHECKS = {
     'brand_whitespace': check_brand_name_whitespace,
     'single_any_fallback': check_single_any_fallback_guideline,
     'fallback_single_lookup': check_single_lookup_fallback_guideline,
+    'annotated_but_not_staged': check_if_fully_annotated_staged,
 }
 
 DRUG_CORRECTIONS = {
@@ -35,20 +37,17 @@ GUIDELINE_CHECKS = {
     'green_warning_level': check_green_warning_level,
     'none_warning_level': check_none_warning_level,
     'metabolization_before_consequence': check_metabolization_before_consequence,
+    'annotated_but_not_staged': check_if_fully_annotated_staged,
 }
 
 GUIDELINE_CORRECTIONS = {
     'has_consult': add_consult,
 }
 
-def analyze_annotations(item, annotations, checks, data = None):
+def analyze_annotations(checks, check_args):
     results = {}
     for check_name, check_function in checks.items():
-        results[check_name] = check_function({
-            'item': item,
-            'annotations': annotations,
-            'data': data,
-        })
+        results[check_name] = check_function(check_args)
     return results
 
 def correct_inconsistency(data, item, check_name, corrections):
@@ -112,7 +111,14 @@ def run_analyses():
             log_not_annotated(log_content)
         else:
             drug_result = analyze_annotations(
-                drug, drug_annotations, DRUG_CHECKS, data)
+                DRUG_CHECKS,
+                {
+                    'item': drug,
+                    'annotations': drug_annotations,
+                    'data': data,
+                    'drug_name': drug_name,
+                },
+            )
             if not all(drug_result.values()):
                 skipped, failed = handle_failed_checks(data, drug, drug_result,
                     DRUG_CORRECTIONS, correct_inconsistencies,
@@ -131,7 +137,13 @@ def run_analyses():
                 log_not_annotated(log_content)
                 continue
             guideline_result = analyze_annotations(
-                guideline, guideline_annotations, GUIDELINE_CHECKS)
+                GUIDELINE_CHECKS,
+                {
+                    'item': guideline,
+                    'annotations': guideline_annotations,
+                    'drug_name': drug_name,
+                },
+            )
             if guideline_result == None: continue
             if not all(guideline_result.values()):
                 skipped, failed = handle_failed_checks(

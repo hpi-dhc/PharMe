@@ -96,6 +96,7 @@ and optionally correct what can be corrected easily in
 | `brand_whitespace` | Drug brand names should not have leading or trailing white space. | ✅ | ❌ |
 | `single_any_fallback` | If any fallback guidelines `*` are present, only one guideline should be present (otherwise other guidelines are ignored) | ❌ | ❌ |
 | `fallback_single_lookup` | If fallback guidelines `*` or `~` are present, only one lookup value per gene should be present (otherwise other lookup values are ignored) | ❌ | ❌ |
+| `annotated_but_not_staged` | Warns if a drug is annotated but not staged (ignored drugs in `IGNORE_STAGED_CHECK`) | ❌ | ❌ |
 
 ### Guideline annotation checks
 
@@ -108,6 +109,7 @@ and optionally correct what can be corrected easily in
 | `green_warning` | Green warning level should be applied in all non-red and non-yellow cases and when the recommendation states "at standard dose" or similar formulations. | ❌ | ❌ |
 | `none_warning` | None warning level should be applied in all not handled warning level cases. | ❌ | ❌ |
 | `metabolization_before_consequence` | Metabolization implications should come before consequences. | ❌ | ❌ |
+| `annotated_but_not_staged` | Warns if a guideline is annotated but not staged (ignored drugs in `IGNORE_STAGED_CHECK`) | ❌ | ❌ |
 
 \* Skips guidelines with multiple genes unless all results but one are missing
 or indeterminate.
