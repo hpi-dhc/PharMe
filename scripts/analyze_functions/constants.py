@@ -14,7 +14,9 @@ NON_METABOLIZERS = [
     'HLA-B',
     'HLA-A',
 ]
-METABOLIZER_TEXTS = ['break down', 'activate']
+BREAK_DOWN_TEXT = 'break down'
+ACTIVATE_TEXT = 'activate'
+METABOLIZER_TEXTS = [BREAK_DOWN_TEXT, ACTIVATE_TEXT]
 MISSING_PHENOTYPES = ['no result', 'indeterminate']
 IGNORED_PHENOTYPES = [*MISSING_PHENOTYPES, 'normal metabolizer']
 RED_TEXT = 'not be the right medication'
