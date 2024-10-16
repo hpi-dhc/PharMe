@@ -89,7 +89,9 @@ Run `python analyze.py <PATH_TO_BACKUP> [--correct]` to analyze annotations
 and optionally correct what can be corrected easily in
 `<PATH_TO_BACKUP>_corrected_<TIMESTAMP>.base64.json`.
 
-Also checks which bricks are not used in guidelines.
+Also checks whether guidelines with same implications / recommendations were
+annotated consistently (although this check will not catch similar formulations)
+and which bricks are not used in guidelines.
 
 ### Drug annotation checks
 

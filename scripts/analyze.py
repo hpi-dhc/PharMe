@@ -2,6 +2,7 @@ import sys
 
 from analyze_functions.checks.fully_annotated_staged import check_if_fully_annotated_staged
 from analyze_functions.checks.brand_name import check_brand_name_comma, check_brand_name_whitespace
+from analyze_functions.checks.guideline_consistency import check_guideline_consistencies
 from analyze_functions.checks.metabolization_before_consequence import check_metabolization_before_consequence
 from analyze_functions.checks.fallback_guidelines import check_single_any_fallback_guideline, check_single_lookup_fallback_guideline
 from analyze_functions.checks.metabolization_type import check_same_metabolization_type
@@ -112,6 +113,7 @@ def run_analyses():
     failed_guideline_annotation_count = 0
     log_content = []
     used_bricks = []
+    guideline_check_args_list = []
     for drug in data[DRUG_COLLECTION_NAME]:
         drug_name = drug['name']
         log_content.append(f'* {drug_name}')
@@ -153,13 +155,15 @@ def run_analyses():
                 missing_guideline_annotation_count += 1
                 log_not_annotated(log_content)
                 continue
+            check_args = {
+                'item': guideline,
+                'annotations': guideline_annotations,
+                'drug_name': drug_name,
+            }
+            guideline_check_args_list = [*guideline_check_args_list, check_args]
             guideline_result = analyze_annotations(
                 GUIDELINE_CHECKS,
-                {
-                    'item': guideline,
-                    'annotations': guideline_annotations,
-                    'drug_name': drug_name,
-                },
+                check_args,
             )
             if guideline_result == None: continue
             if not all(guideline_result.values()):
@@ -171,12 +175,19 @@ def run_analyses():
                 failed_guideline_annotation_count += failed
             else:
                 log_all_passed(log_content)
+    
+    inconsistent_guidelines_count, guideline_inconsistency_log = \
+        check_guideline_consistencies(guideline_check_args_list)
+    
     log_header = [
         '# Analyze annotation data\n\n',
         f'Correct if possible: {correct_inconsistencies}\n\n',
         '**Failed annotation checks** (search for `_some checks failed_`):\n\n',
         f'* Drugs: {failed_drug_annotation_count}\n',
         f'* Guidelines: {failed_guideline_annotation_count}\n\n',
+        f'**Inconsistent guidelines**: {inconsistent_guidelines_count}\n\n',
+        *guideline_inconsistency_log,
+        '\n',
         'Missing annotations (search for `_not annotated_`):\n\n',
         f'* Drugs: {missing_drug_annotation_count}\n',
         f'* Guidelines: {missing_guideline_annotation_count}\n\n',

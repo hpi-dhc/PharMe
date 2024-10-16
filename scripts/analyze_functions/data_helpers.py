@@ -3,8 +3,8 @@ from common.constants import BRICK_COLLECTION_NAME
 def get_guideline_content(guideline, key):
     return guideline['externalData'][0][key]
 
-def joint_annotation_text(guideline):
-    return '–'.join(get_guideline_content(guideline, 'implications').values()).lower()
+def joint_implication_text(guideline):
+    return '–'.join(sorted(set(get_guideline_content(guideline, 'implications').values()))).lower()
 
 def ensure_unique_item(item_filter, field_name, value):
     item = list(item_filter)
