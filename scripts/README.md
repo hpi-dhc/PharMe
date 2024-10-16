@@ -100,6 +100,7 @@ Also checks which bricks are not used in guidelines.
 | `single_any_fallback` | If any fallback guidelines `*` are present, only one guideline should be present (otherwise other guidelines are ignored) | ❌ | ❌ |
 | `fallback_single_lookup` | If fallback guidelines `*` or `~` are present, only one lookup value per gene should be present (otherwise other lookup values are ignored) | ❌ | ❌ |
 | `annotated_but_not_staged` | Warns if a drug is annotated but not staged (ignored drugs in `IGNORE_STAGED_CHECK`) | ❌ | ❌ |
+| `same_metabolization` | Warns if a guidelines of a drug use different metabolization types | ❌ | ❌ |
 
 ### Guideline annotation checks
 
