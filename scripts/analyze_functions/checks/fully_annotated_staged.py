@@ -1,12 +1,4 @@
-IGNORE_STAGED_CHECK = [#
-    'amikacin',
-    'gentamicin',
-    'kanamycin',
-    'paromomycin',
-    'tobramycin',
-    'streptomycin',
-    'plazomicin',
-]
+from analyze_functions.constants import IGNORE_STAGED_CHECK
 
 def check_if_fully_annotated_staged(args):
     if args['drug_name'] in IGNORE_STAGED_CHECK: return None

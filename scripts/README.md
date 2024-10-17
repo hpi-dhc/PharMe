@@ -109,7 +109,7 @@ and which bricks are not used in guidelines.
 | Check | Description | `--correct`ed | Only for single-gene results* |
 | ----- | ----------- | ------------- | ----------------------------- |
 | `has_consult` | Is "consult your pharmacist..." included in recommendation? | ✅ | ❌ |
-| `check_metabolization_severity` | "Much" keyword, should only be used if reflected by guideline implication. | ❌ | ✅ |
+| `check_metabolization_severity` | "Much" keyword, should only be used if reflected by guideline implication (or guideline lookup in `METABOLIZATION_SEVERITY_OVERWRITES`). | ❌ | ✅ |
 | `red_warning` | Red warning level should be present with recommendation containing "may not be the right medication". | ❌ | ❌ |
 | `yellow_warning` | Yellow warning level should be present when the red warning level does not apply but the implication contains "may not work" or "side effects" or the recommendation contains non-standard dose. | ❌ | ❌ |
 | `green_warning` | Green warning level should be applied in all non-red and non-yellow cases and when the recommendation states "at standard dose" or similar formulations. | ❌ | ❌ |

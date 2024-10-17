@@ -1,3 +1,26 @@
+METABOLIZATION_SEVERITY_OVERWRITES = [
+    {
+        'drug': 'voriconazole',
+        'lookup': {'CYP2C19': ['Ultrarapid Metabolizer']},
+        'overwrite': True,
+    },
+    {
+        'drug': 'siponimod',
+        'lookup': {'CYP2C9': ['0.0']},
+        'overwrite': True,
+    },
+]
+
+IGNORE_STAGED_CHECK = [
+    'amikacin',
+    'gentamicin',
+    'kanamycin',
+    'paromomycin',
+    'tobramycin',
+    'streptomycin',
+    'plazomicin',
+]
+
 CONSULT_TEXT = 'consult your pharmacist or doctor'
 WHOLE_CONSULT_TEXT = '{} for more information.'.format(CONSULT_TEXT)
 NORMAL_RISK_TEXTS = [
