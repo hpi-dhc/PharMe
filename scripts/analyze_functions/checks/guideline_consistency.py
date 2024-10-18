@@ -1,3 +1,4 @@
+from analyze_functions.constants import IGNORED_GUIDELINE_INCONSISTENCIES
 from analyze_functions.data_helpers import get_guideline_content, joint_implication_text
 from common.get_data import get_phenotype
 
@@ -49,12 +50,26 @@ def check_guideline_consistencies(guideline_check_args_list):
     inconsistent_guidelines_count = 0
     log_content = []
     for guideline_key, check_args_list in check_args_per_external_guideline.items():
+        if (guideline_key.startswith('fda-table-pharmacogenetic-associations')):
+            continue
         if (len(check_args_list) < 2): continue
         same_guideline_annotations = _group_annotations_by_guideline_content(
             check_args_list,
         )
         inconsistency_log_content = []
         for same_guideline_key, guideline_content in same_guideline_annotations.items():
+            skip_definitions = list(filter(
+                lambda ignored_case: ignored_case['guideline'] == guideline_key \
+                    and same_guideline_key.lower().startswith(ignored_case['type']) \
+                    and same_guideline_key.endswith(f'"{ignored_case["text"]}"'),
+                IGNORED_GUIDELINE_INCONSISTENCIES,
+            ))
+            if len(skip_definitions) > 1:
+                print('WARNING: Got multiple applying consistency check skip '
+                      'definitions, this should not happen'
+                )
+            if len(skip_definitions) > 0:
+                continue
             unique_guideline_content = set(guideline_content.keys())
             if len(unique_guideline_content) != 1:
                 inconsistency_log_content += f'  * {same_guideline_key} maps to:\n'
@@ -66,4 +81,6 @@ def check_guideline_consistencies(guideline_check_args_list):
             log_content += f'* {guideline_key}\n'
             for inconsistency in inconsistency_log_content:
                 log_content += inconsistency
+    if inconsistent_guidelines_count > 0:
+        log_content.append('\n')
     return inconsistent_guidelines_count, log_content

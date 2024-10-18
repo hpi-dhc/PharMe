@@ -11,6 +11,32 @@ METABOLIZATION_SEVERITY_OVERWRITES = [
     },
 ]
 
+IMPLICATION_TYPE = 'implication'
+RECOMMENDATION_TYPE = 'recommendation'
+
+IGNORED_GUIDELINE_INCONSISTENCIES = [
+    {
+        'guideline': 'guideline-for-tricyclic-antidepressants-and-cyp2d6-and-cyp2c19',
+        'type': RECOMMENDATION_TYPE,
+        'text': 'No recommendation',
+    },
+    {
+        'guideline': 'cpic-guideline-for-tamoxifen-based-on-cyp2d6-genotype',
+        'type': IMPLICATION_TYPE,
+        'text': 'therapeutic endoxifen concentrations',
+    },
+    {
+        'guideline': 'cpic-guideline-for-atomoxetine-based-on-cyp2d6-genotype',
+        'type': IMPLICATION_TYPE,
+        'text': 'normal metabolizers of #drug-name have a lower likelihood of response as compared to poor metabolizers. this is associated with increased discontinuation due to lack of efficacy as compared to poor metabolizers.',
+    },
+    {
+        'guideline': 'guideline-for-phenytoin-and-cyp2c9-and-hla-b',
+        'type': IMPLICATION_TYPE,
+        'text': 'n/a',
+    },
+]
+
 IGNORE_STAGED_CHECK = [
     'amikacin',
     'gentamicin',

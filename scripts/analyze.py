@@ -187,7 +187,6 @@ def run_analyses():
         f'* Guidelines: {failed_guideline_annotation_count}\n\n',
         f'**Inconsistent guidelines**: {inconsistent_guidelines_count}\n\n',
         *guideline_inconsistency_log,
-        '\n',
         'Missing annotations (search for `_not annotated_`):\n\n',
         f'* Drugs: {missing_drug_annotation_count}\n',
         f'* Guidelines: {missing_guideline_annotation_count}\n\n',
