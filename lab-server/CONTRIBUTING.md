@@ -34,32 +34,34 @@ Please also see the [contribution guide in the root folder](../CONTRIBUTING.md).
 
 ### Keycloak setup (local)
 
-- Open `http://localhost:28080` in your browser to access the keycloak admin
-  console (or different port, if changed in `.env`; make sure to also adapt the
-  port in `KEYCLOAK_AUTH_SERVER_URL` accordingly)
-- Login using the credentials `KEYCLOAK_USER` and `KEYCLOAK_PASS`
-  configured in the `.env` file
-- Create a realm called `KEYCLOAK_REALM` (see `.env`)
-- Create clients (one for the backend and one for the frontend)
-  - For the backend with name `KEYCLOAK_CLIENT_ID` (see `.env`)
-    - `access-type` "bearer only" (uncheck all other types, see
-      [StackOverflow](https://stackoverflow.com/a/75040248))
-    - In the credentials tab (enable "Client authentication" and save to enable
-      tab, see [StackOverflow](https://stackoverflow.com/a/44753547)) create a
-      secret and update the `.env` value `KEYCLOAK_SECRET` accordingly
-  - For the frontend with the name `pharme-app` (as `clientId` in
-    `app/lib/login/pages/cubit.dart`)
-    - `access-type` "public" ("Client authentication" off)
-    - set the redirect URI to `localhost:/*` (as specified in
-      `callbackUrlScheme` in `app/lib/login/pages/cubit.dart`)
-  - In `Authentication > Required actions` disable `Verify Profile`
-- Create a user for testing (you can choose username and password freely, no
-  roles are required); when setting the password, set "Temporary" to "OFF"
-- For more information see
-  [this guide](https://medium.com/devops-dudes/secure-nestjs-rest-api-with-keycloak-745ef32a2370)
-  (the important steps are described above; most of the steps described in
-  the guide, including the application configuration in NestJS, are
-      irrelevant for this setup)
+1. Open `http://localhost:28080` in your browser to access the keycloak admin
+   console (or different port, if changed in `.env`; make sure to also adapt the
+   port in `KEYCLOAK_AUTH_SERVER_URL` accordingly)
+2. Login using the credentials `KEYCLOAK_USER` and `KEYCLOAK_PASS`
+   configured in the `.env` file
+3. Create a realm called `KEYCLOAK_REALM` (see `.env` or use
+   `pharme-realm-export.json` for default settings; handles step 4, but need to
+   regenerate `KEYCLOAK_SECRET` in 4.1.2)
+4. Create clients (one for the backend and one for the frontend)
+   1. For the backend with name `KEYCLOAK_CLIENT_ID` (see `.env`)
+      1. `access-type` "bearer only" (uncheck all other types, see
+         [StackOverflow](https://stackoverflow.com/a/75040248))
+      2. In the credentials tab (enable "Client authentication" and save to
+         enable tab, see [StackOverflow](https://stackoverflow.com/a/44753547))
+         create a secret and update the `.env` value `KEYCLOAK_SECRET`
+         accordingly
+   2. For the frontend with the name `pharme-app` (as `clientId` in
+      `app/lib/login/pages/cubit.dart`)
+      1. `access-type` "public" ("Client authentication" off)
+      2. Set the redirect URI to `*` (for testing)
+   3. In `Authentication > Required actions` disable `Verify Profile`
+5. Create a user for testing (you can choose username and password freely, no
+   roles are required); when setting the password, set "Temporary" to "OFF"
+6. For more information see
+   [this guide](https://medium.com/devops-dudes/secure-nestjs-rest-api-with-keycloak-745ef32a2370)
+   (the important steps are described above; most of the steps described in
+   the guide, including the application configuration in NestJS, are
+   irrelevant for this setup)
 
 To check all endpoints of your local Keycloak instance, send a GET request to
 (for example with Postman):
