@@ -5,30 +5,11 @@ import 'package:http/http.dart';
 
 import '../module.dart';
 
-Future<void> fetchAndSaveDiplotypesAndActiveDrugs(
-  String token, String url, ActiveDrugs activeDrugs) async {
-  if (!shouldFetchDiplotypes()) return;
-  final response = await getDiplotypes(token, url);
-  if (response.statusCode == 200) {
-    await _saveDiplotypeAndActiveDrugsResponse(response, activeDrugs);
-  } else {
-    throw Exception();
-  }
-}
-
-Future<Response> getDiplotypes(String? token, String url) async {
-  return get(Uri.parse(url), headers: {'Authorization': 'Bearer $token'});
-}
-
-Future<void> _saveDiplotypeAndActiveDrugsResponse(
-  Response response,
+Future<void> saveDiplotypesAndActiveDrugs(
+  List<LabResult> labData,
+  List<String> activeDrugList,
   ActiveDrugs activeDrugs,
 ) async {
-  // parse response to list of user's labData
-  final labData =
-      labDataFromHTTPResponse(response);
-  final activeDrugList = activeDrugsFromHTTPResponse(response);
-
   UserData.instance.labData = labData;
   await UserData.save();
   await activeDrugs.setList(activeDrugList);
@@ -63,7 +44,7 @@ Map<String, GenotypeResult> initializeGenotypeResultKeys() {
   return emptyGenotypeResults;
 }
 
-Future<void> updateGenotypeResults() async {
+Future<void> maybeUpdateGenotypeResults() async {
   final skipUpdate = !shouldUpdateGenotypeResults();
   if (skipUpdate) return;
 

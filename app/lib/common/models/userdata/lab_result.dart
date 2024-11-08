@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart';
 import 'genotype.dart';
 
 part 'lab_result.g.dart';
@@ -34,10 +31,4 @@ class LabResult implements Genotype {
 
   @HiveField(3)
   String allelesTested;
-}
-
-// assumes http reponse from lab server
-List<LabResult> labDataFromHTTPResponse(Response resp) {
-  final json = jsonDecode(resp.body)['diplotypes'] as List<dynamic>;
-  return json.map<LabResult>(LabResult.fromJson).toList();
 }

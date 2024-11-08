@@ -1,24 +1,38 @@
+import 'dart:convert';
+
+import 'package:http/http.dart';
+
 import '../../common/module.dart';
+
+class LabAuthenticationCanceled implements Exception {
+  LabAuthenticationCanceled();
+}
+
+class LabAuthenticationError implements Exception {
+  LabAuthenticationError();
+}
 
 class Lab {
   Lab({
     required this.name,
-    required this.authUrl,
-    required this.tokenUrl,
-    required this.starAllelesUrl,
   });
 
   String name;
-  Uri authUrl;
-  Uri tokenUrl;
-  Uri starAllelesUrl;
-}
+  
+  Future<void> authenticate() async {}
+  Future<(List<LabResult>, List<String>)> loadData() async {
+    throw UnimplementedError();
+  }
 
-final labs = [
-  Lab(
-    name: 'Mount Sinai Health System',
-    authUrl: keycloakUrl('realms/pharme/protocol/openid-connect/auth'),
-    tokenUrl: keycloakUrl('realms/pharme/protocol/openid-connect/token'),
-    starAllelesUrl: labServerUrl('star-alleles'),
-  )
-];
+  (List<LabResult>, List<String>) labDataFromHTTPResponse(Response response) {
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    final labData = json['diplotypes'].map<LabResult>(
+      LabResult.fromJson
+    ).toList();
+    var activeDrugs = <String>[];
+    if (json.containsKey('medications')) {
+      activeDrugs = List<String>.from(json['medications']);
+    }
+    return (labData, activeDrugs);
+  }
+}

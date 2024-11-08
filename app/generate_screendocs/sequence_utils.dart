@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 Future<void> loadApp(WidgetTester tester) async {
   // Part before runApp in lib/main.dart
   await initServices();
-  await updateGenotypeResults();
+  await maybeUpdateGenotypeResults();
   // Load the app
   await tester.pumpWidget(
     ChangeNotifierProvider(

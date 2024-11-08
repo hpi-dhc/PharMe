@@ -6,7 +6,7 @@ import 'common/module.dart';
 Future<void> main() async {
   await initServices();
   // Maybe refresh lookups on app start
-  await updateGenotypeResults();
+  await maybeUpdateGenotypeResults();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ActiveDrugs(),

@@ -1,5 +1,4 @@
 import 'package:app/common/module.dart';
-import 'package:app/login/models/lab.dart';
 import 'package:app/login/module.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';

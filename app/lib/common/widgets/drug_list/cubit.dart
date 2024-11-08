@@ -62,7 +62,7 @@ class DrugListCubit extends Cubit<DrugListState> {
 
     emit(DrugListState.loading());
     try {
-      await updateDrugsWithGuidelines();
+      await maybeUpdateDrugsWithGuidelines();
       await loadDrugs(updateIfNull: false, filter: filter);
     } catch (error) {
       emit(DrugListState.error());

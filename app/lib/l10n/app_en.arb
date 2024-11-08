@@ -40,7 +40,7 @@
   "drug_list_subheader_all_drugs": "All medications",
   "drug_list_subheader_other_drugs": "Other medications",
   
-  "err_could_not_retrieve_access_token": "An unexpected error occurred while retrieving the access token",
+  "err_could_not_retrieve_access_token": "An unexpected error occurred while logging in",
   "err_fetch_user_data_failed": "An error occurred while getting data, please try again later",
   "err_generic": "Error",
 
@@ -137,7 +137,7 @@
       }
   },
   "drugs_page_tooltip_guideline_present": "{source} guidelines are used to inform the content on this page. These guidelines provide recommendations on which drugs to use based on your DNA.",
-  "@drugs_page_tooltip_guideline": {
+  "@drugs_page_tooltip_guideline_present": {
     "placeholders": {
       "source": {
         "type": "String",

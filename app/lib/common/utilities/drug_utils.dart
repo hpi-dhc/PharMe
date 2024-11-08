@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import '../../app.dart';
 import '../module.dart';
 
-Future<void> updateDrugsWithGuidelines() async {
+Future<void> maybeUpdateDrugsWithGuidelines() async {
   final isOnline = await hasConnectionTo(anniUrl().host);
   if (!isOnline && DrugsWithGuidelines.instance.version == null) {
     throw Exception();
@@ -22,7 +22,7 @@ Future<void> updateDrugsWithGuidelines() async {
   DrugsWithGuidelines.instance.drugs = data.drugs;
   DrugsWithGuidelines.instance.version = data.version;
   await DrugsWithGuidelines.save();
-  await updateGenotypeResults();
+  await maybeUpdateGenotypeResults();
   if (previousVersion != null) {
     final context = PharMeApp.navigatorKey.currentContext;
     if (context != null) {
