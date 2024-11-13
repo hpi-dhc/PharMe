@@ -3,9 +3,14 @@ import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
 import '../cubit.dart';
+import '../models/app_share_flow_lab.dart';
 import '../models/oauth_authorization_code_flow_lab.dart';
 
 final labs = [
+  AppShareFlowLab(
+    name: 'Health-X via Data Wallet App',
+    shareAppName: 'Data Wallet App',
+  ),
   OAuthAuthorizationCodeFlowLab(
     name: 'Mount Sinai Health System',
     authUrl: Uri.http('vm-slosarek01.dhclab.i.hpi.de:28080', 'realms/pharme/protocol/openid-connect/auth'),

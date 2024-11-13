@@ -1,7 +1,7 @@
 import 'package:url_launcher/url_launcher.dart';
 
 Uri anniUrl([String slug = '']) =>
-    Uri.http('vm-slosarek01.dhclab.i.hpi.de:8000', 'api/v1/$slug');
+    Uri.https('hpi-annotation-service.duckdns.org', 'api/v1/$slug');
 
 final geneticInformationUrl = Uri.https(
   'medlineplus.gov',
