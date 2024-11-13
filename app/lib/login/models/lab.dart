@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 import '../../common/module.dart';
 
@@ -24,11 +24,17 @@ class Lab {
     throw UnimplementedError();
   }
 
-  (List<LabResult>, List<String>) labDataFromHTTPResponse(Response response) {
+  Future<(List<LabResult>, List<String>)> fetchData(
+    Uri dataUrl,
+    {
+      Map<String,String>? headers,
+    }) async {
+    final response = await http.get(dataUrl, headers: headers);
+    if (response.statusCode != 200) throw Exception();
     final json = jsonDecode(response.body) as Map<String, dynamic>;
     final labData = json['diplotypes'].map<LabResult>(
       LabResult.fromJson
-    ).toList();
+    ).toList() as List<LabResult>;
     var activeDrugs = <String>[];
     if (json.containsKey('medications')) {
       activeDrugs = List<String>.from(json['medications']);
