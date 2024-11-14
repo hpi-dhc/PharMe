@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../common/module.dart';
 import '../cubit.dart';
 import '../models/app_share_flow_lab.dart';
+import '../models/lab.dart';
 import '../models/oauth_authorization_code_flow_lab.dart';
 
 final labs = [
@@ -28,6 +29,10 @@ class LoginPage extends HookWidget {
 
   final LoginCubit? cubit;
 
+  Lab _getSelectedLab(ValueNotifier<String> dropdownValue) => labs.firstWhere(
+    (lab) => lab.name == dropdownValue.value,
+  );
+
   @override
   Widget build(BuildContext context) {
     final dropdownValue = useState(labs.first.name);
@@ -41,7 +46,7 @@ class LoginPage extends HookWidget {
               child: state.when(
                 initial: () =>
                     _buildInitialScreen(context, dropdownValue),
-                loadingUserData: (loadingMessage) => Padding(
+                loadingUserData: (loadingMessage, cancelable) => Padding(
                   padding: EdgeInsets.all(PharMeTheme.largeSpace),
                   child: Column(
                     children: [
@@ -53,6 +58,19 @@ class LoginPage extends HookWidget {
                           style: context.textTheme.titleLarge,
                           textAlign: TextAlign.center,
                         ),
+                      ],
+                      if (cancelable ?? false) ...[
+                        SizedBox(height: PharMeTheme.largeSpace),
+                        FullWidthButton(
+                          context.l10n.action_cancel,
+                          () {
+                            final selectedLab = _getSelectedLab(dropdownValue);
+                            selectedLab.authenticationWasCanceled = true;
+                            context
+                              .read<LoginCubit>()
+                              .revertToInitialState();
+                          }
+                        )
                       ],
                     ],
                   ),
@@ -73,12 +91,9 @@ class LoginPage extends HookWidget {
     ValueNotifier<String> dropdownValue,
   ) {
     Future<void> action() async {
-      final selectedLab = labs.firstWhere(
-        (el) => el.name == dropdownValue.value,
-      );
       await context
           .read<LoginCubit>()
-          .signInAndLoadUserData(context, selectedLab);
+          .signInAndLoadUserData(context, _getSelectedLab(dropdownValue));
     }
 
     return _buildColumnWrapper(

@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 
 import '../../common/module.dart';
 
-class LabAuthenticationCanceled implements Exception {
-  LabAuthenticationCanceled();
+class LabProcessCanceled implements Exception {
+  LabProcessCanceled();
 }
 
 class LabAuthenticationError implements Exception {
@@ -18,6 +18,10 @@ class Lab {
   });
 
   String name;
+  bool cancelAuthInApp = false;
+  bool authenticationWasCanceled = false;
+
+  String? authLoadingMessage() => null;
   
   Future<void> authenticate() async {}
   Future<(List<LabResult>, List<String>)> loadData() async {

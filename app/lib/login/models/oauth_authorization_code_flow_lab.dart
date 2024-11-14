@@ -46,7 +46,7 @@ class OAuthAuthorizationCodeFlowLab extends Lab {
       token = jsonDecode(response.body)['access_token'] as String;
     } on PlatformException catch (e) {
       if (e.code == 'CANCELED') {
-        throw LabAuthenticationCanceled();
+        throw LabProcessCanceled();
       }
     }
     if (token == null) {
