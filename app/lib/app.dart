@@ -21,8 +21,23 @@ class PharMeApp extends StatelessWidget {
         appRouter: _appRouter,
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          routeInformationParser: _appRouter.defaultRouteParser(),
-          routerDelegate: _appRouter.delegate(deepLinkBuilder: getInitialRoute),
+          routerConfig: _appRouter.config(
+            deepLinkBuilder: (deepLink) async {
+              final queryParameters = deepLink.uri.queryParameters;
+              final isDeepLinkShareRequest = deepLink.path == '' &&
+                queryParameters.containsKey('provider_url');
+              if (isDeepLinkShareRequest) {
+                MetaData.instance.deepLinkSharePublishUrl =
+                  queryParameters['provider_url'];
+                await MetaData.save();
+                if (_appRouter.currentPath != '/') {
+                  return DeepLink.path(_appRouter.currentPath);
+                }
+              }
+              // default route
+              return getInitialRoute();
+            },
+          ),
           theme: PharMeTheme.light,
           localizationsDelegates: [
             AppLocalizations.delegate,

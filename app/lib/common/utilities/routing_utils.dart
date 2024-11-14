@@ -1,7 +1,7 @@
 import '../../secure/module.dart';
 import '../module.dart';
 
-DeepLink getInitialRoute(_) {
+DeepLink getInitialRoute() {
   final isLoggedIn = MetaData.instance.isLoggedIn ?? false;
   final onboardingDone = MetaData.instance.onboardingDone ?? false;
   final initialDrugSelectionDone =

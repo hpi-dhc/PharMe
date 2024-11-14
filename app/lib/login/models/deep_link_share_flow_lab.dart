@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../../common/module.dart';
 import 'lab.dart';
 
@@ -19,19 +21,24 @@ class DeepLinkShareFlowLab extends Lab {
   String? authLoadingMessage() =>
     'Please open the $shareAppName and share your data with PharMe';
 
+  Future<void> _waitForDeepLinkSharePublishUrl() async {
+    var waitingForDeepLinkSharePublishUrl = true;
+    while (waitingForDeepLinkSharePublishUrl) {
+      waitingForDeepLinkSharePublishUrl =
+        MetaData.instance.deepLinkSharePublishUrl == null;
+      await Future.delayed(Duration(seconds: 1));
+    }
+  }
+
   @override
   Future<void> authenticate() async {
-    // THIS IS FOR TESTING, SHOULD WAIT UNTIL A DEEP LINK IS RECEIVED
-    // (if possible like this but could set metadata field when deep link
-    // caught and wait here until it was set)
-    await Future.delayed(Duration(seconds: 7));
+    await _waitForDeepLinkSharePublishUrl();
   }
   
   @override
   Future<(List<LabResult>, List<String>)> loadData() async {
-    // THIS IS FOR TESTING, SHOULD GET FROM DWA
     publishUrl = Uri.parse(
-      'https://hpi-datastore.duckdns.org/userdata?id=1e006a69-b693-43d2-a318-22904e305b5c',
+      MetaData.instance.deepLinkSharePublishUrl!,
     );
     publishHeaders = null;
     return fetchData(

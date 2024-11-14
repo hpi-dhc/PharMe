@@ -37,6 +37,18 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- BEGIN receive deep links config -->
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Agreed to use app ID but must not contain underscores -->
+                <data android:scheme="pharme" />
+                <!-- Host we agreed upon -->
+                <data android:host="open_file" />
+            </intent-filter>
+            <!-- END receive deep links config -->
         </activity>
         <!-- Used for Sign-In Flow -->
         <activity

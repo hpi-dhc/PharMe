@@ -46,6 +46,9 @@ class MetaData {
 
   @HiveField(5)
   bool? tutorialDone;
+
+  @HiveField(6)
+  String? deepLinkSharePublishUrl;
 }
 
 /// Initializes the user's metadata by registering all necessary adapters and
