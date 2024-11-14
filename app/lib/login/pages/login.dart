@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
 import '../cubit.dart';
-import '../models/app_share_flow_lab.dart';
+import '../models/deep_link_share_flow_lab.dart';
 import '../models/lab.dart';
 import '../models/oauth_authorization_code_flow_lab.dart';
 
 final labs = [
-  AppShareFlowLab(
+  DeepLinkShareFlowLab(
     name: 'Health-X via Data Wallet App',
     shareAppName: 'Data Wallet App',
   ),

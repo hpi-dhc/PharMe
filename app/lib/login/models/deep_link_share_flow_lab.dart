@@ -1,8 +1,8 @@
 import '../../common/module.dart';
 import 'lab.dart';
 
-class AppShareFlowLab extends Lab {
-  AppShareFlowLab({
+class DeepLinkShareFlowLab extends Lab {
+  DeepLinkShareFlowLab({
     required super.name,
     required this.shareAppName,
   });
