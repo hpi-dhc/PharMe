@@ -18,6 +18,55 @@ allprojects {
     }
 }
 
+subprojects {
+    afterEvaluate { project ->
+        // From https://medium.com/@vortj/solving-namespace-errors-in-flutters-android-gradle-configuration-c2baa6262f8b
+        if (project.hasProperty('android')) {
+            project.android {
+                if (namespace == null) {
+                    namespace = project.group.toString()  // Set namespace as fallback
+                }
+                project.tasks.whenTaskAdded { task ->
+                    if (task.name.contains('processDebugManifest') || task.name.contains('processReleaseManifest')) {
+                        task.doFirst {
+                            File manifestFile = file("${projectDir}/src/main/AndroidManifest.xml")
+                            if (manifestFile.exists()) {
+                                String manifestContent = manifestFile.text
+                                if (manifestContent.contains('package=')) {
+                                    manifestContent = manifestContent.replaceAll(/package="[^"]*"/, "")
+                                    manifestFile.write(manifestContent)
+                                    println "Removed 'package' attribute from ${manifestFile}"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // From https://github.com/flutter/flutter/issues/153281#issuecomment-2292201697
+        if (project.extensions.findByName("android") != null) {
+            Integer pluginCompileSdk = project.android.compileSdk
+            if (pluginCompileSdk != null && pluginCompileSdk < 31) {
+                project.logger.error(
+                        "Warning: Overriding compileSdk version in Flutter plugin: "
+                                + project.name
+                                + " from "
+                                + pluginCompileSdk
+                                + " to 31 (to work around https://issuetracker.google.com/issues/199180389)."
+                                + "\nIf there is not a new version of " + project.name + ", consider filing an issue against "
+                                + project.name
+                                + " to increase their compileSdk to the latest (otherwise try updating to the latest version)."
+                )
+                project.android {
+                    compileSdk 31
+                }
+            }
+        }
+    }
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(":app")
+}
+
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
@@ -26,4 +75,11 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+
+// From https://stackoverflow.com/a/69050529
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.core:core-ktx:1.6.0'
+    }
 }
