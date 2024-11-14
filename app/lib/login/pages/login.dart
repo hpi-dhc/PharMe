@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:provider/provider.dart';
 
@@ -128,9 +130,11 @@ class LoginPage extends HookWidget {
           ),
         ),
       ],
-      bottomWidget: Column(
-        children: _buildHealthXShareContent(context),
-      )
+      bottomWidget: Platform.isAndroid
+        ? Column(
+          children: _buildHealthXShareContent(context),
+        )
+        : null,
     );
   }
 
