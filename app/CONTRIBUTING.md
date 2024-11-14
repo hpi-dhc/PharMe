@@ -28,6 +28,24 @@ alias flutter-generate='dart run build_runner build --delete-conflicting-outputs
 alias flutter-clean='find . -maxdepth 20 -type f \( -name "*.inject.summary" -o -name "*.inject.dart" -o  -name "*.g.dart" \) -delete'
 ```
 
+## Updating Flutter and Android
+
+... can be super painful, because Java, Gradle, and Kotlin versions may be
+wrong.
+
+Often problems in packages arise that rely on older Gradle versions.
+
+The places to check are:
+
+- Your Flutter version
+- Your `JAVA_HOME` version
+- The Gradle version in `gradle-wrapper.properties`; the recommended versions
+  are "between 7.3 and 7.6.1." (see
+  [Android Java Gradle migration guide](https://docs.flutter.dev/release/breaking-changes/android-java-gradle-migration-guide))
+- The Java version in `android/app/build/gradle`
+- The Java version used for Gradle (check in Android Studio)
+- The Kotlin version in `settings.gradle`
+
 ## Architecture
 
 The app consists of multiple so-called modules. Our main modules (usually app
