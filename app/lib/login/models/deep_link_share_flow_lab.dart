@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../../common/module.dart';
 import 'lab.dart';
 
