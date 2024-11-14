@@ -65,7 +65,7 @@ class LoginPage extends HookWidget {
                           context.l10n.action_cancel,
                           () {
                             final selectedLab = _getSelectedLab(dropdownValue);
-                            selectedLab.authenticationWasCanceled = true;
+                            selectedLab.preparationWasCanceled = true;
                             context
                               .read<LoginCubit>()
                               .revertToInitialState();

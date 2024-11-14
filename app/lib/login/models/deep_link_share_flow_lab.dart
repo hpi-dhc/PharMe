@@ -13,10 +13,10 @@ class DeepLinkShareFlowLab extends Lab {
 
   @override
   // ignore: overridden_fields
-  bool cancelAuthInApp = true;
+  bool cancelPreparationInApp= true;
 
   @override
-  String? authLoadingMessage() =>
+  String? preparationLoadingMessage() =>
     'Please open the $shareAppName and share your data with PharMe';
 
   Future<void> _waitForDeepLinkSharePublishUrl() async {
@@ -28,13 +28,20 @@ class DeepLinkShareFlowLab extends Lab {
     }
   }
 
+  Future<void> _setAwaitingDeepLinkSharePublishUrl(bool newValue) async {
+    MetaData.instance.awaitingDeepLinkSharePublishUrl = newValue;
+    await MetaData.save();
+  }
+
   @override
-  Future<void> authenticate() async {
+  Future<void> prepareDataLoad() async {
+    await _setAwaitingDeepLinkSharePublishUrl(true);
     await _waitForDeepLinkSharePublishUrl();
   }
   
   @override
   Future<(List<LabResult>, List<String>)> loadData() async {
+    await _setAwaitingDeepLinkSharePublishUrl(false);
     publishUrl = Uri.parse(
       MetaData.instance.deepLinkSharePublishUrl!,
     );

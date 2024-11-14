@@ -16,15 +16,15 @@ class LoginCubit extends Cubit<LoginState> {
   // genomic data from it's endpoint.
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
     emit(LoginState.loadingUserData(
-      lab.authLoadingMessage(),
-      cancelable: lab.cancelAuthInApp,
+      lab.preparationLoadingMessage(),
+      cancelable: lab.cancelPreparationInApp,
     ));
     try {
-      await lab.authenticate();
+      await lab.prepareDataLoad();
     } on LabProcessCanceled {
       revertToInitialState();
       return;
-    } on LabAuthenticationError {
+    } on Exception {
       emit(LoginState.error(
         // ignore: use_build_context_synchronously
         context.l10n.err_could_not_retrieve_access_token,
@@ -32,8 +32,9 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
 
-    if (lab.authenticationWasCanceled) {
-      lab.authenticationWasCanceled = false;
+    if (lab.preparationWasCanceled) {
+      lab.preparationWasCanceled = false;
+      MetaData.instance.awaitingDeepLinkSharePublishUrl = false;
       return;
     }
 

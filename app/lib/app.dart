@@ -13,6 +13,13 @@ class PharMeApp extends StatelessWidget {
 
   final _appRouter = AppRouter();
 
+  Future<void> _setDeepLinkSharePublishUrl(PlatformDeepLink deepLink) async {
+    final queryParameters = deepLink.uri.queryParameters;
+    MetaData.instance.deepLinkSharePublishUrl =
+      queryParameters['provider_url'];
+    await MetaData.save();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ErrorHandler(
@@ -23,16 +30,11 @@ class PharMeApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           routerConfig: _appRouter.config(
             deepLinkBuilder: (deepLink) async {
-              final queryParameters = deepLink.uri.queryParameters;
-              final isDeepLinkShareRequest = deepLink.path == '' &&
-                queryParameters.containsKey('provider_url');
-              if (isDeepLinkShareRequest) {
-                MetaData.instance.deepLinkSharePublishUrl =
-                  queryParameters['provider_url'];
-                await MetaData.save();
-                if (_appRouter.currentPath != '/') {
-                  return DeepLink.path(_appRouter.currentPath);
-                }
+              if (deepLink.path.startsWith('/open_file')) {
+                await _setDeepLinkSharePublishUrl(deepLink);
+              }
+              if (_appRouter.currentPath != '/') {
+                return DeepLink.path(_appRouter.currentPath);
               }
               // default route
               return getInitialRoute();

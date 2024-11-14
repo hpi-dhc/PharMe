@@ -49,6 +49,9 @@ class MetaData {
 
   @HiveField(6)
   String? deepLinkSharePublishUrl;
+
+  @HiveField(7)
+  bool? awaitingDeepLinkSharePublishUrl;
 }
 
 /// Initializes the user's metadata by registering all necessary adapters and

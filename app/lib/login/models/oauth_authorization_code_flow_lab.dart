@@ -22,7 +22,11 @@ class OAuthAuthorizationCodeFlowLab extends Lab {
   late String? token;
 
   @override
-  Future<void> authenticate() async {
+  String? preparationErrorMessage(BuildContext context) =>
+    context.l10n.err_fetch_user_data_failed;
+
+  @override
+  Future<void> prepareDataLoad() async {
     const clientId = 'pharme-app';
     const callbackUrlScheme = 'localhost';
     final url = authUrl.replace(queryParameters: {

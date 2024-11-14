@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../app.dart';
 import '../../common/module.dart';
 
 class LabProcessCanceled implements Exception {
@@ -18,12 +19,14 @@ class Lab {
   });
 
   String name;
-  bool cancelAuthInApp = false;
-  bool authenticationWasCanceled = false;
+  bool cancelPreparationInApp = false;
+  bool preparationWasCanceled = false;
 
-  String? authLoadingMessage() => null;
+  String? preparationLoadingMessage() => null;
+
+  String? preparationErrorMessage(BuildContext context) => null;
   
-  Future<void> authenticate() async {}
+  Future<void> prepareDataLoad() async {}
   Future<(List<LabResult>, List<String>)> loadData() async {
     throw UnimplementedError();
   }
@@ -33,6 +36,38 @@ class Lab {
     {
       Map<String,String>? headers,
     }) async {
+    final awaitingOpenFile =
+      MetaData.instance.awaitingDeepLinkSharePublishUrl ?? false;
+    final loggedIn = MetaData.instance.isLoggedIn ?? false;
+    final needsConfirmation = !awaitingOpenFile || loggedIn;
+    final context = PharMeApp.navigatorKey.currentContext;
+    if (context == null && needsConfirmation) throw Exception();
+    if (needsConfirmation) {
+      final dialogTitle =  loggedIn
+        ? 'Confirm data overwrite'
+        : 'Received data';
+      final dialogText = 'PharMe received data from another app. ${
+        loggedIn
+          ? 'Overwrite existing data?'
+          : 'Continue if you want to import the data.'
+      }';
+      await showAdaptiveDialog(
+        context: PharMeApp.navigatorKey.currentContext!,
+        builder: (context) => DialogWrapper(
+          title: dialogTitle,
+          content: DialogContentText(dialogText),
+          actions: [
+            DialogAction(
+              onPressed: () => Navigator.pop(context),
+              text: context.l10n.action_cancel,
+            ),
+            DialogAction(
+              onPressed: () => throw LabProcessCanceled(),
+              text: context.l10n.action_understood,
+            ),
+          ],
+        ),);
+    }
     final response = await http.get(dataUrl, headers: headers);
     if (response.statusCode != 200) throw Exception();
     final json = jsonDecode(response.body) as Map<String, dynamic>;
