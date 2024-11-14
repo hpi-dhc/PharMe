@@ -78,7 +78,7 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
       - uses: futureware-tech/simulator-action@v3
         with:
-          model: 'iPhone 14'
+          model: 'iPhone 15'
       - run: flutter pub get
       - run: flutter pub run build_runner build
       - run: open -a Simulator.app
