@@ -6,7 +6,8 @@ import 'models/lab.dart';
 part 'cubit.freezed.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(this.activeDrugs): super(LoginState.initial());
+  LoginCubit(this.activeDrugs, LoginState? initialState):
+    super(initialState ?? LoginState.initial());
 
   ActiveDrugs activeDrugs;
 
@@ -15,10 +16,7 @@ class LoginCubit extends Cubit<LoginState> {
   // signInAndLoadUserData authenticates a user with a Lab and fetches their
   // genomic data from it's endpoint.
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
-    emit(LoginState.loadingUserData(
-      lab.preparationLoadingMessage(),
-      cancelable: lab.cancelPreparationInApp,
-    ));
+    emit(LoginState.loadingUserData(null));
     try {
       await lab.prepareDataLoad();
     } on LabProcessCanceled {
@@ -29,12 +27,6 @@ class LoginCubit extends Cubit<LoginState> {
         // ignore: use_build_context_synchronously
         context.l10n.err_could_not_retrieve_access_token,
       ));
-      return;
-    }
-
-    if (lab.preparationWasCanceled) {
-      lab.preparationWasCanceled = false;
-      MetaData.instance.awaitingDeepLinkSharePublishUrl = false;
       return;
     }
 
@@ -68,10 +60,8 @@ class LoginCubit extends Cubit<LoginState> {
 @freezed
 class LoginState with _$LoginState {
   const factory LoginState.initial() = _InitialState;
-  const factory LoginState.loadingUserData(
-    String? loadingMessage,
-    {bool? cancelable}
-  ) = _LoadingUserDataState;
+  const factory LoginState.loadingUserData(String? loadingMessage) =
+    _LoadingUserDataState;
   const factory LoginState.loadedUserData() = _LoadedUserDataState;
   const factory LoginState.error(String string) = _ErrorState;
 }

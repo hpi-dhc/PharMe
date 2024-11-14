@@ -36,7 +36,6 @@ class PharMeApp extends StatelessWidget {
               if (_appRouter.currentPath != '/') {
                 return DeepLink.path(_appRouter.currentPath);
               }
-              // default route
               return getInitialRoute();
             },
           ),

@@ -8,10 +8,6 @@ import '../models/lab.dart';
 import '../models/oauth_authorization_code_flow_lab.dart';
 
 final labs = [
-  DeepLinkShareFlowLab(
-    name: 'Health-X via Data Wallet App',
-    shareAppName: 'Data Wallet App',
-  ),
   OAuthAuthorizationCodeFlowLab(
     name: 'Mount Sinai Health System',
     authUrl: Uri.http('vm-slosarek01.dhclab.i.hpi.de:28080', 'realms/pharme/protocol/openid-connect/auth'),
@@ -20,18 +16,29 @@ final labs = [
   )
 ];
 
+final healthXLab = DeepLinkShareFlowLab(
+    name: 'Health-X via Data Wallet App',
+    shareAppName: 'Data Wallet App',
+);
+
 @RoutePage()
 class LoginPage extends HookWidget {
   const LoginPage({
     super.key,
+    this.initialState,
     @visibleForTesting this.cubit,
   });
 
   final LoginCubit? cubit;
+  final LoginState? initialState;
 
   Lab _getSelectedLab(ValueNotifier<String> dropdownValue) => labs.firstWhere(
     (lab) => lab.name == dropdownValue.value,
   );
+
+  Future<void> _getDataFromLab(Lab lab, BuildContext context) async => context
+    .read<LoginCubit>()
+    .signInAndLoadUserData(context, lab);
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +46,14 @@ class LoginPage extends HookWidget {
 
     return Consumer<ActiveDrugs>(
       builder: (context, activeDrugs, child) => BlocProvider(
-        create: (context) => cubit ?? LoginCubit(activeDrugs),
+        create: (context) => cubit ?? LoginCubit(activeDrugs, initialState),
         child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
             return PharMeLogoPage(
               child: state.when(
                 initial: () =>
                     _buildInitialScreen(context, dropdownValue),
-                loadingUserData: (loadingMessage, cancelable) => Padding(
+                loadingUserData: (loadingMessage) => Padding(
                   padding: EdgeInsets.all(PharMeTheme.largeSpace),
                   child: Column(
                     children: [
@@ -58,19 +65,6 @@ class LoginPage extends HookWidget {
                           style: context.textTheme.titleLarge,
                           textAlign: TextAlign.center,
                         ),
-                      ],
-                      if (cancelable ?? false) ...[
-                        SizedBox(height: PharMeTheme.largeSpace),
-                        FullWidthButton(
-                          context.l10n.action_cancel,
-                          () {
-                            final selectedLab = _getSelectedLab(dropdownValue);
-                            selectedLab.preparationWasCanceled = true;
-                            context
-                              .read<LoginCubit>()
-                              .revertToInitialState();
-                          }
-                        )
                       ],
                     ],
                   ),
@@ -90,14 +84,8 @@ class LoginPage extends HookWidget {
     BuildContext context,
     ValueNotifier<String> dropdownValue,
   ) {
-    Future<void> action() async {
-      await context
-          .read<LoginCubit>()
-          .signInAndLoadUserData(context, _getSelectedLab(dropdownValue));
-    }
-
     return _buildColumnWrapper(
-      action: action,
+      action: () => _getDataFromLab(_getSelectedLab(dropdownValue), context),
       actionText: context.l10n.auth_sign_in,
       children: [
         Text(
@@ -140,7 +128,31 @@ class LoginPage extends HookWidget {
           ),
         ),
       ],
+      bottomWidget: Column(
+        children: _buildHealthXShareContent(context),
+      )
     );
+  }
+
+  List<Widget> _buildHealthXShareContent(BuildContext context) {
+    final loadingPossible = MetaData.instance.deepLinkSharePublishUrl != null;
+    return [
+        FullWidthButton(
+          'Import data from ${healthXLab.shareAppName}',
+          () => _getDataFromLab(healthXLab, context),
+          color: Colors.orange,
+          enabled: loadingPossible,
+        ),
+        if (!loadingPossible) ...[
+          SizedBox(height: PharMeTheme.smallSpace),
+          Text(
+            'Please first share your data with PharMe using the '
+            '${healthXLab.shareAppName}, so that PharMe can import them.',
+            style: PharMeTheme.textTheme.labelMedium,
+            textAlign: TextAlign.center,
+          ),
+        ]
+      ];
   }
 
   Widget _buildLoadedScreen(BuildContext context) {
@@ -190,14 +202,19 @@ class LoginPage extends HookWidget {
     required void Function()? action,
     required String actionText,
     required List<Widget> children,
+    Widget? bottomWidget,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ...children,
-        SizedBox(height: PharMeTheme.mediumSpace),
+        SizedBox(height: PharMeTheme.smallSpace),
         FullWidthButton(actionText, action ?? () {}),
         SizedBox(height: PharMeTheme.mediumSpace),
+        if (bottomWidget != null) ...[
+          bottomWidget,
+          SizedBox(height: PharMeTheme.mediumSpace),
+        ],
       ],
     );
   }

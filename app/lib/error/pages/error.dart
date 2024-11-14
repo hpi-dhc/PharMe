@@ -52,7 +52,7 @@ class ErrorPage extends StatelessWidget {
             FullWidthButton(
               context.l10n.error_close_app,
               () => exit(0),
-              secondaryColor: true,
+              color: PharMeTheme.secondaryColor,
             ),
             SizedBox(height: PharMeTheme.mediumSpace),
           ],
