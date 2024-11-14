@@ -34,5 +34,7 @@ class AppRouter extends _$AppRouter {
     ),
     onboardingRoute(),
     secureRoute(),
+    // See https://github.com/Milad-Akarie/auto_route_library/issues/1722#issuecomment-2344394468
+    RedirectRoute(path: '*', redirectTo: '/main'),
   ];
 }

@@ -9,7 +9,7 @@
    >
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -44,9 +44,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Agreed to use app ID but must not contain underscores -->
-                <data android:scheme="pharme" />
+                <data android:scheme="healthx" />
                 <!-- Host we agreed upon -->
-                <data android:host="open_file" />
+                <data android:host="pharme" />
             </intent-filter>
             <!-- END receive deep links config -->
         </activity>
