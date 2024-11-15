@@ -19,8 +19,8 @@ final labs = [
 ];
 
 final healthXLab = DeepLinkShareFlowLab(
-    name: 'Health-X via Data Wallet App',
-    shareAppName: 'Data Wallet App',
+    name: 'HEALTH-X dataLOFT',
+    shareAppName: 'Consent Manager App',
 );
 
 @RoutePage()
@@ -142,7 +142,7 @@ class LoginPage extends HookWidget {
     final loadingPossible = MetaData.instance.deepLinkSharePublishUrl != null;
     return [
         FullWidthButton(
-          'Import data from ${healthXLab.shareAppName}',
+          'Import data from ${healthXLab.name}',
           () => _getDataFromLab(healthXLab, context),
           color: Colors.orange,
           enabled: loadingPossible,
@@ -150,8 +150,8 @@ class LoginPage extends HookWidget {
         if (!loadingPossible) ...[
           SizedBox(height: PharMeTheme.smallSpace),
           Text(
-            'Please first share your data with PharMe using the '
-            '${healthXLab.shareAppName}, so that PharMe can import them.',
+            'Share your data with PharMe using the${healthXLab.shareAppName}, '
+            'and return to PharMe to import them.',
             style: PharMeTheme.textTheme.labelMedium,
             textAlign: TextAlign.center,
           ),
