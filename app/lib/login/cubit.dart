@@ -36,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
         ? context.l10n.auth_loading_data
         // ignore: use_build_context_synchronously
         : context.l10n.auth_updating_data;
-      emit(LoginState.loadingUserData(loadingMessage, ));
+      emit(LoginState.loadingUserData(loadingMessage));
       if (shouldFetchDiplotypes()) {
         final (labData, activeDrugList) = await lab.loadData();
         await saveDiplotypesAndActiveDrugs(
