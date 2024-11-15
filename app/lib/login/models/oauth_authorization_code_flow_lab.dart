@@ -56,6 +56,6 @@ class OAuthAuthorizationCodeFlowLab extends Lab {
   
   @override
   Future<(List<LabResult>, List<String>)> loadData() async {
-    return fetchData(dataUrl, headers: {'Authorization': 'Bearer $token'});
+    return Lab.fetchData(dataUrl, headers: {'Authorization': 'Bearer $token'});
   }
 }

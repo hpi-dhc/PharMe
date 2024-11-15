@@ -24,7 +24,7 @@ class Lab {
     throw UnimplementedError();
   }
 
-  Future<(List<LabResult>, List<String>)> fetchData(
+  static Future<(List<LabResult>, List<String>)> fetchData(
     Uri dataUrl,
     {
       Map<String,String>? headers,

@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
 import '../cubit.dart';
-import '../models/oauth_authorization_code_flow_lab.dart';
+import '../models/dummy_demo_lab.dart';
 
 final labs = [
-  OAuthAuthorizationCodeFlowLab(
+  DummyDemoLab(
     name: 'Mount Sinai Health System',
-    authUrl: Uri.http('vm-slosarek01.dhclab.i.hpi.de:28080', 'realms/pharme/protocol/openid-connect/auth'),
-    tokenUrl: Uri.http('vm-slosarek01.dhclab.i.hpi.de:28080', 'realms/pharme/protocol/openid-connect/token'),
-    dataUrl: Uri.http('vm-slosarek01.dhclab.i.hpi.de:8081', 'api/v1/star-alleles'),
+    dataUrl: Uri.parse(
+      'https://hpi-datastore.duckdns.org/userdata?id=66608824-2ab4-4f03-aef0-03aa007337d3',
+    ),
   )
 ];
 
