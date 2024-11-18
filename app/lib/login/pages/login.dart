@@ -150,7 +150,7 @@ class LoginPage extends HookWidget {
         if (!loadingPossible) ...[
           SizedBox(height: PharMeTheme.smallSpace),
           Text(
-            'Share your data with PharMe using the${healthXLab.shareAppName}, '
+            'Share your data with PharMe using the ${healthXLab.shareAppName}, '
             'and return to PharMe to import them.',
             style: PharMeTheme.textTheme.labelMedium,
             textAlign: TextAlign.center,
