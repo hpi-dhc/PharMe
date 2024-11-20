@@ -106,9 +106,57 @@
   "inhibitor_third_person_salutation": "the user is",
   "inhibitor_third_person_salutation_genitive": "the user's",
   "inhibitor_message": "One or more of the medications {salutation} currently taking may interact with {salutationGenitive} genetic result",
+  "@inhibitor_message": {
+    "placeholders": {
+      "salutation": {
+        "type": "String",
+        "example": "you"
+      },
+      "salutationGenitive": {
+        "type": "String",
+        "example": "your"
+      }
+    }
+  },
   "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} phenotype was adapted from {originalPhenotype}.",
+  "@inhibitors_consequence_adapted": {
+    "placeholders": {
+      "salutationGenitive": {
+        "type": "String",
+        "example": "your"
+      },
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      },
+      "originalPhenotype": {
+        "type": "String",
+        "example": "Normal Metabolizer"
+      }
+    }
+  },
   "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} phenotype was not adapted but may need to be.",
+  "@inhibitors_consequence_not_adapted": {
+    "placeholders": {
+      "salutationGenitive": {
+        "type": "String",
+        "example": "your"
+      },
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
   "inhibitors_tooltip": "Current interacting medications: {inhibitors}.",
+  "@inhibitors_tooltip": {
+    "placeholders": {
+      "inhibitors": {
+        "type": "String",
+        "example": "bupropion"
+      }
+    }
+  },
   "consult_text": "Consult your pharmacist or doctor for more information.",
 
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
@@ -351,7 +399,23 @@
   "faq_question_phenoconversion": "Why can my results change when I take certain medications?",
   "faq_answer_phenoconversion": "Certain medications can change your phenotype that descries how your body responds to medications. Typically, medications either inhibit or induce the activity of a gene. In PharMe, the following interactions are included:",
   "faq_strong_inhibitors": "Strong {geneName} inhibitors:",
+  "@faq_strong_inhibitors": {
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
   "faq_moderate_inhibitors": "Moderate {geneName} inhibitors:",
+  "@faq_moderate_inhibitors": {
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
   "faq_question_family": "Will my results affect my family members?",
   "faq_answer_family": "Yes, since this is a genetic test, it is possible that your results were passed down to you and your siblings from your parents and you will also pass them down to your children.",
   "faq_question_share": "Who can I share my results with?",
