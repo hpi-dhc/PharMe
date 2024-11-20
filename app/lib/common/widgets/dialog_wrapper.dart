@@ -3,12 +3,12 @@ import '../module.dart';
 class DialogWrapper extends StatelessWidget {
   const DialogWrapper({
     super.key,
-    required this.title,
-    required this.content,
     required this.actions,
+    this.title,
+    this.content,
   });
 
-  final String title;
+  final String? title;
   final Widget? content;
   final List<DialogAction> actions;
 
@@ -22,7 +22,7 @@ class DialogWrapper extends StatelessWidget {
         )
       : content;
     return AlertDialog.adaptive(
-      title: Text(title),
+      title: title != null ? Text(title!) : null,
       content: materialContent,
       actions: actions,
       elevation: 0,

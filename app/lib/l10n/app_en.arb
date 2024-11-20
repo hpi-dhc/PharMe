@@ -32,7 +32,7 @@
   "drug_item_brand_names": "Brand names",
 
   "drug_selection_header": "Current medications",
-  "drug_selection_onboarding_description": "Please review the medications you are currently taking below and update them if needed. You can always change the status for a medication later on a medication page or in the settings.",
+  "drug_selection_continue_warning": "If you continue, you will complete the initial setup and will not be able to come back to this page. You can always change the status for a medication later in the app.",
   "drug_selection_settings_description": "Review the medications you are currently taking below.",
   "drug_selection_no_drugs_loaded": "No medications loaded",
 
