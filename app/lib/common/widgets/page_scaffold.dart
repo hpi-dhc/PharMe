@@ -62,6 +62,11 @@ Scaffold pageScaffold({
   );
 }
 
+void _maybeRemoveFocus(BuildContext? contextToDismissFocusOnTap) =>
+  contextToDismissFocusOnTap != null
+      ? FocusScope.of(contextToDismissFocusOnTap).unfocus()
+      : null;
+
 Widget unscrollablePageScaffold({
   required Widget body,
   String? title,
@@ -86,9 +91,7 @@ Widget unscrollablePageScaffold({
         titleSpacing: _getTitleSpacing(backButtonPresent: canNavigateBack),
       );
   return GestureDetector(
-    onTap: () => contextToDismissFocusOnTap != null
-      ? FocusScope.of(contextToDismissFocusOnTap).unfocus()
-      : null,
+    onTap: () => _maybeRemoveFocus(contextToDismissFocusOnTap),
     child: Scaffold(
       key: key,
       appBar: appBar,
