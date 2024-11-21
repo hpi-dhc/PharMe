@@ -69,6 +69,7 @@ class DrugSelectionPage extends HookWidget {
           await showAdaptiveDialog(
             context: context,
             builder: (context) => DialogWrapper(
+              title: context.l10n.drug_selection_continue_warning_title,
               content: Text(context.l10n.drug_selection_continue_warning),
               actions: [
                 DialogAction(

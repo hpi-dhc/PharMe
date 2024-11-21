@@ -51,6 +51,8 @@
 
   "drug_selection_header": "Current medications",
   "@drug_selection_header": {},
+  "drug_selection_continue_warning_title": "Confirm proceeding",
+  "@drug_selection_continue_warning_title": {},
   "drug_selection_continue_warning": "Proceeding will close the initial medication selection. You can always change the status for a medication later in the app.",
   "@drug_selection_continue_warning": {},
   "drug_selection_settings_description": "Review the medications you are currently taking below.",
