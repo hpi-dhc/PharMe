@@ -46,6 +46,7 @@ List<SwitchListTile> _buildSelectionList(
       subtitle: (drug.annotations.brandNames.isNotEmpty) ?
         formatBrandNames(context, drug) :
         null,
+      warnIfInhibitor: showDrugInteractionIndicator,
     )
   ).toList();
 }
