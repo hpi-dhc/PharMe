@@ -51,7 +51,7 @@
 
   "drug_selection_header": "Current medications",
   "@drug_selection_header": {},
-  "drug_selection_continue_warning": "If you continue, you will complete the initial setup and will not be able to come back to this page. You can always change the status for a medication later in the app.",
+  "drug_selection_continue_warning": "Proceeding will close the initial medication selection. You can always change the status for a medication later in the app.",
   "@drug_selection_continue_warning": {},
   "drug_selection_settings_description": "Review the medications you are currently taking below.",
   "@drug_selection_settings_description": {},
