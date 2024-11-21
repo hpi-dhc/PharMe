@@ -14,6 +14,7 @@ Widget scrollList(List<Widget> body, { bool keepPosition = false }) {
       child: Padding(
         padding: EdgeInsets.only(right: PharMeTheme.mediumSpace),
         child: FlutterListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           delegate: FlutterListViewDelegate(
               (context, index) => body[index],
               childCount: body.length,

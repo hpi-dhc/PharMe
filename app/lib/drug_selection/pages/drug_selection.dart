@@ -32,6 +32,7 @@ class DrugSelectionPage extends HookWidget {
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
               canNavigateBack: !concludesOnboarding,
+              contextToDismissFocusOnTap: context,
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -62,12 +62,13 @@ Scaffold pageScaffold({
   );
 }
 
-Scaffold unscrollablePageScaffold({
+Widget unscrollablePageScaffold({
   required Widget body,
   String? title,
   String? titleTooltip,
   List<Widget>? actions,
   bool canNavigateBack = true,
+  BuildContext? contextToDismissFocusOnTap,
   Key? key,
 }) {
   final appBar = title == null
@@ -84,13 +85,18 @@ Scaffold unscrollablePageScaffold({
         scrolledUnderElevation: 0,
         titleSpacing: _getTitleSpacing(backButtonPresent: canNavigateBack),
       );
-  return Scaffold(
-    key: key,
-    appBar: appBar,
-    body: SafeArea(
-      child: Padding(
-        padding: pagePadding(),
-        child: body,
+  return GestureDetector(
+    onTap: () => contextToDismissFocusOnTap != null
+      ? FocusScope.of(contextToDismissFocusOnTap).unfocus()
+      : null,
+    child: Scaffold(
+      key: key,
+      appBar: appBar,
+      body: SafeArea(
+        child: Padding(
+          padding: pagePadding(),
+          child: body,
+        ),
       ),
     ),
   );
