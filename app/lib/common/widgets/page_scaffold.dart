@@ -38,6 +38,7 @@ Scaffold pageScaffold({
 }) {
   return Scaffold(
     key: key,
+    resizeToAvoidBottomInset: false,
     body: CustomScrollView(slivers: [
       SliverAppBar(
         scrolledUnderElevation: 0,
@@ -95,6 +96,7 @@ Widget unscrollablePageScaffold({
     child: Scaffold(
       key: key,
       appBar: appBar,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: pagePadding(),
