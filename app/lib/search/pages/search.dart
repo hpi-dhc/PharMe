@@ -24,6 +24,7 @@ class SearchPage extends HookWidget {
         child: unscrollablePageScaffold(
           title: context.l10n.tab_drugs,
           canNavigateBack: false,
+          contextToDismissFocusOnTap: context,
           body: DrugSearch(
             key: Key('drug-search'),
             showFilter: true,

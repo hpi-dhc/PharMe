@@ -15,15 +15,19 @@ SwitchListTile buildDrugActivitySelection({
   required bool isActive,
   required bool disabled,
   EdgeInsetsGeometry? contentPadding,
+  bool warnIfInhibitor = true,
 }) => SwitchListTile.adaptive(
   key: key,
   value: isActive,
   activeColor: PharMeTheme.primaryColor,
+  inactiveThumbColor: PharMeTheme.surfaceColor,
+  inactiveTrackColor: PharMeTheme.borderColor,
+  trackOutlineColor: WidgetStatePropertyAll(Colors.transparent),
   title: Text(title),
   subtitle: subtitle.isNotNullOrBlank ? Text(subtitle!, style: PharMeTheme.textTheme.bodyMedium): null,
   contentPadding: contentPadding,
   onChanged: disabled ? null : (newValue) {
-    if (isInhibitor(drug.name)) {
+    if (warnIfInhibitor && isInhibitor(drug.name)) {
       showAdaptiveDialog(
         context: context,
         builder: (context) => DialogWrapper(

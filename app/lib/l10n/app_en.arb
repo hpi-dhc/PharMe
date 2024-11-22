@@ -1,17 +1,28 @@
 {
   "@@locale": "en",
   "action_cancel": "Cancel",
+  "@action_cancel": {},
   "action_continue": "Continue",
+  "@action_continue": {},
   "action_understood": "Understood",
+  "@action_understood": {},
   "action_back_to_app": "Back to app",
+  "@action_back_to_app": {},
   "action_finish": "Finish",
+  "@action_finish": {},
 
   "error_title": "Something went wrong",
+  "@error_title": {},
   "error_uncaught_message_first_part": "PharMe has encountered an unknown error. ",
+  "@error_uncaught_message_first_part": {},
   "error_uncaught_message_bold_part": "Please close the app and open it again.",
+  "@error_uncaught_message_bold_part": {},
   "error_uncaught_message_contact": "The error has been logged for our technical staff; however, if this problem persists, please contact us:",
+  "@error_uncaught_message_contact": {},
   "error_close_app": "Close app",
+  "@error_close_app": {},
   "error_mail_subject": "[ACTION REQUIRED] Unknown Error Report",
+  "@error_mail_subject": {},
   "error_mail_body": "Please describe what happened right before the error occurred: \n\n--- Please keep the following information, it will help us to pin down the error ---\n\n{error}",
   "@error_mail_body": {
     "placeholders": {
@@ -23,43 +34,75 @@
   },
 
   "auth_welcome": "Welcome to PharMe",
+  "@auth_welcome": {},
   "auth_choose_lab": "Please select your data provider",
+  "@auth_choose_lab": {},
   "auth_sign_in": "Get data",
+  "@auth_sign_in": {},
   "auth_success": "Successfully imported data",
+  "@auth_success": {},
   "auth_loading_data": "Loading your data, please do not close the app...",
+  "@auth_loading_data": {},
   "auth_updating_data": "Checking for updates, please do not close the app...",
+  "@auth_updating_data": {},
 
   "drug_item_brand_names": "Brand names",
+  "@drug_item_brand_names": {},
 
   "drug_selection_header": "Current medications",
-  "drug_selection_onboarding_description": "Please review the medications you are currently taking below and update them if needed. You can always change the status for a medication later on a medication page or in the settings.",
+  "@drug_selection_header": {},
+  "drug_selection_continue_warning_title": "Confirm proceeding",
+  "@drug_selection_continue_warning_title": {},
+  "drug_selection_continue_warning": "Proceeding will close the initial medication selection. You can always change the status for a medication later in the app.",
+  "@drug_selection_continue_warning": {},
   "drug_selection_settings_description": "Review the medications you are currently taking below.",
+  "@drug_selection_settings_description": {},
   "drug_selection_no_drugs_loaded": "No medications loaded",
+  "@drug_selection_no_drugs_loaded": {},
 
   "drug_list_subheader_active_drugs": "Current medications",
+  "@drug_list_subheader_active_drugs": {},
   "drug_list_subheader_all_drugs": "All medications",
+  "@drug_list_subheader_all_drugs": {},
   "drug_list_subheader_other_drugs": "Other medications",
+  "@drug_list_subheader_other_drugs": {},
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while logging in",
+  "@err_could_not_retrieve_access_token": {},
   "err_fetch_user_data_failed": "An error occurred while getting data, please try again later",
+  "@err_fetch_user_data_failed": {},
   "err_generic": "Error",
+  "@err_generic": {},
 
   "update_warning_title": "Updated guidelines",
+  "@update_warning_title": {},
   "update_warning_body": "The guidelines for interactions between genes and medications were updated. Please review your results, especially for the medications you are currently taking.",
+  "@update_warning_body": {},
 
   "general_continue": "Continue",
+  "@general_continue": {},
   "general_retry": "Retry",
+  "@general_retry": {},
   "general_and": "and",
+  "@general_and": {},
   "general_not_tested": "Not tested",
+  "@general_not_tested": {},
 
   "warning_level_green": "Standard precautions",
+  "@warning_level_green": {},
   "warning_level_missing": "Standard precautions (incomplete data)",
+  "@warning_level_missing": {},
   "warning_level_yellow": "Use with caution",
+  "@warning_level_yellow": {},
   "warning_level_red": "Consider alternatives",
+  "@warning_level_red": {},
   
   "search_page_tooltip_search": "Search for medications by their name, brand name or class.",
+  "@search_page_tooltip_search": {},
   "search_page_tooltip_search_no_class": "Search for medications by their name or brand name.",
+  "@search_page_tooltip_search_no_class": {},
   "search_page_filter_label": "Filter by guideline result",
+  "@search_page_filter_label": {},
   "search_page_indicator_explanation": "Taking medications with an {indicatorName} ({indicator}) can interact with your results for other medications",
   "@search_page_indicator_explanation": {
     "placeholders": {
@@ -74,6 +117,7 @@
     }
   },
   "search_no_drugs_with_filter_amendment": " or filters",
+  "@search_no_drugs_with_filter_amendment": {},
   "search_no_drugs": "No medications found. Try adjusting the search term{amendment}.\n\nIf the medication you are looking for is not included in PharMe, it might not have relevant DNA-based guidelines. Clinical dosing may apply, consult your pharmacist or doctor for more information.",
   "@search_no_drugs": {
     "placeholders": {
@@ -84,9 +128,13 @@
     }
   },
   "drugs_page_disclaimer_description": "Please note: ",
+  "@drugs_page_disclaimer_description": {},
   "drugs_page_disclaimer_text_part_0": "Never stop taking or change the dose of your medications without consulting your pharmacist or doctor.",
+  "@drugs_page_disclaimer_text_part_0": {},
   "drugs_page_disclaimer_text_part_1": "Also, the information shown on this page is ONLY based on your DNA and certain medications you are currently taking.",
+  "@drugs_page_disclaimer_text_part_1": {},
   "drugs_page_disclaimer_text_part_2": "Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
+  "@drugs_page_disclaimer_text_part_2": {},
   "drugs_page_is_inhibitor": "Taking {drugName} can interact with your results for the following gene(s): {genes}",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
@@ -102,14 +150,67 @@
   },
 
   "inhibitor_direct_salutation": "you are",
+  "@inhibitor_direct_salutation": {},
   "inhibitor_direct_salutation_genitive": "your",
+  "@inhibitor_direct_salutation_genitive": {},
   "inhibitor_third_person_salutation": "the user is",
+  "@inhibitor_third_person_salutation": {},
   "inhibitor_third_person_salutation_genitive": "the user's",
+  "@inhibitor_third_person_salutation_genitive": {},
   "inhibitor_message": "One or more of the medications {salutation} currently taking may interact with {salutationGenitive} genetic result",
+  "@inhibitor_message": {
+    "placeholders": {
+      "salutation": {
+        "type": "String",
+        "example": "you"
+      },
+      "salutationGenitive": {
+        "type": "String",
+        "example": "your"
+      }
+    }
+  },
   "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} phenotype was adapted from {originalPhenotype}.",
+  "@inhibitors_consequence_adapted": {
+    "placeholders": {
+      "salutationGenitive": {
+        "type": "String",
+        "example": "your"
+      },
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      },
+      "originalPhenotype": {
+        "type": "String",
+        "example": "Normal Metabolizer"
+      }
+    }
+  },
   "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} phenotype was not adapted but may need to be.",
+  "@inhibitors_consequence_not_adapted": {
+    "placeholders": {
+      "salutationGenitive": {
+        "type": "String",
+        "example": "your"
+      },
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
   "inhibitors_tooltip": "Current interacting medications: {inhibitors}.",
+  "@inhibitors_tooltip": {
+    "placeholders": {
+      "inhibitors": {
+        "type": "String",
+        "example": "bupropion"
+      }
+    }
+  },
   "consult_text": "Consult your pharmacist or doctor for more information.",
+  "@consult_text": {},
 
   "drugs_page_guidelines_empty": "No guidelines are present for {drugName}",
   "@drugs_page_guidelines_empty": {
@@ -121,12 +222,19 @@
     }
   },
   "drugs_page_header_drugclass": "Medication class",
+  "@drugs_page_header_drugclass": {},
   "drugs_page_header_drug": "Medication information",
+  "@drugs_page_header_drug": {},
   "drugs_page_text_active": "Current medication",
+  "@drugs_page_text_active": {},
   "drugs_page_active_warn_header": "Are you sure you want to change the medication usage status?",
+  "@drugs_page_active_warn_header": {},
   "drugs_page_active_warn": "This can interact with your results for other medications.",
+  "@drugs_page_active_warn": {},
   "drugs_page_header_guideline": "DNA-based clinical guideline",
+  "@drugs_page_header_guideline": {},
   "drugs_page_no_guidelines_text": "No pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
+  "@drugs_page_no_guidelines_text": {},
   "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
   "@drugs_page_sources_description": {
       "placeholders": {
@@ -146,11 +254,16 @@
     }
   },
   "drugs_page_tooltip_guideline_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present in this case (yet).",
+  "@drugs_page_tooltip_guideline_missing": {},
   "drugs_page_recommendation_description": "What to do: ",
+  "@drugs_page_recommendation_description": {},
 
   "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",
+  "@report_content_explanation": {},
   "report_legend_text": "Next to your gene result the number of implicated medications per guideline result is shown:",
+  "@report_legend_text": {},
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
+  "@report_page_faq_tooltip": {},
   "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be adjusted based on interactions with medications you are currently taking",
   "@report_page_indicator_explanation": {
     "placeholders": {
@@ -165,6 +278,7 @@
     }
   },
   "report_no_result_genes": "Genes with no result",
+  "@report_no_result_genes": {},
 
   "gene_page_headline": "{gene} report",
   "@gene_page_headline": {
@@ -194,10 +308,15 @@
     }
   },
   "gene_page_genotype": "Genotype",
+  "@gene_page_genotype": {},
   "gene_page_genotype_tooltip": "The genotype is the variant you carry for this gene.",
+  "@gene_page_genotype_tooltip": {},
   "gene_page_phenotype": "Phenotype",
+  "@gene_page_phenotype": {},
   "gene_page_phenotype_tooltip": "The phenotype often describes the gene's activity level or whether a specific variant is present.",
+  "@gene_page_phenotype_tooltip": {},
   "gene_page_relevant_drugs": "Implicated medications",
+  "@gene_page_relevant_drugs": {},
   "gene_page_relevant_drugs_tooltip": "The medications listed here are influenced by your {geneDisplayString} result.",
   "@gene_page_relevant_drugs_tooltip": {
     "placeholders": {
@@ -208,20 +327,33 @@
     }
   },
   "gene_page_no_relevant_drugs": "This gene has no known effect on any medications.",
+  "@gene_page_no_relevant_drugs": {},
   "gene_page_activity_score": "Activity score",
+  "@gene_page_activity_score": {},
 
 
   "pdf_disclaimer": "Disclaimer: The information contained in this PDF document is intended solely for use by trained health care professionals. It is provided for informational purposes only and should not be considered medical advice. The content may include technical terminology and clinical data that are intended for professional interpretation and application. Recipients are advised to exercise professional judgment and discretion when utilizing the information contained herein. If you are not a trained health care professional, please consult with a qualified medical practitioner or specialist before interpreting or applying the information provided in this document.",
+  "@pdf_disclaimer": {},
   "pdf_pgx_report": "PGx Report",
+  "@pdf_pgx_report": {},
   "pdf_heading_user_data": "User data",
+  "@pdf_heading_user_data": {},
   "pdf_heading_clinical_guidelines": "Clinical guideline(s)",
+  "@pdf_heading_clinical_guidelines": {},
   "pdf_info_clinical_guidelines": "For more fine-grained information please refer to the original guideline(s) by following the URL(s) below.",
+  "@pdf_info_clinical_guidelines": {},
   "pdf_info_clinical_guidelines_no_phenotype_guidelines": "No guidelines were found for the user's phenotype. For further guideline information please refer to the  URL(s) below.\n\nPlease note that it is possible that the guideline includes relevant information for the user's phenotype, although it could not be identified by PharMe.",
+  "@pdf_info_clinical_guidelines_no_phenotype_guidelines": {},
   "pdf_no_value": "n/a",
+  "@pdf_no_value": {},
   "pdf_indication": "Indication",
+  "@pdf_indication": {},
   "pdf_brand_names": "Brand names",
+  "@pdf_brand_names": {},
   "pdf_tested_alleles": "Tested alleles",
+  "@pdf_tested_alleles": {},
   "pdf_user_guideline": "User guideline",
+  "@pdf_user_guideline": {},
   "pdf_guideline_link": "{guidelineSource} guideline link",
   "@pdf_guideline_link": {
     "placeholders": {
@@ -273,101 +405,205 @@
   },
 
   "nav_report": "Genes",
+  "@nav_report": {},
   "tab_report": "Gene report",
+  "@tab_report": {},
   "nav_drugs": "Medications",
+  "@nav_drugs": {},
   "tab_drugs": "Medication overview",
+  "@tab_drugs": {},
   "nav_faq": "FAQ",
+  "@nav_faq": {},
   "tab_faq": "Common questions",
+  "@tab_faq": {},
   "nav_more": "More",
+  "@nav_more": {},
   "tab_more": "More",
+  "@tab_more": {},
   
   "tutorial_initial_drug_selection_title": "Setup PharMe",
+  "@tutorial_initial_drug_selection_title": {},
   "tutorial_initial_drug_selection_body": "As a first step, please update the list of your current medications.",
+  "@tutorial_initial_drug_selection_body": {},
   "tutorial_app_tour_1_title": "App Tour (1/5) · Navigation",
+  "@tutorial_app_tour_1_title": {},
   "tutorial_app_tour_1_body": "We would first like to guide you through the app's main functions.\nYou can switch between PharMe's main screens using the bottom navigation bar – if you want to re-watch this app  tour later, you can always do so on the last screen under More.",
+  "@tutorial_app_tour_1_body": {},
   "tutorial_app_tour_2_title": "App Tour (2/5) · Medication List",
+  "@tutorial_app_tour_2_title": {},
   "tutorial_app_tour_2_body": "Under Medications, you will find the list of all available medications in PharMe.\nYou can search for specific generic names, brand names, or medication classes, and filter the list by guideline result.\nAll medications in PharMe are labeled with a color and an icon: ",
+  "@tutorial_app_tour_2_body": {},
   "tutorial_app_tour_3_title": "App Tour (3/5) · Medication Details",
+  "@tutorial_app_tour_3_title": {},
   "tutorial_app_tour_3_body": "The medication details provide further information about how well this medication works for you, according to scientific guidelines.\nHere you can also change whether you are currently taking a medication and export a report for healthcare professionals.",
+  "@tutorial_app_tour_3_body": {},
   "tutorial_app_tour_4_title": "App Tour (4/5) · Gene Report",
+  "@tutorial_app_tour_4_title": {},
   "tutorial_app_tour_4_body": "Under Genes, you will find the results of your genetic test for genes with known medication interactions.\nSelect a gene to learn more about your results and how this gene might interact with specific medications.",
+  "@tutorial_app_tour_4_body": {},
   "tutorial_app_tour_5_title": "App Tour (5/5) · FAQ & Additional Features",
+  "@tutorial_app_tour_5_title": {},
   "tutorial_app_tour_5_body": "Under FAQ, you will find a list of frequently asked questions and further resources.\nUnder More, you will find additional information about the app as well as a contact form and other useful features. Please reach out if you have any questions while using the app!",
+  "@tutorial_app_tour_5_body": {},
 
   "onboarding_get_started": "Get started",
+  "@onboarding_get_started": {},
   "onboarding_next": "Next",
+  "@onboarding_next": {},
   "onboarding_prev": "Back",
+  "@onboarding_prev": {},
   "onboarding_1_header": "Welcome to PharMe",
+  "@onboarding_1_header": {},
   "onboarding_1_text": "Your genome influences your health more than you might think, including how you react to medications.\n\nMore than 90 percent of people are vulnerable to unintended medication reactions.\n\nUse PharMe to find out about yours.",
+  "@onboarding_1_text": {},
   "onboarding_2_header": "One size does not fit all",
+  "@onboarding_2_header": {},
   "onboarding_1_disclaimer_part_1": "The information provided in PharMe is ONLY based on your DNA and certain medications that may interact with your genetic result.",
+  "@onboarding_1_disclaimer_part_1": {},
   "onboarding_2_text": "Each person’s body reacts to medications differently.\n\nMedications that are effective for a majority of people can have adverse side effects for you.",
+  "@onboarding_2_text": {},
   "onboarding_3_header": "Genome power unlocked to improve human health",
+  "@onboarding_3_header": {},
   "onboarding_3_text": "PharMe informs you if your genome makes you more likely to experience an unintended medication response.\n\nThis enables you to avoid medications that are ineffective or have side effects.",
+  "@onboarding_3_text": {},
   "onboarding_3_disclaimer": "Please note that this app does not provide recommendations for medications or dosages. Always consult your pharmacist or doctor for personalized advice.",
+  "@onboarding_3_disclaimer": {},
   "onboarding_4_header": "Tailored to your genome",
+  "@onboarding_4_header": {},
   "onboarding_4_text": "For PharMe to work, you need to get your genetics (DNA) tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
+  "@onboarding_4_text": {},
   "onboarding_4_button": "Find out more about gene tests here.",
+  "@onboarding_4_button": {},
   "onboarding_4_already_tested_text": "PharMe works by matching your genetic data with known information about interactions between certain genes and medications.\n\nThe information presented in PharMe is based on scientifically proven guidelines published by the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
+  "@onboarding_4_already_tested_text": {},
   "onboarding_5_header": "We care about your data protection",
+  "@onboarding_5_header": {},
   "onboarding_5_text": "After downloading your genetic data from your data provider, it is solely kept on your phone in encrypted form.\n\nOur servers know nothing about you, neither your identity nor your DNA.",
+  "@onboarding_5_text": {},
+
     
   "more_page_account_settings": "Settings",
+  "@more_page_account_settings": {},
   "more_page_delete_data": "Delete app data",
+  "@more_page_delete_data": {},
   "more_page_delete_data_text": "Are you sure that you want to delete all app data? This also includes your genetic data and will reset the app.",
+  "@more_page_delete_data_text": {},
   "more_page_delete_data_additional_text": "Your genetic data will be deleted and it might not be possible to import it again.",
+  "@more_page_delete_data_additional_text": {},
   "more_page_delete_data_confirmation": "I understand the consequences and want to delete all app data",
+  "@more_page_delete_data_confirmation": {},
   "more_page_app_information": "App information",
+  "@more_page_app_information": {},
   "more_page_onboarding": "Repeat onboarding",
+  "@more_page_onboarding": {},
   "more_page_app_tour": "Repeat app tour",
+  "@more_page_app_tour": {},
   "more_page_about_us": "About us",
+  "@more_page_about_us": {},
   "more_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboration with health professionals from the Mount Sinai Health System in New York City, NY, USA.",
+  "@more_page_about_us_text": {},
   "more_page_privacy_policy": "Privacy policy",
+  "@more_page_privacy_policy": {},
   "more_page_privacy_policy_text": "These aren't the Droids you're looking for.",
+  "@more_page_privacy_policy_text": {},
   "more_page_terms_and_conditions": "Terms of use",
+  "@more_page_terms_and_conditions": {},
   "more_page_terms_and_conditions_text": "These aren't the Droids you're looking for.",
+  "@more_page_terms_and_conditions_text": {},
   "more_page_help_and_feedback": "Help & Feedback",
+  "@more_page_help_and_feedback": {},
   "more_page_genetic_information": "Learn about genetics (MedlinePlus)",
+  "@more_page_genetic_information": {},
   "more_page_contact_us": "Contact us",
+  "@more_page_contact_us": {},
 
   "contact_text": "You can contact us using the following email address:",
+  "@contact_text": {},
   "contact_context_text": "To help us to understand the context of your message, please include the following information:",
+  "@contact_context_text": {},
   "contact_subject": "Subject:",
+  "@contact_subject": {},
   "contact_body": "Text:",
+  "@contact_body": {},
   "contact_open_mail": "Send mail",
+  "@contact_open_mail": {},
 
   "comprehension_intro_text": "Would you like to participate in a survey aiming to measure user comprehension of content in the app? This would help us make PharMe more understandable for everyone!",
+  "@comprehension_intro_text": {},
   "comprehension_survey_button_text": "Continue to survey",
+  "@comprehension_survey_button_text": {},
 
   "faq_section_title_pgx": "Pharmacogenomics (PGx)",
+  "@faq_section_title_pgx": {},
   "faq_question_pgx_what": "What is pharmacogenomics?",
+  "@faq_question_pgx_what": {},
   "faq_answer_pgx_what": "Pharmacogenomics (PGx) is the study of how your genes (DNA) affect your response to medications.",
+  "@faq_answer_pgx_what": {},
   "faq_question_pgx_why": "Why is pharmacogenomics important?",
+  "@faq_question_pgx_why": {},
   "faq_answer_pgx_why": "Pharmacogenomics is important because it helps to predict those who will respond well to medications and those who may have side effects. With this information we can better select the right medication and dose to avoid side effects.",
+  "@faq_answer_pgx_why": {},
   "faq_question_genetics_info": "Where can I find out more about genetics in general?",
+  "@faq_question_genetics_info": {},
   "faq_answer_genetics_info": "To learn more about genetics, we recommend MedlinePlus, a service of the National Library of Medicine:",
+  "@faq_answer_genetics_info": {},
   "faq_question_which_medications": "Which medications have known gene interactions?",
+  "@faq_question_which_medications": {},
   "faq_answer_which_medications": "Examples of medication classes with known gene interactions include anti-clotting medications (like clopidogrel and warfarin), antidepressants (like sertraline, citalopram, and paroxetine), anti-cholesterol medications (like simvastatin and atorvastatin), acid reducers (like pantoprazole and omeprazole), pain killers (like codeine, tramadol, and ibuprofen), antifungals (like voriconazole), medications that suppress the immune system (like tacrolimus), and anti-cancer medications (like fluorouracil and irinotecan).\n\nSearch a medication in the Medications tab to find out whether it has known gene interactions according to CPIC® and FDA guidelines.",
+  "@faq_answer_which_medications": {},
   "faq_question_phenoconversion": "Why can my results change when I take certain medications?",
+  "@faq_question_phenoconversion": {},
   "faq_answer_phenoconversion": "Certain medications can change your phenotype that descries how your body responds to medications. Typically, medications either inhibit or induce the activity of a gene. In PharMe, the following interactions are included:",
+  "@faq_answer_phenoconversion": {},
   "faq_strong_inhibitors": "Strong {geneName} inhibitors:",
+  "@faq_strong_inhibitors": {
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
   "faq_moderate_inhibitors": "Moderate {geneName} inhibitors:",
+  "@faq_moderate_inhibitors": {
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
   "faq_question_family": "Will my results affect my family members?",
+  "@faq_question_family": {},
   "faq_answer_family": "Yes, since this is a genetic test, it is possible that your results were passed down to you and your siblings from your parents and you will also pass them down to your children.",
+  "@faq_answer_family": {},
   "faq_question_share": "Who can I share my results with?",
+  "@faq_question_share": {},
   "faq_answer_share": "We recommend that you share your results with your pharmacists, doctors, and close family members such as parents, siblings, and children.",
+  "@faq_answer_share": {},
   
   "faq_section_title_pharme": "PharMe App",
+  "@faq_section_title_pharme": {},
   "faq_question_pharme_function": "What does PharMe do?",
+  "@faq_question_pharme_function": {},
   "faq_answer_pharme_function": "PharMe provides user-friendly information on how your body reacts to medications based on your genes. This enables you to better understand which medications may be ineffective for you or could have potential side effects. We recommend that you share consult your health care team before making any changes to your treatments.",
+  "@faq_answer_pharme_function": {},
   "faq_question_pharme_hcp": "Can I use PharMe's results without consulting a medical professional?",
+  "@faq_question_pharme_hcp": {},
   "faq_answer_pharme_hcp": "No. Whether a medication is a good choice for you depends on a lot of other factors such as age, weight, or pre-existing conditions. We highly recommend that you talk to your health care team (e.g., pharmacist and doctors) before taking, stopping or adjusting the dose of any medication.",
+  "@faq_answer_pharme_hcp": {},
   "faq_question_pharme_data_source": "Where does PharMe get its data from?",
+  "@faq_question_pharme_data_source": {},
   "faq_answer_pharme_data_source": "PharMe is showing pharmacogenomic guidelines from the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA). Our PGx experts adapted the language from the guidelines to make them more user-friendly and easier to understand; please note that this does only affect the guidelines' presentation, not affect the guidelines' statements.",
+  "@faq_answer_pharme_data_source": {},
   
   "faq_section_title_security": "Data security",
+  "@faq_section_title_security": {},
   "faq_question_data_security": "How is the security of my genetic data ensured?",
+  "@faq_question_data_security": {},
   "faq_answer_data_security": "Once securely imported from the lab, your genetic data is re-encrypted, saved and never sent anywhere else. All computation is done on your phone. When fetching data from external resources, PharMe always uses generalized requests and only personalizes information locally on your phone. No personal data is sent to third parties. This provides the highest level of security for your personal information.",
+  "@faq_answer_data_security": {},
 
-  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us"
+  "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
+  "@faq_contact_us": {}
 }

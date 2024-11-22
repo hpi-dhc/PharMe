@@ -3,76 +3,62 @@ import '../../common/models/metadata.dart';
 
 @RoutePage()
 class OnboardingPage extends HookWidget {
-  OnboardingPage({ this.isRevisiting = false });
+  const OnboardingPage({ this.isRevisiting = false });
 
   final bool isRevisiting;
 
-  final iconSize = 32.0;
-  final sidePadding = PharMeTheme.mediumSpace;
-  final indicatorSize = PharMeTheme.smallSpace;
-  final indicatorPadding = PharMeTheme.largeSpace;
-
-  double getTopPadding(BuildContext context) {
-    return MediaQuery.of(context).padding.top + sidePadding;
-  }
-
-  double _getBottomPadding(BuildContext context) {
-    return MediaQuery.of(context).padding.bottom + PharMeTheme.mediumSpace;
-  }
-
-  double _getBottomSpace(context) {
-    // Icon button height and indicators
-    final bottomWidgetsSize =  iconSize + indicatorSize + indicatorPadding;
-    const spaceBetweenBottomWidgets = PharMeTheme.largeSpace;
-    return _getBottomPadding(context)
-      + bottomWidgetsSize
-      + spaceBetweenBottomWidgets;
-  }
-  
-  final _pages = [
-    OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/OutlinedLogo.png',
-      getHeader: (context) => context.l10n.onboarding_1_header,
-      getText: (context) => context.l10n.onboarding_1_text,
-      color: PharMeTheme.sinaiCyan,
-      child: disclaimerCard(
-        getText: (context) => context.l10n.onboarding_1_disclaimer_part_1,
-        getSecondLineText: (context) =>
-          context.l10n.drugs_page_disclaimer_text_part_2,
-      ),
-    ),
-    OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/DrugReaction.png',
-      getHeader: (context) => context.l10n.onboarding_2_header,
-      getText: (context) => context.l10n.onboarding_2_text,
-      color: PharMeTheme.sinaiMagenta,
-    ),
-    OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/GenomePower.png',
-      getHeader: (context) => context.l10n.onboarding_3_header,
-      getText: (context) => context.l10n.onboarding_3_text,
-      color: PharMeTheme.sinaiPurple,
-      child: disclaimerCard(
-        getText: (context) => context.l10n.onboarding_3_disclaimer,
-      ),
-    ),
-    OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/Tailored.png',
-      getHeader: (context) => context.l10n.onboarding_4_header,
-      getText: (context) => context.l10n.onboarding_4_already_tested_text,
-      color: Colors.grey.shade600,
-    ),
-    OnboardingSubPage(
-      illustrationPath: 'assets/images/onboarding/DataProtection.png',
-      getHeader: (context) => context.l10n.onboarding_5_header,
-      getText: (context) => context.l10n.onboarding_5_text,
-      color: PharMeTheme.sinaiCyan,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final colors = _pages.map((page) => page.color);
+    final pages = [
+      OnboardingSubPage(
+        availableHeight:
+          OnboardingDimensions.contentHeight(context, isRevisiting),
+        illustrationPath: 'assets/images/onboarding/OutlinedLogo.png',
+        header: context.l10n.onboarding_1_header,
+        text: context.l10n.onboarding_1_text,
+        color: PharMeTheme.sinaiCyan,
+        child: DisclaimerCard(
+          text: context.l10n.onboarding_1_disclaimer_part_1,
+          secondLineText: context.l10n.drugs_page_disclaimer_text_part_2,
+        ),
+      ),
+      OnboardingSubPage(
+        availableHeight:
+          OnboardingDimensions.contentHeight(context, isRevisiting),
+        illustrationPath: 'assets/images/onboarding/DrugReaction.png',
+        header: context.l10n.onboarding_2_header,
+        text: context.l10n.onboarding_2_text,
+        color: PharMeTheme.sinaiMagenta,
+      ),
+      OnboardingSubPage(
+        availableHeight:
+          OnboardingDimensions.contentHeight(context, isRevisiting),
+        illustrationPath: 'assets/images/onboarding/GenomePower.png',
+        header: context.l10n.onboarding_3_header,
+        text: context.l10n.onboarding_3_text,
+        color: PharMeTheme.sinaiPurple,
+        child: DisclaimerCard(
+          text: context.l10n.onboarding_3_disclaimer,
+        ),
+      ),
+      OnboardingSubPage(
+        availableHeight:
+          OnboardingDimensions.contentHeight(context, isRevisiting),
+        illustrationPath: 'assets/images/onboarding/Tailored.png',
+        header: context.l10n.onboarding_4_header,
+        text: context.l10n.onboarding_4_already_tested_text,
+        color: Colors.grey.shade600,
+      ),
+      OnboardingSubPage(
+        availableHeight:
+          OnboardingDimensions.contentHeight(context, isRevisiting),
+        illustrationPath: 'assets/images/onboarding/DataProtection.png',
+        header: context.l10n.onboarding_5_header,
+        text: context.l10n.onboarding_5_text,
+        color: PharMeTheme.sinaiCyan,
+      ),
+    ];
+    final colors = pages.map((page) => page.color);
     final tweenSequenceItems = <TweenSequenceItem>[];
     for (var tweenIndex = 0; tweenIndex < colors.length - 1; tweenIndex++) {
       tweenSequenceItems.add(
@@ -95,7 +81,7 @@ class OnboardingPage extends HookWidget {
         animation: pageController,
         builder: (context, child) {
           final color = pageController.hasClients
-              ? pageController.page! / (_pages.length - 1)
+              ? pageController.page! / (pages.length - 1)
               : .0;
 
           return DecoratedBox(
@@ -109,50 +95,53 @@ class OnboardingPage extends HookWidget {
           alignment: Alignment.topCenter,
           children: [
             if (isRevisiting) Positioned(
-              top: getTopPadding(context),
-              right: sidePadding,
+              top: OnboardingDimensions.getTopPadding(context),
+              right: OnboardingDimensions.sidePadding,
               child: IconButton(
                 icon: Icon(
                   Icons.close,
-                  size: iconSize,
+                  size: OnboardingDimensions.iconSize,
                   color: Colors.white,
                 ),
                 onPressed: () => context.router.back(),
               )
             ),
             Positioned.fill(
-              top: isRevisiting
-                ? getTopPadding(context) + iconSize
-                : getTopPadding(context),
-              bottom: _getBottomSpace(context),
+              top: OnboardingDimensions.getTopSpace(context, isRevisiting),
+              bottom: OnboardingDimensions.getBottomSpace(context),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: sidePadding),
+                padding: EdgeInsets.symmetric(
+                  horizontal: OnboardingDimensions.sidePadding,
+                ),
                 child: PageView(
                   controller: pageController,
                   onPageChanged: (newPage) => currentPage.value = newPage,
-                  children: _pages,
+                  children: pages,
                 ),
               ),
             ),
             Positioned(
-              bottom: _getBottomSpace(context) - indicatorSize - indicatorPadding,
+              bottom: OnboardingDimensions.getBottomSpace(context) -
+                OnboardingDimensions.indicatorSize -
+                  OnboardingDimensions.indicatorPadding,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: _buildPageIndicator(context, currentPage.value),
+                children:
+                  _buildPageIndicator(context, pages, currentPage.value),
               ),
             ),
             Positioned(
-              bottom: _getBottomPadding(context),
-              right: sidePadding,
+              bottom: OnboardingDimensions.getBottomPadding(context),
+              right: OnboardingDimensions.sidePadding,
               child: _buildNextButton(
                 context,
                 pageController,
-                currentPage.value == _pages.length - 1,
+                currentPage.value == pages.length - 1,
               ),
             ),
             Positioned(
-              bottom: _getBottomPadding(context),
-              left: sidePadding,
+              bottom: OnboardingDimensions.getBottomPadding(context),
+              left: OnboardingDimensions.sidePadding,
               child: _buildPrevButton(
                 context,
                 pageController,
@@ -165,9 +154,13 @@ class OnboardingPage extends HookWidget {
     );
   }
 
-  List<Widget> _buildPageIndicator(BuildContext context, int currentPage) {
+  List<Widget> _buildPageIndicator(
+    BuildContext context,
+    List<OnboardingSubPage> pages,
+    int currentPage,
+  ) {
     final list = <Widget>[];
-    for (var i = 0; i < _pages.length; ++i) {
+    for (var i = 0; i < pages.length; ++i) {
       list.add(_indicator(context, i == currentPage));
     }
     return list;
@@ -176,8 +169,8 @@ class OnboardingPage extends HookWidget {
   Widget _indicator(BuildContext context, bool isActive) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
-      margin: EdgeInsets.symmetric(horizontal: indicatorSize),
-      height: indicatorSize,
+      margin: EdgeInsets.symmetric(horizontal: OnboardingDimensions.indicatorSize),
+      height: OnboardingDimensions.indicatorSize,
       width: isActive
         ? PharMeTheme.mediumToLargeSpace
         : PharMeTheme.mediumSpace,
@@ -220,7 +213,7 @@ class OnboardingPage extends HookWidget {
           );
         }
       },
-      iconSize: iconSize,
+      iconSize: OnboardingDimensions.iconSize,
       onDarkBackground: true,
       emphasize: isLastPage,
     );
@@ -242,7 +235,7 @@ class OnboardingPage extends HookWidget {
             );
         },
         text: context.l10n.onboarding_prev,
-        iconSize: iconSize,
+        iconSize: OnboardingDimensions.iconSize,
         onDarkBackground: true,
       );
     } else {
@@ -251,111 +244,215 @@ class OnboardingPage extends HookWidget {
   }
 }
 
-class OnboardingSubPage extends StatelessWidget {
+class OnboardingDimensions {
+  static const iconSize = 32.0;
+  static const sidePadding = PharMeTheme.mediumSpace;
+  static const indicatorSize = PharMeTheme.smallSpace;
+  static const indicatorPadding = PharMeTheme.largeSpace;
+
+  static double getTopPadding(BuildContext context) {
+    return MediaQuery.of(context).padding.top + sidePadding;
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  static double getTopSpace(BuildContext context, bool isRevisiting) {
+    return isRevisiting
+      ? OnboardingDimensions.getTopPadding(context) +
+        OnboardingDimensions.iconSize
+      : OnboardingDimensions.getTopPadding(context);
+  }
+
+  static double getBottomPadding(BuildContext context) {
+    return MediaQuery.of(context).padding.bottom + PharMeTheme.mediumSpace;
+  }
+
+  static double getBottomSpace(BuildContext context) {
+    // Icon button height and indicators
+    const bottomWidgetsSize =  iconSize + indicatorSize + indicatorPadding;
+    const spaceBetweenBottomWidgets = PharMeTheme.largeSpace;
+    return getBottomPadding(context)
+      + bottomWidgetsSize
+      + spaceBetweenBottomWidgets;
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  static double contentHeight(BuildContext context, bool isRevisiting) {
+    return MediaQuery.of(context).size.height
+      - getTopSpace(context, isRevisiting)
+      - getBottomSpace(context);
+  }
+
+  static double contentWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width - 2 * sidePadding;
+  }
+}
+
+class OnboardingSubPage extends HookWidget {
   const OnboardingSubPage({
     required this.illustrationPath,
     this.secondImagePath,
-    required this.getHeader,
-    required this.getText,
+    required this.header,
+    required this.text,
     required this.color,
+    required this.availableHeight,
     this.child,
   });
 
   final String illustrationPath;
   final String? secondImagePath;
-  final String Function(BuildContext) getHeader;
-  final String Function(BuildContext) getText;
+  final String header;
+  final String text;
+  final double availableHeight;
   final Color color;
   final Widget? child;
 
+  double? _getContentHeight(GlobalKey contentKey) {
+    return contentKey.currentContext?.size?.height;
+  }
+
+  double? _getMaxScrollOffset(GlobalKey contentKey) {
+    final contentHeight = _getContentHeight(contentKey);
+    if (contentHeight == null) return null;
+    return contentHeight - availableHeight;
+  }
+
+  bool? _contentScrollable(GlobalKey contentKey) {
+    final contentHeight = _getContentHeight(contentKey);
+    if (contentHeight == null) return null;
+    return availableHeight < contentHeight;
+  }
+
+  bool? _scrolledToEnd(
+    GlobalKey contentKey,
+    ScrollController scrollController,
+  ) {
+    final maxScrollOffset = _getMaxScrollOffset(contentKey);
+    if (maxScrollOffset == null) return null;
+    return scrollController.offset >= maxScrollOffset;
+  }
+
   @override
   Widget build(BuildContext context) {
-    const scrollbarThickness = 4.0;
+    const scrollbarThickness = 6.5;
     const iconButtonPadding = 16.0; // to align the scrollbar
-
+    const horizontalPadding = iconButtonPadding + 3 * scrollbarThickness;
+    const imageHeight = 175.0;
+    final contentKey =  GlobalKey();
+    final showScrollIndicatorButton = useState(false);
     final scrollController = ScrollController();
-    return RawScrollbar(
-      controller: scrollController, // needed to always show scrollbar
-      thumbVisibility: true,
-      shape: StadiumBorder(),
-      padding: EdgeInsets.only(
-        top: PharMeTheme.mediumToLargeSpace,
-        right: iconButtonPadding,
-      ),
-      thumbColor: Colors.white54,
-      thickness: scrollbarThickness,
-      child: SingleChildScrollView(
-        controller: scrollController,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: iconButtonPadding + 3 * scrollbarThickness,
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final contentScrollable = _contentScrollable(contentKey) ?? false;
+      final scrolledToEnd = _scrolledToEnd(contentKey, scrollController) ?? false;
+      showScrollIndicatorButton.value = contentScrollable && !scrolledToEnd;
+    });
+
+    scrollController.addListener(() {
+      final hideButton = _scrolledToEnd(contentKey, scrollController) ?? false;
+      showScrollIndicatorButton.value = !hideButton;
+    });
+ 
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        RawScrollbar(
+          controller: scrollController, // needed to always show scrollbar
+          thumbVisibility: true,
+          shape: StadiumBorder(),
+          padding: EdgeInsets.only(
+            top: PharMeTheme.mediumToLargeSpace,
+            right: iconButtonPadding,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: PharMeTheme.mediumSpace),
-              Center(
-                child: FractionallySizedBox(
-                  alignment: Alignment.topCenter,
-                  widthFactor: 0.75,
-                  child: Image.asset(
-                    illustrationPath,
-                    height: 175,
-                  ),
-                ),
+          thumbColor: Colors.white,
+          thickness: scrollbarThickness,
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
               ),
-              SizedBox(height: PharMeTheme.mediumToLargeSpace),
-              Column(children: [
-                AutoSizeText(
-                  getHeader(context),
-                  style: PharMeTheme.textTheme.headlineLarge!.copyWith(
-                    color: Colors.white,
-                  ),
-                  maxLines: 2,
-                ),
-                SizedBox(height: PharMeTheme.mediumToLargeSpace),
-                Text(
-                  getText(context),
-                  style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-                if (child != null) ...[
+              child: Column(
+                key: contentKey,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   SizedBox(height: PharMeTheme.mediumSpace),
-                  child!,
+                  Center(
+                    child: FractionallySizedBox(
+                      alignment: Alignment.topCenter,
+                      widthFactor: 0.75,
+                      child: Image.asset(
+                        illustrationPath,
+                        height: imageHeight,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: PharMeTheme.mediumToLargeSpace),
+                  Column(children: [
+                    AutoSizeText(
+                      header,
+                      style: PharMeTheme.textTheme.headlineLarge!.copyWith(
+                        color: Colors.white,
+                      ),
+                      maxLines: 2,
+                    ),
+                    SizedBox(height: PharMeTheme.mediumToLargeSpace),
+                    Text(
+                      text,
+                      style: PharMeTheme.textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (child != null) ...[
+                      SizedBox(height: PharMeTheme.mediumSpace),
+                      child!,
+                    ],
+                  ]),
+                  // Empty widget for spaceBetween in this column to work properly
+                  Container(),
                 ],
-              ]),
-              // Empty widget for spaceBetween in this column to work properly
-              Container(),
-            ],
+              ),
+            ),
           ),
         ),
-      ),
+        if (showScrollIndicatorButton.value) Positioned(
+          bottom: 0,
+          child: IconButton(
+            style: IconButton.styleFrom(
+              backgroundColor: Colors.white,
+              side: BorderSide(color: color, width: 3),
+            ),
+            icon: Icon(
+              Icons.arrow_downward,
+              size: OnboardingDimensions.iconSize * 0.85,
+              color: color,
+            ),
+            onPressed: () async {
+              await scrollController.animateTo(
+                _getMaxScrollOffset(contentKey)!,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.linearToEaseOut,
+              );
+              showScrollIndicatorButton.value = false;
+            },
+          )
+        ),
+      ],
     );
   }
 }
 
-BottomCard disclaimerCard({
-  required String Function(BuildContext) getText,
-  String Function(BuildContext)? getSecondLineText,
-}) => BottomCard(
-  getText: getText,
-  icon: Icon(Icons.warning_rounded, size: 32),
-  getSecondLineText: getSecondLineText,
-);
-
-class BottomCard extends StatelessWidget {
-  const BottomCard({
+class DisclaimerCard extends StatelessWidget {
+  const DisclaimerCard({
     this.icon,
-    required this.getText,
-    this.getSecondLineText,
+    required this.text,
+    this.secondLineText,
     this.onClick,
   });
 
   final Icon? icon;
-  final String Function(BuildContext) getText;
-  final String Function(BuildContext)? getSecondLineText;
+  final String text;
+  final String? secondLineText;
   final GestureTapCallback? onClick;
 
   @override
@@ -370,17 +467,15 @@ class BottomCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (icon != null) ...[
-              icon!,
-              SizedBox(width: PharMeTheme.smallSpace),
-            ],
+            icon ??  Icon(Icons.warning_rounded, size: 32),
+            SizedBox(width: PharMeTheme.smallSpace),
             Expanded(
               child: Column(
                 children: [
-                  getTextWidget(getText(context)),
-                  if (getSecondLineText != null) ...[
+                  getTextWidget(text),
+                  if (secondLineText != null) ...[
                     SizedBox(height: PharMeTheme.smallSpace),
-                    getTextWidget(getSecondLineText!(context)),
+                    getTextWidget(secondLineText!),
                   ]
                 ],
               ),
@@ -398,6 +493,6 @@ class BottomCard extends StatelessWidget {
   Widget getTextWidget(String text) => Text(
     text,
     style: PharMeTheme.textTheme.bodyMedium,
-    textAlign: (icon != null) ? TextAlign.start : TextAlign.center,
+    textAlign: TextAlign.start,
   );
 }

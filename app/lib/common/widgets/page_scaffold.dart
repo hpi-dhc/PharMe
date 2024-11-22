@@ -29,45 +29,58 @@ Widget buildTitle(String text, { String? tooltipText }) {
   );
 }
 
-Scaffold pageScaffold({
+Widget pageScaffold({
   required List<Widget> body,
   required String title,
   List<Widget>? actions,
   bool canNavigateBack = true,
+  BuildContext? contextToDismissFocusOnTap,
+  bool resizeToAvoidBottomInset = false,
   Key? key,
 }) {
-  return Scaffold(
-    key: key,
-    body: CustomScrollView(slivers: [
-      SliverAppBar(
-        scrolledUnderElevation: 0,
-        backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
-        foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
-        elevation: PharMeTheme.appBarTheme.elevation,
-        leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
-        automaticallyImplyLeading: canNavigateBack,
-        floating: true,
-        pinned: true,
-        snap: false,
-        centerTitle: PharMeTheme.appBarTheme.centerTitle,
-        title: buildTitle(title),
-        actions: actions,
-        titleSpacing: _getTitleSpacing(backButtonPresent: canNavigateBack),
-      ),
-      SliverPadding(
-        padding: pagePadding(),
-        sliver: SliverList(delegate: SliverChildListDelegate(body)),  
-      ),
-    ]),
+  return GestureDetector(
+    onTap: () => _maybeRemoveFocus(contextToDismissFocusOnTap),
+    child: Scaffold(
+      key: key,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      body: CustomScrollView(slivers: [
+        SliverAppBar(
+          scrolledUnderElevation: 0,
+          backgroundColor: PharMeTheme.appBarTheme.backgroundColor,
+          foregroundColor: PharMeTheme.appBarTheme.foregroundColor,
+          elevation: PharMeTheme.appBarTheme.elevation,
+          leadingWidth: PharMeTheme.appBarTheme.leadingWidth,
+          automaticallyImplyLeading: canNavigateBack,
+          floating: true,
+          pinned: true,
+          snap: false,
+          centerTitle: PharMeTheme.appBarTheme.centerTitle,
+          title: buildTitle(title),
+          actions: actions,
+          titleSpacing: _getTitleSpacing(backButtonPresent: canNavigateBack),
+        ),
+        SliverPadding(
+          padding: pagePadding(),
+          sliver: SliverList(delegate: SliverChildListDelegate(body)),  
+        ),
+      ]),
+    ),
   );
 }
 
-Scaffold unscrollablePageScaffold({
+void _maybeRemoveFocus(BuildContext? contextToDismissFocusOnTap) =>
+  contextToDismissFocusOnTap != null
+      ? FocusScope.of(contextToDismissFocusOnTap).unfocus()
+      : null;
+
+Widget unscrollablePageScaffold({
   required Widget body,
   String? title,
   String? titleTooltip,
   List<Widget>? actions,
   bool canNavigateBack = true,
+  BuildContext? contextToDismissFocusOnTap,
+  bool resizeToAvoidBottomInset = false,
   Key? key,
 }) {
   final appBar = title == null
@@ -84,13 +97,17 @@ Scaffold unscrollablePageScaffold({
         scrolledUnderElevation: 0,
         titleSpacing: _getTitleSpacing(backButtonPresent: canNavigateBack),
       );
-  return Scaffold(
-    key: key,
-    appBar: appBar,
-    body: SafeArea(
-      child: Padding(
-        padding: pagePadding(),
-        child: body,
+  return GestureDetector(
+    onTap: () => _maybeRemoveFocus(contextToDismissFocusOnTap),
+    child: Scaffold(
+      key: key,
+      appBar: appBar,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      body: SafeArea(
+        child: Padding(
+          padding: pagePadding(),
+          child: body,
+        ),
       ),
     ),
   );

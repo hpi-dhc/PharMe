@@ -38,6 +38,7 @@ class PharMeApp extends StatelessWidget {
               }
               return getInitialRoute();
             },
+            navigatorObservers:  () => [RemoveFocusOnNavigate()],
           ),
           theme: PharMeTheme.light,
           localizationsDelegates: [
@@ -50,5 +51,15 @@ class PharMeApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// Based on https://github.com/flutter/flutter/issues/48464#issuecomment-586635827
+class RemoveFocusOnNavigate extends NavigatorObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
+    final focus = FocusManager.instance.primaryFocus;
+    focus?.unfocus();
   }
 }
