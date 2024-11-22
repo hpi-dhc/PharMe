@@ -11,7 +11,7 @@ import '../models/lab.dart';
 
 final labs = [
   DummyDemoLab(
-    name: 'Mount Sinai Health System',
+    name: 'Charité',
     dataUrl: Uri.parse(
       'https://hpi-datastore.duckdns.org/userdata?id=66608824-2ab4-4f03-aef0-03aa007337d3',
     ),
