@@ -20,7 +20,7 @@ final labs = [
 
 final healthXLab = DeepLinkShareFlowLab(
     name: 'HEALTH-X dataLOFT',
-    shareAppName: 'Consent Manager App',
+    shareAppName: 'Data Wallet App',
 );
 
 @RoutePage()
