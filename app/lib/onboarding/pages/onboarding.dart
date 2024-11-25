@@ -331,6 +331,21 @@ class OnboardingSubPage extends HookWidget {
     return scrollController.offset >= maxScrollOffset;
   }
 
+  double? _getRelativeScrollPosition(
+    GlobalKey contentKey,
+    ScrollController scrollController,
+  ) {
+    final maxScrollOffset = _getMaxScrollOffset(contentKey);
+    if (maxScrollOffset == null) return null;
+    final relativePosition =
+      1 - (maxScrollOffset - scrollController.offset) / maxScrollOffset;
+    return relativePosition < 0
+      ? 0
+      : relativePosition > 1
+        ? 1
+        : relativePosition;
+  }
+
   @override
   Widget build(BuildContext context) {
     const scrollbarThickness = 6.5;
@@ -339,6 +354,7 @@ class OnboardingSubPage extends HookWidget {
     const imageHeight = 175.0;
     final contentKey =  GlobalKey();
     final showScrollIndicatorButton = useState(false);
+    final scrollIndicatorButtonOpacity = useState<double>(1);
     final scrollController = ScrollController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -350,6 +366,11 @@ class OnboardingSubPage extends HookWidget {
     scrollController.addListener(() {
       final hideButton = _scrolledToEnd(contentKey, scrollController) ?? false;
       showScrollIndicatorButton.value = !hideButton;
+      final relativeScrollPosition =
+        _getRelativeScrollPosition(contentKey, scrollController);
+      if (relativeScrollPosition != null) {
+        scrollIndicatorButtonOpacity.value = 1 - relativeScrollPosition;
+      }
     });
  
     return Stack(
@@ -417,25 +438,28 @@ class OnboardingSubPage extends HookWidget {
         ),
         if (showScrollIndicatorButton.value) Positioned(
           bottom: 0,
-          child: IconButton(
+          child: Opacity(
+            opacity: scrollIndicatorButtonOpacity.value,
+            child: IconButton(
             style: IconButton.styleFrom(
-              backgroundColor: Colors.white,
-              side: BorderSide(color: color, width: 3),
+                backgroundColor: Colors.white,
+                side: BorderSide(color: color, width: 3),
+              ),
+              icon: Icon(
+                Icons.arrow_downward,
+                size: OnboardingDimensions.iconSize * 0.85,
+                color: color,
+              ),
+              onPressed: () async {
+                await scrollController.animateTo(
+                  _getMaxScrollOffset(contentKey)!,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.linearToEaseOut,
+                );
+                showScrollIndicatorButton.value = false;
+              },
             ),
-            icon: Icon(
-              Icons.arrow_downward,
-              size: OnboardingDimensions.iconSize * 0.85,
-              color: color,
-            ),
-            onPressed: () async {
-              await scrollController.animateTo(
-                _getMaxScrollOffset(contentKey)!,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.linearToEaseOut,
-              );
-              showScrollIndicatorButton.value = false;
-            },
-          )
+          ),
         ),
       ],
     );
