@@ -91,16 +91,6 @@ class DrugList extends HookWidget {
               '(${activeDrugsList.length})',
             useLine: false,
           ),
-          trailing: drugActivityChangeable
-            ? null
-            : ResizedIconButton(
-                size: PharMeTheme.mediumToLargeSpace,
-                iconWidgetBuilder:
-                  (size) => defaultIconBuilder(Icons.edit, size),
-                onPressed: () => context.router.push(
-                  DrugSelectionRoute(concludesOnboarding: false)
-                ),
-              ),
           visualDensity: VisualDensity.compact,
           contentPadding: EdgeInsets.zero,
         ),
