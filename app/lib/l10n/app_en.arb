@@ -105,6 +105,15 @@
   "@search_page_tooltip_search_no_class": {},
   "search_page_filter_label": "Filter by guideline result",
   "@search_page_filter_label": {},
+  "search_page_expand_help": "Expand list to view {listName}.",
+  "@search_page_expand_help": {
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "other medications"
+      }
+    }
+  },
   "search_page_indicator_explanation": "Taking medications with an {indicatorName} ({indicator}) can interact with your results for other medications",
   "@search_page_indicator_explanation": {
     "placeholders": {

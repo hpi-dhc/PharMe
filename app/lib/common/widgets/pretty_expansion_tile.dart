@@ -10,6 +10,7 @@ class PrettyExpansionTile extends StatelessWidget {
     this.titlePadding,
     this.childrenPadding,
     this.initiallyExpanded = false,
+    this.enabled = true,
   });
 
   final Widget title;
@@ -20,6 +21,7 @@ class PrettyExpansionTile extends StatelessWidget {
   final EdgeInsets? titlePadding;
   final EdgeInsets? childrenPadding;
   final bool initiallyExpanded;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class PrettyExpansionTile extends StatelessWidget {
       ),
       child: ExpansionTile(
         key: GlobalKey(), // force to rebuild
+        enabled: enabled,
         initiallyExpanded: initiallyExpanded,
         title: title,
         iconColor: PharMeTheme.iconColor,

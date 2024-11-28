@@ -9,7 +9,7 @@ typedef DrugItemBuilder = List<Widget> Function(
   }
 );
 
-class DrugList extends StatelessWidget {
+class DrugList extends HookWidget {
   const DrugList({
     super.key,
     required this.state,
@@ -38,6 +38,7 @@ class DrugList extends StatelessWidget {
     BuildContext context,
     List<Drug> drugs,
     FilterState filter,
+    ValueNotifier<bool?> otherDrugsExpanded,
   ) {
     final filteredDrugs = filter.filter(
       drugs,
@@ -66,7 +67,7 @@ class DrugList extends StatelessWidget {
     final otherDrugs = drugActivityChangeable
       ? filteredDrugs
       : filteredDrugs.filter((drug) => !drug.isActive).toList();
-    final otherDrugsHeader = drugActivityChangeable
+    final otherDrugsHeaderText = drugActivityChangeable
       ? context.l10n.drug_list_subheader_all_drugs
       : context.l10n.drug_list_subheader_other_drugs;
     final allDrugsList = buildDrugItems(
@@ -75,12 +76,19 @@ class DrugList extends StatelessWidget {
       showDrugInteractionIndicator: showDrugInteractionIndicator,
       keyPrefix: 'other-',
     );
+    final otherDrugsHeader = SubheaderDivider(
+      text: '$otherDrugsHeaderText (${allDrugsList.length})',
+      key: Key('header-other'),
+      useLine: false,
+    );
+    final currentlyExpanded = otherDrugsExpanded.value ?? false;
     final drugLists = [
       if (activeDrugsList != null) ...[
         ListTile(
           key: Key('header-active'),
           title: SubheaderDivider(
-            text: context.l10n.drug_list_subheader_active_drugs,
+            text: '${context.l10n.drug_list_subheader_active_drugs} '
+              '(${activeDrugsList.length})',
             useLine: false,
           ),
           trailing: drugActivityChangeable
@@ -99,18 +107,31 @@ class DrugList extends StatelessWidget {
         ...activeDrugsList,
       ],
       if (activeDrugsList != null && allDrugsList.isNotEmpty)
-        PrettyExpansionTile(
-          title: SubheaderDivider(
-            text: otherDrugsHeader,
-            key: Key('header-other'),
-            useLine: false,
+        ...[
+          PrettyExpansionTile(
+            title: otherDrugsHeader,
+            enabled: filter.query.isBlank,
+            initiallyExpanded: currentlyExpanded || !filter.query.isBlank,
+            onExpansionChanged: (value) => otherDrugsExpanded.value = value,
+            visualDensity: VisualDensity.compact,
+            titlePadding: EdgeInsets.zero,
+            childrenPadding: EdgeInsets.zero,
+            children: allDrugsList,
           ),
-          initiallyExpanded: drugActivityChangeable || filter.query.isNotBlank,
-          visualDensity: VisualDensity.compact,
-          titlePadding: EdgeInsets.zero,
-          childrenPadding: EdgeInsets.zero,
-          children: allDrugsList,
-        ),
+          if (!currentlyExpanded) Padding(
+            key: Key('other-hidden-instruction'),
+            padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
+            child: Text(
+              context.l10n.search_page_expand_help(
+                otherDrugsHeaderText.toLowerCase(),
+              ),
+              style: PharMeTheme.textTheme.bodySmall!.copyWith(
+                fontStyle: FontStyle.italic,
+                color: PharMeTheme.subheaderColor,
+              ),
+            ),
+          ),
+        ],
       if (activeDrugsList == null) ...allDrugsList,
     ];
     return (buildContainer != null)
@@ -120,10 +141,14 @@ class DrugList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final otherDrugsExpanded = useState<bool?>(null);
     return state.when(
       initial: SizedBox.shrink,
       error: () => errorIndicator(context.l10n.err_generic),
-      loaded: (allDrugs, filter) => _buildDrugList(context, allDrugs, filter),
+      loaded: (allDrugs, filter) {
+        otherDrugsExpanded.value ??= drugActivityChangeable;
+        return _buildDrugList(context, allDrugs, filter, otherDrugsExpanded);
+      },
       loading: loadingIndicator,
    );
   }

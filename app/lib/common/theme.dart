@@ -84,6 +84,7 @@ class PharMeTheme {
   static const errorColor = Color(0xccf52a2a);
   static final borderColor = Colors.black.withOpacity(.2);
   static final iconColor = darkenColor(PharMeTheme.onSurfaceText, -0.1);
+  static final subheaderColor = Colors.grey[600];
 
   static const smallSpace = 8.0;
   static const defaultPagePadding = smallSpace;
