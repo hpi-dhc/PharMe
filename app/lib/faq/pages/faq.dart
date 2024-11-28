@@ -2,11 +2,25 @@ import '../../common/module.dart';
 import 'content.dart';
 
 @RoutePage()
-class FaqPage extends StatelessWidget {
+class FaqPage extends HookWidget {
   const FaqPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final expandedCards = useState<Map<String, GlobalKey>>({});
+    final expandQuestion = useState<String?>(null);
+    if (expandQuestion.value != null) {
+        final questionKey = GlobalKey();
+        expandedCards.value[expandQuestion.value!] = questionKey;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (expandQuestion.value != null) {
+        _scrollToSelectedContent(
+          key: expandedCards.value[expandQuestion.value]!,
+        );
+        expandQuestion.value = null;
+      }
+    });
     return PopScope(
       canPop: false,
       child: pageScaffold(
@@ -21,7 +35,7 @@ class FaqPage extends StatelessWidget {
               children: [
                 SizedBox(height: PharMeTheme.smallSpace),
                 ...faqContent.flatMap((faqSection) =>
-                  _buildTopic(context, faqSection)),
+                  _buildTopic(context, faqSection, expandedCards, expandQuestion)),
                 ..._buildTopicHeader(
                   context.l10n.more_page_contact_us,
                   addSpace: true,
@@ -55,12 +69,15 @@ class FaqPage extends StatelessWidget {
   List<Widget> _buildTopic(
     BuildContext context,
     FaqSection faqSection,
+    ValueNotifier<Map<String, GlobalKey>> expandedCards,
+    ValueNotifier<String?> expandQuestion,
   ) {
     final isFirst = faqContent.indexOf(faqSection) == 0;
     return [
       ..._buildTopicHeader(faqSection.title(context), addSpace: !isFirst),
       ...faqSection.questions.map(
-        (questionBuilder) => _buildQuestion(context, questionBuilder)
+        (questionBuilder) =>
+          _buildQuestion(context, questionBuilder, expandedCards, expandQuestion)
       )
     ];
   }
@@ -68,9 +85,12 @@ class FaqPage extends StatelessWidget {
   Widget _buildQuestion(
     BuildContext context,
     FaqQuestionBuilder questionBuilder,
+    ValueNotifier<Map<String, GlobalKey>> expandedCards,
+    ValueNotifier<String?> expandQuestion,
   ) {
-    final key = GlobalKey();
     final question = questionBuilder(context);
+    final key = expandedCards.value[question.question];
+    final expanded = expandedCards.value.containsKey(question.question);
     return _buildQuestionCard(
           key: key,
           child: Theme(
@@ -78,11 +98,25 @@ class FaqPage extends StatelessWidget {
               dividerColor: Colors.transparent,
             ),
             child: ExpansionTile(
-              title: Text(question.question),
+              initiallyExpanded: expanded,
+              title: Text(
+                question.question,
+                style: expanded
+                  ? PharMeTheme.textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  )
+                  : null,
+              ),
               iconColor: PharMeTheme.iconColor,
               collapsedIconColor: PharMeTheme.iconColor,
               onExpansionChanged: (value) {
-                if (value) _scrollToSelectedContent(key: key);
+                if (value) {
+                  expandQuestion.value = question.question;
+                } else {
+                  expandedCards.value = expandedCards.value.filterKeys(
+                    (questionTitle) => questionTitle != question.question
+                  );
+                }
               },
               children: [
                 ListTile(
@@ -104,11 +138,11 @@ class FaqPage extends StatelessWidget {
   void _scrollToSelectedContent({required GlobalKey key}) {
     final keyContext = key.currentContext;
     if (keyContext != null) {
-      Future.delayed(Duration(milliseconds: 200)).then((value) {
+      Future.delayed(Duration(milliseconds: 100)).then((value) {
         Scrollable.ensureVisible(
           // ignore: use_build_context_synchronously
           keyContext,
-          duration: Duration(milliseconds: 200),
+          duration: Duration(milliseconds: 500),
           alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
         );
       });
