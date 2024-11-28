@@ -97,6 +97,8 @@
   "warning_level_red": "Consider alternatives",
   "@warning_level_red": {},
   
+  "search_content_explanation": "Below, medications that are known to have meaningful interactions with genes are listed.",
+  "@search_content_explanation": {},
   "search_page_tooltip_search": "Search for medications by their name, brand name or class.",
   "@search_page_tooltip_search": {},
   "search_page_tooltip_search_no_class": "Search for medications by their name or brand name.",

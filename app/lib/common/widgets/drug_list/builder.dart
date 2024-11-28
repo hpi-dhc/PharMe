@@ -85,14 +85,13 @@ class DrugList extends StatelessWidget {
           ),
           trailing: drugActivityChangeable
             ? null
-            : IconButton(
+            : ResizedIconButton(
+                size: PharMeTheme.mediumToLargeSpace,
+                iconWidgetBuilder:
+                  (size) => defaultIconBuilder(Icons.edit, size),
                 onPressed: () => context.router.push(
                   DrugSelectionRoute(concludesOnboarding: false)
                 ),
-                icon: Icon(Icons.edit),
-                color: PharMeTheme.iconColor,
-                iconSize: 20,
-                visualDensity: VisualDensity.compact,
               ),
           visualDensity: VisualDensity.compact,
           contentPadding: EdgeInsets.zero,

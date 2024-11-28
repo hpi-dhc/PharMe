@@ -24,6 +24,7 @@ export 'page_scaffold.dart';
 export 'pharme_logo_page.dart';
 export 'pretty_expansion_tile.dart';
 export 'radiant_gradient_mask.dart';
+export 'resized_icon_button.dart';
 export 'rounded_card.dart';
 export 'scroll_list.dart';
 export 'subheader_divider.dart';

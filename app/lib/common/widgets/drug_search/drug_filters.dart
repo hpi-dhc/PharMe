@@ -170,7 +170,7 @@ class DrugFilters extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: PharMeTheme.sinaiMagenta,
+          color: PharMeTheme.sinaiCyan,
         ),
         width: indicatorSize,
         height: indicatorSize,
@@ -205,28 +205,33 @@ class DrugFilters extends StatelessWidget {
     ];
   }
 
-  IconButton _buildButton({
+  Widget _buildButton({
     required void Function()? onPressed,
     required bool enableIndicator,
   }) {
-    return IconButton(
+    return ResizedIconButton(
       onPressed: onPressed,
-      icon: Stack(
+      size: PharMeTheme.largeSpace,
+      backgroundColor: PharMeTheme.iconColor,
+      iconWidgetBuilder: (size) => Stack(
         children: [
-          Icon(Icons.filter_list),
+          Icon(
+            Icons.filter_list,
+            size: size,
+            color: PharMeTheme.surfaceColor,
+          ),
           if (enableIndicator && _showActiveIndicator())
             _buildActiveIndicator(),
         ],
       ),
-      color: PharMeTheme.iconColor,
     );
   }
 
-  IconButton _buildDisabledButton() {
+  Widget _buildDisabledButton() {
     return _buildButton(onPressed: null, enableIndicator: false);
   }
 
-  IconButton _buildEnabledButton(
+  Widget _buildEnabledButton(
     BuildContext context,
     List<Drug> allDrugs,
     FilterState filter,

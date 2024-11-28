@@ -85,12 +85,15 @@ class DrugSearch extends HookWidget {
         ? context.l10n.search_page_tooltip_search
         : context.l10n.search_page_tooltip_search_no_class
       ),
-      if (showFilter) DrugFilters(
-        cubit: cubit,
-        state: state,
-        activeDrugs: activeDrugs,
-        searchForDrugClass: searchForDrugClass,
-      ),
+      if (showFilter) ...[
+        SizedBox(width: PharMeTheme.smallToMediumSpace),
+        DrugFilters(
+          cubit: cubit,
+          state: state,
+          activeDrugs: activeDrugs,
+          searchForDrugClass: searchForDrugClass,
+        ),
+      ],
     ];
   }
 
