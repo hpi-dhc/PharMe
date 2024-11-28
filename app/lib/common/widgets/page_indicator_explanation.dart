@@ -9,7 +9,12 @@ class PageIndicatorExplanation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(PharMeTheme.smallSpace),
-      child: Text(text),
+      child: Text(
+        text,
+        style: PharMeTheme.textTheme.labelMedium!.copyWith(
+          fontStyle: FontStyle.italic,
+        ),
+      ),
     );
   }
 }
