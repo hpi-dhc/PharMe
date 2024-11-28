@@ -56,16 +56,20 @@ class ReportPage extends HookWidget {
       }
       return allAffectedDrugs;
     }
-
-  List<Widget> _buildGeneCards({ List<String>? drugsToFilterBy }) {
-    final userGenotypes = drugsToFilterBy != null
+  
+  Iterable<GenotypeResult> _getRelevantGenotypes(List<String>? drugSubset) {
+    return drugSubset != null
       ? UserData.instance.genotypeResults!.values.filter((genotypeResult) =>
           _getAffectedDrugs(
                 genotypeResult.key.value,
-                drugSubset: drugsToFilterBy,
+                drugSubset: drugSubset,
           ).isNotEmpty
         )
       : UserData.instance.genotypeResults!.values;
+  }
+
+  List<Widget> _buildGeneCards({ List<String>? drugsToFilterBy }) {
+    final userGenotypes = _getRelevantGenotypes(drugsToFilterBy);
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
       warningLevelCounts[genotypeResult.key.value] = {};
@@ -122,8 +126,8 @@ class ReportPage extends HookWidget {
     final geneCards = _buildGeneCards(
       drugsToFilterBy: currentListOption.drugSubset,
     );
-    // TODO: only for currently shown genes
-    final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
+    final relevantGenes = _getRelevantGenotypes(currentListOption.drugSubset);
+    final hasActiveInhibitors = relevantGenes.any((genotypeResult) => activeDrugs.names.any((drug) => isInhibited(genotypeResult, drug: drug)));
     return PopScope(
       canPop: false,
       child: unscrollablePageScaffold(
