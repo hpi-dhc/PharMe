@@ -20,14 +20,38 @@ class ReportPage extends StatelessWidget {
     ).values.sum();
   }
 
-  Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
-    final userGenotypes = UserData.instance.genotypeResults!.values;
+  List<Drug> _getAffectedDrugs(
+    String genotypeResultKey,
+    {
+      List<String>? drugSubset,
+    }) {
+      final allAffectedDrugs = DrugsWithGuidelines.instance.drugs?.filter(
+        (drug) => drug.guidelineGenotypes.contains(genotypeResultKey)
+      ).toList() ?? [];
+      if (drugSubset != null) {
+        return allAffectedDrugs.filter(
+          (drug) => drugSubset.contains(drug.name)
+        ).toList();
+      }
+      return allAffectedDrugs;
+    }
+
+  List<Widget> _buildGeneCards({ List<String>? drugsToFilterBy }) {
+    final userGenotypes = drugsToFilterBy != null
+      ? UserData.instance.genotypeResults!.values.filter((genotypeResult) =>
+          _getAffectedDrugs(
+                genotypeResult.key.value,
+                drugSubset: drugsToFilterBy,
+          ).isNotEmpty
+        )
+      : UserData.instance.genotypeResults!.values;
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
       warningLevelCounts[genotypeResult.key.value] = {};
-      final affectedDrugs = DrugsWithGuidelines.instance.drugs?.filter(
-        (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
-      ) ?? [];
+      final affectedDrugs = _getAffectedDrugs(
+        genotypeResult.key.value,
+        drugSubset: drugsToFilterBy,
+      );
       for (final warningLevel in WarningLevel.values) {
         warningLevelCounts[genotypeResult.key.value]![warningLevel] =
           affectedDrugs.filter(
@@ -51,10 +75,18 @@ class ReportPage extends StatelessWidget {
         ),
       );
     }
-    final sortedGenotypesWithResults = sortedGenotypes.filter(
-      (genotypeResult) => !_hasNoResult(genotypeResult)
-    );
-    final sortedGenotypesWithoutResults = sortedGenotypes.filter(_hasNoResult);
+    return sortedGenotypes.map((genotypeResult) =>
+      GeneCard(
+        genotypeResult,
+        warningLevelCounts[genotypeResult.key.value]!,
+        key: Key('gene-card-${genotypeResult.key.value}')
+      )
+    ).toList();
+  }
+
+  Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
+    final currentMedicationGeneCards = _buildGeneCards(drugsToFilterBy: activeDrugs.names);
+    final allGeneCards = _buildGeneCards();
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
     return PopScope(
       canPop: false,
@@ -78,25 +110,34 @@ class ReportPage extends StatelessWidget {
                     ]
                   ),
                 ),
-                ...sortedGenotypesWithResults.map((genotypeResult) => GeneCard(
-                  genotypeResult,
-                  warningLevelCounts[genotypeResult.key.value]!,
-                  key: Key('gene-card-${genotypeResult.key.value}')
-                )),
-                if (sortedGenotypesWithoutResults.isNotEmpty) ...[
+                if (currentMedicationGeneCards.isNotEmpty) ...[
                   SubheaderDivider(
-                    text: context.l10n.report_no_result_genes,
-                    key: Key('header-no-result'),
+                    text: context.l10n.report_current_medications(
+                      currentMedicationGeneCards.length,
+                    ),
+                    key: Key('header-current'),
                     useLine: false,
                   ),
-                  ...sortedGenotypesWithoutResults.map((genotypeResult) =>
-                    GeneCard(
-                      genotypeResult,
-                      warningLevelCounts[genotypeResult.key.value]!,
-                      key: Key('gene-card-${genotypeResult.key.value}')
-                    )
-                  ),
+                  ...currentMedicationGeneCards,
                 ],
+                if (
+                  allGeneCards.isNotEmpty &&
+                  currentMedicationGeneCards.isNotEmpty
+                ) PrettyExpansionTile(
+                    key: Key('header-all'),
+                    title: SubheaderDivider(
+                      text: context.l10n.report_all_medications(
+                        allGeneCards.length,
+                      ),
+                      useLine: false,
+                    ),
+                    initiallyExpanded: true,
+                    visualDensity: VisualDensity.compact,
+                    titlePadding: EdgeInsets.zero,
+                    childrenPadding: EdgeInsets.zero,
+                    children: allGeneCards,
+                  ),
+                if (currentMedicationGeneCards.isEmpty) ...allGeneCards,
               ],
             ),
             if (hasActiveInhibitors) PageIndicatorExplanation(

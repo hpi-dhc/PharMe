@@ -288,6 +288,24 @@
       }
     }
   },
+  "report_current_medications": "Gene report for current medication interactions ({geneNumber} genes)",
+  "@report_current_medications": {
+    "placeholders": {
+      "geneNumber": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "report_all_medications": "Gene report for all known medication interactions ({geneNumber} genes)",
+  "@report_all_medications": {
+    "placeholders": {
+      "geneNumber": {
+        "type": "int",
+        "example": "19"
+      }
+    }
+  },
   "report_no_result_genes": "Genes with no result",
   "@report_no_result_genes": {},
 
