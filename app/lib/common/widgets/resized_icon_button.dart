@@ -13,12 +13,14 @@ class ResizedIconButton extends StatelessWidget {
     required this.size,
     this.onPressed,
     this.backgroundColor,
+    this.disabledBackgroundColor,
   });
 
   final Widget Function(double? size) iconWidgetBuilder;
   final double size;
   final void Function()? onPressed;
   final Color? backgroundColor;
+  final Color? disabledBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,10 @@ class ResizedIconButton extends StatelessWidget {
           padding: EdgeInsets.all(padding),
           onPressed: onPressed,
           icon: iconWidgetBuilder(size - 2 * padding),
-          style: IconButton.styleFrom(backgroundColor: backgroundColor),
+          style: IconButton.styleFrom(
+            backgroundColor: backgroundColor,
+            disabledBackgroundColor: disabledBackgroundColor,
+          ),
         ),
     );
   }

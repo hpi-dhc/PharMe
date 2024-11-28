@@ -4,14 +4,34 @@ import 'package:provider/provider.dart';
 import '../../common/module.dart';
 
 typedef WarningLevelCounts = Map<WarningLevel, int>;
+class ListOption {
+  ListOption({required this.label, this.drugSubset});
+  Widget getDescription(BuildContext context, int geneNumber) {
+    return Text.rich(
+      style: PharMeTheme.textTheme.labelLarge,
+      TextSpan(
+        children: [
+          TextSpan(text: label, style: TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(
+            text: context.l10n.report_gene_number(geneNumber),
+            style: TextStyle(color: PharMeTheme.buttonColor),
+          ),
+        ],
+      ),
+    );
+  }
+  final String label;
+  final List<String>? drugSubset;
+}
 
 @RoutePage()
-class ReportPage extends StatelessWidget {
+class ReportPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    final currentListOption = useState(0);
     return Consumer<ActiveDrugs>(
       builder: (context, activeDrugs, child) =>
-        _buildReportPage(context, activeDrugs)
+        _buildReportPage(context, activeDrugs, currentListOption)
     );
   }
 
@@ -86,9 +106,23 @@ class ReportPage extends StatelessWidget {
     ).toList();
   }
 
-  Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
-    final currentMedicationGeneCards = _buildGeneCards(drugsToFilterBy: activeDrugs.names);
-    final allGeneCards = _buildGeneCards();
+  Widget _buildReportPage(
+    BuildContext context,
+    ActiveDrugs activeDrugs,
+    ValueNotifier<int> currentListOptionIndex,
+  ) {
+    final listOptions = [
+      ListOption(
+        label: context.l10n.report_current_medications,
+        drugSubset: activeDrugs.names,
+      ),
+      ListOption(label: context.l10n.report_all_medications),
+    ];
+    final currentListOption = listOptions[currentListOptionIndex.value];
+    final geneCards = _buildGeneCards(
+      drugsToFilterBy: currentListOption.drugSubset,
+    );
+    // TODO: only for currently shown genes
     final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
     return PopScope(
       canPop: false,
@@ -100,48 +134,54 @@ class ReportPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PageDescription.fromText(context.l10n.report_content_explanation),
-            scrollList(
-              [
-                PageDescription(
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(context.l10n.report_legend_text),
-                      SizedBox(height: PharMeTheme.smallSpace * 0.5),
-                      Text.rich(buildWarningLevelTextLegend(context)),
-                    ]
-                  ),
-                ),
-                if (currentMedicationGeneCards.isNotEmpty) ...[
-                  SubheaderDivider(
-                    text: context.l10n.report_current_medications(
-                      currentMedicationGeneCards.length,
+            Padding(
+              key: Key('gene-report-selection'),
+              padding: EdgeInsets.only(
+                top: PharMeTheme.smallSpace,
+                left: PharMeTheme.smallSpace,
+                bottom: PharMeTheme.smallSpace,
+                right: PharMeTheme.mediumToLargeSpace,
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  isExpanded: true,
+                  isDense: false,
+                  value: currentListOptionIndex.value,
+                  onChanged: (index) => currentListOptionIndex.value =
+                    index ?? currentListOptionIndex.value,
+                  icon: ResizedIconButton(
+                    size: PharMeTheme.largeSpace,
+                    disabledBackgroundColor: PharMeTheme.buttonColor,
+                    iconWidgetBuilder: (size) => Icon(
+                      Icons.arrow_drop_down,
+                      size: size,
+                      color: PharMeTheme.surfaceColor,
                     ),
-                    key: Key('header-current'),
-                    useLine: false,
                   ),
-                  ...currentMedicationGeneCards,
-                ],
-                if (
-                  allGeneCards.isNotEmpty &&
-                  currentMedicationGeneCards.isNotEmpty
-                ) PrettyExpansionTile(
-                    key: Key('header-all'),
-                    title: SubheaderDivider(
-                      text: context.l10n.report_all_medications(
-                        allGeneCards.length,
+                  items: listOptions.mapIndexed(
+                    (index, listOption) => DropdownMenuItem<int>(
+                      value: index,
+                      child: listOption.getDescription(
+                        context,
+                        _buildGeneCards(
+                          drugsToFilterBy: listOption.drugSubset,
+                        ).length
                       ),
-                      useLine: false,
                     ),
-                    initiallyExpanded: true,
-                    visualDensity: VisualDensity.compact,
-                    titlePadding: EdgeInsets.zero,
-                    childrenPadding: EdgeInsets.zero,
-                    children: allGeneCards,
-                  ),
-                if (currentMedicationGeneCards.isEmpty) ...allGeneCards,
-              ],
+                  ).toList(),
+                ),
+              ),
             ),
+            scrollList([
+              ...geneCards,
+              if (currentListOption.drugSubset != null) ...[
+                SizedBox(
+                  key: Key('gene-spacer'),
+                  height: PharMeTheme.mediumSpace,
+                ),
+                PageDescription.fromText(context.l10n.report_page_dropdown_text),
+              ]
+            ]),
             if (hasActiveInhibitors) PageIndicatorExplanation(
               context.l10n.report_page_indicator_explanation(
                 drugInteractionIndicatorName,
@@ -203,7 +243,7 @@ class GeneCard extends StatelessWidget {
               WidgetSpan(child: Icon(
                 FontAwesomeIcons.pills,
                 size: PharMeTheme.textTheme.bodyMedium!.fontSize,
-                color: darkenColor(PharMeTheme.iconColor, -0.1),
+                color: PharMeTheme.buttonColor,
               )),
               TextSpan(text: ' : '),
               buildWarningLevelLegend(
