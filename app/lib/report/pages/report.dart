@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/module.dart';
@@ -185,70 +186,80 @@ class GeneCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasLegend = warningLevelCounts.values.any((count) => count > 0);
+    final medicationIndicators =
+      warningLevelCounts.values.any((count) => count > 0)
+      ? DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: PharMeTheme.smallSpace * 0.35,
+            horizontal: PharMeTheme.smallSpace,
+          ),
+          child: Text.rich(
+            TextSpan(children: [
+              WidgetSpan(child: Icon(
+                FontAwesomeIcons.pills,
+                size: PharMeTheme.textTheme.bodyMedium!.fontSize,
+                color: darkenColor(PharMeTheme.iconColor, -0.1),
+              )),
+              TextSpan(text: ' : '),
+              buildWarningLevelLegend(
+                getText: (warningLevel) {
+                  final warningLevelCount =
+                    warningLevelCounts[warningLevel]!;
+                  return warningLevelCount > 0
+                    ? warningLevelCount.toString()
+                    : null;
+                }
+              ),
+            ]),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          ),
+        )
+      : null;
     return RoundedCard(
       onTap: () => context.router.push(
         GeneRoute(genotypeResult: genotypeResult)
       ),
       radius: 16,
       color: color,
-      child: IntrinsicHeight(child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                genotypeResult.geneDisplayString,
-                style: PharMeTheme.textTheme.titleMedium
-              ),
-              SizedBox(height: 8),
-              Text(
-                possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
-                style: PharMeTheme.textTheme.titleSmall,
-              ),
-            ],
-          ),
           Expanded(
-            child: hasLegend
-              ? Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                padding: EdgeInsets.only(
-                  left: PharMeTheme.mediumSpace,
-                  right: PharMeTheme.smallSpace,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  genotypeResult.geneDisplayString,
+                  style: PharMeTheme.textTheme.titleMedium
                 ),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: PharMeTheme.smallSpace * 0.35,
-                    horizontal: PharMeTheme.smallSpace,
-                  ),
-                  child: Text.rich(
-                    buildWarningLevelLegend(
-                      getText: (warningLevel) {
-                        final warningLevelCount =
-                          warningLevelCounts[warningLevel]!;
-                        return warningLevelCount > 0
-                          ? warningLevelCount.toString()
-                          : null;
-                      }
+                SizedBox(height: PharMeTheme.smallSpace * 0.5),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  alignment: WrapAlignment.spaceBetween,
+                  runSpacing: PharMeTheme.smallSpace * 0.5,
+                  children: [
+                    Text(
+                      possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
+                      style: PharMeTheme.textTheme.titleSmall,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  ),
-                )),
-              )
-              : SizedBox.shrink(),
+                    SizedBox(width: PharMeTheme.smallSpace),
+                    medicationIndicators ?? SizedBox.shrink(),
+                  ],
+                ),
+              ]
+            ),
           ),
-          Icon(Icons.chevron_right_rounded),
-        ]
-      )),
+          SizedBox(width: PharMeTheme.smallSpace),
+          Column(mainAxisSize: MainAxisSize.min,children: [Icon(Icons.chevron_right_rounded)],),
+        ],
+      ),
     );
   }
 }
