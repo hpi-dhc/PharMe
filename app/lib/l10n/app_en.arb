@@ -257,6 +257,8 @@
   },
   "drugs_page_tooltip_guideline_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present in this case (yet).",
   "@drugs_page_tooltip_guideline_missing": {},
+  "drugs_page_implication_description": "What your result means: ",
+  "@drugs_page_implication_description": {},
   "drugs_page_recommendation_description": "What to do: ",
   "@drugs_page_recommendation_description": {},
 

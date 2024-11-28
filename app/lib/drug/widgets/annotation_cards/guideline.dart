@@ -76,8 +76,20 @@ class GuidelineAnnotationCard extends StatelessWidget {
           SizedBox(height: PharMeTheme.smallToMediumSpace),
           Text.rich(
             TextSpan(
-              text:
-                implicationText ?? context.l10n.drugs_page_no_guidelines_text,
+              children: [
+                TextSpan(
+                  text: context.l10n.drugs_page_implication_description,
+                ),
+                TextSpan(text: '\n'),
+                WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.2)),
+                TextSpan(
+                  text:
+                    implicationText ?? context.l10n.drugs_page_no_guidelines_text,
+                  style: implicationText != null
+                    ? TextStyle(fontWeight: FontWeight.bold)
+                    : TextStyle(fontStyle: FontStyle.italic)
+                    ),
+              ],
             ),
           ),
           if (recommendationText != null) ...[
@@ -86,9 +98,13 @@ class GuidelineAnnotationCard extends StatelessWidget {
               TextSpan(children: [
                 TextSpan(
                   text: context.l10n.drugs_page_recommendation_description,
+                ),
+                TextSpan(text: '\n'),
+                WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.2)),
+                TextSpan(
+                  text: recommendationText,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                TextSpan(text: recommendationText),
               ]),
             ),
           ],
