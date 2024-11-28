@@ -212,7 +212,7 @@ class DrugFilters extends StatelessWidget {
     return ResizedIconButton(
       onPressed: onPressed,
       size: PharMeTheme.largeSpace,
-      backgroundColor: PharMeTheme.iconColor,
+      backgroundColor: darkenColor(PharMeTheme.iconColor, -0.1),
       iconWidgetBuilder: (size) => Stack(
         children: [
           Icon(
