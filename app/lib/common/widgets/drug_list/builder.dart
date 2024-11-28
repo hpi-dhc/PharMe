@@ -82,6 +82,7 @@ class DrugList extends HookWidget {
       useLine: false,
     );
     final currentlyExpanded = otherDrugsExpanded.value ?? false;
+    final currentlyEnabled = filter.query.isBlank;
     final drugLists = [
       if (activeDrugsList != null) ...[
         ListTile(
@@ -100,12 +101,27 @@ class DrugList extends HookWidget {
         ...[
           PrettyExpansionTile(
             title: otherDrugsHeader,
-            enabled: filter.query.isBlank,
-            initiallyExpanded: currentlyExpanded || !filter.query.isBlank,
+            enabled: currentlyEnabled,
+            initiallyExpanded: currentlyExpanded || !currentlyEnabled,
             onExpansionChanged: (value) => otherDrugsExpanded.value = value,
             visualDensity: VisualDensity.compact,
             titlePadding: EdgeInsets.zero,
             childrenPadding: EdgeInsets.zero,
+            icon: drugActivityChangeable
+              ? SizedBox.shrink()
+              : ResizedIconButton(
+                  size: PharMeTheme.largeSpace,
+                  disabledBackgroundColor: currentlyEnabled
+                    ? PharMeTheme.buttonColor
+                    : PharMeTheme.onSurfaceColor,
+                  iconWidgetBuilder: (size) => Icon(
+                    currentlyExpanded
+                      ? Icons.arrow_drop_up
+                      : Icons.arrow_drop_down,
+                    size: size,
+                    color: PharMeTheme.surfaceColor,
+                  ),
+                ),
             children: allDrugsList,
           ),
         ],

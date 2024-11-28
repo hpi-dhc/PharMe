@@ -9,6 +9,7 @@ class PrettyExpansionTile extends StatelessWidget {
     this.visualDensity,
     this.titlePadding,
     this.childrenPadding,
+    this.icon,
     this.initiallyExpanded = false,
     this.enabled = true,
   });
@@ -20,6 +21,7 @@ class PrettyExpansionTile extends StatelessWidget {
   final VisualDensity? visualDensity;
   final EdgeInsets? titlePadding;
   final EdgeInsets? childrenPadding;
+  final Widget? icon;
   final bool initiallyExpanded;
   final bool enabled;
 
@@ -35,6 +37,7 @@ class PrettyExpansionTile extends StatelessWidget {
         initiallyExpanded: initiallyExpanded,
         title: title,
         iconColor: PharMeTheme.iconColor,
+        trailing: icon,
         collapsedIconColor: PharMeTheme.iconColor,
         onExpansionChanged: onExpansionChanged,
         visualDensity: visualDensity,
