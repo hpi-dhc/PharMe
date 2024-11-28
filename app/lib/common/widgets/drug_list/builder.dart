@@ -77,10 +77,25 @@ class DrugList extends StatelessWidget {
     );
     final drugLists = [
       if (activeDrugsList != null) ...[
-        SubheaderDivider(
-          text: context.l10n.drug_list_subheader_active_drugs,
+        ListTile(
           key: Key('header-active'),
-          useLine: false,
+          title: SubheaderDivider(
+            text: context.l10n.drug_list_subheader_active_drugs,
+            useLine: false,
+          ),
+          trailing: drugActivityChangeable
+            ? null
+            : IconButton(
+                onPressed: () => context.router.push(
+                  DrugSelectionRoute(concludesOnboarding: false)
+                ),
+                icon: Icon(Icons.edit),
+                color: PharMeTheme.iconColor,
+                iconSize: 20,
+                visualDensity: VisualDensity.compact,
+              ),
+          visualDensity: VisualDensity.compact,
+          contentPadding: EdgeInsets.zero,
         ),
         ...activeDrugsList,
       ],
