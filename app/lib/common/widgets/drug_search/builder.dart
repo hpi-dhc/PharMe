@@ -34,11 +34,7 @@ class DrugSearch extends HookWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(
-            left: PharMeTheme.smallSpace,
-            right: PharMeTheme.smallSpace,
-            bottom: PharMeTheme.smallSpace,
-          ),
+          padding: EdgeInsets.all(PharMeTheme.smallSpace),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: _buildSearchBarItems(context, searchController),
