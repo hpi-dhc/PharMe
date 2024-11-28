@@ -104,7 +104,6 @@ class DrugList extends HookWidget {
             enabled: currentlyEnabled,
             initiallyExpanded: currentlyExpanded || !currentlyEnabled,
             onExpansionChanged: (value) => otherDrugsExpanded.value = value,
-            visualDensity: VisualDensity.compact,
             titlePadding: EdgeInsets.zero,
             childrenPadding: EdgeInsets.zero,
             icon: drugActivityChangeable
