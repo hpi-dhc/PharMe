@@ -93,44 +93,37 @@ class FaqPage extends HookWidget {
     final expanded = expandedCards.value.containsKey(question.question);
     return _buildQuestionCard(
           key: key,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              dividerColor: Colors.transparent,
+          child: PrettyExpansionTile(
+            initiallyExpanded: expanded,
+            title: Text(
+              question.question,
+              style: expanded
+                ? PharMeTheme.textTheme.bodyLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                )
+                : null,
             ),
-            child: ExpansionTile(
-              initiallyExpanded: expanded,
-              title: Text(
-                question.question,
-                style: expanded
-                  ? PharMeTheme.textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  )
-                  : null,
-              ),
-              iconColor: PharMeTheme.iconColor,
-              collapsedIconColor: PharMeTheme.iconColor,
-              onExpansionChanged: (value) {
-                if (value) {
-                  expandQuestion.value = question.question;
-                } else {
-                  expandedCards.value = expandedCards.value.filterKeys(
-                    (questionTitle) => questionTitle != question.question
-                  );
-                }
-              },
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.only(
-                    left: PharMeTheme.mediumSpace,
-                    right: PharMeTheme.mediumSpace,
-                    bottom: PharMeTheme.smallSpace,
-                  ),
-                  title: question is FaqTextAnswerQuestion
-                    ? Text(question.answer)
-                    : question.answer,
+            onExpansionChanged: (value) {
+              if (value) {
+                expandQuestion.value = question.question;
+              } else {
+                expandedCards.value = expandedCards.value.filterKeys(
+                  (questionTitle) => questionTitle != question.question
+                );
+              }
+            },
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.only(
+                  left: PharMeTheme.mediumSpace,
+                  right: PharMeTheme.mediumSpace,
+                  bottom: PharMeTheme.smallSpace,
                 ),
-              ],
-            ),
+                title: question is FaqTextAnswerQuestion
+                  ? Text(question.answer)
+                  : question.answer,
+              ),
+            ],
           ),
         );
   }

@@ -48,7 +48,7 @@ class DrugList extends StatelessWidget {
       return errorIndicator(noDrugsMessage!);
     }
     List<Widget>? activeDrugsList;
-    // Do not show repeated active drugs when searching
+    // Do not show repeated active drugs when searching in medication selection
     if (drugActivityChangeable && filteredDrugs.length != drugs.length) {
       activeDrugsList = null;
     } else {
@@ -84,12 +84,20 @@ class DrugList extends StatelessWidget {
         ),
         ...activeDrugsList,
       ],
-      if (activeDrugsList != null && allDrugsList.isNotEmpty) SubheaderDivider(
-        text: otherDrugsHeader,
-        key: Key('header-other'),
-        useLine: false,
-      ),
-      ...allDrugsList,
+      if (activeDrugsList != null && allDrugsList.isNotEmpty)
+        PrettyExpansionTile(
+          title: SubheaderDivider(
+            text: otherDrugsHeader,
+            key: Key('header-other'),
+            useLine: false,
+          ),
+          initiallyExpanded: drugActivityChangeable || filter.query.isNotBlank,
+          visualDensity: VisualDensity.compact,
+          titlePadding: EdgeInsets.zero,
+          childrenPadding: EdgeInsets.zero,
+          children: allDrugsList,
+        ),
+      if (activeDrugsList == null) ...allDrugsList,
     ];
     return (buildContainer != null)
       ? buildContainer!(drugLists)
