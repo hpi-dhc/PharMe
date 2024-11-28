@@ -118,19 +118,19 @@ class DrugList extends HookWidget {
             childrenPadding: EdgeInsets.zero,
             children: allDrugsList,
           ),
-          if (!currentlyExpanded) Padding(
-            key: Key('other-hidden-instruction'),
-            padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
-            child: Text(
-              context.l10n.search_page_expand_help(
-                otherDrugsHeaderText.toLowerCase(),
-              ),
-              style: PharMeTheme.textTheme.bodySmall!.copyWith(
-                fontStyle: FontStyle.italic,
-                color: PharMeTheme.subheaderColor,
-              ),
-            ),
-          ),
+          // if (!currentlyExpanded) Padding(
+          //   key: Key('other-hidden-instruction'),
+          //   padding: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
+          //   child: Text(
+          //     context.l10n.search_page_expand_help(
+          //       otherDrugsHeaderText.toLowerCase(),
+          //     ),
+          //     style: PharMeTheme.textTheme.bodySmall!.copyWith(
+          //       fontStyle: FontStyle.italic,
+          //       color: PharMeTheme.subheaderColor,
+          //     ),
+          //   ),
+          // ),
         ],
       if (activeDrugsList == null) ...allDrugsList,
     ];
