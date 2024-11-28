@@ -79,7 +79,8 @@ class ReportPage extends StatelessWidget {
       GeneCard(
         genotypeResult,
         warningLevelCounts[genotypeResult.key.value]!,
-        key: Key('gene-card-${genotypeResult.key.value}')
+        key: Key('gene-card-${genotypeResult.key.value}'),
+        useColors: false,
       )
     ).toList();
   }
@@ -157,13 +158,19 @@ bool _hasNoResult(GenotypeResult genotypeResult) =>
   UserData.lookupFor(genotypeResult.key.value) == SpecialLookup.noResult.value;
 
 class GeneCard extends StatelessWidget {
-  const GeneCard(this.genotypeResult, this.warningLevelCounts, { super.key });
+  const GeneCard(
+    this.genotypeResult,
+    this.warningLevelCounts, {
+      super.key,
+      this.useColors = true,
+    });
 
   final GenotypeResult genotypeResult;
   final WarningLevelCounts warningLevelCounts;
+  final bool useColors;
 
   @visibleForTesting
-  Color? get color => _hasNoResult(genotypeResult)
+  Color? get color => !useColors || _hasNoResult(genotypeResult)
     ? PharMeTheme.onSurfaceColor
     : _getHighestSeverityColor(warningLevelCounts);
 
