@@ -260,8 +260,6 @@
 
   "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",
   "@report_content_explanation": {},
-  "report_page_dropdown_text": "Having trouble finding a gene? Use the ▾ button above to change between showing only genes associated with your current medications or showing all genes with known medication interactions.",
-  "@report_page_dropdown_text": {},
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
   "@report_page_faq_tooltip": {},
   "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be adjusted based on interactions with medications you are currently taking",
@@ -277,9 +275,11 @@
       }
     }
   },
-  "report_current_medications": "Gene report for current medication interactions",
+  "report_description_prefix": "Gene report for",
+  "@report_description_prefix": {},
+  "report_current_medications": "current medication interactions",
   "@report_current_medications": {},
-  "report_all_medications": "Gene report for all known medication interactions",
+  "report_all_medications": "all known medication interactions",
   "@report_all_medications": {},
   "report_gene_number": " ({geneNumber} genes)",
   "@report_gene_number": {
@@ -290,6 +290,21 @@
       }
     }
   },
+  "show_all_dropdown_text": "Having trouble finding a {item}? Use the ▾ button above to show all {items}.",
+  "@show_all_dropdown_text": {
+    "placeholders": {
+      "item": {
+        "type": "String",
+        "example": "gene"
+      },
+      "items": {
+        "type": "String",
+        "example": "genes with known medication interactions"
+      }
+    }
+  },
+  "report_show_all_dropdown_item": "gene",
+  "report_show_all_dropdown_items": "genes with known medication interactions",
 
   "gene_page_headline": "{gene} report",
   "@gene_page_headline": {

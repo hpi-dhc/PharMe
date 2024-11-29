@@ -11,6 +11,8 @@ class ListOption {
       style: PharMeTheme.textTheme.labelLarge,
       TextSpan(
         children: [
+          TextSpan(text: context.l10n.report_description_prefix),
+          TextSpan(text: ' '),
           TextSpan(text: label, style: TextStyle(fontWeight: FontWeight.bold)),
           TextSpan(
             text: context.l10n.report_gene_number(geneNumber),
@@ -115,6 +117,37 @@ class ReportPage extends HookWidget {
     ).toList();
   }
 
+  Widget _maybeBuildPageIndicators(
+    BuildContext context,
+    Iterable<GenotypeResult> relevantGenes,
+    ActiveDrugs activeDrugs,
+    ListOption currentListOption,
+  ) {
+    final hasActiveInhibitors = relevantGenes.any(
+      (genotypeResult) => activeDrugs.names.any(
+        (drug) => isInhibited(genotypeResult, drug: drug)
+      )
+    );
+    if (!hasActiveInhibitors && currentListOption.drugSubset == null) {
+      return SizedBox.shrink();
+    }
+    var indicatorText = '';
+    if (hasActiveInhibitors) {
+      indicatorText = context.l10n.report_page_indicator_explanation(
+        drugInteractionIndicatorName,
+        drugInteractionIndicator
+      );
+    }
+    if (currentListOption.drugSubset != null) {
+      indicatorText = '$indicatorText\n\n'
+        '${context.l10n.show_all_dropdown_text(
+            context.l10n.report_show_all_dropdown_item,
+            context.l10n.report_show_all_dropdown_items,
+          )}';
+    }
+    return PageIndicatorExplanation(indicatorText);
+  }
+
   Widget _buildReportPage(
     BuildContext context,
     ActiveDrugs activeDrugs,
@@ -134,7 +167,6 @@ class ReportPage extends HookWidget {
       drugsToFilterBy: currentListOption.drugSubset,
     );
     final relevantGenes = _getRelevantGenotypes(currentListOption.drugSubset);
-    final hasActiveInhibitors = relevantGenes.any((genotypeResult) => activeDrugs.names.any((drug) => isInhibited(genotypeResult, drug: drug)));
     return PopScope(
       canPop: false,
       child: unscrollablePageScaffold(
@@ -160,13 +192,16 @@ class ReportPage extends HookWidget {
                   value: currentListOptionIndex.value,
                   onChanged: (index) => currentListOptionIndex.value =
                     index ?? currentListOptionIndex.value,
-                  icon: ResizedIconButton(
-                    size: PharMeTheme.largeSpace,
-                    disabledBackgroundColor: PharMeTheme.buttonColor,
-                    iconWidgetBuilder: (size) => Icon(
-                      Icons.arrow_drop_down,
-                      size: size,
-                      color: PharMeTheme.surfaceColor,
+                  icon: Padding(
+                    padding: EdgeInsets.only(left: PharMeTheme.smallSpace),
+                    child: ResizedIconButton(
+                      size: PharMeTheme.largeSpace,
+                      disabledBackgroundColor: PharMeTheme.buttonColor,
+                      iconWidgetBuilder: (size) => Icon(
+                        Icons.arrow_drop_down,
+                        size: size,
+                        color: PharMeTheme.surfaceColor,
+                      ),
                     ),
                   ),
                   items: listOptions.mapIndexed(
@@ -183,21 +218,12 @@ class ReportPage extends HookWidget {
                 ),
               ),
             ),
-            scrollList([
-              ...geneCards,
-              if (currentListOption.drugSubset != null) ...[
-                SizedBox(
-                  key: Key('gene-spacer'),
-                  height: PharMeTheme.mediumSpace,
-                ),
-                PageDescription.fromText(context.l10n.report_page_dropdown_text),
-              ]
-            ]),
-            if (hasActiveInhibitors) PageIndicatorExplanation(
-              context.l10n.report_page_indicator_explanation(
-                drugInteractionIndicatorName,
-                drugInteractionIndicator
-              ),
+            scrollList(geneCards),
+            _maybeBuildPageIndicators(
+              context,
+              relevantGenes,
+              activeDrugs,
+              currentListOption,
             ),
           ]
         )
