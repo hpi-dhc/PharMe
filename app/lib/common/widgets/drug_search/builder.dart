@@ -43,17 +43,28 @@ class DrugSearch extends HookWidget {
           : ''
       ),
       searchForDrugClass: searchForDrugClass,
-      buildContainer:
-        ({children, indicator, noDrugsMessage}) => Column(
+      buildContainer: ({
+        children,
+        indicator,
+        noDrugsMessage,
+        showInactiveDrugs,
+      }) => Column(
           children: [
             Padding(
               padding: EdgeInsets.all(PharMeTheme.smallSpace),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: _buildSearchBarItems(context, searchController),
+                children: _buildSearchBarItems(
+                  context,
+                  searchController,
+                  showInactiveDrugs: showInactiveDrugs ?? true,
+                ),
               ),
             ),
-            if (children != null) scrollList(keepPosition: keepPosition, children),
+            if (children != null) scrollList(
+              keepPosition: keepPosition,
+              children,
+            ),
             if (noDrugsMessage != null) noDrugsMessage,
             if (indicator != null) indicator,
           ],
@@ -65,6 +76,9 @@ class DrugSearch extends HookWidget {
   List<Widget> _buildSearchBarItems(
     BuildContext context,
     TextEditingController searchController,
+    {
+      required bool showInactiveDrugs,
+    }
   ) {
     return [
       Expanded(
@@ -89,6 +103,7 @@ class DrugSearch extends HookWidget {
           state: state,
           activeDrugs: activeDrugs,
           searchForDrugClass: searchForDrugClass,
+          showInactiveDrugs: showInactiveDrugs,
         ),
       ],
     ];

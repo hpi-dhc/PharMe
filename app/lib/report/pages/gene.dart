@@ -27,7 +27,12 @@ class GenePage extends HookWidget {
               state: state,
               activeDrugs: activeDrugs,
               noDrugsMessage: context.l10n.gene_page_no_relevant_drugs,
-              buildContainer: ({children, indicator, noDrugsMessage}) =>
+              buildContainer: ({
+                children,
+                indicator,
+                noDrugsMessage,
+                showInactiveDrugs,
+              }) =>
                 Column(
                   children: [
                     Padding(

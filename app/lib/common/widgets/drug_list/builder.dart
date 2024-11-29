@@ -37,6 +37,7 @@ class DrugList extends HookWidget {
     List<Widget>? children,
     Widget? indicator,
     Widget? noDrugsMessage,
+    bool? showInactiveDrugs
   }) buildContainer;
 
   Widget _buildDrugList(
@@ -142,6 +143,7 @@ class DrugList extends HookWidget {
     return buildContainer(
       children: drugLists,
       indicator: indicator,
+      showInactiveDrugs: !currentlyEnabled || currentlyExpanded,
     );
   }
 
