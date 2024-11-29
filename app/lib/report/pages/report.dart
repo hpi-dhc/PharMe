@@ -132,18 +132,23 @@ class ReportPage extends HookWidget {
       return SizedBox.shrink();
     }
     var indicatorText = '';
+    if (currentListOption.drugSubset != null) {
+      final listHelperText = context.l10n.show_all_dropdown_text(
+        context.l10n.report_show_all_dropdown_item,
+        context.l10n.report_show_all_dropdown_items,
+      );
+      indicatorText = listHelperText;
+    }
     if (hasActiveInhibitors) {
-      indicatorText = context.l10n.report_page_indicator_explanation(
+      final inhibitorText = context.l10n.report_page_indicator_explanation(
         drugInteractionIndicatorName,
         drugInteractionIndicator
       );
-    }
-    if (currentListOption.drugSubset != null) {
-      indicatorText = '$indicatorText\n\n'
-        '${context.l10n.show_all_dropdown_text(
-            context.l10n.report_show_all_dropdown_item,
-            context.l10n.report_show_all_dropdown_items,
-          )}';
+      if (indicatorText.isNotBlank) {
+        indicatorText = '$indicatorText\n\n$inhibitorText';
+      } else {
+        indicatorText = inhibitorText;
+      }
     }
     return PageIndicatorExplanation(indicatorText);
   }
