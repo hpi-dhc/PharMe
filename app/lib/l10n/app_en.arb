@@ -309,7 +309,7 @@
   "@report_show_all_dropdown_items": {},
   "drugs_show_all_dropdown_item": "medication",
   "@drugs_show_all_dropdown_item": {},
-  "drugs_show_all_dropdown_items": "medication with clinically relevant gene interactions",
+  "drugs_show_all_dropdown_items": "medications with clinically relevant gene interactions",
   "@drugs_show_all_dropdown_items": {},
 
   "gene_page_headline": "{gene} report",
