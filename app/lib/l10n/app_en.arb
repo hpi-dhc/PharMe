@@ -290,7 +290,7 @@
       }
     }
   },
-  "show_all_dropdown_text": "Having trouble finding a {item}? Use the ▾ button above to show all {items}.",
+  "show_all_dropdown_text": "Having trouble finding a {item}? Use the ▾ button to show all {items}.",
   "@show_all_dropdown_text": {
     "placeholders": {
       "item": {
@@ -304,7 +304,9 @@
     }
   },
   "report_show_all_dropdown_item": "gene",
+  "@report_show_all_dropdown_item": {},
   "report_show_all_dropdown_items": "genes with known medication interactions",
+  "@report_show_all_dropdown_items": {},
 
   "gene_page_headline": "{gene} report",
   "@gene_page_headline": {
