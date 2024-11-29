@@ -133,10 +133,6 @@
   "@drugs_page_disclaimer_description": {},
   "drugs_page_disclaimer_text_part_0": "Never stop taking or change the dose of your medications without consulting your pharmacist or doctor.",
   "@drugs_page_disclaimer_text_part_0": {},
-  "drugs_page_disclaimer_text_part_1": "Also, the information shown on this page is ONLY based on your DNA and certain medications you are currently taking.",
-  "@drugs_page_disclaimer_text_part_1": {},
-  "drugs_page_disclaimer_text_part_2": "Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
-  "@drugs_page_disclaimer_text_part_2": {},
   "drugs_page_is_inhibitor": "Taking {drugName} can interact with your results for the following gene(s): {genes}",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
@@ -473,8 +469,8 @@
   "@onboarding_1_text": {},
   "onboarding_2_header": "One size does not fit all",
   "@onboarding_2_header": {},
-  "onboarding_1_disclaimer_part_1": "The information provided in PharMe is ONLY based on your DNA and certain medications that may interact with your genetic result.",
-  "@onboarding_1_disclaimer_part_1": {},
+  "onboarding_1_disclaimer": "The information from PharMe is like one puzzle piece in the big picture of how well a medicine works for you.\n\nThe information provided here is based ONLY on your DNA and certain medications that may interact with your genetic result. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
+  "@onboarding_1_disclaimer": {},
   "onboarding_2_text": "Each person’s body reacts to medications differently.\n\nMedications that are effective for a majority of people can have adverse side effects for you.",
   "@onboarding_2_text": {},
   "onboarding_3_header": "Genome power unlocked to improve human health",

@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../../common/module.dart' hide MetaData;
 import '../../common/models/metadata.dart';
 
@@ -17,9 +19,8 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_1_header,
         text: context.l10n.onboarding_1_text,
         color: PharMeTheme.sinaiCyan,
-        child: DisclaimerCard(
-          text: context.l10n.onboarding_1_disclaimer_part_1,
-          secondLineText: context.l10n.drugs_page_disclaimer_text_part_2,
+        bottom: DisclaimerCard(
+          text: context.l10n.onboarding_3_disclaimer,
         ),
       ),
       OnboardingSubPage(
@@ -37,8 +38,9 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_3_header,
         text: context.l10n.onboarding_3_text,
         color: PharMeTheme.sinaiPurple,
-        child: DisclaimerCard(
-          text: context.l10n.onboarding_3_disclaimer,
+        bottom: DisclaimerCard(
+          icon: FontAwesomeIcons.puzzlePiece,
+          text: context.l10n.onboarding_1_disclaimer,
         ),
       ),
       OnboardingSubPage(
@@ -295,7 +297,8 @@ class OnboardingSubPage extends HookWidget {
     required this.text,
     required this.color,
     required this.availableHeight,
-    this.child,
+    this.top,
+    this.bottom,
   });
 
   final String illustrationPath;
@@ -304,7 +307,8 @@ class OnboardingSubPage extends HookWidget {
   final String text;
   final double availableHeight;
   final Color color;
-  final Widget? child;
+  final Widget? top;
+  final Widget? bottom;
 
   double? _getContentHeight(GlobalKey contentKey) {
     return contentKey.currentContext?.size?.height;
@@ -418,15 +422,19 @@ class OnboardingSubPage extends HookWidget {
                       maxLines: 2,
                     ),
                     SizedBox(height: PharMeTheme.mediumToLargeSpace),
+                    if (top != null) ...[
+                      top!,
+                      SizedBox(height: PharMeTheme.mediumSpace),
+                    ],
                     Text(
                       text,
                       style: PharMeTheme.textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
                     ),
-                    if (child != null) ...[
+                    if (bottom != null) ...[
                       SizedBox(height: PharMeTheme.mediumSpace),
-                      child!,
+                      bottom!,
                     ],
                   ]),
                   // Empty widget for spaceBetween in this column to work properly
@@ -474,7 +482,7 @@ class DisclaimerCard extends StatelessWidget {
     this.onClick,
   });
 
-  final Icon? icon;
+  final IconData? icon;
   final String text;
   final String? secondLineText;
   final GestureTapCallback? onClick;
@@ -491,7 +499,7 @@ class DisclaimerCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            icon ??  Icon(Icons.warning_rounded, size: 32),
+            Icon(icon ?? Icons.warning_rounded, size: 32),
             SizedBox(width: PharMeTheme.smallSpace),
             Expanded(
               child: Column(

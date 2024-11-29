@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../../common/module.dart';
 
 class Disclaimer extends StatelessWidget {
@@ -34,16 +36,19 @@ class Disclaimer extends StatelessWidget {
             text: context.l10n.drugs_page_disclaimer_text_part_0,
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          if (userGuideline != null) TextSpan(
+          TextSpan(
             children: [
               TextSpan(text: '\n\n'),
-              TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_1),
+              WidgetSpan(
+                child: Icon(
+                  FontAwesomeIcons.puzzlePiece,
+                  size: PharMeTheme.mediumSpace,
+                  color: PharMeTheme.onSurfaceText,
+                ),
+              ),
               TextSpan(text: ' '),
-              TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_2),
+              TextSpan(text: context.l10n.onboarding_1_disclaimer),
             ],
-            style: PharMeTheme.textTheme.labelMedium!.copyWith(
-              fontWeight: FontWeight.w300,
-            ),
           )
         ]),
       ),

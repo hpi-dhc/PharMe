@@ -27,8 +27,10 @@ class GuidelineAnnotationCard extends StatelessWidget {
                   ..._buildHeader(context),
                   SizedBox(height: PharMeTheme.mediumSpace),
                   _buildCard(context),
-                  SizedBox(height: PharMeTheme.mediumSpace),
+                  SizedBox(height: PharMeTheme.smallSpace),
                   _buildSourcesSection(context),
+                  SizedBox(height: PharMeTheme.smallSpace),
+                  Disclaimer(userGuideline: drug.userGuideline),
                 ]
                 else ...[
                   ..._buildHeader(context),
@@ -108,8 +110,6 @@ class GuidelineAnnotationCard extends StatelessWidget {
               ]),
             ),
           ],
-          SizedBox(height: PharMeTheme.smallToMediumSpace),
-          Disclaimer(userGuideline: drug.userGuideline),
         ]
       )
     );
