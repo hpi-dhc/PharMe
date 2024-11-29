@@ -50,6 +50,7 @@ class DrugAnnotationCards extends StatelessWidget {
         ),
         SizedBox(height: PharMeTheme.smallSpace),
         PrettyExpansionTile(
+          key: Key('drug-information-expansion-tile'),
           title: SubHeader(context.l10n.drugs_page_header_drug),
           visualDensity: VisualDensity.compact,
           titlePadding: EdgeInsets.zero,

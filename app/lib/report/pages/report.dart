@@ -26,6 +26,11 @@ class ListOption {
 
 @RoutePage()
 class ReportPage extends HookWidget {
+  const ReportPage({@visibleForTesting this.onlyShowWholeReport = false});
+
+  // Currently for testing but might use in the future
+  final bool onlyShowWholeReport;
+
   @override
   Widget build(BuildContext context) {
     final currentListOption = useState(0);
@@ -115,13 +120,15 @@ class ReportPage extends HookWidget {
     ActiveDrugs activeDrugs,
     ValueNotifier<int> currentListOptionIndex,
   ) {
-    final listOptions = [
-      ListOption(
-        label: context.l10n.report_current_medications,
-        drugSubset: activeDrugs.names,
-      ),
-      ListOption(label: context.l10n.report_all_medications),
-    ];
+    final listOptions = onlyShowWholeReport
+      ? [ListOption(label: context.l10n.report_all_medications)]
+      : [
+        ListOption(
+          label: context.l10n.report_current_medications,
+          drugSubset: activeDrugs.names,
+        ),
+        ListOption(label: context.l10n.report_all_medications),
+      ];
     final currentListOption = listOptions[currentListOptionIndex.value];
     final geneCards = _buildGeneCards(
       drugsToFilterBy: currentListOption.drugSubset,

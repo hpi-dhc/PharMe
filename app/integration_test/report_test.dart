@@ -31,7 +31,7 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return ReportPage();
+                return ReportPage(onlyShowWholeReport: true);
               },
             ),
           ),

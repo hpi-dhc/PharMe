@@ -77,7 +77,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
           Text.rich(
             TextSpan(
               children: [
-                TextSpan(
+                if (implicationText != null) TextSpan(
                   text: context.l10n.drugs_page_implication_description,
                 ),
                 TextSpan(text: '\n'),
