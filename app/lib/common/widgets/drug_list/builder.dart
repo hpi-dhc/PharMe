@@ -9,6 +9,7 @@ typedef DrugItemBuilder = List<Widget> Function(
   }
 );
 
+// TODO(tamslo): https://github.com/hpi-dhc/PharMe/issues/731
 class DrugList extends HookWidget {
   const DrugList({
     super.key,
@@ -19,7 +20,7 @@ class DrugList extends HookWidget {
     this.showDrugInteractionIndicator = false,
     this.searchForDrugClass = true,
     this.drugActivityChangeable = false,
-    this.buildContainer,
+    required this.buildContainer,
   });
 
   final DrugListState state;
@@ -32,7 +33,11 @@ class DrugList extends HookWidget {
   // in the "All medications" list to make searching and toggling a medication's
   // activity less confusing
   final bool drugActivityChangeable;
-  final Widget Function(List<Widget> children)? buildContainer;
+  final Widget Function({
+    List<Widget>? children,
+    Widget? indicator,
+    Widget? noDrugsMessage,
+  }) buildContainer;
 
   Widget _buildDrugList(
     BuildContext context,
@@ -46,7 +51,7 @@ class DrugList extends HookWidget {
       searchForDrugClass: searchForDrugClass,
     ).sortedBy((drug) => drug.name);
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
-      return errorIndicator(noDrugsMessage!);
+      return buildContainer(noDrugsMessage: errorIndicator(noDrugsMessage!));
     }
     List<Widget>? activeDrugsList;
     // Do not show repeated active drugs when searching in medication selection
@@ -126,9 +131,18 @@ class DrugList extends HookWidget {
         ],
       if (activeDrugsList == null) ...allDrugsList,
     ];
-    return (buildContainer != null)
-      ? buildContainer!(drugLists)
-      : Column(crossAxisAlignment: CrossAxisAlignment.start, children: drugLists);
+    final indicator = _maybeBuildDrugListIndicator(
+      context: context,
+      drugs: drugs,
+      filter: filter,
+      activeDrugs: activeDrugs,
+      otherDrugsExpanded: currentlyExpanded,
+      currentlyEnabled: currentlyEnabled,
+    );
+    return buildContainer(
+      children: drugLists,
+      indicator: indicator,
+    );
   }
 
   @override
@@ -143,5 +157,45 @@ class DrugList extends HookWidget {
       },
       loading: loadingIndicator,
    );
+  }
+
+  Widget _maybeBuildDrugListIndicator({
+    required BuildContext context,
+    required List<Drug> drugs,
+    required FilterState filter,
+    required ActiveDrugs activeDrugs,
+    required bool otherDrugsExpanded,
+    required bool currentlyEnabled,
+  }) {
+    var indicatorText = '';
+    if (currentlyEnabled && !otherDrugsExpanded) {
+      final listHelperText = context.l10n.show_all_dropdown_text(
+        context.l10n.drugs_show_all_dropdown_item,
+        context.l10n.drugs_show_all_dropdown_items,
+      );
+      indicatorText = listHelperText;
+    }
+    if (showDrugInteractionIndicator) {
+    final filteredDrugs = filter.filter(
+      drugs,
+      activeDrugs,
+      searchForDrugClass: searchForDrugClass,
+    );
+    if (filteredDrugs.any((drug) => isInhibitor(drug.name))) {
+      final inhibitorText = context.l10n.search_page_indicator_explanation(
+        drugInteractionIndicatorName,
+        drugInteractionIndicator
+      );
+      if (indicatorText.isNotBlank) {
+        indicatorText = '$indicatorText\n\n$inhibitorText';
+      } else {
+        indicatorText = inhibitorText;
+      }
+    }
+  }
+  if (indicatorText.isNotBlank) {
+    return PageIndicatorExplanation(indicatorText);
+  }
+  return SizedBox.shrink();
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../../common/module.dart';
 import '../../../drug/widgets/tooltip_icon.dart';
 
+// TODO(tamslo): https://github.com/hpi-dhc/PharMe/issues/731
 class DrugSearch extends HookWidget {
   const DrugSearch({
     super.key,
@@ -31,33 +32,33 @@ class DrugSearch extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(PharMeTheme.smallSpace),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _buildSearchBarItems(context, searchController),
-          ),
+    return DrugList(
+      state: state,
+      activeDrugs: activeDrugs,
+      buildDrugItems: buildDrugItems,
+      showDrugInteractionIndicator: showDrugInteractionIndicator,
+      noDrugsMessage: context.l10n.search_no_drugs(
+        showFilter
+          ? context.l10n.search_no_drugs_with_filter_amendment
+          : ''
+      ),
+      searchForDrugClass: searchForDrugClass,
+      buildContainer:
+        ({children, indicator, noDrugsMessage}) => Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(PharMeTheme.smallSpace),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: _buildSearchBarItems(context, searchController),
+              ),
+            ),
+            if (children != null) scrollList(keepPosition: keepPosition, children),
+            if (noDrugsMessage != null) noDrugsMessage,
+            if (indicator != null) indicator,
+          ],
         ),
-        DrugList(
-          state: state,
-          activeDrugs: activeDrugs,
-          buildDrugItems: buildDrugItems,
-          showDrugInteractionIndicator: showDrugInteractionIndicator,
-          noDrugsMessage: context.l10n.search_no_drugs(
-            showFilter
-              ? context.l10n.search_no_drugs_with_filter_amendment
-              : ''
-          ),
-          searchForDrugClass: searchForDrugClass,
-          buildContainer:
-            (children) => scrollList(keepPosition: keepPosition, children),
-          drugActivityChangeable: drugActivityChangeable,
-        ),
-        _maybeBuildInteractionIndicator(context, state, activeDrugs)
-          ?? SizedBox.shrink(),
-      ],
+      drugActivityChangeable: drugActivityChangeable,
     );
   }
 
@@ -91,32 +92,5 @@ class DrugSearch extends HookWidget {
         ),
       ],
     ];
-  }
-
-  Widget? _maybeBuildInteractionIndicator(
-    BuildContext context,
-    DrugListState state,
-    ActiveDrugs activeDrugs,
-  ) {
-    return state.whenOrNull(
-      loaded: (drugs, filter) {
-        if (showDrugInteractionIndicator) {
-          final filteredDrugs = filter.filter(
-            drugs,
-            activeDrugs,
-            searchForDrugClass: searchForDrugClass,
-          );
-          if (filteredDrugs.any((drug) => isInhibitor(drug.name))) {
-            return PageIndicatorExplanation(
-              context.l10n.search_page_indicator_explanation(
-                drugInteractionIndicatorName,
-                drugInteractionIndicator
-              ),
-            );
-          }
-        }
-        return null;
-      }
-    );
   }
 }

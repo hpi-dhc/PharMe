@@ -20,74 +20,80 @@ class GenePage extends HookWidget {
       builder: (context, activeDrugs, child) => BlocProvider(
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(
-          builder: (context, state) => pageScaffold(
+          builder: (context, state) => unscrollablePageScaffold(
             title:
               context.l10n.gene_page_headline(genotypeResult.geneDisplayString),
-            body: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: PharMeTheme.smallToMediumSpace,
-                  vertical: PharMeTheme.mediumSpace
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            body: DrugList(
+              state: state,
+              activeDrugs: activeDrugs,
+              noDrugsMessage: context.l10n.gene_page_no_relevant_drugs,
+              buildContainer: ({children, indicator, noDrugsMessage}) =>
+                Column(
                   children: [
-                    SubHeader(
-                      context.l10n.gene_page_your_result(
-                        genotypeResult.geneDisplayString,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: PharMeTheme.smallToMediumSpace,
+                        vertical: PharMeTheme.mediumSpace
                       ),
-                      tooltip: context.l10n
-                          .gene_page_name_tooltip(
-                            genotypeResult.gene,
-                          ),
-                    ),
-                    SizedBox(height: PharMeTheme.smallToMediumSpace),
-                    RoundedCard(
-                      radius: PharMeTheme.mediumSpace,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Table(
-                            columnWidths: Map.from({
-                              0: IntrinsicColumnWidth(),
-                              1: IntrinsicColumnWidth(flex: 1),
-                            }),
-                            children: [
-                              _buildRow(
-                                  context.l10n.gene_page_genotype,
-                                  genotypeResult.variantDisplayString(context),
-                                  tooltip: context.l10n.gene_page_genotype_tooltip
-                              ),
-                              _buildPhenotypeRow(context),
-                            ],
-                          ),
-                          if (isInhibited(genotypeResult, drug: null)) ...[
-                            SizedBox(height: PharMeTheme.smallSpace),
-                            buildDrugInteractionInfo(
-                              context,
-                              [genotypeResult],
-                              drug: null,
+                          SubHeader(
+                            context.l10n.gene_page_your_result(
+                              genotypeResult.geneDisplayString,
                             ),
-                          ]
-                      ],
-                    )),
-                    SizedBox(height: PharMeTheme.smallToMediumSpace),
-                    SubHeader(
-                      context.l10n.gene_page_relevant_drugs,
-                      tooltip: context.l10n.gene_page_relevant_drugs_tooltip(
-                        genotypeResult.geneDisplayString
+                            tooltip: context.l10n
+                                .gene_page_name_tooltip(
+                                  genotypeResult.gene,
+                                ),
+                          ),
+                          SizedBox(height: PharMeTheme.smallToMediumSpace),
+                          RoundedCard(
+                            radius: PharMeTheme.mediumSpace,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Table(
+                                  columnWidths: Map.from({
+                                    0: IntrinsicColumnWidth(),
+                                    1: IntrinsicColumnWidth(flex: 1),
+                                  }),
+                                  children: [
+                                    _buildRow(
+                                        context.l10n.gene_page_genotype,
+                                        genotypeResult.variantDisplayString(context),
+                                        tooltip: context.l10n.gene_page_genotype_tooltip
+                                    ),
+                                    _buildPhenotypeRow(context),
+                                  ],
+                                ),
+                                if (isInhibited(genotypeResult, drug: null)) ...[
+                                  SizedBox(height: PharMeTheme.smallSpace),
+                                  buildDrugInteractionInfo(
+                                    context,
+                                    [genotypeResult],
+                                    drug: null,
+                                  ),
+                                ]
+                            ],
+                          )),
+                          SizedBox(height: PharMeTheme.smallToMediumSpace),
+                          SubHeader(
+                            context.l10n.gene_page_relevant_drugs,
+                            tooltip: context.l10n.gene_page_relevant_drugs_tooltip(
+                              genotypeResult.geneDisplayString
+                            ),
+                          ),
+                          SizedBox(height: PharMeTheme.smallSpace),
+                        ],
                       ),
                     ),
-                    SizedBox(height: PharMeTheme.smallSpace),
-                    DrugList(
-                      state: state,
-                      activeDrugs: activeDrugs,
-                      noDrugsMessage: context.l10n.gene_page_no_relevant_drugs,
-                    ),
-                  ],
+                    if (children != null) scrollList(children),
+                    if (noDrugsMessage != null) noDrugsMessage,
+                    if (indicator != null) indicator,
+                  ]
                 ),
-              ),
-            ],
+            ),
           ),
         ),
       )
