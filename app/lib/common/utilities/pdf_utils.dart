@@ -145,12 +145,14 @@ String? _getPhenoconversionInfo(Drug drug, BuildContext context) {
   final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
     UserData.instance.genotypeResults![genotypeKey]!
   ).toList();
-  return '$drugInteractionIndicator ${inhibitionTooltipText(
+  final tooltipText = inhibitionTooltipText(
     context,
     genotypeResults,
     drug: drug.name,
     userFacing: false,
-  )}';
+  );
+  if (tooltipText.isBlank) return null;
+  return '$drugInteractionIndicator $tooltipText';
 }
 
 String? _getActivityScoreInfo(
