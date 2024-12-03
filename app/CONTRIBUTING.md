@@ -118,6 +118,8 @@ flutter pub run flutter_launcher_icons:main
 
 This will generate icons for both iOS as well as Android.
 
+Another option is to use, e.g., <https://easyappicon.com/>.
+
 ## Updating screencast and screenshots
 
 🙅 _Not working yet due to login redirect, but keeping script for Sinai_
