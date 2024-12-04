@@ -26,6 +26,11 @@ class ListOption {
   final List<String>? drugSubset;
 }
 
+enum SortOption {
+  alphabetical,
+  warningSeverity,
+}
+
 @RoutePage()
 class ReportPage extends HookWidget {
   const ReportPage({@visibleForTesting this.onlyShowWholeReport = false});
@@ -36,9 +41,16 @@ class ReportPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final currentListOption = useState(0);
+    // Not used yet, but could be adaptable in the future
+    final currentSortOption = useState(SortOption.alphabetical);
     return Consumer<ActiveDrugs>(
       builder: (context, activeDrugs, child) =>
-        _buildReportPage(context, activeDrugs, currentListOption)
+        _buildReportPage(
+          context,
+          activeDrugs,
+          currentListOption,
+          currentSortOption,
+        )
     );
   }
 
@@ -75,7 +87,10 @@ class ReportPage extends HookWidget {
       : UserData.instance.genotypeResults!.values;
   }
 
-  List<Widget> _buildGeneCards({ List<String>? drugsToFilterBy }) {
+  List<Widget> _buildGeneCards({
+    required SortOption currentSortOption,
+    List<String>? drugsToFilterBy,
+  }) {
     final userGenotypes = _getRelevantGenotypes(drugsToFilterBy);
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
@@ -94,18 +109,20 @@ class ReportPage extends HookWidget {
     var sortedGenotypes = userGenotypes.sortedBy(
       (genotypeResult) => genotypeResult.key.value
     );
-    final sortedWarningLevelSeverities = Set<int>.from(
-      WarningLevel.values
-      .sortedBy((warningLevel) => warningLevel.severity)
-      .map((warningLevel) => warningLevel.severity)
-     );
-    for (final severity in sortedWarningLevelSeverities) {
-      sortedGenotypes = sortedGenotypes.sortedByDescending((genotypeResult) =>
-        _getSeverityCount(
-          warningLevelCounts[genotypeResult.key.value]!,
-          severity,
-        ),
+    if (currentSortOption == SortOption.warningSeverity) {
+      final sortedWarningLevelSeverities = Set<int>.from(
+        WarningLevel.values
+        .sortedBy((warningLevel) => warningLevel.severity)
+        .map((warningLevel) => warningLevel.severity)
       );
+      for (final severity in sortedWarningLevelSeverities) {
+        sortedGenotypes = sortedGenotypes.sortedByDescending((genotypeResult) =>
+          _getSeverityCount(
+            warningLevelCounts[genotypeResult.key.value]!,
+            severity,
+          ),
+        );
+      }
     }
     return sortedGenotypes.map((genotypeResult) =>
       GeneCard(
@@ -158,6 +175,7 @@ class ReportPage extends HookWidget {
     BuildContext context,
     ActiveDrugs activeDrugs,
     ValueNotifier<int> currentListOptionIndex,
+    ValueNotifier<SortOption> currentSortOption,
   ) {
     final listOptions = onlyShowWholeReport
       ? [ListOption(label: context.l10n.report_all_medications)]
@@ -170,6 +188,7 @@ class ReportPage extends HookWidget {
       ];
     final currentListOption = listOptions[currentListOptionIndex.value];
     final geneCards = _buildGeneCards(
+      currentSortOption: currentSortOption.value,
       drugsToFilterBy: currentListOption.drugSubset,
     );
     final relevantGenes = _getRelevantGenotypes(currentListOption.drugSubset);
@@ -217,6 +236,7 @@ class ReportPage extends HookWidget {
                         context,
                         _buildGeneCards(
                           drugsToFilterBy: listOption.drugSubset,
+                          currentSortOption: currentSortOption.value,
                         ).length
                       ),
                     ),
