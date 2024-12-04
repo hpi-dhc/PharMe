@@ -169,29 +169,15 @@ needs to be adapted (see
 ## Adapting test data
 
 If you would like to test with specific test data but you don't have a user with
-suitable data available, adapt the code in `utilities/genome_data.dart` as
-shown below.
+suitable data available, adapt the code that gets the lab results as shown below.
 
 ```dart
 // TODO(after-testing): remove test data adaption
-  UserData.instance.labData = UserData.instance.labData!.filter(
-    (labResult) => labResult.gene != 'UGT1A1'
-  ).toList();
-  UserData.instance.labData!.add(LabResult(
-    gene: 'UGT1A1',
-    variant: '*28/*28',
-    phenotype: 'Poor Metabolizer',
-    allelesTested: '',
-  ));
-  UserData.instance.labData = UserData.instance.labData!.filter(
-    (labResult) => labResult.gene != 'HLA-B' && labResult.variant != '*57:01 negative'
-  ).toList();
-  UserData.instance.labData!.add(LabResult(
-    gene: 'HLA-B',
-    variant: '*57:01 positive',
-    phenotype: '*57:01 positive',
-    allelesTested: '',
-  ));
+var labResults = json.map<LabResult>(LabResult.fromJson).toList();
+final cyp2c19Result = labResults.firstWhere((labResult) => labResult.gene == "CYP2C19");
+labResults = labResults.filter((labResult) => labResult.gene != "CYP2C19").toList();
+labResults = [...labResults, LabResult(gene: "CYP2C19", variant: "*2/*2", phenotype: "Poor Metabolizer", allelesTested: cyp2c19Result.allelesTested)];
+return labResults;
 ```
 
 You can use the CPIC API to get reasonable genotype-phenotype pairings, e.g.,
