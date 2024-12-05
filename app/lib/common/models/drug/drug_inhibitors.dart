@@ -166,16 +166,22 @@ Widget _drugInteractionTemplate(
   String tooltipText,
   _DisplayConfig displayConfig,
 ) {
-  return buildTable([
-    TableRowDefinition(
-      drugInteractionIndicator,
-      context.l10n.inhibitor_message(
-        displayConfig.userSalutation,
-        displayConfig.userGenitive,
-      ),
-      tooltip: tooltipText,
-    )],
-    boldHeader: false,
+  return PrettyExpansionTile(
+    title: buildTable([
+      TableRowDefinition(
+        drugInteractionIndicator,
+        context.l10n.inhibitor_message(
+          displayConfig.userSalutation,
+          displayConfig.userGenitive,
+        ),
+      )],
+      boldHeader: false,
+    ),
+    titlePadding: EdgeInsets.zero,
+    childrenPadding: EdgeInsets.all(PharMeTheme.smallSpace),
+    children: [
+      Text(tooltipText),
+    ],
   );
 }
 
