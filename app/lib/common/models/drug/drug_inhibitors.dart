@@ -35,13 +35,8 @@ const Map<String, Map<String, double>> moderateDrugInhibitors = {
 
 // Private helper functions
 
-final _inhibitableGenes = List<String>.from(<String>{
-  ...strongDrugInhibitors.keys,
-  ...moderateDrugInhibitors.keys,
-});
-
 final _drugInhibitorsPerGene = {
-  for (final gene in _inhibitableGenes) gene: [
+  for (final gene in inhibitableGenes) gene: [
     ...?strongDrugInhibitors[gene]?.keys,
     ...?moderateDrugInhibitors[gene]?.keys,
   ]
@@ -196,6 +191,11 @@ List<String> _activeInhibitorsFor(String gene, { required String? drug }) {
 }
 
 // Public helper functions
+
+final inhibitableGenes = List<String>.from(<String>{
+  ...strongDrugInhibitors.keys,
+  ...moderateDrugInhibitors.keys,
+});
 
 bool isInhibitor(String drugName) {
   var drugIsInhibitor = false;

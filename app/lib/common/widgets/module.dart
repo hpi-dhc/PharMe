@@ -14,6 +14,7 @@ export 'drug_search/drug_filters.dart';
 export 'drug_search/filter_data_wrapper.dart';
 export 'error_handler.dart';
 export 'full_width_button.dart';
+export 'gene_modulator_list.dart';
 export 'headings.dart';
 export 'hyperlink.dart';
 export 'indicators.dart';

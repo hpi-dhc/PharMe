@@ -587,24 +587,6 @@
   "@faq_question_phenoconversion": {},
   "faq_answer_phenoconversion": "Certain medications can change your phenotype that describes how your body responds to medications. Typically, medications either inhibit or induce the activity of a gene. In PharMe, the following interactions are included:",
   "@faq_answer_phenoconversion": {},
-  "faq_strong_inhibitors": "Strong {geneName} inhibitors:",
-  "@faq_strong_inhibitors": {
-    "placeholders": {
-      "geneName": {
-        "type": "String",
-        "example": "CYP2D6"
-      }
-    }
-  },
-  "faq_moderate_inhibitors": "Moderate {geneName} inhibitors:",
-  "@faq_moderate_inhibitors": {
-    "placeholders": {
-      "geneName": {
-        "type": "String",
-        "example": "CYP2D6"
-      }
-    }
-  },
   "faq_question_family": "Will my results affect my family members?",
   "@faq_question_family": {},
   "faq_answer_family": "Yes, since this is a genetic test, it is possible that your results were passed down to you and your siblings from your parents and you will also pass them down to your children.",
@@ -637,5 +619,24 @@
   "@faq_answer_data_security": {},
 
   "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
-  "@faq_contact_us": {}
+  "@faq_contact_us": {},
+
+  "strong_inhibitors_description": "Strong {geneName} inhibitors:",
+  "@strong_inhibitors_description": {
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
+  "moderate_inhibitors_description": "Moderate {geneName} inhibitors:",
+  "@moderate_inhibitors_description": {
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  }
 }
