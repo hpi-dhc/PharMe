@@ -163,18 +163,15 @@ class GuidelineAnnotationCard extends StatelessWidget {
 
   Widget? _maybeBuildPhenoconversionInformation(BuildContext context) {
     final genotypeResults = _getGenotypeResults();
-    if (
-      genotypeResults != null &&
-      genotypeResults.any(
-        (genotypeResult) => isInhibited(genotypeResult, drug: drug.name)
-      )
-    ) {
+    final inhibitedGenotypes = genotypeResults?.filter(
+      (genotypeResult) => isInhibited(genotypeResult, drug: drug.name)
+    ).toList() ?? [];
+    if (inhibitedGenotypes.isNotEmpty) {
       return Padding(
         padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
-        child: buildDrugInteractionInfo(
-          context,
-          genotypeResults,
-          drug: drug.name,
+        child: PhenoconversionExplanation(
+          inhibitedGenotypes: inhibitedGenotypes,
+          drugName: drug.name,
         ),
       );
     }

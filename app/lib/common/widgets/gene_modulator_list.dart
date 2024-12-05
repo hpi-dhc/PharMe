@@ -1,18 +1,28 @@
 import '../module.dart';
 
 class GeneModulatorList extends StatelessWidget {
-  const GeneModulatorList({super.key, required this.geneName, this.drugNames});
+  const GeneModulatorList({
+    super.key,
+    required this.geneName,
+    this.onlyActiveDrugs = false,
+    this.displayedDrug,
+  });
 
   final String geneName;
-  final List<String>? drugNames;
+  final bool onlyActiveDrugs;
+  final String? displayedDrug;
 
   List<String> _getModulatorDrugNames(
     Map<String, Map<String, dynamic>>modulatorDefinition,
     String geneName,
   ) {
     final allModulatorDrugs = modulatorDefinition[geneName]!.keys.toList();
-    if (drugNames != null) {
-      return allModulatorDrugs.filter(drugNames!.contains).toList();
+    if (onlyActiveDrugs) {
+      final activeModulators = activeInhibitorsFor(
+        geneName,
+        drug: displayedDrug,
+      );
+      return allModulatorDrugs.filter(activeModulators.contains).toList();
     }
     return allModulatorDrugs;
   }

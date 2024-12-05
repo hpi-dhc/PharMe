@@ -74,10 +74,9 @@ class GenePage extends HookWidget {
                                 ),
                                 if (isInhibited(genotypeResult, drug: null)) ...[
                                   SizedBox(height: PharMeTheme.smallSpace),
-                                  buildDrugInteractionInfo(
-                                    context,
-                                    [genotypeResult],
-                                    drug: null,
+                                  PhenoconversionExplanation(
+                                    inhibitedGenotypes: [genotypeResult],
+                                    drugName: null,
                                   ),
                                 ]
                             ],

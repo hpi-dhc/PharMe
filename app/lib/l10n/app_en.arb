@@ -198,15 +198,6 @@
       }
     }
   },
-  "inhibitors_tooltip": "Current interacting medications: {inhibitors}.",
-  "@inhibitors_tooltip": {
-    "placeholders": {
-      "inhibitors": {
-        "type": "String",
-        "example": "bupropion"
-      }
-    }
-  },
   "consult_text": "Consult your pharmacist or doctor for more information.",
   "@consult_text": {},
 
