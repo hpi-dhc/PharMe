@@ -195,16 +195,26 @@ extension CriticalDrugs on List<Drug> {
 
 List<String> getDrugsWithBrandNames(
   List<String>? drugNames,
-  { bool capitalize = false }
+  {
+    bool capitalize = false,
+    String? brandNamesPrefix,
+  }
 ) {
   return drugNames?.map(
-    (drugName) => _getDrugWithBrandNames(drugName, capitalize: capitalize)
+    (drugName) => _getDrugWithBrandNames(
+      drugName,
+      capitalize: capitalize,
+      brandNamesPrefix: brandNamesPrefix,
+    )
   ).toList() ?? [];
 }
 
 String _getDrugWithBrandNames(
   String drugName,
-  { required bool capitalize }
+  {
+    bool capitalize = false,
+    String? brandNamesPrefix,
+  }
 ) {
   final drug = DrugsWithGuidelines.instance.drugs?.firstOrNullWhere(
     (drug) => drug.name == drugName
@@ -213,5 +223,8 @@ String _getDrugWithBrandNames(
   if (drug == null || drug.annotations.brandNames.isEmpty) {
     return displayedDrugName;
   }
-  return '$displayedDrugName (${drug.annotations.brandNames.join(', ')})';
+  final branNamesString = drug.annotations.brandNames.join(', ');
+  return brandNamesPrefix != null
+    ? '$displayedDrugName ($brandNamesPrefix: $branNamesString)'
+    : '$displayedDrugName ($branNamesString)';
 }

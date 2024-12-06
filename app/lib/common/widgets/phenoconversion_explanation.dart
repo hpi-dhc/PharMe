@@ -90,8 +90,16 @@ String? getPhenoconversionExplanationString({
 }) {
   final displayConfig = displayType.getConfig(context);
   return inhibitedGenotypes.flatMap((genotypeResult) => [
-    _getPhenoconversionDetailText(context, genotypeResult, drug: drugName, displayConfig: displayConfig),
-    // TODO: get list
+    _getPhenoconversionDetailText(
+      context,
+      genotypeResult, drug: drugName,
+      displayConfig: displayConfig,
+    ),
+    GeneModulatorList(
+      geneName: genotypeResult.gene,
+      onlyActiveDrugs: true,
+      displayedDrug: drugName,
+    ).asString(context, linePrefix: '  '),
   ]).join(displayConfig.partSeparator);
 }
 
@@ -135,7 +143,7 @@ class PhenoconversionExplanation extends StatelessWidget {
             geneName: genotypeResult.gene,
             onlyActiveDrugs: true,
             displayedDrug: drugName,
-          ),
+          ).widget,
         ]
       ).toList(),
     );

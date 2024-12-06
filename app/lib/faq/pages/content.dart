@@ -70,7 +70,7 @@ final faqContent = <FaqSection>[
           children: [
             Text(context.l10n.faq_answer_phenoconversion),
             ...inhibitableGenes.map(
-              (geneName) => GeneModulatorList(geneName: geneName),
+              (geneName) => GeneModulatorList(geneName: geneName).widget,
             ),
           ],
         ),
