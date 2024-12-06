@@ -47,7 +47,7 @@ class GeneModulatorList {
         _getModulatorDrugNames(context, modulatorDefinition, geneName);
       if (drugNames.isEmpty) continue;
       final getDescription = subdefinition.key;
-      content[getDescription(geneName)] = drugNames;
+      content[getDescription(drugNames.length, geneName)] = drugNames;
     }
     return content;
   }

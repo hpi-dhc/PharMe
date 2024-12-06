@@ -612,18 +612,26 @@
   "faq_contact_us": "Do you have unanswered questions or feedback? Contact us",
   "@faq_contact_us": {},
 
-  "strong_inhibitors_description": "Strong {geneName} inhibitors:",
+  "strong_inhibitors_description": "{inhibitorNumber, plural, =1{Strong {geneName} inhibitor:} other{Strong {geneName} inhibitors:}}",
   "@strong_inhibitors_description": {
     "placeholders": {
+      "inhibitorNumber": {
+        "type": "int",
+        "example": "2"
+      },
       "geneName": {
         "type": "String",
         "example": "CYP2D6"
       }
     }
   },
-  "moderate_inhibitors_description": "Moderate {geneName} inhibitors:",
+  "moderate_inhibitors_description": "{inhibitorNumber, plural, =1{Moderate {geneName} inhibitor:} other{Moderate {geneName} inhibitors:}}",
   "@moderate_inhibitors_description": {
     "placeholders": {
+      "inhibitorNumber": {
+        "type": "int",
+        "example": "2"
+      },
       "geneName": {
         "type": "String",
         "example": "CYP2D6"
