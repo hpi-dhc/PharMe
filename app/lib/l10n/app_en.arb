@@ -133,17 +133,21 @@
   "@drugs_page_disclaimer_description": {},
   "drugs_page_disclaimer_text_part_0": "Never stop taking or change the dose of your medications without consulting your pharmacist or doctor.",
   "@drugs_page_disclaimer_text_part_0": {},
-  "drugs_page_is_inhibitor": "Taking {drugName} can interact with your results for the following gene(s): {genes}",
+  "drugs_page_is_inhibitor": "{geneNumber, plural, =1{Taking {drugName} can interact with your results for the following gene: {genes}} other{Taking {drugName} can interact with your results for the following genes: {genes}}}",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
-        "drugName": {
-            "type": "String",
-            "example": "bupropion"
-        },
-        "genes": {
+      "geneNumber": {
+        "type": "int",
+        "example": "1"
+      },
+      "drugName": {
           "type": "String",
-          "example": "CYP2D6, CYP2C19"
-        }
+          "example": "bupropion"
+      },
+      "genes": {
+        "type": "String",
+        "example": "CYP2D6, CYP2C19"
+      }
     }
   },
 

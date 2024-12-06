@@ -20,33 +20,15 @@ class DrugAnnotationCards extends StatelessWidget {
       children: [
         RoundedCard(
           innerPadding: EdgeInsets.symmetric(horizontal: PharMeTheme.mediumSpace),
-          child: Column(
-            children: [
-              buildDrugActivitySelection(
-                context: context,
-                drug: drug,
-                setActivity: setActivity,
-                title: context.l10n.drugs_page_text_active,
-                isActive: isActive,
-                disabled: disabled,
-                contentPadding: EdgeInsets.zero,
-              ),
-              if (isInhibitor(drug.name)) ...[
-                SizedBox(height: PharMeTheme.smallSpace),
-                buildTable(
-                  [TableRowDefinition(
-                    drugInteractionIndicator,
-                    context.l10n.drugs_page_is_inhibitor(
-                      drug.name,
-                      inhibitedGenes(drug).join(', '),
-                    ),
-                  )],
-                  boldHeader: false,
-                ),
-                SizedBox(height: PharMeTheme.mediumSpace),
-              ],
-            ],
-          )
+          child: buildDrugActivitySelection(
+            context: context,
+            drug: drug,
+            setActivity: setActivity,
+            title: context.l10n.drugs_page_text_active,
+            isActive: isActive,
+            disabled: disabled,
+            contentPadding: EdgeInsets.zero,
+          ),
         ),
         SizedBox(height: PharMeTheme.smallSpace),
         PrettyExpansionTile(

@@ -32,7 +32,7 @@ class DrugPage extends StatelessWidget {
   }
 
   Widget _buildDrugsPage(BuildContext context, { required bool loading }) {
-    return pageScaffold(
+    return unscrollablePageScaffold(
       title: isInhibitor(drug.name)
         ? '${drug.name.capitalize()}$drugInteractionIndicator'
         : drug.name.capitalize(),
@@ -47,24 +47,38 @@ class DrugPage extends StatelessWidget {
           ),
         )
       ],
-      body: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DrugAnnotationCards(
-                drug,
-                isActive: drug.isActive,
-                setActivity: context.read<DrugCubit>().setActivity,
-                disabled: loading,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+                child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DrugAnnotationCards(
+                      drug,
+                      isActive: drug.isActive,
+                      setActivity: context.read<DrugCubit>().setActivity,
+                      disabled: loading,
+                    ),
+                    SizedBox(height: PharMeTheme.mediumSpace),
+                    GuidelineAnnotationCard(drug),
+                  ],
+                ),
               ),
-              SizedBox(height: PharMeTheme.mediumSpace),
-              GuidelineAnnotationCard(drug),
-            ],
+            ),
           ),
-        ),
-      ],
+          if (isInhibitor(drug.name)) PageIndicatorExplanation(
+            context.l10n.drugs_page_is_inhibitor(
+              inhibitedGenes(drug).length,
+              drug.name,
+              inhibitedGenes(drug).join(', '),
+            ),
+            indicator: drugInteractionIndicator,
+          ), 
+        ],
+      ),
     );
   }
 }
