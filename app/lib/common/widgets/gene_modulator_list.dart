@@ -52,7 +52,7 @@ class GeneModulatorList {
     return content;
   }
 
-  String asString(BuildContext context, {String linePrefix = ''}) {
+  String asString(BuildContext context) {
     final listString = StringBuffer();
     for (final modulatorContentEntry in getContent(context).entries) {
       final entryString = StringBuffer(modulatorContentEntry.key);
@@ -60,10 +60,10 @@ class GeneModulatorList {
         entryString.write(' ${modulatorContentEntry.value.first}');
       } else {
         for (final drugName in modulatorContentEntry.value) {
-          entryString.write('\n$linePrefix- $drugName');
+          entryString.write('\n- $drugName');
         }
       }
-      listString.write('\n$linePrefix$entryString');
+      listString.write('\n\n$entryString');
     }
     return listString.toString();
   }

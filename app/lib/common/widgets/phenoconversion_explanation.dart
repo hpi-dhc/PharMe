@@ -99,7 +99,7 @@ String? getPhenoconversionExplanationString({
       geneName: genotypeResult.gene,
       onlyActiveDrugs: true,
       displayedDrug: drugName,
-    ).asString(context, linePrefix: '  '),
+    ).asString(context),
   ]).join(displayConfig.partSeparator);
 }
 
