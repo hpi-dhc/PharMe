@@ -1,6 +1,5 @@
 import '../module.dart';
 
-// TODO(tamslo): if only one item, just print label and text afterwards
 class GeneModulatorList {
   const GeneModulatorList({
     required this.geneName,
@@ -57,8 +56,12 @@ class GeneModulatorList {
     final listString = StringBuffer();
     for (final modulatorContentEntry in getContent(context).entries) {
       final entryString = StringBuffer(modulatorContentEntry.key);
-      for (final drugName in modulatorContentEntry.value) {
-        entryString.write('\n$linePrefix- $drugName');
+      if (modulatorContentEntry.value.length == 1) {
+        entryString.write(' ${modulatorContentEntry.value.first}');
+      } else {
+        for (final drugName in modulatorContentEntry.value) {
+          entryString.write('\n$linePrefix- $drugName');
+        }
       }
       listString.write('\n$linePrefix$entryString');
     }
@@ -73,17 +76,29 @@ class GeneModulatorListWidget extends StatelessWidget {
 
   final GeneModulatorList listDefinition;
 
-  List<Widget> _buildModulatorSublist(modulatorContentEntry) {
+  List<Widget> _buildModulatorContent(modulatorContentEntry) {
     final descriptionText = modulatorContentEntry.key;
     final modulatorDrugNames = modulatorContentEntry.value;
     return [
       SizedBox(height: PharMeTheme.smallSpace),
-      Text(
-        descriptionText,
-        style: TextStyle(fontStyle: FontStyle.italic),
+      if (modulatorDrugNames.length > 1) ...[
+        Text(
+          descriptionText,
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+        SizedBox(height: PharMeTheme.smallSpace),
+        UnorderedList(modulatorDrugNames),
+      ],
+      if (modulatorDrugNames.length == 1) Text.rich(TextSpan(
+        children: [
+          TextSpan(
+            text: descriptionText,
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+          TextSpan(text: ' '),
+          TextSpan(text: modulatorDrugNames.first),
+        ])
       ),
-      SizedBox(height: PharMeTheme.smallSpace),
-      UnorderedList(modulatorDrugNames),
     ];
   }
 
@@ -93,7 +108,7 @@ class GeneModulatorListWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:
-        modulatorContent.entries.flatMap(_buildModulatorSublist).toList(),
+        modulatorContent.entries.flatMap(_buildModulatorContent).toList(),
     );
   }
 }
