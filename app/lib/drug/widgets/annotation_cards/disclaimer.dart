@@ -29,12 +29,8 @@ class Disclaimer extends StatelessWidget {
           ),
           TextSpan(text: ' '),
           TextSpan(
-            text: context.l10n.drugs_page_disclaimer_description,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(
-            text: context.l10n.drugs_page_disclaimer_text_part_0,
-            style: TextStyle(fontWeight: FontWeight.w500),
+            text: context.l10n.drugs_page_main_disclaimer_text,
+            style: TextStyle(fontWeight: FontWeight.w600),
           ),
           TextSpan(
             children: [
@@ -47,7 +43,7 @@ class Disclaimer extends StatelessWidget {
                 ),
               ),
               TextSpan(text: ' '),
-              TextSpan(text: context.l10n.onboarding_1_disclaimer),
+              TextSpan(text: context.l10n.drugs_page_puzzle_disclaimer_text),
             ],
           )
         ]),

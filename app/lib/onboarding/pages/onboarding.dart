@@ -20,7 +20,7 @@ class OnboardingPage extends HookWidget {
         text: context.l10n.onboarding_1_text,
         color: PharMeTheme.sinaiCyan,
         bottom: DisclaimerCard(
-          text: context.l10n.onboarding_3_disclaimer,
+          text: context.l10n.drugs_page_main_disclaimer_text,
         ),
       ),
       OnboardingSubPage(
@@ -40,7 +40,8 @@ class OnboardingPage extends HookWidget {
         color: PharMeTheme.sinaiPurple,
         bottom: DisclaimerCard(
           icon: FontAwesomeIcons.puzzlePiece,
-          text: context.l10n.onboarding_1_disclaimer,
+          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
+          text: context.l10n.drugs_page_puzzle_disclaimer_text,
         ),
       ),
       OnboardingSubPage(
@@ -50,6 +51,11 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_4_header,
         text: context.l10n.onboarding_4_already_tested_text,
         color: Colors.grey.shade600,
+        bottom: DisclaimerCard(
+          icon: FontAwesomeIcons.pills,
+          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
+          text: context.l10n.onboarding_4_disclaimer,
+        ),
       ),
       OnboardingSubPage(
         availableHeight:
@@ -480,12 +486,14 @@ class DisclaimerCard extends StatelessWidget {
     required this.text,
     this.secondLineText,
     this.onClick,
+    this.iconPadding,
   });
 
   final IconData? icon;
   final String text;
   final String? secondLineText;
   final GestureTapCallback? onClick;
+  final EdgeInsets? iconPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -499,7 +507,10 @@ class DisclaimerCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon ?? Icons.warning_rounded, size: 32),
+            Padding(
+              padding: iconPadding ?? EdgeInsets.zero,
+              child: Icon(icon ?? Icons.warning_rounded, size: 32),
+            ),
             SizedBox(width: PharMeTheme.smallSpace),
             Expanded(
               child: Column(
