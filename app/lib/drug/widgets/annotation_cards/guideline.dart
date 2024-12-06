@@ -125,22 +125,8 @@ class GuidelineAnnotationCard extends StatelessWidget {
       : context.l10n.drugs_page_tooltip_guideline_missing;
   }
 
-  List<GenotypeResult>? _getGenotypeResults() {
-    if (drug.userGuideline == null && drug.guidelines.isEmpty) {
-      return null;
-    }
-    return drug.guidelineGenotypes.map((genotypeKey) =>
-      UserData.instance.genotypeResults![genotypeKey] ??
-        // Should not be null but to be safe
-        GenotypeResult.missingResult(
-          GenotypeKey.extractGene(genotypeKey),
-          variant: GenotypeKey.maybeExtractVariant(genotypeKey),
-        )
-    ).toList();
-  }
-
   Widget _buildPhenotype(BuildContext context) {
-    final genotypeResults = _getGenotypeResults();
+    final genotypeResults = getGenotypeResultsForDrug(drug);
     if (genotypeResults == null) {
       return Text(
         context.l10n.drugs_page_guidelines_empty(drug.name),
@@ -162,20 +148,12 @@ class GuidelineAnnotationCard extends StatelessWidget {
   }
 
   Widget? _maybeBuildPhenoconversionInformation(BuildContext context) {
-    final genotypeResults = _getGenotypeResults();
-    final inhibitedGenotypes = genotypeResults?.filter(
-      (genotypeResult) => isInhibited(genotypeResult, drug: drug.name)
-    ).toList() ?? [];
-    if (inhibitedGenotypes.isNotEmpty) {
-      return Padding(
-        padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
-        child: PhenoconversionExplanation(
-          inhibitedGenotypes: inhibitedGenotypes,
-          drugName: drug.name,
-        ),
-      );
-    }
-    return null;
+    final phenoconversionExplanation = getUserPhenoconversionExplanation(drug);
+    if (phenoconversionExplanation == null) return null;
+    return Padding(
+      padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
+      child: phenoconversionExplanation,
+    );
   }
 
   Widget _buildSourcesSection(BuildContext context) {

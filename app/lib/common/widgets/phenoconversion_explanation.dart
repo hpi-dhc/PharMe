@@ -1,7 +1,7 @@
 import '../module.dart';
 
-class _PhenoconversionDisplayConfig {
-  _PhenoconversionDisplayConfig({
+class PhenoconversionDisplayConfig {
+  PhenoconversionDisplayConfig({
     required this.partSeparator,
     required this.userSalutation,
     required this.userGenitive,
@@ -14,17 +14,81 @@ class _PhenoconversionDisplayConfig {
   final bool useConsult;
 }
 
-String getExpertPhenoconversionExplanation(
-  BuildContext context,
+enum PhenoconversionDisplayType {
+  user,
+  expert 
+}
+
+extension on PhenoconversionDisplayType {
+  PhenoconversionDisplayConfig getConfig(BuildContext context) {
+    switch (this) {
+      case PhenoconversionDisplayType.expert:
+        return PhenoconversionDisplayConfig(
+          partSeparator: ' ',
+          userSalutation: context.l10n.inhibitor_third_person_salutation,
+          userGenitive: context.l10n.inhibitor_third_person_salutation_genitive,
+          useConsult: false,
+        );
+      default:
+        return PhenoconversionDisplayConfig(
+          partSeparator: '\n\n',
+          userSalutation: context.l10n.inhibitor_direct_salutation,
+          userGenitive: context.l10n.inhibitor_direct_salutation_genitive,
+          useConsult: true,
+        );
+    }
+  }
+}
+
+typedef PhenoconversionExplanationBuilder = dynamic Function(
   List<GenotypeResult> inhibitedGenotypes,
   String drugName,
-) {
-  final displayConfig = _PhenoconversionDisplayConfig(
-    partSeparator: ' ',
-    userSalutation: context.l10n.inhibitor_third_person_salutation,
-    userGenitive: context.l10n.inhibitor_third_person_salutation_genitive,
-    useConsult: false,
+  BuildContext? context,
+); 
+
+dynamic _getPhenoconversionExplanation({
+  required Drug drug,
+  required PhenoconversionExplanationBuilder explanationBuilder,
+  BuildContext? context,
+}) {
+  final inhibitedGenotypes = getInhibitedGenotypesForDrug(drug);
+  if (inhibitedGenotypes.isEmpty) return null;
+  return explanationBuilder(inhibitedGenotypes, drug.name, context);
+}
+
+Widget? getUserPhenoconversionExplanation(Drug drug) {
+  return _getPhenoconversionExplanation(
+    drug: drug,
+    explanationBuilder: (inhibitedGenotypes, drugName, _) =>
+      PhenoconversionExplanation(
+        inhibitedGenotypes: inhibitedGenotypes,
+        drugName: drugName,
+        displayType: PhenoconversionDisplayType.user,
+      ),
   );
+}
+
+String? getExpertPhenoconversionExplanation(Drug drug, BuildContext context) {
+  return _getPhenoconversionExplanation(
+    drug: drug,
+    explanationBuilder: (inhibitedGenotypes, drugName, context) =>
+      getPhenoconversionExplanationString(
+        context: context!,
+        inhibitedGenotypes: inhibitedGenotypes,
+        drugName: drugName,
+        displayType: PhenoconversionDisplayType.expert,
+      ),
+    context: context,
+  );
+}
+
+String? getPhenoconversionExplanationString({
+  required BuildContext context,
+  required List<GenotypeResult> inhibitedGenotypes,
+  required String drugName,
+  required PhenoconversionDisplayType displayType,
+}) {
+  final displayConfig = displayType.getConfig(context);
   return inhibitedGenotypes.flatMap((genotypeResult) => [
     _getPhenoconversionDetailText(context, genotypeResult, drug: drugName, displayConfig: displayConfig),
     // TODO: get list
@@ -36,19 +100,16 @@ class PhenoconversionExplanation extends StatelessWidget {
     super.key,
     required this.inhibitedGenotypes,
     required this.drugName,
+    this.displayType = PhenoconversionDisplayType.user,
   });
 
   final List<GenotypeResult> inhibitedGenotypes;
   final String? drugName;
+  final PhenoconversionDisplayType displayType;
 
   @override
   Widget build(BuildContext context) {
-    final displayConfig = _PhenoconversionDisplayConfig(
-      partSeparator: '\n\n',
-      userSalutation: context.l10n.inhibitor_direct_salutation,
-      userGenitive: context.l10n.inhibitor_direct_salutation_genitive,
-      useConsult: true,
-    );
+    final displayConfig = displayType.getConfig(context);
     return PrettyExpansionTile(
       title: buildTable([
         TableRowDefinition(
@@ -86,7 +147,7 @@ String _getPhenoconversionDetailText(
   GenotypeResult genotypeResult,
   {
     required String? drug,
-    required _PhenoconversionDisplayConfig displayConfig,
+    required PhenoconversionDisplayConfig displayConfig,
   })
 {
   final activeInhibitors = activeInhibitorsFor(
