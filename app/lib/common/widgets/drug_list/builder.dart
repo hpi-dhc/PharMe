@@ -9,7 +9,6 @@ typedef DrugItemBuilder = List<Widget> Function(
   }
 );
 
-// TODO(tamslo): https://github.com/hpi-dhc/PharMe/issues/731
 class DrugList extends HookWidget {
   const DrugList({
     super.key,

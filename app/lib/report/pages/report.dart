@@ -134,7 +134,6 @@ class ReportPage extends HookWidget {
     ).toList();
   }
 
-  // TODO(tamslo): https://github.com/hpi-dhc/PharMe/issues/731
   Widget _maybeBuildPageIndicators(
     BuildContext context,
     Iterable<GenotypeResult> relevantGenes,

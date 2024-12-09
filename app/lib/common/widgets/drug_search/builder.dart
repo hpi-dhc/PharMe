@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import '../../../../common/module.dart';
 import '../../../drug/widgets/tooltip_icon.dart';
 
-// TODO(tamslo): https://github.com/hpi-dhc/PharMe/issues/731
 class DrugSearch extends HookWidget {
   const DrugSearch({
     super.key,
