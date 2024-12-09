@@ -172,6 +172,7 @@ class DrugList extends HookWidget {
     if (currentlyEnabled && !otherDrugsExpanded) {
       final listHelperText = context.l10n.show_all_dropdown_text(
         context.l10n.drugs_show_all_dropdown_item,
+        context.l10n.medications_dropdown_position,
         context.l10n.drugs_show_all_dropdown_items,
       );
       indicatorText = listHelperText;

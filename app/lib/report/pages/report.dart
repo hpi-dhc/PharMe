@@ -152,6 +152,7 @@ class ReportPage extends HookWidget {
     if (currentListOption.drugSubset != null) {
       final listHelperText = context.l10n.show_all_dropdown_text(
         context.l10n.report_show_all_dropdown_item,
+        context.l10n.report_dropdown_position,
         context.l10n.report_show_all_dropdown_items,
       );
       indicatorText = listHelperText;

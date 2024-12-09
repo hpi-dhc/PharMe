@@ -37,9 +37,9 @@ class DrugSelectionPage extends HookWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace),
+                    padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
                     child: PageDescription.fromText(
-                      context.l10n.drug_selection_settings_description,
+                      context.l10n.drug_selection_description,
                     ),
                   ),
                   Expanded(child: _buildDrugList(context, state)),

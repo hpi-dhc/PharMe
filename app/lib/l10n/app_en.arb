@@ -55,16 +55,16 @@
   "@drug_selection_continue_warning_title": {},
   "drug_selection_continue_warning": "When you proceed to the next step of the app setup, you will not be able to come back to this page. You can always change your current medications later in the app.",
   "@drug_selection_continue_warning": {},
-  "drug_selection_settings_description": "Review the medications you are currently taking below.",
-  "@drug_selection_settings_description": {},
+  "drug_selection_description": "You can edit below, whether you are currently taking medications that are known to have clinically meaningful interactions with genes.\n\nPlease note that the list may not include all medications you are currently taking.",
+  "@drug_selection_description": {},
   "drug_selection_no_drugs_loaded": "No medications loaded",
   "@drug_selection_no_drugs_loaded": {},
 
   "drug_list_subheader_active_drugs": "Current medications",
   "@drug_list_subheader_active_drugs": {},
-  "drug_list_subheader_all_drugs": "All medications",
+  "drug_list_subheader_all_drugs": "All medications with known gene interactions",
   "@drug_list_subheader_all_drugs": {},
-  "drug_list_subheader_other_drugs": "Other medications",
+  "drug_list_subheader_other_drugs": "Further medications with known gene interactions",
   "@drug_list_subheader_other_drugs": {},
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while logging in",
@@ -105,7 +105,7 @@
   "@search_page_tooltip_search_no_class": {},
   "search_page_filter_label": "Filter by guideline result",
   "@search_page_filter_label": {},
-  "search_page_indicator_explanation": "Taking medications with an {indicatorName} ({indicator}) can interact with your results for other medications",
+  "search_page_indicator_explanation": "Taking medications with an {indicatorName} ({indicator}) can affect how your body processes and responds to certain medications",
   "@search_page_indicator_explanation": {
     "placeholders": {
         "indicatorName": {
@@ -253,7 +253,7 @@
   "drugs_page_recommendation_description": "What to do: ",
   "@drugs_page_recommendation_description": {},
 
-  "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of implicated medications.",
+  "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of associated medications.",
   "@report_content_explanation": {},
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
   "@report_page_faq_tooltip": {},
@@ -285,12 +285,16 @@
       }
     }
   },
-  "show_all_dropdown_text": "Having trouble finding a {item}? Use the dropdown button (▾) to show all {items}.",
+  "show_all_dropdown_text": "Having trouble finding a {item}? Use the dropdown button (▾) {position} to show all {items}.",
   "@show_all_dropdown_text": {
     "placeholders": {
       "item": {
         "type": "String",
         "example": "gene"
+      },
+      "position": {
+        "type": "String",
+        "example": "below the current medications"
       },
       "items": {
         "type": "String",
@@ -298,6 +302,10 @@
       }
     }
   },
+  "report_dropdown_position": "above",
+  "@report_dropdown_position": {},
+  "medications_dropdown_position": "below the current medications",
+  "@medications_dropdown_position": {},
   "report_show_all_dropdown_item": "gene",
   "@report_show_all_dropdown_item": {},
   "report_show_all_dropdown_items": "genes with known medication interactions",
@@ -342,7 +350,7 @@
   "@gene_page_phenotype": {},
   "gene_page_phenotype_tooltip": "The phenotype often describes the gene's activity level or whether a specific variant is present.",
   "@gene_page_phenotype_tooltip": {},
-  "gene_page_relevant_drugs": "Implicated medications",
+  "gene_page_relevant_drugs": "Associated medications",
   "@gene_page_relevant_drugs": {},
   "gene_page_relevant_drugs_tooltip": "The medications listed here are influenced by your {geneDisplayString} result.",
   "@gene_page_relevant_drugs_tooltip": {
