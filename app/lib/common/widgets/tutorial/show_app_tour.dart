@@ -78,6 +78,10 @@ FutureOr<void> showAppTour(
             context.l10n.tutorial_app_tour_5_title,
           content: (context) => _buildContent(
             context.l10n.tutorial_app_tour_5_body,
+            trailingSpan: TextSpan(
+              text: context.l10n.tutorial_app_tour_5_body_bold,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           assetPath:
             'assets/images/tutorial/09_faq_and_more_loopable.gif',
