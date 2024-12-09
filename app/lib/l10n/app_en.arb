@@ -53,7 +53,7 @@
   "@drug_selection_header": {},
   "drug_selection_continue_warning_title": "Confirm proceeding",
   "@drug_selection_continue_warning_title": {},
-  "drug_selection_continue_warning": "When you proceed to the next step of the app setup, you will not be able to come back to this page. You can always change your current medications later in the app.",
+  "drug_selection_continue_warning": "When you proceed to the next step of the app setup, you will not be able to come back to this page.\n\nYou can always change your current medications later in the app.",
   "@drug_selection_continue_warning": {},
   "drug_selection_description": "You can edit below, whether you are currently taking medications that are known to have clinically meaningful interactions with genes.\n\nPlease note that the list may not include all medications you are currently taking.",
   "@drug_selection_description": {},
