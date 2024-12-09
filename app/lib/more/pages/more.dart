@@ -18,7 +18,7 @@ class MorePage extends StatelessWidget {
             useLine: false,
           ),
           _buildSettingsItem(
-            title: context.l10n.drug_selection_header,
+            title: context.l10n.more_page_edit_current_medications,
             onTap: () => context.router.push(
               DrugSelectionRoute(concludesOnboarding: false)
             ),
@@ -31,14 +31,12 @@ class MorePage extends StatelessWidget {
             ),
           ),
           SubheaderDivider(
-            text: context.l10n.more_page_app_information,
+            text: context.l10n.more_page_help_and_feedback,
             useLine: false,
           ),
-          _buildSettingsItem(
-            title: context.l10n.more_page_onboarding,
-            onTap: () =>
-              context.router.push(OnboardingRoute(isRevisiting: true)),
-          ),
+           _buildSettingsItem(
+              title: context.l10n.more_page_contact_us,
+              onTap: () => sendEmail(context)),
           _buildSettingsItem(
             title: context.l10n.more_page_app_tour,
             onTap: () async => showAppTour(
@@ -46,6 +44,18 @@ class MorePage extends StatelessWidget {
               lastNextButtonText: context.l10n.action_back_to_app,
               revisiting: true,
             ),
+          ),
+          _buildSettingsItem(
+            title: context.l10n.more_page_onboarding,
+            onTap: () =>
+              context.router.push(OnboardingRoute(isRevisiting: true)),
+          ),
+          _buildSettingsItem(
+              title: context.l10n.more_page_genetic_information,
+              onTap: openFurtherGeneticInformation),
+          SubheaderDivider(
+            text: context.l10n.more_page_app_information,
+            useLine: false,
           ),
           _buildSettingsItem(
             title: context.l10n.more_page_about_us,
@@ -59,16 +69,6 @@ class MorePage extends StatelessWidget {
             title: context.l10n.more_page_terms_and_conditions,
             onTap: () => context.router.push(TermsRoute()),
           ),
-          SubheaderDivider(
-            text: context.l10n.more_page_help_and_feedback,
-            useLine: false,
-          ),
-          _buildSettingsItem(
-              title: context.l10n.more_page_genetic_information,
-              onTap: openFurtherGeneticInformation),
-          _buildSettingsItem(
-              title: context.l10n.more_page_contact_us,
-              onTap: () => sendEmail(context)),
         ]
       ),
     );
