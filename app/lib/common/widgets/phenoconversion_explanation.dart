@@ -124,8 +124,14 @@ class PhenoconversionExplanation extends StatelessWidget {
           drugInteractionIndicator,
           context.l10n.inhibitor_message(
             displayConfig.userSalutation,
+            enumerationWithAnd(
+              inhibitedGenotypes.map(
+                (genotypeResult) => genotypeResult.gene
+              ).toList(),
+              context,
+            ),
             displayConfig.userGenitive,
-          ),
+          ).capitalize(),
         )],
         boldHeader: false,
       ),
@@ -164,13 +170,14 @@ String _getPhenoconversionDetailText(
   );
   final consequence = activeInhibitors.all(isModerateInhibitor)
     ? context.l10n.inhibitors_consequence_not_adapted(
-        genotypeResult.geneDisplayString,
         displayConfig.userGenitive,
+        genotypeResult.geneDisplayString,
       ).capitalize()
     : context.l10n.inhibitors_consequence_adapted(
+        displayConfig.userGenitive,
         genotypeResult.geneDisplayString,
         genotypeResult.phenotypeDisplayString(context),
-        displayConfig.userGenitive,
+        overwritePhenotype,
       ).capitalize();
   return '$consequence${
     displayConfig.useConsult ? ' ${context.l10n.consult_text}' : ''

@@ -33,7 +33,10 @@ SwitchListTile buildDrugActivitySelection({
         builder: (context) => DialogWrapper(
           title: context.l10n.drugs_page_active_warn_header,
           content: DialogContentText(
-            context.l10n.drugs_page_active_warn,
+            context.l10n.drugs_page_active_warn(
+              drug.name.capitalize(),
+              enumerationWithAnd(inhibitedGenes(drug), context),
+            ),
           ),
           actions: [
             DialogAction(

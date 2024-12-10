@@ -133,20 +133,16 @@
   "@drugs_page_main_disclaimer_text": {},
   "drugs_page_puzzle_disclaimer_text": "The information from PharMe is like one puzzle piece in the big picture of how well a medicine works for you.\n\nThe information provided in this app is based ONLY on your DNA and certain medications that may interact with your genetic result. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
   "@drugs_page_puzzle_disclaimer_text": {},
-  "drugs_page_is_inhibitor": "{geneNumber, plural, =1{Taking {drugName} can interact with your results for the following gene: {genes}} other{Taking {drugName} can interact with your results for the following genes: {genes}}}",
+  "drugs_page_is_inhibitor": "Taking {drugName} will slow down the activity of {genes}. This will affect how your body processes and responds to associated medications.",
   "@drugs_page_is_inhibitor": {
     "placeholders": {
-      "geneNumber": {
-        "type": "int",
-        "example": "1"
-      },
       "drugName": {
           "type": "String",
           "example": "bupropion"
       },
       "genes": {
         "type": "String",
-        "example": "CYP2D6, CYP2C19"
+        "example": "CYP2D6 and CYP2C19"
       }
     }
   },
@@ -159,12 +155,16 @@
   "@inhibitor_third_person_salutation": {},
   "inhibitor_third_person_salutation_genitive": "the user's",
   "@inhibitor_third_person_salutation_genitive": {},
-  "inhibitor_message": "One or more of the medications {salutation} currently taking may interact with {salutationGenitive} genetic result",
+  "inhibitor_message": "{salutation} taking one or more medications that slow down the activity of {geneName}. This will affect how {salutationGenitive} body processes and responds to associated medications.",
   "@inhibitor_message": {
     "placeholders": {
       "salutation": {
         "type": "String",
-        "example": "you"
+        "example": "you are"
+      },
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
       },
       "salutationGenitive": {
         "type": "String",
@@ -172,7 +172,7 @@
       }
     }
   },
-  "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} phenotype was adapted from {originalPhenotype}.",
+  "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} phenotype was changed from “{originalPhenotype}” to “{currentPhenotype}”; this is because you are currently taking one or more strong {geneName} inhibitors (see below).",
   "@inhibitors_consequence_adapted": {
     "placeholders": {
       "salutationGenitive": {
@@ -186,10 +186,14 @@
       "originalPhenotype": {
         "type": "String",
         "example": "Normal Metabolizer"
+      },
+      "currentPhenotype": {
+        "type": "String",
+        "example": "Poor Metabolizer"
       }
     }
   },
-  "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} phenotype was not adapted but may need to be.",
+  "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} phenotype was not adapted but may need to be; this is because your are currently taking one or more moderate {geneName} inhibitors (see below).",
   "@inhibitors_consequence_not_adapted": {
     "placeholders": {
       "salutationGenitive": {
@@ -220,10 +224,21 @@
   "@drugs_page_header_drug": {},
   "drugs_page_text_active": "Current medication",
   "@drugs_page_text_active": {},
-  "drugs_page_active_warn_header": "Are you sure you want to change the medication usage status?",
+  "drugs_page_active_warn_header": "Are you sure you want to change your current medications?",
   "@drugs_page_active_warn_header": {},
-  "drugs_page_active_warn": "This can interact with your results for other medications.",
-  "@drugs_page_active_warn": {},
+  "drugs_page_active_warn": "{drugName} will affect how your body processes and responds to medications associated with {geneName}.\n\nSee {geneName} under “Genes” for a list of all associated medications.",
+  "@drugs_page_active_warn": {
+    "placeholders": {
+      "drugName": {
+        "type": "String",
+        "example": "Mirabegron"
+      },
+      "geneName": {
+        "type": "String",
+        "example": "CYP2D6"
+      }
+    }
+  },
   "drugs_page_header_guideline": "DNA-based clinical guideline",
   "@drugs_page_header_guideline": {},
   "drugs_page_no_guidelines_text": "No pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
@@ -257,7 +272,7 @@
   "@report_content_explanation": {},
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
   "@report_page_faq_tooltip": {},
-  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be adjusted based on interactions with medications you are currently taking",
+  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be adjusted based on interactions with medications you are currently taking.",
   "@report_page_indicator_explanation": {
     "placeholders": {
         "indicatorName": {

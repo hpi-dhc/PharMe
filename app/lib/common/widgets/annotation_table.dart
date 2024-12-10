@@ -70,8 +70,8 @@ TableRow _buildRow(
               WidgetSpan(
                 child: TooltipIcon(tooltip!, size: tooltipSize),
               ),
+              WidgetSpan(child: SizedBox(height: tooltipSize)),
             ],
-            WidgetSpan(child: SizedBox(height: tooltipSize)),
           ],
           style: textStyle,
         ),

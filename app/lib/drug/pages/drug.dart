@@ -71,9 +71,8 @@ class DrugPage extends StatelessWidget {
           ),
           if (isInhibitor(drug.name)) PageIndicatorExplanation(
             context.l10n.drugs_page_is_inhibitor(
-              inhibitedGenes(drug).length,
               drug.name,
-              inhibitedGenes(drug).join(', '),
+              enumerationWithAnd(inhibitedGenes(drug), context),
             ),
             indicator: drugInteractionIndicator,
           ), 
