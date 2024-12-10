@@ -7,6 +7,7 @@ class FaqPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final faqContent = getFaqContent();
     final expandedCards = useState<Map<String, GlobalKey>>({});
     final expandQuestion = useState<String?>(null);
     if (expandQuestion.value != null) {
@@ -38,7 +39,13 @@ class FaqPage extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ...faqContent.flatMap((faqSection) =>
-                  _buildTopic(context, faqSection, expandedCards, expandQuestion)),
+                  _buildTopic(
+                    context,
+                    faqSection,
+                    expandedCards,
+                    expandQuestion,
+                    faqContent,
+                  )),
                 ..._buildTopicHeader(
                   context.l10n.more_page_contact_us,
                   addSpace: true,
@@ -74,6 +81,7 @@ class FaqPage extends HookWidget {
     FaqSection faqSection,
     ValueNotifier<Map<String, GlobalKey>> expandedCards,
     ValueNotifier<String?> expandQuestion,
+    List<FaqSection> faqContent,
   ) {
     final isFirst = faqContent.indexOf(faqSection) == 0;
     return [
