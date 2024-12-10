@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:provider/provider.dart';
 
 import '../../common/module.dart';
@@ -42,7 +44,7 @@ class DrugPage extends StatelessWidget {
           onPressed: loading ? null : () =>
             context.read<DrugCubit>().createAndSharePdf(drug, context),
           icon: Icon(
-            Icons.ios_share_rounded,
+            Platform.isIOS ? Icons.ios_share_rounded : Icons.share_rounded,
             color: PharMeTheme.primaryColor,
           ),
         )
