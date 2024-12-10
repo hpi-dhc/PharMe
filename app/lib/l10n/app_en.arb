@@ -589,7 +589,7 @@
   "@faq_section_title_pgx": {},
   "faq_question_pgx_what": "What is pharmacogenomics?",
   "@faq_question_pgx_what": {},
-  "faq_answer_pgx_what": "Pharmacogenomics (PGx) is the study of how your genes (DNA) affect your response to medications.\n\nYour DNA is the blueprint that tells your body how to make different enzymes. These enzymes play an important role in how your body processes and responds to medications.\n\nSome enzymes help transport medications through your body, while others make medications more or less strong. Depending on the versions of the genes you have, you may make more or less of certain enzymes or they function more or less well.",
+  "faq_answer_pgx_what": "Pharmacogenomics (PGx) is the study of how your genes (DNA) affect your response to medications.\n\nYour DNA is the blueprint that tells your body how to make different enzymes. These enzymes play an important role in how your body processes and responds to medications.\n\nSome enzymes help transport medications through your body, while others make medications more or less strong. Depending on the versions of the genes you have, you may make more or less of certain enzymes, or they function more or less well.",
   "@faq_answer_pgx_what": {},
   "faq_question_pgx_why": "Why is pharmacogenomics important?",
   "@faq_question_pgx_why": {},
