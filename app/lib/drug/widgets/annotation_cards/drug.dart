@@ -19,15 +19,34 @@ class DrugAnnotationCards extends StatelessWidget {
     return Column(
       children: [
         RoundedCard(
-          innerPadding: EdgeInsets.symmetric(horizontal: PharMeTheme.mediumSpace),
-          child: buildDrugActivitySelection(
-            context: context,
-            drug: drug,
-            setActivity: setActivity,
-            title: context.l10n.drugs_page_text_active,
-            isActive: isActive,
-            disabled: disabled,
-            contentPadding: EdgeInsets.zero,
+          innerPadding: EdgeInsets.symmetric(
+            horizontal: PharMeTheme.mediumSpace,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (drug.annotations.brandNames.isNotEmpty) ...[
+                SizedBox(height: PharMeTheme.mediumSpace),
+                buildTable([
+                  TableRowDefinition(
+                    context.l10n.drug_item_brand_names,
+                    drug.annotations.brandNames.join(', '),
+                  ),
+                ]),
+              ],
+              buildDrugActivitySelection(
+                context: context,
+                drug: drug,
+                setActivity: setActivity,
+                title: context.l10n.drugs_page_text_active,
+                titleStyle: PharMeTheme.textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                isActive: isActive,
+                disabled: disabled,
+                contentPadding: EdgeInsets.zero,
+              ),
+            ],
           ),
         ),
         SizedBox(height: PharMeTheme.smallSpace),
@@ -52,11 +71,6 @@ class DrugAnnotationCards extends StatelessWidget {
                         context.l10n.drugs_page_header_drugclass,
                         drug.annotations.drugclass,
                       ),
-                      if (drug.annotations.brandNames.isNotEmpty)
-                        TableRowDefinition(
-                          context.l10n.drug_item_brand_names,
-                          drug.annotations.brandNames.join(', '),
-                        ),
                     ]),
                   ],
                 ),

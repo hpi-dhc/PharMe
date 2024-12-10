@@ -10,6 +10,7 @@ SwitchListTile buildDrugActivitySelection({
   required BuildContext context,
   required Drug drug,
   required String title,
+  TextStyle? titleStyle,
   String? subtitle,
   required SetDrugActivityFunction setActivity,
   required bool isActive,
@@ -23,7 +24,7 @@ SwitchListTile buildDrugActivitySelection({
   inactiveThumbColor: PharMeTheme.surfaceColor,
   inactiveTrackColor: PharMeTheme.borderColor,
   trackOutlineColor: WidgetStatePropertyAll(Colors.transparent),
-  title: Text(title),
+  title: Text(title, style: titleStyle),
   subtitle: subtitle.isNotNullOrBlank ? Text(subtitle!, style: PharMeTheme.textTheme.bodyMedium): null,
   contentPadding: contentPadding,
   onChanged: disabled ? null : (newValue) {
