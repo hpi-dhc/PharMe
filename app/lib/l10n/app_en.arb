@@ -625,7 +625,7 @@
   "@faq_answer_family": {},
   "faq_question_share": "Who can I share my results with?",
   "@faq_question_share": {},
-  "faq_answer_share": "We recommend that you share your results with your pharmacists, doctors, and close family members such as parents, siblings, and children.\n\nTo create a PDF that you can share with a healthcare professional, go to a medication page and use the share button in the upper right corner.",
+  "faq_answer_share": "We recommend that you share your results with your pharmacists, doctors, and close family members such as parents, siblings, and children.\n\nTo create a PDF that you can share with a healthcare professional, go to a medication page, and use the share button in the upper right corner.",
   "@faq_answer_share": {},
   
   "faq_section_title_pharme": "PharMe App",
@@ -636,7 +636,7 @@
   "@faq_answer_pharme_function": {},
   "faq_question_pharme_hcp": "Can I use PharMe's results without consulting a medical professional?",
   "@faq_question_pharme_hcp": {},
-  "faq_answer_pharme_hcp": "No. Whether a medication is a good choice for you depends on a lot of other factors such as age, weight, or pre-existing conditions. We highly recommend that you talk to your health care team (e.g., pharmacist and doctors) before taking, stopping or adjusting the dose of any medication.",
+  "faq_answer_pharme_hcp": "No. Whether a medication is a good choice for you depends on a lot of other factors such as age, weight, or pre-existing conditions. We highly recommend that you talk to your health care team (e.g., pharmacist and doctors) before taking, stopping, or adjusting the dose of any medication.",
   "@faq_answer_pharme_hcp": {},
   "faq_question_pharme_data_source": "Where does PharMe get its data from?",
   "@faq_question_pharme_data_source": {},
