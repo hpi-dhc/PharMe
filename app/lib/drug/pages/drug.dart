@@ -52,7 +52,10 @@ class DrugPage extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
                 child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: PharMeTheme.smallToMediumSpace,
+                  vertical: PharMeTheme.smallSpace,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

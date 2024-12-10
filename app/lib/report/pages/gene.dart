@@ -36,9 +36,11 @@ class GenePage extends HookWidget {
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: PharMeTheme.smallToMediumSpace,
-                        vertical: PharMeTheme.mediumSpace
+                      padding: EdgeInsets.only(
+                        left: PharMeTheme.smallToMediumSpace,
+                        right: PharMeTheme.smallToMediumSpace,
+                        top: PharMeTheme.smallSpace,
+                        bottom: PharMeTheme.smallSpace,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +90,6 @@ class GenePage extends HookWidget {
                               genotypeResult.geneDisplayString
                             ),
                           ),
-                          SizedBox(height: PharMeTheme.smallSpace),
                         ],
                       ),
                     ),

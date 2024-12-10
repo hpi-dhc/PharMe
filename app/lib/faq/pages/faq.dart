@@ -28,12 +28,15 @@ class FaqPage extends HookWidget {
         canNavigateBack: false,
         body: [
           Padding(
-            padding: const EdgeInsets.all(PharMeTheme.smallSpace),
+            padding: const EdgeInsets.only(
+              left: PharMeTheme.smallSpace,
+              right: PharMeTheme.smallSpace,
+              bottom: PharMeTheme.smallSpace,
+            ),
             child: Column(
               key: Key('questionsColumn'),
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: PharMeTheme.smallSpace),
                 ...faqContent.flatMap((faqSection) =>
                   _buildTopic(context, faqSection, expandedCards, expandQuestion)),
                 ..._buildTopicHeader(
