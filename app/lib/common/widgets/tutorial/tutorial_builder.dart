@@ -145,8 +145,13 @@ class TutorialBuilder extends HookWidget {
     ValueNotifier<int> currentPageIndex,
   ) {
     final isFirstPage = currentPageIndex.value == 0;
-    final showFirstButton =
-      !isFirstPage || firstBackButtonText.isNotNullOrBlank;
+    final showFirstButton = !isFirstPage || (
+      firstBackButtonText.isNotNullOrBlank &&
+      context.router.canPop(
+        ignoreChildRoutes: true,
+        ignorePagelessRoutes: true,
+      )
+    );
     final isLastPage = currentPageIndex.value == pages.length - 1;
     final directionButtonTextStyle =
       PharMeTheme.textTheme.titleLarge!.copyWith(fontSize: 20);
@@ -164,7 +169,9 @@ class TutorialBuilder extends HookWidget {
               initiateRouteBack();
               final currentRoute = context.router.current.name;
               context.router.popUntil(
-                (route) => route.settings.name != null && route.settings.name != currentRoute,
+                (route) =>
+                  route.settings.name != null &&
+                  route.settings.name != currentRoute,
               );
             }
             : () => currentPageIndex.value = currentPageIndex.value - 1,

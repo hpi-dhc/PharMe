@@ -90,11 +90,11 @@ FutureOr<void> showAppTour(
       onClose: revisiting
         ? null
         : () async {
-          MetaData.instance.tutorialDone = true;
-          await MetaData.save();
-          // ignore: use_build_context_synchronously
-          await overwriteRoutes(context, nextPage: MainRoute());
-        },
+            MetaData.instance.tutorialDone = true;
+            await MetaData.save();
+            // ignore: use_build_context_synchronously
+            await overwriteRoutes(context, nextPage: MainRoute());
+          },
       lastNextButtonText: lastNextButtonText,
       firstBackButtonText: revisiting ? null : context.l10n.onboarding_prev,
     );
