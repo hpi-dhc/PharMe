@@ -55,7 +55,7 @@
   "@drug_selection_continue_warning_title": {},
   "drug_selection_continue_warning": "When you proceed to the next step of the app setup, you will not be able to come back to this page.\n\nYou can always change your current medications later in the app.",
   "@drug_selection_continue_warning": {},
-  "drug_selection_description": "You can edit below, whether you are currently taking medications that are known to have clinically meaningful interactions with genes.\n\nPlease note that the list may not include all medications you are currently taking.",
+  "drug_selection_description": "You can edit the medications you are currently taking below. \n\nPlease note that the list may not include all medications you are currently taking, ONLY medications that are known to have clinically meaningful interactions with genes are included.",
   "@drug_selection_description": {},
   "drug_selection_no_drugs_loaded": "No medications loaded",
   "@drug_selection_no_drugs_loaded": {},
@@ -120,12 +120,12 @@
   },
   "search_no_drugs_with_filter_amendment": " or filters",
   "@search_no_drugs_with_filter_amendment": {},
-  "search_no_drugs": "No medications found. Try adjusting the search term{amendment}.\n\nIf the medication you are looking for is not included in PharMe, it might not have relevant DNA-based guidelines. Clinical dosing may apply, consult your pharmacist or doctor for more information.",
+  "search_no_drugs": "No medications found that match your search term{amendment}.\n\nThe medication you are looking for might also not be included in PharMe because it does not have relevant DNA-based guidelines.\n\nClinical dosing may apply, consult your pharmacist or doctor for more information.",
   "@search_no_drugs": {
     "placeholders": {
         "amendment": {
             "type": "String",
-            "example": " or filters right to the search bar"
+            "example": " or filters"
         }
     }
   },

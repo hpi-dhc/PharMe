@@ -1,11 +1,17 @@
 import '../module.dart';
 
 Widget loadingIndicator() =>
-    genericIndicator(child: CircularProgressIndicator());
+    genericIndicator(child: CircularProgressIndicator(), verticalPadding: 100);
 Widget errorIndicator(String description) =>
-    genericIndicator(child: Text(description, textAlign: TextAlign.center));
+    genericIndicator(
+      child: Text(description, textAlign: TextAlign.center),
+      verticalPadding: PharMeTheme.mediumToLargeSpace,
+    );
 
-Widget genericIndicator({required Widget child}) => Center(
+Widget genericIndicator({required Widget child, required double verticalPadding}) => Center(
     child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 100, horizontal: 20),
+        padding: EdgeInsets.symmetric(
+          vertical: verticalPadding,
+          horizontal: PharMeTheme.mediumToLargeSpace,
+        ),
         child: child));
