@@ -19,5 +19,6 @@ FutureOr<void> showDrugSelectionIntro(BuildContext context) =>
     onClose: () async {
       MetaData.instance.initialDrugSelectionInitiated = true;
       await MetaData.save();
-    }
+    },
+    firstBackButtonText: context.l10n.onboarding_prev,
   );

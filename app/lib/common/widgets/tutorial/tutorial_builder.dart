@@ -5,11 +5,15 @@ class TutorialBuilder extends HookWidget {
   const TutorialBuilder({
     super.key,
     required this.pages,
+    required this.initiateRouteBack,
     this.lastNextButtonText,
+    this.firstBackButtonText,
   });
 
   final List<TutorialPage> pages;
   final String? lastNextButtonText;
+  final String? firstBackButtonText;
+  final void Function() initiateRouteBack;
 
   Widget getImageAsset(String assetPath) {
     return Container(
@@ -141,20 +145,32 @@ class TutorialBuilder extends HookWidget {
     ValueNotifier<int> currentPageIndex,
   ) {
     final isFirstPage = currentPageIndex.value == 0;
+    final showFirstButton =
+      !isFirstPage || firstBackButtonText.isNotNullOrBlank;
     final isLastPage = currentPageIndex.value == pages.length - 1;
     final directionButtonTextStyle =
       PharMeTheme.textTheme.titleLarge!.copyWith(fontSize: 20);
     const directionButtonIconSize = 22.0;
     return Row(
-      mainAxisAlignment: isFirstPage
-        ? MainAxisAlignment.end
-        : MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: showFirstButton
+        ? MainAxisAlignment.spaceBetween
+        : MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.max,
       children: [
-        if (!isFirstPage) DirectionButton(
+        if (showFirstButton) DirectionButton(
           direction: ButtonDirection.backward,
-          onPressed: () => currentPageIndex.value = currentPageIndex.value - 1,
-          text: context.l10n.onboarding_prev,
+          onPressed: isFirstPage
+            ? () {
+              initiateRouteBack();
+              final currentRoute = context.router.current.name;
+              context.router.popUntil(
+                (route) => route.settings.name != null && route.settings.name != currentRoute,
+              );
+            }
+            : () => currentPageIndex.value = currentPageIndex.value - 1,
+          text: isFirstPage
+            ? firstBackButtonText!
+            : context.l10n.onboarding_prev,
           buttonTextStyle: directionButtonTextStyle,
           iconSize: directionButtonIconSize,
         ),

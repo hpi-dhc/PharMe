@@ -31,7 +31,6 @@ class DrugSelectionPage extends HookWidget {
             }
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
-              canNavigateBack: !concludesOnboarding,
               contextToDismissFocusOnTap: context,
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,28 +65,11 @@ class DrugSelectionPage extends HookWidget {
       child: FullWidthButton(
         context.l10n.action_continue,
         () async {
-          await showAdaptiveDialog(
-            context: context,
-            builder: (context) => DialogWrapper(
-              title: context.l10n.drug_selection_continue_warning_title,
-              content: Text(context.l10n.drug_selection_continue_warning),
-              actions: [
-                DialogAction(
-                  onPressed: context.router.root.maybePop,
-                  text: context.l10n.action_cancel,
-                ),
-                DialogAction(
-                  onPressed: () async {
-                    MetaData.instance.initialDrugSelectionDone = true;
-                    await MetaData.save();
-                    // ignore: use_build_context_synchronously
-                    await overwriteRoutes(context, nextPage: MainRoute());
-                  },
-                  text: context.l10n.action_understood,
-                  isDefault: true,
-                ),
-              ],
-            ),
+          MetaData.instance.initialDrugSelectionDone = true;
+          await MetaData.save();
+          // ignore: use_build_context_synchronously
+          await context.router.push(
+            MainRoute(),
           );
         },
         enabled: _isEditable(state),

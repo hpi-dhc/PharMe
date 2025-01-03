@@ -13,15 +13,20 @@ class TutorialController {
   static TutorialController get instance => _instance;
 
   bool _isOpen = false;
+  bool _wasRoutedBack = false;
+
+  void initiateRouteBack() => _wasRoutedBack = true;
 
   FutureOr<void> showTutorial({
     required BuildContext context,
     required List<TutorialPage> pages,
     String? lastNextButtonText,
+    String? firstBackButtonText,
     FutureOr<void> Function()? onClose,
   }) async {
     if (_isOpen) return null;
     _isOpen = true;
+    _wasRoutedBack = false;
     await showModalBottomSheet(
       context: context,
       enableDrag: true,
@@ -33,9 +38,11 @@ class TutorialController {
       builder: (context) => TutorialBuilder(
         pages: pages,
         lastNextButtonText: lastNextButtonText,
+        firstBackButtonText: firstBackButtonText,
+        initiateRouteBack: initiateRouteBack,
       ),
     );
-    if (onClose != null) await onClose();
     _isOpen = false;
+    if (!_wasRoutedBack && onClose != null) await onClose();
   }
 }
