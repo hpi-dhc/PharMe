@@ -16,8 +16,8 @@ List<GenotypeResult>? getGenotypeResultsForDrug(Drug drug) {
     return null;
   }
   return drug.guidelineGenotypes.map((genotypeKey) =>
-    UserData.instance.genotypeResults![genotypeKey] ??
-      // Should not be null but to be safe
+    // Should not be null but to be safe
+    UserData.instance.genotypeResults?[genotypeKey] ??
       GenotypeResult.missingResult(
         GenotypeKey.extractGene(genotypeKey),
         variant: GenotypeKey.maybeExtractVariant(genotypeKey),

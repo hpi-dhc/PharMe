@@ -77,14 +77,16 @@ class ReportPage extends HookWidget {
     }
   
   Iterable<GenotypeResult> _getRelevantGenotypes(List<String>? drugSubset) {
-    return drugSubset != null
-      ? UserData.instance.genotypeResults!.values.filter((genotypeResult) =>
-          _getAffectedDrugs(
-                genotypeResult.key.value,
-                drugSubset: drugSubset,
-          ).isNotEmpty
-        )
-      : UserData.instance.genotypeResults!.values;
+    return UserData.instance.genotypeResults == null
+      ? []
+      : drugSubset != null
+        ? UserData.instance.genotypeResults!.values.filter((genotypeResult) =>
+            _getAffectedDrugs(
+                  genotypeResult.key.value,
+                  drugSubset: drugSubset,
+            ).isNotEmpty
+          )
+        : UserData.instance.genotypeResults!.values;
   }
 
   List<Widget> _buildGeneCards({
