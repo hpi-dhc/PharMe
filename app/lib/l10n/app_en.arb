@@ -8,6 +8,8 @@
   "@action_understood": {},
   "action_back_to_app": "Back to app",
   "@action_back_to_app": {},
+  "action_proceed_to_app": "Proceed to app",
+  "@action_proceed_to_app": {},
   "action_finish": "Finish",
   "@action_finish": {},
 

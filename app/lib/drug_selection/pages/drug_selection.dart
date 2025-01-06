@@ -64,7 +64,7 @@ class DrugSelectionPage extends HookWidget {
     return Padding(
       padding: EdgeInsets.all(PharMeTheme.mediumSpace),
       child: FullWidthButton(
-        context.l10n.action_continue,
+        context.l10n.action_proceed_to_app,
         () async {
           MetaData.instance.initialDrugSelectionDone = true;
           await MetaData.save();
