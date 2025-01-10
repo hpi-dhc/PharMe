@@ -83,7 +83,7 @@ class GenePage extends HookWidget {
                                 ]
                             ],
                           )),
-                          SizedBox(height: PharMeTheme.smallToMediumSpace),
+                          SizedBox(height: PharMeTheme.mediumToLargeSpace),
                           SubHeader(
                             context.l10n.gene_page_relevant_drugs,
                             tooltip: context.l10n.gene_page_relevant_drugs_tooltip(
