@@ -43,7 +43,7 @@ class DrugSelectionPage extends HookWidget {
                     ),
                   ),
                   Expanded(child: _buildDrugList(context, state)),
-                  if (concludesOnboarding) _buildButton(context, state),
+                  _buildButton(context, state),
                 ],
               ),
             );
@@ -61,18 +61,26 @@ class DrugSelectionPage extends HookWidget {
   }
 
   Widget _buildButton(BuildContext context, DrugSelectionState state) {
-    return Padding(
-      padding: EdgeInsets.all(PharMeTheme.mediumSpace),
-      child: FullWidthButton(
-        context.l10n.action_proceed_to_app,
-        () async {
+    final buttonText = concludesOnboarding
+      ? context.l10n.action_proceed_to_app
+      : context.l10n.action_back_to_app;
+    final onButtonPressed = concludesOnboarding
+      ? () async {
           MetaData.instance.initialDrugSelectionDone = true;
           await MetaData.save();
           // ignore: use_build_context_synchronously
           await context.router.push(
             MainRoute(),
           );
-        },
+        }
+      : () {
+          context.router.maybePop();
+        };
+    return Padding(
+      padding: EdgeInsets.all(PharMeTheme.mediumSpace),
+      child: FullWidthButton(
+        buttonText,
+        onButtonPressed,
         enabled: _isEditable(state),
       )
     );
