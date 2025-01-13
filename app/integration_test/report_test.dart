@@ -31,7 +31,7 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return ReportPage(onlyShowWholeReport: true);
+                return ReportPage(allGenesInitiallyExpanded: true);
               },
             ),
           ),

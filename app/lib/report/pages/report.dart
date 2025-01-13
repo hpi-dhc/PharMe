@@ -4,27 +4,6 @@ import 'package:provider/provider.dart';
 import '../../common/module.dart';
 
 typedef WarningLevelCounts = Map<WarningLevel, int>;
-class ListOption {
-  ListOption({required this.label, this.drugSubset});
-  Widget getDescription(BuildContext context, int geneNumber) {
-    return Text.rich(
-      style: PharMeTheme.textTheme.labelLarge,
-      TextSpan(
-        children: [
-          TextSpan(text: context.l10n.report_description_prefix),
-          TextSpan(text: ' '),
-          TextSpan(text: label, style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(
-            text: context.l10n.report_gene_number(geneNumber),
-            style: TextStyle(color: PharMeTheme.buttonColor),
-          ),
-        ],
-      ),
-    );
-  }
-  final String label;
-  final List<String>? drugSubset;
-}
 
 enum SortOption {
   alphabetical,
@@ -33,22 +12,21 @@ enum SortOption {
 
 @RoutePage()
 class ReportPage extends HookWidget {
-  const ReportPage({@visibleForTesting this.onlyShowWholeReport = false});
+  const ReportPage({@visibleForTesting this.allGenesInitiallyExpanded = false});
 
-  // Currently for testing but might use in the future
-  final bool onlyShowWholeReport;
+  final bool allGenesInitiallyExpanded;
 
   @override
   Widget build(BuildContext context) {
-    final currentListOption = useState(0);
-    // Not used yet, but could be adaptable in the future
+    final allGenesExpanded = useState(allGenesInitiallyExpanded);
+    // Not changeable yet in UI!
     final currentSortOption = useState(SortOption.alphabetical);
     return Consumer<ActiveDrugs>(
       builder: (context, activeDrugs, child) =>
         _buildReportPage(
           context,
           activeDrugs,
-          currentListOption,
+          allGenesExpanded,
           currentSortOption,
         )
     );
@@ -76,24 +54,28 @@ class ReportPage extends HookWidget {
       return allAffectedDrugs;
     }
   
-  Iterable<GenotypeResult> _getRelevantGenotypes(List<String>? drugSubset) {
-    return UserData.instance.genotypeResults == null
-      ? []
-      : drugSubset != null
-        ? UserData.instance.genotypeResults!.values.filter((genotypeResult) =>
-            _getAffectedDrugs(
-                  genotypeResult.key.value,
-                  drugSubset: drugSubset,
-            ).isNotEmpty
-          )
-        : UserData.instance.genotypeResults!.values;
+  Iterable<GenotypeResult> _getRelevantGenotypes(
+    List<String>? drugSubset,
+  ) {
+    if (UserData.instance.genotypeResults == null) return [];
+    final allGenotypeResults = UserData.instance.genotypeResults!.values;
+    if (drugSubset == null) return allGenotypeResults;
+    return allGenotypeResults.filter(
+      (genotypeResult) => _getAffectedDrugs(
+        genotypeResult.key.value,
+        drugSubset: drugSubset,
+      ).isNotEmpty
+    );
   }
 
   List<Widget> _buildGeneCards({
     required SortOption currentSortOption,
     List<String>? drugsToFilterBy,
+    required String keyPostfix,
   }) {
-    final userGenotypes = _getRelevantGenotypes(drugsToFilterBy);
+    final userGenotypes = _getRelevantGenotypes(
+      drugsToFilterBy,
+    );
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
       warningLevelCounts[genotypeResult.key.value] = {};
@@ -130,7 +112,7 @@ class ReportPage extends HookWidget {
       GeneCard(
         genotypeResult,
         warningLevelCounts[genotypeResult.key.value]!,
-        key: Key('gene-card-${genotypeResult.key.value}'),
+        key: Key('gene-card-${genotypeResult.key.value}-$keyPostfix'),
         useColors: false,
       )
     ).toList();
@@ -138,20 +120,21 @@ class ReportPage extends HookWidget {
 
   Widget _maybeBuildPageIndicators(
     BuildContext context,
-    Iterable<GenotypeResult> relevantGenes,
     ActiveDrugs activeDrugs,
-    ListOption currentListOption,
+    { required bool allGenesVisible }
   ) {
+    final drugsToFilterBy = allGenesVisible ? null : activeDrugs.names;
+    final relevantGenes = _getRelevantGenotypes(drugsToFilterBy);
     final hasActiveInhibitors = relevantGenes.any(
       (genotypeResult) => activeDrugs.names.any(
         (drug) => isInhibited(genotypeResult, drug: drug)
       )
     );
-    if (!hasActiveInhibitors && currentListOption.drugSubset == null) {
+    if (!hasActiveInhibitors && drugsToFilterBy == null) {
       return SizedBox.shrink();
     }
     var indicatorText = '';
-    if (currentListOption.drugSubset != null) {
+    if (drugsToFilterBy != null) {
       final listHelperText = context.l10n.show_all_dropdown_text(
         context.l10n.report_show_all_dropdown_item,
         context.l10n.report_dropdown_position,
@@ -176,24 +159,9 @@ class ReportPage extends HookWidget {
   Widget _buildReportPage(
     BuildContext context,
     ActiveDrugs activeDrugs,
-    ValueNotifier<int> currentListOptionIndex,
+    ValueNotifier<bool> allGenesExpanded,
     ValueNotifier<SortOption> currentSortOption,
   ) {
-    final listOptions = onlyShowWholeReport
-      ? [ListOption(label: context.l10n.report_all_medications)]
-      : [
-        ListOption(
-          label: context.l10n.report_current_medications,
-          drugSubset: activeDrugs.names,
-        ),
-        ListOption(label: context.l10n.report_all_medications),
-      ];
-    final currentListOption = listOptions[currentListOptionIndex.value];
-    final geneCards = _buildGeneCards(
-      currentSortOption: currentSortOption.value,
-      drugsToFilterBy: currentListOption.drugSubset,
-    );
-    final relevantGenes = _getRelevantGenotypes(currentListOption.drugSubset);
     return PopScope(
       canPop: false,
       child: unscrollablePageScaffold(
@@ -204,59 +172,118 @@ class ReportPage extends HookWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PageDescription.fromText(context.l10n.report_content_explanation),
-            Padding(
-              key: Key('gene-report-selection'),
-              padding: EdgeInsets.only(
-                top: PharMeTheme.smallSpace,
-                left: PharMeTheme.smallSpace,
-                bottom: PharMeTheme.smallSpace,
-                right: PharMeTheme.mediumToLargeSpace,
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<int>(
-                  isExpanded: true,
-                  isDense: false,
-                  value: currentListOptionIndex.value,
-                  onChanged: (index) => currentListOptionIndex.value =
-                    index ?? currentListOptionIndex.value,
-                  icon: Padding(
-                    padding: EdgeInsets.only(left: PharMeTheme.smallSpace),
-                    child: ResizedIconButton(
-                      size: PharMeTheme.largeSpace,
-                      disabledBackgroundColor: PharMeTheme.buttonColor,
-                      iconWidgetBuilder: (size) => Icon(
-                        Icons.arrow_drop_down,
-                        size: size,
-                        color: PharMeTheme.surfaceColor,
-                      ),
-                    ),
-                  ),
-                  items: listOptions.mapIndexed(
-                    (index, listOption) => DropdownMenuItem<int>(
-                      value: index,
-                      child: listOption.getDescription(
-                        context,
-                        _buildGeneCards(
-                          drugsToFilterBy: listOption.drugSubset,
-                          currentSortOption: currentSortOption.value,
-                        ).length
-                      ),
-                    ),
-                  ).toList(),
-                ),
+            scrollList(
+              _buildReportLists(
+                context,
+                activeDrugs,
+                allGenesExpanded,
+                currentSortOption,
               ),
             ),
-            scrollList(geneCards),
             _maybeBuildPageIndicators(
               context,
-              relevantGenes,
               activeDrugs,
-              currentListOption,
+              allGenesVisible: allGenesExpanded.value,
             ),
           ]
         )
       ),
     );
+  }
+
+  Widget _listDescription(
+    BuildContext context,
+    String label,
+    { required List<String>? drugsToFilterBy }
+  ) {
+    final genotypes = _getRelevantGenotypes(
+      drugsToFilterBy,
+    );
+    final affectedDrugs = genotypes.flatMap(
+      (genotypeResult) => _getAffectedDrugs(
+        genotypeResult.key.value,
+        drugSubset: drugsToFilterBy,
+      )
+    ).toSet();
+    return Padding(
+      key: Key('list-description-$label'),
+      padding: EdgeInsets.symmetric(
+        vertical: PharMeTheme.mediumSpace,
+        horizontal: PharMeTheme.smallSpace,
+      ),
+      child: Text.rich(
+        style: subheaderDividerStyle(),
+        TextSpan(
+          children: [
+            TextSpan(text: context.l10n.report_description_prefix),
+            TextSpan(text: ' '),
+            TextSpan(text: label, style: TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(text: ' '),
+            TextSpan(
+              text: '(${context.l10n.report_gene_number(genotypes.length)}, '
+                '${context.l10n.report_medication_number(affectedDrugs.length)})',
+              style: TextStyle(color: PharMeTheme.buttonColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildReportLists(
+    BuildContext context,
+    ActiveDrugs activeDrugs,
+    ValueNotifier<bool> allGenesExpanded,
+    ValueNotifier<SortOption> currentSortOption,
+  ) {
+    final currentMedicationGenes = _buildGeneCards(
+      currentSortOption: currentSortOption.value,
+      drugsToFilterBy: activeDrugs.names,
+      keyPostfix: 'current-medications',
+    );
+    final allMedicationGenesHeader =  _listDescription(
+      context,
+      context.l10n.report_all_medications,
+      drugsToFilterBy: null,
+    );
+    final allMedicationGenes = _buildGeneCards(
+      currentSortOption: currentSortOption.value,
+      drugsToFilterBy: null,
+      keyPostfix: 'all-medications',
+    );
+    if (currentMedicationGenes.isEmpty) {
+      return [
+        allMedicationGenesHeader,
+        ...allMedicationGenes,
+      ];
+    }
+    return [
+      _listDescription(
+        context,
+        context.l10n.report_current_medications,
+        drugsToFilterBy: activeDrugs.names,
+      ),
+      ...currentMedicationGenes,
+      PrettyExpansionTile(
+        title: allMedicationGenesHeader,
+        initiallyExpanded: allGenesExpanded.value,
+        onExpansionChanged: (value) => allGenesExpanded.value = value,
+        titlePadding: EdgeInsets.zero,
+        childrenPadding: EdgeInsets.zero,
+        icon: ResizedIconButton(
+          size: PharMeTheme.largeSpace,
+          disabledBackgroundColor: PharMeTheme.buttonColor,
+          iconWidgetBuilder: (size) => Icon(
+            allGenesExpanded.value
+              ? Icons.arrow_drop_up
+              : Icons.arrow_drop_down,
+            size: size,
+            color: PharMeTheme.surfaceColor,
+          ),
+        ),
+        children: allMedicationGenes,
+      ),
+    ];
   }
 }
 

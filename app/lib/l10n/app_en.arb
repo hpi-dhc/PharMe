@@ -293,12 +293,21 @@
   "@report_current_medications": {},
   "report_all_medications": "all known medication interactions",
   "@report_all_medications": {},
-  "report_gene_number": "{geneNumber, plural, =1{ (1 gene)} other{ ({geneNumber} genes)}}",
+  "report_gene_number": "{geneNumber, plural, =1{1 gene} other{{geneNumber} genes}}",
   "@report_gene_number": {
     "placeholders": {
       "geneNumber": {
         "type": "int",
         "example": "19"
+      }
+    }
+  },
+  "report_medication_number": "{medicationNumber, plural, =1{1 medication} other{{medicationNumber} medications}}",
+  "@report_medication_number": {
+    "placeholders": {
+      "medicationNumber": {
+        "type": "int",
+        "example": "3"
       }
     }
   },
@@ -315,11 +324,11 @@
       },
       "items": {
         "type": "String",
-        "example": "genes with known medication interactions"
+        "example": "medications with clinically relevant gene interactions"
       }
     }
   },
-  "report_dropdown_position": "above",
+  "report_dropdown_position": "below the current medication interaction report",
   "@report_dropdown_position": {},
   "medications_dropdown_position": "below the current medications",
   "@medications_dropdown_position": {},
