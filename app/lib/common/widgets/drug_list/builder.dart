@@ -17,6 +17,7 @@ class DrugList extends HookWidget {
     this.noDrugsMessage,
     this.buildDrugItems = buildDrugCards,
     this.showDrugInteractionIndicator = false,
+    this.initiallyExpandFurtherMedications = false,
     this.searchForDrugClass = true,
     this.drugActivityChangeable = false,
     required this.buildContainer,
@@ -27,6 +28,7 @@ class DrugList extends HookWidget {
   final String? noDrugsMessage;
   final DrugItemBuilder buildDrugItems;
   final bool showDrugInteractionIndicator;
+  final bool initiallyExpandFurtherMedications;
   final bool searchForDrugClass;
   // if drugActivityChangeable, active medications are not filtered and repeated
   // in the "All medications" list to make searching and toggling a medication's
@@ -153,7 +155,8 @@ class DrugList extends HookWidget {
       initial: SizedBox.shrink,
       error: () => errorIndicator(context.l10n.err_generic),
       loaded: (allDrugs, filter) {
-        otherDrugsExpanded.value ??= drugActivityChangeable;
+        otherDrugsExpanded.value ??=
+          drugActivityChangeable || initiallyExpandFurtherMedications;
         return _buildDrugList(context, allDrugs, filter, otherDrugsExpanded);
       },
       loading: loadingIndicator,

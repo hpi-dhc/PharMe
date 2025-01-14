@@ -71,8 +71,11 @@ class ReportPage extends HookWidget {
   List<Widget> _buildGeneCards({
     required SortOption currentSortOption,
     List<String>? drugsToFilterBy,
-    required String keyPostfix,
+    required bool onlyCurrentMedications,
   }) {
+    final keyPostfix = onlyCurrentMedications
+      ? 'current-medications'
+      : 'all-medications';
     final userGenotypes = _getRelevantGenotypes(
       drugsToFilterBy,
     );
@@ -114,6 +117,7 @@ class ReportPage extends HookWidget {
         warningLevelCounts[genotypeResult.key.value]!,
         key: Key('gene-card-${genotypeResult.key.value}-$keyPostfix'),
         useColors: false,
+        onlyCurrentMedications: onlyCurrentMedications,
       )
     ).toList();
   }
@@ -239,7 +243,7 @@ class ReportPage extends HookWidget {
     final currentMedicationGenes = _buildGeneCards(
       currentSortOption: currentSortOption.value,
       drugsToFilterBy: activeDrugs.names,
-      keyPostfix: 'current-medications',
+      onlyCurrentMedications: true,
     );
     final allMedicationGenesHeader =  _listDescription(
       context,
@@ -249,7 +253,7 @@ class ReportPage extends HookWidget {
     final allMedicationGenes = _buildGeneCards(
       currentSortOption: currentSortOption.value,
       drugsToFilterBy: null,
-      keyPostfix: 'all-medications',
+      onlyCurrentMedications: false,
     );
     if (currentMedicationGenes.isEmpty) {
       return [
@@ -296,11 +300,13 @@ class GeneCard extends StatelessWidget {
     this.warningLevelCounts, {
       super.key,
       this.useColors = true,
+      this.onlyCurrentMedications = false,
     });
 
   final GenotypeResult genotypeResult;
   final WarningLevelCounts warningLevelCounts;
   final bool useColors;
+  final bool onlyCurrentMedications;
 
   @visibleForTesting
   Color? get color => !useColors || _hasNoResult(genotypeResult)
@@ -355,9 +361,13 @@ class GeneCard extends StatelessWidget {
         )
       : null;
     return RoundedCard(
-      onTap: () => context.router.push(
-        GeneRoute(genotypeResult: genotypeResult)
-      ),
+      onTap: () async {
+        // ignore: use_build_context_synchronously
+        await context.router.push(GeneRoute(
+          genotypeResult: genotypeResult,
+          initiallyExpandFurtherMedications: !onlyCurrentMedications,
+        ));
+      },
       radius: 16,
       color: color,
       child: Row(
