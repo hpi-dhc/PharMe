@@ -89,7 +89,7 @@ class DrugList extends HookWidget {
       useLine: false,
     );
     final currentlyExpanded = otherDrugsExpanded.value ?? false;
-    final currentlyEnabled = filter.query.isBlank;
+    final currentlyEnabled = !drugActivityChangeable && filter.query.isBlank;
     final drugLists = [
       if (activeDrugsList != null) ...[
         ListTile(
