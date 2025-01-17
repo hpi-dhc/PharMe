@@ -1,5 +1,5 @@
 import '../../common/module.dart';
-import '../utils.dart';
+import '../../common/utilities/hive_utils.dart';
 
 @RoutePage()
 class MorePage extends StatelessWidget {
