@@ -10,8 +10,8 @@ import '../module.dart';
 Future<List<int>> retrieveExistingOrGenerateKey() async {
   const secureStorage = FlutterSecureStorage();
   // if key not exists return null
-  final encryprionKey = await secureStorage.read(key: 'key');
-  if (encryprionKey == null) {
+  final encryptionKey = await secureStorage.read(key: 'key');
+  if (encryptionKey == null) {
     final key = Hive.generateSecureKey();
     await secureStorage.write(
       key: 'key',
