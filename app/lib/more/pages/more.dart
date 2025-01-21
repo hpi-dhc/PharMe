@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../common/module.dart';
 import '../../common/utilities/hive_utils.dart';
 
@@ -134,7 +136,27 @@ class DeleteDataDialog extends HookWidget {
             ? () async {
               await deleteAllAppData();
               // ignore: use_build_context_synchronously
-              await overwriteRoutes(context, nextPage: LoginRoute());
+              await context.router.root.maybePop();
+              // ignore: use_build_context_synchronously
+              await showAdaptiveDialog(
+                // ignore: use_build_context_synchronously
+                context: context,
+                builder: (context) => DialogWrapper(
+                  title: context.l10n.delete_data_restart_title,
+                  content: Column(
+                    children: [
+                      SizedBox(height: PharMeTheme.smallSpace),
+                      Text(context.l10n.delete_data_restart_text),
+                    ],
+                  ),
+                  actions: [
+                    DialogAction(
+                      text: context.l10n.error_close_app,
+                      onPressed: () => exit(0),
+                    ),
+                  ],
+                ),
+              );
             }
             : null,
           text: context.l10n.action_continue,

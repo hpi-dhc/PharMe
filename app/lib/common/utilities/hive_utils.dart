@@ -22,12 +22,16 @@ Future<List<int>> retrieveExistingOrGenerateKey() async {
   return base64Url.decode(key!);
 }
 
-Future<void> deleteAllAppData() async {
-  await _deleteCacheDir();
-  await _deleteAppDir();
+Future<void> unsetAllData() async {
   await UserData.erase();
   await MetaData.erase();
   await DrugsWithGuidelines.erase();
+}
+
+Future<void> deleteAllAppData() async {
+  await unsetAllData();
+  await _deleteCacheDir();
+  await _deleteAppDir();
 }
 
 // The folders themselves cannot be deleted on iOS, therefore delete all content
