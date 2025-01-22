@@ -83,24 +83,24 @@ class DrugList extends HookWidget {
       showDrugInteractionIndicator: showDrugInteractionIndicator,
       keyPrefix: 'other-',
     );
-    final otherDrugsHeader = SubheaderDivider(
-      text: '$otherDrugsHeaderText (${allDrugsList.length})',
+    final otherDrugsHeader = ListDescription(
       key: Key('header-other'),
-      useLine: false,
+      textParts: [boldListDescriptionText(otherDrugsHeaderText)],
+      detailsText: allDrugsList.length.toString(),
     );
     final currentlyExpanded = otherDrugsExpanded.value ?? false;
     final currentlyEnabled = !drugActivityChangeable && filter.query.isBlank;
     final drugLists = [
       if (activeDrugsList != null) ...[
-        ListTile(
+        ListDescription(
           key: Key('header-active'),
-          title: SubheaderDivider(
-            text: '${context.l10n.drug_list_subheader_active_drugs} '
-              '(${activeDrugsList.length})',
-            useLine: false,
-          ),
-          visualDensity: VisualDensity.compact,
-          contentPadding: EdgeInsets.zero,
+          textParts: [
+            boldListDescriptionText(
+              context.l10n.drug_list_subheader_active_drugs,
+              color: PharMeTheme.primaryColor,
+            ),
+          ],
+          detailsText: activeDrugsList.length.toString(),
         ),
         ...activeDrugsList,
       ],

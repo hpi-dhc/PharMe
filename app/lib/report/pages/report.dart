@@ -198,7 +198,10 @@ class ReportPage extends HookWidget {
   Widget _listDescription(
     BuildContext context,
     String label,
-    { required List<String>? drugsToFilterBy }
+    {
+      required List<String>? drugsToFilterBy,
+      Color? labelColor,
+    }
   ) {
     final genotypes = _getRelevantGenotypes(
       drugsToFilterBy,
@@ -209,28 +212,16 @@ class ReportPage extends HookWidget {
         drugSubset: drugsToFilterBy,
       )
     ).toSet();
-    return Padding(
-      key: Key('list-description-$label'),
-      padding: EdgeInsets.symmetric(
-        vertical: PharMeTheme.mediumSpace,
-        horizontal: PharMeTheme.smallSpace,
-      ),
-      child: Text.rich(
-        style: subheaderDividerStyle(),
-        TextSpan(
-          children: [
-            TextSpan(text: context.l10n.report_description_prefix),
-            TextSpan(text: ' '),
-            TextSpan(text: label, style: TextStyle(fontWeight: FontWeight.bold)),
-            TextSpan(text: ' '),
-            TextSpan(
-              text: '(${context.l10n.report_gene_number(genotypes.length)}, '
-                '${context.l10n.report_medication_number(affectedDrugs.length)})',
-              style: TextStyle(color: PharMeTheme.buttonColor),
-            ),
-          ],
-        ),
-      ),
+    return ListDescription(
+      key: Key('report-list-description-$label'),
+      textParts: [
+        TextSpan(text: context.l10n.report_description_prefix),
+        TextSpan(text: ' '),
+        boldListDescriptionText(label, color: labelColor),
+      ],
+      detailsText:
+        '${context.l10n.report_gene_number(genotypes.length)}, '
+        '${context.l10n.report_medication_number(affectedDrugs.length)}',
     );
   }
 
@@ -266,6 +257,7 @@ class ReportPage extends HookWidget {
         context,
         context.l10n.report_current_medications,
         drugsToFilterBy: activeDrugs.names,
+        labelColor: PharMeTheme.primaryColor,
       ),
       ...currentMedicationGenes,
       PrettyExpansionTile(
