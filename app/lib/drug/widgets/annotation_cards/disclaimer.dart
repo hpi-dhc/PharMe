@@ -33,6 +33,15 @@ class GuidelineDisclaimer extends StatelessWidget {
           ),
           SizedBox(height: PharMeTheme.smallSpace),
           DisclaimerRow(
+            icon: IncludedContentIcon(
+              type: ListInclusionDescriptionType.genes,
+              size: PharMeTheme.mediumSpace,
+              color: PharMeTheme.onSurfaceText,
+            ),
+            text: Text(ListInclusionDescriptionType.genes.getText(context)),
+          ),
+          SizedBox(height: PharMeTheme.smallSpace),
+          DisclaimerRow(
             icon: Icon(
               FontAwesomeIcons.puzzlePiece,
               size: PharMeTheme.mediumSpace,

@@ -7,6 +7,19 @@ enum ListInclusionDescriptionType {
   genes,
 }
 
+extension ListInclusionDescriptionContent on ListInclusionDescriptionType {
+  String getText(BuildContext context) =>
+    context.l10n.included_content_disclaimer_text(
+      this == ListInclusionDescriptionType.medications
+        ? context.l10n.included_content_medications
+        : context.l10n.included_content_genes
+    );
+  
+  IconData get icon => this == ListInclusionDescriptionType.medications
+    ? medicationsIcon
+    : genesIcon;
+}
+
 class ListInclusionDescription extends StatelessWidget {
   const ListInclusionDescription({
     super.key,
@@ -22,11 +35,6 @@ class ListInclusionDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inclusionText = context.l10n.included_content_disclaimer_text(
-      type == ListInclusionDescriptionType.medications
-        ? context.l10n.included_content_medications
-        : context.l10n.included_content_genes
-    );
     return DisclaimerRow(
       icon: Padding(
         padding: EdgeInsets.only(
@@ -36,7 +44,7 @@ class ListInclusionDescription extends StatelessWidget {
         child: IncludedContentIcon(type: type),
       ),
       text: Text(
-        inclusionText,
+        type.getText(context),
         style: TextStyle(color: PharMeTheme.iconColor),
       ),
     );
@@ -58,30 +66,30 @@ class IncludedContentIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = type == ListInclusionDescriptionType.medications
-      ? medicationsIcon
-      : genesIcon;
     final totalSize = size ?? PharMeTheme.mediumToLargeSpace * 1.5;
-    final iconSize = totalSize * 0.9;
     final checkIconBackgroundSize = totalSize * 0.5;
-    final checkIconSize = checkIconBackgroundSize * 0.8;
     final rightShift = type == ListInclusionDescriptionType.medications
       ? checkIconBackgroundSize / 2
       : checkIconBackgroundSize / 4;
+    final bottomShift = type == ListInclusionDescriptionType.medications
+      ? totalSize * 0.1
+      : 0.0;
+    final iconSize = totalSize * 0.9 - rightShift;
+    final checkIconSize = checkIconBackgroundSize * 0.8;
     return Stack(
       children: [
         SizedBox(
           height: totalSize,
-          width: totalSize + rightShift,
+          width: totalSize,
         ),
         Icon(
-          icon,
+          type.icon,
           size: iconSize,
           color: color ?? PharMeTheme.buttonColor,
         ),
         Positioned(
           right: 0,
-          bottom: 0,
+          bottom: bottomShift,
           child: Stack(
             children: [
               Icon(
