@@ -53,7 +53,7 @@ class OnboardingPage extends HookWidget {
         color: Colors.grey.shade600,
         bottom: DisclaimerCard(
           iconWidget: IncludedContentIcon(
-            type: ListPageInclusionDescriptionType.medications,
+            type: ListInclusionDescriptionType.medications,
             color: PharMeTheme.onSurfaceText,
             size: OnboardingDimensions.iconSize,
           ),

@@ -246,14 +246,14 @@ class ReportPage extends HookWidget {
       drugsToFilterBy: null,
       onlyCurrentMedications: false,
     );
-    final inclusionDescription = ListPageInclusionDescription(
+    final inclusionDescription = Padding(
       key: Key('included-gene-explanation'),
-      type: ListPageInclusionDescriptionType.genes,
-      customPadding: EdgeInsets.only(
+      padding: EdgeInsets.only(
         left: PharMeTheme.smallSpace,
         right: PharMeTheme.smallSpace,
         top: PharMeTheme.smallSpace * 1.5,
       ),
+      child: ListInclusionDescription.forGenes(),
     );
     if (currentMedicationGenes.isEmpty) {
       return [

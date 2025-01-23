@@ -163,14 +163,14 @@ class DrugList extends HookWidget {
     BuildContext context,
     { double addRightPadding = 0.0 }
   ) =>
-    ListPageInclusionDescription(
+    Padding(
       key: Key('inclusion-description'),
-      type: ListPageInclusionDescriptionType.medications,
-      customPadding: EdgeInsets.only(
+      padding: EdgeInsets.only(
         left: PharMeTheme.smallSpace,
         right: PharMeTheme.smallSpace + addRightPadding,
-        top: PharMeTheme.smallSpace * 1.5,
+        top: PharMeTheme.mediumSpace,
       ),
+      child: ListInclusionDescription.forMedications(),
     );
 
   @override

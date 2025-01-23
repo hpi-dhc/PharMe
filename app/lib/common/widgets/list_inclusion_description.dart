@@ -2,59 +2,43 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../module.dart';
 
-enum ListPageInclusionDescriptionType {
+enum ListInclusionDescriptionType {
   medications,
   genes,
 }
 
-class ListPageInclusionDescription extends StatelessWidget {
-  const ListPageInclusionDescription({
+class ListInclusionDescription extends StatelessWidget {
+  const ListInclusionDescription({
     super.key,
-    this.text,
-    this.customPadding,
     required this.type,
   });
 
-  final String? text;
-  final ListPageInclusionDescriptionType type;
-  final EdgeInsets? customPadding;
+  factory ListInclusionDescription.forMedications() =>
+    ListInclusionDescription(type: ListInclusionDescriptionType.medications);
+  factory ListInclusionDescription.forGenes() =>
+    ListInclusionDescription(type: ListInclusionDescriptionType.genes);
+
+  final ListInclusionDescriptionType type;
 
   @override
   Widget build(BuildContext context) {
     final inclusionText = context.l10n.included_content_disclaimer_text(
-      type == ListPageInclusionDescriptionType.medications
+      type == ListInclusionDescriptionType.medications
         ? context.l10n.included_content_medications
         : context.l10n.included_content_genes
     );
-    return PageDescription(
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (text != null) Text(text!),
-          if (text != null) SizedBox(height: PharMeTheme.smallToMediumSpace),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  left: PharMeTheme.smallSpace * 1.5,
-                  right: PharMeTheme.smallSpace * 1.5,
-                  top: PharMeTheme.smallSpace * 0.5,
-                  bottom: PharMeTheme.smallSpace,
-                ),
-                child: IncludedContentIcon(type: type),
-              ),
-              Expanded(
-                child: Text(
-                  inclusionText,
-                  style: TextStyle(color: PharMeTheme.iconColor),
-                ),
-              ),
-            ],
-          ),
-        ],
+    return DisclaimerRow(
+      icon: Padding(
+        padding: EdgeInsets.only(
+          left: PharMeTheme.smallSpace,
+          right: PharMeTheme.smallSpace * 0.5,
+        ),
+        child: IncludedContentIcon(type: type),
       ),
-      customPadding: customPadding,
+      text: Text(
+        inclusionText,
+        style: TextStyle(color: PharMeTheme.iconColor),
+      ),
     );
   }
   
@@ -68,20 +52,20 @@ class IncludedContentIcon extends StatelessWidget {
     this.size,
   });
 
-  final ListPageInclusionDescriptionType type;
+  final ListInclusionDescriptionType type;
   final Color? color;
   final double? size;
 
   @override
   Widget build(BuildContext context) {
-    final icon = type == ListPageInclusionDescriptionType.medications
+    final icon = type == ListInclusionDescriptionType.medications
       ? medicationsIcon
       : genesIcon;
     final totalSize = size ?? PharMeTheme.mediumToLargeSpace * 1.5;
     final iconSize = totalSize * 0.9;
     final checkIconBackgroundSize = totalSize * 0.5;
     final checkIconSize = checkIconBackgroundSize * 0.8;
-    final rightShift = type == ListPageInclusionDescriptionType.medications
+    final rightShift = type == ListInclusionDescriptionType.medications
       ? checkIconBackgroundSize / 2
       : checkIconBackgroundSize / 4;
     return Stack(
