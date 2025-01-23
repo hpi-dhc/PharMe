@@ -1,7 +1,6 @@
 import 'package:app/common/module.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
@@ -42,17 +41,24 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(FontAwesomeIcons.pills), findsOneWidget);
-      expect(find.byIcon(FontAwesomeIcons.dna), findsOneWidget);
-      expect(find.byIcon(Icons.lightbulb_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.more_horiz_rounded), findsOneWidget);
+      Finder findNavigationIcon(IconData icon) {
+        return find.descendant(
+          of: find.byType(BottomNavigationBar),
+          matching: find.byIcon(icon),
+        );
+      }
+
+      expect(findNavigationIcon(medicationsIcon), findsOneWidget);
+      expect(findNavigationIcon(genesIcon), findsOneWidget);
+      expect(findNavigationIcon(Icons.lightbulb_rounded), findsOneWidget);
+      expect(findNavigationIcon(Icons.more_horiz_rounded), findsOneWidget);
 
       // ignore: omit_local_variable_types
       BottomNavigationBar bar = tester.widget(find.byType(BottomNavigationBar));
 
       expect(bar.currentIndex, 0);
 
-      await tester.tap(find.byIcon(Icons.lightbulb_rounded));
+      await tester.tap(findNavigationIcon(Icons.lightbulb_rounded));
       await tester.pumpAndSettle();
 
       bar = tester.widget(find.byType(BottomNavigationBar));
