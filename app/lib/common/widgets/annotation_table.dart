@@ -2,17 +2,27 @@ import '../../drug/widgets/tooltip_icon.dart';
 import '../module.dart';
 
 class TableRowDefinition {
-  const TableRowDefinition(this.key, this.value, { this.tooltip });
+  const TableRowDefinition(
+    this.key,
+    this.value,
+    {
+      this.keyTooltip,
+      this.valueTooltip,
+    }
+  );
+
   final String key;
   final String value;
-  final String? tooltip;
+  final String? keyTooltip;
+  final String? valueTooltip;
 }
 
 Widget buildTable(
   List<TableRowDefinition> rowDefinitions,
   {
     TextStyle? style,
-    bool boldHeader = true,
+    bool boldKey = true,
+    bool italicValue = false,
   }
 ) {
   return Column(
@@ -25,9 +35,10 @@ Widget buildTable(
             rowDefinition.key,
             rowDefinition.value,
             style ?? PharMeTheme.textTheme.bodyMedium!,
-            boldHeader: boldHeader,
+            boldKey: boldKey,
             isLast: index == rowDefinitions.length - 1,
-            tooltip: rowDefinition.tooltip,
+            keyTooltip: rowDefinition.keyTooltip,
+            valueTooltip: rowDefinition.valueTooltip,
           ),
         ],
       ),
@@ -40,13 +51,12 @@ TableRow _buildRow(
   String value,
   TextStyle textStyle,
   {
-    required bool boldHeader,
+    required bool boldKey,
     required bool isLast,
-    String? tooltip,
+    String? keyTooltip,
+    String? valueTooltip,
   }
 ) {
-  const tooltipSize = 16.0;
-
   return TableRow(
     children: [
       Padding(
@@ -54,28 +64,40 @@ TableRow _buildRow(
           right: PharMeTheme.smallSpace,
           bottom: isLast ? 0 : PharMeTheme.smallSpace,
         ),
-        child: Text(
-          key,
-          style: boldHeader
-            ? textStyle.copyWith(fontWeight: FontWeight.bold)
-            : textStyle,
+        child: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: key),
+              ..._maybeBuildTooltip(keyTooltip),
+            ],
+            style: boldKey
+              ? textStyle.copyWith(fontWeight: FontWeight.bold)
+              : textStyle,
+          ),
         ),
       ),
       Text.rich(
         TextSpan(
           children: [
             TextSpan(text: value),
-            if (tooltip.isNotNullOrBlank) ...[
-              WidgetSpan(child: SizedBox(width: PharMeTheme.smallSpace)),
-              WidgetSpan(
-                child: TooltipIcon(tooltip!, size: tooltipSize),
-              ),
-              WidgetSpan(child: SizedBox(height: tooltipSize)),
-            ],
+            ..._maybeBuildTooltip(valueTooltip),
           ],
           style: textStyle,
         ),
       ),
     ],
   );
+}
+
+List<WidgetSpan> _maybeBuildTooltip(String? tooltip) {
+  const tooltipSize = 16.0;
+  return tooltip.isNotNullOrBlank
+    ? [
+        WidgetSpan(child: SizedBox(width: PharMeTheme.smallSpace)),
+        WidgetSpan(
+          child: TooltipIcon(tooltip!, size: tooltipSize),
+        ),
+        WidgetSpan(child: SizedBox(height: tooltipSize)),
+      ]
+    : [];
 }

@@ -16,7 +16,7 @@ class PageIndicatorExplanation extends StatelessWidget {
       child: indicator.isNotNullOrBlank
       ? buildTable(
           [TableRowDefinition(indicator!, text)],
-          boldHeader: false,
+          boldKey: false,
           style: textStyle,
         )
       : Text(text, style: textStyle),

@@ -62,20 +62,7 @@ class GenePage extends HookWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Table(
-                                  columnWidths: Map.from({
-                                    0: IntrinsicColumnWidth(),
-                                    1: IntrinsicColumnWidth(flex: 1),
-                                  }),
-                                  children: [
-                                    _buildRow(
-                                        context.l10n.gene_page_genotype,
-                                        genotypeResult.variantDisplayString(context),
-                                        tooltip: context.l10n.gene_page_genotype_tooltip
-                                    ),
-                                    _buildPhenotypeRow(context),
-                                  ],
-                                ),
+                                _buildGeneResults(context),
                                 if (isInhibited(genotypeResult, drug: null)) ...[
                                   SizedBox(height: PharMeTheme.smallSpace),
                                   PhenoconversionExplanation(
@@ -105,35 +92,19 @@ class GenePage extends HookWidget {
         ),
       )
     );
-  }
 
-  TableRow _buildPhenotypeRow(BuildContext context) {
-    return _buildRow(
+  }
+  
+  Widget _buildGeneResults(BuildContext context) => buildTable([
+    TableRowDefinition(
+      context.l10n.gene_page_genotype,
+      genotypeResult.variantDisplayString(context),
+      keyTooltip: context.l10n.gene_page_genotype_tooltip,
+    ),
+    TableRowDefinition(
       context.l10n.gene_page_phenotype,
       possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
-      tooltip:
-        context.l10n.gene_page_phenotype_tooltip,
-    );
-  }
-
-  TableRow _buildRow(String key, String value, {String? tooltip}) =>
-      TableRow(children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 4, 12, 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(key,
-                  style: PharMeTheme.textTheme.bodyMedium!
-                      .copyWith(fontWeight: FontWeight.bold)),
-              if (tooltip.isNotNullOrEmpty) ...[
-                SizedBox(width: PharMeTheme.smallSpace),
-                TooltipIcon(tooltip!),
-              ],
-            ],
-          ),
-        ),
-        Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4), child: Text(value)),
-      ]);
+      keyTooltip: context.l10n.gene_page_phenotype_tooltip,
+    ),
+  ]);
 }

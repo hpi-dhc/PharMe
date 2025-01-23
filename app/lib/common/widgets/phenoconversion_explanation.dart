@@ -133,7 +133,7 @@ class PhenoconversionExplanation extends StatelessWidget {
             displayConfig.userGenitive,
           ).capitalize(),
         )],
-        boldHeader: false,
+        boldKey: false,
       ),
       titlePadding: EdgeInsets.zero,
       childrenPadding: EdgeInsets.all(PharMeTheme.mediumSpace),
