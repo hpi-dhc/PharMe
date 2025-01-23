@@ -1,6 +1,8 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'module.dart';
+
 const medicationsIcon = FontAwesomeIcons.pills;
 const genesIcon = FontAwesomeIcons.dna;
 
@@ -31,6 +33,11 @@ enum SpecialLookup {
   anyNotHandled,
   noResult,
 }
+
+List<String> unknownPhenotypes(BuildContext context) => [
+  'Indeterminate',
+  context.l10n.general_not_tested,
+];
 
 extension SpecialLookupValue on SpecialLookup {
   String get value {

@@ -8,6 +8,7 @@ class TableRowDefinition {
     {
       this.keyTooltip,
       this.valueTooltip,
+      this.italicValue = false,
     }
   );
 
@@ -15,6 +16,7 @@ class TableRowDefinition {
   final String value;
   final String? keyTooltip;
   final String? valueTooltip;
+  final bool italicValue;
 }
 
 Widget buildTable(
@@ -22,7 +24,6 @@ Widget buildTable(
   {
     TextStyle? style,
     bool boldKey = true,
-    bool italicValue = false,
   }
 ) {
   return Column(
@@ -32,13 +33,10 @@ Widget buildTable(
         defaultColumnWidth: IntrinsicColumnWidth(),
         children: [
           _buildRow(
-            rowDefinition.key,
-            rowDefinition.value,
+            rowDefinition,
             style ?? PharMeTheme.textTheme.bodyMedium!,
             boldKey: boldKey,
             isLast: index == rowDefinitions.length - 1,
-            keyTooltip: rowDefinition.keyTooltip,
-            valueTooltip: rowDefinition.valueTooltip,
           ),
         ],
       ),
@@ -47,14 +45,11 @@ Widget buildTable(
 }
 
 TableRow _buildRow(
-  String key,
-  String value,
+  TableRowDefinition rowDefinition,
   TextStyle textStyle,
   {
     required bool boldKey,
     required bool isLast,
-    String? keyTooltip,
-    String? valueTooltip,
   }
 ) {
   return TableRow(
@@ -67,8 +62,8 @@ TableRow _buildRow(
         child: Text.rich(
           TextSpan(
             children: [
-              TextSpan(text: key),
-              ..._maybeBuildTooltip(keyTooltip),
+              TextSpan(text: rowDefinition.key),
+              ..._maybeBuildTooltip(rowDefinition.keyTooltip),
             ],
             style: boldKey
               ? textStyle.copyWith(fontWeight: FontWeight.bold)
@@ -79,8 +74,13 @@ TableRow _buildRow(
       Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: value),
-            ..._maybeBuildTooltip(valueTooltip),
+            TextSpan(
+              text: rowDefinition.value,
+              style: rowDefinition.italicValue
+                ? textStyle.copyWith(fontStyle: FontStyle.italic)
+                : textStyle,
+            ),
+            ..._maybeBuildTooltip(rowDefinition.valueTooltip),
           ],
           style: textStyle,
         ),
@@ -100,4 +100,38 @@ List<WidgetSpan> _maybeBuildTooltip(String? tooltip) {
         WidgetSpan(child: SizedBox(height: tooltipSize)),
       ]
     : [];
+}
+
+bool testResultIsUnknown(BuildContext context, String phenotype) =>
+  unknownPhenotypes(context).contains(phenotype);
+
+TableRowDefinition testResultTableRow(
+  BuildContext context,
+  {
+    required String key,
+    required String value,
+    String? keyTooltip,
+  }
+) => TableRowDefinition(
+  key,
+  value,
+  keyTooltip: keyTooltip,
+  italicValue: testResultIsUnknown(context, value),
+);
+
+TableRowDefinition phenotypeTableRow(
+  BuildContext context,
+  {
+    required String key,
+    required GenotypeResult genotypeResult,
+    required String? drug,
+    String? keyTooltip,
+  }
+) {
+  return testResultTableRow(
+    context,
+    key: key,
+    value: possiblyAdaptedPhenotype(context, genotypeResult, drug: drug),
+    keyTooltip: keyTooltip,
+  );
 }

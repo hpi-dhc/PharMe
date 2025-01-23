@@ -96,14 +96,17 @@ class GenePage extends HookWidget {
   }
   
   Widget _buildGeneResults(BuildContext context) => buildTable([
-    TableRowDefinition(
-      context.l10n.gene_page_genotype,
-      genotypeResult.variantDisplayString(context),
+    testResultTableRow(
+      context,
+      key: context.l10n.gene_page_genotype,
+      value: genotypeResult.variantDisplayString(context),
       keyTooltip: context.l10n.gene_page_genotype_tooltip,
     ),
-    TableRowDefinition(
-      context.l10n.gene_page_phenotype,
-      possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
+    phenotypeTableRow(
+      context,
+      key: context.l10n.gene_page_phenotype,
+      genotypeResult: genotypeResult,
+      drug: null,
       keyTooltip: context.l10n.gene_page_phenotype_tooltip,
     ),
   ]);

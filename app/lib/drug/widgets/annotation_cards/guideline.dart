@@ -135,14 +135,12 @@ class GuidelineAnnotationCard extends StatelessWidget {
     }
     return buildTable(
       genotypeResults.map((genotypeResult) =>
-        TableRowDefinition(
-          genotypeResult.geneDisplayString,
-          possiblyAdaptedPhenotype(
-            context,
-            genotypeResult,
-            drug: drug.name,
-          ),
-        )
+        phenotypeTableRow(
+          context,
+          key: genotypeResult.geneDisplayString,
+          genotypeResult: genotypeResult,
+          drug: drug.name,
+        ),
       ).toList(),
     );
   }

@@ -363,6 +363,11 @@ class GeneCard extends StatelessWidget {
           ),
         )
       : null;
+    final phenotype = possiblyAdaptedPhenotype(
+      context,
+      genotypeResult,
+      drug: null,
+    );
     return RoundedCard(
       onTap: () async {
         // ignore: use_build_context_synchronously
@@ -391,8 +396,12 @@ class GeneCard extends StatelessWidget {
                   runSpacing: PharMeTheme.smallSpace * 0.5,
                   children: [
                     Text(
-                      possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
-                      style: PharMeTheme.textTheme.titleSmall,
+                      phenotype,
+                      style: testResultIsUnknown(context, phenotype)
+                        ? PharMeTheme.textTheme.titleSmall!.copyWith(
+                            fontStyle: FontStyle.italic,
+                          )
+                        : PharMeTheme.textTheme.titleSmall,
                     ),
                     SizedBox(width: PharMeTheme.smallSpace),
                     medicationIndicators ?? SizedBox.shrink(),
