@@ -34,8 +34,9 @@ enum SpecialLookup {
   noResult,
 }
 
+const indeterminateResult = 'Indeterminate';
 List<String> unknownPhenotypes(BuildContext context) => [
-  'Indeterminate',
+  indeterminateResult,
   context.l10n.general_not_tested,
 ];
 

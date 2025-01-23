@@ -92,6 +92,16 @@
   "general_not_tested": "Not tested",
   "@general_not_tested": {},
 
+  "indeterminate_result_tooltip": "This means that your gene test did not provide a meaningful outcome for {geneName}. This happens when the impact of your gene result on medications is uncertain.",
+  "@indeterminate_result_tooltip": {
+    "placeholders": {
+      "geneName": {
+        "type": "String",
+        "example": "CYP2C19"
+      }
+    }
+  },
+
   "warning_level_green": "Standard precautions",
   "@warning_level_green": {},
   "warning_level_missing": "Standard precautions (incomplete data)",

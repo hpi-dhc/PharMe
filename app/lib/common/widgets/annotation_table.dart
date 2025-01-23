@@ -111,11 +111,13 @@ TableRowDefinition testResultTableRow(
     required String key,
     required String value,
     String? keyTooltip,
+    String? valueTooltip,
   }
 ) => TableRowDefinition(
   key,
   value,
   keyTooltip: keyTooltip,
+  valueTooltip: valueTooltip,
   italicValue: testResultIsUnknown(context, value),
 );
 
@@ -128,10 +130,16 @@ TableRowDefinition phenotypeTableRow(
     String? keyTooltip,
   }
 ) {
+  final value = possiblyAdaptedPhenotype(context, genotypeResult, drug: drug);
   return testResultTableRow(
     context,
     key: key,
-    value: possiblyAdaptedPhenotype(context, genotypeResult, drug: drug),
+    value: value,
     keyTooltip: keyTooltip,
+    valueTooltip: value == indeterminateResult
+      ? context.l10n.indeterminate_result_tooltip(
+          genotypeResult.geneDisplayString,
+        )
+      : null,
   );
 }
