@@ -108,16 +108,20 @@ bool testResultIsUnknown(BuildContext context, String phenotype) =>
 TableRowDefinition testResultTableRow(
   BuildContext context,
   {
+    required GenotypeResult genotypeResult, 
     required String key,
     required String value,
     String? keyTooltip,
-    String? valueTooltip,
   }
 ) => TableRowDefinition(
   key,
   value,
   keyTooltip: keyTooltip,
-  valueTooltip: valueTooltip,
+  valueTooltip: value == indeterminateResult
+    ? context.l10n.indeterminate_result_tooltip(
+        genotypeResult.geneDisplayString,
+      )
+    : null,
   italicValue: testResultIsUnknown(context, value),
 );
 
@@ -133,13 +137,9 @@ TableRowDefinition phenotypeTableRow(
   final value = possiblyAdaptedPhenotype(context, genotypeResult, drug: drug);
   return testResultTableRow(
     context,
+    genotypeResult: genotypeResult,
     key: key,
     value: value,
     keyTooltip: keyTooltip,
-    valueTooltip: value == indeterminateResult
-      ? context.l10n.indeterminate_result_tooltip(
-          genotypeResult.geneDisplayString,
-        )
-      : null,
   );
 }

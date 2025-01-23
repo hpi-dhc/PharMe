@@ -98,6 +98,7 @@ class GenePage extends HookWidget {
   Widget _buildGeneResults(BuildContext context) => buildTable([
     testResultTableRow(
       context,
+      genotypeResult: genotypeResult,
       key: context.l10n.gene_page_genotype,
       value: genotypeResult.variantDisplayString(context),
       keyTooltip: context.l10n.gene_page_genotype_tooltip,
