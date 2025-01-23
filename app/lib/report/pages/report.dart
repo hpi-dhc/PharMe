@@ -175,10 +175,7 @@ class ReportPage extends HookWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListPageInclusionDescription(
-              text: context.l10n.report_content_explanation,
-              type: ListPageInclusionDescriptionType.genes,
-            ),
+            PageDescription.fromText(context.l10n.report_content_explanation),
             scrollList(
               _buildReportLists(
                 context,
@@ -249,13 +246,24 @@ class ReportPage extends HookWidget {
       drugsToFilterBy: null,
       onlyCurrentMedications: false,
     );
+    final inclusionDescription = ListPageInclusionDescription(
+      key: Key('included-gene-explanation'),
+      type: ListPageInclusionDescriptionType.genes,
+      customPadding: EdgeInsets.only(
+        left: PharMeTheme.smallSpace,
+        right: PharMeTheme.smallSpace,
+        top: PharMeTheme.smallSpace * 1.5,
+      ),
+    );
     if (currentMedicationGenes.isEmpty) {
       return [
+        inclusionDescription,
         allMedicationGenesHeader,
         ...allMedicationGenes,
       ];
     }
     return [
+      inclusionDescription,
       _listDescription(
         context,
         context.l10n.report_current_medications,

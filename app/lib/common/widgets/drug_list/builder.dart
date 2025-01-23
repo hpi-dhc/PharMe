@@ -53,7 +53,17 @@ class DrugList extends HookWidget {
       searchForDrugClass: searchForDrugClass,
     ).sortedBy((drug) => drug.name);
     if (filteredDrugs.isEmpty && noDrugsMessage != null) {
-      return buildContainer(noDrugsMessage: errorIndicator(noDrugsMessage!));
+      return buildContainer(
+        noDrugsMessage: Column(
+          children: [
+            _buildIncludedMedicationsDescription(
+              context,
+              addRightPadding: PharMeTheme.mediumSpace,
+            ),
+            errorIndicator(noDrugsMessage!),
+          ],
+        ),
+      );
     }
     List<Widget>? activeDrugsList;
     // Do not show repeated active drugs when searching in medication selection
@@ -91,6 +101,7 @@ class DrugList extends HookWidget {
     final currentlyExpanded = otherDrugsExpanded.value ?? false;
     final currentlyEnabled = !drugActivityChangeable && filter.query.isBlank;
     final drugLists = [
+      _buildIncludedMedicationsDescription(context),
       if (activeDrugsList != null) ...[
         ListDescription(
           key: Key('header-active'),
@@ -147,6 +158,20 @@ class DrugList extends HookWidget {
       showInactiveDrugs: !currentlyEnabled || currentlyExpanded,
     );
   }
+
+  Widget _buildIncludedMedicationsDescription(
+    BuildContext context,
+    { double addRightPadding = 0.0 }
+  ) =>
+    ListPageInclusionDescription(
+      key: Key('inclusion-description'),
+      type: ListPageInclusionDescriptionType.medications,
+      customPadding: EdgeInsets.only(
+        left: PharMeTheme.smallSpace,
+        right: PharMeTheme.smallSpace + addRightPadding,
+        top: PharMeTheme.smallSpace * 1.5,
+      ),
+    );
 
   @override
   Widget build(BuildContext context) {

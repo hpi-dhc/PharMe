@@ -61,15 +61,6 @@ class DrugSearch extends HookWidget {
                 ),
               ),
             ),
-            ListPageInclusionDescription(
-              type: ListPageInclusionDescriptionType.medications,
-              customPadding: EdgeInsets.only(
-                left: PharMeTheme.smallSpace,
-                right: PharMeTheme.smallSpace,
-                top: PharMeTheme.smallSpace * 1.5,
-                bottom: PharMeTheme.smallSpace,
-              ),
-            ),
             if (children != null) scrollList(
               keepPosition: keepPosition,
               children,

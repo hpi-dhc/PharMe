@@ -92,11 +92,6 @@ class GenePage extends HookWidget {
                               genotypeResult.geneDisplayString
                             ),
                           ),
-                          SizedBox(height: PharMeTheme.mediumSpace),
-                          ListPageInclusionDescription(
-                            type: ListPageInclusionDescriptionType.medications,
-                            customPadding: EdgeInsets.zero,
-                          ),
                         ],
                       ),
                     ),
