@@ -126,7 +126,7 @@ void main() {
         ValueKey('annotationCard'),
       ),
     ) as RoundedCard;
-    expect(find.byType(Disclaimer), findsOneWidget);
+    expect(find.byType(GuidelineDisclaimer), findsOneWidget);
     final sourcesSection = find.byKey(Key('sourceCard'));
     final context = tester.element(find.byType(Scaffold).first);
     if (expectNoBrandNames) {
