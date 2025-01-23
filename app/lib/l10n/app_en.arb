@@ -57,7 +57,7 @@
   "@drug_selection_continue_warning_title": {},
   "drug_selection_continue_warning": "When you proceed to the next step of the app setup, you will not be able to come back to this page.\n\nYou can always change your current medications later in the app.",
   "@drug_selection_continue_warning": {},
-  "drug_selection_description": "You can edit the medications you are currently taking below. \n\nPlease note that the list may not include all medications you are currently taking, ONLY medications that are known to have clinically meaningful interactions with genes are included.",
+  "drug_selection_description": "You can edit the medications you are currently taking below.",
   "@drug_selection_description": {},
   "drug_selection_no_drugs_loaded": "No medications loaded",
   "@drug_selection_no_drugs_loaded": {},
@@ -101,7 +101,7 @@
   "warning_level_red": "Consider alternatives",
   "@warning_level_red": {},
   
-  "search_content_explanation": "Below, medications that are known to have clinically relevant interactions with genes are listed.",
+  "search_content_explanation": "Get an overview on your PGx tests results per medication. Tap on a medication so see what your result means and what to do.",
   "@search_content_explanation": {},
   "search_page_tooltip_search": "Search for medications by their name, brand name or class.",
   "@search_page_tooltip_search": {},
@@ -124,7 +124,7 @@
   },
   "search_no_drugs_with_filter_amendment": " or filters",
   "@search_no_drugs_with_filter_amendment": {},
-  "search_no_drugs": "No medications found that match your search term{amendment}.\n\nThe medication you are looking for might also not be included in PharMe because it does not have relevant DNA-based guidelines.\n\nClinical dosing may apply, consult your pharmacist or doctor for more information.",
+  "search_no_drugs": "No medications found that match your search term{amendment}. Clinical dosing may apply, consult your pharmacist or doctor for more information.",
   "@search_no_drugs": {
     "placeholders": {
         "amendment": {
@@ -326,7 +326,7 @@
       },
       "items": {
         "type": "String",
-        "example": "medications with clinically relevant gene interactions"
+        "example": "medications with clinical PGx guidelines"
       }
     }
   },
@@ -336,11 +336,11 @@
   "@medications_dropdown_position": {},
   "report_show_all_dropdown_item": "gene",
   "@report_show_all_dropdown_item": {},
-  "report_show_all_dropdown_items": "genes with known medication interactions",
+  "report_show_all_dropdown_items": "genes with clinical PGx guidelines",
   "@report_show_all_dropdown_items": {},
   "drugs_show_all_dropdown_item": "medication",
   "@drugs_show_all_dropdown_item": {},
-  "drugs_show_all_dropdown_items": "medications with clinically relevant gene interactions",
+  "drugs_show_all_dropdown_items": "medications with clinical PGx guidelines",
   "@drugs_show_all_dropdown_items": {},
 
   "gene_page_headline": "{gene} report",
@@ -539,13 +539,26 @@
   "@onboarding_4_button": {},
   "onboarding_4_already_tested_text": "PharMe matches your genetic information with what scientists know about how certain genes and medications interact.\n\nThe information provided by PharMe is based on proven guidelines from trusted organizations like the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
   "@onboarding_4_already_tested_text": {},
-  "onboarding_4_disclaimer": "PharMe ONLY includes medications that are known to have meaningful interactions with genes. If you cannot find a medication in PharMe, there may not be enough evidence for gene interactions.",
-  "@onboarding_4_disclaimer": {},
   "onboarding_5_header": "We care about your privacy",
   "@onboarding_5_header": {},
   "onboarding_5_text": "Once you download your genetic information, it is stored safely on your phone.\n\nOur system does not collect any information about you, including your name or DNA.",
   "@onboarding_5_text": {},
 
+  "included_content_medications": "medications",
+  "@included_content_medications": {},
+  "included_content_genes": "genes",
+  "@included_content_genes": {},
+  "included_content_disclaimer_text": "PharMe only includes {content} with clinical PGx guidelines from CPIC and the FDA.",
+  "@included_content_disclaimer_text": {
+    "placeholders": {
+      "content": {
+        "type": "String",
+        "example": "medications"
+      }
+    }
+  },
+  "included_content_addition": "While only to a small percentage of medications have PGx guidelines, they are among the most commonly prescribed ones.\n\nIf you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.",
+  "@included_content_addition": {},
     
   "more_page_account_settings": "Settings",
   "@more_page_account_settings": {},

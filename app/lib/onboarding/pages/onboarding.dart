@@ -52,9 +52,15 @@ class OnboardingPage extends HookWidget {
         text: context.l10n.onboarding_4_already_tested_text,
         color: Colors.grey.shade600,
         bottom: DisclaimerCard(
-          icon: FontAwesomeIcons.pills,
+          iconWidget: IncludedContentIcon(
+            type: ListPageInclusionDescriptionType.medications,
+            color: PharMeTheme.onSurfaceText,
+            size: OnboardingDimensions.iconSize,
+          ),
           iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
-          text: context.l10n.onboarding_4_disclaimer,
+          text: '${context.l10n.included_content_disclaimer_text(
+              context.l10n.included_content_medications,
+            )}\n\n${context.l10n.included_content_addition}',
         ),
       ),
       OnboardingSubPage(
@@ -483,6 +489,7 @@ class OnboardingSubPage extends HookWidget {
 class DisclaimerCard extends StatelessWidget {
   const DisclaimerCard({
     this.icon,
+    this.iconWidget,
     required this.text,
     this.secondLineText,
     this.onClick,
@@ -490,6 +497,7 @@ class DisclaimerCard extends StatelessWidget {
   });
 
   final IconData? icon;
+  final Widget? iconWidget;
   final String text;
   final String? secondLineText;
   final GestureTapCallback? onClick;
@@ -509,7 +517,11 @@ class DisclaimerCard extends StatelessWidget {
           children: [
             Padding(
               padding: iconPadding ?? EdgeInsets.zero,
-              child: Icon(icon ?? Icons.warning_rounded, size: 32),
+              child: iconWidget ?? Icon(
+                icon ?? Icons.warning_rounded,
+                size: OnboardingDimensions.iconSize,
+                color: PharMeTheme.onSurfaceText,
+              ),
             ),
             SizedBox(width: PharMeTheme.smallSpace),
             Expanded(

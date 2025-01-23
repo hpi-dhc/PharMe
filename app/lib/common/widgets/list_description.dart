@@ -26,7 +26,7 @@ class ListDescription extends StatelessWidget {
         horizontal: PharMeTheme.smallSpace,
       ),
       child: Text.rich(
-        style: subheaderDividerStyle(color: PharMeTheme.onSurfaceText),
+        style: PharMeTheme.textTheme.bodyMedium,
         TextSpan(
           children: [
             ...textParts,

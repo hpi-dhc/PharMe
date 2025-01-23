@@ -4,7 +4,11 @@ Widget loadingIndicator() =>
     genericIndicator(child: CircularProgressIndicator(), verticalPadding: 100);
 Widget errorIndicator(String description) =>
     genericIndicator(
-      child: Text(description, textAlign: TextAlign.center),
+      child: Text(
+        description,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontStyle: FontStyle.italic),
+      ),
       verticalPadding: PharMeTheme.mediumToLargeSpace,
     );
 

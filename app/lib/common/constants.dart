@@ -1,4 +1,8 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+const medicationsIcon = FontAwesomeIcons.pills;
+const genesIcon = FontAwesomeIcons.dna;
 
 Uri anniUrl([String slug = '']) =>
     Uri.http('hpi-annotation-service.duckdns.org', 'api/v1/$slug');

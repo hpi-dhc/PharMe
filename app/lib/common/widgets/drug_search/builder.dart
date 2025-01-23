@@ -31,16 +31,17 @@ class DrugSearch extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
+    final noDrugsMessage = '${context.l10n.search_no_drugs(
+      showFilter
+        ? context.l10n.search_no_drugs_with_filter_amendment
+        : '')
+    }\n\n${context.l10n.included_content_addition}';
     return DrugList(
       state: state,
       activeDrugs: activeDrugs,
       buildDrugItems: buildDrugItems,
       showDrugInteractionIndicator: showDrugInteractionIndicator,
-      noDrugsMessage: context.l10n.search_no_drugs(
-        showFilter
-          ? context.l10n.search_no_drugs_with_filter_amendment
-          : ''
-      ),
+      noDrugsMessage: noDrugsMessage,
       searchForDrugClass: searchForDrugClass,
       buildContainer: ({
         children,
@@ -58,6 +59,15 @@ class DrugSearch extends HookWidget {
                   searchController,
                   showInactiveDrugs: showInactiveDrugs ?? true,
                 ),
+              ),
+            ),
+            ListPageInclusionDescription(
+              type: ListPageInclusionDescriptionType.medications,
+              customPadding: EdgeInsets.only(
+                left: PharMeTheme.smallSpace,
+                right: PharMeTheme.smallSpace,
+                top: PharMeTheme.smallSpace * 1.5,
+                bottom: PharMeTheme.smallSpace,
               ),
             ),
             if (children != null) scrollList(

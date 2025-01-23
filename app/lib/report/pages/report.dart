@@ -175,7 +175,10 @@ class ReportPage extends HookWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PageDescription.fromText(context.l10n.report_content_explanation),
+            ListPageInclusionDescription(
+              text: context.l10n.report_content_explanation,
+              type: ListPageInclusionDescriptionType.genes,
+            ),
             scrollList(
               _buildReportLists(
                 context,

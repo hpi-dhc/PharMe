@@ -1,5 +1,3 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../common/module.dart';
 
 class TabRouteDefinition {
@@ -18,12 +16,12 @@ List<TabRouteDefinition> getTabRoutesDefinition(BuildContext context) {
     TabRouteDefinition(
       pageRouteInfo: SearchRoute(),
       label: context.l10n.nav_drugs,
-      icon: FontAwesomeIcons.pills,
+      icon: medicationsIcon,
     ),
     TabRouteDefinition(
       pageRouteInfo: ReportRoute(),
       label: context.l10n.nav_report,
-      icon: FontAwesomeIcons.dna,
+      icon: genesIcon,
     ),
     TabRouteDefinition(
       pageRouteInfo: FaqRoute(),

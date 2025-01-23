@@ -20,6 +20,7 @@ export 'hyperlink.dart';
 export 'indicators.dart';
 export 'lifecycle_observer.dart';
 export 'list_description.dart';
+export 'list_page_inclusion_description.dart';
 export 'page_description.dart';
 export 'page_indicator_explanation.dart';
 export 'page_scaffold.dart';
