@@ -132,25 +132,30 @@ screen.
 A simulator with the app in its initial state (or not installed) needs to be
 running.
 
+Optional: set the time and status bar items as described in
+[screenshots for publishing](#screenshots-for-publishing).
+
+The `generate_screendocs/run.sh` script will create screencasts
+and screenshots.
+
+Run the script with `bash generate_screendocs/run.sh`.
+
 ### Screencasts
 
-The `generate_screendocs/generate_screencast.sh` script will create screencast.
-It uses Xcode to record the screencast and [`ffmpeg`](https://ffmpeg.org/)
-to cut the `full.mov` to relevant subsets (needs to be installed).
+The script uses uses Xcode to record the screencast and
+[`ffmpeg`](https://ffmpeg.org/) to cut the `full.mov` to relevant subsets
+(needs to be installed).
 
 To generate GIFs used in the Tutorial,
 [ImageMagick](https://imagemagick.org/index.php) is used
 (which also needs to be installed).
 
-Run the script with `bash generate_screendocs/generate_screencast.sh`.
+### Screenshots
 
-## Screenshots
-
-To update the screenshots in `../docs/screenshots`
+The script automatically updates the screenshots in `../docs/screenshots`
 (used in [📑 App screens](../docs/App-screens.md),
 [📑 User instructions](../docs/User-instructions.html), and the
-[README](./README.md)), run the following command:
-`bash generate_screendocs/generate_screenshots.sh`.
+[README](./README.md)).
 
 If the error `The following MissingPluginException was thrown running a test:
 MissingPluginException(No implementation found for method captureScreenshot on
