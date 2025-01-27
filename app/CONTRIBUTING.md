@@ -126,50 +126,8 @@ Another option is to use, e.g., <https://easyappicon.com/>.
 _version (login without redirect) – can adopt once different login types are_
 _supported._
 
-Scripts were created to click through the app using tests and record the
-screen.
-
-A simulator with the app in its initial state (or not installed) needs to be
-running.
-
-Optional: set the time and status bar items as described in
-[screenshots for publishing](#screenshots-for-publishing).
-
-The `generate_screendocs/run.sh` script will create screencasts
-and screenshots.
-
-Run the script with `bash generate_screendocs/run.sh`.
-
-### Screencasts
-
-The script uses uses Xcode to record the screencast and
-[`ffmpeg`](https://ffmpeg.org/) to cut the `full.mov` to relevant subsets
-(needs to be installed).
-
-To generate GIFs used in the Tutorial,
-[ImageMagick](https://imagemagick.org/index.php) is used
-(which also needs to be installed).
-
-### Screenshots
-
-The script automatically updates the screenshots in `../docs/screenshots`
-(used in [📑 App screens](../docs/App-screens.md),
-[📑 User instructions](../docs/User-instructions.html), and the
-[README](./README.md)).
-
-If the error `The following MissingPluginException was thrown running a test:
-MissingPluginException(No implementation found for method captureScreenshot on
-channel plugins.flutter.io/integration_test)` occurs, the registration in the
-file
-`ios/.symlinks/plugins/integration_test/ios/Classes/IntegrationTestPlugin.m`
-needs to be adapted (see
-[issue](https://github.com/flutter/flutter/issues/91668)):
-
-```m
-+ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
-  [[IntegrationTestPlugin instance] setupChannels:registrar.messenger];
-}
-```
+_Check `e60efb4f2fc3ba2efa7735ffb06ec5fdb64d7af6` for a rudimentary script_
+_version, removed afterwards due to too many merge conflicts._
 
 ## Adapting test data
 

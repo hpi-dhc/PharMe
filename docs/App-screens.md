@@ -8,6 +8,10 @@ Actions are usually tapping (👆) or scrolling down (⏬).
 If no screen number is given, the action refers to the screen in the previous
 table row.
 
+_Please note: as screenshot generation is currently not possible, the screens_
+_you see here are the study version screens. Most screens are the same, but_
+_in the study version some additional content is implemented._
+
 | # | Action | Screen | Description |
 | - | ------ | ------ | ----------- |
 | 1 | App opened the first time | <img src="./screenshots/accept-terms.png" width="1000px" alt="accept-terms"> | Notice that by continuing users agree to terms (see screen 23) |
