@@ -2,17 +2,28 @@ import '../../drug/widgets/tooltip_icon.dart';
 import '../module.dart';
 
 class TableRowDefinition {
-  const TableRowDefinition(this.key, this.value, { this.tooltip });
+  const TableRowDefinition(
+    this.key,
+    this.value,
+    {
+      this.keyTooltip,
+      this.valueTooltip,
+      this.italicValue = false,
+    }
+  );
+
   final String key;
   final String value;
-  final String? tooltip;
+  final String? keyTooltip;
+  final String? valueTooltip;
+  final bool italicValue;
 }
 
 Widget buildTable(
   List<TableRowDefinition> rowDefinitions,
   {
     TextStyle? style,
-    bool boldHeader = true,
+    bool boldKey = true,
   }
 ) {
   return Column(
@@ -22,12 +33,10 @@ Widget buildTable(
         defaultColumnWidth: IntrinsicColumnWidth(),
         children: [
           _buildRow(
-            rowDefinition.key,
-            rowDefinition.value,
+            rowDefinition,
             style ?? PharMeTheme.textTheme.bodyMedium!,
-            boldHeader: boldHeader,
+            boldKey: boldKey,
             isLast: index == rowDefinitions.length - 1,
-            tooltip: rowDefinition.tooltip,
           ),
         ],
       ),
@@ -36,17 +45,13 @@ Widget buildTable(
 }
 
 TableRow _buildRow(
-  String key,
-  String value,
+  TableRowDefinition rowDefinition,
   TextStyle textStyle,
   {
-    required bool boldHeader,
+    required bool boldKey,
     required bool isLast,
-    String? tooltip,
   }
 ) {
-  const tooltipSize = 16.0;
-
   return TableRow(
     children: [
       Padding(
@@ -54,28 +59,87 @@ TableRow _buildRow(
           right: PharMeTheme.smallSpace,
           bottom: isLast ? 0 : PharMeTheme.smallSpace,
         ),
-        child: Text(
-          key,
-          style: boldHeader
-            ? textStyle.copyWith(fontWeight: FontWeight.bold)
-            : textStyle,
+        child: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: rowDefinition.key),
+              ..._maybeBuildTooltip(rowDefinition.keyTooltip),
+            ],
+            style: boldKey
+              ? textStyle.copyWith(fontWeight: FontWeight.bold)
+              : textStyle,
+          ),
         ),
       ),
       Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: value),
-            if (tooltip.isNotNullOrBlank) ...[
-              WidgetSpan(child: SizedBox(width: PharMeTheme.smallSpace)),
-              WidgetSpan(
-                child: TooltipIcon(tooltip!, size: tooltipSize),
-              ),
-            ],
-            WidgetSpan(child: SizedBox(height: tooltipSize)),
+            TextSpan(
+              text: rowDefinition.value,
+              style: rowDefinition.italicValue
+                ? textStyle.copyWith(fontStyle: FontStyle.italic)
+                : textStyle,
+            ),
+            ..._maybeBuildTooltip(rowDefinition.valueTooltip),
           ],
           style: textStyle,
         ),
       ),
     ],
+  );
+}
+
+List<WidgetSpan> _maybeBuildTooltip(String? tooltip) {
+  const tooltipSize = 16.0;
+  return tooltip.isNotNullOrBlank
+    ? [
+        WidgetSpan(child: SizedBox(width: PharMeTheme.smallSpace)),
+        WidgetSpan(
+          child: TooltipIcon(tooltip!, size: tooltipSize),
+        ),
+        WidgetSpan(child: SizedBox(height: tooltipSize)),
+      ]
+    : [];
+}
+
+bool testResultIsUnknown(BuildContext context, String phenotype) =>
+  unknownPhenotypes(context).contains(phenotype);
+
+TableRowDefinition testResultTableRow(
+  BuildContext context,
+  {
+    required GenotypeResult genotypeResult, 
+    required String key,
+    required String value,
+    String? keyTooltip,
+  }
+) => TableRowDefinition(
+  key,
+  value,
+  keyTooltip: keyTooltip,
+  valueTooltip: value == indeterminateResult
+    ? context.l10n.indeterminate_result_tooltip(
+        genotypeResult.geneDisplayString,
+      )
+    : null,
+  italicValue: testResultIsUnknown(context, value),
+);
+
+TableRowDefinition phenotypeTableRow(
+  BuildContext context,
+  {
+    required String key,
+    required GenotypeResult genotypeResult,
+    required String? drug,
+    String? keyTooltip,
+  }
+) {
+  final value = possiblyAdaptedPhenotype(context, genotypeResult, drug: drug);
+  return testResultTableRow(
+    context,
+    genotypeResult: genotypeResult,
+    key: key,
+    value: value,
+    keyTooltip: keyTooltip,
   );
 }

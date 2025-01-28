@@ -10,6 +10,7 @@ class WarningLevelFilterChip extends HookWidget {
     required this.drugs,
     required this.activeDrugs,
     required this.searchForDrugClass,
+    required this.showInactiveDrugs,
   });
 
   final WarningLevel warningLevel;
@@ -18,12 +19,17 @@ class WarningLevelFilterChip extends HookWidget {
   final List<Drug> drugs;
   final ActiveDrugs activeDrugs;
   final bool searchForDrugClass;
+  final bool showInactiveDrugs;
 
   int _getFilteredNumber({
     required FilterState itemFilter,
     required List<Drug> drugs,
   }) {
-    return itemFilter
+    final currentFilter = FilterState.from(
+      itemFilter,
+      showInactive: showInactiveDrugs,
+    );
+    return currentFilter
       .filter(drugs, activeDrugs, searchForDrugClass: searchForDrugClass)
       .length;
   }
@@ -135,25 +141,32 @@ class DrugFilters extends StatelessWidget {
     required this.state,
     required this.activeDrugs,
     required this.searchForDrugClass,
+    required this.showInactiveDrugs,
   });
 
   final DrugListCubit cubit;
   final DrugListState state;
   final ActiveDrugs activeDrugs;
   final bool searchForDrugClass;
+  final bool showInactiveDrugs;
 
   bool _showActiveIndicator() => state.whenOrNull(
     loaded: (allDrugs, filter) {
       final relevantDrugsFilter = FilterState.from(
         FilterState.initial(),
         query: filter.query,
+        showInactive: showInactiveDrugs,
       );
       final totalNumberOfDrugs = relevantDrugsFilter.filter(
         allDrugs,
         activeDrugs,
         searchForDrugClass: searchForDrugClass,
       ).length;
-      final currentNumberOfDrugs = filter.filter(
+      final currentFilter = FilterState.from(
+        filter,
+        showInactive: showInactiveDrugs,
+      );
+      final currentNumberOfDrugs = currentFilter.filter(
         allDrugs,
         activeDrugs,
         searchForDrugClass: searchForDrugClass,
@@ -170,7 +183,7 @@ class DrugFilters extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: PharMeTheme.sinaiMagenta,
+          color: PharMeTheme.sinaiCyan,
         ),
         width: indicatorSize,
         height: indicatorSize,
@@ -196,6 +209,7 @@ class DrugFilters extends StatelessWidget {
           filter: filter,
           activeDrugs: activeDrugs,
           searchForDrugClass: searchForDrugClass,
+          showInactiveDrugs: showInactiveDrugs,
         ),
       );
     return [
@@ -205,28 +219,33 @@ class DrugFilters extends StatelessWidget {
     ];
   }
 
-  IconButton _buildButton({
+  Widget _buildButton({
     required void Function()? onPressed,
     required bool enableIndicator,
   }) {
-    return IconButton(
+    return ResizedIconButton(
       onPressed: onPressed,
-      icon: Stack(
+      size: PharMeTheme.largeSpace,
+      backgroundColor: PharMeTheme.buttonColor,
+      iconWidgetBuilder: (size) => Stack(
         children: [
-          Icon(Icons.filter_list),
+          Icon(
+            Icons.filter_list,
+            size: size,
+            color: PharMeTheme.surfaceColor,
+          ),
           if (enableIndicator && _showActiveIndicator())
             _buildActiveIndicator(),
         ],
       ),
-      color: PharMeTheme.iconColor,
     );
   }
 
-  IconButton _buildDisabledButton() {
+  Widget _buildDisabledButton() {
     return _buildButton(onPressed: null, enableIndicator: false);
   }
 
-  IconButton _buildEnabledButton(
+  Widget _buildEnabledButton(
     BuildContext context,
     List<Drug> allDrugs,
     FilterState filter,

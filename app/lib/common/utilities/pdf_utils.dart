@@ -141,16 +141,10 @@ String? _getPhenotypeInfo(String genotypeKey, Drug drug, BuildContext context) {
 }
 
 String? _getPhenoconversionInfo(Drug drug, BuildContext context) {
-  if (drug.guidelines.isEmpty) return null;
-  final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
-    UserData.instance.genotypeResults![genotypeKey]!
-  ).toList();
-  return '$drugInteractionIndicator ${inhibitionTooltipText(
-    context,
-    genotypeResults,
-    drug: drug.name,
-    userFacing: false,
-  )}';
+  final phenoconversionExplanation =
+    getExpertPhenoconversionExplanation(drug, context);
+  if (phenoconversionExplanation == null) return null;
+  return '$drugInteractionIndicator $phenoconversionExplanation';
 }
 
 String? _getActivityScoreInfo(

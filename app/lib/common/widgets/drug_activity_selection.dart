@@ -10,6 +10,7 @@ SwitchListTile buildDrugActivitySelection({
   required BuildContext context,
   required Drug drug,
   required String title,
+  TextStyle? titleStyle,
   String? subtitle,
   required SetDrugActivityFunction setActivity,
   required bool isActive,
@@ -23,7 +24,7 @@ SwitchListTile buildDrugActivitySelection({
   inactiveThumbColor: PharMeTheme.surfaceColor,
   inactiveTrackColor: PharMeTheme.borderColor,
   trackOutlineColor: WidgetStatePropertyAll(Colors.transparent),
-  title: Text(title),
+  title: Text(title, style: titleStyle),
   subtitle: subtitle.isNotNullOrBlank ? Text(subtitle!, style: PharMeTheme.textTheme.bodyMedium): null,
   contentPadding: contentPadding,
   onChanged: disabled ? null : (newValue) {
@@ -33,7 +34,10 @@ SwitchListTile buildDrugActivitySelection({
         builder: (context) => DialogWrapper(
           title: context.l10n.drugs_page_active_warn_header,
           content: DialogContentText(
-            context.l10n.drugs_page_active_warn,
+            context.l10n.drugs_page_active_warn(
+              drug.name.capitalize(),
+              enumerationWithAnd(inhibitedGenes(drug), context),
+            ),
           ),
           actions: [
             DialogAction(

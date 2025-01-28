@@ -106,21 +106,27 @@ void main() {
     ) as Switch;
     expect(activitySelection.onChanged, isLoading ? isNull : isNotNull);
     expect(activitySelection.value, expectDrugToBeActive ? isTrue : isFalse);
+    await tester.tap(find.byKey(Key('drug-information-expansion-tile')));
+    await tester.pumpAndSettle();
     // Drug details
     expect(
       find.textContaining(
-        drug.annotations.drugclass
+        drug.annotations.drugclass,
+        skipOffstage: false,
       ),
       findsOneWidget,
     );
-    expect(find.text(drug.annotations.indication), findsOneWidget);
+    expect(
+      find.text(drug.annotations.indication, skipOffstage: false),
+      findsOneWidget,
+    );
     // Guideline details
     final card = tester.firstWidget(
       find.byKey(
         ValueKey('annotationCard'),
       ),
     ) as RoundedCard;
-    expect(find.byType(Disclaimer), findsOneWidget);
+    expect(find.byType(GuidelineDisclaimer), findsOneWidget);
     final sourcesSection = find.byKey(Key('sourceCard'));
     final context = tester.element(find.byType(Scaffold).first);
     if (expectNoBrandNames) {
@@ -147,7 +153,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.text(context.l10n.drugs_page_no_guidelines_text),
+        find.textContaining(context.l10n.drugs_page_no_guidelines_text),
         findsOneWidget,
       );
       if (drug.guidelines.isNotEmpty) {
@@ -170,7 +176,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.text(relevantGuideline.annotations.implication),
+        find.textContaining(relevantGuideline.annotations.implication),
         findsOneWidget,
       );
       expect(

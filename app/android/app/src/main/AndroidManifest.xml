@@ -4,8 +4,9 @@
         etc.) set the parameter 'android:usesCleartextTraffic' to 'true' -->
    <application
         android:label="PharMe"
-        android:icon="@mipmap/launcher_icon"
-        android:usesCleartextTraffic="false"
+       android:icon="@mipmap/ic_launcher"
+       android:roundIcon="@mipmap/ic_launcher_round"
+       android:usesCleartextTraffic="false"
    >
         <activity
             android:name=".MainActivity"

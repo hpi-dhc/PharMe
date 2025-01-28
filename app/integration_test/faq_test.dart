@@ -38,6 +38,8 @@ void main() {
         await tester.pumpWidget(faqWidget);
         await tester.pumpAndSettle();
 
+        final faqContent = getFaqContent();
+
         final expectedNumberOfQuestions = faqContent.fold<int>(
           0, (number, topic) => number + topic.questions.length
         );

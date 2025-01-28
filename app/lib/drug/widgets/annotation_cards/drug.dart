@@ -19,60 +19,64 @@ class DrugAnnotationCards extends StatelessWidget {
     return Column(
       children: [
         RoundedCard(
-          innerPadding: EdgeInsets.symmetric(horizontal: PharMeTheme.mediumSpace),
+          innerPadding: EdgeInsets.symmetric(
+            horizontal: PharMeTheme.mediumSpace,
+          ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (drug.annotations.brandNames.isNotEmpty) ...[
+                SizedBox(height: PharMeTheme.mediumSpace),
+                buildTable([
+                  TableRowDefinition(
+                    context.l10n.drug_item_brand_names,
+                    drug.annotations.brandNames.join(', '),
+                  ),
+                ]),
+              ],
               buildDrugActivitySelection(
                 context: context,
                 drug: drug,
                 setActivity: setActivity,
                 title: context.l10n.drugs_page_text_active,
+                titleStyle: PharMeTheme.textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
                 isActive: isActive,
                 disabled: disabled,
                 contentPadding: EdgeInsets.zero,
               ),
-              if (isInhibitor(drug.name)) ...[
-                SizedBox(height: PharMeTheme.smallSpace),
-                buildTable(
-                  [TableRowDefinition(
-                    drugInteractionIndicator,
-                    context.l10n.drugs_page_is_inhibitor(
-                      drug.name,
-                      inhibitedGenes(drug).join(', '),
-                    ),
-                  )],
-                  boldHeader: false,
-                ),
-                SizedBox(height: PharMeTheme.mediumSpace),
-              ],
             ],
-          )
+          ),
         ),
         SizedBox(height: PharMeTheme.smallSpace),
-        SubHeader(context.l10n.drugs_page_header_drug),
-        SizedBox(height: PharMeTheme.smallSpace),
-        RoundedCard(
-          innerPadding: EdgeInsets.all(PharMeTheme.mediumSpace),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(drug.annotations.indication),
-                SizedBox(height: PharMeTheme.smallSpace),
-                buildTable([
-                  TableRowDefinition(
-                    context.l10n.drugs_page_header_drugclass,
-                    drug.annotations.drugclass,
-                  ),
-                  if (drug.annotations.brandNames.isNotEmpty)
-                    TableRowDefinition(
-                      context.l10n.drug_item_brand_names,
-                      drug.annotations.brandNames.join(', '),
-                    ),
-                ]),
-              ],
+        PrettyExpansionTile(
+          key: Key('drug-information-expansion-tile'),
+          title: SubHeader(context.l10n.drugs_page_header_drug),
+          visualDensity: VisualDensity.compact,
+          titlePadding: EdgeInsets.zero,
+          childrenPadding: EdgeInsets.zero,
+          children: [
+            SizedBox(height: PharMeTheme.smallSpace),
+            RoundedCard(
+              innerPadding: EdgeInsets.all(PharMeTheme.mediumSpace),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(drug.annotations.indication),
+                    SizedBox(height: PharMeTheme.smallSpace),
+                    buildTable([
+                      TableRowDefinition(
+                        context.l10n.drugs_page_header_drugclass,
+                        drug.annotations.drugclass,
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );

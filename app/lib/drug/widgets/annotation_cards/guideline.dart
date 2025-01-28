@@ -24,16 +24,14 @@ class GuidelineAnnotationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (drug.guidelines.isNotEmpty) ...[
-                  ..._buildHeader(context),
-                  SizedBox(height: PharMeTheme.mediumSpace),
-                  _buildCard(context),
-                  SizedBox(height: PharMeTheme.mediumSpace),
+                  _buildResultSection(context),
+                  SizedBox(height: PharMeTheme.smallToMediumSpace),
                   _buildSourcesSection(context),
+                  SizedBox(height: PharMeTheme.mediumSpace),
+                  GuidelineDisclaimer(userGuideline: drug.userGuideline),
                 ]
                 else ...[
-                  ..._buildHeader(context),
-                  SizedBox(height: PharMeTheme.smallSpace),
-                  _buildCard(context),
+                  _buildResultSection(context),
                 ],
               ],
             ),
@@ -43,59 +41,79 @@ class GuidelineAnnotationCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCard(BuildContext context) {
+  Widget _buildResultSection(BuildContext context) {
     final implicationText = drug.userGuideline?.annotations.implication;
     final recommendationText = drug.userGuideline?.annotations.recommendation;
-    return RoundedCard(
-      key: Key('annotationCard'),
-      radius: PharMeTheme.innerCardRadius,
-      outerHorizontalPadding: 0,
-      outerVerticalPadding: 0,
-      color: drug.warningLevel.color,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text.rich(
-            TextSpan(children: [
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  drug.warningLevel.icon,
-                  color: PharMeTheme.onSurfaceText,
-                  size: PharMeTheme.mediumToLargeSpace,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildPhenotype(context),
+        SizedBox(height: PharMeTheme.smallToMediumSpace),
+        RoundedCard(
+          key: Key('annotationCard'),
+          radius: PharMeTheme.innerCardRadius,
+          outerHorizontalPadding: 0,
+          outerVerticalPadding: 0,
+          color: drug.warningLevel.color,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text.rich(
+                TextSpan(children: [
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Icon(
+                      drug.warningLevel.icon,
+                      color: PharMeTheme.onSurfaceText,
+                      size: PharMeTheme.mediumToLargeSpace,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' ${drug.warningLevel.getLabel(context)}',
+                  ),
+                ]),
+                style: PharMeTheme.textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              TextSpan(
-                text: ' ${drug.warningLevel.getLabel(context)}',
-              ),
-            ]),
-            style: PharMeTheme.textTheme.titleMedium!.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: PharMeTheme.smallToMediumSpace),
-          Text.rich(
-            TextSpan(
-              text:
-                implicationText ?? context.l10n.drugs_page_no_guidelines_text,
-            ),
-          ),
-          if (recommendationText != null) ...[
-            SizedBox(height: PharMeTheme.smallToMediumSpace),
-            Text.rich(
-              TextSpan(children: [
+              SizedBox(height: PharMeTheme.smallToMediumSpace),
+              Text.rich(
                 TextSpan(
-                  text: context.l10n.drugs_page_recommendation_description,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  children: [
+                    if (implicationText != null) TextSpan(
+                      text: context.l10n.drugs_page_implication_description,
+                    ),
+                    WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.2)),
+                    TextSpan(
+                      text:
+                        implicationText ?? context.l10n.drugs_page_no_guidelines_text,
+                      style: implicationText != null
+                        ? TextStyle(fontWeight: FontWeight.bold)
+                        : TextStyle(fontStyle: FontStyle.italic)
+                        ),
+                  ],
                 ),
-                TextSpan(text: recommendationText),
-              ]),
-            ),
-          ],
-          SizedBox(height: PharMeTheme.smallToMediumSpace),
-          Disclaimer(userGuideline: drug.userGuideline),
-        ]
-      )
+              ),
+              if (recommendationText != null) ...[
+                SizedBox(height: PharMeTheme.smallToMediumSpace),
+                Text.rich(
+                  TextSpan(children: [
+                    TextSpan(
+                      text: context.l10n.drugs_page_recommendation_description,
+                    ),
+                    WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.2)),
+                    TextSpan(
+                      text: recommendationText,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ]),
+                ),
+              ],
+            ]
+          )
+        ),
+        _maybeBuildPhenoconversionInformation(context) ?? SizedBox.shrink(),
+      ],
     );
   }
 
@@ -107,47 +125,33 @@ class GuidelineAnnotationCard extends StatelessWidget {
       : context.l10n.drugs_page_tooltip_guideline_missing;
   }
 
-  List<Widget> _buildHeader(BuildContext context) {
-    if (drug.userGuideline == null && drug.guidelines.isEmpty) {
-      return [
-        Text(
-          context.l10n.drugs_page_guidelines_empty(drug.name),
-          style: TextStyle(fontStyle: FontStyle.italic),
-        ),
-      ];
-    } else {
-      final genotypeResults = drug.guidelineGenotypes.map((genotypeKey) =>
-        UserData.instance.genotypeResults![genotypeKey] ??
-          // Should not be null but to be safe
-          GenotypeResult.missingResult(
-            GenotypeKey.extractGene(genotypeKey),
-            variant: GenotypeKey.maybeExtractVariant(genotypeKey),
-          )
-      ).toList();
-      final geneDescriptions = genotypeResults.map((genotypeResult) =>
-        TableRowDefinition(
-          genotypeResult.geneDisplayString,
-          possiblyAdaptedPhenotype(
-            context,
-            genotypeResult,
-            drug: drug.name,
-          ),
-        )
-      ).toList();
-      return [
-        buildTable(geneDescriptions),
-        if (genotypeResults.any(
-          (genotypeResult) => isInhibited(genotypeResult, drug: drug.name)
-        )) ...[
-          SizedBox(height: PharMeTheme.smallSpace),
-          buildDrugInteractionInfo(
-            context,
-            genotypeResults,
-            drug: drug.name,
-          ),
-        ],
-      ];
+  Widget _buildPhenotype(BuildContext context) {
+    final genotypeResults = getGenotypeResultsForDrug(drug);
+    if (genotypeResults == null) {
+      return Text(
+        context.l10n.drugs_page_guidelines_empty(drug.name),
+        style: TextStyle(fontStyle: FontStyle.italic),
+      );
     }
+    return buildTable(
+      genotypeResults.map((genotypeResult) =>
+        phenotypeTableRow(
+          context,
+          key: genotypeResult.geneDisplayString,
+          genotypeResult: genotypeResult,
+          drug: drug.name,
+        ),
+      ).toList(),
+    );
+  }
+
+  Widget? _maybeBuildPhenoconversionInformation(BuildContext context) {
+    final phenoconversionExplanation = getUserPhenoconversionExplanation(drug);
+    if (phenoconversionExplanation == null) return null;
+    return Padding(
+      padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
+      child: phenoconversionExplanation,
+    );
   }
 
   Widget _buildSourcesSection(BuildContext context) {

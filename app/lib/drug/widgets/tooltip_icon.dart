@@ -12,7 +12,8 @@ class TooltipIcon extends StatelessWidget {
     return Tooltip(
       key: tooltipKey,
       message: message,
-      margin: EdgeInsets.symmetric(horizontal: PharMeTheme.smallSpace),
+      margin: EdgeInsets.symmetric(horizontal: PharMeTheme.smallToMediumSpace),
+      padding: EdgeInsets.all(PharMeTheme.smallSpace),
       triggerMode: TooltipTriggerMode.manual,
       child: SizedBox(
         height: size,

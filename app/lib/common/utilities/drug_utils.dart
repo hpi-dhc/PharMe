@@ -4,6 +4,27 @@ import 'package:http/http.dart';
 import '../../app.dart';
 import '../module.dart';
 
+List<GenotypeResult> getInhibitedGenotypesForDrug(Drug drug) {
+  final genotypeResults = getGenotypeResultsForDrug(drug);
+  return genotypeResults?.filter(
+    (genotypeResult) => isInhibited(genotypeResult, drug: drug.name)
+  ).toList() ?? [];
+}
+
+List<GenotypeResult>? getGenotypeResultsForDrug(Drug drug) {
+  if (drug.userGuideline == null && drug.guidelines.isEmpty) {
+    return null;
+  }
+  return drug.guidelineGenotypes.map((genotypeKey) =>
+    // Should not be null but to be safe
+    UserData.instance.genotypeResults?[genotypeKey] ??
+      GenotypeResult.missingResult(
+        GenotypeKey.extractGene(genotypeKey),
+        variant: GenotypeKey.maybeExtractVariant(genotypeKey),
+      )
+  ).toList();
+}
+
 Future<void> maybeUpdateDrugsWithGuidelines() async {
   final isOnline = await hasConnectionTo(anniUrl().host);
   if (!isOnline && DrugsWithGuidelines.instance.version == null) {

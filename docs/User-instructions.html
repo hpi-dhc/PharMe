@@ -1,7 +1,19 @@
 <html>
 <head>
-<title>PharMe: Getting Started</title>
+<title>PharMe: Getting Started & Further Resources</title>
+<link
+    href="https://fonts.googleapis.com/css2?family=Material+Icons+Round"
+    rel="stylesheet"
+>
+<link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"">
 <style>
+
+@media print {
+    body {
+        -webkit-print-color-adjust: exact; /*chrome & webkit browsers*/
+        print-color-adjust: exact; /*firefox & IE */
+    } 
+}
 body {
     margin: 0;
     background-color: whitesmoke;
@@ -9,6 +21,14 @@ body {
     flex-direction: column;
     align-items: center;
     font-family: Helvetica, sans-serif;
+    line-height: 150%;
+}
+h1 {
+    margin-bottom: 0.4in;
+}
+h2 {
+    margin-top: 0.3in;
+    margin-bottom: 0.2in;
 }
 .content {
     margin: 0;
@@ -16,38 +36,201 @@ body {
     width: 8.5in;
     background-color: white;
 }
-td {
-    height: 5.2in;
-    vertical-align: center;
-}
-tr {
-    border-bottom: 3px solid gainsboro;
-    border-top: 3px solid gainsboro;
-    border-collapse: collapse;
-}
-.screenshot-wrapper {
-    width: 5.2in;
+.onboarding-page {
+    padding: 0.3in;
+    color: whitesmoke;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
 }
-.screenshot {
-    width: 2.5in;
-    height: 4.93in;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: bottom;
+.cyan-background {
+    background-color: #01aeef;
 }
+.magenta-background {
+    background-color: #d80b8c;
+}
+.purple-background {
+    background-color: #221f73;
+}
+.gray-background {
+    background-color: #757575;
+}
+.onboarding-image {
+    height: 1in;
+    margin: 0.3in;
+}
+.disclaimer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.3in;
+    background-color: whitesmoke;
+    color: black;
+    padding: 0.1in;
+    border-radius: 0.1in;
+}
+.disclaimer-icon-container {
+    flex: 1;
+    position: relative;
+    padding-right: 0.1in;
+    min-height: 30px;
+    max-height: 30px;
+    min-width: 30px;
+    max-width: 30px;
+}
+.disclaimer-icon {
+    font-size: 30px;
+}
+.disclaimer-icon-with-sub-icon {
+    font-size: 23px;
+}
+.disclaimer-sub-icon-background {
+    position: absolute;
+    font-size: 10px;
+    bottom: 5px;
+    right: 10px;
+    color: whitesmoke;
+}
+.disclaimer-sub-icon {
+    position: absolute;
+    font-size: 8px;
+    bottom: 6px;
+    right: 11px;
+    color: #221f73;
+}
+
 </style>
 </head>
 <body>
 <div class="content">
-<h1>Getting Started with PharMe</h1>
+<h1>PharMe: Getting Started & Further Resources</h1>
 <p>
-    Welcome to PharMe, an application to gain insights on your DNA's influence
-    on medications! 🧬💊🤗
+    In this document you find all information to get started with PharMe and further support while using it:
 </p>
+<ul>
+    <li><a href="#app-intro">App intro</a></li>
+    <li><a href="#app-tour">App tour</a></li>
+    <li>Resources to <a href="#learn-about-genetics">learn about genetics</a></li>
+    <li><a href="#faq">FAQ</a></li>
+</ul>
 <p>
+    If you have any questions or need assistance, please refer to the FAQ section or reach out via e-mail: <a href="mailto:ehivepgx@mssm.edu">ehivepgx@mssm.edu</a>
+</p>
+<h2 id="app-intro">App Intro</h2>
+<div class="onboarding-page cyan-background">
+    <div>
+        <h2>Welcome to PharMe!</h2>
+        <p>
+            Did you know? Your genes help decide how medications work in your body.
+            <br/>
+            In fact, 9 out of 10 people might react differently to medications than expected.
+            <br/>
+            PharMe helps you understand how your genes affect your medications.
+        </p>
+        <div class="disclaimer">
+            <div class="disclaimer-icon-container">
+                <i class="fa-classic fa-solid fa-puzzle-piece disclaimer-icon"></i>
+            </div>
+            <div>
+                Your genes are just one piece of the puzzle. Many things affect how medications work, like your weight, age, other health conditions, or other medications you are taking.
+            </div>
+        </div>
+    </div>
+    <img
+        class="onboarding-image"
+        src="../app/assets/images/onboarding/OutlinedLogo.png"
+    />
+</div>
+<div class="onboarding-page magenta-background">
+    <div>
+        <h2>One Size Does Not Fit All</h2>
+        <p>
+            Think of medications like shoes - one size doesn't fit all.
+            <br/>
+            A medication that works well for most people might not work the same way for you.
+        </p>
+        <div class="disclaimer">
+            <div class="disclaimer-icon-container">
+                <span class="material-icons-round disclaimer-icon">warning</span>
+            </div>
+            <div>
+                Never change or stop your medications without talking to your pharmacist or doctor first.
+            </div>
+        </div>
+    </div>
+    <img
+        class="onboarding-image"
+        src="../app/assets/images/onboarding/DrugReaction.png"
+    />
+</div>
+<div class="onboarding-page purple-background">
+    <div>
+        <h2>Genome Power Unlocked to Improve Your Health</h2>
+        <p>
+            PharMe tells you if your genes might make certain medications work differently than expected, cause unwanted side effects, or not work well enough.
+            <br/>
+            <br/>
+            This field of medicine is called pharma-co-genomics (PGx).
+        </p>
+        <div class="disclaimer">
+            <div class="disclaimer-icon-container">
+                <span class="material-icons-round disclaimer-icon">info</span>
+            </div>
+            <div>
+                The medical field of how your genes affect how medications work in your body is called pharma-co-genomics (PGx).
+            </div>
+        </div>
+    </div>
+    <img
+        class="onboarding-image"
+        src="../app/assets/images/onboarding/GenomePower.png"
+    />
+</div>
+<div class="onboarding-page gray-background">
+    <div>
+        <h2>Tailored Just for You</h2>
+        <p>
+            PharMe works by looking at your gene information and checking it against what scientists know about genes and medications.
+            <br/>
+            <br/>
+            We use information from trusted clinical PGx guidelines created by medical experts (CPIC and FDA).
+        </p>
+        <div class="disclaimer">
+            <div class="disclaimer-icon-container">
+                <i class="fa-classic fa-solid fa-pills disclaimer-icon-with-sub-icon"></i>
+                <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background"></i>
+                <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon"></i>
+            </div>
+            <div>
+                PharMe only includes medications with clinical PGx guidelines from CPIC and the FDA.
+                <br/>
+                <br/>
+                While only to a small percentage of medications have PGx guidelines, they are among the most commonly prescribed ones. If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
+            </div>
+        </div>
+    </div>
+    <img
+        class="onboarding-image"
+        src="../app/assets/images/onboarding/Tailored.png"
+    />
+</div>
+<div class="onboarding-page cyan-background">
+    <div>
+        <h2>Keeping Your Information Safe</h2>
+        <p>
+            We protect your privacy by storing your gene information and doing calculations only on your phone. We do not share your gene information with anyone.
+            <br/>
+            <br/>
+            We also do not store any information that could tell someone who you are, such as your name.
+        </p>
+    </div>
+    <img
+        class="onboarding-image"
+        src="../app/assets/images/onboarding/DataProtection.png"
+    />
+</div>
+<h2 id="app-tour">App Tour</h2>
+<!-- <p>
     In the following, we will give you an overview on how to use the app.
     Please contact us at
     <a href="mailto:pgx-app-validation-study@lists.myhpi.de">pgx-app-validation-study@lists.myhpi.de</a>
@@ -67,8 +250,7 @@ tr {
 <td>
     To get started with PharMe, you first need to import your pharmacogenomic
     (PGx) test data (data about your DNA and medications you are taking) from your
-    data provider.
-    <br/>
+    data provider.<br/>
     <br/>
     Tapping the <i>Get data</i> button will forward you to
     your data provider's sign in.
@@ -99,8 +281,8 @@ tr {
 <tr>
 <td>
 <div class="screenshot-wrapper">
-    <div class="screenshot" style="background-image: url(./screenshots/gene-report.png)"></div>
-    <div class="screenshot" style="background-image: url(./screenshots/cyp2c19.png)"></div>
+    <div class="screenshot" style="background-image: url(./screenshots/gene-report-current.png)"></div>
+    <div class="screenshot" style="background-image: url(./screenshots/cyp2c9.png)"></div>
 </div>
 </td>
 <td>
@@ -176,7 +358,9 @@ tr {
 <p>
     We hope by using PharMe you will learn useful information about your DNA and
     medications! Have fun! 💫
-</p>
+</p> -->
+<h2 id="learn-about-genetics">Learn About Genetics</h2>
+<h2 id="faq">FAQ</h2>
 </div>
 </body>
 </html>

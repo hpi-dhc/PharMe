@@ -31,43 +31,54 @@ class DrugSearch extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: PharMeTheme.smallSpace,
-            right: PharMeTheme.smallSpace,
-            bottom: PharMeTheme.smallSpace,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _buildSearchBarItems(context, searchController),
-          ),
+    final noDrugsMessage = '${context.l10n.search_no_drugs(
+      showFilter
+        ? context.l10n.search_no_drugs_with_filter_amendment
+        : '')
+    }\n\n${context.l10n.included_content_addition}';
+    return DrugList(
+      state: state,
+      activeDrugs: activeDrugs,
+      buildDrugItems: buildDrugItems,
+      showDrugInteractionIndicator: showDrugInteractionIndicator,
+      noDrugsMessage: noDrugsMessage,
+      searchForDrugClass: searchForDrugClass,
+      buildContainer: ({
+        children,
+        indicator,
+        noDrugsMessage,
+        showInactiveDrugs,
+      }) => Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(PharMeTheme.smallSpace),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: _buildSearchBarItems(
+                  context,
+                  searchController,
+                  showInactiveDrugs: showInactiveDrugs ?? true,
+                ),
+              ),
+            ),
+            if (children != null) scrollList(
+              keepPosition: keepPosition,
+              children,
+            ),
+            if (noDrugsMessage != null) noDrugsMessage,
+            if (indicator != null) indicator,
+          ],
         ),
-        DrugList(
-          state: state,
-          activeDrugs: activeDrugs,
-          buildDrugItems: buildDrugItems,
-          showDrugInteractionIndicator: showDrugInteractionIndicator,
-          noDrugsMessage: context.l10n.search_no_drugs(
-            showFilter
-              ? context.l10n.search_no_drugs_with_filter_amendment
-              : ''
-          ),
-          searchForDrugClass: searchForDrugClass,
-          buildContainer:
-            (children) => scrollList(keepPosition: keepPosition, children),
-          drugActivityChangeable: drugActivityChangeable,
-        ),
-        _maybeBuildInteractionIndicator(context, state, activeDrugs)
-          ?? SizedBox.shrink(),
-      ],
+      drugActivityChangeable: drugActivityChangeable,
     );
   }
 
   List<Widget> _buildSearchBarItems(
     BuildContext context,
     TextEditingController searchController,
+    {
+      required bool showInactiveDrugs,
+    }
   ) {
     return [
       Expanded(
@@ -85,39 +96,16 @@ class DrugSearch extends HookWidget {
         ? context.l10n.search_page_tooltip_search
         : context.l10n.search_page_tooltip_search_no_class
       ),
-      if (showFilter) DrugFilters(
-        cubit: cubit,
-        state: state,
-        activeDrugs: activeDrugs,
-        searchForDrugClass: searchForDrugClass,
-      ),
+      if (showFilter) ...[
+        SizedBox(width: PharMeTheme.smallToMediumSpace),
+        DrugFilters(
+          cubit: cubit,
+          state: state,
+          activeDrugs: activeDrugs,
+          searchForDrugClass: searchForDrugClass,
+          showInactiveDrugs: showInactiveDrugs,
+        ),
+      ],
     ];
-  }
-
-  Widget? _maybeBuildInteractionIndicator(
-    BuildContext context,
-    DrugListState state,
-    ActiveDrugs activeDrugs,
-  ) {
-    return state.whenOrNull(
-      loaded: (drugs, filter) {
-        if (showDrugInteractionIndicator) {
-          final filteredDrugs = filter.filter(
-            drugs,
-            activeDrugs,
-            searchForDrugClass: searchForDrugClass,
-          );
-          if (filteredDrugs.any((drug) => isInhibitor(drug.name))) {
-            return PageIndicatorExplanation(
-              context.l10n.search_page_indicator_explanation(
-                drugInteractionIndicatorName,
-                drugInteractionIndicator
-              ),
-            );
-          }
-        }
-        return null;
-      }
-    );
   }
 }

@@ -37,6 +37,10 @@ FutureOr<void> showAppTour(
             context.l10n.tutorial_app_tour_1_title,
           content: (context) => _buildContent(
             context.l10n.tutorial_app_tour_1_body,
+            trailingSpan: TextSpan(
+              text: context.l10n.tutorial_app_tour_1_body_bold,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           assetPath:
             'assets/images/tutorial/05_bottom_navigation_loopable.gif',
@@ -78,6 +82,10 @@ FutureOr<void> showAppTour(
             context.l10n.tutorial_app_tour_5_title,
           content: (context) => _buildContent(
             context.l10n.tutorial_app_tour_5_body,
+            trailingSpan: TextSpan(
+              text: context.l10n.tutorial_app_tour_5_body_bold,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           assetPath:
             'assets/images/tutorial/09_faq_and_more_loopable.gif',
@@ -86,8 +94,11 @@ FutureOr<void> showAppTour(
       onClose: revisiting
         ? null
         : () async {
-          MetaData.instance.tutorialDone = true;
-          await MetaData.save();
-        },
+            MetaData.instance.tutorialDone = true;
+            await MetaData.save();
+            // ignore: use_build_context_synchronously
+            await overwriteRoutes(context, nextPage: MainRoute());
+          },
       lastNextButtonText: lastNextButtonText,
+      firstBackButtonText: revisiting ? null : context.l10n.onboarding_prev,
     );

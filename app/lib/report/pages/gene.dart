@@ -5,7 +5,7 @@ import '../../drug/widgets/module.dart';
 
 @RoutePage()
 class GenePage extends HookWidget {
-  GenePage(this.genotypeResult)
+  GenePage(this.genotypeResult, {this.initiallyExpandFurtherMedications = false})
       : cubit = DrugListCubit(
           initialFilter:
             FilterState.forGenotypeKey(genotypeResult.key.value),
@@ -13,6 +13,7 @@ class GenePage extends HookWidget {
 
   final GenotypeResult genotypeResult;
   final DrugListCubit cubit;
+  final bool initiallyExpandFurtherMedications;
 
   @override
   Widget build(BuildContext context) {
@@ -20,107 +21,94 @@ class GenePage extends HookWidget {
       builder: (context, activeDrugs, child) => BlocProvider(
         create: (context) => cubit,
         child: BlocBuilder<DrugListCubit, DrugListState>(
-          builder: (context, state) => pageScaffold(
+          builder: (context, state) => unscrollablePageScaffold(
             title:
               context.l10n.gene_page_headline(genotypeResult.geneDisplayString),
-            body: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: PharMeTheme.smallToMediumSpace,
-                  vertical: PharMeTheme.mediumSpace
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            body: DrugList(
+              state: state,
+              activeDrugs: activeDrugs,
+              noDrugsMessage: context.l10n.gene_page_no_relevant_drugs,
+              initiallyExpandFurtherMedications: initiallyExpandFurtherMedications,
+              buildContainer: ({
+                children,
+                indicator,
+                noDrugsMessage,
+                showInactiveDrugs,
+              }) =>
+                Column(
                   children: [
-                    SubHeader(
-                      context.l10n.gene_page_your_result(
-                        genotypeResult.geneDisplayString,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: PharMeTheme.smallToMediumSpace,
+                        right: PharMeTheme.smallToMediumSpace,
+                        top: PharMeTheme.smallSpace,
+                        bottom: PharMeTheme.smallSpace,
                       ),
-                      tooltip: context.l10n
-                          .gene_page_name_tooltip(
-                            genotypeResult.gene,
-                          ),
-                    ),
-                    SizedBox(height: PharMeTheme.smallToMediumSpace),
-                    RoundedCard(
-                      radius: PharMeTheme.mediumSpace,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Table(
-                            columnWidths: Map.from({
-                              0: IntrinsicColumnWidth(),
-                              1: IntrinsicColumnWidth(flex: 1),
-                            }),
-                            children: [
-                              _buildRow(
-                                  context.l10n.gene_page_genotype,
-                                  genotypeResult.variantDisplayString(context),
-                                  tooltip: context.l10n.gene_page_genotype_tooltip
-                              ),
-                              _buildPhenotypeRow(context),
-                            ],
-                          ),
-                          if (isInhibited(genotypeResult, drug: null)) ...[
-                            SizedBox(height: PharMeTheme.smallSpace),
-                            buildDrugInteractionInfo(
-                              context,
-                              [genotypeResult],
-                              drug: null,
+                          SubHeader(
+                            context.l10n.gene_page_your_result(
+                              genotypeResult.geneDisplayString,
                             ),
-                          ]
-                      ],
-                    )),
-                    SizedBox(height: PharMeTheme.smallToMediumSpace),
-                    SubHeader(
-                      context.l10n.gene_page_relevant_drugs,
-                      tooltip: context.l10n.gene_page_relevant_drugs_tooltip(
-                        genotypeResult.geneDisplayString
+                            tooltip: context.l10n
+                                .gene_page_name_tooltip(
+                                  genotypeResult.gene,
+                                ),
+                          ),
+                          SizedBox(height: PharMeTheme.smallToMediumSpace),
+                          RoundedCard(
+                            radius: PharMeTheme.mediumSpace,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildGeneResults(context),
+                                if (isInhibited(genotypeResult, drug: null)) ...[
+                                  SizedBox(height: PharMeTheme.smallSpace),
+                                  PhenoconversionExplanation(
+                                    inhibitedGenotypes: [genotypeResult],
+                                    drugName: null,
+                                  ),
+                                ]
+                            ],
+                          )),
+                          SizedBox(height: PharMeTheme.mediumToLargeSpace),
+                          SubHeader(
+                            context.l10n.gene_page_relevant_drugs,
+                            tooltip: context.l10n.gene_page_relevant_drugs_tooltip(
+                              genotypeResult.geneDisplayString
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: PharMeTheme.smallSpace),
-                    DrugList(
-                      state: state,
-                      activeDrugs: activeDrugs,
-                      noDrugsMessage: context.l10n.gene_page_no_relevant_drugs,
-                    ),
-                  ],
+                    if (children != null) scrollList(children),
+                    if (noDrugsMessage != null) noDrugsMessage,
+                    if (indicator != null) indicator,
+                  ]
                 ),
-              ),
-            ],
+            ),
           ),
         ),
       )
     );
-  }
 
-  TableRow _buildPhenotypeRow(BuildContext context) {
-    return _buildRow(
-      context.l10n.gene_page_phenotype,
-      possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
-      tooltip:
-        context.l10n.gene_page_phenotype_tooltip,
-    );
   }
-
-  TableRow _buildRow(String key, String value, {String? tooltip}) =>
-      TableRow(children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 4, 12, 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(key,
-                  style: PharMeTheme.textTheme.bodyMedium!
-                      .copyWith(fontWeight: FontWeight.bold)),
-              if (tooltip.isNotNullOrEmpty) ...[
-                SizedBox(width: PharMeTheme.smallSpace),
-                TooltipIcon(tooltip!),
-              ],
-            ],
-          ),
-        ),
-        Padding(padding: EdgeInsets.fromLTRB(0, 4, 0, 4), child: Text(value)),
-      ]);
+  
+  Widget _buildGeneResults(BuildContext context) => buildTable([
+    testResultTableRow(
+      context,
+      genotypeResult: genotypeResult,
+      key: context.l10n.gene_page_genotype,
+      value: genotypeResult.variantDisplayString(context),
+      keyTooltip: context.l10n.gene_page_genotype_tooltip,
+    ),
+    phenotypeTableRow(
+      context,
+      key: context.l10n.gene_page_phenotype,
+      genotypeResult: genotypeResult,
+      drug: null,
+      keyTooltip: context.l10n.gene_page_phenotype_tooltip,
+    ),
+  ]);
 }

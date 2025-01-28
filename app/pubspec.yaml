@@ -1,7 +1,7 @@
 name: app
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.0.4+14
+version: 1.0.6+16
 
 environment:
   sdk: '>=3.0.0'
@@ -71,7 +71,8 @@ flutter:
     - assets/images/onboarding/
     - assets/images/tutorial/
 
-flutter_icons:
-  android: 'launcher_icon'
+flutter_launcher_icons:
+  android: true
   ios: true
+  remove_alpha_ios: true
   image_path: 'assets/icon/icon.png'

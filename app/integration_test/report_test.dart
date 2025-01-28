@@ -31,7 +31,7 @@ void main() {
           home: Scaffold(
             body: Builder(
               builder: (context) {
-                return ReportPage();
+                return ReportPage(allGenesInitiallyExpanded: true);
               },
             ),
           ),
@@ -122,10 +122,6 @@ void main() {
     }
     final context = tester.element(find.byType(Scaffold).first);
     if (expectedNotTestedGenes.isNotEmpty) {
-      expect(
-        find.text(context.l10n.report_no_result_genes, skipOffstage: false),
-        findsOneWidget,
-      );
       for (final gene in expectedNotTestedGenes) {
         final geneCardsFinder = findGeneCard(gene);
         expect(
@@ -140,11 +136,6 @@ void main() {
         final geneCard = tester.widgetList(geneCardsFinder).last as GeneCard;
         expect(geneCard.color, PharMeTheme.onSurfaceColor);
       }
-    } else {
-      expect(
-        find.text(context.l10n.report_no_result_genes, skipOffstage: false),
-        findsNothing,
-      );
     }
   }
 

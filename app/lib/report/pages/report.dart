@@ -1,16 +1,34 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/module.dart';
 
 typedef WarningLevelCounts = Map<WarningLevel, int>;
 
+enum SortOption {
+  alphabetical,
+  warningSeverity,
+}
+
 @RoutePage()
-class ReportPage extends StatelessWidget {
+class ReportPage extends HookWidget {
+  const ReportPage({@visibleForTesting this.allGenesInitiallyExpanded = false});
+
+  final bool allGenesInitiallyExpanded;
+
   @override
   Widget build(BuildContext context) {
+    final allGenesExpanded = useState(allGenesInitiallyExpanded);
+    // Not changeable yet in UI!
+    final currentSortOption = useState(SortOption.alphabetical);
     return Consumer<ActiveDrugs>(
       builder: (context, activeDrugs, child) =>
-        _buildReportPage(context, activeDrugs)
+        _buildReportPage(
+          context,
+          activeDrugs,
+          allGenesExpanded,
+          currentSortOption,
+        )
     );
   }
 
@@ -20,14 +38,54 @@ class ReportPage extends StatelessWidget {
     ).values.sum();
   }
 
-  Widget _buildReportPage(BuildContext context, ActiveDrugs activeDrugs) {
-    final userGenotypes = UserData.instance.genotypeResults!.values;
+  List<Drug> _getAffectedDrugs(
+    String genotypeResultKey,
+    {
+      List<String>? drugSubset,
+    }) {
+      final allAffectedDrugs = DrugsWithGuidelines.instance.drugs?.filter(
+        (drug) => drug.guidelineGenotypes.contains(genotypeResultKey)
+      ).toList() ?? [];
+      if (drugSubset != null) {
+        return allAffectedDrugs.filter(
+          (drug) => drugSubset.contains(drug.name)
+        ).toList();
+      }
+      return allAffectedDrugs;
+    }
+  
+  Iterable<GenotypeResult> _getRelevantGenotypes(
+    List<String>? drugSubset,
+  ) {
+    if (UserData.instance.genotypeResults == null) return [];
+    final allGenotypeResults = UserData.instance.genotypeResults!.values;
+    if (drugSubset == null) return allGenotypeResults;
+    return allGenotypeResults.filter(
+      (genotypeResult) => _getAffectedDrugs(
+        genotypeResult.key.value,
+        drugSubset: drugSubset,
+      ).isNotEmpty
+    );
+  }
+
+  List<Widget> _buildGeneCards({
+    required SortOption currentSortOption,
+    List<String>? drugsToFilterBy,
+    required bool onlyCurrentMedications,
+  }) {
+    final keyPostfix = onlyCurrentMedications
+      ? 'current-medications'
+      : 'all-medications';
+    final userGenotypes = _getRelevantGenotypes(
+      drugsToFilterBy,
+    );
     final warningLevelCounts = <String, WarningLevelCounts>{};
     for (final genotypeResult in userGenotypes) {
       warningLevelCounts[genotypeResult.key.value] = {};
-      final affectedDrugs = DrugsWithGuidelines.instance.drugs?.filter(
-        (drug) => drug.guidelineGenotypes.contains(genotypeResult.key.value)
-      ) ?? [];
+      final affectedDrugs = _getAffectedDrugs(
+        genotypeResult.key.value,
+        drugSubset: drugsToFilterBy,
+      );
       for (final warningLevel in WarningLevel.values) {
         warningLevelCounts[genotypeResult.key.value]![warningLevel] =
           affectedDrugs.filter(
@@ -38,24 +96,76 @@ class ReportPage extends StatelessWidget {
     var sortedGenotypes = userGenotypes.sortedBy(
       (genotypeResult) => genotypeResult.key.value
     );
-    final sortedWarningLevelSeverities = Set<int>.from(
-      WarningLevel.values
-      .sortedBy((warningLevel) => warningLevel.severity)
-      .map((warningLevel) => warningLevel.severity)
-     );
-    for (final severity in sortedWarningLevelSeverities) {
-      sortedGenotypes = sortedGenotypes.sortedByDescending((genotypeResult) =>
-        _getSeverityCount(
-          warningLevelCounts[genotypeResult.key.value]!,
-          severity,
-        ),
+    if (currentSortOption == SortOption.warningSeverity) {
+      final sortedWarningLevelSeverities = Set<int>.from(
+        WarningLevel.values
+        .sortedBy((warningLevel) => warningLevel.severity)
+        .map((warningLevel) => warningLevel.severity)
       );
+      for (final severity in sortedWarningLevelSeverities) {
+        sortedGenotypes = sortedGenotypes.sortedByDescending((genotypeResult) =>
+          _getSeverityCount(
+            warningLevelCounts[genotypeResult.key.value]!,
+            severity,
+          ),
+        );
+      }
     }
-    final sortedGenotypesWithResults = sortedGenotypes.filter(
-      (genotypeResult) => !_hasNoResult(genotypeResult)
+    return sortedGenotypes.map((genotypeResult) =>
+      GeneCard(
+        genotypeResult,
+        warningLevelCounts[genotypeResult.key.value]!,
+        key: Key('gene-card-${genotypeResult.key.value}-$keyPostfix'),
+        useColors: false,
+        onlyCurrentMedications: onlyCurrentMedications,
+      )
+    ).toList();
+  }
+
+  Widget _maybeBuildPageIndicators(
+    BuildContext context,
+    ActiveDrugs activeDrugs,
+    { required bool allGenesVisible }
+  ) {
+    final drugsToFilterBy = allGenesVisible ? null : activeDrugs.names;
+    final relevantGenes = _getRelevantGenotypes(drugsToFilterBy);
+    final hasActiveInhibitors = relevantGenes.any(
+      (genotypeResult) => activeDrugs.names.any(
+        (drug) => isInhibited(genotypeResult, drug: drug)
+      )
     );
-    final sortedGenotypesWithoutResults = sortedGenotypes.filter(_hasNoResult);
-    final hasActiveInhibitors = activeDrugs.names.any(isInhibitor);
+    if (!hasActiveInhibitors && drugsToFilterBy == null) {
+      return SizedBox.shrink();
+    }
+    var indicatorText = '';
+    if (drugsToFilterBy != null) {
+      final listHelperText = context.l10n.show_all_dropdown_text(
+        context.l10n.report_show_all_dropdown_item,
+        context.l10n.report_dropdown_position,
+        context.l10n.report_show_all_dropdown_items,
+      );
+      indicatorText = listHelperText;
+    }
+    if (hasActiveInhibitors) {
+      final inhibitorText = context.l10n.report_page_indicator_explanation(
+        drugInteractionIndicatorName,
+        drugInteractionIndicator
+      );
+      if (indicatorText.isNotBlank) {
+        indicatorText = '$indicatorText\n\n$inhibitorText';
+      } else {
+        indicatorText = inhibitorText;
+      }
+    }
+    return PageIndicatorExplanation(indicatorText);
+  }
+
+  Widget _buildReportPage(
+    BuildContext context,
+    ActiveDrugs activeDrugs,
+    ValueNotifier<bool> allGenesExpanded,
+    ValueNotifier<SortOption> currentSortOption,
+  ) {
     return PopScope(
       canPop: false,
       child: unscrollablePageScaffold(
@@ -67,48 +177,120 @@ class ReportPage extends StatelessWidget {
           children: [
             PageDescription.fromText(context.l10n.report_content_explanation),
             scrollList(
-              [
-                PageDescription(
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(context.l10n.report_legend_text),
-                      SizedBox(height: PharMeTheme.smallSpace * 0.5),
-                      Text.rich(buildWarningLevelTextLegend(context)),
-                    ]
-                  ),
-                ),
-                ...sortedGenotypesWithResults.map((genotypeResult) => GeneCard(
-                  genotypeResult,
-                  warningLevelCounts[genotypeResult.key.value]!,
-                  key: Key('gene-card-${genotypeResult.key.value}')
-                )),
-                if (sortedGenotypesWithoutResults.isNotEmpty) ...[
-                  SubheaderDivider(
-                    text: context.l10n.report_no_result_genes,
-                    key: Key('header-no-result'),
-                    useLine: false,
-                  ),
-                  ...sortedGenotypesWithoutResults.map((genotypeResult) =>
-                    GeneCard(
-                      genotypeResult,
-                      warningLevelCounts[genotypeResult.key.value]!,
-                      key: Key('gene-card-${genotypeResult.key.value}')
-                    )
-                  ),
-                ],
-              ],
-            ),
-            if (hasActiveInhibitors) PageIndicatorExplanation(
-              context.l10n.report_page_indicator_explanation(
-                drugInteractionIndicatorName,
-                drugInteractionIndicator
+              _buildReportLists(
+                context,
+                activeDrugs,
+                allGenesExpanded,
+                currentSortOption,
               ),
+            ),
+            _maybeBuildPageIndicators(
+              context,
+              activeDrugs,
+              allGenesVisible: allGenesExpanded.value,
             ),
           ]
         )
       ),
     );
+  }
+
+  Widget _listDescription(
+    BuildContext context,
+    String label,
+    {
+      required List<String>? drugsToFilterBy,
+      Color? labelColor,
+    }
+  ) {
+    final genotypes = _getRelevantGenotypes(
+      drugsToFilterBy,
+    );
+    final affectedDrugs = genotypes.flatMap(
+      (genotypeResult) => _getAffectedDrugs(
+        genotypeResult.key.value,
+        drugSubset: drugsToFilterBy,
+      )
+    ).toSet();
+    return ListDescription(
+      key: Key('report-list-description-$label'),
+      textParts: [
+        TextSpan(text: context.l10n.report_description_prefix),
+        TextSpan(text: ' '),
+        boldListDescriptionText(label, color: labelColor),
+      ],
+      detailsText:
+        '${context.l10n.report_gene_number(genotypes.length)}, '
+        '${context.l10n.report_medication_number(affectedDrugs.length)}',
+    );
+  }
+
+  List<Widget> _buildReportLists(
+    BuildContext context,
+    ActiveDrugs activeDrugs,
+    ValueNotifier<bool> allGenesExpanded,
+    ValueNotifier<SortOption> currentSortOption,
+  ) {
+    final currentMedicationGenes = _buildGeneCards(
+      currentSortOption: currentSortOption.value,
+      drugsToFilterBy: activeDrugs.names,
+      onlyCurrentMedications: true,
+    );
+    final allMedicationGenesHeader =  _listDescription(
+      context,
+      context.l10n.report_all_medications,
+      drugsToFilterBy: null,
+    );
+    final allMedicationGenes = _buildGeneCards(
+      currentSortOption: currentSortOption.value,
+      drugsToFilterBy: null,
+      onlyCurrentMedications: false,
+    );
+    final inclusionDescription = Padding(
+      key: Key('included-gene-explanation'),
+      padding: EdgeInsets.only(
+        left: PharMeTheme.smallSpace,
+        right: PharMeTheme.smallSpace,
+        top: PharMeTheme.smallSpace * 1.5,
+      ),
+      child: ListInclusionDescription.forGenes(),
+    );
+    if (currentMedicationGenes.isEmpty) {
+      return [
+        inclusionDescription,
+        allMedicationGenesHeader,
+        ...allMedicationGenes,
+      ];
+    }
+    return [
+      inclusionDescription,
+      _listDescription(
+        context,
+        context.l10n.report_current_medications,
+        drugsToFilterBy: activeDrugs.names,
+        labelColor: PharMeTheme.primaryColor,
+      ),
+      ...currentMedicationGenes,
+      PrettyExpansionTile(
+        title: allMedicationGenesHeader,
+        initiallyExpanded: allGenesExpanded.value,
+        onExpansionChanged: (value) => allGenesExpanded.value = value,
+        titlePadding: EdgeInsets.zero,
+        childrenPadding: EdgeInsets.zero,
+        icon: ResizedIconButton(
+          size: PharMeTheme.largeSpace,
+          disabledBackgroundColor: PharMeTheme.buttonColor,
+          iconWidgetBuilder: (size) => Icon(
+            allGenesExpanded.value
+              ? Icons.arrow_drop_up
+              : Icons.arrow_drop_down,
+            size: size,
+            color: PharMeTheme.surfaceColor,
+          ),
+        ),
+        children: allMedicationGenes,
+      ),
+    ];
   }
 }
 
@@ -116,13 +298,21 @@ bool _hasNoResult(GenotypeResult genotypeResult) =>
   UserData.lookupFor(genotypeResult.key.value) == SpecialLookup.noResult.value;
 
 class GeneCard extends StatelessWidget {
-  const GeneCard(this.genotypeResult, this.warningLevelCounts, { super.key });
+  const GeneCard(
+    this.genotypeResult,
+    this.warningLevelCounts, {
+      super.key,
+      this.useColors = true,
+      this.onlyCurrentMedications = false,
+    });
 
   final GenotypeResult genotypeResult;
   final WarningLevelCounts warningLevelCounts;
+  final bool useColors;
+  final bool onlyCurrentMedications;
 
   @visibleForTesting
-  Color? get color => _hasNoResult(genotypeResult)
+  Color? get color => !useColors || _hasNoResult(genotypeResult)
     ? PharMeTheme.onSurfaceColor
     : _getHighestSeverityColor(warningLevelCounts);
 
@@ -137,70 +327,93 @@ class GeneCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasLegend = warningLevelCounts.values.any((count) => count > 0);
+    final medicationIndicators =
+      warningLevelCounts.values.any((count) => count > 0)
+      ? DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: PharMeTheme.smallSpace * 0.35,
+            horizontal: PharMeTheme.smallSpace,
+          ),
+          child: Text.rich(
+            TextSpan(children: [
+              WidgetSpan(child: Icon(
+                FontAwesomeIcons.pills,
+                size: PharMeTheme.textTheme.bodyMedium!.fontSize,
+                color: PharMeTheme.buttonColor,
+              )),
+              TextSpan(text: ' : '),
+              buildWarningLevelLegend(
+                getText: (warningLevel) {
+                  final warningLevelCount =
+                    warningLevelCounts[warningLevel]!;
+                  return warningLevelCount > 0
+                    ? warningLevelCount.toString()
+                    : null;
+                }
+              ),
+            ]),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          ),
+        )
+      : null;
+    final phenotype = possiblyAdaptedPhenotype(
+      context,
+      genotypeResult,
+      drug: null,
+    );
     return RoundedCard(
-      onTap: () => context.router.push(
-        GeneRoute(genotypeResult: genotypeResult)
-      ),
+      onTap: () async {
+        // ignore: use_build_context_synchronously
+        await context.router.push(GeneRoute(
+          genotypeResult: genotypeResult,
+          initiallyExpandFurtherMedications: !onlyCurrentMedications,
+        ));
+      },
       radius: 16,
       color: color,
-      child: IntrinsicHeight(child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                genotypeResult.geneDisplayString,
-                style: PharMeTheme.textTheme.titleMedium
-              ),
-              SizedBox(height: 8),
-              Text(
-                possiblyAdaptedPhenotype(context, genotypeResult, drug: null),
-                style: PharMeTheme.textTheme.titleSmall,
-              ),
-            ],
-          ),
           Expanded(
-            child: hasLegend
-              ? Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                padding: EdgeInsets.only(
-                  left: PharMeTheme.mediumSpace,
-                  right: PharMeTheme.smallSpace,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  genotypeResult.geneDisplayString,
+                  style: PharMeTheme.textTheme.titleMedium
                 ),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: PharMeTheme.smallSpace * 0.35,
-                    horizontal: PharMeTheme.smallSpace,
-                  ),
-                  child: Text.rich(
-                    buildWarningLevelLegend(
-                      getText: (warningLevel) {
-                        final warningLevelCount =
-                          warningLevelCounts[warningLevel]!;
-                        return warningLevelCount > 0
-                          ? warningLevelCount.toString()
-                          : null;
-                      }
+                SizedBox(height: PharMeTheme.smallSpace * 0.5),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  alignment: WrapAlignment.spaceBetween,
+                  runSpacing: PharMeTheme.smallSpace * 0.5,
+                  children: [
+                    Text(
+                      phenotype,
+                      style: testResultIsUnknown(context, phenotype)
+                        ? PharMeTheme.textTheme.titleSmall!.copyWith(
+                            fontStyle: FontStyle.italic,
+                          )
+                        : PharMeTheme.textTheme.titleSmall,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  ),
-                )),
-              )
-              : SizedBox.shrink(),
+                    SizedBox(width: PharMeTheme.smallSpace),
+                    medicationIndicators ?? SizedBox.shrink(),
+                  ],
+                ),
+              ]
+            ),
           ),
-          Icon(Icons.chevron_right_rounded),
-        ]
-      )),
+          SizedBox(width: PharMeTheme.smallSpace),
+          Column(mainAxisSize: MainAxisSize.min,children: [Icon(Icons.chevron_right_rounded)],),
+        ],
+      ),
     );
   }
 }

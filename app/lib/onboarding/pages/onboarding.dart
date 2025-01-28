@@ -1,3 +1,5 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../../common/module.dart' hide MetaData;
 import '../../common/models/metadata.dart';
 
@@ -17,9 +19,8 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_1_header,
         text: context.l10n.onboarding_1_text,
         color: PharMeTheme.sinaiCyan,
-        child: DisclaimerCard(
-          text: context.l10n.onboarding_1_disclaimer_part_1,
-          secondLineText: context.l10n.drugs_page_disclaimer_text_part_2,
+        bottom: DisclaimerCard(
+          text: context.l10n.drugs_page_main_disclaimer_text,
         ),
       ),
       OnboardingSubPage(
@@ -37,8 +38,10 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_3_header,
         text: context.l10n.onboarding_3_text,
         color: PharMeTheme.sinaiPurple,
-        child: DisclaimerCard(
-          text: context.l10n.onboarding_3_disclaimer,
+        bottom: DisclaimerCard(
+          icon: FontAwesomeIcons.puzzlePiece,
+          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
+          text: context.l10n.drugs_page_puzzle_disclaimer_text,
         ),
       ),
       OnboardingSubPage(
@@ -48,6 +51,17 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_4_header,
         text: context.l10n.onboarding_4_already_tested_text,
         color: Colors.grey.shade600,
+        bottom: DisclaimerCard(
+          iconWidget: IncludedContentIcon(
+            type: ListInclusionDescriptionType.medications,
+            color: PharMeTheme.onSurfaceText,
+            size: OnboardingDimensions.iconSize,
+          ),
+          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
+          text: '${context.l10n.included_content_disclaimer_text(
+              context.l10n.included_content_medications,
+            )}\n\n${context.l10n.included_content_addition}',
+        ),
       ),
       OnboardingSubPage(
         availableHeight:
@@ -295,7 +309,8 @@ class OnboardingSubPage extends HookWidget {
     required this.text,
     required this.color,
     required this.availableHeight,
-    this.child,
+    this.top,
+    this.bottom,
   });
 
   final String illustrationPath;
@@ -304,7 +319,8 @@ class OnboardingSubPage extends HookWidget {
   final String text;
   final double availableHeight;
   final Color color;
-  final Widget? child;
+  final Widget? top;
+  final Widget? bottom;
 
   double? _getContentHeight(GlobalKey contentKey) {
     return contentKey.currentContext?.size?.height;
@@ -331,6 +347,21 @@ class OnboardingSubPage extends HookWidget {
     return scrollController.offset >= maxScrollOffset;
   }
 
+  double? _getRelativeScrollPosition(
+    GlobalKey contentKey,
+    ScrollController scrollController,
+  ) {
+    final maxScrollOffset = _getMaxScrollOffset(contentKey);
+    if (maxScrollOffset == null) return null;
+    final relativePosition =
+      1 - (maxScrollOffset - scrollController.offset) / maxScrollOffset;
+    return relativePosition < 0
+      ? 0
+      : relativePosition > 1
+        ? 1
+        : relativePosition;
+  }
+
   @override
   Widget build(BuildContext context) {
     const scrollbarThickness = 6.5;
@@ -339,6 +370,7 @@ class OnboardingSubPage extends HookWidget {
     const imageHeight = 175.0;
     final contentKey =  GlobalKey();
     final showScrollIndicatorButton = useState(false);
+    final scrollIndicatorButtonOpacity = useState<double>(1);
     final scrollController = ScrollController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -350,6 +382,11 @@ class OnboardingSubPage extends HookWidget {
     scrollController.addListener(() {
       final hideButton = _scrolledToEnd(contentKey, scrollController) ?? false;
       showScrollIndicatorButton.value = !hideButton;
+      final relativeScrollPosition =
+        _getRelativeScrollPosition(contentKey, scrollController);
+      if (relativeScrollPosition != null) {
+        scrollIndicatorButtonOpacity.value = 1 - relativeScrollPosition;
+      }
     });
  
     return Stack(
@@ -397,15 +434,19 @@ class OnboardingSubPage extends HookWidget {
                       maxLines: 2,
                     ),
                     SizedBox(height: PharMeTheme.mediumToLargeSpace),
+                    if (top != null) ...[
+                      top!,
+                      SizedBox(height: PharMeTheme.mediumSpace),
+                    ],
                     Text(
                       text,
                       style: PharMeTheme.textTheme.bodyLarge!.copyWith(
                         color: Colors.white,
                       ),
                     ),
-                    if (child != null) ...[
+                    if (bottom != null) ...[
                       SizedBox(height: PharMeTheme.mediumSpace),
-                      child!,
+                      bottom!,
                     ],
                   ]),
                   // Empty widget for spaceBetween in this column to work properly
@@ -417,25 +458,28 @@ class OnboardingSubPage extends HookWidget {
         ),
         if (showScrollIndicatorButton.value) Positioned(
           bottom: 0,
-          child: IconButton(
+          child: Opacity(
+            opacity: scrollIndicatorButtonOpacity.value,
+            child: IconButton(
             style: IconButton.styleFrom(
-              backgroundColor: Colors.white,
-              side: BorderSide(color: color, width: 3),
+                backgroundColor: Colors.white,
+                side: BorderSide(color: color, width: 3),
+              ),
+              icon: Icon(
+                Icons.arrow_downward,
+                size: OnboardingDimensions.iconSize * 0.85,
+                color: color,
+              ),
+              onPressed: () async {
+                await scrollController.animateTo(
+                  _getMaxScrollOffset(contentKey)!,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.linearToEaseOut,
+                );
+                showScrollIndicatorButton.value = false;
+              },
             ),
-            icon: Icon(
-              Icons.arrow_downward,
-              size: OnboardingDimensions.iconSize * 0.85,
-              color: color,
-            ),
-            onPressed: () async {
-              await scrollController.animateTo(
-                _getMaxScrollOffset(contentKey)!,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.linearToEaseOut,
-              );
-              showScrollIndicatorButton.value = false;
-            },
-          )
+          ),
         ),
       ],
     );
@@ -445,15 +489,19 @@ class OnboardingSubPage extends HookWidget {
 class DisclaimerCard extends StatelessWidget {
   const DisclaimerCard({
     this.icon,
+    this.iconWidget,
     required this.text,
     this.secondLineText,
     this.onClick,
+    this.iconPadding,
   });
 
-  final Icon? icon;
+  final IconData? icon;
+  final Widget? iconWidget;
   final String text;
   final String? secondLineText;
   final GestureTapCallback? onClick;
+  final EdgeInsets? iconPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -467,7 +515,14 @@ class DisclaimerCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            icon ??  Icon(Icons.warning_rounded, size: 32),
+            Padding(
+              padding: iconPadding ?? EdgeInsets.zero,
+              child: iconWidget ?? Icon(
+                icon ?? Icons.warning_rounded,
+                size: OnboardingDimensions.iconSize,
+                color: PharMeTheme.onSurfaceText,
+              ),
+            ),
             SizedBox(width: PharMeTheme.smallSpace),
             Expanded(
               child: Column(

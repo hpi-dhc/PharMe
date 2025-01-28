@@ -31,19 +31,19 @@ class DrugSelectionPage extends HookWidget {
             }
             return unscrollablePageScaffold(
               title: context.l10n.drug_selection_header,
-              canNavigateBack: !concludesOnboarding,
               contextToDismissFocusOnTap: context,
+              canNavigateBack: context.router.stack.length > 1,
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace),
+                    padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
                     child: PageDescription.fromText(
-                      context.l10n.drug_selection_settings_description,
+                      context.l10n.drug_selection_description,
                     ),
                   ),
                   Expanded(child: _buildDrugList(context, state)),
-                  if (concludesOnboarding) _buildButton(context, state),
+                  _buildButton(context, state),
                 ],
               ),
             );
@@ -61,42 +61,33 @@ class DrugSelectionPage extends HookWidget {
   }
 
   Widget _buildButton(BuildContext context, DrugSelectionState state) {
+    final buttonText = concludesOnboarding
+      ? context.l10n.action_proceed_to_app
+      : context.l10n.action_back_to_app;
+    final onButtonPressed = concludesOnboarding
+      ? () async {
+          MetaData.instance.initialDrugSelectionDone = true;
+          await MetaData.save();
+          // ignore: use_build_context_synchronously
+          await context.router.push(
+            MainRoute(),
+          );
+        }
+      : () {
+          context.router.maybePop();
+        };
     return Padding(
       padding: EdgeInsets.all(PharMeTheme.mediumSpace),
       child: FullWidthButton(
-        context.l10n.action_continue,
-        () async {
-          await showAdaptiveDialog(
-            context: context,
-            builder: (context) => DialogWrapper(
-              title: context.l10n.drug_selection_continue_warning_title,
-              content: Text(context.l10n.drug_selection_continue_warning),
-              actions: [
-                DialogAction(
-                  onPressed: context.router.root.maybePop,
-                  text: context.l10n.action_cancel,
-                ),
-                DialogAction(
-                  onPressed: () async {
-                    MetaData.instance.initialDrugSelectionDone = true;
-                    await MetaData.save();
-                    // ignore: use_build_context_synchronously
-                    await overwriteRoutes(context, nextPage: MainRoute());
-                  },
-                  text: context.l10n.action_understood,
-                  isDefault: true,
-                ),
-              ],
-            ),
-          );
-        },
+        buttonText,
+        onButtonPressed,
         enabled: _isEditable(state),
       )
     );
   }
 
   Widget _buildDrugList(BuildContext context, DrugSelectionState state) {
-    if (DrugsWithGuidelines.instance.drugs!.isEmpty) {
+    if (DrugsWithGuidelines.instance.drugs?.isEmpty ?? true) {
       return Column(
         children: [
           Text(

@@ -1,4 +1,10 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'module.dart';
+
+const medicationsIcon = FontAwesomeIcons.pills;
+const genesIcon = FontAwesomeIcons.dna;
 
 Uri anniUrl([String slug = '']) =>
     Uri.https('hpi-annotation-service.duckdns.org', 'api/v1/$slug');
@@ -27,6 +33,12 @@ enum SpecialLookup {
   anyNotHandled,
   noResult,
 }
+
+const indeterminateResult = 'Indeterminate';
+List<String> unknownPhenotypes(BuildContext context) => [
+  indeterminateResult,
+  context.l10n.general_not_tested,
+];
 
 extension SpecialLookupValue on SpecialLookup {
   String get value {

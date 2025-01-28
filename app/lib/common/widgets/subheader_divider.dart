@@ -1,5 +1,10 @@
 import '../module.dart';
 
+TextStyle subheaderDividerStyle({Color? color}) =>
+  PharMeTheme.textTheme.bodySmall!.copyWith(
+    color: color ?? PharMeTheme.subheaderColor,
+  );
+
 class SubheaderDivider extends StatelessWidget {
   const SubheaderDivider({
     this.text = '',
@@ -16,7 +21,7 @@ class SubheaderDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widgetColor = color ?? Colors.grey[600];
+    final widgetColor = color ?? PharMeTheme.subheaderColor;
     return Padding(
       padding: EdgeInsets.all(padding ?? PharMeTheme.smallSpace),
       child: Column(
@@ -25,8 +30,7 @@ class SubheaderDivider extends StatelessWidget {
           if (useLine) Divider(color: widgetColor, thickness: 0.5),
           Text(
             text,
-            style:
-              PharMeTheme.textTheme.bodySmall!.copyWith(color: widgetColor),
+            style: subheaderDividerStyle(color: widgetColor),
             textAlign: TextAlign.start,
           ),
         ],

@@ -1,7 +1,9 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../../../common/module.dart';
 
-class Disclaimer extends StatelessWidget {
-  const Disclaimer({ this.userGuideline });
+class GuidelineDisclaimer extends StatelessWidget {
+  const GuidelineDisclaimer({ this.userGuideline });
 
   final Guideline? userGuideline;
 
@@ -16,36 +18,38 @@ class Disclaimer extends StatelessWidget {
         color: PharMeTheme.surfaceColor,
         border: Border.all(color: PharMeTheme.errorColor, width: 1.2),
       ),
-      child: Text.rich(
-        TextSpan(children: [
-          WidgetSpan(
-            child: Icon(
+      child: Column(
+        children: [
+          DisclaimerRow(
+            icon: Icon(
               Icons.warning_rounded,
               size: PharMeTheme.mediumSpace,
               color: PharMeTheme.errorColor,
             ),
-          ),
-          TextSpan(text: ' '),
-          TextSpan(
-            text: context.l10n.drugs_page_disclaimer_description,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(
-            text: context.l10n.drugs_page_disclaimer_text_part_0,
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-          if (userGuideline != null) TextSpan(
-            children: [
-              TextSpan(text: '\n\n'),
-              TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_1),
-              TextSpan(text: ' '),
-              TextSpan(text: context.l10n.drugs_page_disclaimer_text_part_2),
-            ],
-            style: PharMeTheme.textTheme.labelMedium!.copyWith(
-              fontWeight: FontWeight.w300,
+            text: Text(
+              context.l10n.drugs_page_main_disclaimer_text,
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
-          )
-        ]),
+          ),
+          SizedBox(height: PharMeTheme.smallSpace),
+          DisclaimerRow(
+            icon: IncludedContentIcon(
+              type: ListInclusionDescriptionType.genes,
+              size: PharMeTheme.mediumSpace,
+              color: PharMeTheme.onSurfaceText,
+            ),
+            text: Text(ListInclusionDescriptionType.genes.getText(context)),
+          ),
+          SizedBox(height: PharMeTheme.smallSpace),
+          DisclaimerRow(
+            icon: Icon(
+              FontAwesomeIcons.puzzlePiece,
+              size: PharMeTheme.mediumSpace,
+              color: PharMeTheme.onSurfaceText,
+            ),
+            text: Text(context.l10n.drugs_page_puzzle_disclaimer_text),
+          ),
+        ],
       ),
     );
   }

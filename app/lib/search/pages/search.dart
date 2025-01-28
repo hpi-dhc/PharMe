@@ -25,15 +25,24 @@ class SearchPage extends HookWidget {
           title: context.l10n.tab_drugs,
           canNavigateBack: false,
           contextToDismissFocusOnTap: context,
-          body: DrugSearch(
-            key: Key('drug-search'),
-            showFilter: true,
-            buildDrugItems: buildDrugCards,
-            cubit: cubit,
-            state: state,
-            activeDrugs: activeDrugs,
-            searchForDrugClass: searchForDrugClass,
-            showDrugInteractionIndicator: false,
+          body: Column(
+            children: [
+              PageDescription.fromText(
+                context.l10n.search_content_explanation,
+              ),
+              Expanded(
+                child: DrugSearch(
+                  key: Key('drug-search'),
+                  showFilter: true,
+                  buildDrugItems: buildDrugCards,
+                  cubit: cubit,
+                  state: state,
+                  activeDrugs: activeDrugs,
+                  searchForDrugClass: searchForDrugClass,
+                  showDrugInteractionIndicator: false,
+                ),
+              ),
+            ],
           ),
         ),
       ),
