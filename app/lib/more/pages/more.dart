@@ -143,12 +143,8 @@ class DeleteDataDialog extends HookWidget {
                 context: context,
                 builder: (context) => DialogWrapper(
                   title: context.l10n.delete_data_restart_title,
-                  content: Column(
-                    children: [
-                      SizedBox(height: PharMeTheme.smallSpace),
-                      Text(context.l10n.delete_data_restart_text),
-                    ],
-                  ),
+                  content:
+                    DialogContentText(context.l10n.delete_data_restart_text),
                   actions: [
                     DialogAction(
                       text: context.l10n.error_close_app,
