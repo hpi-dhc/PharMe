@@ -112,13 +112,18 @@ h3 {
 }
 .app-tour-container {
     display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
+    flex-direction: row-reverse;
+    padding: 0.15in;
 }
-.app-screenshot-container {
+.app-tour-content {
+    padding-right: 0.15in;
+}
+.app-screenshot {
     min-width: 2in;
     max-width: 2in;
-    padding: 0.15in;
+    padding-left: 0.15in;
+    object-fit: contain;
+    filter: drop-shadow(lightgray 5px 5px 5px);
 }
 
 </style>
@@ -137,8 +142,15 @@ h3 {
 </ul>
 <p>
     If you have any questions or need assistance, please refer to the FAQ section or reach out via e-mail: <a href="mailto:ehivepgx@mssm.edu">ehivepgx@mssm.edu</a>
+    <br/>
+    <br/>
+    We hope you will enjoy using PharMe and that you will learn useful
+    information about how your genes influence how well medications work for
+    you!
 </p>
-<h2 id="app-intro page">App Intro</h2>
+
+<h2 id="app-intro">App Intro</h2>
+
 <div class="onboarding-page cyan-background no-pagebreak-inside">
     <div class="onboarding-texts">
         <h3>Welcome to PharMe!</h3>
@@ -262,89 +274,164 @@ h3 {
         />
     </div>
 </div>
+
 <h2 id="app-tour">App Tour</h2>
-<!-- <div class="app-tour-container">
+
+<!-- Not included in app -->
+<div class="app-tour-container">
     <div class="app-screenshot-container">
-        <img class="constrained-image" src="./screenshots/accept-terms.png" />
+        <img class="app-screenshot" src="./screenshots/accept-terms.png" />
     </div>
-    <div>
+    <div class="app-tour-content">
+        <h3>Get Started</h3>
         To get started with PharMe, you first need to agree to our
         <a href="https://pharme-services-sandbox.mssm.edu/terms/">Terms of Use</a>
         and <a href="https://pharme-services-sandbox.mssm.edu/privacy/">Privacy Policy</a>.
     </div>
 </div>
+<hr>
 <div class="app-tour-container">
     <div class="app-screenshot-container">
-        <img class="constrained-image" src="./screenshots/login.png" />
+        <img class="app-screenshot" src="./screenshots/login.png" />
     </div>
-    <div>
+    <div class="app-tour-content">
+        <h3>Login</h3>
         Login with the credentials you received from the study team to
-        load your pharmacogenomic (PGx) test data, medications you are
-        currently taking, and pharmacogenomic guideline data.
+        load your PGx test data, medications you are
+        currently taking, and PGx guideline data.
     </div>
-</div> -->
-<!-- <p>
-    In the following, we will give you an overview on how to use the app.
-    Please contact us at
-    <a href="mailto:pgx-app-validation-study@lists.myhpi.de">pgx-app-validation-study@lists.myhpi.de</a>
-    in case you have any questions.
-</p>
-<p>
-    We hope you will enjoy using PharMe! 🎉
-</p>
-<table>
-<tr>
-<td>
-<div class="screenshot-wrapper">
-    <div class="screenshot" style="background-image: url(./screenshots/login.png)"></div>
-    <div class="screenshot" style="background-image: url(./screenshots/login-redirect.png)"></div>
 </div>
-</td>
-<td>
-    To get started with PharMe, you first need to import your pharmacogenomic
-    (PGx) test data (data about your DNA and medications you are taking) from your
-    data provider.<br/>
-    <br/>
-    Tapping the <i>Get data</i> button will forward you to
-    your data provider's sign in.
-</td>
-</tr>
-<tr>
-<td>
-<div class="screenshot-wrapper">
-    <div class="screenshot" style="background-image: url(./screenshots/onboarding-2.png)"></div>
-    <div class="screenshot" style="background-image: url(./screenshots/drug-selection.png)"></div>
+<hr>
+<div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="app-screenshot" src="./screenshots/onboarding-1.png" />
+    </div>
+    <div class="app-tour-content">
+        <h3>App Intro</h3>
+        After successfully downloading your data, you will get an overview about
+        what PharMe can do in the app intro (also see the
+        <a href="#app-intro">app intro</a> above).
+    </div>
 </div>
-</td>
-<td>
-    After successfully importing data, you will get an overview about PharMe's
-    background and capabilities in a short onboarding.
-    <br/>
-    <br/>
-    In the initial medication selection you can tell PharMe which medications
-    you are currently taking – if your PGx test data includes current
-    medications, they will be pre-selected here.
-    <br/>
-    <br/>
-    Later in the app, you will be able to filter for medications you are
-    currently taking; also, some medications can influence your results for
-    other medications. Please take your time here to make the most of PharMe. ☺️
-</td>
-</tr>
-<tr>
-<td>
-<div class="screenshot-wrapper">
-    <div class="screenshot" style="background-image: url(./screenshots/gene-report-current.png)"></div>
-    <div class="screenshot" style="background-image: url(./screenshots/cyp2c9.png)"></div>
+<hr>
+<div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="app-screenshot" src="./screenshots/drug-selection.png" />
+    </div>
+    <div class="app-tour-content">
+        <h3>Update Current Medications</h3>
+        You can then review and update your current medications with PGx
+        guidelines. Your current medications with PGx guidelines from your
+        medical record will be pre-selected here.
+        <br/>
+        <br/>
+        You will also be able to edit your current medications later in the
+        app.
+        <br/>
+        <br/>
+        Some medications can change how your body handles other medication.
+        They can slow down or speed how your body processes medications.
+        <br/>
+        <br/>
+        PharMe will warn you when this might happen.
+    </div>
 </div>
-</td>
-<p>
-    We hope you will enjoy using PharMe! 🎉
-    We hope by using PharMe you will learn useful information about your DNA and
-    medications! Have fun! 💫
-</p> -->
+<!-- FROM NOW ON INCLUDED IN APP (HEADING WILL SAY "Part i: ... (i/n)") -->
+<hr>
+<div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="app-screenshot" src="./screenshots/drug-search.png" />
+    </div>
+    <div class="app-tour-content">
+        <h3>Getting Around</h3>
+        Great! You're almost ready to use PharMe. Let's show you how it works.
+        <br/>
+        <br/>
+        At the bottom of your screen, you'll find four main buttons:
+        "Medications", "Genes", "FAQ", and "More".
+        <br/>
+        <br/>
+        <b>Want to see this tour again later? Just go to "More" and tap
+        "Repeat app tour" or "Print app information".</b>
+        <br/>
+        <br/>
+        <hr>
+        <br/>
+        <h3>Finding Medications</h3>
+        The "Medications" screen  shows all medications in PharMe.
+        <br/>
+        <br/>
+        You can search for medication names (both generic and brand names), look
+        for types of medications, and filter the list by how well they work with
+        your genes.
+        <br/>
+        <br/>
+        Each medication has a color and symbol that shows how it might work for
+        you based on your genes:
+        <br/>
+        <br/>
+        <p style="color: red">TODO: List of icons and descriptions</p>
+    </div>
+</div>
+<hr>
+<div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="app-screenshot" src="./screenshots/ibuprofen.png" />
+    </div>
+    <div class="app-tour-content">
+        <h3>Learning About Your Medications</h3>
+        Tap any medication to see how well it might work for you, based on what
+        science tells us about this medication and your genes.
+        <br/>
+        <br/>
+        Here you can also mark medications you're taking and save information
+        for your doctor.
+    </div>
+</div>
+<hr>
+<div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="app-screenshot" src="./screenshots/gene-report-all.png" />
+    </div>
+    <div class="app-tour-content">
+        <h3>Understanding Your Genes</h3>
+        The "Genes" screen shows your gene test results that affect medications.
+        <br/>
+        <br/>
+        Tap any gene to learn what your results mean and which medications it
+        affects.
+        <br/>
+        <br/>
+        Want to learn more? Check out the FAQ or go to "More" > "Learn about
+        genetics."
+    </div>
+</div>
+<hr>
+<div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="app-screenshot" src="./screenshots/more.png" />
+    </div>
+    <div class="app-screenshot-container">
+        <img class="app-screenshot" src="./screenshots/faq.png" />
+    </div>
+    <div class="app-tour-content">
+        <h3>FAQ & Additional Features</h3>
+        <b>Need help? Use "More" to get in touch with us or learn about the app,
+        or check the FAQ for common questions.</b>
+        <br/>
+        <br/>
+        Under "More" you can also edit your current medication list.
+    </div>
+</div>
+
 <h2 id="learn-about-genetics">Learn About Genetics</h2>
+
+<p style="color: red">TODO: List from Aniwaa</p>
+
 <h2 id="faq">FAQ</h2>
+
+<h3></h3>
+
 </div>
 </body>
 </html>
