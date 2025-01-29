@@ -12,7 +12,10 @@
     body {
         -webkit-print-color-adjust: exact; /*chrome & webkit browsers*/
         print-color-adjust: exact; /*firefox & IE */
-    } 
+    }
+    .no-pagebreak-inside {
+        break-inside: avoid;
+    }
 }
 body {
     margin: 0;
@@ -29,6 +32,9 @@ h1 {
 h2 {
     margin-top: 0.3in;
     margin-bottom: 0.2in;
+}
+h3 {
+    margin-top: 0;
 }
 .content {
     margin: 0;
@@ -56,9 +62,15 @@ h2 {
 .gray-background {
     background-color: #757575;
 }
+.onboarding-texts {
+    padding-right: 0.3in;
+}
 .onboarding-image {
-    height: 1in;
-    margin: 0.3in;
+    max-height: 1in;
+    min-height: 1in;
+    max-width: 1.5in;
+    min-width: 1.5in;
+    object-fit: contain;
 }
 .disclaimer {
     display: flex;
@@ -98,6 +110,16 @@ h2 {
     right: 11px;
     color: #221f73;
 }
+.app-tour-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+.app-screenshot-container {
+    min-width: 2in;
+    max-width: 2in;
+    padding: 0.15in;
+}
 
 </style>
 </head>
@@ -108,18 +130,18 @@ h2 {
     In this document you find all information to get started with PharMe and further support while using it:
 </p>
 <ul>
-    <li><a href="#app-intro">App intro</a></li>
-    <li><a href="#app-tour">App tour</a></li>
+    <li>An <a href="#app-intro">app intro</a> that explains what PharMe can do</li>
+    <li>An <a href="#app-tour">app tour</a>, which leads through PharMe's main functions</li>
     <li>Resources to <a href="#learn-about-genetics">learn about genetics</a></li>
-    <li><a href="#faq">FAQ</a></li>
+    <li>Our <a href="#faq">FAQ</a></li>
 </ul>
 <p>
     If you have any questions or need assistance, please refer to the FAQ section or reach out via e-mail: <a href="mailto:ehivepgx@mssm.edu">ehivepgx@mssm.edu</a>
 </p>
-<h2 id="app-intro">App Intro</h2>
-<div class="onboarding-page cyan-background">
-    <div>
-        <h2>Welcome to PharMe!</h2>
+<h2 id="app-intro page">App Intro</h2>
+<div class="onboarding-page cyan-background no-pagebreak-inside">
+    <div class="onboarding-texts">
+        <h3>Welcome to PharMe!</h3>
         <p>
             Did you know? Your genes help decide how medications work in your body.
             <br/>
@@ -136,14 +158,17 @@ h2 {
             </div>
         </div>
     </div>
-    <img
-        class="onboarding-image"
-        src="../app/assets/images/onboarding/OutlinedLogo.png"
-    />
+    <div class="onboarding-image-container">
+        <img
+            class="onboarding-image"
+            src="../app/assets/images/onboarding/OutlinedLogo.png"
+        />
+    </div>
 </div>
-<div class="onboarding-page magenta-background">
-    <div>
-        <h2>One Size Does Not Fit All</h2>
+<div class="page-break-before"></div>
+<div class="onboarding-page magenta-background no-pagebreak-inside">
+    <div class="onboarding-texts">
+        <h3>One Size Does Not Fit All</h3>
         <p>
             Think of medications like shoes - one size doesn't fit all.
             <br/>
@@ -158,14 +183,16 @@ h2 {
             </div>
         </div>
     </div>
-    <img
-        class="onboarding-image"
-        src="../app/assets/images/onboarding/DrugReaction.png"
-    />
+    <div class="onboarding-image-container">
+        <img
+            class="onboarding-image"
+            src="../app/assets/images/onboarding/DrugReaction.png"
+        />
+    </div>
 </div>
-<div class="onboarding-page purple-background">
-    <div>
-        <h2>Genome Power Unlocked to Improve Your Health</h2>
+<div class="onboarding-page purple-background no-pagebreak-inside">
+    <div class="onboarding-texts">
+        <h3>Genome Power Unlocked to Improve Your Health</h3>
         <p>
             PharMe tells you if your genes might make certain medications work differently than expected, cause unwanted side effects, or not work well enough.
             <br/>
@@ -181,14 +208,16 @@ h2 {
             </div>
         </div>
     </div>
-    <img
-        class="onboarding-image"
-        src="../app/assets/images/onboarding/GenomePower.png"
-    />
+    <div class="onboarding-image-container">
+        <img
+            class="onboarding-image"
+            src="../app/assets/images/onboarding/GenomePower.png"
+        />
+    </div>
 </div>
-<div class="onboarding-page gray-background">
-    <div>
-        <h2>Tailored Just for You</h2>
+<div class="onboarding-page gray-background no-pagebreak-inside">
+    <div class="onboarding-texts">
+        <h3>Tailored Just for You</h3>
         <p>
             PharMe works by looking at your gene information and checking it against what scientists know about genes and medications.
             <br/>
@@ -209,14 +238,16 @@ h2 {
             </div>
         </div>
     </div>
-    <img
-        class="onboarding-image"
-        src="../app/assets/images/onboarding/Tailored.png"
-    />
+    <div class="onboarding-image-container">
+        <img
+            class="onboarding-image"
+            src="../app/assets/images/onboarding/Tailored.png"
+        />
+    </div>
 </div>
-<div class="onboarding-page cyan-background">
-    <div>
-        <h2>Keeping Your Information Safe</h2>
+<div class="onboarding-page cyan-background no-pagebreak-inside">
+    <div class="onboarding-texts">
+        <h3>Keeping Your Information Safe</h3>
         <p>
             We protect your privacy by storing your gene information and doing calculations only on your phone. We do not share your gene information with anyone.
             <br/>
@@ -224,12 +255,34 @@ h2 {
             We also do not store any information that could tell someone who you are, such as your name.
         </p>
     </div>
-    <img
-        class="onboarding-image"
-        src="../app/assets/images/onboarding/DataProtection.png"
-    />
+    <div class="onboarding-image-container">
+        <img
+            class="onboarding-image"
+            src="../app/assets/images/onboarding/DataProtection.png"
+        />
+    </div>
 </div>
 <h2 id="app-tour">App Tour</h2>
+<!-- <div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="constrained-image" src="./screenshots/accept-terms.png" />
+    </div>
+    <div>
+        To get started with PharMe, you first need to agree to our
+        <a href="https://pharme-services-sandbox.mssm.edu/terms/">Terms of Use</a>
+        and <a href="https://pharme-services-sandbox.mssm.edu/privacy/">Privacy Policy</a>.
+    </div>
+</div>
+<div class="app-tour-container">
+    <div class="app-screenshot-container">
+        <img class="constrained-image" src="./screenshots/login.png" />
+    </div>
+    <div>
+        Login with the credentials you received from the study team to
+        load your pharmacogenomic (PGx) test data, medications you are
+        currently taking, and pharmacogenomic guideline data.
+    </div>
+</div> -->
 <!-- <p>
     In the following, we will give you an overview on how to use the app.
     Please contact us at
@@ -285,77 +338,8 @@ h2 {
     <div class="screenshot" style="background-image: url(./screenshots/cyp2c9.png)"></div>
 </div>
 </td>
-<td>
-    Afterwards, you reach the main app; everything is set up
-    now. (Yay! 🥳)
-    <br/>
-    <br/>
-    The first page you will see is the <i>Report</i> screen; here you can see
-    the results from your your PGx test by gene (we know the names are cryptic,
-    but you will get to know them sooner as you think!).
-    <br/>
-    <br/>
-    Under each gene name, your phenotype is depicted. The phenotype tells you
-    what the consequence of your genetic variant is; e.g., as a <i>CYP2C19
-    Intermediate Metabolizer</i>, your CYP2C19 enzyme – the protein that is
-    encoded by the CYP2C19 gene – works a bit slower than expected.
-    <br/>
-    <br/>
-    Selecting a gene will take you to its detail page, with further information
-    about your result and medications that are influenced by this gene. For
-    technical terms (like "genotype"), you can always find explanations by
-    tapping on the question mark.
-</td>
-</tr>
-<tr>
-<td>
-<div class="screenshot-wrapper">
-    <div class="screenshot" style="background-image: url(./screenshots/drug-search.png)"></div>
-    <div class="screenshot" style="background-image: url(./screenshots/clopidogrel.png)"></div>
-</div>
-</td>
-<td>
-    You can also view your PGx results by medications on the <i>Medications</i>
-    screen. Here, you can search for medications by their generic name, brand
-    names, or class. You can also filter the list by medications you are
-    currently taking and by guideline result (❌ consider alternatives,
-    ⚠️ use with caution, and ✅ standard precautions).
-    <br/>
-    <br/>
-    Selecting a medication (also on the gene detail page) leads to the
-    medication's page with further details.
-    <br/>
-    <br/>
-    Here you see some general information about the medication and a short
-    statement what PGx guidelines say about your DNA and this medication. For
-    more information, the respective guideline is linked at the bottom of each
-    medication page.
-</td>
-</tr>
-<tr>
-<td>
-<div class="screenshot-wrapper">
-    <div class="screenshot" style="background-image: url(./screenshots/faq.png)"></div>
-    <div class="screenshot" style="background-image: url(./screenshots/more.png)"></div>
-</div>
-</td>
-<td>
-    The <i>FAQ</i> page collects information that might be useful for you.
-    <br/>
-    <br/>
-    If you want to view the onboarding again or review our Terms of Use or
-    Privacy Policy, you can find the information you need on the <i>More</i>
-    tab.
-    <br/>
-    <br/>
-    Please be careful when deleting your data; this will reset the app in its
-    initial state and also delete your PGx test data. It might not be possible
-    to import your data again, if you lost your credentials or your data
-    provider deleted your data.
-</td>
-</tr>
-</table>
 <p>
+    We hope you will enjoy using PharMe! 🎉
     We hope by using PharMe you will learn useful information about your DNA and
     medications! Have fun! 💫
 </p> -->
