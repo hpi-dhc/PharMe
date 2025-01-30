@@ -113,7 +113,7 @@
   
   "search_content_explanation": "Get an overview on your PGx tests results per medication. Tap on a medication so see what your result means and what to do.",
   "@search_content_explanation": {},
-  "search_page_tooltip_search": "Search for medications by their name, brand name or class.",
+  "search_page_tooltip_search": "Search for medications by their name, brand name or type.",
   "@search_page_tooltip_search": {},
   "search_page_tooltip_search_no_class": "Search for medications by their name or brand name.",
   "@search_page_tooltip_search_no_class": {},
@@ -232,7 +232,7 @@
         }
     }
   },
-  "drugs_page_header_drugclass": "Medication class",
+  "drugs_page_header_drugclass": "Medication type",
   "@drugs_page_header_drugclass": {},
   "drugs_page_header_drug": "Medication information",
   "@drugs_page_header_drug": {},
@@ -506,7 +506,7 @@
   "@tutorial_app_tour_1_body_bold": {},
   "tutorial_app_tour_2_title": "App Tour (2/5) · Medication List",
   "@tutorial_app_tour_2_title": {},
-  "tutorial_app_tour_2_body": "Under “Medications”, you will find the list of all available medications in PharMe.\nYou can search for specific generic names, brand names, or medication classes, and filter the list by guideline result.\nBased on your personal gene results, all medications in PharMe are labeled with a color and an icon: ",
+  "tutorial_app_tour_2_body": "Under “Medications”, you will find the list of all available medications in PharMe.\nYou can search for specific generic names, brand names, or medication types, and filter the list by guideline result.\nBased on your personal gene results, all medications in PharMe are labeled with a color and an icon: ",
   "@tutorial_app_tour_2_body": {},
   "tutorial_app_tour_3_title": "App Tour (3/5) · Medication Details",
   "@tutorial_app_tour_3_title": {},
@@ -651,7 +651,7 @@
   "@faq_answer_genetics_info": {},
   "faq_question_which_medications": "Which medications are included in PharMe?",
   "@faq_question_which_medications": {},
-  "faq_answer_which_medications": "PharMe includes medications that are known to have meaningful interactions with genes. This knowledge is science-based, according to CPIC® and FDA guidelines.\n\nExamples of medication classes with known gene interactions include:",
+  "faq_answer_which_medications": "PharMe includes medications that are known to have meaningful interactions with genes. This knowledge is science-based, according to CPIC® and FDA guidelines.\n\nExamples of medication types with known gene interactions include:",
   "faq_answer_which_medications_examples": "anti-clotting medications (like clopidogrel and warfarin); antidepressants (like sertraline, citalopram, and paroxetine); anti-cholesterol medications (like simvastatin and atorvastatin), acid reducers (like pantoprazole and omeprazole); pain killers (like codeine, tramadol, and ibuprofen); antifungals (like voriconazole); medications that suppress the immune system (like tacrolimus); anti-cancer medications (like fluorouracil and irinotecan)",
   "@faq_answer_which_medications_examples": {
     "description": "A list separated by semicolon and space; this can be used to split the text in the code to format a list"
