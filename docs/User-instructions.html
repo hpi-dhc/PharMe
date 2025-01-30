@@ -1,3 +1,9 @@
+<!--
+    TODO: The app content should be included from the `app_en.arb` in the future
+    and be generated as in the actual content to avoid manual updates (and
+    especially forgetting about manual updates).
+-->
+
 <html>
 <head>
 <title>PharMe: Getting Started & Further Resources</title>
@@ -16,6 +22,20 @@
     .no-pagebreak-inside {
         break-inside: avoid;
     }
+    .force-pagebreak {
+        page-break-inside: avoid;
+        page-break-after: always;
+    }
+    .reviewer-comment:before {
+        content: "Reviewer comment (will not be visible in the final PDF): ";
+    }
+    .reviewer-comment {
+        /* Uncomment for final print version */
+        /* display: none !important; */
+    }
+    body {
+        background-color: white;
+    }
 }
 body {
     margin: 0;
@@ -30,8 +50,8 @@ h1 {
     margin-bottom: 0.4in;
 }
 h2 {
-    margin-top: 0.3in;
-    margin-bottom: 0.2in;
+    margin-top: 0.4in;
+    margin-bottom: 0.3in;
 }
 h3 {
     margin-top: 0;
@@ -41,6 +61,17 @@ h3 {
     padding: 1in;
     width: 8.5in;
     background-color: white;
+}
+.reviewer-comment:before {
+        content: "Reviewer comment (will not be visible in PDF): ";
+}
+.reviewer-comment {
+    color: orange;
+    font-style: italic;
+}
+.fake-link {
+    color: #221f73;
+    text-decoration: underline;
 }
 .onboarding-page {
     padding: 0.3in;
@@ -125,6 +156,14 @@ h3 {
     object-fit: contain;
     filter: drop-shadow(lightgray 5px 5px 5px);
 }
+.indicator-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.indicator-icon {
+    font-size: 1em;
+}
 
 </style>
 </head>
@@ -135,18 +174,19 @@ h3 {
     In this document you find all information to get started with PharMe and further support while using it:
 </p>
 <ul>
-    <li>An <a href="#app-intro">app intro</a> that explains what PharMe can do</li>
-    <li>An <a href="#app-tour">app tour</a>, which leads through PharMe's main functions</li>
-    <li>Resources to <a href="#learn-about-genetics">learn about genetics</a></li>
-    <li>Our <a href="#faq">FAQ</a></li>
+    <li>An app intro that explains what PharMe can do</li>
+    <li>An app tour, which leads through PharMe's main functions</li>
+    <li>Resources to learn about genetics</li>
+    <li>Frequently asked questions (FAQ)</li>
 </ul>
+<p>These resources are also available in the app.</p>
 <p>
-    If you have any questions or need assistance, please refer to the FAQ section or reach out via e-mail: <a href="mailto:ehivepgx@mssm.edu">ehivepgx@mssm.edu</a>
-    <br/>
-    <br/>
     We hope you will enjoy using PharMe and that you will learn useful
     information about how your genes influence how well medications work for
     you!
+</p>
+<p>
+    If you have any questions or need assistance, please refer to the FAQ section or reach out via e-mail: <span class="fake-link">ehivepgx@mssm.edu</span>
 </p>
 
 <h2 id="app-intro">App Intro</h2>
@@ -154,13 +194,9 @@ h3 {
 <div class="onboarding-page cyan-background no-pagebreak-inside">
     <div class="onboarding-texts">
         <h3>Welcome to PharMe!</h3>
-        <p>
-            Did you know? Your genes help decide how medications work in your body.
-            <br/>
-            In fact, 9 out of 10 people might react differently to medications than expected.
-            <br/>
-            PharMe helps you understand how your genes affect your medications.
-        </p>
+        <p>Did you know? Your genes help decide how medications work in your body.</p>
+        <p>In fact, 9 out of 10 people might react differently to medications than expected.</p>
+        <p>PharMe helps you understand how your genes affect your medications.</p>
         <div class="disclaimer">
             <div class="disclaimer-icon-container">
                 <i class="fa-classic fa-solid fa-puzzle-piece disclaimer-icon"></i>
@@ -181,11 +217,8 @@ h3 {
 <div class="onboarding-page magenta-background no-pagebreak-inside">
     <div class="onboarding-texts">
         <h3>One Size Does Not Fit All</h3>
-        <p>
-            Think of medications like shoes - one size doesn't fit all.
-            <br/>
-            A medication that works well for most people might not work the same way for you.
-        </p>
+        <p>Think of medications like shoes – one size doesn't fit all.</p>
+        <p>A medication that works well for most people might not work the same way for you.</p>
         <div class="disclaimer">
             <div class="disclaimer-icon-container">
                 <span class="material-icons-round disclaimer-icon">warning</span>
@@ -207,8 +240,8 @@ h3 {
         <h3>Genome Power Unlocked to Improve Your Health</h3>
         <p>
             PharMe tells you if your genes might make certain medications work differently than expected, cause unwanted side effects, or not work well enough.
-            <br/>
-            <br/>
+        </p>
+        <p>
             This field of medicine is called pharma-co-genomics (PGx).
         </p>
         <div class="disclaimer">
@@ -232,10 +265,8 @@ h3 {
         <h3>Tailored Just for You</h3>
         <p>
             PharMe works by looking at your gene information and checking it against what scientists know about genes and medications.
-            <br/>
-            <br/>
-            We use information from trusted clinical PGx guidelines created by medical experts (CPIC and FDA).
         </p>
+        <p>We use information from trusted clinical PGx guidelines created by medical experts (CPIC and FDA).</p>
         <div class="disclaimer">
             <div class="disclaimer-icon-container">
                 <i class="fa-classic fa-solid fa-pills disclaimer-icon-with-sub-icon"></i>
@@ -243,10 +274,11 @@ h3 {
                 <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon"></i>
             </div>
             <div>
-                PharMe only includes medications with clinical PGx guidelines from CPIC and the FDA.
-                <br/>
-                <br/>
-                While only to a small percentage of medications have PGx guidelines, they are among the most commonly prescribed ones. If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
+                <p>PharMe only includes medications with clinical PGx guidelines from CPIC and the FDA.</p>
+                <p>
+                    While only to a small percentage of medications have PGx guidelines, they are among the most commonly prescribed ones.
+                    If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
+                </p>
             </div>
         </div>
     </div>
@@ -261,11 +293,10 @@ h3 {
     <div class="onboarding-texts">
         <h3>Keeping Your Information Safe</h3>
         <p>
-            We protect your privacy by storing your gene information and doing calculations only on your phone. We do not share your gene information with anyone.
-            <br/>
-            <br/>
-            We also do not store any information that could tell someone who you are, such as your name.
+            We protect your privacy by storing your gene information and doing calculations only on your phone.
+            We do not share your gene information with anyone.
         </p>
+        <p>We also do not store any information that could tell someone who you are, such as your name.</p>
     </div>
     <div class="onboarding-image-container">
         <img
@@ -275,18 +306,26 @@ h3 {
     </div>
 </div>
 
+<div class="force-pagebreak"></div>
+
 <h2 id="app-tour">App Tour</h2>
 
-<!-- Not included in app -->
+<p class="reviewer-comment">The first part will not be included in the app</p>
 <div class="app-tour-container">
     <div class="app-screenshot-container">
         <img class="app-screenshot" src="./screenshots/accept-terms.png" />
     </div>
     <div class="app-tour-content">
         <h3>Get Started</h3>
-        To get started with PharMe, you first need to agree to our
-        <a href="https://pharme-services-sandbox.mssm.edu/terms/">Terms of Use</a>
-        and <a href="https://pharme-services-sandbox.mssm.edu/privacy/">Privacy Policy</a>.
+        <p>
+            To get started with PharMe, you first need to agree to our terms of use
+            and privacy policy.
+        </p>
+        <p>You can review the documents here:</p>
+        <ul>
+            <li>Terms of use: <span class="fake-link">https://pharme-services-sandbox.mssm.edu/terms</span></li>
+            <li>Privacy policy: <span class="fake-link">https://pharme-services-sandbox.mssm.edu/privacy</span></li>
+        </ul>
     </div>
 </div>
 <hr>
@@ -307,10 +346,10 @@ h3 {
         <img class="app-screenshot" src="./screenshots/onboarding-1.png" />
     </div>
     <div class="app-tour-content">
+        <p class="reviewer-comment">need to update the screenshot after content updates</p>
         <h3>App Intro</h3>
         After successfully downloading your data, you will get an overview about
-        what PharMe can do in the app intro (also see the
-        <a href="#app-intro">app intro</a> above).
+        what PharMe can do in the app intro (also see the app intro above).
     </div>
 </div>
 <hr>
@@ -320,57 +359,77 @@ h3 {
     </div>
     <div class="app-tour-content">
         <h3>Update Current Medications</h3>
-        You can then review and update your current medications with PGx
-        guidelines. Your current medications with PGx guidelines from your
-        medical record will be pre-selected here.
-        <br/>
-        <br/>
-        You will also be able to edit your current medications later in the
-        app.
-        <br/>
-        <br/>
-        Some medications can change how your body handles other medication.
-        They can slow down or speed how your body processes medications.
-        <br/>
-        <br/>
-        PharMe will warn you when this might happen.
+        <p>
+            You can then review and update your current medications with PGx
+            guidelines. Your current medications with PGx guidelines from your
+            medical record will be pre-selected here.
+        </p>
+        <p>
+            You will also be able to edit your current medications later in the
+            app.
+        </p>
+        <p class="reviewer-comment">not sure if we should include this here, what do you think?</p>
+        <p>
+            If you are taking any of the following medications, please be sure to
+            add them. They can change how your body handles other medications.
+            PharMe will warn you when these medications interact with other
+            medications you are taking:
+        </p>
+        <ul>
+            <li>Abiraterone (brand names: Yonsa, Zytiga)</li>
+            <li>Bupropion (brand names: Aplenzin, Auvelity, Budeprion, Contrave, Forfivo, Wellbutrin, Zyban)</li>
+            <li>Cinacalcet (brand names: Sensipar, Mimpara)</li>
+            <li>Duloxetine (brand names: Cymbalta, Drizalma, Irenka, Yentreve)</li>
+            <li>Fluoxetine (brand names: Act Fluoxetine, Prozac, Sarafem, Symbyax)</li>
+            <li>Lorcaserin (brand names: Belvia)</li>
+            <li>Mirabegron (brand names: Myrbetriq)</li>
+            <li>Paroxetine (brand names: Paxil, Pexeva)</li>
+            <li>Quinidine (brand names: Nuedexta)</li>
+            <li>Terbinafine (brand names: Lamisil, Silka Cream)</li>
+        </ul>
     </div>
 </div>
-<!-- FROM NOW ON INCLUDED IN APP (HEADING WILL SAY "Part i: ... (i/n)") -->
+<p class="reviewer-comment">From now on this will be included in the app; headings will say "Part I: [heading] (I/N)"</p>
 <hr>
 <div class="app-tour-container">
-    <div class="app-screenshot-container">
+    <div class="app-screenshot-container" style="align-self: center;">
         <img class="app-screenshot" src="./screenshots/drug-search.png" />
     </div>
     <div class="app-tour-content">
         <h3>Getting Around</h3>
-        Great! You're almost ready to use PharMe. Let's show you how it works.
-        <br/>
-        <br/>
-        At the bottom of your screen, you'll find four main buttons:
-        "Medications", "Genes", "FAQ", and "More".
-        <br/>
-        <br/>
-        <b>Want to see this tour again later? Just go to "More" and tap
-        "Repeat app tour" or "Print app information".</b>
-        <br/>
-        <br/>
+        <p>Great! You're almost ready to use PharMe. Let's show you how it works.</p>
+        <p>
+            At the bottom of your screen, you'll find four main buttons:
+            "Medications", "Genes", "FAQ", and "More".
+        </p>
+        <p class="reviewer-comment">In the app, "again in the app" will be "again later"</p>
+        <p style="font-weight: bold;">Want to repeat this tour again in the app? Just go to "More" and tap
+        "Repeat app tour".</p>
+    </p>
         <hr>
-        <br/>
-        <h3>Finding Medications</h3>
-        The "Medications" screen  shows all medications in PharMe.
-        <br/>
-        <br/>
-        You can search for medication names (both generic and brand names), look
-        for types of medications, and filter the list by how well they work with
-        your genes.
-        <br/>
-        <br/>
-        Each medication has a color and symbol that shows how it might work for
-        you based on your genes:
-        <br/>
-        <br/>
-        <p style="color: red">TODO: List of icons and descriptions</p>
+        <h3 style="margin-top: 1em">Finding Medications</h3>
+        <p>The "Medications" screen  shows all medications in PharMe.</p>
+        <p>
+            You can search for medication names (both generic and brand names), look
+            for types of medications, and filter the list by how well they work with
+            your genes.
+        </p>
+        <p>
+            Each medication has a color and symbol that shows how it might work for
+            you based on your genes:
+        </p>
+        <div class="indicator-row" style="color: #ac0000">
+            <span class="material-icons-round indicator-icon">dangerous</span> Consider alternatives
+        </div>
+        <div class="indicator-row" style="color: #b87000">
+            <span class="material-icons-round indicator-icon">warning</span> Use with caution
+        </div>
+        <div class="indicator-row" style="color: #397739">
+            <span class="material-icons-round indicator-icon">check_circle</span> Standard precautions
+        </div>
+        <div class="indicator-row" style="color: #397739">
+            <span class="material-icons-round indicator-icon">help</span> Standard precautions (incomplete data)
+        </div>
     </div>
 </div>
 <hr>
@@ -380,12 +439,14 @@ h3 {
     </div>
     <div class="app-tour-content">
         <h3>Learning About Your Medications</h3>
-        Tap any medication to see how well it might work for you, based on what
-        science tells us about this medication and your genes.
-        <br/>
-        <br/>
-        Here you can also mark medications you're taking and save information
-        for your doctor.
+        <p>
+            Tap any medication to see how well it might work for you, based on what
+            science tells us about this medication and your genes.
+        </p>
+        <p>
+            Here you can also mark medications you're taking and save information
+            for your pharmacist or doctor.
+        </p>
     </div>
 </div>
 <hr>
@@ -395,15 +456,15 @@ h3 {
     </div>
     <div class="app-tour-content">
         <h3>Understanding Your Genes</h3>
-        The "Genes" screen shows your gene test results that affect medications.
-        <br/>
-        <br/>
-        Tap any gene to learn what your results mean and which medications it
-        affects.
-        <br/>
-        <br/>
-        Want to learn more? Check out the FAQ or go to "More" > "Learn about
-        genetics."
+        <p>The "Genes" screen shows your gene test results that affect medications.</p>
+        <p>
+            Tap any gene to learn what your results mean and which medications it
+            affects.
+        </p>
+        <p>
+            Want to learn more? Check out the FAQ or go to "More" > "Learn about
+            genetics".
+        </p>
     </div>
 </div>
 <hr>
@@ -415,22 +476,213 @@ h3 {
         <img class="app-screenshot" src="./screenshots/faq.png" />
     </div>
     <div class="app-tour-content">
+        <p class="reviewer-comment">need to update the more screenshot after content updates</p>
         <h3>FAQ & Additional Features</h3>
-        <b>Need help? Use "More" to get in touch with us or learn about the app,
-        or check the FAQ for common questions.</b>
-        <br/>
-        <br/>
-        Under "More" you can also edit your current medication list.
+        <p style="font-weight: bold;">Need help? Use "More" to get in touch with us or learn about the app,
+        or check the FAQ for common questions.</p>
+        <p>Under "More" you can also edit your current medication list.</p>
     </div>
 </div>
 
+<div class="force-pagebreak"></div>
 <h2 id="learn-about-genetics">Learn About Genetics</h2>
 
 <p style="color: red">TODO: List from Aniwaa</p>
 
-<h2 id="faq">FAQ</h2>
+<h2 id="faq">Frequently Asked Questions (FAQ)</h2>
 
-<h3></h3>
+<h3 style="margin-top: 1em">About Gene Testing and Medications (PGx)</h3>
+<hr>
+
+<h4>What is PGx?</h4>
+<p>
+    PGx (short for pharma-co-genomics) explores how your genes affect how
+    medications work in your body. 
+</p>
+<p>
+    Think of your genes like a recipe book that tells your body how to make
+    important proteins. These proteins help:
+</p>
+<ul>
+    <li>Move medications through your body</li>
+    <li>Break down medications to digest them to less active versions</li>
+    <li>Activate medications my changing them to make them work in your body</li>
+</ul>
+<p>
+    Depending on the gene version you carry, these proteins may work faster or
+    slower than expected.
+</p>
+<p>
+    For example, if a protein that activates a medication
+    works slower than expected, it may not work properly for you because you do
+    not have enough working versions of the medication in your body. In such a
+    case, you might need a higher dose of the medication or might need to use a
+    different medication.
+</p>
+
+<h4>Why is PGx important?</h4>
+<p>
+    PGx helps pharmacists and doctors pick the right medications and doses for
+    you. It can help avoid bad reactions to medications before you even take
+    them.
+
+    But remember: Your genes are just one piece of the puzzle in how medications
+    work for you, other factors are also important, like your:
+    <ul>
+        <li>Age</li>
+        <li>Weight</li>
+        <li>Other health conditions</li>
+        <li>Other medications you are taking</li>
+    </ul>
+</p>
+
+<h4>What can cause bad reactions to medications?</h4>
+<p>
+    You might have a bad reaction to medication for several reasons:
+    <ul>
+        <li>
+            <span style="font-weight: bold;">Allergies</span>: Sometimes your body thinks a medication is harmful and
+            fights against it. This can cause an upset stomach, itchy skin, or
+            in rare cases, very serious reactions.
+        </li>
+        <li>
+            <span style="font-weight: bold;">Genes</span>: Your genes affect how your body handles medications.
+        </li>
+        <li>
+            <span style="font-weight: bold;">Unknown causes</span>: Sometimes people have rare reactions that
+            pharmacists and doctors don't yet understand.
+        </li>
+    </ul>
+    You can have more than one type of reaction at the same time. For example,
+    you might have both an allergy AND a reaction because of your genes.
+</p>
+
+<h4>Does PharMe show all possible gene-related reactions?</h4>
+<p>
+    No. Scientists are still finding new ways that genes affect medications. Different labs might also interpret gene tests differently as this is a new science.
+</p>
+<p>
+    PharMe uses trusted guidelines from medical experts (CPIC and FDA) to give you the most up-to-date information.
+</p>
+
+<h4>What do my gene results mean?</h4>
+<p>
+    Your results show two things:
+    <ul>
+        <li>Your gene versions (called <span style="font-weight: bold;">genotype</span>): You have two copies for one gene, one from your mom and one from your dad. One gene copy is called an "allele".</li>
+        <li>How your genes affect your body (called <span style="font-weight: bold;">phenotype</span>): in PGx, it usually shows if a gene version might cause a bad reaction to a medication or how fast your body processes a drug.</li>
+    </ul>
+    <p class="reviewer-comment">in the app the "the learn about genomics, or in the app" part will be omitted</p>
+    For more information about genetics please refer to the learn about genetics section, or in the app "More" > "Learn about genetics".
+</p>
+
+<h4>Which medications does PharMe include?</h4>
+<p>
+    PharMe includes medications that are known to be affected by genes. We get this information from clinical guidelines from CPIC and the FDA.
+</p>
+<p class="reviewer-comment">is this true?</p>
+<p>
+    While only a small percentage of drugs have these guidelines, they are very commonly prescribed.
+</p>
+<p>
+    Some examples are medications for:
+</p>
+<ul>
+    <li>Blood clots</li>
+    <li>Depression</li>
+    <li>High cholesterol</li>
+    <li>Heartburn</li>
+    <li>Pain</li>
+    <li>Fungal infections</li>
+    <li>Immune system</li>
+    <li>Cancer</li>
+</ul>
+
+<h4>Can other medications change my results?</h4>
+<p>
+    Yes. Some medications can change how your body handles other medications. They can slow down or speed up how your body processes medications.
+</p>
+<p>PharMe will warn you when this might happen.</p>
+<p>
+    Medications that slow down how your body processes medications are called "inhibitors". Medications that speed these processes up are called "inducers". They can have a strong effect or a moderate effect on genes.
+</p>
+<p>
+    Please note that PharMe only changes your results if medications have a strong effect and only and warns you of medications have a moderate effect. Consult your pharmacist or doctor in such cases.
+</p>
+<p>
+    The following medications are included in PharMe that can change your results:
+</p>
+<p class="reviewer-comment">Will also leave out gene names in app FAQ (currently only CYP2D6 anyways)</p>
+<p style="font-style: italic;">Strong inhibitors:</p>
+<ul>
+    <li>Bupropion (brand names: Aplenzin, Auvelity, Budeprion, Contrave, Forfivo, Wellbutrin, Zyban)</li>
+    <li>Fluoxetine (brand names: Act Fluoxetine, Prozac, Sarafem, Symbyax)</li>
+    <li>Paroxetine (brand names: Paxil, Pexeva)</li>
+    <li>Quinidine (brand names: Nuedexta)</li>
+    <li>Terbinafine (brand names: Lamisil, Silka Cream)</li>
+</ul>
+<p style="font-style: italic;">Moderate inhibitors:</p>
+<ul>
+    <li>Abiraterone (brand names: Yonsa, Zytiga)</li>
+    <li>Cinacalcet (brand names: Sensipar, Mimpara)</li>
+    <li>Duloxetine (brand names: Cymbalta, Drizalma, Irenka, Yentreve)</li>
+    <li>Lorcaserin (brand names: Belvia)</li>
+    <li>Mirabegron (brand names: Myrbetriq)</li>
+</ul>
+
+<h4>Will my results affect my family?</h4>
+<p>
+    Yes. Since genes run in families:
+    <ul>
+        <li>You got your gene versions from your parents</li>
+        <li>Your children will get their gene versions from you</li>
+        <li>Your brothers and sisters might have similar gene versions</li>
+    </ul>
+</p>
+
+<h4>Who should I share my results with?</h4>
+<p>
+    Share your results with:
+    <ul>
+        <li>Your doctors</li>
+        <li>Your pharmacists</li>
+        <li>Close family members</li>
+    </ul>
+    To share with healthcare providers, use the share button (top right of medication pages) to create a PDF.
+</p>
+
+<h3 style="margin-top: 1em">About the PharMe App</h3>
+<hr>
+
+<h4>What does PharMe do?</h4>
+<p>PharMe helps you understand how your genes affect your medications.</p>
+<p>It shows which medications might not work well for you and might cause side effects.</p>
+<p>Always talk to your pharmacist or doctor before changing any medications.</p>
+
+<h4>Can I use PharMe without talking to my doctor?</h4>
+<p>
+    No. Always talk to your pharmacist or doctor before starting, changing, or stopping your medications.
+</p>
+
+<h4>Where does PharMe get its information?</h4>
+<p>
+    PharMe uses trusted guidelines from medical experts (CPIC and FDA). Our experts made these guidelines easier to understand without changing their meaning.
+</p>
+
+<h3 style="margin-top: 1em">Data Security</h3>
+<hr>
+
+<h4>How do you protect my gene information?</h4>
+<p>
+    We keep your information safe by:
+    <ul>
+        <li>Storing it only on your phone</li>
+        <li>Never sharing it with others</li>
+        <li>Doing all calculations on your phone</li>
+        <li>Not storing any information that could tell us who you are </li>
+        <li>Asking you to log in again if you do not use the app for some time</li>
+    </ul>
+</p>
 
 </div>
 </body>

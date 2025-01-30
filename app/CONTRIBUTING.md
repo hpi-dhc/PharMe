@@ -129,6 +129,16 @@ _supported._
 _Check `e60efb4f2fc3ba2efa7735ffb06ec5fdb64d7af6` for a rudimentary script_
 _version, removed afterwards due to too many merge conflicts._
 
+## User Instructions
+
+Currently, the user instructions are a static HTML file that need to be updated
+manually if changes in the app content occur (at least the screenshots are
+linked and do not need to be updated after re-generation).
+
+We decided to host a PDF of the user instructions (for the study). To create
+this PDF, open the HTML file in a browser (tested with Chrome) and print with
+"Save to PDF".
+
 ## Adapting test data
 
 If you would like to test with specific test data but you don't have a user with
