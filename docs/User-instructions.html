@@ -47,6 +47,7 @@ body {
     line-height: 150%;
 }
 h1 {
+    margin-top: 0;
     margin-bottom: 0.4in;
 }
 h2 {
@@ -69,7 +70,7 @@ h3 {
     color: orange;
     font-style: italic;
 }
-.fake-link {
+a {
     color: #221f73;
     text-decoration: underline;
 }
@@ -179,14 +180,14 @@ h3 {
     <li>Resources to learn about genetics</li>
     <li>Frequently asked questions (FAQ)</li>
 </ul>
-<p>These resources are also available in the app.</p>
+<p>
+    These resources are also available in the app.
+    If you have any questions or need further assistance, please reach out via e-mail: <a href="mailto:ehivepgx@mssm.edu">ehivepgx@mssm.edu</a>.
+</p>
 <p>
     We hope you will enjoy using PharMe and that you will learn useful
     information about how your genes influence how well medications work for
     you!
-</p>
-<p>
-    If you have any questions or need assistance, please refer to the FAQ section or reach out via e-mail: <span class="fake-link">ehivepgx@mssm.edu</span>
 </p>
 
 <h2 id="app-intro">App Intro</h2>
@@ -323,8 +324,8 @@ h3 {
         </p>
         <p>You can review the documents here:</p>
         <ul>
-            <li>Terms of use: <span class="fake-link">https://pharme-services-sandbox.mssm.edu/terms</span></li>
-            <li>Privacy policy: <span class="fake-link">https://pharme-services-sandbox.mssm.edu/privacy</span></li>
+            <li>Terms of use: <a href="https://pharme-services-sandbox.mssm.edu/static/terms">https://pharme-services-sandbox.mssm.edu/static/terms</a></li>
+            <li>Privacy policy: <a href="https://pharme-services-sandbox.mssm.edu/static/privacy">https://pharme-services-sandbox.mssm.edu/static/privacy</a></li>
         </ul>
     </div>
 </div>
@@ -340,7 +341,7 @@ h3 {
         currently taking, and PGx guideline data.
     </div>
 </div>
-<hr>
+<!-- <hr> -->
 <div class="app-tour-container">
     <div class="app-screenshot-container">
         <img class="app-screenshot" src="./screenshots/onboarding-1.png" />
@@ -390,7 +391,7 @@ h3 {
     </div>
 </div>
 <p class="reviewer-comment">From now on this will be included in the app; headings will say "Part I: [heading] (I/N)"</p>
-<hr>
+<!-- <hr> -->
 <div class="app-tour-container">
     <div class="app-screenshot-container" style="align-self: center;">
         <img class="app-screenshot" src="./screenshots/drug-search.png" />
@@ -449,7 +450,7 @@ h3 {
         </p>
     </div>
 </div>
-<hr>
+<!-- <hr> -->
 <div class="app-tour-container">
     <div class="app-screenshot-container">
         <img class="app-screenshot" src="./screenshots/gene-report-all.png" />
@@ -487,9 +488,26 @@ h3 {
 <div class="force-pagebreak"></div>
 <h2 id="learn-about-genetics">Learn About Genetics</h2>
 
-<p style="color: red">TODO: List from Aniwaa</p>
+<p>
+    Please refer to the links below to learn more about PGx and genetics in general.
+    You can also open the links from the app, under "More" > "Learn about genetics".
+</p>
 
-<h2 id="faq">Frequently Asked Questions (FAQ)</h2>
+<p>For more information on PGx:</p>
+<ul>
+    <li><span style="font-weight: bold;">Mount Sinai Introduction Video</span>: <a href="https://www.youtube.com/watch?v=N6432xbpGOU">https://www.youtube.com/watch?v=N6432xbpGOU</a></li>
+    <li><span style="font-weight: bold;">Information on MedlinePlus</span> (an online health information resource for patients and their families and friends of the National Library of Medicine): <a href="https://medlineplus.gov/lab-tests/pharmacogenetic-tests">https://medlineplus.gov/lab-tests/pharmacogenetic-tests</a></li>
+    <li><span style="font-weight: bold;">Information on KidsHealth</span> (educational resources by Nemours®): <a href="https://kidshealth.org/en/parents/pharmacogenomics.html">https://kidshealth.org/en/parents/pharmacogenomics.html</a></li>
+</ul>
+
+<p>For more information on Genetics:</p>
+<ul>
+    <li><span style="font-weight: bold;">Information from the CDC</span> (the U.S. Centers for Disease Control and Prevention): <a href="https://www.cdc.gov/genomics-and-health/about/index.html">https://www.cdc.gov/genomics-and-health/about/index.html</a></li>
+    <li><span style="font-weight: bold;">Genetics on OLogy</span> (a science website in easy language from the American Museum of Natural History): <a href="https://www.amnh.org/explore/ology/genetics/what-is-genetics">https://www.amnh.org/explore/ology/genetics/what-is-genetics</a></li>
+    <li><span style="font-weight: bold;">Information from Genes and Health</span> (resources by the study team of one of the world’s largest community-based genetics studies)<a href="https://www.genesandhealth.org/genes-your-health/genes-made-easy">https://www.genesandhealth.org/genes-your-health/genes-made-easy</a></li>
+</ul>
+
+<h2 id="faq" style="margin-top: 0.6in; margin-bottom: 0.4in">Frequently Asked Questions (FAQ)</h2>
 
 <h3 style="margin-top: 1em">About Gene Testing and Medications (PGx)</h3>
 <hr>
@@ -591,7 +609,7 @@ h3 {
     <li>Blood clots</li>
     <li>Depression</li>
     <li>High cholesterol</li>
-    <li>Heartburn</li>
+    <li>Acid reflux</li>
     <li>Pain</li>
     <li>Fungal infections</li>
     <li>Immune system</li>
