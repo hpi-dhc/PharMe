@@ -24,7 +24,8 @@ const cpicLookupUrl =
 const drugInteractionIndicator = '*';
 const drugInteractionIndicatorName = 'asterisk';
 
-const testErrorMessage = 'THIS IS A TEST';
+const nonFatalTestErrorMessage = 'THIS IS A NON-FATAL TEST';
+const fatalTestErrorMessage = 'THIS IS A FATAL TEST';
 
 // For shorter uniqueness check that also does not rely on variant; also format
 // HLA-A (which is currently unique) as HLA-B

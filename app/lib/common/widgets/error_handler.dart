@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../module.dart';
 
 class ErrorHandler extends StatefulWidget {
@@ -39,14 +41,15 @@ class ErrorHandlerState extends State<ErrorHandler> {
     }
   }
 
+  bool _isNonFatalTestError(Object exception) {
+    return exception.toString().contains(nonFatalTestErrorMessage);
+  }
+
   bool _needToHandleError(Object exception) {
-    // Set to false to test that error screen appears (annoying when debugging
-    // with breakpoints anyways)
-    const ignoreTestError = true;
-    final isTestError = exception.toString().contains(testErrorMessage);
+    final ignoreTestError = kDebugMode && _isNonFatalTestError(exception);
     final isOverflowError = exception is FlutterError &&
       exception.message.startsWith('A RenderFlex overflowed');
-    final willIgnoreError = isOverflowError || (isTestError && ignoreTestError);
+    final willIgnoreError = isOverflowError || ignoreTestError;
     return !willIgnoreError;
   }
 

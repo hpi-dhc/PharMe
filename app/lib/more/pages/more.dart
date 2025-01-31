@@ -80,12 +80,22 @@ class MorePage extends StatelessWidget {
           if (kDebugMode) _buildSettingsItem(
             title: 'Throw Flutter Error',
             style: TextStyle(color: PharMeTheme.errorColor),
-            onTap: () => throw FlutterError(testErrorMessage),
+            onTap: () => throw FlutterError(nonFatalTestErrorMessage),
           ),
           if (kDebugMode) _buildSettingsItem(
             title: 'Throw Other Error',
             style: TextStyle(color: PharMeTheme.errorColor),
-            onTap: () async => throw Exception(testErrorMessage),
+            onTap: () async => throw Exception(nonFatalTestErrorMessage),
+          ),
+          if (kDebugMode) _buildSettingsItem(
+            title: 'Throw Flutter Error (Fatal)',
+            style: TextStyle(color: PharMeTheme.errorColor),
+            onTap: () => throw FlutterError(fatalTestErrorMessage),
+          ),
+          if (kDebugMode) _buildSettingsItem(
+            title: 'Throw Other Error (Fatal)',
+            style: TextStyle(color: PharMeTheme.errorColor),
+            onTap: () async => throw Exception(fatalTestErrorMessage),
           ),
         ]
       ),
