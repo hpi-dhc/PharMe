@@ -24,6 +24,8 @@ const cpicLookupUrl =
 const drugInteractionIndicator = '*';
 const drugInteractionIndicatorName = 'asterisk';
 
+const testErrorMessage = 'THIS IS A TEST';
+
 // For shorter uniqueness check that also does not rely on variant; also format
 // HLA-A (which is currently unique) as HLA-B
 const definedNonUniqueGenes = ['HLA-A', 'HLA-B'];

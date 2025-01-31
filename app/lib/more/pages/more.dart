@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import '../../common/module.dart';
 import '../../common/utilities/hive_utils.dart';
 
@@ -71,6 +73,20 @@ class MorePage extends StatelessWidget {
             title: context.l10n.more_page_terms_and_conditions,
             onTap: () => context.router.push(TermsRoute()),
           ),
+          if (kDebugMode) SubheaderDivider(
+            text: 'Test Error Handling',
+            useLine: false,
+          ),
+          if (kDebugMode) _buildSettingsItem(
+            title: 'Throw Flutter Error',
+            style: TextStyle(color: PharMeTheme.errorColor),
+            onTap: () => throw FlutterError(testErrorMessage),
+          ),
+          if (kDebugMode) _buildSettingsItem(
+            title: 'Throw Other Error',
+            style: TextStyle(color: PharMeTheme.errorColor),
+            onTap: () async => throw Exception(testErrorMessage),
+          ),
         ]
       ),
     );
@@ -79,8 +95,9 @@ class MorePage extends StatelessWidget {
   Widget _buildSettingsItem({
     required String title,
     required void Function() onTap,
+    TextStyle? style,
   }) => ListTile(
-    title: Text(title),
+    title: Text(title, style: style),
     trailing: Icon(Icons.chevron_right_rounded),
     iconColor: PharMeTheme.iconColor,
     onTap: onTap,

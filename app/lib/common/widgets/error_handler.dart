@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../module.dart';
 
 class ErrorHandler extends StatefulWidget {
@@ -19,8 +17,8 @@ class ErrorHandler extends StatefulWidget {
 class ErrorHandlerState extends State<ErrorHandler> {
   @override
   void initState() {
-    FlutterError.onError = (details) {
-      _handleError(exception: details.exception, stackTrace: details.stack);
+    FlutterError.onError = (details) async {
+      await _handleError(exception: details.exception, stackTrace: details.stack);
     };
     WidgetsBinding.instance.platformDispatcher.onError =
       (exception, stackTrace) {
@@ -34,23 +32,21 @@ class ErrorHandlerState extends State<ErrorHandler> {
     required Object exception,
     StackTrace? stackTrace,
   }) async {
-    debugPrint(exception.toString());
-    debugPrintStack(stackTrace: stackTrace);
-    if (kDebugMode) {
-      if (exception is AssertionError) return;
-    }
+    final isFatal = _needToHandleError(exception);
     final errorString = exception.toString();
-    if (_needToHandleError(exception)) {
-      final errorMailInfo = stackTrace != null
-        ? '$errorString\n\n${stackTrace.toString()}'
-        : errorString;
-      await widget.appRouter.push(ErrorRoute(error: errorMailInfo));
+    if (isFatal) {
+      await widget.appRouter.push(ErrorRoute(error: errorString));
     }
   }
 
   bool _needToHandleError(Object exception) {
-    final willIgnoreError = exception is FlutterError &&
+    // Set to false to test that error screen appears (annoying when debugging
+    // with breakpoints anyways)
+    const ignoreTestError = true;
+    final isTestError = exception.toString().contains(testErrorMessage);
+    final isOverflowError = exception is FlutterError &&
       exception.message.startsWith('A RenderFlex overflowed');
+    final willIgnoreError = isOverflowError || (isTestError && ignoreTestError);
     return !willIgnoreError;
   }
 
