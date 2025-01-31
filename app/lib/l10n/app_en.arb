@@ -382,7 +382,7 @@
   },
   "gene_page_genotype": "Genotype",
   "@gene_page_genotype": {},
-  "gene_page_genotype_tooltip": "The genotype tells you about your DNA and which version of a gene you have.\n\nhave two copies for one gene, one from your mom and one from your dad. One gene copy is called an \"allele\".",
+  "gene_page_genotype_tooltip": "The genotype tells you about your DNA and which version of a gene you have.\n\nYou have two copies for one gene, one from your mom and one from your dad. One gene copy is called an \"allele\".",
   "@gene_page_genotype_tooltip": {},
   "gene_page_phenotype": "Phenotype",
   "@gene_page_phenotype": {},
