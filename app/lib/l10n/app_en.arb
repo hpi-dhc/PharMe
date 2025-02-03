@@ -107,7 +107,7 @@
   "warning_level_red": "Consider alternatives",
   "@warning_level_red": {},
   
-  "search_content_explanation": "Get an overview on your PGx tests results per medication. Tap on a medication so see what your result means and what to do.",
+  "search_content_explanation": "Get an overview on your pharmacogenomic (PGx) tests results per medication. Tap on a medication so see what your result means and what to do.",
   "@search_content_explanation": {},
   "search_page_tooltip_search": "Search for medications by their name, brand name or type.",
   "@search_page_tooltip_search": {},
@@ -278,7 +278,7 @@
   "drugs_page_recommendation_description": "What to do: ",
   "@drugs_page_recommendation_description": {},
 
-  "report_content_explanation": "This is your PGx test report. Tap on a gene name for more details on your results and a list of associated medications.",
+  "report_content_explanation": "This is your pharmacogenomic (PGx) test report. Tap on a gene name for more details on your results and a list of associated medications.",
   "@report_content_explanation": {},
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
   "@report_page_faq_tooltip": {},
@@ -382,7 +382,7 @@
   "@gene_page_genotype_tooltip": {},
   "gene_page_phenotype": "Phenotype",
   "@gene_page_phenotype": {},
-  "gene_page_phenotype_tooltip": "The phenotype describes how your DNA affects your body.\n\nIn PGx, it usually shows if a gene version might cause a bad reaction to a medication or how fast your body processes a drug.",
+  "gene_page_phenotype_tooltip": "The phenotype describes how your DNA affects your body.\n\nIn pharmacogenomics (PGx), it usually shows if a gene version might cause a bad reaction to a medication or how fast your body processes a drug.",
   "@gene_page_phenotype_tooltip": {},
   "gene_page_relevant_drugs": "Associated medications",
   "@gene_page_relevant_drugs": {},
@@ -554,7 +554,7 @@
   "@included_content_medications": {},
   "included_content_genes": "genes",
   "@included_content_genes": {},
-  "included_content_disclaimer_text": "PharMe only includes {content} with clinical PGx guidelines from CPIC and the FDA.",
+  "included_content_disclaimer_text": "PharMe only includes {content} with clinical pharmacogenomic (PGx) guidelines from CPIC and the FDA.",
   "@included_content_disclaimer_text": {
     "placeholders": {
       "content": {
