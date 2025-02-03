@@ -403,7 +403,7 @@
 
   "pdf_disclaimer": "Disclaimer: The information contained in this PDF document is intended solely for use by trained health care professionals. It is provided for informational purposes only and should not be considered medical advice. The content may include technical terminology and clinical data that are intended for professional interpretation and application. Recipients are advised to exercise professional judgment and discretion when utilizing the information contained herein. If you are not a trained health care professional, please consult with a qualified medical practitioner or specialist before interpreting or applying the information provided in this document.",
   "@pdf_disclaimer": {},
-  "pdf_pgx_report": "PGx Report",
+  "pdf_pgx_report": "Pharmacogenomic (PGx) Report",
   "@pdf_pgx_report": {},
   "pdf_heading_user_data": "User data",
   "@pdf_heading_user_data": {},
