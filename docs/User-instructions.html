@@ -107,11 +107,13 @@ a {
 .disclaimer {
     display: flex;
     flex-direction: row;
-    margin-top: 0.3in;
     background-color: whitesmoke;
     color: black;
     padding: 0.1in;
     border-radius: 0.1in;
+}
+.onboarding-page > .disclaimer {
+    margin-top: 0.3in;
 }
 .disclaimer-icon-container {
     flex: 1;
@@ -125,22 +127,41 @@ a {
 .disclaimer-icon {
     font-size: 30px;
 }
-.disclaimer-icon-with-sub-icon {
+.pills-icon-with-sub-icon {
     font-size: 23px;
+}
+.dna-icon-with-sub-icon {
+    font-size: 24px;
 }
 .disclaimer-sub-icon-background {
     position: absolute;
     font-size: 10px;
-    bottom: 5px;
-    right: 10px;
     color: whitesmoke;
 }
 .disclaimer-sub-icon {
     position: absolute;
     font-size: 8px;
+    color: #221f73;
+}
+.pills-sub-icon-background {
+    bottom: 5px;
+    right: 10px;
+}
+.pills-sub-icon {
     bottom: 6px;
     right: 11px;
-    color: #221f73;
+}
+.dna-sub-icon-background {
+    bottom: 4px;
+    right: 12px;
+}
+.dna-sub-icon {
+    bottom: 3px;
+    right: 13px;
+}
+.disclaimer-text {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .app-tour-container {
     display: flex;
@@ -275,16 +296,16 @@ a {
         <p>
             PharMe works by looking at your gene information and checking it against what scientists know about genes and medications.
         </p>
-        <p>We use information from trusted clinical PGx (pharmacogenomic) guidelines created by medical experts (CPIC and FDA).</p>
+        <p>We use information from trusted clinical guidelines created by medical experts (CPIC and FDA).</p>
         <div class="disclaimer">
             <div class="disclaimer-icon-container">
-                <i class="fa-classic fa-solid fa-pills disclaimer-icon-with-sub-icon"></i>
-                <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background"></i>
-                <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon"></i>
+                <i class="fa-classic fa-solid fa-pills pills-icon-with-sub-icon"></i>
+                <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background pills-sub-icon-background"></i>
+                <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon pills-sub-icon"></i>
             </div>
             <div>
-                <p style="margin-top: 0;">PharMe only includes medications with clinical PGx (pharmacogenomic) guidelines from CPIC and the FDA.</p>
-                <p style="font-style: italic;">
+                <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes according to CPIC and FDA guidelines.</p>
+                <p class="disclaimer-text" style="font-style: italic; margin-top: 1em;">
                     While only to a small percentage of medications have PGx guidelines, they are among the most commonly prescribed ones.
                     If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
                 </p>
@@ -305,7 +326,7 @@ a {
             We protect your privacy by storing your gene information and doing calculations only on your phone.
             We do not share your gene information with anyone.
         </p>
-        <p>We also do not store any information that could tell someone who you are, such as your name.</p>
+        <p style="margin-bottom: 0;">We also do not store any information that could tell someone who you are, such as your name.</p>
     </div>
     <div class="onboarding-image-container">
         <img
@@ -373,6 +394,20 @@ a {
             (pharmacogenomic) guidelines. Your current medications with PGx
             guidelines from your medical record will be pre-selected here.
         </p>
+        <div class="disclaimer">
+            <div class="disclaimer-icon-container">
+                <i class="fa-classic fa-solid fa-pills pills-icon-with-sub-icon"></i>
+                <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background pills-sub-icon-background"></i>
+                <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon pills-sub-icon"></i>
+            </div>
+            <div>
+                <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes according to CPIC and FDA guidelines.</p>
+                <p class="disclaimer-text" style="font-style: italic; margin-top: 1em;">
+                    While only to a small percentage of medications have CPIC or FDA guidelines, they are among the most commonly prescribed ones.
+                    If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
+                </p>
+            </div>
+        </div>
         <p>
             You will also be able to edit your current medications later in the
             App.
@@ -554,16 +589,18 @@ a {
 <p>
     PGx helps pharmacists and doctors pick the right medications and doses for
     you. It can help avoid bad reactions to medications before you even take
-    them.
+    them. But remember:
 
-    But remember: Your genes are just one piece of the puzzle in how medications
-    work for you, other factors are also important, like your:
-    <ul>
-        <li>Age</li>
-        <li>Weight</li>
-        <li>Other health conditions</li>
-        <li>Other medications you are taking</li>
-    </ul>
+    <div class="disclaimer">
+        <div class="disclaimer-icon-container">
+            <i class="fa-classic fa-solid fa-puzzle-piece disclaimer-icon"></i>
+        </div>
+        <div>
+            Your genes are just one piece of the puzzle. Many things affect
+            how medications work, like your weight, age, other health
+            conditions, or other medications you are taking.
+        </div>
+    </div>
 </p>
 
 <h4>What can cause bad reactions to medications?</h4>
@@ -592,8 +629,16 @@ a {
     No. Scientists are still finding new ways that genes affect medications. Different labs might also interpret gene tests differently as this is a new science.
 </p>
 <p>
-    PharMe uses trusted guidelines from medical experts (CPIC and FDA) to give you the most up-to-date information.
+    PharMe uses trusted guidelines from medical experts (CPIC and FDA) to give you the most up-to-date information. Therefore:
 </p>
+<div class="disclaimer">
+    <div class="disclaimer-icon-container">
+        <i class="fa-classic fa-solid fa-dna dna-icon-with-sub-icon"></i>
+        <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background dna-sub-icon-background"></i>
+        <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon dna-sub-icon"></i>
+    </div>
+    <p class="disclaimer-text">PharMe only includes genes that are known to affect how medications are processed according to CPIC and FDA guidelines.</p>
+</div>
 
 <h4>What do my gene results mean?</h4>
 <p>
@@ -607,13 +652,20 @@ a {
 </p>
 
 <h4>Which medications does PharMe include?</h4>
-<p>
-    PharMe includes medications that are known to be affected by genes. We get this information from clinical guidelines from CPIC and the FDA.
-</p>
-<p class="reviewer-comment">is this true?</p>
-<p>
-    While only a small percentage of drugs have these guidelines, they are very commonly prescribed.
-</p>
+<div class="disclaimer">
+    <div class="disclaimer-icon-container">
+        <i class="fa-classic fa-solid fa-pills pills-icon-with-sub-icon"></i>
+        <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background pills-sub-icon-background"></i>
+        <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon pills-sub-icon"></i>
+    </div>
+    <div>
+        <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes. We get this information from clinical guidelines from CPIC and the FDA.</p>
+        <p class="disclaimer-text" style="font-style: italic; margin-top: 1em;">
+            While only to a small percentage of medications have CPIC or FDA guidelines, they are among the most commonly prescribed ones.
+            If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
+        </p>
+    </div>
+</div>
 <p>
     Some examples are medications for:
 </p>
@@ -687,7 +739,20 @@ a {
 <h4>What does PharMe do?</h4>
 <p>PharMe helps you understand how your genes affect your medications.</p>
 <p>It shows which medications might not work well for you and might cause side effects.</p>
-<p>Always talk to your pharmacist or doctor before changing any medications.</p>
+<div class="disclaimer">
+    <div class="disclaimer-icon-container">
+        <i class="fa-classic fa-solid fa-pills pills-icon-with-sub-icon"></i>
+        <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background pills-sub-icon-background"></i>
+        <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon pills-sub-icon"></i>
+    </div>
+    <div>
+        <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes. We get this information from clinical guidelines from CPIC and the FDA.</p>
+        <p class="disclaimer-text" style="font-style: italic; margin-top: 1em;">
+            While only to a small percentage of medications have PGx guidelines, they are among the most commonly prescribed ones.
+            If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
+        </p>
+    </div>
+</div>
 
 <h4>Can I use PharMe without talking to my doctor?</h4>
 <p>
