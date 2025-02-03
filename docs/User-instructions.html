@@ -171,12 +171,43 @@ a {
 .app-tour-content {
     padding-right: 0.15in;
 }
+.app-screenshot-container {
+    position: relative;
+}
 .app-screenshot {
     min-width: 2in;
     max-width: 2in;
     padding-left: 0.15in;
     object-fit: contain;
     filter: drop-shadow(lightgray 5px 5px 5px);
+}
+.navbar-overlay {
+    margin-left: 0.15in;
+    width: 2in;
+    height: 3.85in;
+    position: absolute;
+    z-index: 10000;
+    opacity: 0.45;
+    background-color: gray;
+}
+.highlight-box {
+    margin-left: 0.15in;
+    position: absolute;
+    z-index: 10000;
+    border-style: solid;
+    border-width: 4px;
+    border-color: #d80b8c;
+}
+.navbar-box {
+    width: calc(2in - 8px);
+    top: 3.85in;
+    height: 0.41in;
+}
+.filter-box {
+    top: 0.7in;
+    height: 1.1in;
+    width: 1.24in;
+    right: 0;
 }
 .indicator-row {
     display: flex;
@@ -341,6 +372,7 @@ a {
 <h2 id="app-tour">II. App Tour</h2>
 
 <p class="reviewer-comment">The first part will not be included in the App</p>
+<p class="reviewer-comment">need to update the more screenshot after content updates</p>
 <div class="app-tour-container">
     <div class="app-screenshot-container">
         <img class="app-screenshot" src="./screenshots/accept-terms.png" />
@@ -376,9 +408,8 @@ a {
         <img class="app-screenshot" src="./screenshots/onboarding-1.png" />
     </div>
     <div class="app-tour-content">
-        <p class="reviewer-comment">need to update the screenshot after content updates</p>
         <h3>App Intro</h3>
-        After successfully downloading your data, you will get an overview about
+        After the login, you will get an overview about
         what PharMe can do in the App intro (also see the App intro above).
     </div>
 </div>
@@ -390,9 +421,16 @@ a {
     <div class="app-tour-content">
         <h3>Update Current Medications</h3>
         <p>
-            You can then review and update your current medications with PGx
-            (pharmacogenomic) guidelines. Your current medications with PGx
-            guidelines from your medical record will be pre-selected here.
+            Please review your current medications with PGx
+            (pharmacogenomic) guidelines that were imported from your medical
+            record.
+        </p>
+        <p>
+            Use the toggle switches to mark a medication as a current medication (on)
+            or remove a medication from current medications (off).
+        </p>
+        <p>
+            You can search for generic medication names and brand names.
         </p>
         <div class="disclaimer">
             <div class="disclaimer-icon-container">
@@ -408,29 +446,6 @@ a {
                 </p>
             </div>
         </div>
-        <p>
-            You will also be able to edit your current medications later in the
-            App.
-        </p>
-        <p class="reviewer-comment">not sure if we should include this here, what do you think?</p>
-        <p>
-            If you are taking any of the following medications, please be sure to
-            add them. They can change how your body handles other medications.
-            PharMe will warn you when these medications interact with other
-            medications you are taking:
-        </p>
-        <ul>
-            <li>Abiraterone (brand names: Yonsa, Zytiga)</li>
-            <li>Bupropion (brand names: Aplenzin, Auvelity, Budeprion, Contrave, Forfivo, Wellbutrin, Zyban)</li>
-            <li>Cinacalcet (brand names: Sensipar, Mimpara)</li>
-            <li>Duloxetine (brand names: Cymbalta, Drizalma, Irenka, Yentreve)</li>
-            <li>Fluoxetine (brand names: Act Fluoxetine, Prozac, Sarafem, Symbyax)</li>
-            <li>Lorcaserin (brand names: Belvia)</li>
-            <li>Mirabegron (brand names: Myrbetriq)</li>
-            <li>Paroxetine (brand names: Paxil, Pexeva)</li>
-            <li>Quinidine (brand names: Nuedexta)</li>
-            <li>Terbinafine (brand names: Lamisil, Silka Cream)</li>
-        </ul>
     </div>
 </div>
 
@@ -439,7 +454,9 @@ a {
 <p class="reviewer-comment">From now on this will be included in the App; headings will say "Part I: [heading] (I/N)"</p>
 <!-- <hr> -->
 <div class="app-tour-container">
-    <div class="app-screenshot-container" style="align-self: center;">
+    <div class="app-screenshot-container">
+        <div class="navbar-overlay"></div>
+        <div class="highlight-box navbar-box"></div>
         <img class="app-screenshot" src="./screenshots/drug-search.png" />
     </div>
     <div class="app-tour-content">
@@ -447,20 +464,47 @@ a {
         <p>Great! You're almost ready to use PharMe. Let's show you how it works.</p>
         <p>
             At the bottom of your screen, you'll find four main buttons:
-            "Medications", "Genes", "FAQ", and "More".
         </p>
+        <ul>
+            <li>Medications: search through medications and learn how your genes impact them.</li>
+            <li>Genes: get more information about your gene results and learn which medications they affect.</li>
+            <li>FAQ: refer to frequently asked questions if you encounter problems.</li>
+            <li>More: this page includes functions like editing the list of your current medications, contacting us, and information resources.</li>
+        </ul>
+        <p>The next parts of this app tour will provide further details about these screens.</p>
         <p class="reviewer-comment">In the App, "again in the App" will be "again later"</p>
-        <p style="font-weight: bold;">Want to repeat this tour again in the App? Just go to "More" and tap
-        "Repeat App tour".</p>
+        <p style="font-weight: bold;">Want to repeat this tour again in the App? You can tap "More" > "Repeat App tour".</p>
     </p>
-        <hr>
-        <h3 style="margin-top: 1em">Finding Medications</h3>
+    </div>
+</div>
+<hr>
+<div class="app-tour-container">
+    <div style="display: flex; flex-direction: column-reverse;">
+        <div class="app-screenshot-container">
+            <div class="highlight-box filter-box"></div>
+            <img class="app-screenshot" src="./screenshots/drug-search-filter.png" />
+        </div>
+        <div class="app-screenshot-container">
+            <img class="app-screenshot" src="./screenshots/drug-search.png" />
+        </div>
+    </div>
+    <div class="app-tour-content">
+        <h3>Finding Medications</h3>
         <p>The "Medications" screen  shows all medications in PharMe.</p>
-        <p>
-            You can search for medication names (both generic and brand names), look
-            for types of medications, and filter the list by how well they work with
-            your genes.
-        </p>
+        <div class="disclaimer">
+            <div class="disclaimer-icon-container">
+                <i class="fa-classic fa-solid fa-pills pills-icon-with-sub-icon"></i>
+                <i class="fa-classic fa-solid fa-circle disclaimer-sub-icon-background pills-sub-icon-background"></i>
+                <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon pills-sub-icon"></i>
+            </div>
+            <div>
+                <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes according to CPIC and FDA guidelines.</p>
+                <p class="disclaimer-text" style="font-style: italic; margin-top: 1em;">
+                    While only a small percentage of medications have CPIC or FDA guidelines, they are among the most commonly prescribed ones.
+                    If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
+                </p>
+            </div>
+        </div>
         <p>
             Each medication has a color and symbol that shows how it might work for
             you based on your genes:
@@ -477,6 +521,14 @@ a {
         <div class="indicator-row" style="color: #397739">
             <span class="material-icons-round indicator-icon">help</span> Standard precautions (incomplete data)
         </div>
+        <div class="force-pagebreak"></div>
+        <p style="font-style: italic;">Finding Medications (continued)</p>
+        <p>
+            You can search for medication names (both generic and brand names)
+            and for types of medications. Filter the list by how medications
+            might work for you based on your genes using the button next to the
+            search bar.
+        </p>
     </div>
 </div>
 <hr>
@@ -491,8 +543,12 @@ a {
             science tells us about this medication and your genes.
         </p>
         <p>
-            Here you can also mark medications you're taking and save information
-            for your pharmacist or doctor.
+            Mark medications you're currently taking by using the
+            toggle switch.
+        </p>
+        <p>
+            Here you can also save information for your pharmacist or doctor
+            by using the share button in the upper right corner.
         </p>
     </div>
 </div>
@@ -509,8 +565,8 @@ a {
             affects.
         </p>
         <p>
-            Want to learn more? Check out the FAQ or go to "More" > "Learn about
-            genetics".
+            Want to learn more about genetics? Check out the FAQ or go to
+            "More" > "Learn about genetics".
         </p>
     </div>
 </div>
@@ -523,10 +579,8 @@ a {
         <img class="app-screenshot" src="./screenshots/faq.png" />
     </div>
     <div class="app-tour-content">
-        <p class="reviewer-comment">need to update the more screenshot after content updates</p>
         <h3>FAQ & Additional Features</h3>
-        <p style="font-weight: bold;">Need help? Use "More" to get in touch with us or learn about the App,
-        or check the FAQ for common questions.</p>
+        <p style="font-weight: bold;">Need help? Check the frequently asked questions (FAQ) for common questions or use "More" to get in touch with us or learn about the App.</p>
         <p>Under "More" you can also edit your current medication list.</p>
     </div>
 </div>
@@ -540,6 +594,7 @@ a {
     You can also open the links from the App, under "More" > "Learn about genetics".
 </p>
 
+<p class="reviewer-comment">will adapt the list once I hear back from Aniwaa (probably will remove the government websites)</p>
 <p>For more information on PGx:</p>
 <ul>
     <li><span style="font-weight: bold;">Mount Sinai Introduction Video</span>: <a href="https://www.youtube.com/watch?v=N6432xbpGOU">https://www.youtube.com/watch?v=N6432xbpGOU</a></li>
@@ -564,7 +619,6 @@ a {
 <p>PharMe helps you understand how your genes affect your medications.</p>
 <p>It shows which medications might not work well for you and might cause side effects.</p>
 <p>However, please remember:</p>
-<p class="reviewer-comment">Also include "no change wo/ pharmacist or doctor disclaimer in app</p>
 <div class="disclaimer" style="margin-bottom: 1em;">
     <div class="disclaimer-icon-container">
         <i class="fa-classic fa-solid fa-puzzle-piece disclaimer-icon"></i>
@@ -582,7 +636,7 @@ a {
         <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon pills-sub-icon"></i>
     </div>
     <div>
-        <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes. We get this information from clinical guidelines from CPIC and the FDA.</p>
+        <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes according to CPIC and FDA guidelines.</p>
         <p class="disclaimer-text" style="font-style: italic; margin-top: 1em;">
             While only a small percentage of medications have CPIC or FDA guidelines, they are among the most commonly prescribed ones.
             If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
@@ -593,6 +647,15 @@ a {
 <h4>1.2 Can I use PharMe without talking to my pharmacist or doctor?</h4>
 <p>
     No. Always talk to your pharmacist or doctor before starting, changing, or stopping your medications.
+    <div class="disclaimer">
+        <div class="disclaimer-icon-container">
+            <span class="material-icons-round disclaimer-icon">warning</span>
+        </div>
+        <div>
+            Never change or stop your medications without talking to your
+            pharmacist or doctor first.
+        </div>
+    </div>
 </p>
 
 <h4>1.3 Where does PharMe get its information?</h4>
@@ -713,7 +776,7 @@ a {
         <i class="fa-classic fa-solid fa-circle-check disclaimer-sub-icon pills-sub-icon"></i>
     </div>
     <div>
-        <p class="disclaimer-text">PharMe only includes medications that are known to be affected by genes. We get this information from clinical guidelines from CPIC and the FDA.</p>
+        <p class="disclaimer-text">PharMe includes medications that are known to be affected by genes. We get this information from clinical guidelines from CPIC and the FDA.</p>
         <p class="disclaimer-text" style="font-style: italic; margin-top: 1em;">
             While only a small percentage of medications have CPIC or FDA guidelines, they are among the most commonly prescribed ones.
             If you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.
