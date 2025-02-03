@@ -136,8 +136,14 @@ manually if changes in the app content occur (at least the screenshots are
 linked and do not need to be updated after re-generation).
 
 We decided to host a PDF of the user instructions (for the study). To create
-this PDF, open the HTML file in a browser (tested with Chrome) and print with
-"Save to PDF".
+this PDF, follow these steps:
+
+1. Open the HTML file in Chrome
+2. Print with "Save to PDF" using default settings, format US Letter
+3. Add page numbers [online](https://www.ilovepdf.com/add_pdf_page_number)
+   - Position: bottom center
+   - Text: `{n} of {p}`
+   - Font size: 10
 
 ## Adapting test data
 
