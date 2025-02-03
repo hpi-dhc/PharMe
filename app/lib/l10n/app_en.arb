@@ -109,9 +109,9 @@
   
   "search_content_explanation": "Get an overview on your PGx (pharmacogenomic) tests results per medication. Tap on a medication so see what your result means and what to do.",
   "@search_content_explanation": {},
-  "search_page_tooltip_search": "Search for medications by their name, brand name or type.",
+  "search_page_tooltip_search": "Search for medications by their generic name, brand name, or type.",
   "@search_page_tooltip_search": {},
-  "search_page_tooltip_search_no_class": "Search for medications by their name or brand name.",
+  "search_page_tooltip_search_no_class": "Search for medications by their generic name or brand name.",
   "@search_page_tooltip_search_no_class": {},
   "search_page_filter_label": "Filter by guideline result",
   "@search_page_filter_label": {},
