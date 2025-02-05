@@ -4,6 +4,8 @@
   "@action_cancel": {},
   "action_continue": "Continue",
   "@action_continue": {},
+  "action_ok": "OK",
+  "@action_ok": {},
   "action_understood": "Understood",
   "@action_understood": {},
   "action_back_to_app": "Back to App",
@@ -12,6 +14,22 @@
   "@action_proceed_to_app": {},
   "action_finish": "Finish",
   "@action_finish": {},
+
+  "action_back_to_pharme": "Back to PharMe",
+  "@action_back_to_pharme": {},
+  "secure_page_explanation_link": "Why am I seeing this screen?",
+  "@secure_page_explanation_link": {},
+  "secure_page_dialog_title": "This screen hides and protects your health information",
+  "@secure_page_dialog_title": {},
+  "secure_page_dialog_body": "\nIt should only show if PharMe is running in the background. Sometimes PharMe does not detect this correctly.\n\nPlease use the \"{buttonText}\" button to hide this screen.",
+  "@secure_page_dialog_body": {
+    "placeholders": {
+      "buttonText": {
+        "type": "String",
+        "example": "Back to PharMe"
+      }
+    }
+  },
 
   "error_title": "Something went wrong",
   "@error_title": {},

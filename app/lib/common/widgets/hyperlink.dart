@@ -1,17 +1,23 @@
 import '../module.dart';
 
 class Hyperlink extends StatelessWidget {
-  const Hyperlink({ required this.text, required this.onTap, this.style });
+  const Hyperlink({
+    required this.text,
+    required this.onTap,
+    this.style,
+    this.color,
+  });
   final String text;
   final void Function() onTap;
   final TextStyle? style;
+  final Color? color;
   
   @override
   Widget build(BuildContext context) {
     final linkStyle = TextStyle(
-      color: PharMeTheme.secondaryColor,
+      color: color ?? PharMeTheme.secondaryColor,
       decoration: TextDecoration.underline,
-      decorationColor: PharMeTheme.secondaryColor,
+      decorationColor: color ?? PharMeTheme.secondaryColor,
     );
     return GestureDetector(
       onTap: onTap,
