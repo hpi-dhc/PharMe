@@ -14,7 +14,7 @@ class LifecycleObserver extends HookWidget {
   Widget build(BuildContext context) {  
     useOnAppLifecycleStateChange((previous, current) async {
       if (current == AppLifecycleState.resumed) {
-        if (currentPathIsSecurePath(appRouter)) appRouter.back();
+        await routeBackAfterSecurePage(appRouter);
       }
       if (
         current == AppLifecycleState.inactive ||
