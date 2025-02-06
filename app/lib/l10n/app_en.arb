@@ -21,7 +21,7 @@
   "@secure_page_explanation_link": {},
   "secure_page_dialog_title": "This screen hides and protects your health information",
   "@secure_page_dialog_title": {},
-  "secure_page_dialog_body": "\nIt should only show if PharMe is running in the background. Sometimes PharMe does not detect this correctly.\n\nPlease use the \"{buttonText}\" button to hide this screen.",
+  "secure_page_dialog_body": "Please use the \"{buttonText}\" button to hide this screen.",
   "@secure_page_dialog_body": {
     "placeholders": {
       "buttonText": {
