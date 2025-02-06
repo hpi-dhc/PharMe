@@ -19,17 +19,34 @@ DeepLink getInitialRoute() {
   return DeepLink.path(getInitialRouteName());
 }
 
+void routeBackToContent(
+  StackRouter router,
+  {
+    bool popLogin = true,
+    // Dialogs or modal bottom sheets will have no route name
+    bool popNull = false,
+  }) {
+  final currentRoute = router.current.name;
+  bool keepRoute(Route route) {
+    final isSecureRoute = route.settings.name == SecureRoute.name;
+    final isLoginRoute = route.settings.name == LoginRoute.name;
+    final isCurrentRoute = route.settings.name == currentRoute;
+    final isNullRoute = route.settings.name == null;
+    var keepCurrentRoute = !isSecureRoute && !isCurrentRoute;
+    if (popLogin) keepCurrentRoute = keepCurrentRoute && !isLoginRoute;
+    if (popNull) keepCurrentRoute = keepCurrentRoute && !isNullRoute;
+    return keepCurrentRoute;
+  }
+  router.popUntil(keepRoute);
+}
+
 bool currentPathIsSecurePath(StackRouter router) {
   return router.currentPath == secureRoutePath;
 }
 
 Future<void> routeBackAfterSecurePage(StackRouter router) async {
   if (currentPathIsSecurePath(router)) {
-    if (router.canPop()) {
-      await router.maybePop();
-    } else {
-      await router.pushNamed(getInitialRouteName());
-    }
+    routeBackToContent(router, popLogin: false);
   }
 }
 

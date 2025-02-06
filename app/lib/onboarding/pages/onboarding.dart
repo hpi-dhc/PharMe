@@ -117,7 +117,7 @@ class OnboardingPage extends HookWidget {
                   size: OnboardingDimensions.iconSize,
                   color: Colors.white,
                 ),
-                onPressed: () => context.router.back(),
+                onPressed: () => routeBackToContent(context.router),
               )
             ),
             Positioned.fill(
@@ -211,7 +211,7 @@ class OnboardingPage extends HookWidget {
       onPressed: () async {
         if (isLastPage) {
           if (isRevisiting) {
-            context.router.back();
+            routeBackToContent(context.router);
           } else {
             MetaData.instance.onboardingDone = true;
             await MetaData.save();

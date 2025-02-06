@@ -167,12 +167,7 @@ class TutorialBuilder extends HookWidget {
           onPressed: isFirstPage
             ? () {
               initiateRouteBack();
-              final currentRoute = context.router.current.name;
-              context.router.popUntil(
-                (route) =>
-                  route.settings.name != null &&
-                  route.settings.name != currentRoute,
-              );
+              routeBackToContent(context.router, popNull: true);
             }
             : () => currentPageIndex.value = currentPageIndex.value - 1,
           text: isFirstPage
