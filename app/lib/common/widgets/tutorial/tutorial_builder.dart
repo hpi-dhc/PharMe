@@ -125,7 +125,7 @@ class TutorialBuilder extends HookWidget {
       ),
       if (content != null) Padding(
         padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
-        child: Text.rich(content, style: PharMeTheme.textTheme.bodyLarge),
+        child: content,
       ),
       if (assetContainer != null) Expanded(
         child: Padding(

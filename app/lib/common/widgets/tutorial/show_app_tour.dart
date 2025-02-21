@@ -1,27 +1,21 @@
 import 'dart:async';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
+
 import '../../module.dart';
 import 'tutorial_controller.dart';
 import 'tutorial_page.dart';
 
-TextSpan _buildContent(String text, { InlineSpan? trailingSpan }) {
-  final paragraphs = text.split('\n');
-  final spacerSpan = WidgetSpan(child: SizedBox(height: 25));
-  var spacedParagraphs = <InlineSpan>[];
-  for (final (index, paragraph) in paragraphs.indexed) {
-    final isLast = index == paragraphs.length - 1;
-    final paragraphSpan = isLast
-      ? TextSpan(text: paragraph)
-      : TextSpan(text: '$paragraph\n');
-    spacedParagraphs = isLast
-      ? [...spacedParagraphs, paragraphSpan]
-      : [...spacedParagraphs, paragraphSpan, spacerSpan];
-  }
-  if (trailingSpan != null) {
-    spacedParagraphs = [...spacedParagraphs, TextSpan(text: '\n'), spacerSpan, trailingSpan];
-  }
-  return TextSpan(children: spacedParagraphs);
-}
+Widget _getTutorialContent(String text) => MarkdownBody(
+  data: text,
+  styleSheet: MarkdownStyleSheet.fromTheme(
+    ThemeData(
+      textTheme: TextTheme(
+        bodyMedium: PharMeTheme.textTheme.bodyLarge,
+      )
+    )
+  ),
+);
 
 FutureOr<void> showAppTour(
   BuildContext context,
@@ -35,12 +29,8 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_1_title,
-          content: (context) => _buildContent(
+          content: (context) => _getTutorialContent(
             context.l10n.tutorial_app_tour_1_body,
-            trailingSpan: TextSpan(
-              text: context.l10n.tutorial_app_tour_1_body_bold,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
           assetPath:
             'assets/images/tutorial/05_bottom_navigation_loopable.gif',
@@ -48,11 +38,27 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_2_title,
-          content: (context) => TextSpan(
+          content: (context) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildContent(
-                context.l10n.tutorial_app_tour_2_body,
-                trailingSpan: buildWarningLevelTextLegend(context),
+              _getTutorialContent(
+                context.l10n.tutorial_app_tour_2_body_before_disclaimer,
+              ),
+              Padding(
+                padding: EdgeInsets.all(PharMeTheme.smallSpace),
+                child: ListInclusionDescription.forMedications(),
+              ),
+              _getTutorialContent(
+                context.l10n.tutorial_app_tour_2_body_after_disclaimer,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: PharMeTheme.smallSpace),
+                child: Text.rich(
+                  buildWarningLevelTextLegend(context),
+                ),
+              ),
+              _getTutorialContent(
+                context.l10n.tutorial_app_tour_2_body_after_legend,
               ),
             ],
           ),
@@ -62,7 +68,7 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_3_title,
-          content: (context) => _buildContent(
+          content: (context) => _getTutorialContent(
             context.l10n.tutorial_app_tour_3_body,
           ),
           assetPath:
@@ -71,7 +77,7 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_4_title,
-          content: (context) => _buildContent(
+          content: (context) => _getTutorialContent(
             context.l10n.tutorial_app_tour_4_body,
           ),
           assetPath:
@@ -80,12 +86,8 @@ FutureOr<void> showAppTour(
         TutorialPage(
           title: (context) =>
             context.l10n.tutorial_app_tour_5_title,
-          content: (context) => _buildContent(
+          content: (context) => _getTutorialContent(
             context.l10n.tutorial_app_tour_5_body,
-            trailingSpan: TextSpan(
-              text: context.l10n.tutorial_app_tour_5_body_bold,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
           assetPath:
             'assets/images/tutorial/09_faq_and_more_loopable.gif',

@@ -21,6 +21,7 @@ class OnboardingPage extends HookWidget {
         color: PharMeTheme.sinaiCyan,
         bottom: DisclaimerCard(
           icon: FontAwesomeIcons.puzzlePiece,
+          iconSize: OnboardingDimensions.iconSize,
           iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
           text: context.l10n.drugs_page_puzzle_disclaimer_text,
         ),
@@ -45,6 +46,7 @@ class OnboardingPage extends HookWidget {
         color: PharMeTheme.sinaiPurple,
         bottom: DisclaimerCard(
           icon: Icons.info,
+          iconSize: OnboardingDimensions.iconSize,
           iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
           textWidget: Text.rich(
             TextSpan(
@@ -515,72 +517,4 @@ class OnboardingSubPage extends HookWidget {
       ],
     );
   }
-}
-
-class DisclaimerCard extends StatelessWidget {
-  const DisclaimerCard({
-    this.icon,
-    this.iconWidget,
-    this.text,
-    this.textWidget,
-    this.secondLineText,
-    this.onClick,
-    this.iconPadding,
-  });
-
-  final IconData? icon;
-  final Widget? iconWidget;
-  final String? text;
-  final Widget? textWidget;
-  final String? secondLineText;
-  final GestureTapCallback? onClick;
-  final EdgeInsets? iconPadding;
-
-  @override
-  Widget build(BuildContext context) {
-    final widget = Card(
-      color: PharMeTheme.surfaceColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(PharMeTheme.smallSpace),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: iconPadding ?? EdgeInsets.zero,
-              child: iconWidget ?? Icon(
-                icon ?? Icons.warning_rounded,
-                size: OnboardingDimensions.iconSize,
-                color: PharMeTheme.onSurfaceText,
-              ),
-            ),
-            SizedBox(width: PharMeTheme.smallSpace),
-            Expanded(
-              child: Column(
-                children: [
-                  textWidget ?? getTextWidget(text!),
-                  if (secondLineText != null) ...[
-                    SizedBox(height: PharMeTheme.smallSpace),
-                    getTextWidget(secondLineText!),
-                  ]
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    if (onClick != null) return InkWell(onTap: onClick, child: widget);
-
-    return widget;
-  }
-
-  Widget getTextWidget(String text) => Text(
-    text,
-    style: PharMeTheme.textTheme.bodyMedium,
-    textAlign: TextAlign.start,
-  );
 }

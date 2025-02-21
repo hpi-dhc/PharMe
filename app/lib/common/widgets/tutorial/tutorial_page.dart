@@ -8,6 +8,6 @@ class TutorialPage {
   });
 
   final String Function(BuildContext)? title;
-  final TextSpan Function(BuildContext)? content;
+  final Widget Function(BuildContext)? content;
   final String? assetPath;
 }

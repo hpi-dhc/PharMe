@@ -24,6 +24,7 @@ dependencies:
   flutter_list_view: ^1.1.22
   flutter_localizations:
     sdk: flutter
+  flutter_markdown: ^0.7.6+2
   flutter_secure_storage: ^9.0.0
   flutter_share: ^2.0.0
   flutter_sliding_up_panel: ^2.0.1

@@ -1,4 +1,4 @@
-import '../module.dart';
+import '../../module.dart';
 
 class DisclaimerRow extends StatelessWidget {
   const DisclaimerRow({super.key, required this.icon, required this.text});

@@ -11,8 +11,9 @@ FutureOr<void> showDrugSelectionIntro(BuildContext context) =>
       TutorialPage(
         title: (context) =>
           context.l10n.tutorial_initial_drug_selection_title,
-        content: (context) => TextSpan(
-          text: context.l10n.tutorial_initial_drug_selection_body,
+        content: (context) => Text(
+          context.l10n.tutorial_initial_drug_selection_body,
+          style: TextStyle(fontSize: PharMeTheme.textTheme.bodyLarge?.fontSize),
         ),
       ),
     ],
