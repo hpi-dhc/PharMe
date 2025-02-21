@@ -44,6 +44,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
   Widget _buildResultSection(BuildContext context) {
     final implicationText = drug.userGuideline?.annotations.implication;
     final recommendationText = drug.userGuideline?.annotations.recommendation;
+    final descriptionStyle = TextStyle(fontStyle: FontStyle.italic);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,10 +81,15 @@ class GuidelineAnnotationCard extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   children: [
-                    if (implicationText != null) TextSpan(
+                    if (
+                      implicationText != null &&
+                      drug.warningLevel != WarningLevel.none
+                    ) TextSpan(
                       text: context.l10n.drugs_page_implication_description,
+                      style: descriptionStyle,
                     ),
-                    WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.2)),
+                    TextSpan(text: ':\n', style: descriptionStyle),
+                    WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.3)),
                     TextSpan(
                       text:
                         implicationText ?? context.l10n.drugs_page_no_guidelines_text,
@@ -95,13 +101,19 @@ class GuidelineAnnotationCard extends StatelessWidget {
                 ),
               ),
               if (recommendationText != null) ...[
-                SizedBox(height: PharMeTheme.smallToMediumSpace),
+                SizedBox(height: PharMeTheme.mediumSpace),
                 Text.rich(
                   TextSpan(children: [
                     TextSpan(
-                      text: context.l10n.drugs_page_recommendation_description,
+                      text: context.l10n.drugs_page_recommendation_description_part_1,
+                      style: descriptionStyle,
                     ),
-                    WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.2)),
+                    TextSpan(
+                      text: context.l10n.drugs_page_recommendation_description_part_2,
+                      style: descriptionStyle.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: ':\n', style: descriptionStyle),
+                    WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.3)),
                     TextSpan(
                       text: recommendationText,
                       style: TextStyle(fontWeight: FontWeight.bold),
