@@ -8,12 +8,18 @@ enum ListInclusionDescriptionType {
 }
 
 extension ListInclusionDescriptionContent on ListInclusionDescriptionType {
-  String getText(BuildContext context) =>
-    context.l10n.included_content_disclaimer_text(
-      this == ListInclusionDescriptionType.medications
+  String getText(BuildContext context) {
+    final includedContent = this == ListInclusionDescriptionType.medications
         ? context.l10n.included_content_medications
-        : context.l10n.included_content_genes
+        : context.l10n.included_content_genes;
+    final inclusionText = this == ListInclusionDescriptionType.medications
+        ? context.l10n.included_content_inclusion_medications
+        : context.l10n.included_content_inclusion_genes;
+    return context.l10n.included_content_disclaimer_text(
+      includedContent,
+      inclusionText
     );
+  }
   
   IconData get icon => this == ListInclusionDescriptionType.medications
     ? medicationsIcon

@@ -20,7 +20,9 @@ class OnboardingPage extends HookWidget {
         text: context.l10n.onboarding_1_text,
         color: PharMeTheme.sinaiCyan,
         bottom: DisclaimerCard(
-          text: context.l10n.drugs_page_main_disclaimer_text,
+          icon: FontAwesomeIcons.puzzlePiece,
+          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
+          text: context.l10n.drugs_page_puzzle_disclaimer_text,
         ),
       ),
       OnboardingSubPage(
@@ -30,6 +32,9 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_2_header,
         text: context.l10n.onboarding_2_text,
         color: PharMeTheme.sinaiMagenta,
+        bottom: DisclaimerCard(
+          text: context.l10n.drugs_page_main_disclaimer_text,
+        ),
       ),
       OnboardingSubPage(
         availableHeight:
@@ -39,9 +44,21 @@ class OnboardingPage extends HookWidget {
         text: context.l10n.onboarding_3_text,
         color: PharMeTheme.sinaiPurple,
         bottom: DisclaimerCard(
-          icon: FontAwesomeIcons.puzzlePiece,
+          icon: Icons.info,
           iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
-          text: context.l10n.drugs_page_puzzle_disclaimer_text,
+          textWidget: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '${context.l10n.pgx_abbreviation} ',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: context.l10n.pharmacogenomics_info_box_text,
+                ),
+              ]
+            ),
+          ),
         ),
       ),
       OnboardingSubPage(
@@ -58,9 +75,23 @@ class OnboardingPage extends HookWidget {
             size: OnboardingDimensions.iconSize,
           ),
           iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
-          text: '${context.l10n.included_content_disclaimer_text(
-              context.l10n.included_content_medications,
-            )}\n\n${context.l10n.included_content_addition}',
+          textWidget: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: context.l10n.included_content_disclaimer_text(
+                    context.l10n.included_content_medications,
+                    context.l10n.included_content_inclusion_medications,
+                  ),
+                ),
+                TextSpan(text: '\n\n'),
+                TextSpan(
+                  text: context.l10n.included_content_addition,
+                  style: TextStyle(fontStyle: FontStyle.italic),
+                )
+              ]
+            ),
+          ),
         ),
       ),
       OnboardingSubPage(
@@ -490,7 +521,8 @@ class DisclaimerCard extends StatelessWidget {
   const DisclaimerCard({
     this.icon,
     this.iconWidget,
-    required this.text,
+    this.text,
+    this.textWidget,
     this.secondLineText,
     this.onClick,
     this.iconPadding,
@@ -498,7 +530,8 @@ class DisclaimerCard extends StatelessWidget {
 
   final IconData? icon;
   final Widget? iconWidget;
-  final String text;
+  final String? text;
+  final Widget? textWidget;
   final String? secondLineText;
   final GestureTapCallback? onClick;
   final EdgeInsets? iconPadding;
@@ -527,7 +560,7 @@ class DisclaimerCard extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  getTextWidget(text),
+                  textWidget ?? getTextWidget(text!),
                   if (secondLineText != null) ...[
                     SizedBox(height: PharMeTheme.smallSpace),
                     getTextWidget(secondLineText!),

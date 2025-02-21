@@ -15,6 +15,14 @@
   "action_finish": "Finish",
   "@action_finish": {},
 
+  "pgx_abbreviation": "PGx",
+  "@pgx_abbreviation": {},
+
+  "accept_terms_privacy_title": "Please note",
+  "@accept_terms_privacy_title": {},
+  "accept_terms_privacy_body": "By continuing to the App, you accept our terms of use and agree to our privacy policy.",
+  "@accept_terms_privacy_body": {},
+
   "action_back_to_pharme": "Back to PharMe",
   "@action_back_to_pharme": {},
   "secure_page_explanation_link": "Why am I seeing this screen?",
@@ -157,9 +165,9 @@
         }
     }
   },
-  "drugs_page_main_disclaimer_text": "Never stop taking or change the dose of your medications without consulting your pharmacist or doctor.",
+  "drugs_page_main_disclaimer_text": "Never change or stop your medications without talking to your pharmacist or doctor first.",
   "@drugs_page_main_disclaimer_text": {},
-  "drugs_page_puzzle_disclaimer_text": "The information from PharMe is like one puzzle piece in the big picture of how well a medication works for you.\n\nThe information provided in this app is based ONLY on your genes and certain medications that may interact with your genetic result. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
+  "drugs_page_puzzle_disclaimer_text": "Your genes are just one piece of the puzzle. Many things affect how medications work, like your weight, age, other health conditions, or other medications you are taking.",
   "@drugs_page_puzzle_disclaimer_text": {},
   "drugs_page_is_inhibitor": "Taking {drugName} will slow down the activity of {genes}. This will affect how your body processes and responds to associated medications.",
   "@drugs_page_is_inhibitor": {
@@ -545,41 +553,51 @@
   "@onboarding_next": {},
   "onboarding_prev": "Back",
   "@onboarding_prev": {},
-  "onboarding_1_header": "Welcome to PharMe",
+  "onboarding_1_header": "Welcome to PharMe!",
   "@onboarding_1_header": {},
-  "onboarding_1_text": "Your genes affect your health more than you might think, including how you respond to medications.\n\nIn fact, over 90 percent of people can have unexpected reactions to medications.\n\nUse PharMe to find out about yours.",
+  "onboarding_1_text": "Did you know? Your genes help decide how medications work in your body.\n\nIn fact, 9 out of 10 people might react differently to medications than expected.\n\nPharMe helps you understand how your genes affect your medications.",
   "@onboarding_1_text": {},
-  "onboarding_2_header": "One size does not fit all",
+  "onboarding_2_header": "One Size Does Not Fit All",
   "@onboarding_2_header": {},
-  "onboarding_2_text": "Each person’s body reacts to medications differently.\n\nMedications that are effective for a majority of people can have adverse side effects for you.",
+  "onboarding_2_text": "Think of medications like shoes – one size doesn't fit all.\n\nA medication that works well for most people might not work the same way for you.",
   "@onboarding_2_text": {},
-  "onboarding_3_header": "Genome power unlocked to improve your health",
+  "onboarding_3_header": "Genome Power Unlocked to Improve Your Health",
   "@onboarding_3_header": {},
-  "onboarding_3_text": "PharMe tells you if your genes make you more likely to have an unexpected reaction to a medication.\n\nThis way, you can avoid medications that might not work or could cause side effects.",
+  "onboarding_3_text": "PharMe tells you if your genes might make certain medications work differently than expected, cause unwanted side effects, or not work well enough.\n\nThis field of medicine is called pharma-co-genomics (PGx).",
   "@onboarding_3_text": {},
-  "onboarding_4_header": "Tailor-made for you",
+  "pharmacogenomics_info_box_text": "(pharma-co-genomics) is the medical field of how your genes affect how medications work in your body.",
+  "@pharmacogenomics_info_box_text": {},
+  "onboarding_4_header": "Tailored Just for You",
   "@onboarding_4_header": {},
   "onboarding_4_text": "For PharMe to work, you need to get your genes (DNA) tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
   "@onboarding_4_text": {},
   "onboarding_4_button": "Find out more about gene tests here.",
   "@onboarding_4_button": {},
-  "onboarding_4_already_tested_text": "PharMe matches your genetic information with what scientists know about how certain genes and medications interact.\n\nThe information provided by PharMe is based on proven guidelines from trusted organizations like the Clinical Pharmacogenetics Implementation Consortium (CPIC®) and the U.S. Food and Drug Administration (FDA).",
+  "onboarding_4_already_tested_text": "PharMe works by looking at your gene information and checking it against what scientists know about genes and medications.\n\nWe use information from trusted clinical guidelines created by medical experts (CPIC and FDA).",
   "@onboarding_4_already_tested_text": {},
-  "onboarding_5_header": "We care about your privacy",
+  "onboarding_5_header": "Keeping Your Information Safe",
   "@onboarding_5_header": {},
-  "onboarding_5_text": "Once you download your genetic information, it is stored safely on your phone.\n\nOur system does not collect any information about you, including your name or gene results.",
+  "onboarding_5_text": "We protect your privacy by storing your gene information and doing calculations only on your phone.\n\nWe do not share your gene information with anyone.\n\nWe also do not store any information that could tell someone who you are, such as your name.",
   "@onboarding_5_text": {},
 
   "included_content_medications": "medications",
   "@included_content_medications": {},
+  "included_content_inclusion_medications": "known to be affected by genes",
+  "@included_content_inclusion_medications": {},
   "included_content_genes": "genes",
   "@included_content_genes": {},
-  "included_content_disclaimer_text": "PharMe only includes {content} with clinical PGx (pharmacogenomic) guidelines from CPIC and the FDA.",
+  "included_content_inclusion_genes": "known to affect medications",
+  "@included_content_inclusion_genes": {},
+  "included_content_disclaimer_text": "PharMe only includes {content} that are {inclusionCriteria} according to CPIC and FDA guidelines.",
   "@included_content_disclaimer_text": {
     "placeholders": {
       "content": {
         "type": "String",
         "example": "medications"
+      },
+      "inclusionCriteria": {
+        "type": "String",
+        "example": "known to be affected by genes"
       }
     }
   },
