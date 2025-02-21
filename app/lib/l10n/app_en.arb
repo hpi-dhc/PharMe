@@ -159,7 +159,7 @@
   },
   "drugs_page_main_disclaimer_text": "Never stop taking or change the dose of your medications without consulting your pharmacist or doctor.",
   "@drugs_page_main_disclaimer_text": {},
-  "drugs_page_puzzle_disclaimer_text": "The information from PharMe is like one puzzle piece in the big picture of how well a medication works for you.\n\nThe information provided in this app is based ONLY on your DNA and certain medications that may interact with your genetic result. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
+  "drugs_page_puzzle_disclaimer_text": "The information from PharMe is like one puzzle piece in the big picture of how well a medication works for you.\n\nThe information provided in this app is based ONLY on your genes and certain medications that may interact with your genetic result. Other important factors like weight, age, pre-existing conditions, and further medication interactions are not considered.",
   "@drugs_page_puzzle_disclaimer_text": {},
   "drugs_page_is_inhibitor": "Taking {drugName} will slow down the activity of {genes}. This will affect how your body processes and responds to associated medications.",
   "@drugs_page_is_inhibitor": {
@@ -267,7 +267,7 @@
       }
     }
   },
-  "drugs_page_header_guideline": "DNA-based clinical guideline",
+  "drugs_page_header_guideline": "Gene-based clinical guideline",
   "@drugs_page_header_guideline": {},
   "drugs_page_no_guidelines_text": "Standard dosing may apply; no pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "@drugs_page_no_guidelines_text": {},
@@ -280,7 +280,7 @@
           }
       }
   },
-  "drugs_page_tooltip_guideline_present": "{source} guidelines are used to inform the content on this page. These guidelines provide recommendations on which drugs to use based on your DNA.",
+  "drugs_page_tooltip_guideline_present": "{source} guidelines are used to inform the content on this page. These guidelines provide recommendations on which drugs to use based on your genes.",
   "@drugs_page_tooltip_guideline_present": {
     "placeholders": {
       "source": {
@@ -289,7 +289,7 @@
       }
     }
   },
-  "drugs_page_tooltip_guideline_missing": "Guidelines provide recommendations on which medications to use based on your DNA. However, no guideline is present in this case (yet).",
+  "drugs_page_tooltip_guideline_missing": "Guidelines provide recommendations on which medications to use based on your genes. However, no guideline is present in this case (yet).",
   "@drugs_page_tooltip_guideline_missing": {},
   "drugs_page_implication_description": "What your result means: ",
   "@drugs_page_implication_description": {},
@@ -396,11 +396,11 @@
   },
   "gene_page_genotype": "Genotype",
   "@gene_page_genotype": {},
-  "gene_page_genotype_tooltip": "The genotype tells you about your DNA and which version of a gene you have.\n\nYou have two copies for one gene, one from your mom and one from your dad. One gene copy is called an \"allele\".",
+  "gene_page_genotype_tooltip": "The genotype tells you about your genes and which version of a gene you have.\n\nYou have two copies for one gene, one from your mom and one from your dad. One gene copy is called an \"allele\".",
   "@gene_page_genotype_tooltip": {},
   "gene_page_phenotype": "Phenotype",
   "@gene_page_phenotype": {},
-  "gene_page_phenotype_tooltip": "The phenotype describes how your DNA affects your body.\n\nIn PGx (pharmacogenomics), it usually shows if a gene version might cause a bad reaction to a medication or how fast your body processes a drug.",
+  "gene_page_phenotype_tooltip": "The phenotype describes how your genes affects your body.\n\nIn PGx (pharmacogenomics), it usually shows if a gene version might cause a bad reaction to a medication or how fast your body processes a drug.",
   "@gene_page_phenotype_tooltip": {},
   "gene_page_relevant_drugs": "Associated medications",
   "@gene_page_relevant_drugs": {},
@@ -557,7 +557,7 @@
   "@onboarding_3_text": {},
   "onboarding_4_header": "Tailor-made for you",
   "@onboarding_4_header": {},
-  "onboarding_4_text": "For PharMe to work, you need to get your genetics (DNA) tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
+  "onboarding_4_text": "For PharMe to work, you need to get your genes (DNA) tested at a lab. You don't need an account to use PharMe: You can just sign in to the lab's website through our app.",
   "@onboarding_4_text": {},
   "onboarding_4_button": "Find out more about gene tests here.",
   "@onboarding_4_button": {},
@@ -565,7 +565,7 @@
   "@onboarding_4_already_tested_text": {},
   "onboarding_5_header": "We care about your privacy",
   "@onboarding_5_header": {},
-  "onboarding_5_text": "Once you download your genetic information, it is stored safely on your phone.\n\nOur system does not collect any information about you, including your name or DNA.",
+  "onboarding_5_text": "Once you download your genetic information, it is stored safely on your phone.\n\nOur system does not collect any information about you, including your name or gene results.",
   "@onboarding_5_text": {},
 
   "included_content_medications": "medications",
