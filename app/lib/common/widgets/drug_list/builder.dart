@@ -102,6 +102,7 @@ class DrugList extends HookWidget {
     final currentlyEnabled = !drugActivityChangeable && filter.query.isBlank;
     final drugLists = [
       _buildIncludedMedicationsDescription(context),
+      if (activeDrugsList == null) SizedBox(height: PharMeTheme.smallSpace),
       if (activeDrugsList != null) ...[
         ListDescription(
           key: Key('header-active'),
