@@ -84,16 +84,18 @@ class GuidelineAnnotationCard extends StatelessWidget {
                     if (
                       implicationText != null &&
                       drug.warningLevel != WarningLevel.none
-                    ) TextSpan(
-                      text: context.l10n.drugs_page_implication_description,
-                      style: descriptionStyle,
-                    ),
-                    TextSpan(text: ':\n', style: descriptionStyle),
+                    ) ...[
+                      TextSpan(
+                        text: context.l10n.drugs_page_implication_description,
+                        style: descriptionStyle,
+                      ),
+                      TextSpan(text: ':\n', style: descriptionStyle),
+                    ],
                     WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.3)),
                     TextSpan(
                       text:
                         implicationText ?? context.l10n.drugs_page_no_guidelines_text,
-                      style: implicationText != null
+                      style: drug.warningLevel != WarningLevel.none
                         ? TextStyle(fontWeight: FontWeight.bold)
                         : TextStyle(fontStyle: FontStyle.italic)
                         ),
