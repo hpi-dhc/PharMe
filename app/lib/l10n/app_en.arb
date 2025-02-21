@@ -269,7 +269,7 @@
   },
   "drugs_page_header_guideline": "DNA-based clinical guideline",
   "@drugs_page_header_guideline": {},
-  "drugs_page_no_guidelines_text": "No pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
+  "drugs_page_no_guidelines_text": "Standard dosing may apply; no pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "@drugs_page_no_guidelines_text": {},
   "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
   "@drugs_page_sources_description": {
