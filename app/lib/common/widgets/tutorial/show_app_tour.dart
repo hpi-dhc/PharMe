@@ -1,21 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter_markdown/flutter_markdown.dart';
-
 import '../../module.dart';
 import 'tutorial_controller.dart';
 import 'tutorial_page.dart';
 
-Widget _getTutorialContent(String text) => MarkdownBody(
-  data: text,
-  styleSheet: MarkdownStyleSheet.fromTheme(
-    ThemeData(
-      textTheme: TextTheme(
-        bodyMedium: PharMeTheme.textTheme.bodyLarge,
-      )
-    )
-  ),
-);
+Widget _getTutorialContent(String text) => LargeMarkdownBody(data: text);
 
 FutureOr<void> showAppTour(
   BuildContext context,

@@ -131,7 +131,7 @@ class FaqPage extends HookWidget {
                   bottom: PharMeTheme.smallSpace,
                 ),
                 title: question is FaqTextAnswerQuestion
-                  ? Text(question.answer)
+                  ? LargeMarkdownBody(data: question.answer)
                   : question.answer,
               ),
             ],

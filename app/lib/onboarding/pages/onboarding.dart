@@ -1,5 +1,3 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../../common/module.dart' hide MetaData;
 import '../../common/models/metadata.dart';
 
@@ -19,12 +17,7 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_1_header,
         text: context.l10n.onboarding_1_text,
         color: PharMeTheme.sinaiCyan,
-        bottom: DisclaimerCard(
-          icon: FontAwesomeIcons.puzzlePiece,
-          iconSize: OnboardingDimensions.iconSize,
-          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
-          text: context.l10n.drugs_page_puzzle_disclaimer_text,
-        ),
+        bottom: PuzzleDisclaimerCard(),
       ),
       OnboardingSubPage(
         availableHeight:
@@ -33,9 +26,7 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_2_header,
         text: context.l10n.onboarding_2_text,
         color: PharMeTheme.sinaiMagenta,
-        bottom: DisclaimerCard(
-          text: context.l10n.drugs_page_main_disclaimer_text,
-        ),
+        bottom: ProfessionalDisclaimerCard(),
       ),
       OnboardingSubPage(
         availableHeight:
@@ -46,8 +37,7 @@ class OnboardingPage extends HookWidget {
         color: PharMeTheme.sinaiPurple,
         bottom: DisclaimerCard(
           icon: Icons.info,
-          iconSize: OnboardingDimensions.iconSize,
-          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
+          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.1),
           textWidget: Text.rich(
             TextSpan(
               children: [
@@ -70,31 +60,7 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_4_header,
         text: context.l10n.onboarding_4_already_tested_text,
         color: Colors.grey.shade600,
-        bottom: DisclaimerCard(
-          iconWidget: IncludedContentIcon(
-            type: ListInclusionDescriptionType.medications,
-            color: PharMeTheme.onSurfaceText,
-            size: OnboardingDimensions.iconSize,
-          ),
-          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.5),
-          textWidget: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: context.l10n.included_content_disclaimer_text(
-                    context.l10n.included_content_medications,
-                    context.l10n.included_content_inclusion_medications,
-                  ),
-                ),
-                TextSpan(text: '\n\n'),
-                TextSpan(
-                  text: context.l10n.included_content_addition,
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                )
-              ]
-            ),
-          ),
-        ),
+        bottom: IncludedMedicationsDisclaimerCard(),
       ),
       OnboardingSubPage(
         availableHeight:

@@ -1,9 +1,11 @@
 import '../../module.dart';
 
+const defaultDisclaimerCardIconSize = 32.0;
+
 class DisclaimerCard extends StatelessWidget {
   const DisclaimerCard({
     this.icon,
-    this.iconSize = 32.0,
+    this.iconSize = defaultDisclaimerCardIconSize,
     this.iconWidget,
     this.text,
     this.textWidget,

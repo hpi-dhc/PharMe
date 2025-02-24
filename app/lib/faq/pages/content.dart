@@ -35,6 +35,43 @@ class FaqWidgetAnswerQuestion extends FaqQuestion {
 
 List<FaqSection> getFaqContent() => <FaqSection>[
   FaqSection(
+    title: (context) => context.l10n.faq_section_title_pharme,
+    questions: [
+      (context) => FaqWidgetAnswerQuestion(
+        question: context.l10n.faq_question_pharme_function,
+        answer: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(context.l10n.faq_answer_pharme_function),
+            SizedBox(height: PharMeTheme.smallSpace),
+            PuzzleDisclaimerCard(elevation: 0),
+            SizedBox(height: PharMeTheme.smallSpace * 0.5),
+            IncludedMedicationsDisclaimerCard(elevation: 0),
+          ],
+        ),
+      ),
+      (context) => FaqWidgetAnswerQuestion(
+        question: context.l10n.faq_question_pharme_hcp,
+        answer: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(context.l10n.faq_answer_pharme_hcp),
+            SizedBox(height: PharMeTheme.smallSpace),
+            ProfessionalDisclaimerCard(elevation: 0),
+          ],
+        ),
+      ),
+      (context) => FaqTextAnswerQuestion(
+        question: context.l10n.faq_question_pharme_data_source,
+        answer: context.l10n.faq_answer_pharme_data_source,
+      ),
+      (context) => FaqTextAnswerQuestion(
+        question: context.l10n.faq_question_data_security,
+        answer: context.l10n.faq_answer_data_security,
+      ),
+    ],
+  ),
+  FaqSection(
     title: (context) => context.l10n.faq_section_title_pgx,
     questions: [
       (context) => FaqTextAnswerQuestion(
@@ -103,32 +140,6 @@ List<FaqSection> getFaqContent() => <FaqSection>[
       (context) => FaqTextAnswerQuestion(
         question: context.l10n.faq_question_share,
         answer: context.l10n.faq_answer_share,
-      ),
-    ],
-  ),
-  FaqSection(
-    title: (context) => context.l10n.faq_section_title_pharme,
-    questions: [
-      (context) => FaqTextAnswerQuestion(
-        question: context.l10n.faq_question_pharme_function,
-        answer: context.l10n.faq_answer_pharme_function,
-      ),
-      (context) => FaqTextAnswerQuestion(
-        question: context.l10n.faq_question_pharme_hcp,
-        answer: context.l10n.faq_answer_pharme_hcp,
-      ),
-      (context) => FaqTextAnswerQuestion(
-        question: context.l10n.faq_question_pharme_data_source,
-        answer: context.l10n.faq_answer_pharme_data_source,
-      ),
-    ],
-  ),
-  FaqSection(
-    title: (context) => context.l10n.faq_section_title_security,
-    questions: [
-      (context) => FaqTextAnswerQuestion(
-        question: context.l10n.faq_question_data_security,
-        answer: context.l10n.faq_answer_data_security,
       ),
     ],
   ),
