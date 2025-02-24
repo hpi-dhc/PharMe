@@ -88,9 +88,9 @@
   "@drug_list_subheader_active_drugs": {},
   "drug_list_subheader_all_drugs": "All medications",
   "@drug_list_subheader_all_drugs": {},
-  "drug_list_subheader_other_drugs": "Further medications",
+  "drug_list_subheader_other_drugs": "Additional medications",
   "@drug_list_subheader_other_drugs": {},
-  "list_subheader_postfix": "with clinical PGx guidelines",
+  "list_subheader_postfix": "with CPIC or FDA guidelines",
   "@list_subheader_postfix": {},
   
   "err_could_not_retrieve_access_token": "An unexpected error occurred while logging in",
@@ -126,13 +126,15 @@
 
   "warning_level_green": "Standard precautions",
   "@warning_level_green": {},
-  "warning_level_missing": "Standard precautions (incomplete data)",
+  "warning_level_missing": "Standard precautions (more information needed)",
   "@warning_level_missing": {},
   "warning_level_yellow": "Use with caution",
   "@warning_level_yellow": {},
   "warning_level_red": "Consider alternatives",
   "@warning_level_red": {},
   
+  "search_placeholder": "Search for medications",
+  "@search_placeholder": {},
   "search_content_explanation": "Get an overview on your PGx (pharmacogenomic) tests results per medication. Tap on a medication so see what your result means and what to do.",
   "@search_content_explanation": {},
   "search_page_tooltip_search": "Search for medications by their generic name, brand name, or type.",
@@ -156,7 +158,7 @@
   },
   "search_no_drugs_with_filter_amendment": " or filters",
   "@search_no_drugs_with_filter_amendment": {},
-  "search_no_drugs": "No medications found that match your search term{amendment}. Clinical dosing may apply, consult your pharmacist or doctor for more information.",
+  "search_no_drugs": "No medications found that match your search term{amendment}. Standard dosing may apply, consult your pharmacist or doctor for more information.",
   "@search_no_drugs": {
     "placeholders": {
         "amendment": {
@@ -279,7 +281,7 @@
   "@drugs_page_header_guideline": {},
   "drugs_page_no_guidelines_text": "Standard dosing may apply; no pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
   "@drugs_page_no_guidelines_text": {},
-  "drugs_page_sources_description": "Tap here to review the corresponding guideline published by {source}",
+  "drugs_page_sources_description": "Tap here to view the full expert guideline published by {source}",
   "@drugs_page_sources_description": {
       "placeholders": {
           "source": {
@@ -360,7 +362,7 @@
       },
       "items": {
         "type": "String",
-        "example": "medications with clinical PGx guidelines"
+        "example": "medications with CPIC or FDA guidelines"
       }
     }
   },
@@ -370,11 +372,11 @@
   "@medications_dropdown_position": {},
   "report_show_all_dropdown_item": "gene",
   "@report_show_all_dropdown_item": {},
-  "report_show_all_dropdown_items": "genes with clinical PGx guidelines",
+  "report_show_all_dropdown_items": "genes with CPIC or FDA guidelines",
   "@report_show_all_dropdown_items": {},
   "drugs_show_all_dropdown_item": "medication",
   "@drugs_show_all_dropdown_item": {},
-  "drugs_show_all_dropdown_items": "medications with clinical PGx guidelines",
+  "drugs_show_all_dropdown_items": "medications with CPIC or FDA guidelines",
   "@drugs_show_all_dropdown_items": {},
 
   "gene_page_headline": "{gene} report",
@@ -406,11 +408,11 @@
   },
   "gene_page_genotype": "Genotype",
   "@gene_page_genotype": {},
-  "gene_page_genotype_tooltip": "The genotype tells you about your genes and which version of a gene you have.\n\nYou have two copies for one gene, one from your mom and one from your dad. One gene copy is called an \"allele\".",
+  "gene_page_genotype_tooltip": "The genotype tells you about the versions of a gene you have.\n\nYou have two copies for one gene, one from your mom and one from your dad. One gene copy is called an \"allele\".",
   "@gene_page_genotype_tooltip": {},
   "gene_page_phenotype": "Phenotype",
   "@gene_page_phenotype": {},
-  "gene_page_phenotype_tooltip": "The phenotype describes how your genes affects your body.\n\nIn PGx (pharmacogenomics), it usually shows if a gene version might cause a bad reaction to a medication or how fast your body processes a drug.",
+  "gene_page_phenotype_tooltip": "The phenotype describes how your genes affect your body.\n\nIn PGx (pharmacogenomics), it usually shows if a gene version might cause a bad reaction to a medication or how fast your body processes a drug.",
   "@gene_page_phenotype_tooltip": {},
   "gene_page_relevant_drugs": "Associated medications",
   "@gene_page_relevant_drugs": {},
@@ -546,9 +548,9 @@
   "@tutorial_app_tour_5_title": {},
   "tutorial_app_tour_5_body": "**Need help? Check the frequently asked questions (FAQ) for common questions or use \"More\" to get in touch with us or learn about the App.**\n\nUnder \"More\" you can also edit your current medication list.",
   "@tutorial_app_tour_5_body": {},
-  "all_set_up_title": "Setup complete",
+  "all_set_up_title": "You're All Set!",
   "@all_set_up_title": {},
-  "all_set_up_message": "You're now ready to explore how your DNA influences your drug responses in PharMe.\n\nIf you have any questions or need assistance, please refer to the FAQ section or reach out via “More” > “Contact us”.",
+  "all_set_up_message": "You can now start exploring how your genes affect your medications.\n\nHave questions? Just check the FAQ or tap \"More\" > \"Contact us.\"",
   "@all_set_up_message": {},
   "all_set_up_action": "Understood",
   "@all_set_up_action": {},
@@ -607,7 +609,7 @@
       }
     }
   },
-  "included_content_addition": "While only to a small percentage of medications have PGx guidelines, they are among the most commonly prescribed ones.\n\nIf you cannot find a medication in PharMe, there may not be enough evidence for meaningful gene interactions.",
+  "included_content_addition": "While only to a small percentage of medications have CPIC or FDA guidelines, they are among the most commonly prescribed medications.\n\nIf you cannot find a medication in PharMe, there may not be enough evidence for clinically relevant gene interactions.",
   "@included_content_addition": {},
     
   "more_page_account_settings": "Settings",
@@ -626,7 +628,7 @@
   "@more_page_delete_data_additional_text": {},
   "more_page_delete_data_confirmation": "I understand the consequences and want to delete all App data",
   "@more_page_delete_data_confirmation": {},
-  "more_page_app_information": "App information",
+  "more_page_app_information": "Additional information",
   "@more_page_app_information": {},
   "more_page_onboarding": "Repeat App intro",
   "@more_page_onboarding": {},
@@ -634,7 +636,7 @@
   "@more_page_app_tour": {},
   "more_page_about_us": "About us",
   "@more_page_about_us": {},
-  "more_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboration with health professionals from the Mount Sinai Health System in New York City, NY, USA.",
+  "more_page_about_us_text": "PharMe was created as a bachelor's project at Hasso Plattner Institute (HPI) in Potsdam, Germany, in collaboration with health professionals from the Mount Sinai Health System in New York City, NY, USA.\n\nIn the PharMe validation study, researchers from Mount Sinai and HPI compare patients’ understanding of their PGx (pharmacogenomic) test results shared through PharMe vs. pharmacist-led counseling.",
   "@more_page_about_us_text": {},
   "more_page_privacy_policy": "Privacy policy",
   "@more_page_privacy_policy": {},
@@ -683,7 +685,7 @@
   "@faq_answer_adr_factors": {},
   "faq_question_guidelines_are_developing": "Does PharMe show all possible gene-related reactions?",
   "@faq_question_guidelines_are_developing": {},
-  "faq_answer_guidelines_are_developing": "_No. Scientists are still finding new ways that genes affect medications._\n\nDifferent labs might also interpret gene tests differently as this is a new science.\n\nPharMe uses trusted guidelines from medical experts (CPIC and FDA) to give you the most up-to-date information. Therefore:",
+  "faq_answer_guidelines_are_developing": "_No. Scientists are still finding new ways that genes affect medications._\n\nDifferent labs might also interpret gene tests differently as this is a new science.\n\nPharMe uses trusted clinical guidelines from medical experts (CPIC and FDA) to give you the most up-to-date information. Therefore:",
   "@faq_answer_guidelines_are_developing": {},
   "faq_question_genetics_info": "What do my gene results mean?",
   "@faq_question_genetics_info": {},
@@ -718,7 +720,7 @@
   "@faq_answer_pharme_hcp": {},
   "faq_question_pharme_data_source": "Where does PharMe get its information?",
   "@faq_question_pharme_data_source": {},
-  "faq_answer_pharme_data_source": "PharMe uses trusted guidelines from medical experts (CPIC and FDA). Our experts made these guidelines easier to understand.",
+  "faq_answer_pharme_data_source": "PharMe uses trusted clinical guidelines from medical experts (CPIC and FDA). Our experts made these guidelines easier to understand.",
   "@faq_answer_pharme_data_source": {},
   "faq_question_data_security": "How does PharMe protect my gene information?",
   "@faq_question_data_security": {},

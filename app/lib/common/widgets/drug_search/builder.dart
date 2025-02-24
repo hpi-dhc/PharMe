@@ -84,6 +84,7 @@ class DrugSearch extends HookWidget {
       Expanded(
         child: CupertinoSearchTextField(
           controller: searchController,
+          placeholder: context.l10n.search_placeholder,
           onChanged: (value) {
             context.read<DrugListCubit>().search(
               query: value,
