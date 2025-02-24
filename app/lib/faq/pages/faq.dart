@@ -145,7 +145,7 @@ class FaqPage extends HookWidget {
           // ignore: use_build_context_synchronously
           keyContext,
           duration: Duration(milliseconds: 500),
-          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
         );
       });
     }
