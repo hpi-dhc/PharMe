@@ -55,16 +55,25 @@ void main() {
           expectedNumberOfQuestions,
         );
 
+        Finder findExpandedQuestion(String answerText) => find.textContaining(
+          answerText.split('\n').first,
+          findRichText: true,
+          skipOffstage: false,
+        );
+
         final BuildContext context =
           tester.element(find.byType(Scaffold).first);
         final firstQuestion = faqContent.first.questions.first(context);
         expect(find.text(firstQuestion.question), findsOneWidget);
-        expect(find.text(firstQuestion.answer), findsNothing);
+        expect(findExpandedQuestion(firstQuestion.answer), findsNothing);
 
         await tester.tap(find.byType(ExpansionTile).first);
         await tester.pumpAndSettle();
 
-        expect(find.text(firstQuestion.answer), findsOneWidget);
+        expect(
+          findExpandedQuestion(firstQuestion.answer),
+          findsOneWidget,
+        );
       },
     );
   });
