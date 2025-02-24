@@ -113,11 +113,17 @@ List<FaqSection> getFaqContent() => <FaqSection>[
         ],
         widgetsBeforeText: true,
       ),
+      // If inhibitors for other genes than CYP2D6 are implemented, this needs
+      // to be updated (e.g., by reverting this commit): adapt description of 
+      // included items in user instructions and FAQ answer
       (context) => FaqQuestion(
         question: context.l10n.faq_question_phenoconversion,
         answer: context.l10n.faq_answer_phenoconversion,
         answerWidgets: inhibitableGenes.map(
-          (geneName) => GeneModulatorList(geneName: geneName).widget,
+          (geneName) => GeneModulatorList(
+            geneName: geneName,
+            showGeneName: false,
+          ).widget,
         ),
       ),
       (context) => FaqQuestion(

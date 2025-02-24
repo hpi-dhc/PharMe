@@ -5,11 +5,13 @@ class GeneModulatorList {
     required this.geneName,
     this.onlyActiveDrugs = false,
     this.displayedDrug,
+    this.showGeneName = true,
   });
 
   final String geneName;
   final bool onlyActiveDrugs;
   final String? displayedDrug;
+  final bool showGeneName;
 
   List<String> _filterActiveModulatorDrugNames(List<String> allModulatorDrugs) {
     final activeModulators = activeInhibitorsFor(
@@ -47,7 +49,10 @@ class GeneModulatorList {
         _getModulatorDrugNames(context, modulatorDefinition, geneName);
       if (drugNames.isEmpty) continue;
       final getDescription = subdefinition.key;
-      content[getDescription(drugNames.length, geneName)] = drugNames;
+      final description = showGeneName
+        ? getDescription(drugNames.length, geneName)
+        : getDescription(drugNames.length, geneName).replaceAll(' $geneName', '');
+      content[description] = drugNames;
     }
     return content;
   }
