@@ -17,7 +17,7 @@ class DrugList extends HookWidget {
     this.noDrugsMessage,
     this.buildDrugItems = buildDrugCards,
     this.showDrugInteractionIndicator = false,
-    this.initiallyExpandFurtherMedications = false,
+    this.initiallyExpandFurtherMedications = true,
     this.searchForDrugClass = true,
     this.drugActivityChangeable = false,
     required this.buildContainer,

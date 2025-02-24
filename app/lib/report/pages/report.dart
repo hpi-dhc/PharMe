@@ -12,7 +12,7 @@ enum SortOption {
 
 @RoutePage()
 class ReportPage extends HookWidget {
-  const ReportPage({@visibleForTesting this.allGenesInitiallyExpanded = false});
+  const ReportPage({this.allGenesInitiallyExpanded = true});
 
   final bool allGenesInitiallyExpanded;
 
@@ -373,7 +373,6 @@ class GeneCard extends StatelessWidget {
         // ignore: use_build_context_synchronously
         await context.router.push(GeneRoute(
           genotypeResult: genotypeResult,
-          initiallyExpandFurtherMedications: !onlyCurrentMedications,
         ));
       },
       radius: 16,

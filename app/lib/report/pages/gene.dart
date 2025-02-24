@@ -5,7 +5,7 @@ import '../../drug/widgets/module.dart';
 
 @RoutePage()
 class GenePage extends HookWidget {
-  GenePage(this.genotypeResult, {this.initiallyExpandFurtherMedications = false})
+  GenePage(this.genotypeResult)
       : cubit = DrugListCubit(
           initialFilter:
             FilterState.forGenotypeKey(genotypeResult.key.value),
@@ -13,7 +13,6 @@ class GenePage extends HookWidget {
 
   final GenotypeResult genotypeResult;
   final DrugListCubit cubit;
-  final bool initiallyExpandFurtherMedications;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,6 @@ class GenePage extends HookWidget {
               state: state,
               activeDrugs: activeDrugs,
               noDrugsMessage: context.l10n.gene_page_no_relevant_drugs,
-              initiallyExpandFurtherMedications: initiallyExpandFurtherMedications,
               buildContainer: ({
                 children,
                 indicator,
