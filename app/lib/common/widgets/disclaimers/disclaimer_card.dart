@@ -13,7 +13,6 @@ class DisclaimerCard extends StatelessWidget {
     this.onClick,
     this.iconPadding,
     this.color,
-    this.elevation,
   });
 
   final IconData? icon;
@@ -25,13 +24,12 @@ class DisclaimerCard extends StatelessWidget {
   final GestureTapCallback? onClick;
   final EdgeInsets? iconPadding;
   final Color? color;
-  final double? elevation;
 
   @override
   Widget build(BuildContext context) {
     final widget = Card(
       color: color ?? PharMeTheme.surfaceColor,
-      elevation: elevation,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

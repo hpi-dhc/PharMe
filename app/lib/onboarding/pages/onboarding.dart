@@ -35,23 +35,7 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_3_header,
         text: context.l10n.onboarding_3_text,
         color: PharMeTheme.sinaiPurple,
-        bottom: DisclaimerCard(
-          icon: Icons.info,
-          iconPadding: EdgeInsets.all(PharMeTheme.smallSpace * 0.1),
-          textWidget: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: '${context.l10n.pgx_abbreviation} ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(
-                  text: context.l10n.pharmacogenomics_info_box_text,
-                ),
-              ]
-            ),
-          ),
-        ),
+        bottom: PgxInfoCard(),
       ),
       OnboardingSubPage(
         availableHeight:
@@ -60,7 +44,9 @@ class OnboardingPage extends HookWidget {
         header: context.l10n.onboarding_4_header,
         text: context.l10n.onboarding_4_already_tested_text,
         color: Colors.grey.shade600,
-        bottom: IncludedMedicationsDisclaimerCard(),
+        bottom: IncludedContentDisclaimerCard(
+          type: ListInclusionDescriptionType.medications,
+        ),
       ),
       OnboardingSubPage(
         availableHeight:
