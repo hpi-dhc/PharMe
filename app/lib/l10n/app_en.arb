@@ -648,8 +648,10 @@
   "@more_page_terms_and_conditions_text": {},
   "more_page_help_and_feedback": "Help & feedback",
   "@more_page_help_and_feedback": {},
-  "more_page_genetic_information": "Learn about genetics (MedlinePlus)",
+  "more_page_genetic_information": "Learn about genetics",
   "@more_page_genetic_information": {},
+  "more_page_genetic_information_markdown": "Please refer to the links below to learn more about PGx (pharmacogenomics) and genetics in general.\n\n_For more information on PGx:_\n\n- **Mount Sinai Introduction Video**: <https://www.youtube.com/watch?v=N6432xbpGOU>\n- **Information on MedlinePlus** (an online health information resource for patients and their families and friends of the National Library of Medicine): <https://medlineplus.gov/lab-tests/pharmacogenetic-tests>\n- **Information on KidsHealth** (educational resources by Nemours®): <https://kidshealth.org/en/parents/pharmacogenomics.html>\n\n_For more information on Genetics_:\n- **Genetics on OLogy** (a science website in easy language from the American Museum of Natural History): <https://www.amnh.org/explore/ology/genetics/what-is-genetics>\n- **Information from Genes and Health** (resources by the study team of one of the world’s largest community-based genetics studies): <https://www.genesandhealth.org/genes-your-health/genes-made-easy>",
+  "@more_page_genetic_information_markdown": {},
   "more_page_contact_us": "Contact us",
   "@more_page_contact_us": {},
 

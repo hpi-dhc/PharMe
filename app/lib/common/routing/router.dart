@@ -2,6 +2,7 @@ import '../../drug/module.dart';
 import '../../drug_selection/module.dart';
 import '../../error/module.dart';
 import '../../faq/module.dart';
+import '../../genetic_information/module.dart';
 import '../../login/module.dart';
 import '../../main/module.dart';
 import '../../more/module.dart';
@@ -28,7 +29,12 @@ class AppRouter extends _$AppRouter {
         searchRoute(children: [ drugRoute() ]),
         faqRoute(),
         moreRoute(
-          children: [ aboutRoute(), termsRoute(), privacyRoute() ],
+          children: [
+            geneticInformationRoute(),
+            aboutRoute(),
+            termsRoute(),
+            privacyRoute(),
+          ],
         ),
       ],
     ),

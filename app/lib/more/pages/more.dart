@@ -56,7 +56,10 @@ class MorePage extends StatelessWidget {
           ),
           _buildSettingsItem(
               title: context.l10n.more_page_genetic_information,
-              onTap: openFurtherGeneticInformation),
+              onTap: () => context.router.push(
+                GeneticInformationRoute(),
+              ),
+          ),
           SubheaderDivider(
             text: context.l10n.more_page_app_information,
             useLine: false,
