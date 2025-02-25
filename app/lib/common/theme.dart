@@ -21,7 +21,7 @@ class PharMeTheme {
       textTheme: textTheme,
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: surfaceColor,
-        dragHandleColor: onSurfaceColor,
+        dragHandleColor: subheaderColor,
       )
     );
   }

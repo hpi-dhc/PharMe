@@ -34,6 +34,7 @@ class TutorialController {
       isDismissible: false,
       isScrollControlled: true,
       useSafeArea: true,
+      useRootNavigator: true,
       elevation: 0,
       builder: (context) => TutorialBuilder(
         pages: pages,

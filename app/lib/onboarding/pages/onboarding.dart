@@ -1,5 +1,6 @@
 import '../../../common/module.dart' hide MetaData;
 import '../../common/models/metadata.dart';
+import '../../common/widgets/scrollable_stack_with_indicator.dart';
 
 @RoutePage()
 class OnboardingPage extends HookWidget {
@@ -11,8 +12,6 @@ class OnboardingPage extends HookWidget {
   Widget build(BuildContext context) {
     final pages = [
       OnboardingSubPage(
-        availableHeight:
-          OnboardingDimensions.contentHeight(context, isRevisiting),
         illustrationPath: 'assets/images/onboarding/OutlinedLogo.png',
         header: context.l10n.onboarding_1_header,
         text: context.l10n.onboarding_1_text,
@@ -20,8 +19,6 @@ class OnboardingPage extends HookWidget {
         bottom: PuzzleDisclaimerCard(),
       ),
       OnboardingSubPage(
-        availableHeight:
-          OnboardingDimensions.contentHeight(context, isRevisiting),
         illustrationPath: 'assets/images/onboarding/DrugReaction.png',
         header: context.l10n.onboarding_2_header,
         text: context.l10n.onboarding_2_text,
@@ -29,8 +26,6 @@ class OnboardingPage extends HookWidget {
         bottom: ProfessionalDisclaimerCard(),
       ),
       OnboardingSubPage(
-        availableHeight:
-          OnboardingDimensions.contentHeight(context, isRevisiting),
         illustrationPath: 'assets/images/onboarding/GenomePower.png',
         header: context.l10n.onboarding_3_header,
         text: context.l10n.onboarding_3_text,
@@ -38,8 +33,6 @@ class OnboardingPage extends HookWidget {
         bottom: PgxInfoCard(),
       ),
       OnboardingSubPage(
-        availableHeight:
-          OnboardingDimensions.contentHeight(context, isRevisiting),
         illustrationPath: 'assets/images/onboarding/Tailored.png',
         header: context.l10n.onboarding_4_header,
         text: context.l10n.onboarding_4_already_tested_text,
@@ -49,8 +42,6 @@ class OnboardingPage extends HookWidget {
         ),
       ),
       OnboardingSubPage(
-        availableHeight:
-          OnboardingDimensions.contentHeight(context, isRevisiting),
         illustrationPath: 'assets/images/onboarding/DataProtection.png',
         header: context.l10n.onboarding_5_header,
         text: context.l10n.onboarding_5_text,
@@ -293,7 +284,6 @@ class OnboardingSubPage extends HookWidget {
     required this.header,
     required this.text,
     required this.color,
-    required this.availableHeight,
     this.top,
     this.bottom,
   });
@@ -302,170 +292,57 @@ class OnboardingSubPage extends HookWidget {
   final String? secondImagePath;
   final String header;
   final String text;
-  final double availableHeight;
   final Color color;
   final Widget? top;
   final Widget? bottom;
 
-  double? _getContentHeight(GlobalKey contentKey) {
-    return contentKey.currentContext?.size?.height;
-  }
-
-  double? _getMaxScrollOffset(GlobalKey contentKey) {
-    final contentHeight = _getContentHeight(contentKey);
-    if (contentHeight == null) return null;
-    return contentHeight - availableHeight;
-  }
-
-  bool? _contentScrollable(GlobalKey contentKey) {
-    final contentHeight = _getContentHeight(contentKey);
-    if (contentHeight == null) return null;
-    return availableHeight < contentHeight;
-  }
-
-  bool? _scrolledToEnd(
-    GlobalKey contentKey,
-    ScrollController scrollController,
-  ) {
-    final maxScrollOffset = _getMaxScrollOffset(contentKey);
-    if (maxScrollOffset == null) return null;
-    return scrollController.offset >= maxScrollOffset;
-  }
-
-  double? _getRelativeScrollPosition(
-    GlobalKey contentKey,
-    ScrollController scrollController,
-  ) {
-    final maxScrollOffset = _getMaxScrollOffset(contentKey);
-    if (maxScrollOffset == null) return null;
-    final relativePosition =
-      1 - (maxScrollOffset - scrollController.offset) / maxScrollOffset;
-    return relativePosition < 0
-      ? 0
-      : relativePosition > 1
-        ? 1
-        : relativePosition;
-  }
-
   @override
   Widget build(BuildContext context) {
-    const scrollbarThickness = 6.5;
-    const iconButtonPadding = 16.0; // to align the scrollbar
-    const horizontalPadding = iconButtonPadding + 3 * scrollbarThickness;
     const imageHeight = 175.0;
-    final contentKey =  GlobalKey();
-    final showScrollIndicatorButton = useState(false);
-    final scrollIndicatorButtonOpacity = useState<double>(1);
-    final scrollController = ScrollController();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final contentScrollable = _contentScrollable(contentKey) ?? false;
-      final scrolledToEnd = _scrolledToEnd(contentKey, scrollController) ?? false;
-      showScrollIndicatorButton.value = contentScrollable && !scrolledToEnd;
-    });
-
-    scrollController.addListener(() {
-      final hideButton = _scrolledToEnd(contentKey, scrollController) ?? false;
-      showScrollIndicatorButton.value = !hideButton;
-      final relativeScrollPosition =
-        _getRelativeScrollPosition(contentKey, scrollController);
-      if (relativeScrollPosition != null) {
-        scrollIndicatorButtonOpacity.value = 1 - relativeScrollPosition;
-      }
-    });
- 
-    return Stack(
-      alignment: Alignment.center,
+    return ScrollableStackWithIndicator(
+      iconColor: color,
+      thumbColor: Colors.white,
+      iconSize: OnboardingDimensions.iconSize,
+      rightScrollbarPadding: 16,
       children: [
-        RawScrollbar(
-          controller: scrollController, // needed to always show scrollbar
-          thumbVisibility: true,
-          shape: StadiumBorder(),
-          padding: EdgeInsets.only(
-            top: PharMeTheme.mediumToLargeSpace,
-            right: iconButtonPadding,
-          ),
-          thumbColor: Colors.white,
-          thickness: scrollbarThickness,
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-              ),
-              child: Column(
-                key: contentKey,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: PharMeTheme.mediumSpace),
-                  Center(
-                    child: FractionallySizedBox(
-                      alignment: Alignment.topCenter,
-                      widthFactor: 0.75,
-                      child: Image.asset(
-                        illustrationPath,
-                        height: imageHeight,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: PharMeTheme.mediumToLargeSpace),
-                  Column(children: [
-                    AutoSizeText(
-                      header,
-                      style: PharMeTheme.textTheme.headlineLarge!.copyWith(
-                        color: Colors.white,
-                      ),
-                      maxLines: 2,
-                    ),
-                    SizedBox(height: PharMeTheme.mediumToLargeSpace),
-                    if (top != null) ...[
-                      top!,
-                      SizedBox(height: PharMeTheme.mediumSpace),
-                    ],
-                    Text(
-                      text,
-                      style: PharMeTheme.textTheme.bodyLarge!.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-                    if (bottom != null) ...[
-                      SizedBox(height: PharMeTheme.mediumSpace),
-                      bottom!,
-                    ],
-                  ]),
-                  // Empty widget for spaceBetween in this column to work properly
-                  Container(),
-                ],
-              ),
+        SizedBox(height: PharMeTheme.mediumSpace),
+        Center(
+          child: FractionallySizedBox(
+            alignment: Alignment.topCenter,
+            widthFactor: 0.75,
+            child: Image.asset(
+              illustrationPath,
+              height: imageHeight,
             ),
           ),
         ),
-        if (showScrollIndicatorButton.value) Positioned(
-          bottom: 0,
-          child: Opacity(
-            opacity: scrollIndicatorButtonOpacity.value,
-            child: IconButton(
-            style: IconButton.styleFrom(
-                backgroundColor: Colors.white,
-                side: BorderSide(color: color, width: 3),
-              ),
-              icon: Icon(
-                Icons.arrow_downward,
-                size: OnboardingDimensions.iconSize * 0.85,
-                color: color,
-              ),
-              onPressed: () async {
-                await scrollController.animateTo(
-                  _getMaxScrollOffset(contentKey)!,
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.linearToEaseOut,
-                );
-                showScrollIndicatorButton.value = false;
-              },
+        SizedBox(height: PharMeTheme.mediumToLargeSpace),
+        Column(children: [
+          AutoSizeText(
+            header,
+            style: PharMeTheme.textTheme.headlineLarge!.copyWith(
+              color: Colors.white,
+            ),
+            maxLines: 2,
+          ),
+          SizedBox(height: PharMeTheme.mediumToLargeSpace),
+          if (top != null) ...[
+            top!,
+            SizedBox(height: PharMeTheme.mediumSpace),
+          ],
+          Text(
+            text,
+            style: PharMeTheme.textTheme.bodyLarge!.copyWith(
+              color: Colors.white,
             ),
           ),
-        ),
+          if (bottom != null) ...[
+            SizedBox(height: PharMeTheme.mediumSpace),
+            bottom!,
+          ],
+        ]),
+        // Empty widget for spaceBetween in this column to work properly
+        Container(),
       ],
     );
   }

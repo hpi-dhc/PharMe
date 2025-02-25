@@ -1,4 +1,5 @@
 import '../../module.dart';
+import '../scrollable_stack_with_indicator.dart';
 import 'tutorial_page.dart';
 
 class TutorialBuilder extends HookWidget {
@@ -18,13 +19,20 @@ class TutorialBuilder extends HookWidget {
   Widget getImageAsset(String assetPath) {
     return Container(
       color: PharMeTheme.onSurfaceColor,
-      child: Center(child: Image.asset(assetPath)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: PharMeTheme.largeSpace),
+        child: Image.asset(assetPath),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final pageWidgets = pages.map(
+      (page) => _buildPageContent(context, page),
+    );
     final currentPageIndex = useState(0);
+    final pageController = usePageController(initialPage: currentPageIndex.value);
     return Padding(
       padding: EdgeInsets.only(
         left: PharMeTheme.largeSpace,
@@ -34,16 +42,27 @@ class TutorialBuilder extends HookWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _buildPageContent(context, currentPageIndex),
+        children: [
+          Expanded(
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (newPage) => currentPageIndex.value = newPage,
+              children: pageWidgets.toList(),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
+            child: _buildActionBar(context, currentPageIndex, pageController),
+          ),
+        ],
       ),
     );
   }
 
-  List<Widget> _buildPageContent(
+  Widget _buildPageContent(
     BuildContext context,
-    ValueNotifier<int> currentPageIndex,
+    TutorialPage currentPage,
   ) {
-    final currentPage = pages[currentPageIndex.value];
     final title = currentPage.title != null
       ? currentPage.title!(context)
       : null;
@@ -54,95 +73,32 @@ class TutorialBuilder extends HookWidget {
       fontSize: PharMeTheme.textTheme.headlineSmall!.fontSize,
     );
     final assetContainer = currentPage.assetPath != null
-      ? Stack(
-          children: [
-            getImageAsset(currentPage.assetPath!),
-            Positioned(
-              top: PharMeTheme.smallSpace,
-              right: PharMeTheme.smallSpace,
-              child: IconButton.filled(
-                style: IconButton.styleFrom(
-                  backgroundColor: PharMeTheme.onSurfaceText,
-                ),
-                color: PharMeTheme.onSurfaceColor,
-                onPressed: () async => {
-                  await showDialog(
-                  // ignore: use_build_context_synchronously
-                    context: context,
-                    builder: (context) => Dialog.fullscreen(
-                      backgroundColor: Colors.transparent,
-                      child: SafeArea(
-                        child: RoundedCard(
-                          outerHorizontalPadding: 0,
-                          outerVerticalPadding: 0,
-                          innerPadding: EdgeInsets.all(PharMeTheme.largeSpace),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  if (title != null) Expanded(
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        title,
-                                        style: titleStyle,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: PharMeTheme.smallSpace),
-                                  GestureDetector(
-                                    onTap: () => Navigator.pop(context),
-                                    child: Icon(
-                                      Icons.close,
-                                      color: PharMeTheme.onSurfaceText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: PharMeTheme.smallToMediumSpace),
-                              Expanded(
-                                child: getImageAsset(currentPage.assetPath!),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                },
-                icon: Icon(Icons.zoom_in),
-              ),
-            ),
-          ],
-      )
+      ? getImageAsset(currentPage.assetPath!)
       : null;
-    return [
-      if (title != null) Text(
-        title,
-        style: titleStyle,
-      ),
-      if (content != null) Padding(
-        padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
-        child: content,
-      ),
-      if (assetContainer != null) Expanded(
-        child: Padding(
+    return ScrollableStackWithIndicator(
+      rightScrollbarPadding: 0,
+      thumbColor: PharMeTheme.subheaderColor,
+      children: [
+        if (title != null) Text(
+          title,
+          style: titleStyle,
+        ),
+        if (content != null) Padding(
+          padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
+          child: content,
+        ),
+        if (assetContainer != null) Padding(
           padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
           child: assetContainer,
         ),
-      ),
-      Padding(
-        padding: EdgeInsetsDirectional.only(top: PharMeTheme.mediumSpace),
-        child: _buildActionBar(context, currentPageIndex),
-      ),
-    ];
+      ],
+    );
   }
 
   Widget _buildActionBar(
     BuildContext context,
     ValueNotifier<int> currentPageIndex,
+    PageController pageController,
   ) {
     final isFirstPage = currentPageIndex.value == 0;
     final showFirstButton = !isFirstPage || (
@@ -169,7 +125,10 @@ class TutorialBuilder extends HookWidget {
               initiateRouteBack();
               routeBackToContent(context.router, popNull: true);
             }
-            : () => currentPageIndex.value = currentPageIndex.value - 1,
+            : () => pageController.previousPage(
+              duration: Duration(milliseconds: 500),
+              curve: Curves.ease,
+            ),
           text: isFirstPage
             ? firstBackButtonText!
             : context.l10n.onboarding_prev,
@@ -180,7 +139,10 @@ class TutorialBuilder extends HookWidget {
           direction: ButtonDirection.forward,
           onPressed: isLastPage
             ? Navigator.of(context).pop
-            : () => currentPageIndex.value = currentPageIndex.value + 1,
+            : () => pageController.nextPage(
+              duration: Duration(milliseconds: 500),
+              curve: Curves.ease,
+            ),
           text: isLastPage && lastNextButtonText != null
             ? lastNextButtonText!
             : context.l10n.action_continue,
