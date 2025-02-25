@@ -63,7 +63,11 @@ class TutorialBuilder extends HookWidget {
           pageView,
           Padding(
             padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
-            child: _buildActionBar(context, currentPageIndex, pageController),
+            child: _buildActionBar(
+              context,
+              currentPageIndex,
+              pageController,
+            ),
           ),
         ],
       ),
@@ -123,6 +127,22 @@ class TutorialBuilder extends HookWidget {
     final directionButtonTextStyle =
       PharMeTheme.textTheme.titleLarge!.copyWith(fontSize: 20);
     const directionButtonIconSize = 22.0;
+    void navigateIfSafe(void Function() navigate, { required bool isForward }) {
+      if (pageController.page == null) {
+        navigate();
+        return;
+      }
+      final pageChangeProgress = pageController.page! % 1;
+      if (pageChangeProgress == 0) {
+        navigate();
+        return;
+      }
+      const allowPageChangeThreshold = 0.5;
+      final allowPageChange = isForward
+        ? pageChangeProgress >= allowPageChangeThreshold
+        : pageChangeProgress <= (1 - allowPageChangeThreshold);
+      if (allowPageChange) navigate();
+    }
     return Row(
       mainAxisAlignment: showFirstButton
         ? MainAxisAlignment.spaceBetween
@@ -131,15 +151,18 @@ class TutorialBuilder extends HookWidget {
       children: [
         if (showFirstButton) DirectionButton(
           direction: ButtonDirection.backward,
-          onPressed: isFirstPage
-            ? () {
-              initiateRouteBack();
-              routeBackToContent(context.router, popNull: true);
-            }
-            : () => pageController.previousPage(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.ease,
-            ),
+          onPressed: () => navigateIfSafe(
+            isFirstPage
+              ? () {
+                initiateRouteBack();
+                routeBackToContent(context.router, popNull: true);
+              }
+              : () => pageController.previousPage(
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease,
+              ),
+            isForward: false,
+          ),
           text: isFirstPage
             ? firstBackButtonText!
             : context.l10n.onboarding_prev,
@@ -148,12 +171,15 @@ class TutorialBuilder extends HookWidget {
         ),
         DirectionButton(
           direction: ButtonDirection.forward,
-          onPressed: isLastPage
-            ? Navigator.of(context).pop
-            : () => pageController.nextPage(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.ease,
-            ),
+          onPressed: () => navigateIfSafe(
+            isLastPage
+              ? Navigator.of(context).pop
+              : () => pageController.nextPage(
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease,
+              ),
+            isForward: true,
+          ),
           text: isLastPage && lastNextButtonText != null
             ? lastNextButtonText!
             : context.l10n.action_continue,
