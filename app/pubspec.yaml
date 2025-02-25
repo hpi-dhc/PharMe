@@ -17,6 +17,7 @@ dependencies:
   dartx: ^1.1.0
   debug_overlay: ^0.2.11
   dropdown_button2: ^2.3.9
+  expandable_page_view: ^1.0.17
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1

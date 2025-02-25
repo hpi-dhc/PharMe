@@ -1,3 +1,5 @@
+import 'package:expandable_page_view/expandable_page_view.dart';
+
 import '../../module.dart';
 import '../scrollable_stack_with_indicator.dart';
 import 'tutorial_page.dart';
@@ -9,12 +11,14 @@ class TutorialBuilder extends HookWidget {
     required this.initiateRouteBack,
     this.lastNextButtonText,
     this.firstBackButtonText,
+    required this.fitToContent,
   });
 
   final List<TutorialPage> pages;
   final String? lastNextButtonText;
   final String? firstBackButtonText;
   final void Function() initiateRouteBack;
+  final bool fitToContent;
 
   Widget getImageAsset(String assetPath) {
     return Container(
@@ -33,23 +37,30 @@ class TutorialBuilder extends HookWidget {
     );
     final currentPageIndex = useState(0);
     final pageController = usePageController(initialPage: currentPageIndex.value);
+    final pageView = fitToContent
+      ? ExpandablePageView(
+          controller: pageController,
+          onPageChanged: (newPage) => currentPageIndex.value = newPage,
+          children: pageWidgets.toList(),
+        )
+      : Expanded(
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (newPage) => currentPageIndex.value = newPage,
+            children: pageWidgets.toList(),
+          )
+        );
     return Padding(
       padding: EdgeInsets.only(
-        left: PharMeTheme.largeSpace,
-        bottom: PharMeTheme.largeSpace,
-        right: PharMeTheme.largeSpace,
+        left: PharMeTheme.mediumSpace,
+        bottom: PharMeTheme.mediumSpace,
+        right: PharMeTheme.mediumSpace,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: PageView(
-              controller: pageController,
-              onPageChanged: (newPage) => currentPageIndex.value = newPage,
-              children: pageWidgets.toList(),
-            ),
-          ),
+          pageView,
           Padding(
             padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
             child: _buildActionBar(context, currentPageIndex, pageController),

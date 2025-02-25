@@ -23,6 +23,7 @@ class TutorialController {
     String? lastNextButtonText,
     String? firstBackButtonText,
     FutureOr<void> Function()? onClose,
+    bool fitToContent = false,
   }) async {
     if (_isOpen) return null;
     _isOpen = true;
@@ -41,6 +42,7 @@ class TutorialController {
         lastNextButtonText: lastNextButtonText,
         firstBackButtonText: firstBackButtonText,
         initiateRouteBack: initiateRouteBack,
+        fitToContent: fitToContent,
       ),
     );
     _isOpen = false;

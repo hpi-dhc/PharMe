@@ -22,4 +22,5 @@ FutureOr<void> showDrugSelectionIntro(BuildContext context) =>
       await MetaData.save();
     },
     firstBackButtonText: context.l10n.onboarding_prev,
+    fitToContent: true,
   );
