@@ -210,7 +210,7 @@
       }
     }
   },
-  "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} phenotype was changed from “{originalPhenotype}” to “{currentPhenotype}”; this is because you are currently taking one or more strong {geneName} inhibitors (see below).",
+  "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} result was changed from “{originalPhenotype}” to “{currentPhenotype}”; this is because you are currently taking one or more medications that strongly slow down (inhibit) the activity of {geneName} (see below).",
   "@inhibitors_consequence_adapted": {
     "placeholders": {
       "salutationGenitive": {
@@ -231,7 +231,7 @@
       }
     }
   },
-  "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} phenotype was not adapted but may need to be; this is because your are currently taking one or more moderate {geneName} inhibitors (see below).",
+  "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} result was not adapted but may need to be; this is because your are currently taking one or more medications that moderately slow down (inhibit) the activity of {geneName} (see below).",
   "@inhibitors_consequence_not_adapted": {
     "placeholders": {
       "salutationGenitive": {
@@ -279,7 +279,7 @@
   },
   "drugs_page_header_guideline": "Gene-based clinical guideline",
   "@drugs_page_header_guideline": {},
-  "drugs_page_no_guidelines_text": "Standard dosing may apply; no pharmacogenomic recommendation can be made at this time. Consult your pharmacist or doctor for more information.",
+  "drugs_page_no_guidelines_text": "Standard dosing may apply; no recommendation based on your genes can be made at this time. Consult your pharmacist or doctor for more information.",
   "@drugs_page_no_guidelines_text": {},
   "drugs_page_sources_description": "Tap here to view the full expert guideline published by {source}",
   "@drugs_page_sources_description": {
@@ -312,7 +312,7 @@
   "@report_content_explanation": {},
   "report_page_faq_tooltip": "To learn more about genetics in general, please refer to the FAQ",
   "@report_page_faq_tooltip": {},
-  "report_page_indicator_explanation": "Phenotypes followed by an {indicatorName} ({indicator}) might be adjusted based on interactions with medications you are currently taking.",
+  "report_page_indicator_explanation": "Gene results followed by an {indicatorName} ({indicator}) might be adjusted based on interactions with medications you are currently taking.",
   "@report_page_indicator_explanation": {
     "placeholders": {
         "indicatorName": {
