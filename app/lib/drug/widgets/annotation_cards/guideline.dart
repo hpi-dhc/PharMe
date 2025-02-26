@@ -107,12 +107,8 @@ class GuidelineAnnotationCard extends StatelessWidget {
                 Text.rich(
                   TextSpan(children: [
                     TextSpan(
-                      text: context.l10n.drugs_page_recommendation_description_part_1,
+                      text: context.l10n.drugs_page_recommendation_description,
                       style: descriptionStyle,
-                    ),
-                    TextSpan(
-                      text: context.l10n.drugs_page_recommendation_description_part_2,
-                      style: descriptionStyle.copyWith(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(text: ':\n', style: descriptionStyle),
                     WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.3)),

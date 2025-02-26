@@ -303,10 +303,8 @@
   "@drugs_page_tooltip_guideline_missing": {},
   "drugs_page_implication_description": "What your gene result means",
   "@drugs_page_implication_description": {},
-  "drugs_page_recommendation_description_part_1": "What to do",
-  "@drugs_page_recommendation_description_part_1": {},
-  "drugs_page_recommendation_description_part_2": " based on your genes",
-  "@drugs_page_recommendation_description_part_2": {},
+  "drugs_page_recommendation_description": "What to do",
+  "@drugs_page_recommendation_description": {},
 
   "report_content_explanation": "This is your PGx (pharmacogenomic) test report. Tap on a gene name for more details on your results and a list of associated medications.",
   "@report_content_explanation": {},
