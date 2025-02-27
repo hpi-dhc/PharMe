@@ -210,7 +210,7 @@
       }
     }
   },
-  "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} result was changed from “{originalPhenotype}” to “{currentPhenotype}”; this is because you are currently taking one or more medications that strongly slow down (inhibit) the activity of {geneName} (see below).",
+  "inhibitors_consequence_adapted": "{salutationGenitive} {geneName} result was changed from \"{originalPhenotype}\" to \"{currentPhenotype}\"; this is because you are currently taking one or more medications that strongly slow down (inhibit) the activity of {geneName} (see below).",
   "@inhibitors_consequence_adapted": {
     "placeholders": {
       "salutationGenitive": {
@@ -264,7 +264,7 @@
   "@drugs_page_text_active": {},
   "drugs_page_active_warn_header": "Are you sure you want to change your current medications?",
   "@drugs_page_active_warn_header": {},
-  "drugs_page_active_warn": "{drugName} will affect how your body processes and responds to medications associated with {geneName}.\n\nSee {geneName} under “Genes” for a list of all associated medications.",
+  "drugs_page_active_warn": "{drugName} will affect how your body processes and responds to medications associated with {geneName}.\n\nSee {geneName} under \"Genes\" for a list of all associated medications.",
   "@drugs_page_active_warn": {
     "placeholders": {
       "drugName": {
