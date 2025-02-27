@@ -42,17 +42,17 @@ class MorePage extends StatelessWidget {
               title: context.l10n.more_page_contact_us,
               onTap: () => sendEmail(context)),
           _buildSettingsItem(
+            title: context.l10n.more_page_onboarding,
+            onTap: () =>
+              context.router.push(OnboardingRoute(isRevisiting: true)),
+          ),
+          _buildSettingsItem(
             title: context.l10n.more_page_app_tour,
             onTap: () async => showAppTour(
               context,
               lastNextButtonText: context.l10n.action_back_to_app,
               revisiting: true,
             ),
-          ),
-          _buildSettingsItem(
-            title: context.l10n.more_page_onboarding,
-            onTap: () =>
-              context.router.push(OnboardingRoute(isRevisiting: true)),
           ),
           _buildSettingsItem(
               title: context.l10n.more_page_genetic_information,
