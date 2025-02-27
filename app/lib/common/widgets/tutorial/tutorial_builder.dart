@@ -52,6 +52,7 @@ class TutorialBuilder extends HookWidget {
         );
     return Padding(
       padding: EdgeInsets.only(
+        top: PharMeTheme.smallSpace,
         left: PharMeTheme.mediumSpace,
         bottom: PharMeTheme.mediumSpace,
         right: PharMeTheme.mediumSpace,
@@ -62,7 +63,12 @@ class TutorialBuilder extends HookWidget {
         children: [
           pageView,
           Padding(
-            padding: EdgeInsets.only(top: PharMeTheme.smallSpace),
+            padding: EdgeInsets.only(
+              top: PharMeTheme.mediumSpace,
+              left: PharMeTheme.smallSpace,
+              right: PharMeTheme.smallSpace,
+              bottom: PharMeTheme.smallSpace,
+            ),
             child: _buildActionBar(
               context,
               currentPageIndex,
