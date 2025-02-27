@@ -16,8 +16,6 @@ class  Guideline {
   });
   factory Guideline.fromJson(dynamic json) => _$GuidelineFromJson(json);
 
-  Map<String,dynamic> toJson() => _$GuidelineToJson(this);
-
   bool get isFdaGuideline => externalData.first.source == 'FDA';
 
   List<String> get genes => lookupkey.keys.toList();

@@ -164,15 +164,19 @@ extension DrugExtension on Drug {
           genotypeResult.phenotypeDisplayString(context) == indeterminateResult
       );
       if (isCompletelyIndeterminateResult) {
-        final indeterminateFdaFallbackGuideline = Guideline.fromJson(
-          completelyUnhandledGuideline.toJson(),
+        final indeterminateFdaFallbackGuideline = Guideline(
+          id: completelyUnhandledGuideline.id,
+          version: completelyUnhandledGuideline.version,
+          lookupkey: completelyUnhandledGuideline.lookupkey,
+          externalData: completelyUnhandledGuideline.externalData,
+          annotations: GuidelineAnnotations(
+            recommendation:
+              context.l10n.drugs_page_no_guidelines_recommendation_text,
+            implication:
+              context.l10n.drugs_page_fda_indeterminate_implication_text(name),
+            warningLevel: WarningLevel.none,
+          ),
         );
-        indeterminateFdaFallbackGuideline.annotations.implication =
-          context.l10n.drugs_page_fda_indeterminate_implication_text(name);
-        indeterminateFdaFallbackGuideline.annotations.recommendation = 
-          context.l10n.drugs_page_no_guidelines_recommendation_text;
-        indeterminateFdaFallbackGuideline.annotations.warningLevel =
-          WarningLevel.none;
         return indeterminateFdaFallbackGuideline;
       }
     }
