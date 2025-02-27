@@ -161,7 +161,9 @@ extension DrugExtension on Drug {
       ).all(
         (genotypeResult) =>
           genotypeResult != null &&
-          genotypeResult.phenotypeDisplayString(context) == indeterminateResult
+          unknownPhenotypes(context).contains(
+            genotypeResult.phenotypeDisplayString(context)
+          )
       );
       if (isCompletelyIndeterminateResult) {
         final indeterminateFdaFallbackGuideline = Guideline(
