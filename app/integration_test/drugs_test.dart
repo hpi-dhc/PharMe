@@ -153,7 +153,7 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.textContaining(context.l10n.drugs_page_no_guidelines_text),
+        find.textContaining(context.l10n.drugs_page_no_guidelines_recommendation_text),
         findsOneWidget,
       );
       if (drug.guidelines.isNotEmpty) {

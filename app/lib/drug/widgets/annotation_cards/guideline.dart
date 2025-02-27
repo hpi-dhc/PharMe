@@ -94,7 +94,7 @@ class GuidelineAnnotationCard extends StatelessWidget {
                     WidgetSpan(child: SizedBox(height: PharMeTheme.mediumSpace * 1.3)),
                     TextSpan(
                       text:
-                        implicationText ?? context.l10n.drugs_page_no_guidelines_text,
+                        implicationText ?? context.l10n.drugs_page_no_guidelines_recommendation_text,
                       style: drug.warningLevel != WarningLevel.none
                         ? TextStyle(fontWeight: FontWeight.bold)
                         : TextStyle(fontStyle: FontStyle.italic)

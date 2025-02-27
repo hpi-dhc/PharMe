@@ -221,7 +221,7 @@ List<pw.Widget> _buildUserPart(
   final userGuidelineText = drug.userGuideline != null
     ? '${drug.userGuideline?.annotations.implication} '
       '${drug.userGuideline?.annotations.recommendation}'
-    : buildContext.l10n.drugs_page_no_guidelines_text;
+    : buildContext.l10n.drugs_page_no_guidelines_recommendation_text;
   return [
     _buildSubheading(buildContext.l10n.pdf_heading_user_data),
     _buildTextBlockSpacer(),

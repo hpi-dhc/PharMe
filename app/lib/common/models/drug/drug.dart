@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:trotter/trotter.dart';
 
+import '../../../app.dart';
 import '../../module.dart';
 
 part 'drug.g.dart';
@@ -106,7 +107,7 @@ extension DrugExtension on Drug {
       ),
     );
     if (partialGuidelines.isEmpty) return null;
-    final guidelineGenes = guidelines.first.lookupkey.keys.toList();
+    final guidelineGenes = guidelines.first.genes;
     Guideline? partiallyHandledGuideline;
     var currentMatchingNumber = guidelineGenes.length - 1;
     while (currentMatchingNumber > 0 && partiallyHandledGuideline == null) {
@@ -142,13 +143,40 @@ extension DrugExtension on Drug {
     if (exactGuideline != null) return exactGuideline;
     final partiallyHandledGuideline = _getPartiallyHandledGuideline();
     if (partiallyHandledGuideline != null) return partiallyHandledGuideline;
-    return guidelines.firstOrNullWhere(
+    final completelyUnhandledGuideline = guidelines.firstOrNullWhere(
       (guideline) => guideline.lookupkey.all(
         (gene, variants) => variants.any(
           (variant) => variant == SpecialLookup.anyNotHandled.value
         )
-      ),
+      )
     );
+    final context = PharMeApp.navigatorKey.currentContext;
+    if (
+      completelyUnhandledGuideline != null &&
+      completelyUnhandledGuideline.isFdaGuideline &&
+      context != null
+    ) {      
+      final isCompletelyIndeterminateResult = guidelineGenotypes.map(
+        (genotypeKey) => UserData.instance.genotypeResults?[genotypeKey]
+      ).all(
+        (genotypeResult) =>
+          genotypeResult != null &&
+          genotypeResult.phenotypeDisplayString(context) == indeterminateResult
+      );
+      if (isCompletelyIndeterminateResult) {
+        final indeterminateFdaFallbackGuideline = Guideline.fromJson(
+          completelyUnhandledGuideline.toJson(),
+        );
+        indeterminateFdaFallbackGuideline.annotations.implication =
+          context.l10n.drugs_page_fda_indeterminate_implication_text(name);
+        indeterminateFdaFallbackGuideline.annotations.recommendation = 
+          context.l10n.drugs_page_no_guidelines_recommendation_text;
+        indeterminateFdaFallbackGuideline.annotations.warningLevel =
+          WarningLevel.none;
+        return indeterminateFdaFallbackGuideline;
+      }
+    }
+    return completelyUnhandledGuideline;
   }
 
   Guideline? get userOrFirstGuideline => userGuideline ??
