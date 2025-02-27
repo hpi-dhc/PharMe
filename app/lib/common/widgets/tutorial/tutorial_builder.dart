@@ -51,12 +51,7 @@ class TutorialBuilder extends HookWidget {
           )
         );
     return Padding(
-      padding: EdgeInsets.only(
-        top: PharMeTheme.smallSpace,
-        left: PharMeTheme.mediumSpace,
-        bottom: PharMeTheme.mediumSpace,
-        right: PharMeTheme.mediumSpace,
-      ),
+      padding: EdgeInsets.all(PharMeTheme.smallSpace),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +62,6 @@ class TutorialBuilder extends HookWidget {
               top: PharMeTheme.mediumSpace,
               left: PharMeTheme.smallSpace,
               right: PharMeTheme.smallSpace,
-              bottom: PharMeTheme.smallSpace,
             ),
             child: _buildActionBar(
               context,

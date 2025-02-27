@@ -37,12 +37,14 @@ class TutorialController {
       useSafeArea: true,
       useRootNavigator: true,
       elevation: 0,
-      builder: (context) => TutorialBuilder(
+      builder: (context) => SafeArea(
+        child: TutorialBuilder(
         pages: pages,
-        lastNextButtonText: lastNextButtonText,
-        firstBackButtonText: firstBackButtonText,
-        initiateRouteBack: initiateRouteBack,
-        fitToContent: fitToContent,
+          lastNextButtonText: lastNextButtonText,
+          firstBackButtonText: firstBackButtonText,
+          initiateRouteBack: initiateRouteBack,
+          fitToContent: fitToContent,
+        ),
       ),
     );
     _isOpen = false;
