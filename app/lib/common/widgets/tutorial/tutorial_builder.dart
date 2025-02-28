@@ -23,9 +23,16 @@ class TutorialBuilder extends HookWidget {
   Widget getImageAsset(String assetPath) {
     return Container(
       color: PharMeTheme.onSurfaceColor,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: PharMeTheme.largeSpace),
-        child: Image.asset(assetPath),
+      child: Center(
+        child: Image.asset(
+          assetPath,
+          // Set size because directly after rendering the asset might not be
+          // loaded already, which will not render the arrow down indicator
+          // in ScrollableStackWithIndicator
+          height: 550,
+          isAntiAlias: true,
+          filterQuality: FilterQuality.high,
+        ),
       ),
     );
   }
