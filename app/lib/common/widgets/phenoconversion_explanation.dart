@@ -172,6 +172,7 @@ String _getPhenoconversionDetailText(
     ? context.l10n.inhibitors_consequence_not_adapted(
         displayConfig.userGenitive,
         genotypeResult.geneDisplayString,
+        displayConfig.userSalutation,
       ).capitalize()
     : context.l10n.inhibitors_consequence_adapted(
         displayConfig.userGenitive,

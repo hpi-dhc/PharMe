@@ -231,7 +231,7 @@
       }
     }
   },
-  "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} result was not adapted but may need to be; this is because your are currently taking one or more medications that moderately slow down (inhibit) the activity of {geneName} (see below).",
+  "inhibitors_consequence_not_adapted": "{salutationGenitive} {geneName} result was not adapted but may need to be; this is because {salutation} currently taking one or more medications that moderately slow down (inhibit) the activity of {geneName} (see below).",
   "@inhibitors_consequence_not_adapted": {
     "placeholders": {
       "salutationGenitive": {
@@ -241,6 +241,10 @@
       "geneName": {
         "type": "String",
         "example": "CYP2D6"
+      },
+      "salutation": {
+        "type": "String",
+        "example": "you are"
       }
     }
   },
