@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/services.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:http/http.dart' as http;
+//import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 
 import '../../common/module.dart';
 import 'lab.dart';
@@ -20,6 +18,7 @@ class OAuthAuthorizationCodeFlowLab extends Lab {
   Uri dataUrl;
 
   late String? token;
+  final _appAuth = FlutterAppAuth();
 
   @override
   Future<void> authenticate() async {
@@ -32,28 +31,34 @@ class OAuthAuthorizationCodeFlowLab extends Lab {
       'scope': 'openid profile',
     });
     try {
-      final result = await FlutterWebAuth.authenticate(
-        url: url.toString(),
-        callbackUrlScheme: callbackUrlScheme,
+      final result = await _appAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(
+          clientId,
+          '$callbackUrlScheme:/', // your redirect URI
+          serviceConfiguration: AuthorizationServiceConfiguration(
+            authorizationEndpoint: url.toString(), // your auth URL
+            tokenEndpoint: tokenUrl.toString(), // your token URL
+          ),
+          scopes: <String>['openid', 'profile'], // adjust your scopes
+        ),
       );
-      final code = Uri.parse(result).queryParameters['code'];
-      final response = await http.post(tokenUrl, body: {
-        'client_id': clientId,
-        'redirect_uri': '$callbackUrlScheme:/',
-        'grant_type': 'authorization_code',
-        'code': code,
-      });
-      token = jsonDecode(response.body)['access_token'] as String;
+
+      token = result?.accessToken;
     } on PlatformException catch (e) {
-      if (e.code == 'CANCELED') {
+      if (e.code == 'user_cancelled_authorization') {
         throw LabAuthenticationCanceled();
+      } else {
+        throw LabAuthenticationError();
       }
     }
+
     if (token == null) {
       throw LabAuthenticationError();
     }
+
+    // use `token`…
   }
-  
+
   @override
   Future<(List<LabResult>, List<String>)> loadData() async {
     return Lab.fetchData(dataUrl, headers: {'Authorization': 'Bearer $token'});

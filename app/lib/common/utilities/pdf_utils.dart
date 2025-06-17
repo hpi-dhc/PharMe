@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter_share/flutter_share.dart';
+//import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -34,7 +35,15 @@ Future<void> sharePdf(Drug drug, BuildContext context) async {
   final emoji = await PdfGoogleFonts.notoColorEmoji();
   // ignore: use_build_context_synchronously
   final path = await createPdf(drug, context, emoji);
-  await FlutterShare.shareFile(title: drug.name.capitalize(), filePath: path);
+  final title = drug.name.capitalize();
+  final filePath = path; // your local file path
+  await Share.shareXFiles(
+    [XFile(filePath)],
+    text: title,
+    subject: title,
+  );
+
+  //await FlutterShare.shareFile(title: drug.name.capitalize(), filePath: path);
 }
 
 pw.Widget buildPdfPage(
@@ -58,21 +67,20 @@ pw.Widget buildPdfPage(
 }
 
 pw.SizedBox _buildTextBlockSpacer() =>
-  pw.SizedBox(height: PharMeTheme.mediumSpace, width: double.infinity);
+    pw.SizedBox(height: PharMeTheme.mediumSpace, width: double.infinity);
 
 pw.SizedBox _buildTextSpacer() =>
-  pw.SizedBox(height: PharMeTheme.smallSpace, width: double.infinity);
+    pw.SizedBox(height: PharMeTheme.smallSpace, width: double.infinity);
 
-pw.Divider _buildTextDivider() => 
-  pw.Divider(color: PdfColors.grey500);
+pw.Divider _buildTextDivider() => pw.Divider(color: PdfColors.grey500);
 
 pw.Text _buildSubheading(String text) => pw.Text(
-  text,
-  style: pw.TextStyle(
-    fontWeight: pw.FontWeight.bold,
-    fontSize: PharMeTheme.mediumSpace,
-  ),
-);
+      text,
+      style: pw.TextStyle(
+        fontWeight: pw.FontWeight.bold,
+        fontSize: PharMeTheme.mediumSpace,
+      ),
+    );
 
 List<pw.Widget> _buildHeader(Drug drug, BuildContext buildContext) {
   return [
@@ -112,14 +120,14 @@ List<pw.Widget> _buildDrugPart(Drug drug, BuildContext buildContext) {
     _PdfSegment(
       child: _PdfDescription(
         title: buildContext.l10n.drugs_page_header_drugclass,
-        text:  drug.annotations.drugclass,
+        text: drug.annotations.drugclass,
       ),
     ),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
         title: buildContext.l10n.pdf_indication,
-        text:  drug.annotations.indication,
+        text: drug.annotations.indication,
       ),
     ),
     _buildTextSpacer(),
@@ -142,7 +150,7 @@ String? _getPhenotypeInfo(String genotypeKey, Drug drug, BuildContext context) {
 
 String? _getPhenoconversionInfo(Drug drug, BuildContext context) {
   final phenoconversionExplanation =
-    getExpertPhenoconversionExplanation(drug, context);
+      getExpertPhenoconversionExplanation(drug, context);
   if (phenoconversionExplanation == null) return null;
   return '$drugInteractionIndicator $phenoconversionExplanation';
 }
@@ -164,22 +172,19 @@ String? _getActivityScoreInfo(
   );
   if (originalLookup == overwrittenLookup) return originalLookup;
   return '$overwrittenLookup '
-    '(${context.l10n.pdf_activity_score_overwrite(
-      originalLookup ?? context.l10n.pdf_no_value
-    )})';
+      '(${context.l10n.pdf_activity_score_overwrite(originalLookup ?? context.l10n.pdf_no_value)})';
 }
 
 String _userInfoPerGene(
   Drug drug,
   String? Function(String, Drug, BuildContext) getInfo,
-  BuildContext buildContext,  
+  BuildContext buildContext,
 ) {
   if (drug.guidelines.isEmpty) return buildContext.l10n.pdf_no_value;
-  return drug.guidelineGenotypes.map((genotypeKey) =>
-    '$genotypeKey: ${
-      getInfo(genotypeKey, drug, buildContext) ?? buildContext.l10n.pdf_no_value
-    }'
-  ).join(', ');
+  return drug.guidelineGenotypes
+      .map((genotypeKey) =>
+          '$genotypeKey: ${getInfo(genotypeKey, drug, buildContext) ?? buildContext.l10n.pdf_no_value}')
+      .join(', ');
 }
 
 List<pw.Widget> _buildUserPart(
@@ -202,11 +207,8 @@ List<pw.Widget> _buildUserPart(
   if (phenoconversionInfo.isNotNullOrBlank) {
     patientPhenotype = '$patientPhenotype\n\n$phenoconversionInfo';
   }
-  final patientActivityScore = _userInfoPerGene(
-    drug,
-    _getActivityScoreInfo,
-    buildContext
-  );
+  final patientActivityScore =
+      _userInfoPerGene(drug, _getActivityScoreInfo, buildContext);
   final allelesTested = _userInfoPerGene(
     drug,
     (genotypeKey, drug, context) => UserData.allelesTestedFor(genotypeKey),
@@ -219,9 +221,9 @@ List<pw.Widget> _buildUserPart(
     null: '❔',
   };
   final userGuidelineText = drug.userGuideline != null
-    ? '${drug.userGuideline?.annotations.implication} '
-      '${drug.userGuideline?.annotations.recommendation}'
-    : buildContext.l10n.drugs_page_no_guidelines_recommendation_text;
+      ? '${drug.userGuideline?.annotations.implication} '
+          '${drug.userGuideline?.annotations.recommendation}'
+      : buildContext.l10n.drugs_page_no_guidelines_recommendation_text;
   return [
     _buildSubheading(buildContext.l10n.pdf_heading_user_data),
     _buildTextBlockSpacer(),
@@ -249,7 +251,7 @@ List<pw.Widget> _buildUserPart(
     _PdfSegment(
       child: _PdfDescription(
         title: buildContext.l10n.pdf_tested_alleles,
-        text:  allelesTested,
+        text: allelesTested,
       ),
     ),
     _buildTextBlockSpacer(),
@@ -265,18 +267,14 @@ List<pw.Widget> _buildUserPart(
 }
 
 pw.Text _buildInfoText(String text) => pw.Text(
-  text,
-  style: pw.TextStyle(fontStyle: pw.FontStyle.italic),
-);
+      text,
+      style: pw.TextStyle(fontStyle: pw.FontStyle.italic),
+    );
 
 List<pw.Widget> _buildExternalGuidelinePart(
-  Drug drug,
-  BuildContext buildContext
-) {
+    Drug drug, BuildContext buildContext) {
   final heading = [
-    _buildSubheading(
-      buildContext.l10n.pdf_heading_clinical_guidelines
-    ),
+    _buildSubheading(buildContext.l10n.pdf_heading_clinical_guidelines),
     _buildTextBlockSpacer(),
   ];
   if (drug.userOrFirstGuideline == null) {
@@ -298,59 +296,55 @@ List<pw.Widget> _buildExternalGuidelinePart(
   return [
     ...heading,
     _buildInfoText(buildContext.l10n.pdf_info_clinical_guidelines),
-    ...drug.userGuideline!.externalData.fold([], (externalGuidelines, guideline) =>
-        [
-          ...externalGuidelines,
-          _buildTextBlockSpacer(),
-          _buildTextDivider(),
-          ..._buildGuidelinePart(guideline, buildContext)
-        ]
-      ),
+    ...drug.userGuideline!.externalData.fold(
+        [],
+        (externalGuidelines, guideline) => [
+              ...externalGuidelines,
+              _buildTextBlockSpacer(),
+              _buildTextDivider(),
+              ..._buildGuidelinePart(guideline, buildContext)
+            ]),
   ];
 }
 
-pw.UrlLink _buildLink(String destination, { String? displayText }) =>
-  pw.UrlLink(
-    child: pw.Text(
-      displayText ?? destination,
-      style: pw.TextStyle(
-        color: PdfColors.blue500,
-        decoration: pw.TextDecoration.underline,
-      )
-    ),
-    destination: destination,
-  );
+pw.UrlLink _buildLink(String destination, {String? displayText}) => pw.UrlLink(
+      child: pw.Text(displayText ?? destination,
+          style: pw.TextStyle(
+            color: PdfColors.blue500,
+            decoration: pw.TextDecoration.underline,
+          )),
+      destination: destination,
+    );
 
 List<pw.Widget> _buildGuidelineUrls(Drug drug, BuildContext buildContext) {
   return [
-    ...drug.userOrFirstGuideline!.externalData.fold<List<String>>([], (links, guideline) =>
-      [
-        ...links,
-        guideline.guidelineUrl,
-      ]
-    ).toSet().map(_buildLink),
+    ...drug.userOrFirstGuideline!.externalData
+        .fold<List<String>>(
+            [],
+            (links, guideline) => [
+                  ...links,
+                  guideline.guidelineUrl,
+                ])
+        .toSet()
+        .map(_buildLink),
   ];
 }
 
 List<pw.Widget> _buildGuidelinePart(
-  GuidelineExtData guideline,
-  BuildContext buildContext
-) {
+    GuidelineExtData guideline, BuildContext buildContext) {
   return [
     _PdfSegment(
-      child: pw.Text(
-        guideline.guidelineName,
-        style: pw.TextStyle(fontWeight: FontWeight.bold),
-      )
-    ),
+        child: pw.Text(
+      guideline.guidelineName,
+      style: pw.TextStyle(fontWeight: FontWeight.bold),
+    )),
     _buildTextBlockSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: buildContext.l10n.pdf_guideline_link(guideline.source)
-      ),
+          title: buildContext.l10n.pdf_guideline_link(guideline.source)),
     ),
-    _PdfSegment(child:
-      _buildLink(guideline.guidelineUrl),
+    _PdfSegment(
+      child: _buildLink(guideline.guidelineUrl),
     ),
     _buildTextSpacer(),
     _PdfSegment(
@@ -361,24 +355,19 @@ List<pw.Widget> _buildGuidelinePart(
           text: guideline.recommendation),
     ),
     _buildTextSpacer(),
-    ...guideline.implications.entries
-        .map((implication) => _PdfSegment(
-                child: _PdfDescription(
-              title:
-                  buildContext.l10n.pdf_guideline_gene_implication(
-                    guideline.source,
-                    implication.key
-                  ),
-              text: implication.value,
+    ...guideline.implications.entries.map((implication) => _PdfSegment(
+            child: _PdfDescription(
+          title: buildContext.l10n.pdf_guideline_gene_implication(
+              guideline.source, implication.key),
+          text: implication.value,
         ))),
     _buildTextSpacer(),
     _PdfSegment(
       child: _PdfDescription(
-        title: buildContext.l10n.pdf_guideline_comment(guideline.source),
-        text: guideline.comments.isNullOrBlank ?
-          buildContext.l10n.pdf_no_value :
-          guideline.comments
-      ),
+          title: buildContext.l10n.pdf_guideline_comment(guideline.source),
+          text: guideline.comments.isNullOrBlank
+              ? buildContext.l10n.pdf_no_value
+              : guideline.comments),
     ),
   ];
 }
@@ -412,12 +401,11 @@ class _PdfDescription extends pw.StatelessWidget {
           children: [
             if (icon.isNotNullOrBlank)
               pw.TextSpan(
-                text: '$icon ',
-                style: pw.TextStyle(
-                  fontWeight: pw.FontWeight.normal,
-                  fontFallback: [emojiFont!],
-                )
-              ),
+                  text: '$icon ',
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.normal,
+                    fontFallback: [emojiFont!],
+                  )),
             if (text.isNotNullOrBlank)
               pw.TextSpan(
                 text: text,

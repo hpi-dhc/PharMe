@@ -6,7 +6,7 @@ import 'models/lab.dart';
 part 'cubit.freezed.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(this.activeDrugs): super(LoginState.initial());
+  LoginCubit(this.activeDrugs) : super(LoginState.initial());
 
   ActiveDrugs activeDrugs;
 
@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
     emit(LoginState.loadingUserData(null));
     try {
-      await lab.authenticate();
+      //await lab.authenticate();
     } on LabAuthenticationCanceled {
       revertToInitialState();
       return;
@@ -31,10 +31,10 @@ class LoginCubit extends Cubit<LoginState> {
 
     try {
       final loadingMessage = shouldFetchDiplotypes()
-        // ignore: use_build_context_synchronously
-        ? context.l10n.auth_loading_data
-        // ignore: use_build_context_synchronously
-        : context.l10n.auth_updating_data;
+          // ignore: use_build_context_synchronously
+          ? context.l10n.auth_loading_data
+          // ignore: use_build_context_synchronously
+          : context.l10n.auth_updating_data;
       emit(LoginState.loadingUserData(loadingMessage));
       if (shouldFetchDiplotypes()) {
         final (labData, activeDrugList) = await lab.loadData();
@@ -60,7 +60,7 @@ class LoginCubit extends Cubit<LoginState> {
 class LoginState with _$LoginState {
   const factory LoginState.initial() = _InitialState;
   const factory LoginState.loadingUserData(String? loadingMessage) =
-    _LoadingUserDataState;
+      _LoadingUserDataState;
   const factory LoginState.loadedUserData() = _LoadedUserDataState;
   const factory LoginState.error(String string) = _ErrorState;
 }

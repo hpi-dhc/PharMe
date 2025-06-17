@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../common/module.dart';
 import '../cubit.dart';
 import '../models/dummy_demo_lab.dart';
+import '../models/cpic_lab.dart';
 
 final labs = [
   DummyDemoLab(
@@ -11,7 +12,8 @@ final labs = [
     dataUrl: Uri.parse(
       'https://hpi-datastore.duckdns.org/userdata?id=66608824-2ab4-4f03-aef0-03aa007337d3',
     ),
-  )
+  ),
+  CpicLab(name: 'Choose your VCF file'),
 ];
 
 @RoutePage()
@@ -28,39 +30,37 @@ class LoginPage extends HookWidget {
     final dropdownValue = useState(labs.first.name);
 
     return Consumer<ActiveDrugs>(
-      builder: (context, activeDrugs, child) => BlocProvider(
-        create: (context) => cubit ?? LoginCubit(activeDrugs),
-        child: BlocBuilder<LoginCubit, LoginState>(
-          builder: (context, state) {
-            return PharMeLogoPage(
-              child: state.when(
-                initial: () =>
-                    _buildInitialScreen(context, dropdownValue),
-                loadingUserData: (loadingMessage) => Padding(
-                  padding: EdgeInsets.all(PharMeTheme.largeSpace),
-                  child: Column(
-                    children: [
-                      CircularProgressIndicator(),
-                      if (loadingMessage != null) ...[
-                        SizedBox(height: PharMeTheme.largeSpace),
-                        Text(
-                          loadingMessage,
-                          style: context.textTheme.titleLarge,
-                          textAlign: TextAlign.center,
+        builder: (context, activeDrugs, child) => BlocProvider(
+              create: (context) => cubit ?? LoginCubit(activeDrugs),
+              child: BlocBuilder<LoginCubit, LoginState>(
+                builder: (context, state) {
+                  return PharMeLogoPage(
+                    child: state.when(
+                      initial: () =>
+                          _buildInitialScreen(context, dropdownValue),
+                      loadingUserData: (loadingMessage) => Padding(
+                        padding: EdgeInsets.all(PharMeTheme.largeSpace),
+                        child: Column(
+                          children: [
+                            CircularProgressIndicator(),
+                            if (loadingMessage != null) ...[
+                              SizedBox(height: PharMeTheme.largeSpace),
+                              Text(
+                                loadingMessage,
+                                style: context.textTheme.titleLarge,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ],
                         ),
-                      ],
-                    ],
-                  ),
-                ),
-                loadedUserData: () => _buildLoadedScreen(context),
-                error: (message) =>
-                    _buildErrorScreen(context, message),
+                      ),
+                      loadedUserData: () => _buildLoadedScreen(context),
+                      error: (message) => _buildErrorScreen(context, message),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
-      )
-    );
+            ));
   }
 
   Widget _buildInitialScreen(
