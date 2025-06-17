@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> signInAndLoadUserData(BuildContext context, Lab lab) async {
     emit(LoginState.loadingUserData(null));
     try {
-      //await lab.authenticate();
+      await lab.authenticate();
     } on LabAuthenticationCanceled {
       revertToInitialState();
       return;

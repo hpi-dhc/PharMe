@@ -52,12 +52,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to your photo library to select and save images.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>This app requires access to your documents folder to read and write files.</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>This app uses the local network for debugging and communication with development tools.</string>
 	<key>NSFileProviderDomainUsageDescription</key>
 	<string>This app requires access to files for importing and exporting data.</string>
 </dict>
