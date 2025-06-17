@@ -28,23 +28,11 @@ class CpicLab extends Lab {
       }
       final vcfPath = picked.path;
 
-      // 2) Decide where to save the phenotype JSON
-      final dir = await getApplicationSupportDirectory();
-      final phenotypeOutputPath = path.join(
-        dir.path,
-        'phenotyper.json',
-      );
-
       // 3) Generate it
-      final (success, rawJson) = await Helper.processFile(
-        vcfPath,
-        phenotypeOutputPath,
-      );
+      final (success, raw) = await Helper.processFile(vcfPath);
       if (!success) {
         throw LabAuthenticationError();
       }
-
-      final raw = rawJson;
 
       final Map<String, dynamic> doc = json.decode(raw) as Map<String, dynamic>;
 
