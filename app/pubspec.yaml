@@ -15,7 +15,7 @@ dependencies:
   collection: ^1.16.0
   cupertino_icons: ^1.0.5
   dartx: ^1.1.0
-  debug_overlay: ^0.2.11
+  debug_overlay: ^1.0.0
   dropdown_button2: ^2.3.9
   expandable_page_view: ^1.0.17
   flutter:
@@ -27,10 +27,10 @@ dependencies:
     sdk: flutter
   flutter_markdown: ^0.7.6+2
   flutter_secure_storage: ^9.0.0
-  flutter_share: ^2.0.0
+  #flutter_share: ^2.0.0
   flutter_sliding_up_panel: ^2.0.1
   flutter_svg: ^2.0.9
-  flutter_web_auth: ^0.5.0
+  #flutter_web_auth: ^0.5.0
   font_awesome_flutter: ^10.7.0
   freezed_annotation: ^2.0.3
   google_fonts: ^6.1.0
@@ -48,6 +48,13 @@ dependencies:
   shared_preferences: ^2.0.15
   trotter: ^2.2.0
   url_launcher: ^6.1.4
+
+  flutter_appauth: ^8.0.2
+  share_plus: ^11.0.0
+  pharmcat_dart_plugin:
+    git:
+      url: git@github.com:felix1717-r/pharmcat_dart_plugin.git
+      ref: main 
 
 dev_dependencies:
   auto_route_generator: ^7.3.2

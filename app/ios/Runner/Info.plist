@@ -52,5 +52,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>This app requires access to your documents folder to read and write files.</string>
+	<key>NSFileProviderDomainUsageDescription</key>
+	<string>This app requires access to files for importing and exporting data.</string>
 </dict>
 </plist>
