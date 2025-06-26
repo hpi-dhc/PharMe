@@ -196,3 +196,24 @@ Warfarin):
     allelesTested: '',
   );
 ```
+
+## Building with Docker
+
+You cannot update your Dart or Flutter versions locally?
+Use Docker to build what you need:
+
+```bash
+# Change the key names to your local key
+export GITHUB_PRIVATE_KEY="$(cat ~/.ssh/github)"
+export GITHUB_PUBLIC_KEY="$(cat ~/.ssh/github.pub)"
+
+docker build -t flutter-dev -f Dockerfile.dev \
+--secret id=github_private_key,env=GITHUB_PRIVATE_KEY \
+--secret id=github_public_key,env=GITHUB_PUBLIC_KEY .
+
+docker run -it --rm -v ./:/app -w /app flutter-dev
+
+# In container run commands as described in local setup
+```
+
+**TODO: Test** Use Android Studio or Xcode to test and run or build the app or expose a port to run as web app.
