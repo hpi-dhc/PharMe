@@ -1,0 +1,11 @@
+FROM instrumentisto/flutter:3.32.5
+
+ARG ssh_directory=/root/.ssh
+ARG github_ssh_file=${ssh_directory}/id_rsa
+ARG github_private_key
+ARG github_public_key
+
+RUN echo "${github_private_key}" > ${github_ssh_file} && chmod 0400 ${github_ssh_file}
+RUN echo "${github_public_key}" > ${github_ssh_file}.pub && chmod 0400 ${github_ssh_file}.pub
+RUN echo "StrictHostKeyChecking no" > ${ssh_directory}/config
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts

@@ -81,6 +81,20 @@ the green play button.
 When you're done, file a pull request. We will take a look at your code and once
 all checks pass, your code can get merged 🥳
 
+## Building with Docker
+
+You cannot update your Dart or Flutter versions locally?
+Use Docker to build what you need:
+
+```bash
+# Change the key names to your local key (could refactor to pass keys as secrets)
+docker build -t flutter-dev -f Dockerfile.dev --build-arg github_private_key="$(cat ~/.ssh/github)" --build-arg github_public_key="$(cat ~/.ssh/github.pub)" .
+docker run -it --rm -v ./:/app -w /app flutter-dev
+# In container
+```
+
+**TODO: Test** Use Android Studio or Xcode to test and run or build the app or expose a port to run as web app.
+
 ## Dual remote repository setup
 
 This repository exists in two versions: (1) the public version on
