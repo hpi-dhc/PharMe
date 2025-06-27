@@ -219,4 +219,5 @@ flutter doctor --android-licenses
 flutter build apk
 ```
 
-**TODO: Test** Build the app or expose a port to run as web app.
+Further directions: Test building for iOS (mount your local xcode.app
+file) or run as web app and expose the port.
