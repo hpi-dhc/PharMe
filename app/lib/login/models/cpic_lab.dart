@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:file_selector/file_selector.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 import 'package:pharmcat_dart_plugin/helper.dart';
 
 import '../../common/module.dart';
@@ -19,7 +17,7 @@ class CpicLab extends Lab {
       final vcfType = XTypeGroup(
         label: 'All Files',
       );
-      final XFile? picked = await openFile(
+      final picked = await openFile(
         acceptedTypeGroups: [vcfType],
       );
       if (picked == null) {
@@ -34,13 +32,13 @@ class CpicLab extends Lab {
         throw LabAuthenticationError();
       }
 
-      final Map<String, dynamic> doc = json.decode(raw) as Map<String, dynamic>;
+      final doc = json.decode(raw) as Map<String, dynamic>;
 
       final cpic = (doc['geneReports'] as Map<String, dynamic>?)?['CPIC']
               as Map<String, dynamic>? ??
           <String, dynamic>{};
 
-      final List<LabResult> labData = [];
+      final labData = <LabResult>[];
 
       for (final entry in cpic.entries) {
         //final geneKey = entry.key;

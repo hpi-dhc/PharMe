@@ -20,8 +20,8 @@ class SourceCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           gradient: LinearGradient(colors: [
-            PharMeTheme.primaryColor.withOpacity(0.8),
-            PharMeTheme.secondaryColor.withOpacity(0.8),
+            PharMeTheme.primaryColor.withValues(alpha: .8),
+            PharMeTheme.secondaryColor.withValues(alpha: .8),
           ]),
         ),
         child: Padding(

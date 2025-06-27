@@ -43,7 +43,7 @@ class OAuthAuthorizationCodeFlowLab extends Lab {
         ),
       );
 
-      token = result?.accessToken;
+      token = result.accessToken;
     } on PlatformException catch (e) {
       if (e.code == 'user_cancelled_authorization') {
         throw LabAuthenticationCanceled();

@@ -1,12 +1,11 @@
 import 'dart:io';
 
-//import 'package:flutter_share/flutter_share.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../module.dart';
 
@@ -37,13 +36,12 @@ Future<void> sharePdf(Drug drug, BuildContext context) async {
   final path = await createPdf(drug, context, emoji);
   final title = drug.name.capitalize();
   final filePath = path; // your local file path
-  await Share.shareXFiles(
-    [XFile(filePath)],
-    text: title,
-    subject: title,
+  await SharePlus.instance.share(
+    ShareParams(
+      subject: title,
+      files: [XFile(filePath)],
+    ),
   );
-
-  //await FlutterShare.shareFile(title: drug.name.capitalize(), filePath: path);
 }
 
 pw.Widget buildPdfPage(

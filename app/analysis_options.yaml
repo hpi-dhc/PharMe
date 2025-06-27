@@ -56,7 +56,6 @@ linter:
     unnecessary_null_aware_assignments: true
     unnecessary_parenthesis: true
     unnecessary_statements: true
-    unsafe_html: true
     use_key_in_widget_constructors: false
     use_setters_to_change_properties: true
     use_string_buffers: true

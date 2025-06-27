@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../common/module.dart';
 import '../cubit.dart';
-import '../models/dummy_demo_lab.dart';
 import '../models/cpic_lab.dart';
+import '../models/dummy_demo_lab.dart';
 
 final labs = [
   DummyDemoLab(

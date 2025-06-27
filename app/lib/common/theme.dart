@@ -82,7 +82,7 @@ class PharMeTheme {
   static const onSurfaceText = Color(0xff444648);
   static const backgroundColor = Colors.white;
   static const errorColor = Color(0xccf52a2a);
-  static final borderColor = Colors.black.withOpacity(.2);
+  static final borderColor = Colors.black.withValues(alpha: .2);
   static final iconColor = darkenColor(PharMeTheme.onSurfaceText, -0.1);
   static final buttonColor = darkenColor(PharMeTheme.iconColor, -0.1);
   static final subheaderColor = Colors.grey[600];
