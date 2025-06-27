@@ -61,3 +61,6 @@ app.*.map.json
 
 # coverage files
 coverage/ 
+
+# FVM Version Cache
+.fvm/
