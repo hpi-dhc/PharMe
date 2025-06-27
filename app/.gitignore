@@ -1,6 +1,8 @@
 # Files generated due to fix
 android/build/app/
 
+android/app/.cxx
+
 # Miscellaneous
 *.class
 *.log
