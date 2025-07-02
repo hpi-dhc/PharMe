@@ -1022,7 +1022,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "7638294d60abc40b2fd4ab423d4274504a8216dd"
+      resolved-ref: "802ac794ab8a4790c894a57165a9bc15e600a0af"
       url: "git@github.com:felix1717-r/pharmcat_dart_plugin.git"
     source: git
     version: "0.1.0"
