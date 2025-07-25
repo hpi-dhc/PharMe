@@ -6,11 +6,11 @@ const medicationsIcon = FontAwesomeIcons.pills;
 const genesIcon = FontAwesomeIcons.dna;
 
 Uri anniUrl([String slug = '']) =>
-    Uri.http('hpi-annotation-service.duckdns.org', 'api/v1/$slug');
+    Uri.http('vm-slosarek01.dhclab.i.hpi.de:8000', 'api/v1/$slug');
 
 final cpicMaxCacheTime = Duration(days: 90);
 const cpicLookupUrl =
-    'https://api.cpicpgx.org/v1/diplotype?select=genesymbol,diplotype,generesult,lookupkey';
+    'http://vm-slosarek01.dhclab.i.hpi.de:28000/lookups.json';
 
 const drugInteractionIndicator = '*';
 const drugInteractionIndicatorName = 'asterisk';
