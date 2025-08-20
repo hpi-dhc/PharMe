@@ -11,6 +11,7 @@ android/build/app/
 .buildlog/
 .history
 .svn/
+.fvm/
 
 # IntelliJ related
 *.iml
