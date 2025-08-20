@@ -69,7 +69,7 @@ jobs:
       - run: cp test/helpers/e2e-users.json src/seeder/users.json
       - run: yarn seed:run
       - run: yarn test:e2e:cov
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: lab-server/coverage
