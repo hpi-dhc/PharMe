@@ -148,15 +148,18 @@ this PDF, follow these steps:
 ## Adapting test data
 
 If you would like to test with specific test data but you don't have a user with
-suitable data available, adapt the code that gets the lab results as shown below.
+suitable data available, add the code that saves the lab results as shown below.
 
 ```dart
 // TODO(after-testing): remove test data adaption
-var labResults = json.map<LabResult>(LabResult.fromJson).toList();
-final cyp2c19Result = labResults.firstWhere((labResult) => labResult.gene == "CYP2C19");
-labResults = labResults.filter((labResult) => labResult.gene != "CYP2C19").toList();
-labResults = [...labResults, LabResult(gene: "CYP2C19", variant: "*2/*2", phenotype: "Poor Metabolizer", allelesTested: cyp2c19Result.allelesTested)];
-return labResults;
+final geneToChange = "CYP2C9";
+final newGenotype = "*1/*2";
+final newPhenotype = "Intermediate Metabolizer";
+final actualGeneResult = labData.firstWhere((labResult) => labResult.gene == geneToChange);
+var newLabData = labData.filter((labResult) => labResult.gene != geneToChange).toList();
+newLabData = [...newLabData, LabResult(gene: geneToChange, variant: newGenotype, phenotype: newPhenotype, allelesTested: actualGeneResult.allelesTested)];
+UserData.instance.labData = newLabData;
+await UserData.save();
 ```
 
 You can use the CPIC API to get reasonable genotype-phenotype pairings, e.g.,
